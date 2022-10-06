@@ -247,7 +247,7 @@ export const addPaperFilingInteractor = async (
         message: successMessage,
         overwritable: false,
       },
-      pdfUrl: paperServicePdfUrl || undefined,
+      pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
   });

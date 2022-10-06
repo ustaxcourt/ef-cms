@@ -18,6 +18,7 @@ import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDo
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
 import { addCoverToPdf } from '../addCoverToPdf';
+import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
@@ -26,14 +27,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const mockNumberOfPages = 999;
   const clientConnectionId = '987654';
   const mockPdfUrl = 'ayo.seankingston.com';
-  let docketClerkUser;
 
   beforeAll(() => {
     applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(true);
 
-    const PDF_MOCK_BUFFER = 'Hello World';
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
@@ -41,34 +40,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({
       pdfData: testPdfDoc,
     });
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
-
-    applicationContext
-      .getStorageClient()
-      .upload.mockImplementation((params, resolve) => resolve());
-
-    applicationContext.getChromiumBrowser().newPage.mockReturnValue({
-      addStyleTag: () => {},
-      pdf: () => {
-        return PDF_MOCK_BUFFER;
-      },
-      setContent: () => {},
-    });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue({
-        url: 'www.example.com',
-      });
-
-    applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser.mockReturnValue(null);
   });
 
   beforeEach(() => {
@@ -84,7 +55,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           isOnDocketRecord: true,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          userId: docketClerkUser.userId,
         },
       ],
       docketNumber: DOCKET_NUMBER,
@@ -106,23 +77,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: docketClerkUser.userId,
     };
 
-    const mockUserId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    docketClerkUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: mockUserId,
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: mockUserId,
-    });
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -222,8 +180,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
-        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        filedBy: docketClerkUser.name,
+        userId: docketClerkUser.userId,
         workItem: {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
@@ -232,18 +190,18 @@ describe('serveExternallyFiledDocumentInteractor', () => {
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',
-            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filedBy: docketClerkUser.name,
             filingDate: '2019-03-11T21:56:01.625Z',
             isDraft: false,
             isMinuteEntry: false,
             isOnDocketRecord: true,
-            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            sentBy: docketClerkUser.name,
+            userId: docketClerkUser.userId,
           },
           docketNumber: DOCKET_NUMBER,
           isInitializeCase: true,
           section: DOCKET_SECTION,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          sentBy: docketClerkUser.name,
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         },
       },
@@ -262,12 +220,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toHaveBeenCalledWith(
       expect.objectContaining({
         workItem: expect.objectContaining({
-          assigneeId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          assigneeId: docketClerkUser.userId,
           completedAt: expect.stringContaining('T'),
-          completedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          completedByUserId: docketClerkUser.userId,
           completedMessage: 'completed',
           docketNumber: DOCKET_NUMBER,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          sentBy: docketClerkUser.name,
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         }),
       }),
@@ -316,13 +274,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumber: DOCKET_NUMBER,
         documentType: GENERIC_ORDER_DOCUMENT_TYPE,
         eventCode: 'O',
-        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        filedBy: docketClerkUser.name,
         judge: 'someone',
         serviceStamp: mockServiceStamp,
         signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        signedByUserId: docketClerkUser.userId,
         signedJudgeName: 'someone',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: docketClerkUser.userId,
         workItem: {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
@@ -331,18 +289,18 @@ describe('serveExternallyFiledDocumentInteractor', () => {
             documentType: GENERIC_ORDER_DOCUMENT_TYPE,
             entityName: 'DocketEntry',
             eventCode: 'O',
-            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filedBy: docketClerkUser.name,
             filingDate: '2019-03-11T21:56:01.625Z',
             isDraft: false,
             isMinuteEntry: false,
             isOnDocketRecord: true,
-            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            sentBy: docketClerkUser.name,
+            userId: docketClerkUser.userId,
           },
           docketNumber: DOCKET_NUMBER,
           isInitializeCase: true,
           section: DOCKET_SECTION,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          sentBy: docketClerkUser.name,
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         },
       },
@@ -372,13 +330,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumber: DOCKET_NUMBER,
         documentType: 'Order of Dismissal for Lack of Jurisdiction',
         eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        filedBy: docketClerkUser.name,
         judge: 'someone',
         serviceStamp: 'This should not be the service stamp',
         signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        signedByUserId: docketClerkUser.userId,
         signedJudgeName: 'someone',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: docketClerkUser.userId,
         workItem: {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
@@ -387,18 +345,18 @@ describe('serveExternallyFiledDocumentInteractor', () => {
             documentType: 'Order of Dismissal for Lack of Jurisdiction',
             entityName: 'DocketEntry',
             eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filedBy: docketClerkUser.name,
             filingDate: '2019-03-11T21:56:01.625Z',
             isDraft: false,
             isMinuteEntry: false,
             isOnDocketRecord: true,
-            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            sentBy: docketClerkUser.name,
+            userId: docketClerkUser.userId,
           },
           docketNumber: DOCKET_NUMBER,
           isInitializeCase: true,
           section: DOCKET_SECTION,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          sentBy: docketClerkUser.name,
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         },
       },
@@ -428,12 +386,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumber: DOCKET_NUMBER,
         documentType: GENERIC_ORDER_DOCUMENT_TYPE,
         eventCode: 'O',
-        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        filedBy: docketClerkUser.name,
         judge: 'someone',
         signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        signedByUserId: docketClerkUser.userId,
         signedJudgeName: 'someone',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: docketClerkUser.userId,
         workItem: {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
@@ -442,18 +400,18 @@ describe('serveExternallyFiledDocumentInteractor', () => {
             documentType: GENERIC_ORDER_DOCUMENT_TYPE,
             entityName: 'DocketEntry',
             eventCode: 'O',
-            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filedBy: docketClerkUser.name,
             filingDate: '2019-03-11T21:56:01.625Z',
             isDraft: false,
             isMinuteEntry: false,
             isOnDocketRecord: true,
-            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            sentBy: docketClerkUser.name,
+            userId: docketClerkUser.userId,
           },
           docketNumber: DOCKET_NUMBER,
           isInitializeCase: true,
           section: DOCKET_SECTION,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          sentBy: docketClerkUser.name,
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         },
       },
