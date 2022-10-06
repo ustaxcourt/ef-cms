@@ -1,68 +1,83 @@
+import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
 import {
   formatCase,
   getSortableDocketNumber,
 } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
 
-const compareTrialSessionEligibleCases =
-  ({ eligibleCases }) =>
-  (a, b) => {
-    if (a.isManuallyAdded && !b.isManuallyAdded) {
-      return -1;
-    } else if (!a.isManuallyAdded && b.isManuallyAdded) {
-      return 1;
-    } else if (a.highPriority && !b.highPriority) {
-      return -1;
-    } else if (!a.highPriority && b.highPriority) {
-      return 1;
-    } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
-      return -1;
-    } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
-      return 1;
-    } else if (
-      (a.isManuallyAdded && b.isManuallyAdded) ||
-      (a.highPriority && b.highPriority) ||
-      (a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority)
-    ) {
-      let aSortString = getSortableDocketNumber(a.docketNumber);
-      let bSortString = getSortableDocketNumber(b.docketNumber);
-      return aSortString.localeCompare(bSortString);
-    } else {
-      let aSortString = getEligibleDocketNumberSortString({
-        allCases: eligibleCases,
-        theCase: a,
-      });
-      let bSortString = getEligibleDocketNumberSortString({
-        allCases: eligibleCases,
-        theCase: b,
-      });
-      return aSortString.localeCompare(bSortString);
-    }
+const groupKeySymbol = Symbol('group');
+
+const addGroupSymbol = (object, value) => {
+  Object.defineProperty(object, groupKeySymbol, {
+    enumerable: true,
+    value,
+    writable: true,
+  });
+  return object;
+};
+
+const getPriorityGroups = eligibleCases => {
+  const groups = {
+    default: [],
+    highPriority: [],
+    manuallyAdded: [],
+    suffixHighPriority: [],
   };
 
-const getEligibleDocketNumberSortString = ({ allCases, theCase }) => {
-  const leadCase = allCases.find(
+  eligibleCases.forEach(theCase => {
+    if (theCase.isManuallyAdded) {
+      addGroupSymbol(theCase, 'manuallyAdded');
+      groups.manuallyAdded.push(theCase);
+    } else if (theCase.highPriority) {
+      addGroupSymbol(theCase, 'highPriority');
+      groups.highPriority.push(theCase);
+    } else if (theCase.isDocketSuffixHighPriority) {
+      addGroupSymbol(theCase, 'suffixHighPriority');
+      groups.suffixHighPriority.push(theCase);
+    } else {
+      addGroupSymbol(theCase, 'default');
+      groups.default.push(theCase);
+    }
+  });
+
+  return groups;
+};
+
+const compareTrialSessionEligibleCases = eligibleCases => {
+  const groups = getPriorityGroups(eligibleCases);
+
+  return (a, b) => {
+    const aSortString = getEligibleDocketNumberSortString(
+      a,
+      groups[a[groupKeySymbol]],
+    );
+    const bSortString = getEligibleDocketNumberSortString(
+      b,
+      groups[b[groupKeySymbol]],
+    );
+    return aSortString.localeCompare(bSortString);
+  };
+};
+
+const getEligibleDocketNumberSortString = (theCase, casesInGroup) => {
+  const leadCase = casesInGroup.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 
   const isLeadInEligible = !!theCase.leadDocketNumber && !!leadCase;
 
-  const isLeadCaseManuallyAdded = leadCase?.isManuallyAdded;
-  const isLeadCaseHighPriority = leadCase?.highPriority;
-  const isLeadCaseDocketSuffixHighPriority =
-    leadCase?.isDocketSuffixHighPriority;
+  let priorityPrefix = 'D';
 
-  if (
-    isLeadCaseManuallyAdded ||
-    isLeadCaseHighPriority ||
-    isLeadCaseDocketSuffixHighPriority
-  ) {
-    return `${getSortableDocketNumber(
-      theCase.docketNumber,
-    )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+  if (theCase.isManuallyAdded) {
+    priorityPrefix = 'A';
+  } else if (theCase.highPriority) {
+    priorityPrefix = 'B';
+  } else if (theCase.isDocketSuffixHighPriority) {
+    priorityPrefix = 'C';
   }
 
-  return `${getSortableDocketNumber(
+  return `${priorityPrefix}_${getSortableDocketNumber(
     isLeadInEligible
       ? theCase.docketNumber === theCase.leadDocketNumber
         ? theCase.docketNumber
@@ -74,16 +89,44 @@ const getEligibleDocketNumberSortString = ({ allCases, theCase }) => {
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
+  const filter = get(
+    state.screenMetadata.eligibleCasesFilter.hybridSessionFilter,
+  );
+
+  const groups = getPriorityGroups(eligibleCases);
+
   const sortedCases = eligibleCases
     .map(caseItem =>
       formatCase({ applicationContext, caseItem, eligibleCases }),
     )
-    .sort(compareTrialSessionEligibleCases({ eligibleCases }))
-    .map(caseItem =>
-      applicationContext
-        .getUtilities()
-        .setConsolidationFlagsForDisplay(caseItem, eligibleCases),
-    );
+    .map(caseItem => {
+      return addGroupSymbol(
+        setConsolidationFlagsForDisplay(
+          caseItem,
+          groups[caseItem[groupKeySymbol]],
+        ),
+        caseItem[groupKeySymbol],
+      );
+    })
+    .sort(compareTrialSessionEligibleCases(eligibleCases))
+    .filter(eligibleCase => {
+      if (filter === 'Small') {
+        return (
+          eligibleCase.docketNumberSuffix === DOCKET_NUMBER_SUFFIXES.SMALL ||
+          eligibleCase.docketNumberSuffix ===
+            DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY
+        );
+      } else if (filter === 'Regular') {
+        return (
+          eligibleCase.docketNumberSuffix === null ||
+          (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
+            eligibleCase.docketNumberSuffix !==
+              DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)
+        );
+      } else {
+        return true;
+      }
+    });
 
   return sortedCases;
 };
