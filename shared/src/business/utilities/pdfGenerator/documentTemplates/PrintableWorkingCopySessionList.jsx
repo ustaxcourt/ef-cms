@@ -76,8 +76,12 @@ export const PrintableWorkingCopySessionList = ({
                 <React.Fragment key={formattedCase.docketNumber}>
                   <tr className="vertical-align-middle-row padding-bottom-2 content-row">
                     <td className="consolidated-case-column">
-                      {formattedCase.leadCase && 'LC'}
-                      {memberCase && <span className="margin-left-2">🔗</span>}
+                      {formattedCase.leadCase && (
+                        <div className="lead-consolidated-icon" />
+                      )}
+                      {memberCase && (
+                        <div className="margin-left-2 consolidated-icon" />
+                      )}
                     </td>
                     <td>
                       <div className={memberCase ? 'margin-left-2' : ''}>
