@@ -50,7 +50,7 @@ export const docketClerkServesOrderWithPaperService = (
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
-    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForLoadingComponentToHide({ cerebralTest, refreshInterval: 750 });
 
     expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
     expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
