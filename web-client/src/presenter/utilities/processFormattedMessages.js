@@ -74,9 +74,10 @@ export const getFormattedMessages = ({
       'MMDDYY',
     );
     const formattedMessages = messages.map(message => {
-      applicationContext
-        .getUtilities()
-        .setConsolidationFlagsForDisplay(message);
+      const { consolidatedIconTooltipText, inConsolidatedGrou, shouldIndent } =
+        applicationContext
+          .getUtilities()
+          .setConsolidationFlagsForDisplay(message);
 
       return {
         ...message,
@@ -86,13 +87,16 @@ export const getFormattedMessages = ({
           now,
           yesterday,
         ),
+        consolidatedIconTooltipText,
         createdAtFormatted: formatDateIfToday(
           message.createdAt,
           applicationContext,
           now,
           yesterday,
         ),
+        inConsolidatedGrou,
         messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
+        shouldIndent,
       };
     });
     messageCache = formattedMessages;
