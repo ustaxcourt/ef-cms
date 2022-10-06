@@ -24,14 +24,14 @@ exports.deleteCaseDeadline = async ({
 
   if (originalCaseDeadline) {
     await Promise.all([
-      client.delete({
+      client.remove({
         applicationContext,
         key: {
           pk: `case-deadline|${caseDeadlineId}`,
           sk: `case-deadline|${caseDeadlineId}`,
         },
       }),
-      client.delete({
+      client.remove({
         applicationContext,
         key: {
           pk: `case|${docketNumber}`,
