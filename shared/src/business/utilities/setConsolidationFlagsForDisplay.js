@@ -1,33 +1,29 @@
 const { isLeadCase } = require('../entities/cases/Case');
 
-exports.setConsolidationFlagsForDisplay = (caseItem, eligibleCases = []) => {
-  caseItem.inConsolidatedGroup = caseItem.leadCase = false;
+exports.setConsolidationFlagsForDisplay = (
+  caseItem,
+  eligibleCasesInGroup = [],
+) => {
+  const newCaseItem = { ...caseItem };
+  newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
 
-  if (caseItem.leadDocketNumber) {
-    caseItem.inConsolidatedGroup = true;
-    caseItem.consolidatedIconTooltipText = 'Consolidated case';
+  if (newCaseItem.leadDocketNumber) {
+    newCaseItem.inConsolidatedGroup = true;
+    newCaseItem.consolidatedIconTooltipText = 'Consolidated case';
 
-    if (isLeadCase(caseItem)) {
-      caseItem.leadCase = true;
-      caseItem.consolidatedIconTooltipText = 'Lead case';
+    if (isLeadCase(newCaseItem)) {
+      newCaseItem.leadCase = true;
+      newCaseItem.consolidatedIconTooltipText = 'Lead case';
     } else {
-      const leadCase = eligibleCases.find(
-        theCase => theCase.docketNumber === caseItem.leadDocketNumber,
+      const leadCase = eligibleCasesInGroup.find(
+        theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
       );
 
-      if (
-        !!leadCase &&
-        !leadCase.highPriority &&
-        !leadCase.isManuallyAdded &&
-        !leadCase.isDocketSuffixHighPriority &&
-        !caseItem.highPriority &&
-        !caseItem.isManuallyAdded &&
-        !caseItem.isDocketSuffixHighPriority
-      ) {
-        caseItem.shouldIndent = true;
+      if (leadCase) {
+        newCaseItem.shouldIndent = true;
       }
     }
   }
 
-  return caseItem;
+  return newCaseItem;
 };
