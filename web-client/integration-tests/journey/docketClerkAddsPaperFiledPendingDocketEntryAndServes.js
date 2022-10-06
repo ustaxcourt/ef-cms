@@ -68,12 +68,11 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
       );
     }
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: `filersMap.${contactPrimary.contactId}`,
+        key: `filersMap.${contactId}`,
         value: true,
       },
     );
@@ -90,7 +89,6 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to the docket record.',
     );
-
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(cerebralTest.getState('form')).toEqual({});
 

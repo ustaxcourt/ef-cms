@@ -14,6 +14,7 @@ import {
   subtractISODates,
 } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -39,17 +40,25 @@ describe('docket clerk interacts with pending items', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(cerebralTest);
+
     expect(caseDetail.docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as a docket clerk and check pending items count', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDetail.docketNumber,
     });
+
     const formatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
+
     await docketClerkLoadsPendingReportOnChiefJudgeSelection({
       cerebralTest,
       shouldLoadMore: true,
