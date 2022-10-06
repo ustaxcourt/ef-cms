@@ -1,8 +1,16 @@
-const client = require('../../dynamodbClientService');
-const { isUserAlreadyCreated } = require('./createOrUpdateUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
+import * as client from '../../dynamodbClientService';
+import { ROLES } from '../../../business/entities/EntityConstants';
+import { isUserAlreadyCreated } from './createOrUpdateUser';
 
-exports.createUserRecords = async ({ applicationContext, user, userId }) => {
+export const createUserRecords = async ({
+  applicationContext,
+  user,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  user: any;
+  userId: string;
+}) => {
   delete user.password;
 
   if (user.barNumber === '') {
@@ -44,9 +52,12 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   };
 };
 
-exports.createOrUpdatePractitionerUser = async ({
+export const createOrUpdatePractitionerUser = async ({
   applicationContext,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
 }) => {
   let userId = applicationContext.getUniqueId();
   const practitionerRoleTypes = [
@@ -64,7 +75,7 @@ exports.createOrUpdatePractitionerUser = async ({
   const userEmail = user.email || user.pendingEmail;
 
   if (!userEmail) {
-    return await exports.createUserRecords({
+    return await createUserRecords({
       applicationContext,
       user,
       userId,
@@ -132,7 +143,7 @@ exports.createOrUpdatePractitionerUser = async ({
     userId = response.Username;
   }
 
-  return await exports.createUserRecords({
+  return await createUserRecords({
     applicationContext,
     user,
     userId,
