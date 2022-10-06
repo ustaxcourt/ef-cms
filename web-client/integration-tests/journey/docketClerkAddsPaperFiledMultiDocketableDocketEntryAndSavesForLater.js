@@ -1,4 +1,8 @@
-import { contactPrimaryFromState, fakeFile } from '../helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  waitForCondition,
+} from '../helpers';
 
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater =
   (cerebralTest, eventCode) => {
@@ -64,6 +68,11 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
       });
 
       expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      await waitForCondition({
+        booleanExpressionCondition: () =>
+          cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+      });
 
       expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
 
