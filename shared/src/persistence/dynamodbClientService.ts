@@ -1,4 +1,4 @@
-const { chunk, isEmpty } = require('lodash');
+import { chunk, isEmpty } from 'lodash';
 
 /**
  * PUT for dynamodb aws-sdk client
@@ -45,7 +45,7 @@ const getTableName = ({ applicationContext }) =>
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
 
-const getDeployTableName = ({ applicationContext }) => {
+export const getDeployTableName = ({ applicationContext }) => {
   const env =
     applicationContext.environment || applicationContext.getEnvironment();
 
@@ -56,9 +56,7 @@ const getDeployTableName = ({ applicationContext }) => {
   return `efcms-deploy-${env.stage}`;
 };
 
-exports.getDeployTableName = getDeployTableName;
-
-exports.describeTable = async ({ applicationContext }) => {
+export const describeTable = async ({ applicationContext }) => {
   const dynamoClient = applicationContext.getDynamoClient();
 
   const params = {
@@ -68,7 +66,7 @@ exports.describeTable = async ({ applicationContext }) => {
   return await dynamoClient.describeTable(params).promise();
 };
 
-exports.describeDeployTable = async ({ applicationContext }) => {
+export const describeDeployTable = async ({ applicationContext }) => {
   const dynamoClient = applicationContext.getDynamoClient({
     useMasterRegion: true,
   });
@@ -85,7 +83,7 @@ exports.describeDeployTable = async ({ applicationContext }) => {
  * @param {object} params the params to put
  * @returns {object} the item that was put
  */
-exports.put = params => {
+export const put = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient()
@@ -104,7 +102,7 @@ exports.put = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-exports.update = params => {
+export const update = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient()
@@ -123,7 +121,7 @@ exports.update = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-exports.updateToDeployTable = params => {
+export const updateToDeployTable = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient({
@@ -145,7 +143,7 @@ exports.updateToDeployTable = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-exports.updateConsistent = params => {
+export const updateConsistent = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient({
@@ -167,7 +165,7 @@ exports.updateConsistent = params => {
  * @param {object} params the params to get
  * @returns {object} the item that was retrieved
  */
-exports.get = params => {
+export const get = params => {
   return params.applicationContext
     .getDocumentClient()
     .get({
@@ -188,7 +186,7 @@ exports.get = params => {
  * @param {object} params the params to get
  * @returns {object} the item that was retrieved
  */
-exports.getFromDeployTable = params => {
+export const getFromDeployTable = params => {
   return params.applicationContext
     .getDocumentClient({
       useMasterRegion: true,
@@ -211,7 +209,7 @@ exports.getFromDeployTable = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-exports.query = params => {
+export const query = params => {
   return params.applicationContext
     .getDocumentClient()
     .query({
@@ -227,7 +225,7 @@ exports.query = params => {
     });
 };
 
-exports.scan = async params => {
+export const scan = async params => {
   let hasMoreResults = true;
   let lastKey = null;
   const allItems = [];
@@ -259,7 +257,7 @@ exports.scan = async params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-exports.queryFull = async params => {
+export const queryFull = async params => {
   let hasMoreResults = true;
   let lastKey = null;
   let allResults = [];
@@ -296,7 +294,7 @@ exports.queryFull = async params => {
  * @param {Array} providers.keys the keys to get
  * @returns {Array} the results retrieved
  */
-exports.batchGet = async ({ applicationContext, keys }) => {
+export const batchGet = async ({ applicationContext, keys }) => {
   if (!keys.length) return [];
   const chunks = chunk(keys, 100);
 
@@ -330,7 +328,7 @@ exports.batchGet = async ({ applicationContext, keys }) => {
  * @param {object} providers.items the items to write
  * @returns {Promise} the promise of the persistence call
  */
-exports.batchDelete = ({ applicationContext, items }) => {
+export const batchDelete = ({ applicationContext, items }) => {
   if (!items || items.length === 0) {
     return Promise.resolve();
   }
@@ -367,7 +365,7 @@ exports.batchDelete = ({ applicationContext, items }) => {
   }
 };
 
-exports.delete = ({ applicationContext, key }) => {
+export const remove = ({ applicationContext, key }) => {
   return applicationContext
     .getDocumentClient()
     .delete({

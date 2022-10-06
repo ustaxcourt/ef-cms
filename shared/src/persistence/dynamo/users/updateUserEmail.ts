@@ -1,4 +1,10 @@
-exports.updateUserEmail = async ({ applicationContext, user }) => {
+export const updateUserEmail = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   try {
     await applicationContext
       .getCognito()

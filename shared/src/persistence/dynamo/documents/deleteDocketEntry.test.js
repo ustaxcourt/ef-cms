@@ -13,7 +13,7 @@ describe('deleteDocketEntry', () => {
       ({ cases }) => cases,
     );
 
-    client.delete = jest.fn();
+    client.remove = jest.fn();
   });
 
   it('makes a delete request with the given docket entry data for the matching docketEntryId', async () => {
@@ -23,7 +23,7 @@ describe('deleteDocketEntry', () => {
       docketNumber: mockDocketNumber,
     });
 
-    expect(client.delete.mock.calls[0][0]).toMatchObject({
+    expect(client.remove.mock.calls[0][0]).toMatchObject({
       key: {
         pk: `case|${mockDocketNumber}`,
         sk: `docket-entry|${mockDocketEntryId}`,

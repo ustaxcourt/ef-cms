@@ -14,7 +14,7 @@ exports.deleteTrialSessionWorkingCopy = ({
   trialSessionId,
   userId,
 }) =>
-  client.delete({
+  client.remove({
     applicationContext,
     key: {
       pk: `trial-session-working-copy|${trialSessionId}`,
