@@ -1,9 +1,13 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
-exports.updateUserRecords = async ({
+export const updateUserRecords = async ({
   applicationContext,
   updatedUser,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  updatedUser: any;
+  userId: String;
 }) => {
   await client.put({
     Item: {
@@ -37,7 +41,13 @@ exports.updateUserRecords = async ({
   };
 };
 
-exports.createNewPractitionerUser = async ({ applicationContext, user }) => {
+export const createNewPractitionerUser = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   const { userId } = user;
 
   await applicationContext

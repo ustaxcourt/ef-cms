@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
 /**
  * getCasesForUser
@@ -8,7 +8,13 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the userId to filter cases by
  * @returns {object} the case data
  */
-exports.getCasesForUser = ({ applicationContext, userId }) =>
+export const getCasesForUser = ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) =>
   client.queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
