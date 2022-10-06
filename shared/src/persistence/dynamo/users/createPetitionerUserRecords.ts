@@ -1,9 +1,13 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
-const createPetitionerUserRecords = async ({
+export const createPetitionerUserRecords = async ({
   applicationContext,
   user,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  user: any;
+  userId: string;
 }) => {
   delete user.password;
 
@@ -32,5 +36,3 @@ const createPetitionerUserRecords = async ({
     userId,
   };
 };
-
-exports.createPetitionerUserRecords = createPetitionerUserRecords;
