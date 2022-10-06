@@ -5,11 +5,13 @@ import {
   setupTest,
   uploadPetition,
   wait,
+  waitForCondition,
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
-const cerebralTest = setupTest();
 
 describe('Docket Clerk edits a paper filing journey', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -95,6 +97,11 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
+
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDocument = cerebralTest.getState('caseDetail.docketEntries.0');
@@ -170,9 +177,14 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 
-  docketClerkAddsMiscellaneousPaperFiling(cerebralTest, fakeFile);
+  docketClerkAddsMiscellaneousPaperFiling(cerebralTest);
 });
