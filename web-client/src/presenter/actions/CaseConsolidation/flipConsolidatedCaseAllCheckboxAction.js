@@ -7,6 +7,7 @@ import { state } from 'cerebral';
  *   sets tooltip on lead case if non-lead cases are enabled
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the Cerebral get object
  * @param {object} providers.store the Cerebral store object
  */

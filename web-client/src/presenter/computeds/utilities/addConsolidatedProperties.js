@@ -3,6 +3,7 @@
  * Adds consolidated case properties to the passed in object.
  *
  * @param {object} caseObject - caseObject to have consolidated case properties added into.
+ * @param {object} applicationContext - applicationContext the application context
  * @returns {object} caseObject, consolidatedIconTooltipText, inConsolidatedGroup, and inLeadCase
  */
 

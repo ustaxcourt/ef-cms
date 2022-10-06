@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props function
  * @returns {Promise<*>} the success message after the document has been filed and served
  */
 export const fileAndServeCourtIssuedDocumentAction = async ({
