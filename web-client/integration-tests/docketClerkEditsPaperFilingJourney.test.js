@@ -8,6 +8,7 @@ import {
   waitForCondition,
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Docket Clerk edits a paper filing journey', () => {
   const cerebralTest = setupTest();
@@ -26,6 +27,9 @@ describe('Docket Clerk edits a paper filing journey', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('create a paper-filed docket entry', async () => {
@@ -177,12 +181,13 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
     await waitForCondition({
       booleanExpressionCondition: () =>
         cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 
