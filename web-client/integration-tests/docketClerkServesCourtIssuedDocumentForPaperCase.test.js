@@ -8,10 +8,9 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });

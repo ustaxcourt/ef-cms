@@ -91,8 +91,11 @@ export const formatDocketEntryOnDocketRecord = (
 };
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
+  const { ORDER_EVENT_CODES, PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } =
+    applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
   const isTerminalUser = get(state.isTerminalUser);
+  const { docketRecordFilter } = get(state.sessionMetadata);
 
   const formatCaseDetail = caseToFormat => ({
     ...caseToFormat,
@@ -107,13 +110,20 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
-  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
+  let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
     entry =>
       formatDocketEntryOnDocketRecord(applicationContext, {
         entry,
         isTerminalUser,
       }),
   );
+
+  if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
+    formattedDocketEntriesOnDocketRecord =
+      formattedDocketEntriesOnDocketRecord.filter(entry =>
+        ORDER_EVENT_CODES.includes(entry.eventCode),
+      );
+  }
 
   const formattedCaseDetail = formatCaseDetail(publicCase);
 

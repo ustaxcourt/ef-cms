@@ -1,8 +1,11 @@
-const { getRecordsViaMapping } = require('../helpers/getRecordsViaMapping');
+import { getRecordsViaMapping } from '../helpers/getRecordsViaMapping';
 
-exports.getPractitionerByBarNumber = async ({
+export const getPractitionerByBarNumber = async ({
   applicationContext,
   barNumber,
+}: {
+  applicationContext: IApplicationContext;
+  barNumber: string;
 }) => {
   const upperCaseBarNumber = barNumber.toUpperCase();
   const users = [

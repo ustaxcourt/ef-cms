@@ -10,7 +10,7 @@ const client = require('../../dynamodbClientService');
  * @returns {Promise} the return from the persistence delete calls
  */
 exports.deleteUserFromCase = ({ applicationContext, docketNumber, userId }) =>
-  client.delete({
+  client.remove({
     applicationContext,
     key: {
       pk: `user|${userId}`,
