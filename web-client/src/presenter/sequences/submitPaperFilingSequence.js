@@ -24,8 +24,9 @@ import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocket
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 const savePaperFiling = [
+  closeFileUploadStatusModalAction,
+  setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
-  // closeFileUploadStatusModalAction,
   submitPaperFilingAction,
 ];
 
@@ -53,7 +54,6 @@ export const submitPaperFilingSequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          setWaitingForResponseAction,
           stopShowValidationAction,
           clearAlertsAction,
           isFileAttachedAction,
