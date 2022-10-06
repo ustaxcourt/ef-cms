@@ -70,6 +70,8 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'MISC');
 
+    cerebralTest.docketEntryId = miscellaneousDocument.docketEntryId;
+
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
 
