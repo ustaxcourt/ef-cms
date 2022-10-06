@@ -52,9 +52,11 @@ export const PractitionerInformation = connect(
             <Tab tabName="practitioner-details" title={'Details'}>
               <PractitionerDetails />
             </Tab>
-            <Tab tabName="practitioner-documentation" title={'Documentation'}>
-              <div>hi</div>
-            </Tab>
+            {practitionerDetailHelper.showDocumentationTab && (
+              <Tab tabName="practitioner-documentation" title={'Documentation'}>
+                <div>hi</div>
+              </Tab>
+            )}
           </Tabs>
         </section>
 
