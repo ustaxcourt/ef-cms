@@ -18,7 +18,6 @@ export const EligibleCases = connect(
   },
   function EligibleCases({
     formattedEligibleCases,
-    formattedTrialSessionDetails,
     trialSessionDetailsHelper,
     trialSessionId,
     updateQcCompleteForTrialSequence,
@@ -26,7 +25,7 @@ export const EligibleCases = connect(
     return (
       <React.Fragment>
         <div className="grid-row float-right text-semibold margin-bottom-2">
-          {formattedTrialSessionDetails.isHybridSession && (
+          {trialSessionDetailsHelper.showSmallAndRegularQcComplete && (
             <div className="grid-row">
               <div className="margin-right-50 margin-right-mobile">
                 Regular:{' '}
