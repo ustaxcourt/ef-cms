@@ -17,7 +17,7 @@ export const PractitionerDocumentation = connect(
             link
             className="push-right margin-bottom-1"
             href="*"
-            icon="plus"
+            icon="plus-circle"
           >
             Add file
           </Button>
