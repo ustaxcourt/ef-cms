@@ -1,7 +1,15 @@
-const client = require('../../dynamodbClientService');
-const { ROLES } = require('../../../business/entities/EntityConstants');
+import * as client from '../../dynamodbClientService';
+import { ROLES } from '../../../business/entities/EntityConstants';
 
-const createUserRecords = async ({ applicationContext, newUser, userId }) => {
+const createUserRecords = async ({
+  applicationContext,
+  newUser,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  newUser: TUser;
+  userId: string;
+}) => {
   await client.put({
     Item: {
       ...newUser,
@@ -18,7 +26,13 @@ const createUserRecords = async ({ applicationContext, newUser, userId }) => {
   };
 };
 
-exports.createNewPetitionerUser = async ({ applicationContext, user }) => {
+export const createNewPetitionerUser = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   const { userId } = user;
 
   await applicationContext
