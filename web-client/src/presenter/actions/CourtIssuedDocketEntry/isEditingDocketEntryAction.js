@@ -8,6 +8,5 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const isEditingDocketEntryAction = ({ get, path }) => {
-  console.log('are we editing????', get(state.isEditingDocketEntry));
   return get(state.isEditingDocketEntry) ? path.yes() : path.no();
 };
