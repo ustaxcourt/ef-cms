@@ -495,6 +495,55 @@ describe('formattedEligibleCasesHelper', () => {
     ]);
   });
 
+  it('should group the consolidated cases together when the lead and a member case is high priority', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          eligibleCases: [
+            {
+              docketNumber: '103-22',
+              highPriority: true,
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '105-22',
+              highPriority: true,
+            },
+            {
+              docketNumber: '106-22',
+              highPriority: true,
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '120-22',
+            },
+            {
+              docketNumber: '110-22',
+              leadDocketNumber: '103-22',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '110-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '120-22',
+      }),
+    ]);
+  });
+
   it('should not group the consolidated cases when the lead case is high priority', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
@@ -633,7 +682,7 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '105-22',
-              docketNumberSuffix: 'L',
+              highPriority: true,
             },
             {
               docketNumber: '102-22',
@@ -643,7 +692,7 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '106-22',
-              docketNumberSuffix: 'L',
+              highPriority: true,
               leadDocketNumber: '103-22',
             },
             {
