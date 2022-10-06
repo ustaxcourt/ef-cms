@@ -15,7 +15,7 @@ export const gotoPractitionerDetailSequence = [
         clearErrorAlertsAction,
         getPractitionerDetailAction,
         setPractitionerDetailAction,
-        setCurrentPageAction('PractitionerDetail'),
+        setCurrentPageAction('PractitionerInformation'),
       ]),
       unauthorized: [redirectToCognitoAction],
     },
