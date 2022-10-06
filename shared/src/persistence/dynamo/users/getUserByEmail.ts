@@ -1,5 +1,5 @@
-const client = require('../../dynamodbClientService');
-const { getUserById } = require('./getUserById');
+import * as client from '../../dynamodbClientService';
+import { getUserById } from './getUserById';
 
 /**
  * getUserByEmail
@@ -7,7 +7,13 @@ const { getUserById } = require('./getUserById');
  * @param {string} email the email of the user
  * @returns {*} result returned from persistence
  */
-exports.getUserByEmail = async ({ applicationContext, email }) => {
+export const getUserByEmail = async ({
+  applicationContext,
+  email,
+}: {
+  applicationContext: IApplicationContext;
+  email: string;
+}) => {
   const formattedEmail = email.toLowerCase().trim();
 
   const results = await client.query({
