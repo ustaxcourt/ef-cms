@@ -1,23 +1,17 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
+import { PractitionerDetails } from './PractitionerDetails';
 import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
-export const PractitionerDetail = connect(
+export const PractitionerInformation = connect(
   {
-    gotoPrintPractitionerCasesSequence:
-      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerDetail({
-    gotoPrintPractitionerCasesSequence,
-    practitionerDetailHelper,
-    showModal,
-  }) {
+  function PractitionerInformation({ practitionerDetailHelper, showModal }) {
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -41,6 +35,30 @@ export const PractitionerDetail = connect(
         </div>
 
         <div className="grid-container">
+          <div className="grid-row grid-gap">
+            {/* used to be col-8, 12 necessary? check this out */}
+            <div className="grid-col-12">
+              <SuccessNotification />
+            </div>
+          </div>
+        </div>
+
+        <section className="usa-section grid-container">
+          <Tabs
+            className="classic-horizontal-header3 tab-border"
+            defaultActiveTab="practitioner-details"
+            marginBottom={false}
+          >
+            <Tab tabName="practitioner-details" title={'Details'}>
+              <PractitionerDetails />
+            </Tab>
+            <Tab tabName="practitioner-documentation" title={'Documentation'}>
+              <div>hi</div>
+            </Tab>
+          </Tabs>
+        </section>
+
+        {/* <div className="grid-container">
           <div className="grid-row grid-gap">
             <div className="grid-col-8">
               <SuccessNotification />
@@ -183,7 +201,6 @@ export const PractitionerDetail = connect(
                           Address
                         </span>
                         <div className="margin-bottom-4">
-                          {/* TODO: use helper (international) */}
                           {practitionerDetailHelper.contact.address1}
                           {practitionerDetailHelper.contact.address2 && (
                             <>
@@ -282,7 +299,7 @@ export const PractitionerDetail = connect(
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {showModal === 'OpenPractitionerCaseListPdfModal' && (
           <OpenPractitionerCaseListPdfModal />
