@@ -70,27 +70,9 @@ exports.formatCase = ({
     });
   }
 
-  applicationContext
+  return applicationContext
     .getUtilities()
     .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
-
-  return caseItem;
-};
-
-exports.compareCasesByDocketNumber = (a, b) => {
-  if (!a || !a.docketNumber || !b || !b.docketNumber) {
-    return 0;
-  }
-
-  const [numberA, yearA] = a.docketNumber.split('-');
-  const [numberB, yearB] = b.docketNumber.split('-');
-
-  let yearDifference = +yearA - +yearB;
-  if (yearDifference === 0) {
-    return +numberA - +numberB;
-  } else {
-    return yearDifference;
-  }
 };
 
 exports.formattedTrialSessionDetails = ({
