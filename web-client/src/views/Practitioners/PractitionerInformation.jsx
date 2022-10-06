@@ -1,5 +1,6 @@
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { PractitionerDetails } from './PractitionerDetails';
+import { PractitionerDocumentation } from './PractitionerDocumentation';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -54,7 +55,7 @@ export const PractitionerInformation = connect(
             </Tab>
             {practitionerDetailHelper.showDocumentationTab && (
               <Tab tabName="practitioner-documentation" title={'Documentation'}>
-                <div>hi</div>
+                <PractitionerDocumentation />
               </Tab>
             )}
           </Tabs>
