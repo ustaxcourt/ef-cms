@@ -5,7 +5,13 @@
  * @param {object} providers.initials the initials preceding the generated number
  * @returns {string} the generated bar number
  */
-exports.createBarNumber = async ({ applicationContext, initials }) => {
+export const createBarNumber = async ({
+  applicationContext,
+  initials,
+}: {
+  applicationContext: IApplicationContext;
+  initials: string;
+}) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
     key: 'barNumberCounter',

@@ -2,9 +2,9 @@
 
 This part of the documentation is meant to give an overview of how our project is built, tested, and deployed using CircleCi, Github Actions, and Docker.
 
-?> The **Flexion** CircleCI link can be found [here](https://app.circleci.com/pipelines/github/flexion/ef-cms)
+?> The **Flexion** CircleCI link can be found [here](https://app.circleci.com/pipelines/github/flexion/ef-cms).
 
-?> The **Tax Court** CircleCI link can be found [here](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms)
+?> The **Tax Court** CircleCI link can be found [here](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms).
 
 ## CircleCI
 

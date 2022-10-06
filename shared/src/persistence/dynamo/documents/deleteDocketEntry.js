@@ -13,7 +13,7 @@ exports.deleteDocketEntry = async ({
   docketEntryId,
   docketNumber,
 }) => {
-  await client.delete({
+  await client.remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,
