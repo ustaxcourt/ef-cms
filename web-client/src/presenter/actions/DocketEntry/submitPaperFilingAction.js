@@ -87,7 +87,7 @@ export const submitPaperFilingAction = async ({
       });
   }
 
-  if (generateCoversheet) {
+  if (generateCoversheet && caseDetail) {
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
@@ -97,10 +97,10 @@ export const submitPaperFilingAction = async ({
   }
 
   return {
-    caseDetail,
+    caseDetail: caseDetail || {},
     docketEntryId,
     docketNumber,
     overridePaperServiceAddress: true,
-    pdfUrl: paperServicePdfUrl,
+    pdfUrl: paperServicePdfUrl || '',
   };
 };
