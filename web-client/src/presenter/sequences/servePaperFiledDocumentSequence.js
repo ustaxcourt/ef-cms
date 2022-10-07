@@ -4,13 +4,12 @@ import { generateTitleAction } from '../actions/FileDocument/generateTitleAction
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { servePaperFiledDocumentAction } from '../actions/DocketEntry/servePaperFiledDocumentAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
-export const servePaperFiledDocumentSequence = showProgressSequenceDecorator([
+export const servePaperFiledDocumentSequence = [
   clearModalAction,
   generateTitleAction,
   clearAlertsAction,
-  getDocketNumbersForConsolidatedServiceAction,
   setWaitingForResponseAction,
+  getDocketNumbersForConsolidatedServiceAction,
   servePaperFiledDocumentAction,
-]);
+];

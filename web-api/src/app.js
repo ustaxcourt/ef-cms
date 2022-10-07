@@ -598,7 +598,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
-    lambdaWrapper(serveExternallyFiledDocumentLambda),
+    lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/external-document',
