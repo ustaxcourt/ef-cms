@@ -5,6 +5,7 @@ const { post } = require('../requests');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} providers.clientConnectionId the client connection id
  * @param {object} providers.consolidatedGroupDocketNumbers the consolidated group's docket numbers
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
@@ -16,6 +17,7 @@ const { post } = require('../requests');
 exports.addPaperFilingInteractor = (
   applicationContext,
   {
+    clientConnectionId,
     consolidatedGroupDocketNumbers,
     documentMetadata,
     isSavingForLater,
@@ -26,6 +28,7 @@ exports.addPaperFilingInteractor = (
   return post({
     applicationContext,
     body: {
+      clientConnectionId,
       consolidatedGroupDocketNumbers,
       documentMetadata,
       isSavingForLater,

@@ -7,9 +7,9 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
-const cerebralTest = setupTest();
-
 describe('Docket clerk consolidated case work item journey', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -122,7 +122,6 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(
     cerebralTest,
-    fakeFile,
     leadCaseDocketNumber,
   );
 
@@ -144,7 +143,6 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(
     cerebralTest,
-    fakeFile,
     consolidatedCaseDocketNumber,
   );
 

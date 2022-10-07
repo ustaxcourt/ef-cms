@@ -307,8 +307,8 @@ import { selectDocumentForScanSequence } from './sequences/selectDocumentForScan
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
-import { serveCourtIssuedDocumentCompleteSequence } from './sequences/serveCourtIssuedDocumentCompleteSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
+import { serveDocumentCompleteSequence } from './sequences/serveDocumentCompleteSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
@@ -817,8 +817,8 @@ export const presenter = {
     selectScannerSequence,
     selectWorkItemSequence,
     serveCaseToIrsSequence,
-    serveCourtIssuedDocumentCompleteSequence,
     serveCourtIssuedDocumentSequence,
+    serveDocumentCompleteSequence,
     servePaperFiledDocumentSequence,
     setCaseDetailPageTabSequence,
     setCaseDetailPrimaryTabSequence,
