@@ -10,10 +10,13 @@ import React from 'react';
 
 export const PractitionerInformation = connect(
   {
-    practitionerDetailHelper: state.practitionerDetailHelper,
+    practitionerDocumentationHelper: state.practitionerDocumentationHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerInformation({ practitionerDetailHelper, showModal }) {
+  function PractitionerInformation({
+    practitionerDocumentationHelper,
+    showModal,
+  }) {
     return (
       <React.Fragment>
         <PractitionerUserHeader />
@@ -36,7 +39,7 @@ export const PractitionerInformation = connect(
             <Tab tabName="practitioner-details" title={'Details'}>
               <PractitionerDetails />
             </Tab>
-            {practitionerDetailHelper.showDocumentationTab && (
+            {practitionerDocumentationHelper.showDocumentationTab && (
               <Tab tabName="practitioner-documentation" title={'Documentation'}>
                 <PractitionerDocumentation />
               </Tab>
