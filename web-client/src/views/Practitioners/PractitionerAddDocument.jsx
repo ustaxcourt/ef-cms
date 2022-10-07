@@ -30,8 +30,34 @@ export const PractitionerAddDocument = connect(
                       updateFormValueSequence="updateStartCaseFormValueSequence"
                       validationSequence="validateStartCaseWizardSequence"
                     />
-                    <BindedSelect></BindedSelect>
-                    <BindedTextarea></BindedTextarea>
+                  </FormGroup>
+                  <FormGroup>
+                    <label
+                      className="dropdown-label-serif margin-right-3 padding-top-05"
+                      htmlFor="documentation-category"
+                      id="documentation-category-label"
+                    >
+                      Category
+                    </label>
+                    <BindedSelect
+                      aria-describedby="documentation-category-label"
+                      aria-label="documentation category dropdown"
+                      id="documentation-category"
+                      name="documentationCategory"
+                    >
+                      <option value="">-- Select --</option>
+                    </BindedSelect>
+                    <label
+                      className="usa-label"
+                      htmlFor="documentation-notes"
+                      id="documentation-notes-label"
+                    >
+                      Description (optional)
+                    </label>
+                    <BindedTextarea
+                      id="documentation-notes"
+                      required={false}
+                    ></BindedTextarea>
                   </FormGroup>
                 </div>
               </div>
