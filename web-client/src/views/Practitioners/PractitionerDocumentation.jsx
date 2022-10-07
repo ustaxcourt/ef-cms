@@ -6,17 +6,18 @@ import React from 'react';
 
 export const PractitionerDocumentation = connect(
   {
+    barNumber: state.practitionerDetail.barNumber,
     constants: state.constants,
     practitionerDetailHelper: state.practitionerDetailHelper,
   },
-  function PractitionerDocumentation() {
+  function PractitionerDocumentation({ barNumber }) {
     return (
       <>
         <div className="display-flex flex-justify-end">
           <Button
             link
             className="push-right margin-bottom-1"
-            href="*"
+            href={`/practitioner-detail/${barNumber}/add-document`}
             icon="plus-circle"
           >
             Add file
