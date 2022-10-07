@@ -89,12 +89,13 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
     state.screenMetadata.eligibleCasesFilter.hybridSessionFilter,
   );
 
-  const groups = getPriorityGroups(eligibleCases);
+  const formattedCases = eligibleCases.map(caseItem =>
+    formatCase({ applicationContext, caseItem, eligibleCases }),
+  );
 
-  const sortedCases = eligibleCases
-    .map(caseItem =>
-      formatCase({ applicationContext, caseItem, eligibleCases }),
-    )
+  const groups = getPriorityGroups(formattedCases);
+
+  const sortedCases = formattedCases
     .map(caseItem => {
       return addGroupSymbol(
         setConsolidationFlagsForDisplay(

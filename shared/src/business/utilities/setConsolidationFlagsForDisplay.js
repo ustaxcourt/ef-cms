@@ -18,6 +18,8 @@ exports.setConsolidationFlagsForDisplay = (
 
       if (leadCase) {
         newCaseItem.shouldIndent = true;
+      } else {
+        delete newCaseItem.shouldIndent;
       }
     }
   }
