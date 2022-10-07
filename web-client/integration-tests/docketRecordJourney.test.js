@@ -418,6 +418,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    expect(cerebralTest.getState('currentPage')).toBe('PaperFiling');
+
     await cerebralTest.runSequence(
       'openConfirmServePaperFiledDocumentSequence',
       {
@@ -426,6 +433,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     );
 
     await cerebralTest.runSequence('servePaperFiledDocumentSequence');
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
