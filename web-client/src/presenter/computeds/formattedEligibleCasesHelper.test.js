@@ -385,6 +385,36 @@ describe('formattedTrialSessionDetails', () => {
     ]);
   });
 
+  it('does not indent the consolidated cases if the lead case is not in same group', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          eligibleCases: [
+            {
+              docketNumber: '101-20',
+              leadDocketNumber: '101-20',
+            },
+            {
+              docketNumber: '102-20',
+              isManuallyAdded: true,
+              leadDocketNumber: '101-20',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '102-20',
+      }),
+      expect.objectContaining({
+        docketNumber: '101-20',
+      }),
+    ]);
+    expect(result[0].shouldIndent).toBeUndefined();
+    expect(result[1].shouldIndent).toBeUndefined();
+  });
+
   it('groups the cases correctly when the eligible lead case is not in the list', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {

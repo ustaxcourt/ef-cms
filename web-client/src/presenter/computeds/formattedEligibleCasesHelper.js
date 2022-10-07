@@ -3,7 +3,6 @@ import {
   formatCase,
   getSortableDocketNumber,
 } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
-import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
 
 const groupKeySymbol = Symbol('group');
@@ -97,17 +96,12 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
 
   const sortedCases = eligibleCases
     .map(caseItem =>
-      formatCase({ applicationContext, caseItem, eligibleCases }),
+      formatCase({
+        applicationContext,
+        caseItem,
+        eligibleCases: groups[caseItem[groupKeySymbol]],
+      }),
     )
-    .map(caseItem => {
-      return addGroupSymbol(
-        setConsolidationFlagsForDisplay(
-          caseItem,
-          groups[caseItem[groupKeySymbol]],
-        ),
-        caseItem[groupKeySymbol],
-      );
-    })
     .sort(compareTrialSessionEligibleCases(eligibleCases))
     .filter(eligibleCase => {
       if (filter === 'Small') {
