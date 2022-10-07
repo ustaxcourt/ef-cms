@@ -3,7 +3,7 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, uniq, without } = require('lodash');
+const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -13,6 +13,8 @@ const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
+
+const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
@@ -54,6 +56,11 @@ const PARTY_VIEW_TABS = {
 const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
+  },
+  CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS: {
+    disabledMessage:
+      'The ability to add multiple docket entries to an order is disabled.',
+    key: 'consolidated-cases-add-docket-numbers',
   },
   CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES: {
     disabledMessage:
@@ -298,6 +305,7 @@ const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
+
 const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Order',
 ).eventCode;
@@ -453,6 +461,16 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
     TRACKED_DOCUMENT_TYPES.orderToShowCause.eventCode,
   ],
 );
+
+const DOCKET_RECORD_FILTER_OPTIONS = {
+  allDocuments: 'All documents',
+  exhibits: 'Exhibits',
+  orders: 'Orders',
+};
+
+const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(DOCKET_RECORD_FILTER_OPTIONS, [
+  'exhibits',
+]);
 
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
@@ -1360,6 +1378,8 @@ module.exports = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_RECORD_FILTER_OPTIONS,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_SECTION,
   EXTERNAL_DOCUMENTS_ARRAY,
   DOCUMENT_EXTERNAL_CATEGORIES,
@@ -1375,6 +1395,7 @@ module.exports = deepFreeze({
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
+  EXHIBIT_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   GENERIC_ORDER_EVENT_CODE,

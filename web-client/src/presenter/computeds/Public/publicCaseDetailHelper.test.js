@@ -2,6 +2,7 @@
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTIES_CODES,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import {
@@ -44,6 +45,9 @@ describe('publicCaseDetailHelper', () => {
       caseDetail: {
         docketEntries: [],
         docketNumber: '123-45',
+      },
+      sessionMetadata: {
+        docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
       },
     };
   });
@@ -112,6 +116,10 @@ describe('publicCaseDetailHelper', () => {
             canAllowPrintableDocketRecord: true,
             docketEntries: [],
           },
+          sessionMetadata: {
+            docketRecordFilter:
+              PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+          },
         },
       });
       expect(result.showPrintableDocketRecord).toBeTruthy();
@@ -123,6 +131,10 @@ describe('publicCaseDetailHelper', () => {
           caseDetail: {
             canAllowPrintableDocketRecord: false,
             docketEntries: [],
+          },
+          sessionMetadata: {
+            docketRecordFilter:
+              PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
           },
         },
       });
@@ -634,6 +646,57 @@ describe('publicCaseDetailHelper', () => {
           showLinkToDocument: false,
         },
       ]);
+    });
+  });
+
+  describe('docket record filtering', () => {
+    const caseDetail = {
+      docketEntries: [
+        {
+          ...baseDocketEntry,
+          docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+          documentTitle: 'Exhibit for Noodles',
+          eventCode: 'EXH',
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+          documentTitle: 'Order in the Court',
+          eventCode: 'O',
+        },
+      ],
+    };
+
+    it('should ONLY show order type docket entries when "Orders" has been selected as the filter', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail,
+          sessionMetadata: {
+            docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(1);
+      expect(result.formattedDocketEntriesOnDocketRecord[0].eventCode).toBe(
+        'O',
+      );
+    });
+
+    it('should show all docket entries when "All documents" has been selected as the filter', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail,
+          sessionMetadata: {
+            docketRecordFilter:
+              PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(
+        caseDetail.docketEntries.length,
+      );
     });
   });
 

@@ -24,12 +24,18 @@ export const PendingReportList = connect(
         <div className="grid-row margin-bottom-2">
           <div className="tablet:grid-col-8">
             <div className="grid-row grid-gap">
-              <h3 id="filterHeading">Show items for</h3>
+              <label
+                className="dropdown-label-serif margin-right-3"
+                htmlFor="inline-select"
+                id="pending-reports-filter-label"
+              >
+                Show items for
+              </label>
               <BindedSelect
-                aria-describedby="case-deadlines-tab filterHeading"
-                aria-label="judge"
+                aria-describedby="pending-reports-filter-label"
+                aria-label="judge filter"
                 bind="screenMetadata.pendingItemsFilters.judge"
-                className="select-left"
+                className="select-left inline-select width-mobile"
                 id="judgeFilter"
                 name="judge"
                 onChange={judge =>

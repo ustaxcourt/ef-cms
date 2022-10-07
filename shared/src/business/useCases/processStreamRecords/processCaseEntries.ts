@@ -75,6 +75,25 @@ export const processCaseEntries = async ({
             S: caseNewImage.pk.S,
           },
           sk: {
+            S: `${caseNewImage.sk.S}`,
+          },
+        },
+        NewImage: {
+          ...marshalledCase,
+          case_relations: { name: 'case' },
+          entityName: { S: 'CaseWorkItemMapping' },
+        },
+      },
+      eventName: 'MODIFY',
+    });
+
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: caseNewImage.pk.S,
+          },
+          sk: {
             S: caseNewImage.sk.S,
           },
         },
