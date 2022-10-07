@@ -45,7 +45,6 @@ export const PrintableWorkingCopySessionList = ({
         <table>
           <thead>
             <tr>
-              <th></th>
               <th
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
@@ -76,18 +75,22 @@ export const PrintableWorkingCopySessionList = ({
                 <React.Fragment key={formattedCase.docketNumber}>
                   <tr className="vertical-align-middle-row padding-bottom-2 content-row">
                     <td
-                      className={classNames(
-                        `consolidated-case-column ${
-                          formattedCase.leadCase && 'lead-consolidated-icon'
-                        } ${memberCase && 'consolidated-icon'}`,
-                      )}
-                    />
-                    <td>
-                      <div className={memberCase ? 'margin-left-2' : ''}>
-                        {formattedCase.docketNumberWithSuffix}
-                      </div>
+                      className={`${
+                        memberCase ? 'margin-left-2' : ''
+                      } docket-number-with-icon`}
+                    >
+                      <div
+                        className={classNames(
+                          `${
+                            formattedCase.leadCase && 'lead-consolidated-icon'
+                          } ${memberCase && 'consolidated-icon'}`,
+                        )}
+                      />
+                      <div>{formattedCase.docketNumberWithSuffix}</div>
                     </td>
-                    <td className="minw-80">{formattedCase.caseTitle}</td>
+                    <td style={{ wordBreak: 'break-all' }}>
+                      {formattedCase.caseTitle}
+                    </td>
                     <td>
                       {formattedCase.privatePractitioners.map(practitioner => (
                         <div key={practitioner.userId}>{practitioner.name}</div>
@@ -98,15 +101,11 @@ export const PrintableWorkingCopySessionList = ({
                         <div key={respondent.userId}>{respondent.name}</div>
                       ))}
                     </td>
-                    <td className="minw-10">
-                      {formattedCase.filingPartiesCode}
-                    </td>
-                    <td className="minw-30">
-                      {generateCaseStatus(formattedCase.trialStatus)}
-                    </td>
+                    <td>{formattedCase.filingPartiesCode}</td>
+                    <td>{generateCaseStatus(formattedCase.trialStatus)}</td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
-                    <td colSpan="2"></td>
+                    <td colSpan="1"></td>
                     <td colSpan="5">
                       {formattedCase.calendarNotes && (
                         <span>
@@ -119,7 +118,7 @@ export const PrintableWorkingCopySessionList = ({
                     </td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
-                    <td colSpan="2"></td>
+                    <td colSpan="1"></td>
                     <td colSpan="5">
                       {showCaseNotes && formattedCase.userNotes && (
                         <span>
