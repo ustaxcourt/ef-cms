@@ -143,22 +143,19 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockReturnValue({
         pdfUrl: 'localhost:123',
       });
 
-    const result = await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId,
-        docketEntryId: DOCKET_ENTRY_ID,
-        docketNumbers: [DOCKET_NUMBER],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
-      },
-    );
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: DOCKET_ENTRY_ID,
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
@@ -169,7 +166,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toMatchObject({
       docketEntryId: DOCKET_ENTRY_ID,
     });
-    expect(result).toEqual({ pdfUrl: 'localhost:123' });
   });
 
   it('should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
@@ -519,7 +515,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
   });
 
-  it('should send a serve_document_complete notification with a success message', async () => {
+  it('should send a serve_document_complete notification with a success message and paper service pdf url', async () => {
     const { docketEntryId } = caseRecord.docketEntries[0];
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {

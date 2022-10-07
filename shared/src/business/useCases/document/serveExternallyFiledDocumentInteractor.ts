@@ -29,7 +29,6 @@ const { omit } = require('lodash');
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- * @returns {Object} the URL of the document that was served
  */
 export const serveExternallyFiledDocumentInteractor = async (
   applicationContext: IApplicationContext,
@@ -123,7 +122,7 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
-  let serviceResults;
+  let pdfUrl;
   let stampedPdf;
 
   try {
@@ -163,14 +162,14 @@ export const serveExternallyFiledDocumentInteractor = async (
       pdfData: servedDocWithCover,
     });
 
-    serviceResults = await applicationContext
+    ({ pdfUrl } = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
         stampedPdf,
-      });
+      }));
   } finally {
     for (const caseEntity of caseEntities) {
       try {
@@ -211,12 +210,10 @@ export const serveExternallyFiledDocumentInteractor = async (
         message: successMessage,
         overwritable: false,
       },
-      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+      pdfUrl,
     },
     userId: user.userId,
   });
-
-  return serviceResults;
 };
 
 const stampDocument = async ({ applicationContext, form, pdfData }) => {
