@@ -1321,6 +1321,19 @@ const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
 const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
+const PRACTITIONER_DOCUMENT_TYPES = [
+  'Application',
+  'Certificate of Good Standing',
+  'Fee Receipt',
+  'Admission Certificate',
+  'Reference Inquiry',
+  'Response to Reference Inquiry',
+  'Disciplinary',
+  'Change of Name',
+  'Exam-Related',
+  'Miscellaneous',
+];
+
 module.exports = deepFreeze({
   AMENDED_PETITION_FORM_NAME,
   ADC_SECTION,
@@ -1435,6 +1448,7 @@ module.exports = deepFreeze({
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  PRACTITIONER_DOCUMENT_TYPES,
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   PROPOSED_STIPULATED_DECISION_EVENT_CODE,
