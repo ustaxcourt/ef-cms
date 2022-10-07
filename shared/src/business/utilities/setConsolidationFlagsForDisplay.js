@@ -22,6 +22,8 @@ exports.setConsolidationFlagsForDisplay = (
 
       if (!!leadCase && !skipPriorityStatus) {
         newCaseItem.shouldIndent = true;
+      } else {
+        delete newCaseItem.shouldIndent;
       }
     }
   }

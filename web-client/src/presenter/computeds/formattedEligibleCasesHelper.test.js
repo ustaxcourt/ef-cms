@@ -709,6 +709,50 @@ describe('formattedTrialSessionDetails', () => {
     ]);
   });
 
+  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          eligibleCases: [
+            {
+              docketNumber: '30535-15',
+              highPriority: true,
+              leadDocketNumber: '30533-15',
+            },
+            {
+              docketNumber: '33089-21',
+              docketNumberSuffix: 'L',
+              leadDocketNumber: '6450-19',
+            },
+            {
+              docketNumber: '6450-19',
+              leadDocketNumber: '6450-19',
+            },
+            {
+              docketNumber: '30533-15',
+              leadDocketNumber: '30533-15',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '30535-15',
+      }),
+      expect.objectContaining({
+        docketNumber: '33089-21',
+      }),
+      expect.objectContaining({
+        docketNumber: '30533-15',
+      }),
+      expect.objectContaining({
+        docketNumber: '6450-19',
+      }),
+    ]);
+    expect(result.every(({ shouldIndent }) => !shouldIndent)).toBeTruthy();
+  });
+
   it('should sort the high priority items correctly', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
