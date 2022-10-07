@@ -85,6 +85,7 @@ export const PrintableWorkingCopySessionList = ({
                             formattedCase.leadCase && 'lead-consolidated-icon'
                           } ${memberCase && 'consolidated-icon'}`,
                         )}
+                        style={{ marginRight: '0.3rem' }}
                       />
                       <div>{formattedCase.docketNumberWithSuffix}</div>
                     </td>
