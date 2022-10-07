@@ -1,12 +1,13 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+
+const documentationFileTypes = require('../../../../shared/src/tools/documentationFileTypes.json');
 
 export const PractitionerAddDocument = connect(
   {},
@@ -42,10 +43,19 @@ export const PractitionerAddDocument = connect(
                     <BindedSelect
                       aria-describedby="documentation-category-label"
                       aria-label="documentation category dropdown"
+                      bind="screenMetadata.documentationCategoryDropdown.documentationCategory"
                       id="documentation-category"
                       name="documentationCategory"
                     >
                       <option value="">-- Select --</option>
+                      {documentationFileTypes.map(fileType => (
+                        <option
+                          key={fileType.categoryType}
+                          value={fileType.categoryType}
+                        >
+                          {fileType.categoryTitle}
+                        </option>
+                      ))}
                     </BindedSelect>
                     <label
                       className="usa-label"
