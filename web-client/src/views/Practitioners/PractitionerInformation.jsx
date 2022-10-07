@@ -1,6 +1,7 @@
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { PractitionerDetails } from './PractitionerDetails';
 import { PractitionerDocumentation } from './PractitionerDocumentation';
+import { PractitionerUserHeader } from './PractitionerUserHeader';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -15,25 +16,7 @@ export const PractitionerInformation = connect(
   function PractitionerInformation({ practitionerDetailHelper, showModal }) {
     return (
       <React.Fragment>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <div className="grid-row">
-              <div className="tablet:grid-col-12">
-                <h1 className="captioned" tabIndex="-1">
-                  {practitionerDetailHelper.name}
-                </h1>
-                <span className="usa-tag">
-                  {practitionerDetailHelper.admissionsStatus}
-                </span>
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-12">
-                {practitionerDetailHelper.barNumber}
-              </div>
-            </div>
-          </div>
-        </div>
+        <PractitionerUserHeader />
 
         <div className="grid-container">
           <div className="grid-row grid-gap">
