@@ -32,7 +32,6 @@ export const practitionerDetailHelper = (get, applicationContext) => {
     emailFormatted,
     firmNameFormatted: practitionerDetail.firmName || 'None',
     pendingEmailFormatted,
-    showDocumentationTab: permissions.UPLOAD_PRACTITIONER_DOCUMENT,
     showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,
     showEditLink: permissions.ADD_EDIT_PRACTITIONER_USER,
     showPrintCaseListLink: isInternalUser,
