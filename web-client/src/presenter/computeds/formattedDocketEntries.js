@@ -88,6 +88,7 @@ export const getShowEditDocketRecordEntry = ({
 }) => {
   const { SYSTEM_GENERATED_DOCUMENT_TYPES, UNSERVABLE_EVENT_CODES } =
     applicationContext.getConstants();
+
   const systemGeneratedEventCodes = Object.keys(
     SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {
@@ -256,6 +257,12 @@ export const formattedDocketEntries = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
+  const { docketRecordFilter } = get(state.sessionMetadata);
+  const {
+    DOCKET_RECORD_FILTER_OPTIONS,
+    EXHIBIT_EVENT_CODES,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
@@ -271,6 +278,19 @@ export const formattedDocketEntries = (get, applicationContext) => {
   }
 
   const result = formatCase(applicationContext, caseDetail);
+
+  switch (docketRecordFilter) {
+    case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
+      result.formattedDocketEntries = result.formattedDocketEntries.filter(
+        entry => EXHIBIT_EVENT_CODES.includes(entry.eventCode),
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.orders:
+      result.formattedDocketEntries = result.formattedDocketEntries.filter(
+        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+      );
+      break;
+  }
 
   let docketEntriesFormatted = sortDocketEntries(
     result.formattedDocketEntries,

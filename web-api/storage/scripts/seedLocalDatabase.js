@@ -1,8 +1,10 @@
 const AWS = require('aws-sdk');
 const seedEntries = require('../fixtures/seed');
+const {
+  migrateItems: validationMigration,
+} = require('../../migration-terraform/main/lambdas/migrations/0000-validate-all-items');
 const { chunk: splitIntoChunks } = require('lodash');
 const { createCase1 } = require('./cases/createCase1');
-const { createOrder } = require('./cases/createOrder');
 const { createUsers } = require('./createUsers');
 
 AWS.config = new AWS.Config();
@@ -22,6 +24,12 @@ const client = new AWS.DynamoDB.DocumentClient({
 const putEntries = async entries => {
   const chunks = splitIntoChunks(entries, 25);
   for (let chunk of chunks) {
+    try {
+      validationMigration(chunk);
+    } catch (e) {
+      process.exit(1);
+    }
+
     await client
       .batchWrite({
         RequestItems: {
@@ -44,8 +52,6 @@ module.exports.seedLocalDatabase = async entries => {
 
     await putEntries(seedEntries);
 
-    const docketNumber = await createCase1();
-
-    await createOrder({ docketNumber });
+    await createCase1();
   }
 };

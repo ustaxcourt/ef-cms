@@ -10,10 +10,11 @@ const formattedCaseDetail = withAppContextDecorator(
 export const petitionsClerkAddsPractitionersToCase = (
   cerebralTest,
   skipAddingPractitionerToSecondaryPetitioner,
+  caseDocketNumber,
 ) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: caseDocketNumber || cerebralTest.docketNumber,
     });
 
     const practitionerBarNumber = cerebralTest.barNumber || 'PT1234';

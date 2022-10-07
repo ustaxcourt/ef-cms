@@ -1,6 +1,7 @@
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -57,6 +58,7 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
+import { formattedTrialSessionDetailsForFilteredEligibleCases } from './computeds/formattedTrialSessionDetailsForFilteredEligibleCases';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
@@ -86,6 +88,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
@@ -110,12 +113,13 @@ import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
-const { ASCENDING, IDLE_STATUS } = getConstants();
+const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
 const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
+  addDocketNumbersModalHelper,
   addToTrialSessionModalHelper,
   addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,
@@ -170,6 +174,7 @@ const helpers = {
   formattedOpenCases,
   formattedPendingItems,
   formattedTrialSessionDetails,
+  formattedTrialSessionDetailsForFilteredEligibleCases,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
@@ -198,6 +203,7 @@ const helpers = {
   scanBatchPreviewerHelper,
   scanHelper,
   sealedCaseDetailHelper,
+  sessionAssignmentHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
@@ -336,6 +342,7 @@ export const baseState = {
   sectionUsers: [],
   selectedWorkItems: [],
   sessionMetadata: {
+    docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
     todaysOrdersSort: [],
   },

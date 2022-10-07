@@ -1,6 +1,10 @@
-name: Node.js CI
+name: Node.js CI - api
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
 
 jobs:
   API:

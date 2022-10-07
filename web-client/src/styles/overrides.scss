@@ -11,6 +11,16 @@ option:first-child {
   font-weight: initial;
 }
 
+.inline-select {
+  display: inline;
+  max-width: 70%;
+  margin-left: 0.5rem;
+}
+
+.margin-left-1pt5rem:not(:first-child) {
+  margin-left: 1.5rem;
+}
+
 .create-case-steps p {
   max-width: 90%;
 }
@@ -319,8 +329,8 @@ textarea {
 }
 
 input[type='file']::-webkit-file-upload-button {
-  appearance: initial;
   border-radius: 5px;
+  appearance: initial;
 }
 
 .modal-button-link .svg-inline--fa {
