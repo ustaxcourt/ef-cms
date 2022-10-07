@@ -10,11 +10,16 @@ import React from 'react';
 export const PractitionerAddDocument = connect(
   {
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
+    practitionerDocumentationHelper: state.practitionerDocumentationHelper,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
   },
-  function PractitionerAddDocument({ documentTypes, usStates, usStatesOther }) {
-    console.log(documentTypes);
+  function PractitionerAddDocument({
+    documentTypes,
+    practitionerDocumentationHelper,
+    usStates,
+    usStatesOther,
+  }) {
     return (
       <>
         <div className="grid-row margin-bottom-4">
@@ -57,41 +62,45 @@ export const PractitionerAddDocument = connect(
                         </option>
                       ))}
                     </BindedSelect>
-                    <label
-                      className="usa-label"
-                      htmlFor="documentation-location"
-                      id="documentation-location-label"
-                    >
-                      State/Territory
-                    </label>
-                    <BindedSelect
-                      aria-describedby="documentation-location"
-                      aria-label="documentation location dropdown"
-                      bind="screenMetadata.documentationLocationDropdown.documentationLocation"
-                      id="documentation-location"
-                      name="documentationLocation"
-                    >
-                      <option value="">- Select -</option>
-                      <optgroup label="State">
-                        {Object.keys(usStates).map(abbrev => {
-                          const fullStateName = usStates[abbrev];
-                          return (
-                            <option key={fullStateName} value={abbrev}>
-                              {fullStateName}
-                            </option>
-                          );
-                        })}
-                      </optgroup>
-                      <optgroup label="Other">
-                        {usStatesOther.map(abbrev => {
-                          return (
-                            <option key={abbrev} value={abbrev}>
-                              {abbrev}
-                            </option>
-                          );
-                        })}
-                      </optgroup>
-                    </BindedSelect>
+                    {practitionerDocumentationHelper.isCertificateOfGoodStanding && (
+                      <div>
+                        <label
+                          className="usa-label"
+                          htmlFor="documentation-location"
+                          id="documentation-location-label"
+                        >
+                          State/Territory
+                        </label>
+                        <BindedSelect
+                          aria-describedby="documentation-location"
+                          aria-label="documentation location dropdown"
+                          bind="screenMetadata.documentationLocationDropdown.documentationLocation"
+                          id="documentation-location"
+                          name="documentationLocation"
+                        >
+                          <option value="">- Select -</option>
+                          <optgroup label="State">
+                            {Object.keys(usStates).map(abbrev => {
+                              const fullStateName = usStates[abbrev];
+                              return (
+                                <option key={fullStateName} value={abbrev}>
+                                  {fullStateName}
+                                </option>
+                              );
+                            })}
+                          </optgroup>
+                          <optgroup label="Other">
+                            {usStatesOther.map(abbrev => {
+                              return (
+                                <option key={abbrev} value={abbrev}>
+                                  {abbrev}
+                                </option>
+                              );
+                            })}
+                          </optgroup>
+                        </BindedSelect>
+                      </div>
+                    )}
                     <label
                       className="usa-label"
                       htmlFor="documentation-notes"
