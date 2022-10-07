@@ -27,20 +27,21 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitPaperFilingAction } from '../actions/DocketEntry/submitPaperFilingAction';
+import { submitAddPaperFilingAction } from '../actions/DocketEntry/submitAddPaperFilingAction';
+import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const savePaperFilingMultiDocketableFlow = [
+const addPaperFilingMultiDocketableFlow = [
   closeFileUploadStatusModalAction,
   setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
-  submitPaperFilingAction,
+  submitAddPaperFilingAction,
 ];
 
-const savePaperFilingNotMultiDocketableFlow = [
-  submitPaperFilingAction,
+const editPaperFilingNotMultiDocketableFlow = [
+  submitEditPaperFilingAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
   getShouldGoToPaperServiceAction,
@@ -86,13 +87,13 @@ export const submitPaperFilingSequence = [
             no: [
               isFileAttachedAction,
               {
-                no: savePaperFilingMultiDocketableFlow,
+                no: addPaperFilingMultiDocketableFlow,
                 yes: [
                   openFileUploadStatusModalAction,
                   uploadDocketEntryFileAction,
                   {
                     error: [openFileUploadErrorModal],
-                    success: savePaperFilingMultiDocketableFlow,
+                    success: addPaperFilingMultiDocketableFlow,
                   },
                 ],
               },
@@ -100,13 +101,13 @@ export const submitPaperFilingSequence = [
             yes: [
               isFileAttachedAction,
               {
-                no: savePaperFilingNotMultiDocketableFlow,
+                no: editPaperFilingNotMultiDocketableFlow,
                 yes: [
                   openFileUploadStatusModalAction,
                   uploadDocketEntryFileAction,
                   {
                     error: [openFileUploadErrorModal],
-                    success: savePaperFilingNotMultiDocketableFlow,
+                    success: editPaperFilingNotMultiDocketableFlow,
                   },
                 ],
               },

@@ -10,28 +10,18 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {Promise} async action
  */
-export const submitPaperFilingAction = async ({
+export const submitEditPaperFilingAction = async ({
   applicationContext,
   get,
   props,
 }) => {
-  const { docketNumbers, isSavingForLater, primaryDocumentFileId } = props;
+  const { isSavingForLater } = props;
   const { docketNumber } = get(state.caseDetail);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
-  const clientConnectionId = get(state.clientConnectionId);
-  const isEditingDocketEntry = get(state.isEditingDocketEntry);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
 
   let caseDetail;
-  let docketEntryId;
-
-  if (isEditingDocketEntry) {
-    docketEntryId = get(state.docketEntryId);
-  } else if (isFileAttached) {
-    docketEntryId = primaryDocumentFileId;
-  } else {
-    docketEntryId = applicationContext.getUniqueId();
-  }
+  let docketEntryId = get(state.docketEntryId);
 
   let documentMetadata = omit(
     {
@@ -65,33 +55,21 @@ export const submitPaperFilingAction = async ({
 
   let paperServicePdfUrl;
 
-  if (isEditingDocketEntry) {
-    ({ caseDetail, paperServicePdfUrl } = await applicationContext
-      .getUseCases()
-      .editPaperFilingInteractor(applicationContext, {
-        documentMetadata,
-        isSavingForLater,
-        primaryDocumentFileId: docketEntryId,
-      }));
+  ({ caseDetail, paperServicePdfUrl } = await applicationContext
+    .getUseCases()
+    .editPaperFilingInteractor(applicationContext, {
+      documentMetadata,
+      isSavingForLater,
+      primaryDocumentFileId: docketEntryId,
+    }));
 
-    const generateCoversheet = isFileAttached && !isSavingForLater;
-    if (generateCoversheet) {
-      await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber: caseDetail.docketNumber,
-        });
-    }
-  } else {
+  const generateCoversheet = isFileAttached && !isSavingForLater;
+  if (generateCoversheet) {
     await applicationContext
       .getUseCases()
-      .addPaperFilingInteractor(applicationContext, {
-        clientConnectionId,
-        consolidatedGroupDocketNumbers: docketNumbers,
-        documentMetadata,
-        isSavingForLater,
-        primaryDocumentFileId: docketEntryId,
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseDetail.docketNumber,
       });
   }
 
