@@ -1,0 +1,21 @@
+[
+  { "categoryType": "Application", "categoryTitle": "Application" },
+  {
+    "categoryType": "Certificate of Good Standing",
+    "categoryTitle": "Certificate of Good Standing"
+  },
+  { "categoryType": "Fee Receipt", "categoryTitle": "Fee Receipt" },
+  {
+    "categoryType": "Admission Certificate",
+    "categoryTitle": "Admission Certificate"
+  },
+  { "categoryType": "Reference Inquiry", "categoryTitle": "Reference Inquiry" },
+  {
+    "categoryType": "Response to Reference Inquiry",
+    "categoryTitle": "Response to Reference Inquiry"
+  },
+  { "categoryType": "Disciplinary", "categoryTitle": "Disciplinary" },
+  { "categoryType": "Change of Name", "categoryTitle": "Change of Name" },
+  { "categoryType": "Exam-Related", "categoryTitle": "Exam-Related" },
+  { "categoryType": "Miscellaneous", "categoryTitle": "Miscellaneous" }
+]
