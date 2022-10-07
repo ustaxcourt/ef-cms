@@ -956,6 +956,17 @@ const router = {
     );
 
     registerRoute(
+      '/practitioner-detail/*/add-document',
+      ifHasAccess({ app }, barNumber => {
+        console.log('router hit!!!');
+        setPageTitle('Add Practitioner Document');
+        return app.getSequence('gotoPractitionerAddDocumentSequence')({
+          barNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/print-paper-service/*',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);

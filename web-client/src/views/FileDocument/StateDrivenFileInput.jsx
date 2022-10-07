@@ -17,6 +17,7 @@ export const StateDrivenFileInput = connect(
     validationSequence: sequences[props.validationSequence],
   },
   function StateDrivenFileInput({
+    accept = '.pdf',
     ariaDescribedBy,
     constants,
     file,
@@ -33,7 +34,7 @@ export const StateDrivenFileInput = connect(
     return (
       <React.Fragment>
         <input
-          accept=".pdf"
+          accept={accept}
           aria-describedby={ariaDescribedBy}
           className="usa-input"
           id={id}

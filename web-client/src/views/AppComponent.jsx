@@ -59,6 +59,7 @@ import { MyAccount } from './MyAccount';
 import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
+import { PractitionerAddDocument } from './Practitioners/PractitionerAddDocument';
 import { PractitionerInformation } from './Practitioners/PractitionerInformation';
 import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
@@ -147,6 +148,7 @@ const pages = {
   PaperFiling,
   PendingReport,
   PetitionQc,
+  PractitionerAddDocument,
   PractitionerInformation,
   PrintPaperPetitionReceipt,
   PrintPaperService,
