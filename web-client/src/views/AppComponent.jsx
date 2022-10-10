@@ -260,3 +260,5 @@ export const AppComponent = connect(
     );
   },
 );
+
+AppComponent.displayName = 'AppComponent';

@@ -198,3 +198,5 @@ export const Tabs = connect(
   },
   TabsComponent,
 );
+
+Tabs.displayName = 'Tabs';

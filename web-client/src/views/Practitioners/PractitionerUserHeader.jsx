@@ -32,3 +32,5 @@ export const PractitionerUserHeader = connect(
     );
   },
 );
+
+PractitionerUserHeader.displayName = 'PractitionerUserHeader';

@@ -1321,18 +1321,22 @@ const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
 const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
-const PRACTITIONER_DOCUMENT_TYPES = [
-  'Application',
-  'Certificate of Good Standing',
-  'Fee Receipt',
-  'Admission Certificate',
-  'Reference Inquiry',
-  'Response to Reference Inquiry',
-  'Disciplinary',
-  'Change of Name',
-  'Exam-Related',
-  'Miscellaneous',
-];
+const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION: 'Application',
+  CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
+  FEE_RECEIPT: 'Fee Receipt',
+  ADMISSIONS_CERTIFICATE: 'Admission Certificate',
+  REFERENCE_INQUIRY: 'Reference Inquiry',
+  RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
+  DISCIPLINARY: 'Disciplinary',
+  CHANGE_OF_NAME: 'Change of Name',
+  EXAM_RELATED: 'Exam-Related',
+  MISCELLANEOUS: 'Miscellaneous',
+};
+
+const PRACTITIONER_DOCUMENT_TYPES = Object.values(
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
+);
 
 module.exports = deepFreeze({
   AMENDED_PETITION_FORM_NAME,
@@ -1489,6 +1493,7 @@ module.exports = deepFreeze({
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
   ALLOWLIST_FEATURE_FLAGS,
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
   US_STATES,
   US_STATES_OTHER,
 });

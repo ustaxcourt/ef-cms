@@ -286,6 +286,7 @@ import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFr
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
 import { validateAddPetitionerInteractor } from '../../shared/src/business/useCases/validateAddPetitionerInteractor';
+import { validateAddPractitionerDocumentFormInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerDocumentFormInteractor';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
 import { validateCalendarNoteInteractor } from '../../shared/src/business/useCases/validateCalendarNoteInteractor';
@@ -526,6 +527,7 @@ const allUseCases = {
   validateAddDeficiencyStatisticsInteractor,
   validateAddIrsPractitionerInteractor,
   validateAddPetitionerInteractor,
+  validateAddPractitionerDocumentFormInteractor,
   validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
   validateCalendarNoteInteractor,

@@ -13,6 +13,8 @@ import { state } from 'cerebral';
 export const setValidationAlertErrorsAction = ({ props, store }) => {
   let errorKeys = Object.keys(props.errors);
 
+  console.log('errorKeys', errorKeys);
+
   const getErrorKeys = keys => {
     const filteredErrorKeys = [];
     keys.forEach(key => {
@@ -44,6 +46,8 @@ export const setValidationAlertErrorsAction = ({ props, store }) => {
   if (props.errorDisplayOrder) {
     errorKeys = getErrorKeys(props.errorDisplayOrder);
   }
+
+  console.log('errorKeys', errorKeys);
 
   const alertError = {
     messages: flattenDeep(

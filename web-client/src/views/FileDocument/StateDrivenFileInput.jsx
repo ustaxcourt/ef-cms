@@ -96,3 +96,5 @@ export const StateDrivenFileInput = connect(
     );
   },
 );
+
+StateDrivenFileInput.displayName = 'StateDrivenFileInput';
