@@ -13,9 +13,11 @@ import classNames from 'classnames';
 
 export const PractitionerAddDocument = connect(
   {
+    barNumber: state.practitionerDetails.barNumber,
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
-    navigateBackSequence: sequences.navigateBackSequence,
+    navigateToPractitionerDocumentsPageSequence:
+      sequences.navigateToPractitionerDocumentsPageSequence,
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
@@ -26,9 +28,10 @@ export const PractitionerAddDocument = connect(
     validationErrors: state.validationErrors,
   },
   function PractitionerAddDocument({
+    barNumber,
     constants,
     documentTypes,
-    navigateBackSequence,
+    navigateToPractitionerDocumentsPageSequence,
     practitionerDocumentationHelper,
     submitAddPractitionerDocumentSequence,
     usStates,
@@ -162,7 +165,15 @@ export const PractitionerAddDocument = connect(
                   <Button onClick={submitAddPractitionerDocumentSequence}>
                     Add File
                   </Button>
-                  <Button link onClick={() => navigateBackSequence()}>
+                  <Button
+                    link
+                    onClick={() =>
+                      navigateToPractitionerDocumentsPageSequence({
+                        barNumber,
+                        tab: 'practitioner-documentation',
+                      })
+                    }
+                  >
                     Cancel
                   </Button>
                 </div>
