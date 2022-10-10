@@ -6,7 +6,8 @@
  * @param {object} providers.props the cerebral props object
  */
 export const trashAction = async ({ applicationContext, props }) => {
-  const { docketEntryId } = props;
+  const { primaryDocumentFileId: docketEntryId } = props;
+
   await applicationContext
     .getUseCases()
     .getStatusOfVirusScanInteractor(applicationContext, {
