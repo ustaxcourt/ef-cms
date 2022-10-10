@@ -91,11 +91,10 @@ export const submitPaperFilingSequence = [
                 no: addPaperFilingMultiDocketableFlow,
                 yes: [
                   openFileUploadStatusModalAction,
-                  trashAction,
                   uploadDocketEntryFileAction,
                   {
                     error: [openFileUploadErrorModal],
-                    success: addPaperFilingMultiDocketableFlow,
+                    success: [trashAction, addPaperFilingMultiDocketableFlow],
                   },
                 ],
               },
@@ -110,7 +109,10 @@ export const submitPaperFilingSequence = [
                   uploadDocketEntryFileAction,
                   {
                     error: [openFileUploadErrorModal],
-                    success: editPaperFilingNotMultiDocketableFlow,
+                    success: [
+                      trashAction,
+                      editPaperFilingNotMultiDocketableFlow,
+                    ],
                   },
                 ],
               },
