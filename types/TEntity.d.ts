@@ -8,6 +8,18 @@ type TCaseDeadline = {
   sortableDocketNumber: string;
 };
 
+type TPractitionerDocument = {
+  categoryType: string;
+  categoryName: string;
+  location: string;
+  documentId: string;
+};
+
+type TPractitionerDocumentEntity = {
+  validate(): TPractitionerDocumentEntity;
+  toRawObject(): TPractitionerDocument;
+} & TPractitionerDocument;
+
 type DocketEntry = {
   additionalInfo: string;
   caseCaption: string;

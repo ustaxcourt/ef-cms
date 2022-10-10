@@ -9,8 +9,9 @@ export const PractitionerDocumentation = connect(
     barNumber: state.practitionerDetail.barNumber,
     constants: state.constants,
     practitionerDetailHelper: state.practitionerDetailHelper,
+    practitionerDocuments: state.practitionerDocuments,
   },
-  function PractitionerDocumentation({ barNumber }) {
+  function PractitionerDocumentation({ barNumber, practitionerDocuments }) {
     return (
       <>
         <div className="display-flex flex-justify-end">
@@ -36,6 +37,16 @@ export const PractitionerDocumentation = connect(
               <th>Description</th>
             </tr>
           </thead>
+          <tbody>
+            {practitionerDocuments.map(document => (
+              <tr key={document.documentId}>
+                <td>TODO</td>
+                <td>FILE NAME TODO</td>
+                <td>{document.categoryName}</td>
+                <td>{document.description}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </>
     );

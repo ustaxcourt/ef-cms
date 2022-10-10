@@ -69,6 +69,9 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  createPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor');
+const {
   createCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/createCaseDeadlineInteractor');
 const {
@@ -185,6 +188,9 @@ const {
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
+const {
+  getPractitionerDocumentsInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
 const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
@@ -581,6 +587,7 @@ const useCases = {
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
+  createPractitionerDocumentInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
@@ -643,6 +650,7 @@ const useCases = {
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
+  getPractitionerDocumentsInteractor,
   getJudgeInSectionInteractor,
   getJudgesForPublicSearchInteractor,
   getMaintenanceModeInteractor,
