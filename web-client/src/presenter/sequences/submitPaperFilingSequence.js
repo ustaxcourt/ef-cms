@@ -30,9 +30,9 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitAddPaperFilingAction } from '../actions/DocketEntry/submitAddPaperFilingAction';
 import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
-import { trashAction } from '../actions/CourtIssuedDocketEntry/trashAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+import { validateUploadedPdfAction } from '../actions/CourtIssuedDocketEntry/validateUploadedPdfAction';
 
 const addPaperFilingMultiDocketableFlow = [
   closeFileUploadStatusModalAction,
@@ -94,7 +94,10 @@ export const submitPaperFilingSequence = [
                   uploadDocketEntryFileAction,
                   {
                     error: [openFileUploadErrorModal],
-                    success: [trashAction, addPaperFilingMultiDocketableFlow],
+                    success: [
+                      validateUploadedPdfAction,
+                      addPaperFilingMultiDocketableFlow,
+                    ],
                   },
                 ],
               },
@@ -109,7 +112,7 @@ export const submitPaperFilingSequence = [
                   {
                     error: [openFileUploadErrorModal],
                     success: [
-                      trashAction,
+                      validateUploadedPdfAction,
                       editPaperFilingNotMultiDocketableFlow,
                     ],
                   },
