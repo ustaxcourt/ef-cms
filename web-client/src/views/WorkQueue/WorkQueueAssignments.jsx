@@ -7,11 +7,13 @@ import React from 'react';
 export const WorkQueueAssignments = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
+    formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItemsLength: state.selectedWorkItems.length,
   },
   function WorkQueueAssignments({
     assignSelectedWorkItemsSequence,
+    formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItemsLength,
     showSendToBar,
@@ -19,7 +21,7 @@ export const WorkQueueAssignments = connect(
   }) {
     return (
       <React.Fragment>
-        <div className="action-section grid-row">
+        <div className="action-section grid-row inline-block">
           <label
             className="dropdown-label-serif padding-top-05"
             htmlFor="inline-select"
@@ -71,6 +73,9 @@ export const WorkQueueAssignments = connect(
               {selectedWorkItemsLength}
             </span>
           )}
+        </div>
+        <div className="push-right margin-top-4">
+          <b>Count:</b> {formattedWorkQueue.length}
         </div>
       </React.Fragment>
     );
