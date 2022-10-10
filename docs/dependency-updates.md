@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    
    > **Why am I seeing a high severity `dicer` issue?**
    > If you see this warning, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue. Check [caveats](#caveats) for more info.
-1. Check if there are updates to either of the following in `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
+1. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
