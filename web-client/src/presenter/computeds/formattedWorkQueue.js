@@ -286,6 +286,18 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
 
+  let { assignmentFilterValue } = get(state.screenMetadata);
+
+  const assignmentFilter = workItem => {
+    if (assignmentFilterValue && assignmentFilterValue.userId) {
+      if (assignmentFilterValue.userId === 'Unassigned') {
+        return workItem.assigneeId === null;
+      }
+      return workItem.assigneeId === assignmentFilterValue.userId;
+    }
+    return workItem;
+  };
+
   let workQueue = workItems
     .filter(
       filterWorkItems({
@@ -294,6 +306,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
         workQueueToDisplay,
       }),
     )
+    .filter(assignmentFilter)
     .map(workItem => {
       return memoizedFormatItemWithLink({
         applicationContext,
@@ -349,5 +362,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
     [...highPriorityDirection, sortDirection, 'asc'],
   );
 
+  console.log('workQueue', workQueue);
   return workQueue;
 };
