@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 import { computeCategoryNameAction } from '../actions/computeCategoryNameAction';
 import { createPractitionerDocumentAction } from '../actions/createPractitionerDocumentAction';
 import { navigateToPractitionerDocumentsPageAction } from '../actions/navigateToPractitionerDocumentsPageAction';
@@ -22,6 +23,7 @@ export const submitAddPractitionerDocumentSequence = [
     success: [
       showProgressSequenceDecorator([createPractitionerDocumentAction]),
       clearAlertsAction,
+      clearFormAction,
       navigateToPractitionerDocumentsPageAction,
     ],
   },
