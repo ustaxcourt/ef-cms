@@ -60,7 +60,7 @@ export const submitEditPaperFilingAction = async ({
   }
 
   return {
-    caseDetail: caseDetail || {},
+    caseDetail,
     docketEntryId,
     docketNumber,
     overridePaperServiceAddress: true,
