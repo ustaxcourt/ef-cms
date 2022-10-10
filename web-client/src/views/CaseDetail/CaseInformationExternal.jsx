@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
@@ -120,6 +121,22 @@ export const CaseInformationExternal = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">Trial Information</h3>
                     <TrialInformation caseDetail={formattedCaseDetail} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid-row grid-gap margin-top-4">
+              <div className="tablet:grid-col-6">
+                <div className="card height-full">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">Consolidated Cases</h3>
+                    {/* need to add check for if in consolidated group */}
+                    {/* {caseDetailHelper.consolidatedCases.length > 0 && ( */}
+                    <ConsolidatedCases
+                      caseDetail={formattedCaseDetail}
+                      caseDetailHelper={caseDetailHelper}
+                    />
+                    {/* )} */}
                   </div>
                 </div>
               </div>
