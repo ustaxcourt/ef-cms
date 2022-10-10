@@ -69,8 +69,7 @@ export const formatWorkItem = ({
   const result = cloneDeep(workItem);
 
   const inConsolidatedGroup = !!result.leadDocketNumber;
-  const inLeadCase =
-    inConsolidatedGroup && result.leadDocketNumber === result.docketNumber;
+  const inLeadCase = applicationContext.getUtilities().isLeadCase(result);
 
   let consolidatedIconTooltipText;
 
