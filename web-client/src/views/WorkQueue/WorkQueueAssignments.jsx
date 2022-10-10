@@ -21,7 +21,7 @@ export const WorkQueueAssignments = connect(
   }) {
     return (
       <React.Fragment>
-        <div className="action-section grid-row inline-block">
+        <div className="action-section grid-row inline-block margin-bottom-1">
           <label
             className="dropdown-label-serif padding-top-05"
             htmlFor="inline-select"
@@ -56,11 +56,14 @@ export const WorkQueueAssignments = connect(
               selectAssigneeSequence({
                 assigneeId: evt.target.value,
                 assigneeName: evt.target.options[evt.target.selectedIndex].text,
+                evt,
               });
               assignSelectedWorkItemsSequence();
             }}
           >
-            <option value>Assign to...</option>
+            <option key="assignTo" value="">
+              Assign to...
+            </option>
             {users.map(user => (
               <option key={user.userId} value={user.userId}>
                 {user.name}

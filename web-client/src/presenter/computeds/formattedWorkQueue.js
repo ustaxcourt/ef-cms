@@ -362,6 +362,5 @@ export const formattedWorkQueue = (get, applicationContext) => {
     [...highPriorityDirection, sortDirection, 'asc'],
   );
 
-  console.log('workQueue', workQueue);
   return workQueue;
 };
