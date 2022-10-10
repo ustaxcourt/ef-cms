@@ -16,12 +16,10 @@ export const submitEditPaperFilingAction = async ({
   props,
 }) => {
   const { isSavingForLater } = props;
+  const docketEntryId = get(state.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
-
-  let caseDetail;
-  let docketEntryId = get(state.docketEntryId);
 
   let documentMetadata = omit(
     {
@@ -39,15 +37,13 @@ export const submitEditPaperFilingAction = async ({
     receivedAt: documentMetadata.dateReceived,
   };
 
-  let paperServicePdfUrl;
-
-  ({ caseDetail, paperServicePdfUrl } = await applicationContext
+  const { paperServicePdfUrl } = await applicationContext
     .getUseCases()
     .editPaperFilingInteractor(applicationContext, {
       documentMetadata,
       isSavingForLater,
       primaryDocumentFileId: docketEntryId,
-    }));
+    });
 
   const generateCoversheet = isFileAttached && !isSavingForLater;
   if (generateCoversheet) {
@@ -55,7 +51,7 @@ export const submitEditPaperFilingAction = async ({
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
         docketEntryId,
-        docketNumber: caseDetail.docketNumber,
+        docketNumber,
       });
   }
 

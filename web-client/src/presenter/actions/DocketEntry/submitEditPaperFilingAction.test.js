@@ -7,19 +7,15 @@ describe('submitEditPaperFilingAction', () => {
   const clientConnectionId = '999999999';
   const mockDocketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
   const mockPaperServicePdfUrl = 'toucancenter.org';
-
-  let mockCaseDetail;
+  const mockCaseDetail = {
+    docketEntries: [],
+    docketNumber: '123-45',
+  };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    mockCaseDetail = {
-      docketEntries: [],
-      docketNumber: '123-45',
-    };
-
     applicationContext.getUseCases().editPaperFilingInteractor.mockReturnValue({
-      caseDetail: mockCaseDetail,
       paperServicePdfUrl: mockPaperServicePdfUrl,
     });
   });
@@ -173,10 +169,6 @@ describe('submitEditPaperFilingAction', () => {
     });
 
     expect(output).toMatchObject({
-      caseDetail: mockCaseDetail,
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockCaseDetail.docketNumber,
-      overridePaperServiceAddress: true,
       pdfUrl: mockPaperServicePdfUrl,
     });
   });
