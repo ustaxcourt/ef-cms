@@ -13,7 +13,6 @@ import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
@@ -38,7 +37,6 @@ const addPaperFilingMultiDocketableFlow = [
 
 const editPaperFilingNotMultiDocketableFlow = [
   submitEditPaperFilingAction,
-  setCaseAction,
   getShouldGoToPaperServiceAction,
   {
     no: [
