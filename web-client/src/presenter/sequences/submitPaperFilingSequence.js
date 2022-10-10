@@ -1,6 +1,5 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
@@ -32,7 +31,6 @@ import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/sugg
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 const addPaperFilingMultiDocketableFlow = [
-  closeFileUploadStatusModalAction,
   setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
   submitAddPaperFilingAction,
@@ -41,7 +39,6 @@ const addPaperFilingMultiDocketableFlow = [
 const editPaperFilingNotMultiDocketableFlow = [
   submitEditPaperFilingAction,
   setCaseAction,
-  closeFileUploadStatusModalAction,
   getShouldGoToPaperServiceAction,
   {
     no: [

@@ -1,3 +1,4 @@
+import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
@@ -9,7 +10,11 @@ export const docketEntryFileUploadSequenceDecorator = actionsList => {
     uploadDocketEntryFileAction,
     {
       error: [openFileUploadErrorModal],
-      success: [validateUploadedPdfAction, ...actionsList],
+      success: [
+        validateUploadedPdfAction,
+        ...actionsList,
+        closeFileUploadStatusModalAction,
+      ],
     },
   ];
 };

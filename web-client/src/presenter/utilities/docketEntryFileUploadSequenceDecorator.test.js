@@ -11,7 +11,11 @@ describe('fileUploadSequenceDecorator', () => {
       expect.any(Function),
       {
         error: [expect.any(Function)],
-        success: [expect.any(Function), ...mockActionsArray],
+        success: [
+          expect.any(Function),
+          ...mockActionsArray,
+          expect.any(Function),
+        ],
       },
     ]);
   });
