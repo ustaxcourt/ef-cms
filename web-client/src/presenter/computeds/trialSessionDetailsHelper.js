@@ -1,10 +1,8 @@
-import {
-  DOCKET_NUMBER_SUFFIXES,
-  SESSION_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { application } from 'express';
 import { state } from 'cerebral';
 
 export const trialSessionDetailsHelper = get => {
+  const { DOCKET_NUMBER_SUFFIXES, SESSION_TYPES } = application.getConstants();
   const { eligibleCases, sessionType, trialSessionId } = get(
     state.trialSession,
   );
