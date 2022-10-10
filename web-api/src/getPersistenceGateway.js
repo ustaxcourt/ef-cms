@@ -27,6 +27,9 @@ const {
   confirmAuthCode,
 } = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
+  createPractitionerDocument,
+} = require('../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument');
+const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -107,6 +110,9 @@ const {
 const {
   fetchPendingItems,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
+const {
+  getPractitionerDocuments,
+} = require('../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments');
 const {
   getAllWebSocketConnections,
 } = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
@@ -493,6 +499,7 @@ const gatewayMethods = {
     createOrUpdatePractitionerUser,
     createOrUpdateUser,
     createTrialSession,
+    createPractitionerDocument,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
@@ -617,6 +624,7 @@ const gatewayMethods = {
   getReadyForTrialCases,
   getReconciliationReport,
   getSectionInboxMessages,
+  getPractitionerDocuments,
   getSectionOutboxMessages,
   getTableStatus,
   getTrialSessionById,

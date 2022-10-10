@@ -470,6 +470,12 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
+const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -907,6 +913,14 @@ app.get(
   app.get(
     '/practitioners/:barNumber',
     lambdaWrapper(getPractitionerByBarNumberLambda),
+  );
+  app.get(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(getPractitionerDocumentsLambda),
+  );
+  app.post(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(createPractitionerDocumentLambda),
   );
   app.put(
     '/async/practitioners/:barNumber',
