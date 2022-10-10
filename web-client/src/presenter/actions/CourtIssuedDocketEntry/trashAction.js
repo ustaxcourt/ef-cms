@@ -6,7 +6,7 @@
  * @param {object} providers.props the cerebral props object
  */
 export const trashAction = async ({ applicationContext, props }) => {
-  const { primaryDocumentFileId: docketEntryId } = props;
+  const { docketEntryId } = props;
 
   await applicationContext
     .getUseCases()
