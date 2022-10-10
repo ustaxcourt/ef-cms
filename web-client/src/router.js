@@ -949,8 +949,22 @@ const router = {
       '/practitioner-detail/*',
       ifHasAccess({ app }, barNumber => {
         setPageTitle('Practitioner Detail');
+
         return app.getSequence('gotoPractitionerDetailSequence')({
           barNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*?..',
+      ifHasAccess({ app }, barNumber => {
+        setPageTitle('Practitioner Detail');
+        const { tab } = route.query();
+
+        return app.getSequence('gotoPractitionerDetailSequence')({
+          barNumber,
+          tab,
         });
       }),
     );

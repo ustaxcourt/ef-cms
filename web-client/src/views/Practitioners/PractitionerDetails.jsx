@@ -256,3 +256,5 @@ export const PractitionerDetails = connect(
     );
   },
 );
+
+PractitionerDetails.displayName = 'PractitionerDetails';
