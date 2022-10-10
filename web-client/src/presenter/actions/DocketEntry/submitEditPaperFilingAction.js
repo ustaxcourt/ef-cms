@@ -60,10 +60,6 @@ export const submitEditPaperFilingAction = async ({
   }
 
   return {
-    caseDetail,
-    docketEntryId,
-    docketNumber,
-    overridePaperServiceAddress: true,
     pdfUrl: paperServicePdfUrl,
   };
 };
