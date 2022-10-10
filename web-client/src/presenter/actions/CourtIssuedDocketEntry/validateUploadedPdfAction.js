@@ -5,7 +5,10 @@
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
  */
-export const trashAction = async ({ applicationContext, props }) => {
+export const validateUploadedPdfAction = async ({
+  applicationContext,
+  props,
+}) => {
   const { docketEntryId } = props;
 
   await applicationContext
