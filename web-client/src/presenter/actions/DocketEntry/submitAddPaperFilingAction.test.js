@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { submitPaperFilingAction } from './submitPaperFilingAction';
+import { submitAddPaperFilingAction } from './submitAddPaperFilingAction';
 
-describe('submitPaperFilingAction', () => {
+describe('submitAddPaperFilingAction', () => {
   const docketNumbers = ['123-45'];
   const clientConnectionId = '999999999';
   const mockDocketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
@@ -20,7 +20,7 @@ describe('submitPaperFilingAction', () => {
   });
 
   it('should make a call to add a new docket entry when state.isEditingDocketEntry is false', async () => {
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -55,7 +55,7 @@ describe('submitPaperFilingAction', () => {
   });
 
   it('should NOT return a paper service pdf url when adding a new paper filing because the URL will be returned via a websocket notification after all document proccessing has finished', async () => {
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -75,7 +75,7 @@ describe('submitPaperFilingAction', () => {
   });
 
   it('should make a call to add a new docket entry even when a file has not been uploaded and the user is saving for later', async () => {
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -117,7 +117,7 @@ describe('submitPaperFilingAction', () => {
       .getUseCases()
       .editPaperFilingInteractor.mockReturnValue({ caseDetail });
 
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -160,7 +160,7 @@ describe('submitPaperFilingAction', () => {
       .getUseCases()
       .editPaperFilingInteractor.mockReturnValue({ caseDetail });
 
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -207,7 +207,7 @@ describe('submitPaperFilingAction', () => {
       isFileAttached: true,
     });
 
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -253,7 +253,7 @@ describe('submitPaperFilingAction', () => {
       paperServicePdfUrl: mockPdfUrl,
     });
 
-    const result = await runAction(submitPaperFilingAction, {
+    const result = await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
       },
