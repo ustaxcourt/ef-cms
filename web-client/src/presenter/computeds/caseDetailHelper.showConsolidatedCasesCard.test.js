@@ -9,7 +9,6 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {
   ...applicationContext,
   getCurrentUser: () => {
@@ -29,22 +28,23 @@ const getBaseState = user => {
 };
 
 describe('showConsolidatedCasesCard', () => {
-  it('should be true when the user has TRACKED_ITEMS permission', () => {
-    const user = docketClerkUser;
+  it('should be true when the user has VIEW_CONSOLIDATED_CASES_CARD permission and the case is in a consolidated group', () => {
+    const user = petitionerUser;
 
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [],
+          leadDocketNumber: '101-22F',
         },
-        permission: { TRACKED_ITEMS: true },
+        permissions: { VIEW_CONSOLIDATED_CASES_CARD: true },
       },
     });
     expect(result.showConsolidatedCasesCard).toEqual(true);
   });
 
-  it('should be false when the user does not have TRACKED_ITEMS permission', () => {
+  it.skip('should be false when the user does not have TRACKED_ITEMS permission', () => {
     const user = adcUser;
 
     const result = runCompute(caseDetailHelper, {

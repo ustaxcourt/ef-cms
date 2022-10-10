@@ -70,6 +70,9 @@ export const caseDetailHelper = (get, applicationContext) => {
   const showSealedCaseView =
     isPractitioner && !!caseDetail.isSealed && !userAssociatedWithCase;
 
+  const showConsolidatedCasesCard =
+    permissions.VIEW_CONSOLIDATED_CASES_CARD && !!caseDetail.leadDocketNumber;
+
   return {
     caseDeadlines,
     documentDetailTab,
@@ -83,6 +86,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
+    showConsolidatedCasesCard,
     showDocketRecordInProgressState: !isExternalUser,
     showEditCaseDetailsButton: permissions.EDIT_CASE_DETAILS,
     showFileDocumentButton,
