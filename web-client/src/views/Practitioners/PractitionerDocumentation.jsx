@@ -41,7 +41,7 @@ export const PractitionerDocumentation = connect(
             {practitionerDocuments.map(document => (
               <tr key={document.documentId}>
                 <td>TODO</td>
-                <td>FILE NAME TODO</td>
+                <td>{document.fileName}</td>
                 <td>{document.categoryName}</td>
                 <td>{document.description}</td>
               </tr>
