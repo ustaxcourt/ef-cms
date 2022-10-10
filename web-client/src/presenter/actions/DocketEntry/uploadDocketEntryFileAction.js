@@ -37,8 +37,7 @@ export const uploadDocketEntryFileAction = async ({
       });
 
     return path.success({
-      docketEntryId: primaryDocumentFileId, // todo: why both?
-      primaryDocumentFileId,
+      docketEntryId: primaryDocumentFileId,
     });
   } catch (err) {
     return path.error();
