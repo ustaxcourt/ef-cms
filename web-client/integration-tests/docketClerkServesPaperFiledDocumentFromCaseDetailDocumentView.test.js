@@ -3,10 +3,10 @@ import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/d
 import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents View', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });

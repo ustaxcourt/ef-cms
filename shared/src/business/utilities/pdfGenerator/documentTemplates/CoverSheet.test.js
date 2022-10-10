@@ -85,4 +85,26 @@ describe('CoverSheet', () => {
 
     expect(wrapper.find('#certificate-of-service').length).toEqual(1);
   });
+
+  it('should NOT append "ET AL." when the document is only being filed on the lead consolidated case', () => {
+    const mockConsolidatedCases = [{}];
+
+    let wrapper = shallow(
+      <CoverSheet consolidatedCases={mockConsolidatedCases} />,
+    );
+
+    const caseCaptionText = wrapper.find('#caption-title').text();
+    expect(caseCaptionText).not.toContain('ET AL.,');
+  });
+
+  it('should append "ET AL." when the document is filed on at least two cases in a consolidated group', () => {
+    const mockConsolidatedCases = [{}, {}];
+
+    let wrapper = shallow(
+      <CoverSheet consolidatedCases={mockConsolidatedCases} />,
+    );
+
+    const caseCaptionText = wrapper.find('#caption-title').text();
+    expect(caseCaptionText).toContain('ET AL.,');
+  });
 });
