@@ -2,7 +2,7 @@ import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * calls interactor to add or edit a paper filing
+ * calls interactor to edit a paper filing
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

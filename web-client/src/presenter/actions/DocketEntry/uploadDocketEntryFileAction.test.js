@@ -5,7 +5,7 @@ import { uploadDocketEntryFileAction } from './uploadDocketEntryFileAction';
 
 describe('uploadDocketEntryFileAction', () => {
   const mockDocketEntryId = '7dc7c871-6fc4-4274-85ed-63b0c14465bd';
-  const fakeFile = {
+  const mockFile = {
     name: 'petition',
     size: 100,
   };
@@ -25,13 +25,13 @@ describe('uploadDocketEntryFileAction', () => {
     };
   });
 
-  it('should call make a call to upload the selected document with docketEntryId from state', async () => {
+  it('should make a call to upload the selected document with docketEntryId from state', async () => {
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
       state: {
         docketEntryId: mockDocketEntryId,
         form: {
-          primaryDocumentFile: fakeFile,
+          primaryDocumentFile: mockFile,
         },
       },
     });
@@ -40,7 +40,7 @@ describe('uploadDocketEntryFileAction', () => {
       applicationContext.getUseCases().uploadDocumentInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      documentFile: fakeFile,
+      documentFile: mockFile,
       key: mockDocketEntryId,
     });
   });
@@ -62,27 +62,24 @@ describe('uploadDocketEntryFileAction', () => {
     expect(errorStub).toHaveBeenCalled();
   });
 
-  it('should return the success with a generated primaryDocumentFileId and docketEntryId when the document was uploaded successfully', async () => {
-    const mockPrimaryDocumentFileId = 'd85a87c1-fb13-4c1c-b2f6-cf89c43718a1';
-
+  it('should return the success path with the docketEntryId when the document was uploaded successfully', async () => {
     await applicationContext
       .getUseCases()
-      .uploadDocumentInteractor.mockReturnValue(mockPrimaryDocumentFileId);
+      .uploadDocumentInteractor.mockReturnValue(mockDocketEntryId);
 
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
       state: {
         docketEntryId: mockDocketEntryId,
         form: {
-          primaryDocumentFile: fakeFile,
+          primaryDocumentFile: mockFile,
         },
       },
     });
 
     expect(successStub).toHaveBeenCalled();
     expect(successStub.mock.calls[0][0]).toMatchObject({
-      docketEntryId: mockPrimaryDocumentFileId,
-      primaryDocumentFileId: mockPrimaryDocumentFileId,
+      docketEntryId: mockDocketEntryId,
     });
   });
 });
