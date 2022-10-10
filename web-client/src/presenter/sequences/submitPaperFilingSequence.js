@@ -105,7 +105,6 @@ export const submitPaperFilingSequence = [
                 no: editPaperFilingNotMultiDocketableFlow,
                 yes: [
                   openFileUploadStatusModalAction,
-                  trashAction,
                   uploadDocketEntryFileAction,
                   {
                     error: [openFileUploadErrorModal],
