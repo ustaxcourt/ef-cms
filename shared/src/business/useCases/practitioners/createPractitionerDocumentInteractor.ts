@@ -26,6 +26,7 @@ export const createPractitionerDocumentInteractor = async (
       description?: string;
       location?: string;
       practitionerDocumentFileId: string;
+      fileName: string;
     };
   },
 ) => {
@@ -43,6 +44,7 @@ export const createPractitionerDocumentInteractor = async (
       categoryType: documentMetadata.categoryType,
       description: documentMetadata.description,
       documentId: documentMetadata.practitionerDocumentFileId,
+      fileName: documentMetadata.fileName,
       location: documentMetadata.location,
     },
     { applicationContext },
