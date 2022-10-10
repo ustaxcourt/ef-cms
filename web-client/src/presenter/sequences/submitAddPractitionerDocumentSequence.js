@@ -1,10 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCategoryNameAction } from '../actions/computeCategoryNameAction';
-import { navigateBackAction } from '../actions/navigateBackAction';
+import { createPractitionerDocumentAction } from '../actions/createPractitionerDocumentAction';
 import { navigateToPractitionerDocumentsPageAction } from '../actions/navigateToPractitionerDocumentsPageAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateAddPractitionerDocumentFormAction } from '../actions/validateAddPractitionerDocumentFormAction';
 
@@ -18,6 +19,10 @@ export const submitAddPractitionerDocumentSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [clearAlertsAction, navigateToPractitionerDocumentsPageAction],
+    success: [
+      showProgressSequenceDecorator([createPractitionerDocumentAction]),
+      clearAlertsAction,
+      navigateToPractitionerDocumentsPageAction,
+    ],
   },
 ];

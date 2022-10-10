@@ -37,6 +37,7 @@ import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
+import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
@@ -374,6 +375,7 @@ const allUseCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createJudgeUserInteractor,
   createMessageInteractor,
+  createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   deleteAuthCookieInteractor,
