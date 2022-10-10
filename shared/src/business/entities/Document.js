@@ -7,8 +7,8 @@ const {
   PRACTITIONER_DOCUMENT_TYPES,
   PRACTITIONER_DOCUMENT_TYPES_MAP,
 } = require('./EntityConstants');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
 const { createISODateString } = require('../utilities/DateHandler');
+const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 /**
  * constructor
@@ -28,7 +28,7 @@ Document.prototype.init = function init(rawDocument, { applicationContext }) {
   this.documentId = rawDocument.documentId ?? applicationContext.getUniqueId();
   this.description = rawDocument.description;
   this.fileName = rawDocument.fileName;
-  this.uploadDate = rawDocument.filingDate || createISODateString();
+  this.uploadDate = rawDocument.uploadDate || createISODateString();
 };
 
 Document.VALIDATION_ERROR_MESSAGES = {
@@ -52,7 +52,7 @@ Document.schema = joi.object().keys({
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  uploadDate: JoiValidationConstants.DATE,
+  uploadDate: JoiValidationConstants.ISO_DATE,
 });
 
 joiValidationDecorator(

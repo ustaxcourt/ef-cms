@@ -8,10 +8,12 @@ export const PractitionerDocumentation = connect(
   {
     barNumber: state.practitionerDetail.barNumber,
     constants: state.constants,
-    practitionerDetailHelper: state.practitionerDetailHelper,
-    practitionerDocuments: state.practitionerDocuments,
+    practitionerDocumentationHelper: state.practitionerDocumentationHelper,
   },
-  function PractitionerDocumentation({ barNumber, practitionerDocuments }) {
+  function PractitionerDocumentation({
+    barNumber,
+    practitionerDocumentationHelper,
+  }) {
     return (
       <>
         <div className="display-flex flex-justify-end">
@@ -38,14 +40,16 @@ export const PractitionerDocumentation = connect(
             </tr>
           </thead>
           <tbody>
-            {practitionerDocuments.map(document => (
-              <tr key={document.documentId}>
-                <td>TODO</td>
-                <td>{document.fileName}</td>
-                <td>{document.categoryName}</td>
-                <td>{document.description}</td>
-              </tr>
-            ))}
+            {practitionerDocumentationHelper.formattedPractitionerDocuments.map(
+              document => (
+                <tr key={document.documentId}>
+                  <td>{document.formattedUploadDate}</td>
+                  <td>{document.fileName}</td>
+                  <td>{document.categoryName}</td>
+                  <td>{document.description}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
