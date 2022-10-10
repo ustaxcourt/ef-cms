@@ -15,7 +15,7 @@ export const PractitionerAddDocument = connect(
   {
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
-    navigateBackSequence: state.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
