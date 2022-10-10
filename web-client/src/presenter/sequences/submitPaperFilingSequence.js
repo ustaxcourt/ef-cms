@@ -2,7 +2,7 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { fileUploadSequenceDecorator } from '../utilities/fileUploadSequenceDecorator';
+import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
@@ -86,7 +86,7 @@ export const submitPaperFilingSequence = [
               isFileAttachedAction,
               {
                 no: addPaperFilingMultiDocketableFlow,
-                yes: fileUploadSequenceDecorator([
+                yes: docketEntryFileUploadSequenceDecorator([
                   addPaperFilingMultiDocketableFlow,
                 ]),
               },
@@ -95,7 +95,7 @@ export const submitPaperFilingSequence = [
               isFileAttachedAction,
               {
                 no: editPaperFilingNotMultiDocketableFlow,
-                yes: fileUploadSequenceDecorator([
+                yes: docketEntryFileUploadSequenceDecorator([
                   editPaperFilingNotMultiDocketableFlow,
                 ]),
               },
