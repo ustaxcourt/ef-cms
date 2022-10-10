@@ -45,20 +45,6 @@ export const submitAddPaperFilingAction = async ({
     receivedAt: documentMetadata.dateReceived,
   };
 
-  if (isFileAttachedNow) {
-    await applicationContext
-      .getUseCases()
-      .getStatusOfVirusScanInteractor(applicationContext, {
-        key: docketEntryId,
-      });
-
-    await applicationContext
-      .getUseCases()
-      .validatePdfInteractor(applicationContext, {
-        key: docketEntryId,
-      });
-  }
-
   await applicationContext
     .getUseCases()
     .addPaperFilingInteractor(applicationContext, {

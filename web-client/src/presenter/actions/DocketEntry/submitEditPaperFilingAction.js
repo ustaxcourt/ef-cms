@@ -39,20 +39,6 @@ export const submitEditPaperFilingAction = async ({
     receivedAt: documentMetadata.dateReceived,
   };
 
-  if (isFileAttachedNow) {
-    await applicationContext
-      .getUseCases()
-      .getStatusOfVirusScanInteractor(applicationContext, {
-        key: docketEntryId,
-      });
-
-    await applicationContext
-      .getUseCases()
-      .validatePdfInteractor(applicationContext, {
-        key: docketEntryId,
-      });
-  }
-
   let paperServicePdfUrl;
 
   ({ caseDetail, paperServicePdfUrl } = await applicationContext
