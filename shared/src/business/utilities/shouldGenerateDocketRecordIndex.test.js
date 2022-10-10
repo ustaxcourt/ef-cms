@@ -100,7 +100,36 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(true);
   });
 
-  it('returns true for initial document types filed along with the petition', () => {
+  it('returns false for STIN', () => {
+    const caseDetail = {
+      docketEntries: [
+        {
+          createdAt: '2019-03-01T21:40:46.415Z',
+          docketEntryId: '012',
+          eventCode: 'P',
+          isPaper: true,
+        },
+        {
+          docketEntryId: '123',
+          isPaper: true,
+        },
+      ],
+    };
+    const docketEntry = {
+      docketEntryId: '123',
+      documentType: 'Statement of Taxpayer Identification',
+      eventCode: 'STIN',
+      filingDate: '2019-03-01T21:40:56.415Z', // 10 seconds
+    };
+    const result = shouldGenerateDocketRecordIndex({
+      caseDetail,
+      docketEntry,
+    });
+
+    expect(result).toEqual(false);
+  });
+
+  it('returns true for non-STIN initial document types filed along with the petition', () => {
     const caseDetail = {
       docketEntries: [
         {

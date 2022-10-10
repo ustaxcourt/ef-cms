@@ -1018,6 +1018,10 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 
     if (updateIndex) {
       docketEntryEntity.index = this.generateNextDocketRecordIndex();
+    } else if (
+      docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode
+    ) {
+      docketEntryEntity.index = 0;
     }
   }
 

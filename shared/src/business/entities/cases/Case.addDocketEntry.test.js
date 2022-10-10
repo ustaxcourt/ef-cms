@@ -4,7 +4,7 @@ const {
 const { Case } = require('./Case');
 
 describe('addDocketEntry', () => {
-  it('attaches the docket entry to the case', () => {
+  it('should attach the docket entry to the case', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
       {
@@ -22,6 +22,31 @@ describe('addDocketEntry', () => {
       docketNumber: '123-45',
       documentType: 'Answer',
       userId: 'irsPractitioner',
+    });
+  });
+
+  it("should assign docket entry index of '0' to the STIN", () => {
+    const caseToVerify = new Case(
+      { docketNumber: '123-45' },
+      {
+        applicationContext,
+      },
+    );
+    caseToVerify.addDocketEntry({
+      docketEntryId: '123',
+      documentType: 'Statement of Taxpayer Identification',
+      eventCode: 'STIN',
+      isOnDocketRecord: true,
+      userId: 'petitionsClerk',
+    });
+    expect(caseToVerify.docketEntries.length).toEqual(1);
+    expect(caseToVerify.docketEntries[0]).toMatchObject({
+      docketEntryId: '123',
+      docketNumber: '123-45',
+      documentType: 'Statement of Taxpayer Identification',
+      eventCode: 'STIN',
+      index: 0,
+      userId: 'petitionsClerk',
     });
   });
 });
