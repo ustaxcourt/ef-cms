@@ -197,6 +197,7 @@ import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navig
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToPathAndSetRedirectUrlSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
+import { navigateToPractitionerDocumentsPageSequence } from './sequences/navigateToPractitionerDocumentsPageSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
@@ -708,6 +709,7 @@ export const presenter = {
     navigateToEditOrderSequence,
     navigateToPathAndSetRedirectUrlSequence,
     navigateToPathSequence,
+    navigateToPractitionerDocumentsPageSequence,
     navigateToPrintPaperServiceSequence,
     navigateToPrintableCaseConfirmationSequence,
     notFoundErrorSequence,

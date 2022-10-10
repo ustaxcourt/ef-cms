@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -17,8 +18,6 @@ export const validateAddPractitionerDocumentFormAction = ({
 }) => {
   const form = get(state.form);
 
-  console.log('form', form);
-
   let errors = applicationContext
     .getUseCases()
     .validateAddPractitionerDocumentFormInteractor(applicationContext, form);
@@ -37,7 +36,7 @@ export const validateAddPractitionerDocumentFormAction = ({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors,
+      errors: omit(errors, 'categoryName'),
     });
   }
 };
