@@ -68,10 +68,11 @@ export const PractitionerAddDocument = connect(
                       </label>
                       <span className="usa-hint">
                         File must be in PDF format (.pdf), MS-Word (.doc, .docx)
-                        or an image file (.jpg, .png). Max file size{' '}
+                        or an image file (.jpg, .jpeg, .png). Max file size{' '}
                         {constants.MAX_FILE_SIZE_MB}MB.
                       </span>
                       <StateDrivenFileInput
+                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
                         aria-describedby="practitioner-document-file-label"
                         id="practitioner-document-file"
                         name="practitionerDocumentFile"
@@ -153,6 +154,7 @@ export const PractitionerAddDocument = connect(
                         Description (optional)
                       </label>
                       <BindedTextarea
+                        bind="form.description"
                         id="documentation-notes"
                         required={false}
                       ></BindedTextarea>
