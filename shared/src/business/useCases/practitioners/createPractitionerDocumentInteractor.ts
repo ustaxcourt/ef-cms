@@ -41,6 +41,7 @@ export const createPractitionerDocumentInteractor = async (
     {
       categoryName: documentMetadata.categoryName,
       categoryType: documentMetadata.categoryType,
+      description: documentMetadata.description,
       documentId: documentMetadata.practitionerDocumentFileId,
       location: documentMetadata.location,
     },

@@ -25,6 +25,7 @@ Document.prototype.init = function init(rawDocument, { applicationContext }) {
   this.categoryName = rawDocument.categoryName;
   this.location = rawDocument.location;
   this.documentId = rawDocument.documentId ?? applicationContext.getUniqueId();
+  this.description = rawDocument.description;
 };
 
 Document.VALIDATION_ERROR_MESSAGES = {
@@ -38,6 +39,7 @@ Document.schema = joi.object().keys({
   categoryType: JoiValidationConstants.STRING.valid(
     ...Object.values(PRACTITIONER_DOCUMENT_TYPES),
   ).required(),
+  description: JoiValidationConstants.STRING.optional(),
   documentId: JoiValidationConstants.UUID.required().description(
     'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
   ),
