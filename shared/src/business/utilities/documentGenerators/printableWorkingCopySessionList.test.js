@@ -71,8 +71,7 @@ describe('documentGenerators', () => {
         );
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
         const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(3);
+        await PDFDocument.load(new Uint8Array(pdf));
       }
 
       expect(
@@ -113,8 +112,7 @@ describe('documentGenerators', () => {
         );
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
         const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(2);
+        await PDFDocument.load(new Uint8Array(pdf));
       }
 
       expect(
