@@ -30,13 +30,12 @@ describe('submitAddPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         isSavingForLater: false,
-        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
         caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId: mockDocketEntryId,
         form: {},
       },
     });
@@ -50,13 +49,12 @@ describe('submitAddPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         isSavingForLater: false,
-        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
         caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId: mockDocketEntryId,
         form: {
           isFileAttached: true,
         },
@@ -77,13 +75,12 @@ describe('submitAddPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         isSavingForLater: false,
-        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
         caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
         },
@@ -109,13 +106,12 @@ describe('submitAddPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         isSavingForLater: false,
-        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
         caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
         },
