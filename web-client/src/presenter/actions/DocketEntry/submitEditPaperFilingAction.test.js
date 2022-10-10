@@ -5,21 +5,22 @@ import { submitEditPaperFilingAction } from './submitEditPaperFilingAction';
 
 describe('submitEditPaperFilingAction', () => {
   const clientConnectionId = '999999999';
-  const docketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
+  const mockDocketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
+  const mockPaperServicePdfUrl = 'toucancenter.org';
 
-  let caseDetail;
+  let mockCaseDetail;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    caseDetail = {
+    mockCaseDetail = {
       docketEntries: [],
       docketNumber: '123-45',
     };
 
     applicationContext.getUseCases().editPaperFilingInteractor.mockReturnValue({
-      caseDetail,
-      paperServicePdfUrl: '000',
+      caseDetail: mockCaseDetail,
+      paperServicePdfUrl: mockPaperServicePdfUrl,
     });
   });
 
@@ -30,12 +31,12 @@ describe('submitEditPaperFilingAction', () => {
       },
       props: {
         isSavingForLater: false,
-        primaryDocumentFileId: docketEntryId,
+        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
-        caseDetail,
+        caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId,
+        docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
         },
@@ -47,11 +48,11 @@ describe('submitEditPaperFilingAction', () => {
         .calls[0][1],
     ).toMatchObject({
       documentMetadata: {
-        docketNumber: caseDetail.docketNumber,
+        docketNumber: mockCaseDetail.docketNumber,
         isFileAttached: true,
         isPaper: true,
       },
-      primaryDocumentFileId: docketEntryId,
+      primaryDocumentFileId: mockDocketEntryId,
     });
   });
 
@@ -62,12 +63,12 @@ describe('submitEditPaperFilingAction', () => {
       },
       props: {
         isSavingForLater: false,
-        primaryDocumentFileId: docketEntryId,
+        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
-        caseDetail,
+        caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId,
+        docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
         },
@@ -77,8 +78,106 @@ describe('submitEditPaperFilingAction', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
-      docketEntryId,
-      docketNumber: caseDetail.docketNumber,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCaseDetail.docketNumber,
+    });
+  });
+
+  it('should NOT add a coversheet when props.isSavingForLater is false and there is NOT a file attached', async () => {
+    await runAction(submitEditPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isSavingForLater: false,
+        primaryDocumentFileId: mockDocketEntryId,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        form: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should NOT add a coversheet when props.isSavingForLater is true and there is a file attached', async () => {
+    await runAction(submitEditPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isSavingForLater: true,
+        primaryDocumentFileId: mockDocketEntryId,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        form: {
+          isFileAttached: true,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should NOT add a coversheet when props.isSavingForLater is true and a file has been added or replaced', async () => {
+    await runAction(submitEditPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isSavingForLater: true,
+        primaryDocumentFileId: mockDocketEntryId,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should return docket entry and case information to props', async () => {
+    const { output } = await runAction(submitEditPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isSavingForLater: false,
+        primaryDocumentFileId: mockDocketEntryId,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(output).toMatchObject({
+      caseDetail: mockCaseDetail,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCaseDetail.docketNumber,
+      overridePaperServiceAddress: true,
+      pdfUrl: mockPaperServicePdfUrl,
     });
   });
 });
