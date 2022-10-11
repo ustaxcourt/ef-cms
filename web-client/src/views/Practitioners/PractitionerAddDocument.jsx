@@ -18,7 +18,8 @@ export const PractitionerAddDocument = connect(
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
     navigateToPractitionerDocumentsPageSequence:
       sequences.navigateToPractitionerDocumentsPageSequence,
-    practitionerDocumentationHelper: state.practitionerDocumentationHelper,
+    practitionerDocumentationFormHelper:
+      state.practitionerDocumentationFormHelper,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
@@ -32,7 +33,7 @@ export const PractitionerAddDocument = connect(
     constants,
     documentTypes,
     navigateToPractitionerDocumentsPageSequence,
-    practitionerDocumentationHelper,
+    practitionerDocumentationFormHelper,
     submitAddPractitionerDocumentSequence,
     usStates,
     usStatesOther,
@@ -104,7 +105,7 @@ export const PractitionerAddDocument = connect(
                         ))}
                       </BindedSelect>
                     </FormGroup>
-                    {practitionerDocumentationHelper.isCertificateOfGoodStanding && (
+                    {practitionerDocumentationFormHelper.isCertificateOfGoodStanding && (
                       <FormGroup errorText={validationErrors.location}>
                         <label
                           className="usa-label"
