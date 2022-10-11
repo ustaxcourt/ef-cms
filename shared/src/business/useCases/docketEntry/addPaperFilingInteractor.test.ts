@@ -125,7 +125,7 @@ describe('addPaperFilingInteractor', () => {
     ).toEqual(mockPdfUrl);
   });
 
-  it.only('should return paper service url as part of the "serve_document_complete" message when the document is filed on a lead case and one of the member cases has a party with paper service', async () => {
+  it('should return paper service url as part of the "serve_document_complete" message when the document is filed on a lead case and one of the member cases has a party with paper service', async () => {
     const mockPdfUrl = 'www.example.com';
     applicationContext
       .getPersistenceGateway()
