@@ -1021,8 +1021,12 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
     } else if (
       docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode
     ) {
-      docketEntryEntity.index = 0;
+      throw new Error('STIN documents should not be on the docket record.');
     }
+  } else if (
+    docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode
+  ) {
+    docketEntryEntity.index = 0;
   }
 
   this.docketEntries = [...this.docketEntries, docketEntryEntity];

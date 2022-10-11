@@ -100,7 +100,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(true);
   });
 
-  it('returns false for STIN', () => {
+  it('should return false for STIN', () => {
     const caseDetail = {
       docketEntries: [
         {
@@ -120,6 +120,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
       documentType: 'Statement of Taxpayer Identification',
       eventCode: 'STIN',
       filingDate: '2019-03-01T21:40:56.415Z', // 10 seconds
+      isPaper: true,
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
@@ -129,7 +130,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(false);
   });
 
-  it('returns true for non-STIN initial document types filed along with the petition', () => {
+  it('should return true for non-STIN initial document types filed along with the petition', () => {
     const caseDetail = {
       docketEntries: [
         {
