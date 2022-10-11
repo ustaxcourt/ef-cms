@@ -13,8 +13,11 @@ export const practitionerDocumentationHelper = (get, applicationContext) => {
     };
   });
 
+  const practitionerDocumentsCount = formattedPractitionerDocuments.length;
+
   return {
     formattedPractitionerDocuments,
+    practitionerDocumentsCount,
     showDocumentationTab: permissions.UPLOAD_PRACTITIONER_DOCUMENT,
   };
 };

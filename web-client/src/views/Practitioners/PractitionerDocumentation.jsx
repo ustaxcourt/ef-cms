@@ -22,9 +22,16 @@ export const PractitionerDocumentation = connect(
             className="push-right margin-bottom-1"
             href={`/practitioner-detail/${barNumber}/add-document`}
             icon="plus-circle"
+            overrideMargin={true}
           >
             Add file
           </Button>
+        </div>
+        <div className="float-right text-semibold margin-bottom-2">
+          Count:{' '}
+          <span className="text-normal">
+            {practitionerDocumentationHelper.practitionerDocumentsCount}
+          </span>
         </div>
         <table className="usa-table ustc-table subsection">
           <thead>
