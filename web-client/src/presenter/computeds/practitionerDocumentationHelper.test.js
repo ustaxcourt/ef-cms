@@ -109,5 +109,19 @@ describe('practitionerDetailHelper', () => {
         mockPractitionerDocuments.length,
       );
     });
+
+    it('should return 0 if no practitioner documents that have been uploaded', () => {
+      const results = runCompute(practitionerDocumentationHelper, {
+        state: {
+          permissions: {
+            UPLOAD_PRACTITIONER_DOCUMENT: false,
+          },
+          practitionerDocuments: [],
+          user: { role: 'admissionsclerk' },
+        },
+      });
+
+      expect(results.practitionerDocumentsCount).toEqual(0);
+    });
   });
 });
