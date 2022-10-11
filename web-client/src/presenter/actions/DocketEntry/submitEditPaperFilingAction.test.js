@@ -149,7 +149,7 @@ describe('submitEditPaperFilingAction', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should return docket entry and case information to props', async () => {
+  it('should return the paper service pdf url to props', async () => {
     const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
