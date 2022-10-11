@@ -14,11 +14,16 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const serveDocumentCompleteSequence = [
-  setPdfPreviewUrlAction,
-  setAlertSuccessAction,
   clearModalAction,
-  setSaveAlertsForNavigationAction,
+  isCoversheetNeededAction,
+  {
+    no: [],
+    yes: [],
+  },
   unsetWaitingForResponseAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
+  setPdfPreviewUrlAction,
   isPrintPreviewPreparedAction,
   {
     no: [
