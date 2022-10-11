@@ -15,11 +15,13 @@ describe('generateCoversheetAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        docketEntryId: mockDocketEntryId,
+      },
       state: {
         caseDetail: {
           docketNumber: mockDocketNumber,
         },
-        docketEntryId: mockDocketEntryId,
       },
     });
 

@@ -1,5 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
