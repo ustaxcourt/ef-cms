@@ -123,23 +123,32 @@ Every week we rotate responsibility for updating dependencies. As an open-source
 1. `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
 
 2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
+ * Note: Do not update `@fortawesome` packages to ^6.x.x unless the court requests it. These are locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
+    - `@fortawesome/free-solid-svg-icons`
+    - `@fortawesome/free-regular-svg-icons`
+    - `@fortawesome/fontawesome-svg-core`
+
 
 3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides.
 If dependencies have no patch, replace it with an alternative, or wait for the library to be patched.
 
     NOTE: If any npm packages are updated but the `package-lock.js` file is not updated, increment the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
 
-4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
-    - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
-    - Change the version in `scripts/verify-terraform-version.sh`
-    - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
-    - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
-      - `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
-    - deploy as normal
+4. Check if there are updates to the either of the following in `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
-5. `docker`: [docker cypress/base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+    - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
+      - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
+      - Change the version in `scripts/verify-terraform-version.sh`
 
-    See [here](ci-cd.md#docker) for the documentation to create and push the updated docker container for use in CircleCI.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+
+   To publish a new ECR docker image:
+
+   - Increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
+   - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
+   - Deploy as normal by triggering a CircleCI workflow
+   
+   Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
 6. Check through the list of caveats to see if any of the documented issues have been resolved.
 7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
@@ -148,10 +157,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-1. `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
-    - `@fortawesome/free-solid-svg-icons`
-    - `@fortawesome/free-regular-svg-icons`
-    - `@fortawesome/fontawesome-svg-core`
+1. `axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of writing this. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait a few days until those are ironed out.
 
 2. Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver).
     - Why is there a patch called `s3rver+3.7.1.patch`?
@@ -160,4 +166,4 @@ Below is a list of dependencies that are locked down due to known issues with se
       - This runs as part of the `npm postinstall` step.
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
 
-3. `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. `ajv` is a transitive dependency of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/8136004664?check_suite_focus=true) to failing test on 08/29/22 dependency updates.
+3. `puppeteer` and `puppeteer-core` have a major version update to ^18.x.x, but they need to stay at the same major version as `chrome-aws-lambda` (17.1.3). If we upgrade `puppeteer`, we see a ` cannot read property 'prototype' of undefined` error. 
