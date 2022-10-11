@@ -29,7 +29,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       formattedTrialSession.sessionType === SESSION_TYPES.hybrid;
 
     formattedTrialSession.disableHybridFilter =
-      formattedTrialSession.formattedEligibleCases.length === 0;
+      (formattedTrialSession.eligibleCases ?? []).length === 0;
 
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
