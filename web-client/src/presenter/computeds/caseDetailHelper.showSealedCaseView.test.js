@@ -1,13 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import {
-  docketClerkUser,
   irsPractitionerUser,
   petitionerUser,
-  petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -62,10 +60,10 @@ describe('showSealedCaseView', () => {
     expect(result.showSealedCaseView).toEqual(false);
   });
 
-  it('should be true for a practitioner user fix this----', () => {
+  it('should be true for a unassociated private practitioner user with a sealed case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: {
           docketEntries: [],
           isSealed: true,
@@ -77,8 +75,27 @@ describe('showSealedCaseView', () => {
       },
     });
 
-    expect(result.showSealedCaseView).toEqual(false);
-  })
+    expect(result.showSealedCaseView).toEqual(true);
+  });
+
+  it('should be true for a unassociated IRS practitioner user with a sealed case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(irsPractitionerUser),
+        caseDetail: {
+          docketEntries: [],
+          isSealed: true,
+          privatePractitioners: [],
+        },
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showSealedCaseView).toEqual(true);
+  });
+
   it('should be true for an unassociated petitioner associated with a different case in the consolidated group', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
