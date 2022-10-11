@@ -37,9 +37,7 @@ export const WorkQueueAssignments = connect(
             name="assignment"
           >
             <option value="">-Assignment-</option>
-            <option key="unassigned" value={null}>
-              Unassigned
-            </option>
+            <option value="UA">Unassigned</option>
             {users.map(user => (
               <option key={user.name} value={user.userId}>
                 {user.name}
