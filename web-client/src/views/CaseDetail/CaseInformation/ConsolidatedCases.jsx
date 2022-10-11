@@ -12,14 +12,13 @@ export const ConsolidatedCases = connect(
     return (
       <>
         {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
-        <div className="grid-container padding-left-0">
+        <div className="grid-container padding-left-0 margin-bottom-2">
           {caseDetail.consolidatedCases.map(consolidatedCase => (
             <div
               className="grid-row margin-top-3"
               key={consolidatedCase.docketNumber}
             >
-              {/* gotta figure out how to show margin ONLY on mobile */}
-              <div className="grid-col-2 margin-right-1">
+              <div className="grid-col-2">
                 <CaseLink formattedCase={consolidatedCase} />
               </div>
               <div className="grid-col-10">{consolidatedCase.caseTitle}</div>
