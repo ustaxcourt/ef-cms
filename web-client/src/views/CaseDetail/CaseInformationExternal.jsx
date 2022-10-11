@@ -176,6 +176,17 @@ export const CaseInformationExternal = connect(
                 <TrialInformation caseDetail={formattedCaseDetail} />
               </div>
             </div>
+            {caseDetailHelper.showConsolidatedCasesCard && (
+              <div className="margin-top-2">
+                <div className="case-info-card">
+                  <h3>Consolidated Cases</h3>
+                  <ConsolidatedCases
+                    caseDetail={formattedCaseDetail}
+                    caseDetailHelper={caseDetailHelper}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </Mobile>
       </div>
