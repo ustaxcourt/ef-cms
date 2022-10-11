@@ -9,6 +9,8 @@ export const createPractitionerDocument = async ({
   barNumber: string;
   practitionerDocument: TPractitionerDocument;
 }) => {
+  barNumber = barNumber.toLowerCase();
+
   await client.put({
     Item: {
       ...practitionerDocument,

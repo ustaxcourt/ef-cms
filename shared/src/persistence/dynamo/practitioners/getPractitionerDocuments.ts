@@ -7,6 +7,8 @@ export const getPractitionerDocuments = async ({
   applicationContext: IApplicationContext;
   barNumber: string;
 }) => {
+  barNumber = barNumber.toLowerCase();
+
   return await client.queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
