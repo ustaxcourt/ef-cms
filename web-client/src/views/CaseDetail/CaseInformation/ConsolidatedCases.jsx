@@ -18,7 +18,8 @@ export const ConsolidatedCases = connect(
               className="grid-row margin-top-3"
               key={consolidatedCase.docketNumber}
             >
-              <div className="grid-col-2">
+              {/* gotta figure out how to show margin ONLY on mobile */}
+              <div className="grid-col-2 margin-right-1">
                 <CaseLink formattedCase={consolidatedCase} />
               </div>
               <div className="grid-col-10">{consolidatedCase.caseTitle}</div>
