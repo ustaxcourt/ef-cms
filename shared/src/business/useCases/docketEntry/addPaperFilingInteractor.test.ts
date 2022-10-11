@@ -432,6 +432,52 @@ describe('addPaperFilingInteractor', () => {
     });
   });
 
+  it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      consolidatedGroupDocketNumbers: [mockCase.docketNumber],
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.generateCoversheet,
+    ).toBe(true);
+  });
+
+  it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      consolidatedGroupDocketNumbers: [mockCase.docketNumber],
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: false,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.generateCoversheet,
+    ).toBe(false);
+  });
+
   describe('consolidated groups', () => {
     it('should create a work item and add it to the outbox for each case', async () => {
       const mockConsolidatedGroup = [
