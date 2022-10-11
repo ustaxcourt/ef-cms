@@ -155,7 +155,7 @@ export const PractitionerAddDocument = connect(
                         htmlFor="documentation-notes"
                         id="documentation-notes-label"
                       >
-                        Description (optional)
+                        Description <span className="usa-hint">(optional)</span>
                       </label>
                       <BindedTextarea
                         bind="form.description"
