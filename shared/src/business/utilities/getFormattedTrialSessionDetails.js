@@ -75,6 +75,18 @@ exports.formatCase = ({
     .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 };
 
+const getSortableDocketNumber = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${year}-${number.padStart(6, '0')}`;
+};
+
+const compareCasesByDocketNumber = (a, b) => {
+  const aSortString = getSortableDocketNumber(a.docketNumber);
+  const bSortString = getSortableDocketNumber(b.docketNumber);
+  return aSortString.localeCompare(bSortString);
+};
+
+exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
@@ -89,7 +101,7 @@ exports.formattedTrialSessionDetails = ({
         setFilingPartiesCode: true,
       }),
     )
-    .sort(exports.compareCasesByDocketNumber);
+    .sort(compareCasesByDocketNumber);
 
   [trialSession.inactiveCases, trialSession.openCases] = partition(
     trialSession.allCases,

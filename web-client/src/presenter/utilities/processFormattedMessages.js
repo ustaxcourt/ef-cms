@@ -74,10 +74,14 @@ export const getFormattedMessages = ({
       'MMDDYY',
     );
     const formattedMessages = messages.map(message => {
-      const { consolidatedIconTooltipText, inConsolidatedGrou, shouldIndent } =
-        applicationContext
-          .getUtilities()
-          .setConsolidationFlagsForDisplay(message);
+      const {
+        consolidatedIconTooltipText,
+        inConsolidatedGroup,
+        leadCase,
+        shouldIndent,
+      } = applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(message);
 
       return {
         ...message,
@@ -94,7 +98,8 @@ export const getFormattedMessages = ({
           now,
           yesterday,
         ),
-        inConsolidatedGrou,
+        inConsolidatedGroup,
+        leadCase,
         messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
         shouldIndent,
       };
