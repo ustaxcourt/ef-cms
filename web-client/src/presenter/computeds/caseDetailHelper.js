@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -67,8 +68,12 @@ export const caseDetailHelper = (get, applicationContext) => {
     user.role === USER_ROLES.irsPractitioner ||
     user.role === USER_ROLES.privatePractitioner;
 
+  const isPetitioner = user.role === USER_ROLES.petitioner;
+
   const showSealedCaseView =
-    isPractitioner && !!caseDetail.isSealed && !userAssociatedWithCase;
+    (isPractitioner || isPetitioner) &&
+    !!caseDetail.isSealed &&
+    !userAssociatedWithCase;
 
   const showConsolidatedCasesCard =
     permissions.VIEW_CONSOLIDATED_CASES_CARD && !!caseDetail.leadDocketNumber;
