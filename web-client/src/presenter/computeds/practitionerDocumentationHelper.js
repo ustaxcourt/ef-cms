@@ -13,7 +13,7 @@ export const practitionerDocumentationHelper = (get, applicationContext) => {
     };
   });
 
-  const practitionerDocumentsCount = formattedPractitionerDocuments.length;
+  const practitionerDocumentsCount = practitionerDocuments.length;
 
   return {
     formattedPractitionerDocuments,
