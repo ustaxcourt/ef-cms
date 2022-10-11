@@ -110,9 +110,13 @@ export const addPaperFilingInteractor = async (
   }
 
   let filedByFromLeadCase;
-  let servedParties;
+  let consolidatedGroupHasPaperServiceCase: boolean;
+
   for (const caseEntity of caseEntities) {
-    servedParties = aggregatePartiesForService(caseEntity);
+    const servedParties = aggregatePartiesForService(caseEntity);
+    if (servedParties.paper.length > 0) {
+      consolidatedGroupHasPaperServiceCase = true;
+    }
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -225,9 +229,7 @@ export const addPaperFilingInteractor = async (
         docketEntryId,
       });
 
-    console.log('*****', servedParties);
-
-    if (servedParties.paper.length > 0) {
+    if (consolidatedGroupHasPaperServiceCase) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
   }
