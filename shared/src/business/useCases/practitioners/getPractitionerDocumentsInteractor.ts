@@ -1,4 +1,4 @@
-import { Document } from '../../entities/Document';
+import { PractitionerDocument } from '../../entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -36,7 +36,7 @@ export const getPractitionerDocumentsInteractor = async (
       barNumber,
     });
 
-  return Document.validateRawCollection(practitionerDocuments, {
+  return PractitionerDocument.validateRawCollection(practitionerDocuments, {
     applicationContext,
   });
 };

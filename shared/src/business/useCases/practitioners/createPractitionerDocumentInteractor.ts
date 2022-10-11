@@ -1,4 +1,4 @@
-import { Document } from '../../entities/Document';
+import { PractitionerDocument } from '../../entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -38,7 +38,7 @@ export const createPractitionerDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized for creating practitioner user');
   }
 
-  const documentEntity: TPractitionerDocumentEntity = new Document(
+  const documentEntity: TPractitionerDocumentEntity = new PractitionerDocument(
     {
       categoryName: documentMetadata.categoryName,
       categoryType: documentMetadata.categoryType,
