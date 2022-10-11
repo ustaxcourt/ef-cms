@@ -225,6 +225,8 @@ export const addPaperFilingInteractor = async (
         docketEntryId,
       });
 
+    console.log('*****', servedParties);
+
     if (servedParties.paper.length > 0) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
