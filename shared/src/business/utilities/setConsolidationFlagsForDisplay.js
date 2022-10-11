@@ -1,10 +1,6 @@
 const { isLeadCase } = require('../entities/cases/Case');
 
-exports.setConsolidationFlagsForDisplay = (
-  caseItem,
-  eligibleCasesInGroup = [],
-  skipPriorityStatus = false,
-) => {
+exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
   const newCaseItem = { ...caseItem };
   newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
 
@@ -16,11 +12,11 @@ exports.setConsolidationFlagsForDisplay = (
       newCaseItem.leadCase = true;
       newCaseItem.consolidatedIconTooltipText = 'Lead case';
     } else {
-      const leadCase = eligibleCasesInGroup.find(
+      const leadCase = theCases.find(
         theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
       );
 
-      if (!!leadCase && !skipPriorityStatus) {
+      if (leadCase) {
         newCaseItem.shouldIndent = true;
       } else {
         delete newCaseItem.shouldIndent;

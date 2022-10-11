@@ -45,7 +45,7 @@ describe('setConsolidationFlagsForDisplay', () => {
     });
   });
 
-  it('should not indent the case item if the lead case is high priority', () => {
+  it('should not indent the case if group the case is part of does not contain lead case', () => {
     const mockCaseItem = {
       docketNumber: '303-20',
       leadDocketNumber: '300-20',
@@ -61,7 +61,7 @@ describe('setConsolidationFlagsForDisplay', () => {
     });
   });
 
-  it('should indent the case item if part of the same group', () => {
+  it('should indent the case item if the lead case is part of the same group', () => {
     const mockCaseItem = {
       docketNumber: '303-20',
       leadDocketNumber: '300-20',
@@ -78,46 +78,6 @@ describe('setConsolidationFlagsForDisplay', () => {
       inConsolidatedGroup: true,
       leadCase: false,
       shouldIndent: true,
-    });
-  });
-
-  it('should not indent the case item if the lead case is in the cases group', () => {
-    const mockCaseItem = {
-      docketNumber: '303-20',
-      leadDocketNumber: '300-20',
-    };
-    const result = setConsolidationFlagsForDisplay(
-      mockCaseItem,
-      [
-        {
-          docketNumber: '300-20',
-        },
-      ],
-      true,
-    );
-
-    expect(result).toEqual({
-      ...mockCaseItem,
-      consolidatedIconTooltipText: 'Consolidated case',
-      inConsolidatedGroup: true,
-      leadCase: false,
-      shouldIndent: undefined,
-    });
-  });
-
-  it('should NOT indent the case when the lead case is missing from the case list and skipPriorityStatus is true', () => {
-    const mockCaseItem = {
-      docketNumber: '303-20',
-      leadDocketNumber: '300-20',
-    };
-    const result = setConsolidationFlagsForDisplay(mockCaseItem, [], true);
-
-    expect(result).toEqual({
-      ...mockCaseItem,
-      consolidatedIconTooltipText: 'Consolidated case',
-      inConsolidatedGroup: true,
-      leadCase: false,
-      shouldIndent: undefined,
     });
   });
 });

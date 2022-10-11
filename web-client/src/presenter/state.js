@@ -59,7 +59,6 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
-import { formattedTrialSessionDetailsForFilteredEligibleCases } from './computeds/formattedTrialSessionDetailsForFilteredEligibleCases';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
@@ -176,7 +175,6 @@ const helpers = {
   formattedOpenCases,
   formattedPendingItems,
   formattedTrialSessionDetails,
-  formattedTrialSessionDetailsForFilteredEligibleCases,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,

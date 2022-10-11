@@ -126,7 +126,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumberFactory', () =>
       {
         docketNumber: '102-19',
         docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '103-19P',
+        docketNumberWithSuffix: '102-19P',
         isDocketSuffixHighPriority: true,
       },
     );

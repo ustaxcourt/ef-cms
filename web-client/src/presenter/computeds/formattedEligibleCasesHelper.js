@@ -1,8 +1,5 @@
 import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
-import {
-  formatCase,
-  getSortableDocketNumber,
-} from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
 
@@ -10,7 +7,7 @@ const groupKeySymbol = Symbol('group');
 
 const addGroupSymbol = (object, value) => {
   Object.defineProperty(object, groupKeySymbol, {
-    enumerable: true,
+    enumerable: false,
     value,
     writable: true,
   });
@@ -44,24 +41,13 @@ const getPriorityGroups = eligibleCases => {
   return groups;
 };
 
-const compareTrialSessionEligibleCases = eligibleCases => {
-  const groups = getPriorityGroups(eligibleCases);
-
-  return (a, b) => {
-    const aSortString = getEligibleDocketNumberSortString(
-      a,
-      groups[a[groupKeySymbol]],
-    );
-    const bSortString = getEligibleDocketNumberSortString(
-      b,
-      groups[b[groupKeySymbol]],
-    );
-    return aSortString.localeCompare(bSortString);
-  };
+const getSortableDocketNumber = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${year}-${number.padStart(6, '0')}`;
 };
 
-const getEligibleDocketNumberSortString = (theCase, casesInGroup) => {
-  const leadCase = casesInGroup.find(
+const getFullSortString = (theCase, cases) => {
+  const leadCase = cases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 
@@ -84,6 +70,16 @@ const getEligibleDocketNumberSortString = (theCase, casesInGroup) => {
         : theCase.leadDocketNumber
       : theCase.docketNumber,
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+};
+
+const compareTrialSessionEligibleCases = eligibleCases => {
+  const groups = getPriorityGroups(eligibleCases);
+
+  return (a, b) => {
+    const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
+    const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
+    return aSortString.localeCompare(bSortString);
+  };
 };
 
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {

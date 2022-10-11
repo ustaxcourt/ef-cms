@@ -77,14 +77,6 @@ exports.formatCase = ({
   return newCaseItem;
 };
 
-const getSortableDocketNumber = docketNumber => {
-  const docketNumberSplit = docketNumber.split('-');
-  docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
-  return `${docketNumberSplit[1]}${docketNumberSplit[0]}`;
-};
-
-exports.getSortableDocketNumber = getSortableDocketNumber;
-
 const getDocketNumberSortString = ({ allCases = [], theCase }) => {
   const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
@@ -115,6 +107,11 @@ const compareCasesByDocketNumberFactory =
     return aSortString.localeCompare(bSortString);
   };
 
+const getSortableDocketNumber = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${year}-${number.padStart(6, '0')}`;
+};
+
 const compareCasesByDocketNumber = (a, b) => {
   const aSortString = getSortableDocketNumber(a.docketNumber);
   const bSortString = getSortableDocketNumber(b.docketNumber);
@@ -123,6 +120,7 @@ const compareCasesByDocketNumber = (a, b) => {
 
 exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
+exports.getSortableDocketNumber = getSortableDocketNumber;
 
 exports.formattedTrialSessionDetails = ({
   applicationContext,
@@ -147,7 +145,7 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem =>
       applicationContext
         .getUtilities()
-        .setConsolidationFlagsForDisplay(caseItem, openCases, true),
+        .setConsolidationFlagsForDisplay(caseItem, openCases),
     )
     .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
 
@@ -155,7 +153,7 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem =>
       applicationContext
         .getUtilities()
-        .setConsolidationFlagsForDisplay(caseItem, inactiveCases, true),
+        .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
     )
     .sort(
       compareCasesByDocketNumberFactory({
@@ -167,12 +165,11 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem =>
       applicationContext
         .getUtilities()
-        .setConsolidationFlagsForDisplay(caseItem, allCases, true),
+        .setConsolidationFlagsForDisplay(caseItem, allCases),
     )
     .sort(
       compareCasesByDocketNumberFactory({
         allCases,
-        applicationContext,
       }),
     );
 

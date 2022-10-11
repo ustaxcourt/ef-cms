@@ -1,4 +1,4 @@
-import { formattedTrialSessionDetailsForFilteredEligibleCases } from '../../src/presenter/computeds/formattedTrialSessionDetailsForFilteredEligibleCases';
+import { formattedEligibleCasesHelper } from '../../src/presenter/computeds/formattedEligibleCasesHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -25,9 +25,7 @@ export const petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases = (
     );
 
     const formattedEligibleCases = runCompute(
-      withAppContextDecorator(
-        formattedTrialSessionDetailsForFilteredEligibleCases,
-      ),
+      withAppContextDecorator(formattedEligibleCasesHelper),
       {
         state: cerebralTest.getState(),
       },
