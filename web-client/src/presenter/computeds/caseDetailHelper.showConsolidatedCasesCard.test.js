@@ -54,7 +54,7 @@ describe('showConsolidatedCasesCard', () => {
   });
 
   it('should be false when the case is not in a consolidated group and the user has VIEW_CONSOLIDATED_CASES_CARD permission', () => {
-    const user = adcUser;
+    const user = petitionerUser;
 
     const result = runCompute(caseDetailHelper, {
       state: {
