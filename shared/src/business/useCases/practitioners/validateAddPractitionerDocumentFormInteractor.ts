@@ -1,4 +1,4 @@
-import { Document } from '../../entities/Document';
+import { PractitionerDocument } from '../../entities/PractitionerDocument';
 
 /**
  * validateAddPractitionerDocumentFormInteractor
@@ -12,7 +12,7 @@ export const validateAddPractitionerDocumentFormInteractor = (
   applicationContext,
   form,
 ) => {
-  const errors = new Document(form, {
+  const errors = new PractitionerDocument(form, {
     applicationContext,
   }).getFormattedValidationErrors();
 

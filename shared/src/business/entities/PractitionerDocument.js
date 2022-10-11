@@ -17,11 +17,14 @@ const { JoiValidationConstants } = require('./JoiValidationConstants');
  * @param {object} providers.rawStamp the raw document data
  * @constructor
  */
-function Document() {
+function PractitionerDocument() {
   this.entityName = 'Document';
 }
 
-Document.prototype.init = function init(rawDocument, { applicationContext }) {
+PractitionerDocument.prototype.init = function init(
+  rawDocument,
+  { applicationContext },
+) {
   this.categoryType = rawDocument.categoryType;
   this.categoryName = rawDocument.categoryName;
   this.location = rawDocument.location;
@@ -31,13 +34,13 @@ Document.prototype.init = function init(rawDocument, { applicationContext }) {
   this.uploadDate = rawDocument.uploadDate || createISODateString();
 };
 
-Document.VALIDATION_ERROR_MESSAGES = {
+PractitionerDocument.VALIDATION_ERROR_MESSAGES = {
   categoryName: 'Enter a category name',
   categoryType: 'Enter a category type',
   location: 'Enter a location',
 };
 
-Document.schema = joi.object().keys({
+PractitionerDocument.schema = joi.object().keys({
   categoryName: JoiValidationConstants.STRING.required(),
   categoryType: JoiValidationConstants.STRING.valid(
     ...Object.values(PRACTITIONER_DOCUMENT_TYPES),
@@ -56,9 +59,11 @@ Document.schema = joi.object().keys({
 });
 
 joiValidationDecorator(
-  Document,
-  Document.schema,
-  Document.VALIDATION_ERROR_MESSAGES,
+  PractitionerDocument,
+  PractitionerDocument.schema,
+  PractitionerDocument.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { Document: validEntityDecorator(Document) };
+module.exports = {
+  PractitionerDocument: validEntityDecorator(PractitionerDocument),
+};
