@@ -123,6 +123,48 @@ describe('addPaperFilingInteractor', () => {
     ).toEqual(mockPdfUrl);
   });
 
+  it('should return paper service url as part of the "serve_document_complete" message when the document is filed on a lead case and one of the member cases has a party with paper service', async () => {
+    const mockPdfUrl = 'www.example.com';
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce({
+        ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+        leadDocketNumber: mockCase.docketNumber,
+      });
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: mockPdfUrl,
+      });
+
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      consolidatedGroupDocketNumbers: [
+        mockCase.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      documentMetadata: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.pdfUrl,
+    ).toEqual(mockPdfUrl);
+  });
+
   it('should add documents and workItem to inbox when saving for later when a document is attached', async () => {
     await addPaperFilingInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
@@ -386,6 +428,52 @@ describe('addPaperFilingInteractor', () => {
         },
       }),
     });
+  });
+
+  it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      consolidatedGroupDocketNumbers: [mockCase.docketNumber],
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.generateCoversheet,
+    ).toBe(true);
+  });
+
+  it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      consolidatedGroupDocketNumbers: [mockCase.docketNumber],
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: false,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.generateCoversheet,
+    ).toBe(false);
   });
 
   describe('consolidated groups', () => {

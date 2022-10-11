@@ -247,12 +247,10 @@ export const editPaperFilingInteractor = async (
 
     caseEntity.updateDocketEntry(docketEntryEntity);
 
-    const result = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: caseEntity,
-      });
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
     if (!isSavingForLater) {
       await applicationContext
@@ -266,9 +264,6 @@ export const editPaperFilingInteractor = async (
     }
 
     return {
-      caseDetail: new Case(result, { applicationContext })
-        .validate()
-        .toRawObject(),
       paperServicePdfUrl,
     };
   } catch (e) {
