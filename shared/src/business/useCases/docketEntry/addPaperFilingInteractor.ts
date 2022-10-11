@@ -75,8 +75,6 @@ export const addPaperFilingInteractor = async (
       docketNumber,
     });
 
-  let caseEntityToUpdate = new Case(caseToUpdate, { applicationContext });
-
   const baseMetadata = pick(documentMetadata, [
     'filers',
     'partyIrsPractitioner',
@@ -95,8 +93,6 @@ export const addPaperFilingInteractor = async (
     throw new Error('Did not receive a primaryDocumentFileId');
   }
 
-  const servedParties = aggregatePartiesForService(caseEntityToUpdate);
-
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
@@ -114,7 +110,10 @@ export const addPaperFilingInteractor = async (
   }
 
   let filedByFromLeadCase;
+  let servedParties;
   for (const caseEntity of caseEntities) {
+    servedParties = aggregatePartiesForService(caseEntity);
+
     const docketEntryEntity = new DocketEntry(
       {
         ...baseMetadata,
