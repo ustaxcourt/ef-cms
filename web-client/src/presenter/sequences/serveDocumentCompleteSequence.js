@@ -1,7 +1,9 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
+import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
@@ -14,11 +16,16 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const serveDocumentCompleteSequence = [
-  setPdfPreviewUrlAction,
-  setAlertSuccessAction,
   clearModalAction,
-  setSaveAlertsForNavigationAction,
+  isCoversheetNeededAction,
+  {
+    no: [],
+    yes: [generateCoversheetAction],
+  },
   unsetWaitingForResponseAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
+  setPdfPreviewUrlAction,
   isPrintPreviewPreparedAction,
   {
     no: [

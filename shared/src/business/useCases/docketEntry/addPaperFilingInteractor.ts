@@ -75,8 +75,6 @@ export const addPaperFilingInteractor = async (
       docketNumber,
     });
 
-  let caseEntityToUpdate = new Case(caseToUpdate, { applicationContext });
-
   const baseMetadata = pick(documentMetadata, [
     'filers',
     'partyIrsPractitioner',
@@ -95,8 +93,6 @@ export const addPaperFilingInteractor = async (
     throw new Error('Did not receive a primaryDocumentFileId');
   }
 
-  const servedParties = aggregatePartiesForService(caseEntityToUpdate);
-
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
@@ -114,7 +110,14 @@ export const addPaperFilingInteractor = async (
   }
 
   let filedByFromLeadCase;
+  let consolidatedGroupHasPaperServiceCase: boolean;
+
   for (const caseEntity of caseEntities) {
+    const servedParties = aggregatePartiesForService(caseEntity);
+    if (servedParties.paper.length > 0) {
+      consolidatedGroupHasPaperServiceCase = true;
+    }
+
     const docketEntryEntity = new DocketEntry(
       {
         ...baseMetadata,
@@ -226,7 +229,7 @@ export const addPaperFilingInteractor = async (
         docketEntryId,
       });
 
-    if (servedParties.paper.length > 0) {
+    if (consolidatedGroupHasPaperServiceCase) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
   }
@@ -245,6 +248,8 @@ export const addPaperFilingInteractor = async (
         message: successMessage,
         overwritable: false,
       },
+      docketEntryId,
+      generateCoversheet: readyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
