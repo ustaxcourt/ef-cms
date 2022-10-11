@@ -62,6 +62,7 @@ import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeMod
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { closeModalAndReturnToPractitionerDocumentsPageSequence } from './sequences/closeModalAndReturnToPractitionerDocumentsPageSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { closeTrialSessionSequence } from './sequences/closeTrialSessionSequence';
 import { closeVerifyEmailModalAndNavigateToMyAccountSequence } from './sequences/closeVerifyEmailModalAndNavigateToMyAccountSequence';
@@ -197,7 +198,6 @@ import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navig
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToPathAndSetRedirectUrlSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
-import { navigateToPractitionerDocumentsPageSequence } from './sequences/navigateToPractitionerDocumentsPageSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
@@ -575,6 +575,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
+    closeModalAndReturnToPractitionerDocumentsPageSequence,
     closeModalAndReturnToTrialSessionsSequence,
     closeTrialSessionSequence,
     closeVerifyEmailModalAndNavigateToMyAccountSequence,
@@ -709,7 +710,6 @@ export const presenter = {
     navigateToEditOrderSequence,
     navigateToPathAndSetRedirectUrlSequence,
     navigateToPathSequence,
-    navigateToPractitionerDocumentsPageSequence,
     navigateToPrintPaperServiceSequence,
     navigateToPrintableCaseConfirmationSequence,
     notFoundErrorSequence,
