@@ -52,10 +52,4 @@ export const submitAddPaperFilingAction = async ({
       isSavingForLater,
       primaryDocumentFileId: docketEntryId,
     });
-
-  return {
-    docketEntryId,
-    docketNumber,
-    overridePaperServiceAddress: true,
-  };
 };
