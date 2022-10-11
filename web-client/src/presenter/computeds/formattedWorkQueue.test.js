@@ -13,6 +13,7 @@ describe('formattedWorkQueue', () => {
     applicationContext.getConstants();
 
   let globalUser;
+  let screenMetadata = {};
 
   applicationContext.getCurrentUser = () => {
     return globalUser;
@@ -22,6 +23,7 @@ describe('formattedWorkQueue', () => {
     globalUser = user;
     return {
       permissions: getUserPermissions(user),
+      screenMetadata,
     };
   };
 
@@ -50,6 +52,20 @@ describe('formattedWorkQueue', () => {
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
     workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
+  };
+
+  const unassignedWorkItem = {
+    ...baseWorkItem,
+    assigneeId: null,
+    assigneeName: null,
+    workItemId: '068b42a8-bb65-4f40-946c-e0c3adf7e7d1',
+  };
+
+  const thirdWorkItem = {
+    ...baseWorkItem,
+    assigneeId: null,
+    assigneeName: null,
+    workItemId: '4bee162a-b6e5-4350-8c65-3d9c5887b5af',
   };
 
   it('filters the workitems for section QC inbox', () => {
@@ -214,6 +230,64 @@ describe('formattedWorkQueue', () => {
 
     expect(result.length).toEqual(1);
     expect(result[0].workItemId).toEqual(inProgressWorkItemId);
+  });
+
+  it('does not filter workItems based on assigneeId if no filter is selected', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [baseWorkItem, unassignedWorkItem, thirdWorkItem],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.length).toEqual(3);
+  });
+
+  it('filters workItems based on assigneeId', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        screenMetadata: {
+          assignmentFilterValue: {
+            userId: docketClerkUser.userId,
+          },
+        },
+        workQueue: [baseWorkItem, unassignedWorkItem, thirdWorkItem],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.length).toEqual(1);
+    expect(result[0].workItemId).toEqual(baseWorkItem.workItemId);
+  });
+
+  it('filters for unassigned workItems', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        screenMetadata: {
+          assignmentFilterValue: {
+            userId: 'UA',
+          },
+        },
+        workQueue: [baseWorkItem, unassignedWorkItem, thirdWorkItem],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.length).toEqual(2);
+    expect(result[0].workItemId).toEqual(unassignedWorkItem.workItemId);
+    expect(result[1].workItemId).toEqual(thirdWorkItem.workItemId);
   });
 
   it('sorts high priority work items to the start of the list - qc, my, inbox', () => {

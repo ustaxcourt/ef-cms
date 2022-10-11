@@ -240,9 +240,11 @@ export const getWorkItemDocumentLink = ({
 
 export const filterWorkItems = ({
   applicationContext,
-  user,
+  assignmentFilterValue,
+  workItems,
   workQueueToDisplay,
 }) => {
+  const user = applicationContext.getCurrentUser();
   const { box, queue } = workQueueToDisplay;
 
   const filters = applicationContext
@@ -250,7 +252,22 @@ export const filterWorkItems = ({
     .getWorkQueueFilters({ user });
 
   const composedFilter = filters[queue][box];
-  return composedFilter;
+
+  const assignmentFilter = workItem => {
+    if (assignmentFilterValue && assignmentFilterValue.userId) {
+      if (assignmentFilterValue.userId === 'UA') {
+        return workItem.assigneeId === null;
+      }
+      return workItem.assigneeId === assignmentFilterValue.userId;
+    }
+    return workItem;
+  };
+
+  const filteredWorkItems = workItems
+    .filter(composedFilter)
+    .filter(assignmentFilter);
+
+  return filteredWorkItems;
 };
 
 const memoizedFormatItemWithLink = memoize(
@@ -279,43 +296,27 @@ const memoizedFormatItemWithLink = memoize(
 );
 
 export const formattedWorkQueue = (get, applicationContext) => {
-  const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
+  const { assignmentFilterValue } = get(state.screenMetadata);
 
-  let { assignmentFilterValue } = get(state.screenMetadata);
-
-  const assignmentFilter = workItem => {
-    if (assignmentFilterValue && assignmentFilterValue.userId) {
-      if (assignmentFilterValue.userId === 'Unassigned') {
-        return workItem.assigneeId === null;
-      }
-      return workItem.assigneeId === assignmentFilterValue.userId;
-    }
-    return workItem;
-  };
-
-  let workQueue = workItems
-    .filter(
-      filterWorkItems({
-        applicationContext,
-        user,
-        workQueueToDisplay,
-      }),
-    )
-    .filter(assignmentFilter)
-    .map(workItem => {
-      return memoizedFormatItemWithLink({
-        applicationContext,
-        isSelected: selectedWorkItemIds.includes(workItem.workItemId),
-        permissions,
-        workItem,
-        workQueueToDisplay,
-      });
+  let workQueue = filterWorkItems({
+    applicationContext,
+    assignmentFilterValue,
+    workItems,
+    workQueueToDisplay,
+  }).map(workItem => {
+    return memoizedFormatItemWithLink({
+      applicationContext,
+      isSelected: selectedWorkItemIds.includes(workItem.workItemId),
+      permissions,
+      workItem,
+      workQueueToDisplay,
     });
+  });
 
   const sortFields = {
     my: {
