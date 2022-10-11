@@ -128,7 +128,10 @@ export const PractitionerAddDocument = connect(
                             {Object.keys(usStates).map(abbrev => {
                               const fullStateName = usStates[abbrev];
                               return (
-                                <option key={fullStateName} value={abbrev}>
+                                <option
+                                  key={fullStateName}
+                                  value={fullStateName}
+                                >
                                   {fullStateName}
                                 </option>
                               );
