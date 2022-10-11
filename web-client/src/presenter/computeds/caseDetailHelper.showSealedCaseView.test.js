@@ -62,32 +62,23 @@ describe('showSealedCaseView', () => {
     expect(result.showSealedCaseView).toEqual(false);
   });
 
-  const nonPractitionerUsers = [
-    docketClerkUser,
-    petitionerUser,
-    petitionsClerkUser,
-  ];
-
-  nonPractitionerUsers.forEach(user => {
-    it(`should be false for a non practitioner ${user} user`, () => {
-      const result = runCompute(caseDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketEntries: [],
-            isSealed: true,
-            privatePractitioners: [],
-          },
-          screenMetadata: {
-            isAssociated: false,
-          },
+  it('should be true for a practitioner user fix this----', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [],
+          isSealed: true,
+          privatePractitioners: [],
         },
-      });
-
-      expect(result.showSealedCaseView).toEqual(false);
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
     });
-  });
 
+    expect(result.showSealedCaseView).toEqual(false);
+  })
   it('should be true for an unassociated petitioner associated with a different case in the consolidated group', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
