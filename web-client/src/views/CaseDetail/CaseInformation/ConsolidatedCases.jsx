@@ -12,10 +12,10 @@ export const ConsolidatedCases = connect(
     return (
       <>
         {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
-        <div className="grid-container padding-left-0">
+        <div className="grid-container padding-left-0 margin-bottom-2">
           {caseDetail.consolidatedCases.map(consolidatedCase => (
             <div
-              className="grid-row margin-top-3"
+              className="grid-row margin-top-3 align-center"
               key={consolidatedCase.docketNumber}
             >
               <div className="grid-col-2">
