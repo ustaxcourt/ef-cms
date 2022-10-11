@@ -1,7 +1,7 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
+import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
@@ -11,8 +11,6 @@ import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -30,12 +28,9 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitAddPaperFilingAction } from '../actions/DocketEntry/submitAddPaperFilingAction';
 import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
-import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
-import { validateUploadedPdfAction } from '../actions/CourtIssuedDocketEntry/validateUploadedPdfAction';
 
 const addPaperFilingMultiDocketableFlow = [
-  closeFileUploadStatusModalAction,
   setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
   submitAddPaperFilingAction,
@@ -44,7 +39,6 @@ const addPaperFilingMultiDocketableFlow = [
 const editPaperFilingNotMultiDocketableFlow = [
   submitEditPaperFilingAction,
   setCaseAction,
-  closeFileUploadStatusModalAction,
   getShouldGoToPaperServiceAction,
   {
     no: [
@@ -89,34 +83,18 @@ export const submitPaperFilingSequence = [
               isFileAttachedAction,
               {
                 no: addPaperFilingMultiDocketableFlow,
-                yes: [
-                  openFileUploadStatusModalAction,
-                  uploadDocketEntryFileAction,
-                  {
-                    error: [openFileUploadErrorModal],
-                    success: [
-                      validateUploadedPdfAction,
-                      addPaperFilingMultiDocketableFlow,
-                    ],
-                  },
-                ],
+                yes: docketEntryFileUploadSequenceDecorator([
+                  addPaperFilingMultiDocketableFlow,
+                ]),
               },
             ],
             yes: [
               isFileAttachedAction,
               {
                 no: editPaperFilingNotMultiDocketableFlow,
-                yes: [
-                  openFileUploadStatusModalAction,
-                  uploadDocketEntryFileAction,
-                  {
-                    error: [openFileUploadErrorModal],
-                    success: [
-                      validateUploadedPdfAction,
-                      editPaperFilingNotMultiDocketableFlow,
-                    ],
-                  },
-                ],
+                yes: docketEntryFileUploadSequenceDecorator([
+                  editPaperFilingNotMultiDocketableFlow,
+                ]),
               },
             ],
           },
