@@ -248,6 +248,7 @@ export const addPaperFilingInteractor = async (
         message: successMessage,
         overwritable: false,
       },
+      docketEntryId,
       generateCoversheet: true,
       pdfUrl: paperServicePdfUrl,
     },
