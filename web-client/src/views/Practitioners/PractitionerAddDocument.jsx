@@ -2,6 +2,7 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerUserHeader } from './PractitionerUserHeader';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -13,13 +14,12 @@ import classNames from 'classnames';
 
 export const PractitionerAddDocument = connect(
   {
-    barNumber: state.practitionerDetails.barNumber,
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
-    navigateToPractitionerDocumentsPageSequence:
-      sequences.navigateToPractitionerDocumentsPageSequence,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
+    showModal: state.modal.showModal,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
@@ -29,11 +29,11 @@ export const PractitionerAddDocument = connect(
     validationErrors: state.validationErrors,
   },
   function PractitionerAddDocument({
-    barNumber,
     constants,
     documentTypes,
-    navigateToPractitionerDocumentsPageSequence,
+    formCancelToggleCancelSequence,
     practitionerDocumentationFormHelper,
+    showModal,
     submitAddPractitionerDocumentSequence,
     usStates,
     usStatesOther,
@@ -173,15 +173,16 @@ export const PractitionerAddDocument = connect(
                   </Button>
                   <Button
                     link
-                    onClick={() =>
-                      navigateToPractitionerDocumentsPageSequence({
-                        barNumber,
-                        tab: 'practitioner-documentation',
-                      })
-                    }
+                    id="cancel-button"
+                    onClick={() => {
+                      formCancelToggleCancelSequence();
+                    }}
                   >
                     Cancel
                   </Button>
+                  {showModal === 'FormCancelModalDialog' && (
+                    <FormCancelModalDialog onCancelSequence="closeModalAndReturnToPractitionerDocumentsPageSequence" />
+                  )}
                 </div>
               </div>
             </div>
