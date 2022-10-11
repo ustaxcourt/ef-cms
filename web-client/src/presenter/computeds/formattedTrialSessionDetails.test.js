@@ -10,6 +10,9 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
+  const { TRIAL_SESSION_TYPES } = applicationContext.getConstants();
+  const REGULAR_SESSION_TYPE = TRIAL_SESSION_TYPES.regular;
+  const HYBRID_SESSION_TYPE = TRIAL_SESSION_TYPES.hybrid;
 
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
@@ -22,6 +25,7 @@ describe('formattedTrialSessionDetails', () => {
     caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
+    eligibleCases: [],
     irsCalendarAdministrator: 'Test Calendar Admin',
     isCalendared: false,
     judge: { name: 'Test Judge' },
@@ -50,6 +54,79 @@ describe('formattedTrialSessionDetails', () => {
       state: {},
     });
     expect(result).toBeUndefined();
+  });
+
+  it('should return false for isHybridSession when sessionType is set to Regular', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: REGULAR_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ isHybridSession: false });
+  });
+
+  it('should be true for isHybridSession when sessionType is set to Hybrid', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: HYBRID_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ isHybridSession: true });
+  });
+
+  it('should be false for disableHybridFilter when there is at least one case in formattedEligibleCases', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      eligibleCases: [
+        {
+          caseCaption: 'testPetitioner3, Petitioner',
+          caseTitle: 'testPetitioner3',
+          caseType: 'Deficiency',
+          docketNumber: '101-20',
+          docketNumberSuffix: 'S',
+          docketNumberWithSuffix: '101-20S',
+          entityName: 'EligibleCase',
+          inConsolidatedGroup: false,
+          irsPractitioners: [],
+          isDocketSuffixHighPriority: true,
+          leadCase: false,
+          privatePractitioners: [],
+          qcCompleteForTrial: {},
+        },
+      ],
+      sessionType: HYBRID_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ disableHybridFilter: false });
+  });
+
+  it('should be true for disableHybridFilter when there are no cases in formattedEligibleCases', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: HYBRID_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ disableHybridFilter: true });
   });
 
   it('should NOT set canDelete, canEdit, or can canClose when the trial session does NOT have a start date', () => {

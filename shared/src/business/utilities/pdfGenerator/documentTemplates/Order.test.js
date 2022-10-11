@@ -73,4 +73,21 @@ describe('Order', () => {
     );
     expect(wrapper.find('#order-signature').text()).toContain('Test Signature');
   });
+
+  it('renders the addedDocketNumbers and ET AL. if multiple added docket numbers were selected for the order', () => {
+    let wrapper = mount(
+      <Order
+        options={{ ...options, addedDocketNumbers: ['101-20', '102-20P'] }}
+        orderContent={orderContent}
+        orderTitle={orderTitle}
+        signatureText=""
+      />,
+    );
+    expect(wrapper.find('#docket-number').text()).toEqual(
+      'Docket No. 101-20, 102-20P.',
+    );
+    expect(wrapper.find('#caption-title').text()).toEqual(
+      'TEST PETITIONER, ET AL.,',
+    );
+  });
 });

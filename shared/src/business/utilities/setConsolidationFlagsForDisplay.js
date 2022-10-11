@@ -1,8 +1,4 @@
-exports.setConsolidationFlagsForDisplay = (
-  caseItem,
-  theCases = [],
-  skipPriorityStatus = false,
-) => {
+exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
   const newCaseItem = { ...caseItem };
 
   newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
@@ -18,17 +14,10 @@ exports.setConsolidationFlagsForDisplay = (
         theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
       );
 
-      if (
-        !!leadCase &&
-        (skipPriorityStatus ||
-          (!leadCase.highPriority &&
-            !leadCase.isManuallyAdded &&
-            !leadCase.isDocketSuffixHighPriority &&
-            !newCaseItem.highPriority &&
-            !newCaseItem.isManuallyAdded &&
-            !newCaseItem.isDocketSuffixHighPriority))
-      ) {
+      if (leadCase) {
         newCaseItem.shouldIndent = true;
+      } else {
+        delete newCaseItem.shouldIndent;
       }
     }
   }

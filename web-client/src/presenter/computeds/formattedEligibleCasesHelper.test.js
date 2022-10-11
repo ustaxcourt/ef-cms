@@ -6,7 +6,70 @@ import { formattedEligibleCasesHelper as formattedEligibleCasesHelperComputed } 
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('formattedTrialSessionDetails', () => {
+const MOCK_ELIGIBLE_CASES = [
+  {
+    caseCaption: 'testPetitioner1, Petitioner',
+    caseTitle: 'testPetitioner1',
+    caseType: 'CDP (Lien/Levy)',
+    docketNumber: '103-20',
+    docketNumberSuffix: 'L',
+    docketNumberWithSuffix: '103-20L',
+    entityName: 'EligibleCase',
+    inConsolidatedGroup: false,
+    irsPractitioners: [],
+    isDocketSuffixHighPriority: true,
+    leadCase: false,
+    privatePractitioners: [],
+    qcCompleteForTrial: {},
+  },
+  {
+    caseCaption: 'testPetitioner2, Petitioner',
+    caseTitle: 'testPetitioner2',
+    caseType: 'Worker Classification',
+    docketNumber: '108-19',
+    docketNumberSuffix: null,
+    docketNumberWithSuffix: '108-19',
+    entityName: 'EligibleCase',
+    inConsolidatedGroup: false,
+    irsPractitioners: [],
+    isDocketSuffixHighPriority: false,
+    leadCase: false,
+    privatePractitioners: [],
+    qcCompleteForTrial: {},
+  },
+  {
+    caseCaption: 'testPetitioner3, Petitioner',
+    caseTitle: 'testPetitioner3',
+    caseType: 'Deficiency',
+    docketNumber: '101-20',
+    docketNumberSuffix: 'S',
+    docketNumberWithSuffix: '101-20S',
+    entityName: 'EligibleCase',
+    inConsolidatedGroup: false,
+    irsPractitioners: [],
+    isDocketSuffixHighPriority: true,
+    leadCase: false,
+    privatePractitioners: [],
+    qcCompleteForTrial: {},
+  },
+  {
+    caseCaption: 'testPetitioner4, Petitioner',
+    caseTitle: 'testPetitioner4',
+    caseType: 'CDP (Lien/Levy)',
+    docketNumber: '110-20',
+    docketNumberSuffix: 'SL',
+    docketNumberWithSuffix: '110-20SL',
+    entityName: 'EligibleCase',
+    inConsolidatedGroup: false,
+    irsPractitioners: [],
+    isDocketSuffixHighPriority: true,
+    leadCase: false,
+    privatePractitioners: [],
+    qcCompleteForTrial: {},
+  },
+];
+
+describe('formattedEligibleCasesHelper', () => {
   const TRIAL_SESSION = {
     caseOrder: [],
     city: 'Hartford',
@@ -432,6 +495,55 @@ describe('formattedTrialSessionDetails', () => {
     ]);
   });
 
+  it('should group the consolidated cases together when the lead and a member case is high priority', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          eligibleCases: [
+            {
+              docketNumber: '103-22',
+              highPriority: true,
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '105-22',
+              highPriority: true,
+            },
+            {
+              docketNumber: '106-22',
+              highPriority: true,
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '120-22',
+            },
+            {
+              docketNumber: '110-22',
+              leadDocketNumber: '103-22',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '110-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '120-22',
+      }),
+    ]);
+  });
+
   it('should not group the consolidated cases when the lead case is high priority', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
@@ -570,7 +682,7 @@ describe('formattedTrialSessionDetails', () => {
             },
             {
               docketNumber: '105-22',
-              docketNumberSuffix: 'L',
+              highPriority: true,
             },
             {
               docketNumber: '102-22',
@@ -580,7 +692,7 @@ describe('formattedTrialSessionDetails', () => {
             },
             {
               docketNumber: '106-22',
-              docketNumberSuffix: 'L',
+              highPriority: true,
               leadDocketNumber: '103-22',
             },
             {
@@ -630,18 +742,28 @@ describe('formattedTrialSessionDetails', () => {
     ]);
   });
 
-  it('should sort the high priority items correctly', () => {
+  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
           eligibleCases: [
             {
-              docketNumber: '104-12',
-              isManuallyAdded: true,
+              docketNumber: '30535-15',
+              highPriority: true,
+              leadDocketNumber: '30533-15',
             },
             {
-              docketNumber: '103-07',
-              isManuallyAdded: true,
+              docketNumber: '33089-21',
+              docketNumberSuffix: 'L',
+              leadDocketNumber: '6450-19',
+            },
+            {
+              docketNumber: '6450-19',
+              leadDocketNumber: '6450-19',
+            },
+            {
+              docketNumber: '30533-15',
+              leadDocketNumber: '30533-15',
             },
           ],
         },
@@ -649,11 +771,89 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toEqual([
       expect.objectContaining({
-        docketNumber: '103-07',
+        docketNumber: '30535-15',
       }),
       expect.objectContaining({
-        docketNumber: '104-12',
+        docketNumber: '33089-21',
+      }),
+      expect.objectContaining({
+        docketNumber: '30533-15',
+      }),
+      expect.objectContaining({
+        docketNumber: '6450-19',
       }),
     ]);
+    expect(result.every(({ shouldIndent }) => !shouldIndent)).toBeTruthy();
+  });
+
+  it('should display all cases when filter is falsy', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        screenMetadata: {
+          eligibleCasesFilter: {
+            hybridSessionFilter: undefined,
+          },
+        },
+        trialSession: {
+          eligibleCases: MOCK_ELIGIBLE_CASES,
+        },
+      },
+    });
+
+    expect(result).toHaveLength(MOCK_ELIGIBLE_CASES.length);
+  });
+
+  it('should display all small cases when filter is equal to Small', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        screenMetadata: {
+          eligibleCasesFilter: {
+            hybridSessionFilter: 'Small',
+          },
+        },
+        trialSession: {
+          eligibleCases: MOCK_ELIGIBLE_CASES,
+        },
+      },
+    });
+
+    expect(result).toHaveLength(2);
+    expect(result).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '101-20',
+        }),
+        expect.objectContaining({
+          docketNumber: '110-20',
+        }),
+      ]),
+    );
+  });
+
+  it('should display all regular cases when filter is equal to Regular', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        screenMetadata: {
+          eligibleCasesFilter: {
+            hybridSessionFilter: 'Regular',
+          },
+        },
+        trialSession: {
+          eligibleCases: MOCK_ELIGIBLE_CASES,
+        },
+      },
+    });
+
+    expect(result).toHaveLength(2);
+    expect(result).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '103-20',
+        }),
+        expect.objectContaining({
+          docketNumber: '108-19',
+        }),
+      ]),
+    );
   });
 });

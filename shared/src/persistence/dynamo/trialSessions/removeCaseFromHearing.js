@@ -1,4 +1,4 @@
-const { delete: remove } = require('../../dynamodbClientService');
+const { remove } = require('../../dynamodbClientService');
 
 /**
  * removeCaseFromHearing

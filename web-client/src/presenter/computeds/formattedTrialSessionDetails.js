@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from 'cerebral';
 
@@ -23,6 +24,12 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         .getUtilities()
         .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
     }
+
+    formattedTrialSession.isHybridSession =
+      formattedTrialSession.sessionType === SESSION_TYPES.hybrid;
+
+    formattedTrialSession.disableHybridFilter =
+      (formattedTrialSession.eligibleCases ?? []).length === 0;
 
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext

@@ -1,5 +1,3 @@
-import { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } from '../../../../../ef-cms/shared/src/business/entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../ef-cms/shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -11,6 +9,11 @@ describe('serveCourtIssuedDocumentAction', () => {
   let mockPdfUrl = { pdfUrl: 'www.example.com' };
   const clientConnectionId = 'ABC123';
   const docketEntryId = 'bbd6f887-1e53-46e4-94e6-b636bf8c832a';
+
+  const {
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    ENTERED_AND_SERVED_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
