@@ -87,4 +87,24 @@ describe('showSealedCaseView', () => {
       expect(result.showSealedCaseView).toEqual(false);
     });
   });
+
+  it('should be true for an unassociated petitioner associated with a different case in the consolidated group', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [],
+          docketNumber: '198-23',
+          isSealed: true,
+          leadDocketNumber: '199-23',
+          privatePractitioners: [],
+        },
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showSealedCaseView).toEqual(true);
+  });
 });
