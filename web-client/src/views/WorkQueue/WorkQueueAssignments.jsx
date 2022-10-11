@@ -57,6 +57,8 @@ export const WorkQueueAssignments = connect(
                 evt,
               });
               assignSelectedWorkItemsSequence();
+              //reset input manually
+              evt.target.value = '';
             }}
           >
             <option key="assignTo" value="">

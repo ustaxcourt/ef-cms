@@ -10,7 +10,4 @@ import { state } from 'cerebral';
 export const setAssigneeIdAction = ({ props, store }) => {
   store.set(state.assigneeId, props.assigneeId);
   store.set(state.assigneeName, props.assigneeName);
-
-  //reset input manually
-  props.evt.target.value = '';
 };
