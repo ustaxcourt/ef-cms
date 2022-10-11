@@ -245,6 +245,7 @@ export const addPaperFilingInteractor = async (
         message: successMessage,
         overwritable: false,
       },
+      needsCoversheet: true,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
