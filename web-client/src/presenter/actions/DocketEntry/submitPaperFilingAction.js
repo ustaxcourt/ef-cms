@@ -15,13 +15,14 @@ export const submitPaperFilingAction = async ({
   get,
   props,
 }) => {
+  const { docketNumbers, isSavingForLater, primaryDocumentFileId } = props;
   const { docketNumber } = get(state.caseDetail);
-  const { isSavingForLater, primaryDocumentFileId } = props;
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
-  const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
-  const generateCoversheet = isFileAttached && !isSavingForLater;
+  const clientConnectionId = get(state.clientConnectionId);
   const isEditingDocketEntry = get(state.isEditingDocketEntry);
+  const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
 
+  let caseDetail;
   let docketEntryId;
 
   if (isEditingDocketEntry) {
@@ -62,7 +63,7 @@ export const submitPaperFilingAction = async ({
       });
   }
 
-  let caseDetail, paperServicePdfUrl;
+  let paperServicePdfUrl;
 
   if (isEditingDocketEntry) {
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
@@ -72,27 +73,30 @@ export const submitPaperFilingAction = async ({
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
       }));
+
+    const generateCoversheet = isFileAttached && !isSavingForLater;
+    if (generateCoversheet) {
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+        });
+    }
   } else {
-    ({ caseDetail, paperServicePdfUrl } = await applicationContext
+    await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
+        clientConnectionId,
+        consolidatedGroupDocketNumbers: docketNumbers,
         documentMetadata,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
-      }));
-  }
-
-  if (generateCoversheet) {
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
       });
   }
 
   return {
-    caseDetail,
+    caseDetail: caseDetail || {},
     docketEntryId,
     docketNumber,
     overridePaperServiceAddress: true,
