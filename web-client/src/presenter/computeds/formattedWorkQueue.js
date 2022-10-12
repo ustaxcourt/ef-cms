@@ -257,7 +257,10 @@ export const filterWorkItems = ({
       if (assignmentFilterValue.userId === 'UA') {
         return workItem.assigneeId === null;
       }
-      return workItem.assigneeId === assignmentFilterValue.userId;
+      return (
+        workItem.assigneeId === assignmentFilterValue.userId ||
+        workItem.completedBy === assignmentFilterValue.name
+      );
     }
     return workItem;
   };
@@ -300,7 +303,14 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
-  const { assignmentFilterValue } = get(state.screenMetadata);
+  let { assignmentFilterValue } = get(state.screenMetadata);
+  const users = get(state.users);
+
+  if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
+    assignmentFilterValue = users.find(
+      user => user.userId === assignmentFilterValue.userId,
+    );
+  }
 
   let workQueue = filterWorkItems({
     applicationContext,
