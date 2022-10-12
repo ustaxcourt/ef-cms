@@ -46,11 +46,24 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
+  const docketEntryId = get(state.docketEntryId);
+  let { eventCode } = form;
+
+  if (!eventCode) {
+    ({ eventCode } = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    ));
+  }
+
+  // this is temporary until the flow for 9616 is implemented (QC workflow)
+  const editingDocketEntry = !!get(state.isEditingDocketEntry);
+
   const showConsolidatedCasesForService =
+    !editingDocketEntry &&
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
-    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
+    !eventCodesNotCompatibleWithConsolidation.includes(eventCode) &&
     hasConsolidatedCases;
 
   const confirmationText = showConsolidatedCasesForService

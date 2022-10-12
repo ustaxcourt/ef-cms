@@ -8,6 +8,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
+import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation/shouldSetupConsolidatedCasesAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
@@ -26,7 +27,11 @@ export const openConfirmInitiateServiceModalSequence = [
       ),
       getConsolidatedCasesByCaseAction,
       setConsolidatedCasesForCaseAction,
-      setupConsolidatedCasesAction,
+      shouldSetupConsolidatedCasesAction,
+      {
+        no: [],
+        yes: [setupConsolidatedCasesAction],
+      },
       setShowModalFactoryAction('ConfirmInitiateServiceModal'),
     ],
   },
