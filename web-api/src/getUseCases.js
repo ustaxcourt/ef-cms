@@ -483,6 +483,9 @@ const {
   unsealCaseInteractor,
 } = require('../../shared/src/business/useCases/unsealCaseInteractor');
 const {
+  getPractitionerDocumentDownloadUrlInteractor,
+} = require('../../shared/src/business/useCases/getPractitionerDocumentDownloadUrlInteractor');
+const {
   unsealDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/unsealDocketEntryInteractor');
 const {
@@ -660,6 +663,7 @@ const useCases = {
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerDocumentDownloadUrlInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getPublicCaseInteractor,

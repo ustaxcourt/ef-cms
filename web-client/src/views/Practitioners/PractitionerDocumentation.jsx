@@ -1,17 +1,20 @@
 // import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerDocumentation = connect(
   {
     barNumber: state.practitionerDetail.barNumber,
     constants: state.constants,
+    openPractitionerDocumentDownloadUrlSequence:
+      sequences.openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
   },
   function PractitionerDocumentation({
     barNumber,
+    openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper,
   }) {
     return (
@@ -51,7 +54,21 @@ export const PractitionerDocumentation = connect(
               document => (
                 <tr key={document.documentId}>
                   <td>{document.formattedUploadDate}</td>
-                  <td>{document.fileName}</td>
+                  <td>
+                    <Button
+                      link
+                      aria-label={`View PDF: ${document.fileName}`}
+                      onClick={() =>
+                        openPractitionerDocumentDownloadUrlSequence({
+                          barNumber,
+                          documentId: document.documentId,
+                        })
+                      }
+                    >
+                      {document.fileName}
+                    </Button>
+                  </td>
+
                   <td>{document.categoryName}</td>
                   <td>{document.description}</td>
                 </tr>
