@@ -1,9 +1,9 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { UnauthorizedError } from '../../../errors/errors';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
 /**
  *
@@ -20,8 +20,8 @@ import { UnauthorizedError } from '../../../errors/errors';
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
   {
-    contentHtml,
     addedDocketNumbers,
+    contentHtml,
     docketNumber,
     documentTitle,
     signatureText,
