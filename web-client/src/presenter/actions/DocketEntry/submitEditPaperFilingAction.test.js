@@ -12,12 +12,10 @@ describe('submitEditPaperFilingAction', () => {
     docketNumber: '123-45',
   };
 
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
+  presenter.providers.applicationContext = applicationContext;
 
-    applicationContext.getUseCases().editPaperFilingInteractor.mockReturnValue({
-      paperServicePdfUrl: mockPaperServicePdfUrl,
-    });
+  applicationContext.getUseCases().editPaperFilingInteractor.mockReturnValue({
+    paperServicePdfUrl: mockPaperServicePdfUrl,
   });
 
   it('should make a call to edit a paper filed docket entry', async () => {
@@ -52,8 +50,8 @@ describe('submitEditPaperFilingAction', () => {
     });
   });
 
-  it('should add a coversheet when props.isSavingForLater is false and there is a file attached', async () => {
-    await runAction(submitEditPaperFilingAction, {
+  it('should return generateCoversheet true when props.isSavingForLater is false and there is a file attached', async () => {
+    const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -71,16 +69,11 @@ describe('submitEditPaperFilingAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockCaseDetail.docketNumber,
-    });
+    expect(output.generateCoversheet).toBe(true);
   });
 
-  it('should NOT add a coversheet when props.isSavingForLater is false and there is NOT a file attached', async () => {
-    await runAction(submitEditPaperFilingAction, {
+  it('should return generateCoversheet false when props.isSavingForLater is false and there is NOT a file attached', async () => {
+    const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -96,13 +89,11 @@ describe('submitEditPaperFilingAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
+    expect(output.generateCoversheet).toBe(false);
   });
 
-  it('should NOT add a coversheet when props.isSavingForLater is true and there is a file attached', async () => {
-    await runAction(submitEditPaperFilingAction, {
+  it('should return generateCoversheet false when props.isSavingForLater is true and there is a file attached', async () => {
+    const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -120,12 +111,10 @@ describe('submitEditPaperFilingAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
+    expect(output.generateCoversheet).toBe(false);
   });
 
-  it('should NOT add a coversheet when props.isSavingForLater is true and a file has been added or replaced', async () => {
+  it('should return generateCoversheet true when props.isSavingForLater is true and a file has been added or replaced', async () => {
     await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
@@ -171,5 +160,27 @@ describe('submitEditPaperFilingAction', () => {
     expect(output).toMatchObject({
       pdfUrl: mockPaperServicePdfUrl,
     });
+  });
+
+  it('should return the docketEntryId to props', async () => {
+    const { output } = await runAction(submitEditPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isSavingForLater: false,
+        primaryDocumentFileId: mockDocketEntryId,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(output.docketEntryId).toBe(mockDocketEntryId);
   });
 });
