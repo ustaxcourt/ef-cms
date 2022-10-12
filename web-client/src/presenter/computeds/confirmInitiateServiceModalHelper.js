@@ -55,7 +55,11 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     ));
   }
 
+  // this is temporary until the flow for 9616 is implemented (QC workflow)
+  const editingDocketEntry = !!get(state.isEditingDocketEntry);
+
   const showConsolidatedCasesForService =
+    !editingDocketEntry &&
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
