@@ -1,3 +1,4 @@
+import { clearFormAction } from '../actions/clearFormAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -8,6 +9,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoPractitionerAddDocument = [
   setCurrentPageAction('Interstitial'),
+  clearFormAction,
   stopShowValidationAction,
   getPractitionerDetailAction,
   setPractitionerDetailAction,

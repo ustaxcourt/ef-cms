@@ -60,8 +60,8 @@ export const PractitionerDocumentation = connect(
                       aria-label={`View PDF: ${document.fileName}`}
                       onClick={() =>
                         openPractitionerDocumentDownloadUrlSequence({
-                          barNumber,
                           documentId: document.documentId,
+                          fileName: document.fileName,
                         })
                       }
                     >

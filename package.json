@@ -283,7 +283,7 @@
     "eslint-plugin-sort-destructure-keys": "^1.4.0",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "eslint-plugin-sort-keys-fix": "^1.1.2",
-    "eslint-plugin-sort-requires-fix": "^2.1.0",
+    "eslint-plugin-sort-requires-fix": "^2.1.2",
     "eslint-plugin-spellcheck": "^0.0.19",
     "esm": "^3.2.25",
     "file-loader": "^6.2.0",
