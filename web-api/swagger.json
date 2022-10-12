@@ -4843,9 +4843,15 @@
               },
               "sessionNotes": {
                 "type": "string"
+              },
+              "sort": {
+                "type": "string"
+              },
+              "userHeading": {
+                "type": "string"
               }
             },
-            "required": ["showCaseNotes", "filters", "formattedCases", "formattedTrialSession"]
+            "required": ["showCaseNotes", "filters", "formattedCases", "formattedTrialSession", "sort", "userHeading"]
           }
         }
       ],

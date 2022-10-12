@@ -67,6 +67,8 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       formattedTrialSession: mockTrialSession,
       sessionNotes: 'session notes',
       showCaseNotes: true,
+      sort: 'docket',
+      userHeading: 'Yggdrasil - Session Copy',
     };
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
