@@ -43,6 +43,7 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
 exports.formatCase = ({
   applicationContext,
   caseItem,
+  eligibleCases,
   setFilingPartiesCode = false,
 }) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
@@ -69,54 +70,28 @@ exports.formatCase = ({
     });
   }
 
-  applicationContext.getUtilities().setConsolidationFlagsForDisplay(caseItem);
-
-  return caseItem;
+  return applicationContext
+    .getUtilities()
+    .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 };
 
-exports.compareTrialSessionEligibleCases = (a, b) => {
-  if (a.isManuallyAdded && !b.isManuallyAdded) {
-    return -1;
-  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
-    return 1;
-  } else if (a.highPriority && !b.highPriority) {
-    return -1;
-  } else if (!a.highPriority && b.highPriority) {
-    return 1;
-  } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
-    return -1;
-  } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
-    return 1;
-  } else {
-    return exports.compareCasesByDocketNumber(a, b);
-  }
+const getSortableDocketNumber = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${year}-${number.padStart(6, '0')}`;
 };
 
-exports.compareCasesByDocketNumber = (a, b) => {
-  if (!a || !a.docketNumber || !b || !b.docketNumber) {
-    return 0;
-  }
-
-  const [numberA, yearA] = a.docketNumber.split('-');
-  const [numberB, yearB] = b.docketNumber.split('-');
-
-  let yearDifference = +yearA - +yearB;
-  if (yearDifference === 0) {
-    return +numberA - +numberB;
-  } else {
-    return yearDifference;
-  }
+const compareCasesByDocketNumber = (a, b) => {
+  const aSortString = getSortableDocketNumber(a.docketNumber);
+  const bSortString = getSortableDocketNumber(b.docketNumber);
+  return aSortString.localeCompare(bSortString);
 };
 
+exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
   if (!trialSession) return undefined;
-
-  trialSession.formattedEligibleCases = (trialSession.eligibleCases || [])
-    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
-    .sort(exports.compareTrialSessionEligibleCases);
 
   trialSession.allCases = (trialSession.calendaredCases || [])
     .map(caseItem =>
@@ -126,7 +101,7 @@ exports.formattedTrialSessionDetails = ({
         setFilingPartiesCode: true,
       }),
     )
-    .sort(exports.compareCasesByDocketNumber);
+    .sort(compareCasesByDocketNumber);
 
   [trialSession.inactiveCases, trialSession.openCases] = partition(
     trialSession.allCases,
