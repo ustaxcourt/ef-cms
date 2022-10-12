@@ -1,47 +1,63 @@
 /* eslint-disable max-lines */
-const { completeMessageLambda } = require('./messages/completeMessageLambda');
-const { createCaseLambda } = require('./cases/createCaseLambda');
-const { createMessageLambda } = require('./messages/createMessageLambda');
-const { createUserLambda } = require('./users/createUserLambda');
-const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
-const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
-const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
-const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
-const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
-const { getCaseExistsLambda } = require('./cases/getCaseExistsLambda');
-const { getCaseLambda } = require('./cases/getCaseLambda');
-const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
-const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
-const { getCasesForUserLambda } = require('./cases/getCasesForUserLambda');
-const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
-const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
-const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
-const { getNotificationsLambda } = require('./users/getNotificationsLambda');
-const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
-const { getUserByIdLambda } = require('./users/getUserByIdLambda');
-const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
-const { getUserLambda } = require('./users/getUserLambda');
-const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
-const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { ipLimiter } = require('./middleware/ipLimiter');
-const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
-const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
-const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
-const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
-const { sealCaseLambda } = require('./cases/sealCaseLambda');
-const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
-const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
-const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
-const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
-const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
-const { swaggerLambda } = require('./swagger/swaggerLambda');
-const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
-const { unsealCaseLambda } = require('./cases/unsealCaseLambda');
-const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
-const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
-const { updateContactLambda } = require('./cases/updateContactLambda');
-const { userIdLimiter } = require('./middleware/userIdLimiter');
-const { validatePdfLambda } = require('./documents/validatePdfLambda');
+const cors = require('cors');
+const createApplicationContext = require('./applicationContext');
+const express = require('express');
+const logger = require('./logger');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
+const { lambdaWrapper } = require('./lambdaWrapper');
+const { set } = require('lodash');
+const applicationContext = createApplicationContext({});
+
+const app = express();
+
+const allowAccessOriginFunction = (origin, callback) => {
+  //Origin header wasn't provided
+  if (!origin || origin === '') {
+    callback(null, '*');
+    return;
+  }
+
+  //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
+  //this is required for the browser to support receiving and sending cookies
+  if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
+    callback(null, origin);
+    return;
+  }
+
+  //some unknown front-end called us
+  callback(null, '*');
+};
+
+const defaultCorsOptions = {
+  origin: allowAccessOriginFunction,
+};
+
+const authCorsOptions = {
+  ...defaultCorsOptions,
+  credentials: true,
+};
+
+app.use('/auth', cors(authCorsOptions));
+app.use(cors(defaultCorsOptions));
+app.use(express.json({ limit: '1200kb' }));
+app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
+    // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
+    req.headers['x-apigateway-event'] = 'null';
+    req.headers['x-apigateway-context'] = 'null';
+  }
+  return next();
+});
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    const currentInvoke = getCurrentInvoke();
+    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
+  }
+  next();
+});
+app.use(logger());
 
 const {
   addCaseToTrialSessionLambda,
@@ -49,15 +65,12 @@ const {
 const {
   addConsolidatedCaseLambda,
 } = require('./cases/addConsolidatedCaseLambda');
-const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
-const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 const {
   addPetitionerToCaseLambda,
 } = require('./cases/addPetitionerToCaseLambda');
-const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const {
   appendAmendedPetitionFormLambda,
 } = require('./courtIssuedOrder/appendAmendedPetitionFormLambda');
@@ -67,14 +80,12 @@ const {
 const {
   archiveDraftDocumentLambda,
 } = require('./documents/archiveDraftDocumentLambda');
-const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const {
   associateIrsPractitionerWithCaseLambda,
 } = require('./manualAssociation/associateIrsPractitionerWithCaseLambda');
 const {
   associatePrivatePractitionerWithCaseLambda,
 } = require('./manualAssociation/associatePrivatePractitionerWithCaseLambda');
-const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
 const {
   batchDownloadTrialSessionLambda,
 } = require('./trialSessions/batchDownloadTrialSessionLambda');
@@ -99,8 +110,6 @@ const {
 const {
   completeWorkItemLambda,
 } = require('./workitems/completeWorkItemLambda');
-const cors = require('cors');
-const createApplicationContext = require('./applicationContext');
 const {
   createCaseDeadlineLambda,
 } = require('./caseDeadline/createCaseDeadlineLambda');
@@ -110,9 +119,6 @@ const {
 const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
-const {
-  createPractitionerDocumentLambda,
-} = require('./practitioners/createPractitionerDocumentLambda');
 const {
   createPractitionerUserLambda,
 } = require('./practitioners/createPractitionerUserLambda');
@@ -137,7 +143,6 @@ const {
 const {
   downloadPolicyUrlLambda,
 } = require('./documents/downloadPolicyUrlLambda');
-const express = require('express');
 const {
   fetchPendingItemsLambda,
 } = require('./pendingItems/fetchPendingItemsLambda');
@@ -201,13 +206,18 @@ const {
 const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
 const {
   getDocumentContentsForDocketEntryLambda,
 } = require('./documents/getDocumentContentsForDocketEntryLambda');
 const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
+const {
+  getDocumentDownloadUrlLambda: v1GetDocumentDownloadUrlLambda,
+} = require('./v1/getDocumentDownloadUrlLambda');
+const {
+  getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
+} = require('./v2/getDocumentDownloadUrlLambda');
 const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
@@ -251,17 +261,14 @@ const {
   getPractitionerByBarNumberLambda,
 } = require('./practitioners/getPractitionerByBarNumberLambda');
 const {
-  getPractitionerDocumentDownloadUrlLambda,
-} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
-const {
-  getPractitionerDocumentsLambda,
-} = require('./practitioners/getPractitionerDocumentsLambda');
-const {
   getPractitionersByNameLambda,
 } = require('./practitioners/getPractitionersByNameLambda');
 const {
   getPrivatePractitionersBySearchKeyLambda,
 } = require('./users/getPrivatePractitionersBySearchKeyLambda');
+const {
+  getReconciliationReportLambda: v2GetReconciliationReportLambda,
+} = require('./v2/getReconciliationReportLambda');
 const {
   getStatusOfVirusScanLambda,
 } = require('./documents/getStatusOfVirusScanLambda');
@@ -269,11 +276,11 @@ const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
 const {
-  getTrialSessionWorkingCopyLambda,
-} = require('./trialSessions/getTrialSessionWorkingCopyLambda');
-const {
   getTrialSessionsLambda,
 } = require('./trialSessions/getTrialSessionsLambda');
+const {
+  getTrialSessionWorkingCopyLambda,
+} = require('./trialSessions/getTrialSessionWorkingCopyLambda');
 const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
@@ -286,8 +293,6 @@ const {
 const {
   getUsersPendingEmailLambda,
 } = require('./users/getUsersPendingEmailLambda');
-const { lambdaWrapper } = require('./lambdaWrapper');
-const logger = require('./logger');
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
@@ -339,7 +344,6 @@ const {
 const {
   serveExternallyFiledDocumentLambda,
 } = require('./documents/serveExternallyFiledDocumentLambda');
-const { set } = require('lodash');
 const {
   setNoticesForCalendaredTrialSessionLambda,
 } = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
@@ -413,72 +417,68 @@ const {
   updateUserPendingEmailLambda,
 } = require('./users/updateUserPendingEmailLambda');
 const {
-  getDocumentDownloadUrlLambda: v1GetDocumentDownloadUrlLambda,
-} = require('./v1/getDocumentDownloadUrlLambda');
-const {
-  getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
-} = require('./v2/getDocumentDownloadUrlLambda');
-const {
-  getReconciliationReportLambda: v2GetReconciliationReportLambda,
-} = require('./v2/getReconciliationReportLambda');
-const {
   verifyPendingCaseForUserLambda,
 } = require('./cases/verifyPendingCaseForUserLambda');
 const {
   verifyUserPendingEmailLambda,
 } = require('./users/verifyUserPendingEmailLambda');
-
-const applicationContext = createApplicationContext({});
-const app = express();
-
-const allowAccessOriginFunction = (origin, callback) => {
-  //Origin header wasn't provided
-  if (!origin || origin === '') {
-    callback(null, '*');
-    return;
-  }
-
-  //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
-  //this is required for the browser to support receiving and sending cookies
-  if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
-    callback(null, origin);
-    return;
-  }
-
-  //some unknown front-end called us
-  callback(null, '*');
-};
-
-const defaultCorsOptions = {
-  origin: allowAccessOriginFunction,
-};
-
-const authCorsOptions = {
-  ...defaultCorsOptions,
-  credentials: true,
-};
-
-app.use('/auth', cors(authCorsOptions));
-app.use(cors(defaultCorsOptions));
-app.use(express.json({ limit: '1200kb' }));
-app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV !== 'production') {
-    // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
-    // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
-    req.headers['x-apigateway-event'] = 'null';
-    req.headers['x-apigateway-context'] = 'null';
-  }
-  return next();
-});
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV !== 'production') {
-    const currentInvoke = getCurrentInvoke();
-    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-  }
-  next();
-});
-app.use(logger());
+const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
+const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
+const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
+const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
+const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
+const { completeMessageLambda } = require('./messages/completeMessageLambda');
+const { createCaseLambda } = require('./cases/createCaseLambda');
+const { createMessageLambda } = require('./messages/createMessageLambda');
+const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
+const { createUserLambda } = require('./users/createUserLambda');
+const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
+const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
+const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
+const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
+const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
+const { getCaseExistsLambda } = require('./cases/getCaseExistsLambda');
+const { getCaseLambda } = require('./cases/getCaseLambda');
+const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
+const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
+const { getCasesForUserLambda } = require('./cases/getCasesForUserLambda');
+const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
+const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
+const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
+const { getNotificationsLambda } = require('./users/getNotificationsLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
+const {
+  getPractitionerDocumentDownloadUrlLambda,
+} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
+const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
+const { getUserByIdLambda } = require('./users/getUserByIdLambda');
+const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
+const { getUserLambda } = require('./users/getUserLambda');
+const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
+const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
+const { ipLimiter } = require('./middleware/ipLimiter');
+const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
+const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
+const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
+const { sealCaseLambda } = require('./cases/sealCaseLambda');
+const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
+const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
+const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
+const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
+const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
+const { swaggerLambda } = require('./swagger/swaggerLambda');
+const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
+const { unsealCaseLambda } = require('./cases/unsealCaseLambda');
+const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
+const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
+const { updateContactLambda } = require('./cases/updateContactLambda');
+const { userIdLimiter } = require('./middleware/userIdLimiter');
+const { validatePdfLambda } = require('./documents/validatePdfLambda');
 
 /**
  * Important note: order of routes DOES matter!
