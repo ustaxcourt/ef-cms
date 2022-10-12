@@ -430,6 +430,9 @@ const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
+const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
@@ -445,6 +448,12 @@ const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
+const {
+  getPractitionerDocumentDownloadUrlLambda,
+} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserByIdLambda } = require('./users/getUserByIdLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
@@ -470,12 +479,6 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const {
-  createPractitionerDocumentLambda,
-} = require('./practitioners/createPractitionerDocumentLambda');
-const {
-  getPractitionerDocumentsLambda,
-} = require('./practitioners/getPractitionerDocumentsLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -921,6 +924,10 @@ app.get(
   app.post(
     '/practitioners/:barNumber/documents',
     lambdaWrapper(createPractitionerDocumentLambda),
+  );
+  app.get(
+    '/practitioner-documents/:documentId/document-download-url',
+    lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
   );
   app.put(
     '/async/practitioners/:barNumber',

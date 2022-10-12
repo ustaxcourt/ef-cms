@@ -165,3 +165,5 @@ export const CaseDetailInternal = connect(
     );
   },
 );
+
+CaseDetailInternal.displayName = 'CaseDetailInternal';
