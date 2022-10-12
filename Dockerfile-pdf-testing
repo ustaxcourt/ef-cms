@@ -8,8 +8,13 @@ RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/
 RUN apt-get -o Acquire::Check-Valid-Until=false update
 
 RUN apt-get install -y \
-  graphicsmagick=1.4+really1.3.35-1~deb10u1 \
-  ghostscript=9.27~dfsg-2+deb10u5
+  graphicsmagick=1.4+really1.3.35-1~deb10u1
+
+# Install secondary if primary does not work
+RUN apt-get install -y \
+  ghostscript=9.27~dfsg-2+deb10u5 \
+  || apt-get install -y \
+  ghostscript=9.27~dfsg-2+deb10u6
 
 COPY . /home/app/efcms
 
