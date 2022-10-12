@@ -8,9 +8,9 @@ Accepted
 
 ## Context
 
-During early development, the project decided to use Cerebral to manage state and perform business logic through its sequences of actions within the client application. It has enabled the team to separate business logic that from the display of state.
+During early development, the project decided to use Cerebral to manage state and perform business logic through its sequences of actions within the client application. It has enabled the team to separate business logic from the display of state.
 
-Cerebral's "sequences" and "actions" provide a declarative approach that helps developers make sense of the business logic quickly while isolating functionality into individual actions. This helps atomizes the presentation logic in order to be easier to test via unit tests.
+Cerebral's "sequences" and "actions" provide a declarative approach that helps developers make sense of the business logic quickly while isolating functionality into individual actions. This atomizes the presentation logic in order to be easier to test via unit tests.
 
 It is no longer being maintained, and in order to ensure that it continues to be compatible with future versions of React, it will need to be maintained by someone or the project will need to abandon it.
 
