@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import {
   docketClerkUser,
   petitionsClerkUser,
+  validUser,
 } from '../../../../shared/src/test/mockUsers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -24,6 +25,7 @@ describe('formattedWorkQueue', () => {
     return {
       permissions: getUserPermissions(user),
       screenMetadata,
+      users: [docketClerkUser, validUser],
     };
   };
 
@@ -66,6 +68,31 @@ describe('formattedWorkQueue', () => {
     assigneeId: null,
     assigneeName: null,
     workItemId: '4bee162a-b6e5-4350-8c65-3d9c5887b5af',
+  };
+
+  const baseOutboxItem = {
+    caseStatus: 'General Docket - Not at Issue',
+    caseTitle: 'Then and Now',
+    completedAt: '2020-12-02T16:58:30.071Z',
+    completedBy: docketClerkUser.name,
+    docketEntry: {},
+    docketNumber: '113-19',
+    entityName: 'OutboxItem',
+    highPriority: false,
+    section: 'docket',
+    workItemId: 'fd03be29-d1c7-45a3-a462-a93e8ac40150',
+  };
+
+  const secondOutboxItem = {
+    ...baseOutboxItem,
+    completedBy: validUser.name,
+    workItemId: '537f39c6-c33b-4516-9289-7b9f47a91f9b',
+  };
+
+  const thirdOutboxItem = {
+    ...baseOutboxItem,
+    completedBy: validUser.name,
+    workItemId: '1fac76d7-b354-4704-9323-8eba2b29b759',
   };
 
   it('filters the workitems for section QC inbox', () => {
@@ -266,6 +293,47 @@ describe('formattedWorkQueue', () => {
 
     expect(result.length).toEqual(1);
     expect(result[0].workItemId).toEqual(baseWorkItem.workItemId);
+  });
+
+  it('filters workItems based on name when assigneeId is not present', () => {
+    let result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        screenMetadata: {
+          assignmentFilterValue: {
+            userId: docketClerkUser.userId,
+          },
+        },
+        workQueue: [baseOutboxItem, secondOutboxItem, thirdOutboxItem],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.length).toEqual(1);
+    expect(result[0].workItemId).toEqual(baseOutboxItem.workItemId);
+
+    result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        screenMetadata: {
+          assignmentFilterValue: {
+            userId: validUser.userId,
+          },
+        },
+        workQueue: [baseOutboxItem, secondOutboxItem, thirdOutboxItem],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.length).toEqual(2);
+    expect(result[0].workItemId).toEqual(secondOutboxItem.workItemId);
+    expect(result[1].workItemId).toEqual(thirdOutboxItem.workItemId);
   });
 
   it('filters for unassigned workItems', () => {
