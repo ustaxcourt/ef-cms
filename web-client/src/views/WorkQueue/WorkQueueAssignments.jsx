@@ -54,7 +54,6 @@ export const WorkQueueAssignments = connect(
               selectAssigneeSequence({
                 assigneeId: evt.target.value,
                 assigneeName: evt.target.options[evt.target.selectedIndex].text,
-                evt,
               });
               assignSelectedWorkItemsSequence();
               //reset input manually
