@@ -10,6 +10,7 @@ export const WorkQueueAssignments = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItemsLength: state.selectedWorkItems.length,
+    workQueueHelper: state.workQueueHelper,
   },
   function WorkQueueAssignments({
     assignSelectedWorkItemsSequence,
@@ -18,6 +19,7 @@ export const WorkQueueAssignments = connect(
     selectedWorkItemsLength,
     showSendToBar,
     users,
+    workQueueHelper,
   }) {
     return (
       <React.Fragment>
@@ -44,31 +46,34 @@ export const WorkQueueAssignments = connect(
               </option>
             ))}
           </BindedSelect>
-          <select
-            aria-label="select an assignee"
-            className="usa-select select-left inline-select margin-left-1pt5rem"
-            disabled={!showSendToBar}
-            id="options"
-            name="options"
-            onChange={evt => {
-              selectAssigneeSequence({
-                assigneeId: evt.target.value,
-                assigneeName: evt.target.options[evt.target.selectedIndex].text,
-              });
-              assignSelectedWorkItemsSequence();
-              //reset input manually
-              evt.target.value = '';
-            }}
-          >
-            <option key="assignTo" value="">
-              Assign to...
-            </option>
-            {users.map(user => (
-              <option key={user.userId} value={user.userId}>
-                {user.name}
+          {workQueueHelper.currentBoxView !== 'outbox' && (
+            <select
+              aria-label="select an assignee"
+              className="usa-select select-left inline-select margin-left-1pt5rem"
+              disabled={!showSendToBar}
+              id="options"
+              name="options"
+              onChange={evt => {
+                selectAssigneeSequence({
+                  assigneeId: evt.target.value,
+                  assigneeName:
+                    evt.target.options[evt.target.selectedIndex].text,
+                });
+                assignSelectedWorkItemsSequence();
+                //reset input manually
+                evt.target.value = '';
+              }}
+            >
+              <option key="assignTo" value="">
+                Assign to...
               </option>
-            ))}
-          </select>
+              {users.map(user => (
+                <option key={user.userId} value={user.userId}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          )}
           {showSendToBar && (
             <span className="assign-work-item-count">
               <Icon aria-label="selected work items count" icon="check" />
