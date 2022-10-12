@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import { submitCourtIssuedDocketEntryActionHelper } from './submitCourtIssuedDocketEntryActionHelper';
 
 /**
  * creates a docket entry with the given court-issued document
@@ -14,11 +13,27 @@ export const submitCourtIssuedDocketEntryAction = async ({
   get,
 }) => {
   const { docketNumber } = get(state.caseDetail);
-  await submitCourtIssuedDocketEntryActionHelper({
-    applicationContext,
-    docketEntryId: get(state.docketEntryId),
-    form: get(state.form),
-    getDocketNumbers: () => [docketNumber],
-    subjectDocketNumber: docketNumber,
-  });
+  const docketEntryId = get(state.docketEntryId);
+  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
+    applicationContext.getConstants();
+
+  const documentMeta = {
+    ...get(state.form),
+    docketEntryId,
+  };
+
+  await applicationContext
+    .getUseCases()
+    .fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [docketNumber],
+      documentMeta,
+      subjectDocketNumber: docketNumber,
+    });
+
+  return {
+    docketEntryId,
+    generateCoversheet: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    ),
+  };
 };
