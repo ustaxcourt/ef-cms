@@ -103,6 +103,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
+    formattedDocumentToDisplay,
     servedLabel,
     showApplyStampButton,
     showCompleteQcButton,

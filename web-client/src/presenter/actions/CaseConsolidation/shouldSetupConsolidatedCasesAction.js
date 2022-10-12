@@ -9,18 +9,14 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path object
  * @returns {object} the next path based on if the event code can be multi-docketed
  */
-export const shouldSetupConsolidatedCasesAction = ({
-  applicationContext,
-  get,
-  path,
-}) => {
-  const { eventCode } = get(state.form);
-  const { SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES } =
-    applicationContext.getConstants();
+export const shouldSetupConsolidatedCasesAction = ({ get, path }) => {
+  let setupConsolidatedCases = get(
+    state.confirmInitiateServiceModalHelper.showConsolidatedCasesForService,
+  );
 
-  if (SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.includes(eventCode)) {
-    return path.no();
+  if (setupConsolidatedCases) {
+    return path.yes();
   }
 
-  return path.yes();
+  return path.no();
 };
