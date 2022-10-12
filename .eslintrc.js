@@ -86,7 +86,7 @@ module.exports = {
     'sort-destructure-keys',
     'sort-imports-es6-autofix',
     'sort-keys-fix',
-    'require-sort',
+    'sort-requires',
     'spellcheck',
   ],
   rules: {
@@ -226,7 +226,7 @@ module.exports = {
       'asc',
       { caseSensitive: true, natural: true },
     ],
-    'require-sort/require-sort': 'error',
+    'sort-requires/sort-requires': 'error',
     'spellcheck/spell-checker': [
       'warn',
       {
