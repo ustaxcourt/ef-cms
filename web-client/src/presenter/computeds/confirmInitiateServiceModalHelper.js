@@ -13,9 +13,8 @@ import { uniqBy } from 'lodash';
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const {
     CONTACT_TYPE_TITLES,
-    ENTERED_AND_SERVED_EVENT_CODES,
+    NON_MULTI_DOCKETABLE_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
-    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -35,11 +34,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
   );
 
-  const eventCodesNotCompatibleWithConsolidation = [
-    ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  ];
-
   const hasConsolidatedCases =
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
@@ -48,7 +42,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
-    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(form.eventCode) &&
     hasConsolidatedCases;
 
   const confirmationText = showConsolidatedCasesForService
