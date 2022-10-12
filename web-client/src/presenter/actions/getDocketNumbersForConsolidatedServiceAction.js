@@ -13,7 +13,6 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   get,
 }) => {
   const {
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ENTERED_AND_SERVED_EVENT_CODES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -27,7 +26,6 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
 
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
