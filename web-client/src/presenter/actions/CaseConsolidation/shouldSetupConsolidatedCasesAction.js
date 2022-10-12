@@ -19,11 +19,13 @@ export const shouldSetupConsolidatedCasesAction = ({
     ENTERED_AND_SERVED_EVENT_CODES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();
+
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
-  let eventCode = get(state.form);
+
+  let { eventCode } = get(state.form);
 
   if (!eventCode) {
     ({ eventCode } = caseDetail.docketEntries.find(
@@ -31,13 +33,12 @@ export const shouldSetupConsolidatedCasesAction = ({
     ));
   }
 
-  const setupConsolidatedCases =
-    !eventCodesNotCompatibleWithConsolidation.includes(eventCode);
-  console.log(eventCodesNotCompatibleWithConsolidation.includes(eventCode));
+  const shouldNotSetupConsolidatedCases =
+    eventCodesNotCompatibleWithConsolidation.includes(eventCode);
 
-  if (setupConsolidatedCases) {
-    return path.yes();
+  if (shouldNotSetupConsolidatedCases) {
+    return path.no();
   }
 
-  return path.no();
+  return path.yes();
 };

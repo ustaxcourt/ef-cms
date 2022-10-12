@@ -20,7 +20,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     };
   });
 
-  it.only('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  it('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
