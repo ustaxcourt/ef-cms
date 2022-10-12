@@ -4,6 +4,7 @@ import { runAction } from 'cerebral/test';
 import { shouldSetupConsolidatedCasesAction } from './shouldSetupConsolidatedCasesAction';
 
 describe('shouldSetupConsolidatedCasesAction', () => {
+  const mockDocketEntryId = '123333333';
   let pathYesStub;
   let pathNoStub;
 
@@ -19,14 +20,14 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     };
   });
 
-  it('should return the no path when showConsolidatedCasesForService is false', async () => {
+  it.only('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
-        confirmInitiateServiceModalHelper: {
-          showConsolidatedCasesForService: false,
+        form: {
+          eventCode: 'M083',
         },
       },
     });
@@ -34,15 +35,47 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('should return the yes path when showConsolidatedCasesForService is true', async () => {
+  it('should return the no path when the eventCode is one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
-        confirmInitiateServiceModalHelper: {
-          showConsolidatedCasesForService: true,
+        form: {
+          eventCode: 'ODJ',
         },
+      },
+    });
+
+    expect(pathNoStub).toHaveBeenCalled();
+  });
+
+  it('should return the yes path when the form eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
+    await runAction(shouldSetupConsolidatedCasesAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          eventCode: 'A',
+        },
+      },
+    });
+
+    expect(pathYesStub).toHaveBeenCalled();
+  });
+
+  it('should return the yes path when the docket entry eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
+    await runAction(shouldSetupConsolidatedCasesAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketEntries: [{ docketEntryId: mockDocketEntryId, eventCode: 'A' }],
+        },
+        docketEntryId: mockDocketEntryId,
+        form: {},
       },
     });
 
