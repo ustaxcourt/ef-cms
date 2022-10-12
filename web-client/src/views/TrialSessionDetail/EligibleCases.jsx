@@ -1,14 +1,14 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const EligibleCases = connect(
   {
-    formattedEligibleCases:
-      state.formattedTrialSessionDetailsForFilteredEligibleCases
-        .formattedEligibleCases,
+    formattedEligibleCases: state.formattedEligibleCasesHelper,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
@@ -34,6 +34,7 @@ export const EligibleCases = connect(
         >
           <thead>
             <tr>
+              <th></th>
               <th aria-label="Docket Number">Docket No.</th>
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>
@@ -50,7 +51,22 @@ export const EligibleCases = connect(
             <tbody key={item.docketNumber}>
               <tr className="eligible-cases-row">
                 <td>
-                  <CaseLink formattedCase={item} />
+                  <span
+                    className={classNames({
+                      'margin-left-2': item.shouldIndent,
+                    })}
+                  >
+                    <ConsolidatedCaseIcon caseItem={item} />
+                  </span>
+                </td>
+                <td>
+                  <span
+                    className={classNames({
+                      'margin-left-2': item.shouldIndent,
+                    })}
+                  >
+                    <CaseLink formattedCase={item} />
+                  </span>
                 </td>
                 <td>
                   {item.isManuallyAdded && (
