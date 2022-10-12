@@ -72,7 +72,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         featureFlagHelper: featureFlagHelperState,
-        form: {},
+        form: { eventCode: 'A' },
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
         modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
@@ -98,7 +98,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         featureFlagHelper: featureFlagHelperState,
-        form: {},
+        form: { eventCode: 'A' },
         formattedCaseDetail: {
           irsPractitioners: [],
           isPaper: false,
@@ -263,6 +263,27 @@ describe('confirmInitiateServiceModalHelper', () => {
           featureFlagHelper: featureFlagHelperState,
           form: { eventCode: 'A' },
           formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+        },
+      });
+
+      expect(result.showConsolidatedCasesForService).toBe(true);
+    });
+
+    it('showConsolidatedCasesForService should be true when the docket entry eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: {},
+          formattedCaseDetail: {
+            ...formattedCaseDetail,
+            docketEntries: [{ eventCode: 'A' }],
+          },
           modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
       });
