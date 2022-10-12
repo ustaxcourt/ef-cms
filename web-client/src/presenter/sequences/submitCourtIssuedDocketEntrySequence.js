@@ -7,6 +7,7 @@ import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDate
 import { getConstants } from '../../getConstants';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
+import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
@@ -71,7 +72,13 @@ export const submitCourtIssuedDocketEntrySequence = [
                   getDocketEntryAlertSuccessAction,
                 ],
                 yes: [
+                  getDocketNumbersForConsolidatedServiceAction,
                   submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+                  isCoversheetNeededAction,
+                  {
+                    no: [],
+                    yes: [generateCoversheetAction],
+                  },
                   getDocketEntryAlertSuccessForConsolidatedGroupAction,
                   clearModalAction,
                 ],
