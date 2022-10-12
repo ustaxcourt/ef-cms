@@ -4,6 +4,7 @@ import { getPractitionerDocumentsAction } from '../actions/getPractitionerDocume
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setInitialTableSortAction } from '../actions/setInitialTableSortAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setPractitionerDocumentsAction } from '../actions/setPractitionerDocumentsAction';
 import { setTabFromPropsAction } from '../actions/setTabFromPropsAction';
@@ -17,6 +18,7 @@ export const gotoPractitionerDetailSequence = [
       isLoggedIn: startWebSocketConnectionSequenceDecorator([
         clearErrorAlertsAction,
         setTabFromPropsAction,
+        setInitialTableSortAction,
         getPractitionerDetailAction,
         setPractitionerDetailAction,
         getPractitionerDocumentsAction,
