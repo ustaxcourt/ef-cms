@@ -12,10 +12,8 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
   get,
 }) => {
-  const {
-    ENTERED_AND_SERVED_EVENT_CODES,
-    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  } = applicationContext.getConstants();
+  const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
+    applicationContext.getConstants();
 
   const consolidatedCasesPropagateDocketEntriesFlag = get(
     state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
@@ -24,15 +22,10 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   const { eventCode } = get(state.form);
   const consolidatedCases = caseDetail.consolidatedCases || [];
 
-  const eventCodesNotCompatibleWithConsolidation = [
-    ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  ];
-
   const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
 
   const currentDocketEntryNotCompatibleWithConsolidation =
-    eventCodesNotCompatibleWithConsolidation.includes(eventCode);
+    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)

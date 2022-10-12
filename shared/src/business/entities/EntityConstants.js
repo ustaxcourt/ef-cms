@@ -3,6 +3,9 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('./courtIssuedDocument/CourtIssuedDocumentConstants');
 const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
@@ -442,6 +445,11 @@ const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
 ])
   .filter(internalEvent => internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+const NON_MULTI_DOCKETABLE_EVENT_CODES = [
+  ...ENTERED_AND_SERVED_EVENT_CODES,
+  ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+];
 
 const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
@@ -1466,6 +1474,7 @@ module.exports = deepFreeze({
   SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
