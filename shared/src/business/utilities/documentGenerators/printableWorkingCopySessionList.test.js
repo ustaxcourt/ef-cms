@@ -60,6 +60,8 @@ describe('documentGenerators', () => {
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
           sessionNotes: SESSION_NOTES,
           showCaseNotes: true,
+          sort: 'docket',
+          userHeading: 'Gustafson - Session Copy',
         },
       });
 
@@ -101,6 +103,8 @@ describe('documentGenerators', () => {
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
           sessionNotes: SESSION_NOTES,
           showCaseNotes: false,
+          sort: 'docket',
+          userHeading: 'Gustafson - Session Copy',
         },
       });
 
