@@ -29,7 +29,7 @@ Alternative approaches using react-query to fetch data may offer much-needed fea
 
 - Long term repercussions of having to maintain a dependency.
 - Are other Flexion projects relying on this? *No.*
-- Security updates for dependencies. There aren't may dependencies, and they have been stable for many years now. We will need to consider this for project dependency updates.
+- Security updates for dependencies. There aren't many dependencies, and they have been stable for many years now. We will need to consider this for project dependency updates.
 - Are there any "oh crap" moments where we're going to have to get off of it suddenly?
 
 ### Abandoning it
