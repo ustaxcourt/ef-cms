@@ -12,7 +12,7 @@ During early development, the project decided to use Cerebral to manage state an
 
 Cerebral's "sequences" and "actions" provide a declarative approach that helps developers make sense of the business logic quickly while isolating functionality into individual actions. This helps atomizes the presentation logic in order to be easier to test via unit tests.
 
-It is no longer being maintained, and in order to ensure that it is supported for future versions of React, it will need to be maintained by someone it or the project will need to abandon it.
+It is no longer being maintained, and in order to ensure that it continues to be compatible with future versions of React, it will need to be maintained by someone or the project will need to abandon it.
 
 Meanwhile, the project is continuing to undergo heavy feature development at this time, and a large refactor is not desirable.
 
