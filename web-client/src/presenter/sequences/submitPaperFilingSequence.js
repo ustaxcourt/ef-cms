@@ -2,12 +2,14 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
+import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -37,6 +39,11 @@ const addPaperFilingMultiDocketableFlow = [
 
 const editPaperFilingNotMultiDocketableFlow = [
   submitEditPaperFilingAction,
+  isCoversheetNeededAction,
+  {
+    no: [],
+    yes: [generateCoversheetAction],
+  },
   getShouldGoToPaperServiceAction,
   {
     no: [
