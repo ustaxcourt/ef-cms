@@ -312,7 +312,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
       user => user.userId === assignmentFilterValue.userId,
     );
   }
-  console.log('assignmentFilterValue', assignmentFilterValue);
 
   let workQueue = filterWorkItems({
     applicationContext,
