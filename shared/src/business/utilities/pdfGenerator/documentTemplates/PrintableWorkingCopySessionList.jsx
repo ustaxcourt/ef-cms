@@ -17,6 +17,7 @@ export const PrintableWorkingCopySessionList = ({
   sessionNotes,
   showCaseNotes,
   sort,
+  userHeading,
 }) => {
   const trialSessionDateRange =
     formattedTrialSession.formattedEstimatedEndDateFull
@@ -34,7 +35,7 @@ export const PrintableWorkingCopySessionList = ({
       <section className="usa-section grid-container">
         <div className="grid-row">
           <div className="grid-col-9">
-            <h2 className="heading-1">{`${formattedTrialSession.formattedJudge} - Session Copy`}</h2>
+            <h2 className="heading-1">{userHeading}</h2>
           </div>
         </div>
         <SessionNotesSection sessionNotes={sessionNotes} />

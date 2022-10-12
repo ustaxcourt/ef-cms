@@ -18,5 +18,6 @@ exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
         sessionNotes: body.sessionNotes,
         showCaseNotes: body.showCaseNotes,
         sort: body.sort,
+        userHeading: body.userHeading,
       });
   });
