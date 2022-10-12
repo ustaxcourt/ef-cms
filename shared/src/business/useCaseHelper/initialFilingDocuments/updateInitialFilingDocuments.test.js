@@ -59,7 +59,6 @@ describe('addNewInitialFilingToCase', () => {
     const rqtFile = mockOriginalCase.docketEntries.find(
       d => d.docketEntryId === mockRQT.docketEntryId,
     );
-    console.log(mockOriginalCase.docketEntries);
     expect(rqtFile).toBeDefined();
     expect(rqtFile.index).toBeDefined();
   });
