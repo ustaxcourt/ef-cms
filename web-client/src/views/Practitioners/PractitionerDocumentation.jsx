@@ -1,5 +1,5 @@
-// import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { Button } from '../../ustc-ui/Button/Button';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -11,11 +11,14 @@ export const PractitionerDocumentation = connect(
     openPractitionerDocumentDownloadUrlSequence:
       sequences.openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
+    sortTableSequence: sequences.sortTableSequence,
   },
   function PractitionerDocumentation({
     barNumber,
+    constants,
     openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper,
+    sortTableSequence,
   }) {
     return (
       <>
@@ -39,10 +42,62 @@ export const PractitionerDocumentation = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-label="Date Uploaded">Date Uploaded</th>
-              <th>File Name</th>
-              <th>Category</th>
-              <th>Description</th>
+              <th aria-label="Date Uploaded">
+                <SortableColumnHeaderButton
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="uploadDate"
+                  title="Date Uploaded"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="fileName"
+                  title="File Name"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="categoryName"
+                  title="Category"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="description"
+                  title="Description"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th></th>
             </tr>
           </thead>
