@@ -13,7 +13,6 @@ import { uniqBy } from 'lodash';
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const {
     CONTACT_TYPE_TITLES,
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ENTERED_AND_SERVED_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
@@ -38,7 +37,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
