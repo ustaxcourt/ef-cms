@@ -28,13 +28,13 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const { documentId, fileName } = props;
+  const { practitionerDocumentFileId, fileName } = props;
 
   await openUrlInNewTab(fileName, () =>
     applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
-        documentId,
+        practitionerDocumentFileId,
       }),
   );
 };

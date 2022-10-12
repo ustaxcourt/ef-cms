@@ -926,7 +926,7 @@ app.get(
     lambdaWrapper(createPractitionerDocumentLambda),
   );
   app.get(
-    '/practitioner-documents/:documentId/document-download-url',
+    '/practitioner-documents/:practitionerDocumentFileId/document-download-url',
     lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
   );
   app.put(

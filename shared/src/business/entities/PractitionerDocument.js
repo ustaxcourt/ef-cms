@@ -28,7 +28,8 @@ PractitionerDocument.prototype.init = function init(
   this.categoryType = rawDocument.categoryType;
   this.categoryName = rawDocument.categoryName;
   this.location = rawDocument.location;
-  this.documentId = rawDocument.documentId ?? applicationContext.getUniqueId();
+  this.practitionerDocumentFileId =
+    rawDocument.practitionerDocumentFileId ?? applicationContext.getUniqueId();
   this.description = rawDocument.description;
   this.fileName = rawDocument.fileName;
   this.uploadDate = rawDocument.uploadDate || createISODateString();
@@ -46,9 +47,10 @@ PractitionerDocument.schema = joi.object().keys({
     ...Object.values(PRACTITIONER_DOCUMENT_TYPES),
   ).required(),
   description: JoiValidationConstants.STRING.optional(),
-  documentId: JoiValidationConstants.UUID.required().description(
-    'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
-  ),
+  practitionerDocumentFileId:
+    JoiValidationConstants.UUID.required().description(
+      'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
+    ),
   fileName: JoiValidationConstants.STRING.optional(),
   location: JoiValidationConstants.STRING.when('categoryType', {
     is: PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
