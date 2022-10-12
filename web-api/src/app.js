@@ -120,6 +120,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
+const {
   createPractitionerUserLambda,
 } = require('./practitioners/createPractitionerUserLambda');
 const {
@@ -260,6 +263,12 @@ const {
 const {
   getPractitionerByBarNumberLambda,
 } = require('./practitioners/getPractitionerByBarNumberLambda');
+const {
+  getPractitionerDocumentDownloadUrlLambda,
+} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
 const {
   getPractitionersByNameLambda,
 } = require('./practitioners/getPractitionersByNameLambda');
@@ -430,9 +439,6 @@ const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
-const {
-  createPractitionerDocumentLambda,
-} = require('./practitioners/createPractitionerDocumentLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
@@ -448,12 +454,6 @@ const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
-const {
-  getPractitionerDocumentsLambda,
-} = require('./practitioners/getPractitionerDocumentsLambda');
-const {
-  getPractitionerDocumentDownloadUrlLambda,
-} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserByIdLambda } = require('./users/getUserByIdLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
