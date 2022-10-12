@@ -8,10 +8,32 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path object
  * @returns {object} the next path based on if consolidated cases should be set up
  */
-export const shouldSetupConsolidatedCasesAction = ({ get, path }) => {
-  const setupConsolidatedCases = get(
-    state.confirmInitiateServiceModalHelper.showConsolidatedCasesForService,
-  );
+export const shouldSetupConsolidatedCasesAction = ({
+  applicationContext,
+  get,
+  path,
+}) => {
+  const caseDetail = get(state.caseDetail);
+  const docketEntryId = get(state.docketEntryId);
+  const {
+    ENTERED_AND_SERVED_EVENT_CODES,
+    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+  } = applicationContext.getConstants();
+  const eventCodesNotCompatibleWithConsolidation = [
+    ...ENTERED_AND_SERVED_EVENT_CODES,
+    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+  ];
+  let eventCode = get(state.form);
+
+  if (!eventCode) {
+    ({ eventCode } = caseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    ));
+  }
+
+  const setupConsolidatedCases =
+    !eventCodesNotCompatibleWithConsolidation.includes(eventCode);
+  console.log(eventCodesNotCompatibleWithConsolidation.includes(eventCode));
 
   if (setupConsolidatedCases) {
     return path.yes();
