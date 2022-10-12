@@ -21,7 +21,6 @@ export const createPractitionerDocumentAction = async ({
     .uploadOrderDocumentInteractor(applicationContext, {
       documentFile: practitionerDocumentFile,
     });
-  console.log(practitionerDocumentFile);
 
   // create the document entity and store it in dynamo
   await applicationContext
