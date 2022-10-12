@@ -1,4 +1,4 @@
-import { formattedTrialSessionDetailsForFilteredEligibleCases } from '../../src/presenter/computeds/formattedTrialSessionDetailsForFilteredEligibleCases';
+import { formattedEligibleCasesHelper } from '../../src/presenter/computeds/formattedEligibleCasesHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -24,25 +24,17 @@ export const petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases = (
       hybridFilter,
     );
 
-    const trialSessionFormatted = runCompute(
-      withAppContextDecorator(
-        formattedTrialSessionDetailsForFilteredEligibleCases,
-      ),
+    const formattedEligibleCases = runCompute(
+      withAppContextDecorator(formattedEligibleCasesHelper),
       {
         state: cerebralTest.getState(),
       },
     );
 
     if (hybridFilter) {
-      expect(trialSessionFormatted.formattedEligibleCases).toHaveLength(
-        expectedCount - 2,
-      );
+      expect(formattedEligibleCases).toHaveLength(expectedCount - 2);
     } else {
-      expect(trialSessionFormatted.formattedEligibleCases).toHaveLength(
-        expectedCount,
-      );
+      expect(formattedEligibleCases).toHaveLength(expectedCount);
     }
-
-    expect(trialSessionFormatted.computedStatus).toEqual('New');
   });
 };
