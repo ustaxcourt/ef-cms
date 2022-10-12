@@ -14,6 +14,8 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {object} providers.formattedTrialSession the trial session data formatted as on the non-printable version
  * @param {string} providers.sessionNotes the user's session notes if any
  * @param {boolean} providers.showCaseNotes a flag for whether to show case notes or not
+ * @param {boolean} providers.sort the name of the column that the table is sorted by
+ * @param {boolean} providers.userHeading the string '{some name} - Session Copy' that should be displayed depending on who the user is
  * @returns {string} the url of the document
  */
 export const generatePrintableTrialSessionCopyReportInteractor = async (
