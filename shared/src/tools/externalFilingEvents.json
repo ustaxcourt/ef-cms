@@ -187,8 +187,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "",
-      "caseDecision": true
+      "ordinalField": ""
     },
     {
       "documentTitle": "Computation for Entry of Decision",
@@ -198,8 +197,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "",
-      "caseDecision": true
+      "ordinalField": ""
     },
     {
       "documentTitle": "Proposed Stipulated Decision",
@@ -209,8 +207,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "",
-      "caseDecision": true
+      "ordinalField": ""
     },
     {
       "documentTitle": "Revised Computation",
@@ -561,8 +558,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
-      "allowStamp": true,
-      "caseDecision": true
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)",
@@ -1376,8 +1372,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
-      "allowStamp": true,
-      "caseDecision": true
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Modify Order",
