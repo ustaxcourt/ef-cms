@@ -12,7 +12,7 @@ type TPractitionerDocument = {
   categoryType: string;
   categoryName: string;
   location: string;
-  documentId: string;
+  practitionerDocumentFileId: string;
 };
 
 type TPractitionerDocumentEntity = {
