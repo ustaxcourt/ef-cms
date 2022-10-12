@@ -36,14 +36,11 @@ export const PractitionerDocumentation = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th>
-                <th aria-label="Date Uploaded" className="small" colSpan="2">
-                  Date Uploaded
-                </th>
-              </th>
+              <th aria-label="Date Uploaded">Date Uploaded</th>
               <th>File Name</th>
               <th>Category</th>
               <th>Description</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -54,6 +51,19 @@ export const PractitionerDocumentation = connect(
                   <td>{document.fileName}</td>
                   <td>{document.categoryName}</td>
                   <td>{document.description}</td>
+                  <td className="text-align-right">
+                    <Button link icon="edit" onClick={() => {}}>
+                      Edit
+                    </Button>
+                    <Button
+                      link
+                      className="red-warning"
+                      icon="trash"
+                      onClick={() => {}}
+                    >
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ),
             )}
