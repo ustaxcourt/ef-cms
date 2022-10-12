@@ -40,6 +40,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    1. If support for either package has fallen off, we need to update
       1. Replace the version in the Dockerfile with one of the listed stable versions
       1. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+1. Check through the list of caveats to see if any of the documented issues have been resolved.
 1. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ### Caveats
