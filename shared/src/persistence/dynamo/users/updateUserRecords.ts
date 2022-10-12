@@ -1,12 +1,17 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
-exports.updateUserRecords = async ({
+export const updateUserRecords = async ({
   applicationContext,
   oldUser,
   updatedUser,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  oldUser: any;
+  updatedUser: any;
+  userId: string;
 }) => {
-  await client.delete({
+  await client.remove({
     applicationContext,
     key: {
       pk: `section|${oldUser.section}`,
@@ -24,7 +29,7 @@ exports.updateUserRecords = async ({
     applicationContext,
   });
 
-  await client.delete({
+  await client.remove({
     applicationContext,
     key: {
       pk: `${oldUser.role}|${oldUser.name}`,
@@ -32,7 +37,7 @@ exports.updateUserRecords = async ({
     },
   });
 
-  await client.delete({
+  await client.remove({
     applicationContext,
     key: {
       pk: `${oldUser.role}|${oldUser.barNumber}`,

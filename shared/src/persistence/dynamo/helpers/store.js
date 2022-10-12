@@ -74,4 +74,4 @@ exports.setExpiresAt = ({ applicationContext, expiresAt, key }) =>
   });
 
 exports.deleteKeyCount = ({ applicationContext, key }) =>
-  client.delete({ applicationContext, key: { pk: key, sk: key } });
+  client.remove({ applicationContext, key: { pk: key, sk: key } });
