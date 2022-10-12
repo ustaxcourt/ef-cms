@@ -4,6 +4,24 @@ const {
 const { Case } = require('./Case');
 
 describe('addDocketEntry', () => {
+  it('should throw when docket entry is a STIN', () => {
+    const caseToVerify = new Case(
+      { docketNumber: '123-45' },
+      {
+        applicationContext,
+      },
+    );
+    expect(() => {
+      caseToVerify.addDocketEntry({
+        docketEntryId: '123',
+        documentType: 'Statement of Taxpayer Identification',
+        eventCode: 'STIN',
+        isOnDocketRecord: true,
+        userId: 'petitionsClerk',
+      });
+    }).toThrow('STIN documents should not be on the docket record.');
+  });
+
   it('should attach the docket entry to the case', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
@@ -36,7 +54,7 @@ describe('addDocketEntry', () => {
       docketEntryId: '123',
       documentType: 'Statement of Taxpayer Identification',
       eventCode: 'STIN',
-      isOnDocketRecord: true,
+      isOnDocketRecord: false,
       userId: 'petitionsClerk',
     });
     expect(caseToVerify.docketEntries.length).toEqual(1);
