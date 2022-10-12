@@ -437,10 +437,11 @@ const TRACKED_DOCUMENT_TYPES = {
   },
 };
 
-const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = uniq([
+  ...EXTERNAL_DOCUMENTS_ARRAY,
+  ...INTERNAL_DOCUMENTS_ARRAY,
 ])
-  .filter(internalEvent => internalEvent.caseDecision)
+  .filter(doc => doc.caseDecision)
   .map(x => x.eventCode);
 
 const MULTI_DOCKET_FILING_EVENT_CODES = flatten([

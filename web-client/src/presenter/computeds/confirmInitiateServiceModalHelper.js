@@ -46,11 +46,20 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
+  const docketEntryId = get(state.docketEntryId);
+  let { eventCode } = form;
+
+  if (!eventCode) {
+    ({ eventCode } = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    ));
+  }
+
   const showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
-    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
+    !eventCodesNotCompatibleWithConsolidation.includes(eventCode) &&
     hasConsolidatedCases;
 
   const confirmationText = showConsolidatedCasesForService
