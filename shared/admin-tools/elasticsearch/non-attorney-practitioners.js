@@ -1,6 +1,9 @@
-const { formatDateString } = require('../../src/business/utilities/DateHandler');
+// usage: node non-attorney-practitioners.js >> ~/Desktop/non-attorney-practitioners.csv
+
+const { calculateDifferenceInDays, formatDateString } = require('../../src/business/utilities/DateHandler');
 const { getClient } = require('../../../web-api/elasticsearch/client');
 const { getVersion } = require('../util');
+const { sortBy } = require('lodash');
 
 const environmentName = process.env.ENV;
 
@@ -24,7 +27,7 @@ const nonAttorneyBarNos = [
   'CK0263','ML0544','SM1266','CR1072','VR0172','RS0509','GS0565','FT0222','BT0466'
 ];
 
-const getNonAttorneys = async () => {
+const retrieveNonAttorneys = async () => {
   const version = await getVersion();
   const esClient = await getClient({ environmentName, version });
   const query = {
@@ -60,7 +63,7 @@ const getNonAttorneys = async () => {
   return nonAttorneys;
 };
 
-const getUsersCases = async userId => {
+const retrieveCases = async userIds => {
   const version = await getVersion();
   const esClient = await getClient({ environmentName, version });
   const query = {
@@ -71,6 +74,7 @@ const getUsersCases = async userId => {
         'docketNumber.S',
         'docketNumberSuffix.S',
         'noticeOfTrialDate.S',
+        'privatePractitioners.L.M.userId.S',
         'receivedAt.S',
         'status.S',
         'trialDate.S',
@@ -81,8 +85,8 @@ const getUsersCases = async userId => {
         bool: {
           must: [
             {
-              term: {
-                'privatePractitioners.L.M.userId.S': userId,
+              terms: {
+                'privatePractitioners.L.M.userId.S': userIds,
               },
             },
           ],
@@ -93,58 +97,49 @@ const getUsersCases = async userId => {
     index: 'efcms-case',
   };
   const results = await esClient.search(query);
-  const usersCases = [];
-  for (const hit of results.hits.hits) {
-    const docketNumber = hit['_source']['docketNumber']['S'];
-    const docketEntries = await getCasesDocketEntries(docketNumber);
-    const caseRecord = {
+  return results.hits.hits.map(hit => {
+    return {
       caseCaption: hit['_source'].caseCaption?.S ? hit['_source']['caseCaption']['S'] : '',
-      closedDate: hit['_source'].closedDate?.S ? formatDateString(hit['_source']['closedDate']['S'], 'MMDDYYYY') : '',
-      docketEntries,
-      docketNumber,
+      closedDate: hit['_source'].closedDate?.S ? hit['_source']['closedDate']['S'] : null,
+      closedDateFormatted: hit['_source'].closedDate?.S ?
+        formatDateString(hit['_source']['closedDate']['S'], 'MMDDYYYY') : '',
+      docketNumber: hit['_source']['docketNumber']['S'],
       docketNumberSuffix: hit['_source'].docketNumberSuffix?.S ? hit['_source']['docketNumberSuffix']['S'] : '',
-      noticeOfTrialDate: hit['_source'].noticeOfTrialDate?.S ?
+      noticeOfTrialDate: hit['_source'].noticeOfTrialDate?.S ? hit['_source']['noticeOfTrialDate']['S'] : null,
+      noticeOfTrialDateFormatted: hit['_source'].noticeOfTrialDate?.S ?
         formatDateString(hit['_source']['noticeOfTrialDate']['S'], 'MMDDYYYY') : '',
-      receivedAt: hit['_source'].receivedAt?.S ? formatDateString(hit['_source']['receivedAt']['S'], 'MMDDYYYY') : '',
+      privatePractitioners:  hit['_source']['privatePractitioners']['L'].map(pp => { return pp.M.userId.S }),
+      receivedAt: hit['_source'].receivedAt?.S ? hit['_source']['receivedAt']['S'] : null,
+      receivedAtFormatted: hit['_source'].receivedAt?.S ?
+        formatDateString(hit['_source']['receivedAt']['S'], 'MMDDYYYY') : '',
       status: hit['_source']['status']['S'],
-      trialDate: hit['_source'].trialDate?.S ? formatDateString(hit['_source']['trialDate']['S'], 'MMDDYYYY') : '',
+      trialDate: hit['_source'].trialDate?.S ? hit['_source']['trialDate']['S'] : null,
+      trialDateFormatted: hit['_source'].trialDate?.S ?
+        formatDateString(hit['_source']['trialDate']['S'], 'MMDDYYYY') : '',
       trialSessionId: hit['_source'].trialSessionId?.S ? hit['_source']['trialSessionId']['S'] : null
     };
-
-    usersCases.push({
-      ...caseRecord,
-      closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
-      hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
-      userFiledPretrialMemorandum: userFiledPretrialMemorandum(caseRecord, userId),
-      usersDocumentsCount: countUsersDocumentsFiled(caseRecord, userId),
-      usersSubstantiveDocumentsCount: countUsersSubstantiveDocumentsFiled(caseRecord, userId),
-      wentToTrial: wentToTrial(caseRecord)
-    });
-
-    await wait(1000);
-  }
-  return usersCases;
+  });
 };
 
-const getCasesDocketEntries = async docketNumber => {
+const retrieveDocketEntries = async docketNumbers => {
   const version = await getVersion();
   const esClient = await getClient({ environmentName, version });
   const query = {
     body: {
-      _source: ['docketNumber.S', 'eventCode.S', 'receivedAt.S', 'userId.S'],
+      _source: ['docketNumber.S', 'eventCode.S', 'index.N', 'receivedAt.S', 'userId.S'],
       from: 0,
       query: {
         bool: {
           must: [
             {
-              term: {
-                'docketNumber.S': docketNumber,
+              terms: {
+                'docketNumber.S': docketNumbers,
               },
             },
           ],
         },
       },
-      size: 10000,
+      size: 20000,
     },
     index: 'efcms-docket-entry',
   };
@@ -153,10 +148,49 @@ const getCasesDocketEntries = async docketNumber => {
     return {
       docketNumber: hit['_source']['docketNumber']['S'],
       eventCode: hit['_source'].eventCode?.S ? hit['_source']['eventCode']['S'] : null,
-      receivedAt: hit['_source'].receivedAt?.S ? formatDateString(hit['_source']['receivedAt']['S'], 'MMDDYYYY') : null,
+      index: hit['_source'].index?.N ? hit['_source']['index']['N'] : null,
+      receivedAt: hit['_source'].receivedAt?.S ? hit['_source']['receivedAt']['S'] : null,
+      receivedAtFormatted: hit['_source'].receivedAt?.S ?
+        formatDateString(hit['_source']['receivedAt']['S'], 'MMDDYYYY') : null,
       userId: hit['_source'].userId?.S ? hit['_source']['userId']['S'] : null
     };
   });
+};
+
+const getUsersCases = (cases, docketEntries, userId) => {
+  const usersCases = [];
+  const casesFiltered = cases.filter(c => { return c.privatePractitioners.includes(userId); });
+  for (const caseRecord of casesFiltered) {
+    caseRecord.docketEntries = docketEntries.filter(de => { return de.docketNumber === caseRecord.docketNumber; });
+    usersCases.push({
+      ...caseRecord,
+      closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
+      duration: calculateCaseDuration(caseRecord) || '',
+      hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
+      userFiledPretrialMemorandum: userFiledPretrialMemorandum(caseRecord, userId),
+      usersDocumentsCount: countUsersDocumentsFiled(caseRecord, userId),
+      usersSubstantiveDocumentsCount: countUsersSubstantiveDocumentsFiled(caseRecord, userId),
+      wentToTrial: wentToTrial(caseRecord)
+    });
+  }
+  return usersCases;
+};
+
+const calculateCaseDuration = caseRecord => {
+  if (!caseRecord.receivedAt) {
+    return null;
+  }
+  let initialClosureDate = determineInitialClosureDate(caseRecord);
+  if (!initialClosureDate) {
+    return null;
+  }
+  const initialDuration = calculateDifferenceInDays(initialClosureDate, caseRecord.receivedAt);
+  if (caseRecord.hasNoticeOfAppeal && caseRecord.closedDate) {
+    const reopenDate = determineCaseReopenDate(caseRecord);
+    const appealDuration = calculateDifferenceInDays(caseRecord.closedDate, reopenDate);
+    return initialDuration + appealDuration;
+  }
+  return initialDuration;
 };
 
 const closedByStipulatedDecision = caseRecord => {
@@ -171,19 +205,43 @@ const countUsersDocumentsFiled = (caseRecord, userId) => {
 
 const countUsersSubstantiveDocumentsFiled = (caseRecord, userId) => {
   return caseRecord.docketEntries.filter(de => {
-    return de.userId === userId && (de.eventCode in substantiveEventCodes);
+    return de.userId === userId && substantiveEventCodes.includes(de.eventCode);
   }).length;
+};
+
+const determineCaseReopenDate = caseRecord => {
+  return determineDateOfFirstDocketEntryWithEventCodes(caseRecord, ['NOA']);
+};
+
+const determineDateOfFirstDocketEntryWithEventCodes = (caseRecord, eventCodes, reverse = false) => {
+  const docsSorted = reverse ?
+    sortBy(caseRecord.docketEntries, 'receivedAt').reverse() : sortBy(caseRecord.docketEntries, 'receivedAt');
+  const docs = docsSorted.filter(de => {
+    return eventCodes.includes(de.eventCode);
+  });
+  if (docs.length > 0 && 'receivedAt' in docs[0]) {
+    return docs[0]['receivedAt'];
+  }
+  return null;
+};
+
+const determineInitialClosureDate = caseRecord => {
+  const firstDecisionDocReceivedDate = determineDateOfFirstDocketEntryWithEventCodes(
+    caseRecord,
+    ['ODD', 'DEC', 'OAD', 'SDEC']
+  );
+  return firstDecisionDocReceivedDate ? firstDecisionDocReceivedDate : caseRecord.closedDate;
 };
 
 const hasDocumentWithEventCodes = (caseRecord, eventCodes) => {
   return caseRecord.docketEntries.filter(de => {
-    return (de.eventCode in eventCodes);
+    return eventCodes.includes(de.eventCode);
   }).length > 0;
 };
 
 const hasDocumentWithEventCodesFiledByUser = (caseRecord, eventCodes, userId) => {
   return caseRecord.docketEntries.filter(de => {
-    return de.userId === userId && (de.eventCode in eventCodes);
+    return de.userId === userId && eventCodes.includes(de.eventCode);
   }).length > 0;
 };
 
@@ -199,28 +257,26 @@ const wentToTrial = caseRecord => {
   return !!(caseRecord.trialSessionId || caseRecord.trialDate);
 }
 
-const wait = async ms => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-};
-
 (async () => {
-  const nonAttorneys = await getNonAttorneys();
+  const nonAttorneys = await retrieveNonAttorneys();
+  const cases = await retrieveCases(Object.keys(nonAttorneys));
+  const docketEntries = await retrieveDocketEntries(cases.map(c => { return c.docketNumber }));
   console.log(
     '"Bar Number","Name","Docket Number","Proceedings Type","Case Caption","Case Status","Documents Filed",' +
     '"Substantive Documents Filed","Filed Pretrial Memorandum","Closed by Stipulated Decision","Went to Trial",' +
-    '"Date of Receipt of Petition","Date of Notice of Trial","Date Closed","Trial Date","Has Notice of Appeal"',
+    '"Date of Receipt of Petition","Date of Notice of Trial","Date Closed","Total Duration in Days",' +
+    `"Trial Date","Has Notice of Appeal"`,
   );
   for (const userId of Object.keys(nonAttorneys)) {
-    const usersCases = await getUsersCases(userId);
+    const usersCases = getUsersCases(cases, docketEntries, userId);
     for (const uc of usersCases) {
       console.log(
         `"${nonAttorneys[userId]['barNumber']}","${nonAttorneys[userId]['name']}","${uc.docketNumber}",` +
         `"${uc.docketNumberSuffix}","${uc.caseCaption}","${uc.status}","${uc.usersDocumentsCount}",` +
         `"${uc.usersSubstantiveDocumentsCount}","${uc.userFiledPretrialMemorandum}",` +
-        `"${uc.closedByStipulatedDecision}","${uc.wentToTrial}","${uc.receivedAt}","${uc.noticeOfTrialDate}",` +
-        `"${uc.closedDate}","${uc.trialDate}","${uc.hasNoticeOfAppeal}"`,
+        `"${uc.closedByStipulatedDecision}","${uc.wentToTrial}","${uc.receivedAtFormatted}",` +
+        `"${uc.noticeOfTrialDateFormatted}","${uc.closedDateFormatted}","${uc.duration}",` +
+        `"${uc.trialDateFormatted}","${uc.hasNoticeOfAppeal}"`,
       );
     }
   }
