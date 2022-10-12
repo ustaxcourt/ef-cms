@@ -6,8 +6,6 @@ import { shouldSetupConsolidatedCasesAction } from './shouldSetupConsolidatedCas
 describe('shouldSetupConsolidatedCasesAction', () => {
   let pathYesStub;
   let pathNoStub;
-  const { SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES } =
-    applicationContext.getConstants();
 
   beforeAll(() => {
     pathYesStub = jest.fn();
@@ -21,14 +19,14 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     };
   });
 
-  it('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  it('should return the no path when showConsolidatedCasesForService is false', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
-        form: {
-          eventCode: SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES[0],
+        confirmInitiateServiceModalHelper: {
+          showConsolidatedCasesForService: false,
         },
       },
     });
@@ -36,14 +34,14 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('should return the yes path when the eventCode is NOT one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  it('should return the yes path when showConsolidatedCasesForService is true', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
-        form: {
-          eventCode: 'O',
+        confirmInitiateServiceModalHelper: {
+          showConsolidatedCasesForService: true,
         },
       },
     });
