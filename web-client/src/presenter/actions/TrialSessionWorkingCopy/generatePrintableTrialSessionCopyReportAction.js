@@ -8,13 +8,12 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {String} pdfUrl
  */
-
 export const generatePrintableTrialSessionCopyReportAction = async ({
   applicationContext,
   get,
   props,
 }) => {
-  const { formattedCases } = props;
+  const { formattedCases, userHeading } = props;
 
   const showCaseNotes = get(state.modal.showCaseNotes);
 
@@ -86,6 +85,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       showCaseNotes,
       sort,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
+      userHeading,
     });
 
   return { pdfUrl };

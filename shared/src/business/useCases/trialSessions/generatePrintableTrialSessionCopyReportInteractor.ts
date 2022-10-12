@@ -25,6 +25,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sessionNotes,
     showCaseNotes,
     sort,
+    userHeading,
   }: {
     showCaseNotes: boolean;
     filters: string[];
@@ -32,6 +33,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     formattedTrialSession: TTrialSessionData;
     sessionNotes: string;
     sort: string;
+    userHeading: string;
   },
 ): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -52,6 +54,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
         sessionNotes,
         showCaseNotes,
         sort,
+        userHeading,
       },
     });
 
