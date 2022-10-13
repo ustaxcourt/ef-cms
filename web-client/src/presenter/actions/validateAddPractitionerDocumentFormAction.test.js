@@ -7,8 +7,6 @@ describe('validateAddPractitionerDocumentFormAction', () => {
   let successMock;
   let errorMock;
 
-  const { COUNTRY_TYPES, USER_ROLES } = applicationContext.getConstants();
-
   beforeAll(() => {
     successMock = jest.fn();
     errorMock = jest.fn();

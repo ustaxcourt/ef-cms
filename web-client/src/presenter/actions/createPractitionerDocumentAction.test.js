@@ -1,3 +1,4 @@
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createPractitionerDocumentAction } from './createPractitionerDocumentAction';
 import { presenter } from '../presenter-mock';
@@ -23,8 +24,8 @@ describe('createPractitionerDocumentAction', () => {
       },
       state: {
         form: {
-          categoryName: 'Application',
-          categoryType: 'Application',
+          categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
+          categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
           practitionerDocumentFile: {
             name: 'testing.pdf',
           },
@@ -41,8 +42,8 @@ describe('createPractitionerDocumentAction', () => {
     ).toMatchObject({
       barNumber: 'PT1234',
       documentMetadata: expect.objectContaining({
-        categoryName: 'Application',
-        categoryType: 'Application',
+        categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
+        categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
         fileName: 'testing.pdf',
         practitionerDocumentFileId: '123',
       }),
