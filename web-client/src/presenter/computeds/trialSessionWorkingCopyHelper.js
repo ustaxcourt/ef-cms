@@ -106,6 +106,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   return {
     casesShownCount: formattedCases.length,
     formattedCases: leadAndUnconsolidatedCases,
+    showPrintButton: formattedCases.length > 0,
     trialStatusOptions,
   };
 };

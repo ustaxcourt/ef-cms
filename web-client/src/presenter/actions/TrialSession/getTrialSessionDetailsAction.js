@@ -26,6 +26,5 @@ export const getTrialSessionDetailsAction = async ({
 
     trialSession.swingSessionLocation = swingSession.trialLocation;
   }
-
   return { trialSession };
 };

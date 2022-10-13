@@ -1,16 +1,16 @@
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { docketClerkUser } from '../../../test/mockUsers';
 import { MOCK_CASE } from '../../../test/mockCase';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
+import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
