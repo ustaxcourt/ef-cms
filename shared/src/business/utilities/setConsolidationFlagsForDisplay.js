@@ -1,4 +1,4 @@
-import { isLeadCase } from '../entities/cases/Case';
+const { isLeadCase } = require('../entities/cases/Case');
 
 exports.setConsolidationFlagsForDisplay = (
   caseItem,
