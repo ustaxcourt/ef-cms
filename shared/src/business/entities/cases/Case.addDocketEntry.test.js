@@ -4,7 +4,7 @@ const {
 const { Case } = require('./Case');
 
 describe('addDocketEntry', () => {
-  it('should throw when docket entry is a STIN', () => {
+  it('should throw when docket entry to be added to the docket record is a STIN', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
       {
