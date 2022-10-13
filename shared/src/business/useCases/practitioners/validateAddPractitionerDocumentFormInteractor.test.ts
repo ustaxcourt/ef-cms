@@ -8,7 +8,7 @@ describe('validateAddPractitionerInteractor', () => {
       {
         categoryName: undefined,
         categoryType: undefined,
-        fileName: undefined,
+        practitionerDocumentFile: undefined,
       },
     );
 
@@ -25,7 +25,7 @@ describe('validateAddPractitionerInteractor', () => {
       {
         categoryName: 'Application',
         categoryType: 'Application',
-        fileName: 'thing.png',
+        practitionerDocumentFile: { name: 'tests.png' },
       },
     );
 
