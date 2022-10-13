@@ -51,6 +51,10 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketEntry }) => {
     return false;
   }
 
+  if (docketEntry.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode) {
+    return false;
+  }
+
   if (!docketEntry.isPaper && !isCourtIssued) {
     return true;
   }

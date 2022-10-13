@@ -166,6 +166,7 @@ import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrinta
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
+import { gotoPrintableTrialSessionWorkingCopySequence } from './sequences/gotoPrintableTrialSessionWorkingCopySequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
@@ -254,6 +255,7 @@ import { openForwardMessageModalSequence } from './sequences/openForwardMessageM
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
+import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openRemovePetitionerCounselModalSequence } from './sequences/openRemovePetitionerCounselModalSequence';
@@ -679,6 +681,7 @@ export const presenter = {
     gotoPrintableDocketRecordSequence,
     gotoPrintablePendingReportForCaseSequence,
     gotoPrintablePendingReportSequence,
+    gotoPrintableTrialSessionWorkingCopySequence,
     gotoPrivacySequence,
     gotoRequestAccessSequence,
     gotoReviewSavedPetitionSequence,
@@ -767,6 +770,7 @@ export const presenter = {
     openGainElectronicAccessToCaseModalSequence,
     openPdfPreviewModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
+    openPrintableTrialSessionWorkingCopyModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openRemovePetitionerCounselModalSequence,
