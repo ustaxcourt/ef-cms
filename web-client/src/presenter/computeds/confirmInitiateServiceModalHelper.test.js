@@ -14,7 +14,6 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {
-  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
   const featureFlagHelperState = {
     consolidatedCasesPropagateDocketEntries: true,
   };
@@ -73,7 +72,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         featureFlagHelper: featureFlagHelperState,
-        form: {},
+        form: { eventCode: 'A' },
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
         modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
@@ -99,7 +98,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         featureFlagHelper: featureFlagHelperState,
-        form: {},
+        form: { eventCode: 'A' },
         formattedCaseDetail: {
           irsPractitioners: [],
           isPaper: false,
@@ -219,7 +218,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesFlag).toEqual(true);
+      expect(result.showConsolidatedCasesForService).toEqual(true);
     });
 
     it('should say group if any non-lead case is checked & have the correct number of contacts', () => {
@@ -250,7 +249,119 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesFlag).toEqual(true);
+      expect(result.showConsolidatedCasesForService).toEqual(true);
+    });
+
+    it('showConsolidatedCasesForService should be true when form.eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'A' },
+          formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+        },
+      });
+
+      expect(result.showConsolidatedCasesForService).toBe(true);
+    });
+
+    it('showConsolidatedCasesForService should be false when editingDocketEntry', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        irsPractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        isLeadCase: true,
+        petitioners: [
+          {
+            ...SECOND_CASE.petitioners[0],
+            contactId: LEAD_CASE.petitioners[0].contactId,
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'A' },
+          formattedCaseDetail,
+          isEditingDocketEntry: true,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+        },
+      });
+
+      expect(result.showConsolidatedCasesForService).toBe(false);
+    });
+
+    it('showConsolidatedCasesForService should be true when the docket entry eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: {},
+          formattedCaseDetail: {
+            ...formattedCaseDetail,
+            docketEntries: [{ eventCode: 'A' }],
+          },
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+        },
+      });
+
+      expect(result.showConsolidatedCasesForService).toBe(true);
+    });
+
+    it('showConsolidatedCasesForService should be false when form.eventCode is in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        irsPractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        isLeadCase: true,
+        petitioners: [
+          {
+            ...SECOND_CASE.petitioners[0],
+            contactId: LEAD_CASE.petitioners[0].contactId,
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'PSDE' },
+          formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+        },
+      });
+
+      expect(result.showConsolidatedCasesForService).toBe(false);
     });
 
     it('should remove duplicated paper contacts', () => {
@@ -323,7 +434,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
-      expect(result.showConsolidatedCasesFlag).toEqual(false);
+      expect(result.showConsolidatedCasesForService).toEqual(false);
     });
 
     it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedDocumentServiceModal', () => {
@@ -347,7 +458,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
-      expect(result.showConsolidatedCasesFlag).toEqual(false);
+      expect(result.showConsolidatedCasesForService).toEqual(false);
     });
   });
 });

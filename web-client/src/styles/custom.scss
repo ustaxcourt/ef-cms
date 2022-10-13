@@ -830,13 +830,10 @@ textarea#case-caption {
   padding-bottom: 10px;
 
   .assign-work-item-count {
-    top: 50%;
     width: 70px;
-    padding: 8px;
-    margin-top: 2px;
-    margin-right: 20px;
+    padding: 8px 8px 6px;
+    margin: 4px 0 6px 20px;
     background-color: color($theme-color-primary-dark);
-    float: left;
   }
 
   .usa-select {
@@ -2022,4 +2019,8 @@ button.change-scanner-button {
 
 .width-180 {
   width: 180px;
+}
+
+.align-center {
+  align-items: center;
 }
