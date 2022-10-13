@@ -55,7 +55,7 @@ const completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
-    section: user.section,
+    section: user.section ? user.section : DOCKET_SECTION,
     userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
@@ -133,8 +133,6 @@ export const serveCourtIssuedDocumentInteractor = async (
       });
   }
 
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode);
   const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -142,10 +140,7 @@ export const serveCourtIssuedDocumentInteractor = async (
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
 
-  if (
-    eventCodeCanOnlyBeServedOnSubjectCase ||
-    !consolidateCaseDuplicateDocketEntries
-  ) {
+  if (!consolidateCaseDuplicateDocketEntries) {
     docketNumbers = [subjectCaseDocketNumber];
   }
 
@@ -234,7 +229,7 @@ export const serveCourtIssuedDocumentInteractor = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'serve_court_issued_document_complete',
+      action: 'serve_document_complete',
       alertSuccess: {
         message: successMessage,
         overwritable: false,
