@@ -1,6 +1,10 @@
 body {
   margin: 35px 50px;
   font-family: 'nimbus_roman', sans-serif;
+
+  .printable-working-copy-list {
+    margin: 0 -20px;
+  }
 }
 
 @page {
@@ -10,5 +14,15 @@ body {
 
 @page :first {
   margin-top: 0;
+  margin-bottom: 2.5cm;
+}
+
+@page narrow {
+  margin: 1.5cm 0 2cm 0;
+  size: 8.5in 11in;
+}
+
+@page narrow:first {
+  margin: 0;
   margin-bottom: 2.5cm;
 }
