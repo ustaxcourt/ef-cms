@@ -26,7 +26,9 @@ export const getPractitionerDocumentsInteractor = async (
   if (
     !isAuthorized(requestUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {
-    throw new UnauthorizedError('Unauthorized for creating practitioner user');
+    throw new UnauthorizedError(
+      'Unauthorized for getting practitioner documents',
+    );
   }
 
   const practitionerDocuments = await applicationContext

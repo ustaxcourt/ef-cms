@@ -69,9 +69,6 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
-  createPractitionerDocumentInteractor,
-} = require('../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor');
-const {
   createCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/createCaseDeadlineInteractor');
 const {
@@ -89,6 +86,9 @@ const {
 const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
+const {
+  createPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor');
 const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
@@ -188,9 +188,6 @@ const {
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
-const {
-  getPractitionerDocumentsInteractor,
-} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
 const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
@@ -293,6 +290,12 @@ const {
 const {
   getPractitionerByBarNumberInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
+const {
+  getPractitionerDocumentDownloadUrlInteractor,
+} = require('../../shared/src/business/useCases/practitioner/getPractitionerDocumentDownloadUrlInteractor');
+const {
+  getPractitionerDocumentsInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
 const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
@@ -483,9 +486,6 @@ const {
   unsealCaseInteractor,
 } = require('../../shared/src/business/useCases/unsealCaseInteractor');
 const {
-  getPractitionerDocumentDownloadUrlInteractor,
-} = require('../../shared/src/business/useCases/getPractitionerDocumentDownloadUrlInteractor');
-const {
   unsealDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/unsealDocketEntryInteractor');
 const {
@@ -590,11 +590,11 @@ const useCases = {
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
-  createPractitionerDocumentInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
   createPetitionerAccountInteractor,
+  createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   createUserInteractor,
@@ -653,7 +653,6 @@ const useCases = {
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
-  getPractitionerDocumentsInteractor,
   getJudgeInSectionInteractor,
   getJudgesForPublicSearchInteractor,
   getMaintenanceModeInteractor,
@@ -664,6 +663,7 @@ const useCases = {
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
+  getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getPublicCaseInteractor,

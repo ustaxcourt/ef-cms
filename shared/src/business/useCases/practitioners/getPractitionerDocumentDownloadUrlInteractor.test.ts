@@ -1,8 +1,7 @@
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getPractitionerDocumentDownloadUrlInteractor } from '../getPractitionerDocumentDownloadUrlInteractor';
-jest.mock('../users/generateChangeOfAddress');
+import { getPractitionerDocumentDownloadUrlInteractor } from './getPractitionerDocumentDownloadUrlInteractor';
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
@@ -15,35 +14,20 @@ describe('updatePractitionerUserInteractor', () => {
     practitionerDocumentFileId: '07044afe-641b-4d75-a84f-0698870b7650',
   } as any;
 
-  // it('should throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
-  //   testUser = {
-  //     role: ROLES.petitioner,
-  //     userId: 'petitioner',
-  //   };
-
-  //   applicationContext.getCurrentUser.mockImplementation(() => testUser);
-  //   await expect(
-  //     getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
-  //       practitionerDocumentFileId:
-  //         mockDocumentMetadata.practitionerDocumentFileId,
-  //     }),
-  //   ).rejects.toThrow(UnauthorizedError);
-  // });
-  it.only('should throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
+  it('should throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
     testUser = {
       role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
-    const results = await getPractitionerDocumentDownloadUrlInteractor(
-      applicationContext,
-      {
+
+    await expect(
+      getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
         practitionerDocumentFileId:
           mockDocumentMetadata.practitionerDocumentFileId,
-      },
-    );
-    console.log(results);
+      }),
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should not throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
@@ -53,6 +37,7 @@ describe('updatePractitionerUserInteractor', () => {
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
+
     const results = await getPractitionerDocumentDownloadUrlInteractor(
       applicationContext,
       {
@@ -60,17 +45,8 @@ describe('updatePractitionerUserInteractor', () => {
           mockDocumentMetadata.practitionerDocumentFileId,
       },
     );
-    console.log(results);
+    expect(results).toMatchObject({
+      url: expect.any(String),
+    });
   });
-
-  // it('should create a new practitioner document', async () => {
-  //   const results = await createPractitionerDocumentInteractor(
-  //     applicationContext,
-  //     {
-  //       barNumber: 'pt1234',
-  //       documentMetadata: mockDocumentMetadata,
-  //     },
-  //   );
-  //   expect(results).toMatchObject({ ...mockDocumentMetadata });
-  // });
 });

@@ -1,5 +1,4 @@
 import { InvalidEntityError, UnauthorizedError } from '../../../errors/errors';
-import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
 import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createPractitionerDocumentInteractor } from './createPractitionerDocumentInteractor';
@@ -7,7 +6,6 @@ jest.mock('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
-  let mockPractitioner = MOCK_PRACTITIONER as TPractitioner;
   const mockDocumentMetadata = {
     categoryName: 'Application',
     categoryType: 'Application',
@@ -22,21 +20,8 @@ describe('updatePractitionerUserInteractor', () => {
       role: ROLES.admissionsClerk,
       userId: 'admissionsclerk',
     };
-    mockPractitioner = { ...MOCK_PRACTITIONER };
 
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
-    applicationContext
-      .getPersistenceGateway()
-      .updatePractitionerUser.mockImplementation(({ user }) => user);
-    applicationContext
-      .getPersistenceGateway()
-      .createNewPractitionerUser.mockImplementation(({ user }) => user);
-    applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(true);
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {

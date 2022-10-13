@@ -1,8 +1,8 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -11,7 +11,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {string} providers.practitionerDocumentFileId the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
-export const getPractitionerDocumentDownloadUrlInteractor = (
+export const getPractitionerDocumentDownloadUrlInteractor = async (
   applicationContext: IApplicationContext,
   { practitionerDocumentFileId }: { practitionerDocumentFileId: string },
 ) => {
@@ -21,8 +21,12 @@ export const getPractitionerDocumentDownloadUrlInteractor = (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: practitionerDocumentFileId,
-  });
+  const policyUrl = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: practitionerDocumentFileId,
+    });
+
+  return policyUrl;
 };
