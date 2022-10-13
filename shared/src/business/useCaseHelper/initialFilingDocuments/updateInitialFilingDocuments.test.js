@@ -23,6 +23,13 @@ describe('addNewInitialFilingToCase', () => {
     isOnDocketRecord: true,
     userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
   };
+  const mockSTIN = {
+    docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+    filedBy: 'Test Petitioner',
+    userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+  };
   const mockPetition = MOCK_DOCUMENTS.find(
     mockDocument =>
       mockDocument.documentType ===
@@ -57,10 +64,35 @@ describe('addNewInitialFilingToCase', () => {
     });
 
     const rqtFile = mockOriginalCase.docketEntries.find(
-      d => d.docketEntryId === mockRQT.docketEntryId,
+      d => d.documentType === mockRQT.documentType,
     );
     expect(rqtFile).toBeDefined();
     expect(rqtFile.index).toBeDefined();
+  });
+
+  it('should add a new STIN to the case when one does not exist on the original case', async () => {
+    mockOriginalCase = new Case(
+      { ...MOCK_CASE, docketEntries: [mockPetition] },
+      { applicationContext },
+    );
+
+    mockCaseToUpdate = {
+      ...MOCK_CASE,
+      docketEntries: [...MOCK_CASE.docketEntries, mockSTIN],
+    };
+
+    await updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser: petitionsClerkUser,
+      caseEntity: mockOriginalCase,
+      caseToUpdate: mockCaseToUpdate,
+    });
+
+    const stinFile = mockOriginalCase.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    );
+    expect(stinFile).toBeDefined();
+    expect(stinFile.index).toEqual(0);
   });
 
   it('should set isFileAttached and isPaper to true', async () => {

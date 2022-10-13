@@ -45,4 +45,14 @@ module.exports = [
     notes: 'checks a11y of delete procedural note modal',
     url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/case-detail/112-19&info=delete-procedural-note-modal',
   },
+  {
+    actions: [
+      'wait for #print-session-working-copy to be visible',
+      'click element #print-session-working-copy',
+      'wait for .modal-screen to be visible',
+      'click element #modal-button-confirm',
+    ],
+    notes: 'checks a11y of print trial session working copy modal',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  },
 ];
