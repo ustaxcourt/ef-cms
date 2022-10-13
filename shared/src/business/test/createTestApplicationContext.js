@@ -553,6 +553,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
+    getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getTrialSessionJobStatusForCase: jest.fn(),
