@@ -20,7 +20,7 @@ describe('getPractitionersDocumentsInteractor', () => {
       getPractitionerDocumentsInteractor(applicationContext, {
         barNumber: 'PT1234',
       }),
-    ).rejects.toThrow('Unauthorized for creating practitioner user');
+    ).rejects.toThrow('Unauthorized for getting practitioner documents');
   });
 
   it('returns and validates the documents returned from persistence', async () => {

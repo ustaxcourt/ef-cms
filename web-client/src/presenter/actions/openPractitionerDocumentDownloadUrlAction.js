@@ -28,7 +28,7 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const { practitionerDocumentFileId, fileName } = props;
+  const { fileName, practitionerDocumentFileId } = props;
 
   await openUrlInNewTab(fileName, () =>
     applicationContext
