@@ -18,12 +18,9 @@ export const validateAddPractitionerDocumentFormAction = ({
 }) => {
   const form = get(state.form);
 
-  console.log('form', form);
-
   let errors = applicationContext
     .getUseCases()
     .validateAddPractitionerDocumentFormInteractor(applicationContext, form);
-  console.log('errors', errors);
 
   if (errors?.fileName) {
     delete errors.fileName;
