@@ -20,16 +20,20 @@ export const ConsolidatedCases = connect(
               key={consolidatedCase.docketNumber}
             >
               <NonMobile>
-                <div className="grid-col-3">
+                <div className="tablet:grid-col-3 desktop:grid-col-2">
                   <CaseLink formattedCase={consolidatedCase} />
                 </div>
-                <div className="grid-col-9">{consolidatedCase.caseTitle}</div>
+                <div className="tablet:grid-col-9 desktop:grid-col-10">
+                  {consolidatedCase.caseTitle}
+                </div>
               </NonMobile>
               <Mobile>
                 <div className="grid-col-4">
                   <CaseLink formattedCase={consolidatedCase} />
                 </div>
-                <div className="grid-col-8">{consolidatedCase.caseTitle}</div>
+                <div className="grid-col-8 margin-left-neg-2">
+                  {consolidatedCase.caseTitle}
+                </div>
               </Mobile>
             </div>
           ))}
