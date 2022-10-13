@@ -3,7 +3,7 @@ import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getPractitionerDocumentDownloadUrlInteractor } from './getPractitionerDocumentDownloadUrlInteractor';
 
-describe('updatePractitionerUserInteractor', () => {
+describe('getPractitionerDocumentDownloadUrlInteractor', () => {
   let testUser;
   const mockDocumentMetadata = {
     categoryName: 'Application',
