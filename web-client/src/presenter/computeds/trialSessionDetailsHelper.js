@@ -1,10 +1,9 @@
-import {
-  DOCKET_NUMBER_SUFFIXES,
-  SESSION_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
-export const trialSessionDetailsHelper = get => {
+export const trialSessionDetailsHelper = (get, applicationContext) => {
+  const { DOCKET_NUMBER_SUFFIXES, TRIAL_SESSION_TYPES } =
+    applicationContext.getConstants();
+
   const { eligibleCases, sessionType, trialSessionId } = get(
     state.trialSession,
   );
@@ -33,7 +32,7 @@ export const trialSessionDetailsHelper = get => {
 
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
   const showSmallAndRegularQcComplete =
-    sessionType === SESSION_TYPES.hybrid && showQcComplete;
+    sessionType === TRIAL_SESSION_TYPES.hybrid && showQcComplete;
 
   return {
     eligibleRegularCaseQcTotalCompleteCount,
