@@ -43,7 +43,7 @@ describe('addDocketEntry', () => {
     });
   });
 
-  it("should assign docket entry index of '0' to the STIN", () => {
+  it("should assign docket entry index of '0' to the STIN when not being added to the docket record", () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
       {
