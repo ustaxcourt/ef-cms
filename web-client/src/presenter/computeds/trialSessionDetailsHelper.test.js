@@ -1,11 +1,14 @@
+import {
+  DOCKET_NUMBER_SUFFIXES,
+  SESSION_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
-import { trialSessionDetailsHelper } from './trialSessionDetailsHelper';
+import { trialSessionDetailsHelper as trialSessionDetailsHelperComputed } from './trialSessionDetailsHelper';
+import { withAppContextDecorator } from '../../withAppContext';
 
 describe('trialSessionDetailsHelper', () => {
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-
   const TRIAL_SESSION = {
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
@@ -22,34 +25,57 @@ describe('trialSessionDetailsHelper', () => {
     trialLocation: 'Hartford, Connecticut',
   };
 
-  it('returns count of eligible cases with QC complete', () => {
+  const mockCases = [
+    MOCK_CASE,
+    {
+      ...MOCK_CASE,
+      caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+    },
+    {
+      ...MOCK_CASE,
+      caseCaption: undefined,
+      docketNumber: '103-19',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+    },
+    {
+      ...MOCK_CASE,
+      caseCaption: undefined,
+      docketNumber: '110-19',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
+      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+    },
+    {
+      ...MOCK_CASE,
+      caseCaption: undefined,
+      docketNumber: '111-19',
+      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+    },
+  ];
+
+  const trialSessionDetailsHelper = withAppContextDecorator(
+    trialSessionDetailsHelperComputed,
+    applicationContext,
+  );
+
+  it('returns total count of eligible cases with QC complete', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
         permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {
           ...TRIAL_SESSION,
-          eligibleCases: [
-            MOCK_CASE,
-            {
-              ...MOCK_CASE,
-              caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
-            },
-            {
-              ...MOCK_CASE,
-              caseCaption: undefined,
-              docketNumber: '103-19',
-              qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
-            },
-          ],
+          eligibleCases: mockCases,
         },
       },
     });
-    expect(result.eligibleCaseQcCompleteCount).toEqual(2);
+    expect(result.eligibleTotalCaseQcCompleteCount).toEqual(
+      mockCases.length - 1,
+    );
   });
 
-  it('returns eligibleCaseQcCompleteCount of 0 if eligibleCases is not on the state', () => {
+  it('returns 0 total of eligible cases if eligibleCases is not on the state', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
         permissions: { TRIAL_SESSION_QC_COMPLETE: true },
@@ -58,7 +84,33 @@ describe('trialSessionDetailsHelper', () => {
         },
       },
     });
-    expect(result.eligibleCaseQcCompleteCount).toEqual(0);
+    expect(result.eligibleTotalCaseQcCompleteCount).toEqual(0);
+  });
+
+  it('returns count of small eligible cases with QC complete', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: mockCases,
+        },
+      },
+    });
+    expect(result.eligibleSmallCaseQcTotalCompleteCount).toEqual(2);
+  });
+
+  it('returns count of regular eligible cases with QC complete', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: mockCases,
+        },
+      },
+    });
+    expect(result.eligibleRegularCaseQcTotalCompleteCount).toEqual(2);
   });
 
   it('returns showQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission', () => {
@@ -85,5 +137,47 @@ describe('trialSessionDetailsHelper', () => {
       },
     });
     expect(result.showQcComplete).toEqual(false);
+  });
+
+  it('returns showSmallAndRegularQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is Hybrid', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [],
+          sessionType: SESSION_TYPES.hybrid,
+        },
+      },
+    });
+    expect(result.showSmallAndRegularQcComplete).toEqual(true);
+  });
+
+  it('returns showSmallAndRegularQcComplete false if the user does not have TRIAL_SESSION_QC_COMPLETE permission and sessionType is Hybrid', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: false },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [],
+          sessionType: SESSION_TYPES.hybrid,
+        },
+      },
+    });
+    expect(result.showSmallAndRegularQcComplete).toEqual(false);
+  });
+
+  it('returns showSmallAndRegularQcComplete false if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is Regular', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [],
+          sessionType: SESSION_TYPES.regular,
+        },
+      },
+    });
+    expect(result.showSmallAndRegularQcComplete).toEqual(false);
   });
 });
