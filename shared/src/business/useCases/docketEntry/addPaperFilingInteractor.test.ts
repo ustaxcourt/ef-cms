@@ -1,6 +1,4 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
+import { applicationContext } from '../../test/createTestApplicationContext';
 const {
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,

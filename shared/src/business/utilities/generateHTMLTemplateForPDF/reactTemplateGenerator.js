@@ -63,6 +63,12 @@ const {
   PretrialMemorandum,
 } = require('../pdfGenerator/components/PretrialMemorandum.jsx');
 const {
+  PrintableTrialSessionWorkingCopyMetaHeader,
+} = require('../pdfGenerator/components/PrintableTrialSessionWorkingCopyMetaHeader.jsx');
+const {
+  PrintableWorkingCopySessionList,
+} = require('../pdfGenerator/documentTemplates/PrintableWorkingCopySessionList.jsx');
+const {
   ReceiptOfFiling,
 } = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
 const {
@@ -85,10 +91,10 @@ const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 // Emails
 const {
   BouncedEmailAlert,
-} = require('../emailGenerator/emailTemplates/BouncedEmailAlert');
+} = require('../emailGenerator/emailTemplates/BouncedEmailAlert.jsx');
 const {
   DocumentService,
-} = require('../emailGenerator/emailTemplates/DocumentService');
+} = require('../emailGenerator/emailTemplates/DocumentService.jsx');
 const {
   PetitionService,
 } = require('../emailGenerator/emailTemplates/PetitionService.jsx');
@@ -120,6 +126,8 @@ const components = {
   PetitionService,
   PractitionerCaseList,
   PretrialMemorandum,
+  PrintableTrialSessionWorkingCopyMetaHeader,
+  PrintableWorkingCopySessionList,
   ReceiptOfFiling,
   ReportsMetaHeader,
   StandingPretrialOrder,
