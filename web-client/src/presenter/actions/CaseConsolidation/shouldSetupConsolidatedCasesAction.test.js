@@ -7,6 +7,10 @@ describe('shouldSetupConsolidatedCasesAction', () => {
   const mockDocketEntryId = '123333333';
   let pathYesStub;
   let pathNoStub;
+  let {
+    ENTERED_AND_SERVED_EVENT_CODES,
+    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   beforeAll(() => {
     pathYesStub = jest.fn();
@@ -20,34 +24,38 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     };
   });
 
-  it('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
-    await runAction(shouldSetupConsolidatedCasesAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          eventCode: 'M083',
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.forEach(eventCode => {
+    it(`should return the no path when the eventCode ${eventCode} is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES`, async () => {
+      await runAction(shouldSetupConsolidatedCasesAction, {
+        modules: {
+          presenter,
         },
-      },
-    });
+        state: {
+          form: {
+            eventCode: 'M083',
+          },
+        },
+      });
 
-    expect(pathNoStub).toHaveBeenCalled();
+      expect(pathNoStub).toHaveBeenCalled();
+    });
   });
 
-  it.each(ENTERED_AND_SERVED_EVENT_CODES)('should return the no path when the eventCode is one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    await runAction(shouldSetupConsolidatedCasesAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          eventCode: 'ODJ',
+  ENTERED_AND_SERVED_EVENT_CODES.forEach(eventCode => {
+    it(`should return the no path when the eventCode ${eventCode} is one of ENTERED_AND_SERVED_EVENT_CODES`, async () => {
+      await runAction(shouldSetupConsolidatedCasesAction, {
+        modules: {
+          presenter,
         },
-      },
-    });
+        state: {
+          form: {
+            eventCode,
+          },
+        },
+      });
 
-    expect(pathNoStub).toHaveBeenCalled();
+      expect(pathNoStub).toHaveBeenCalled();
+    });
   });
 
   it('should return the yes path when the form eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
