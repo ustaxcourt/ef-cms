@@ -1,11 +1,8 @@
+import { InvalidEntityError, UnauthorizedError } from '../../../errors/errors';
+import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createPractitionerDocumentInteractor } from './createPractitionerDocumentInteractor';
-import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
-import {
-  ROLES,
-  PRACTITIONER_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
 jest.mock('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
@@ -14,10 +11,10 @@ describe('updatePractitionerUserInteractor', () => {
   const mockDocumentMetadata = {
     categoryName: 'Application',
     categoryType: 'Application',
-    practitionerDocumentFileId: '07044afe-641b-4d75-a84f-0698870b7650',
     description: 'hubba bubba bubble gum',
-    location: undefined,
     fileName: 'application.pdf',
+    location: undefined,
+    practitionerDocumentFileId: '07044afe-641b-4d75-a84f-0698870b7650',
   } as any;
 
   beforeEach(() => {
@@ -56,7 +53,16 @@ describe('updatePractitionerUserInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should create a new document', async () => {
+  it('should throw a validation error if the practitioner document has the wrong type', async () => {
+    await expect(
+      createPractitionerDocumentInteractor(applicationContext, {
+        barNumber: 'pt1234',
+        documentMetadata: { ...mockDocumentMetadata, categoryType: 'GG' },
+      }),
+    ).rejects.toThrow(InvalidEntityError);
+  });
+
+  it('should create a new practitioner document', async () => {
     const results = await createPractitionerDocumentInteractor(
       applicationContext,
       {
@@ -64,7 +70,6 @@ describe('updatePractitionerUserInteractor', () => {
         documentMetadata: mockDocumentMetadata,
       },
     );
-    console.log(results);
     expect(results).toMatchObject({ ...mockDocumentMetadata });
   });
 });
