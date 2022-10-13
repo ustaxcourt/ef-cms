@@ -35,7 +35,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('should return the no path when the eventCode is one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
+  it.each(ENTERED_AND_SERVED_EVENT_CODES)('should return the no path when the eventCode is one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
