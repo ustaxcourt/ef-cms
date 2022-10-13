@@ -1,3 +1,4 @@
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateAddPractitionerDocumentFormInteractor } from './validateAddPractitionerDocumentFormInteractor';
 
@@ -23,8 +24,24 @@ describe('validateAddPractitionerInteractor', () => {
     const errors = validateAddPractitionerDocumentFormInteractor(
       applicationContext,
       {
-        categoryName: 'Application',
-        categoryType: 'Application',
+        categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
+        categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
+        practitionerDocumentFile: { name: 'tests.png' },
+      },
+    );
+
+    expect(errors).toBeNull();
+  });
+
+  it('should return null when then form data for good standing documents is valid', () => {
+    const errors = validateAddPractitionerDocumentFormInteractor(
+      applicationContext,
+      {
+        categoryName:
+          PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        categoryType:
+          PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        location: 'FL',
         practitionerDocumentFile: { name: 'tests.png' },
       },
     );

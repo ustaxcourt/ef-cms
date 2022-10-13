@@ -17,6 +17,7 @@ export const validateAddPractitionerDocumentFormInteractor = (
       categoryName: form.categoryName,
       categoryType: form.categoryType,
       fileName: form.practitionerDocumentFile?.name,
+      location: form.location,
     },
     {
       applicationContext,

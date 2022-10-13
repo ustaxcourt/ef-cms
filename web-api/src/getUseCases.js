@@ -292,7 +292,7 @@ const {
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
 const {
   getPractitionerDocumentDownloadUrlInteractor,
-} = require('../../shared/src/business/useCases/practitioner/getPractitionerDocumentDownloadUrlInteractor');
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor');
 const {
   getPractitionerDocumentsInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');

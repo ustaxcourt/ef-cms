@@ -1,3 +1,4 @@
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { practitionerDocumentationFormHelper as practitionerDocumentationFormHelperComputed } from './practitionerDocumentationFormHelper';
 import { runCompute } from 'cerebral/test';
@@ -18,7 +19,8 @@ describe('practitionerDocumentationFormHelper', () => {
         {
           state: {
             form: {
-              categoryType: 'Certificate of Good Standing',
+              categoryType:
+                PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
             },
             permissions: {
               UPLOAD_PRACTITIONER_DOCUMENT: true,
@@ -35,7 +37,7 @@ describe('practitionerDocumentationFormHelper', () => {
         {
           state: {
             form: {
-              categoryType: 'Application',
+              categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
             },
             permissions: {
               UPLOAD_PRACTITIONER_DOCUMENT: true,

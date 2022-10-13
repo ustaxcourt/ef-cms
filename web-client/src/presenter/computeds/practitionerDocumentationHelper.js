@@ -13,6 +13,10 @@ export const practitionerDocumentationHelper = (get, applicationContext) => {
     };
   });
 
+  formattedPractitionerDocuments.sort((a, b) =>
+    a.uploadDate.localeCompare(b.uploadDate),
+  );
+
   const practitionerDocumentsCount = practitionerDocuments.length;
 
   return {
