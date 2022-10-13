@@ -51,7 +51,7 @@ PractitionerDocument.schema = joi.object().keys({
     JoiValidationConstants.UUID.required().description(
       'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
     ),
-  fileName: JoiValidationConstants.STRING.optional(),
+  fileName: JoiValidationConstants.STRING.required(),
   location: JoiValidationConstants.STRING.when('categoryType', {
     is: PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
     otherwise: joi.optional().allow(null),
