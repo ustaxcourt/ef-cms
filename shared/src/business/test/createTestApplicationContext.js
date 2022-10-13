@@ -367,6 +367,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getSealedDocketEntryTooltip),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getSortableDocketNumber: jest
+      .fn()
+      .mockImplementation(Case.getSortableDocketNumber),
     getStampBoxCoordinates: jest
       .fn()
       .mockImplementation(getStampBoxCoordinates),
@@ -478,6 +481,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
+    printableWorkingCopySessionList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrderForSmallCase: jest
