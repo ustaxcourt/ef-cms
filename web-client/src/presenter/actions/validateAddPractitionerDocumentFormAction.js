@@ -22,6 +22,12 @@ export const validateAddPractitionerDocumentFormAction = ({
     .getUseCases()
     .validateAddPractitionerDocumentFormInteractor(applicationContext, form);
 
+  console.log('errors in form!');
+
+  if (errors) {
+    delete errors.fileName;
+  }
+
   if (!form.practitionerDocumentFile) {
     errors = {
       ...(errors ?? {}),
