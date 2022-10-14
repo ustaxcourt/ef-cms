@@ -25,7 +25,7 @@ describe('formattedTrialSessionDetails', () => {
     caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
-    formattedEligibleCases: [],
+    eligibleCases: [],
     irsCalendarAdministrator: 'Test Calendar Admin',
     isCalendared: false,
     judge: { name: 'Test Judge' },
@@ -87,7 +87,7 @@ describe('formattedTrialSessionDetails', () => {
   it('should be false for disableHybridFilter when there is at least one case in formattedEligibleCases', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
-      formattedEligibleCases: [
+      eligibleCases: [
         {
           caseCaption: 'testPetitioner3, Petitioner',
           caseTitle: 'testPetitioner3',

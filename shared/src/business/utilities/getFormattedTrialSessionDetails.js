@@ -43,6 +43,7 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
 exports.formatCase = ({
   applicationContext,
   caseItem,
+  eligibleCases,
   setFilingPartiesCode = false,
 }) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
@@ -69,44 +70,56 @@ exports.formatCase = ({
     });
   }
 
-  applicationContext.getUtilities().setConsolidationFlagsForDisplay(caseItem);
+  const newCaseItem = applicationContext
+    .getUtilities()
+    .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 
-  return caseItem;
+  return newCaseItem;
 };
 
-exports.compareTrialSessionEligibleCases = (a, b) => {
-  if (a.isManuallyAdded && !b.isManuallyAdded) {
-    return -1;
-  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
-    return 1;
-  } else if (a.highPriority && !b.highPriority) {
-    return -1;
-  } else if (!a.highPriority && b.highPriority) {
-    return 1;
-  } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
-    return -1;
-  } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
-    return 1;
-  } else {
-    return exports.compareCasesByDocketNumber(a, b);
-  }
+const getDocketNumberSortString = ({ allCases = [], theCase }) => {
+  const leadCase = allCases.find(
+    aCase => aCase.docketNumber === theCase.leadDocketNumber,
+  );
+
+  const isLeadCaseInList = !!theCase.leadDocketNumber && !!leadCase;
+
+  return `${getSortableDocketNumber(
+    isLeadCaseInList
+      ? theCase.docketNumber === theCase.leadDocketNumber
+        ? theCase.docketNumber
+        : theCase.leadDocketNumber
+      : theCase.docketNumber,
+  )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-exports.compareCasesByDocketNumber = (a, b) => {
-  if (!a || !a.docketNumber || !b || !b.docketNumber) {
-    return 0;
-  }
+const compareCasesByDocketNumberFactory =
+  ({ allCases }) =>
+  (a, b) => {
+    const aSortString = getDocketNumberSortString({
+      allCases,
+      theCase: a,
+    });
+    const bSortString = getDocketNumberSortString({
+      allCases,
+      theCase: b,
+    });
+    return aSortString.localeCompare(bSortString);
+  };
 
-  const [numberA, yearA] = a.docketNumber.split('-');
-  const [numberB, yearB] = b.docketNumber.split('-');
-
-  let yearDifference = +yearA - +yearB;
-  if (yearDifference === 0) {
-    return +numberA - +numberB;
-  } else {
-    return yearDifference;
-  }
+const getSortableDocketNumber = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${year}-${number.padStart(6, '0')}`;
 };
+
+const compareCasesByDocketNumber = (a, b) => {
+  const aSortString = getSortableDocketNumber(a.docketNumber);
+  const bSortString = getSortableDocketNumber(b.docketNumber);
+  return aSortString.localeCompare(bSortString);
+};
+
+exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
+exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 
 exports.formattedTrialSessionDetails = ({
   applicationContext,
@@ -114,24 +127,50 @@ exports.formattedTrialSessionDetails = ({
 }) => {
   if (!trialSession) return undefined;
 
-  trialSession.formattedEligibleCases = (trialSession.eligibleCases || [])
-    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
-    .sort(exports.compareTrialSessionEligibleCases);
+  const allCases = (trialSession.calendaredCases || []).map(caseItem =>
+    exports.formatCase({
+      applicationContext,
+      caseItem,
+      setFilingPartiesCode: true,
+    }),
+  );
 
-  trialSession.allCases = (trialSession.calendaredCases || [])
-    .map(caseItem =>
-      exports.formatCase({
-        applicationContext,
-        caseItem,
-        setFilingPartiesCode: true,
-      }),
-    )
-    .sort(exports.compareCasesByDocketNumber);
-
-  [trialSession.inactiveCases, trialSession.openCases] = partition(
-    trialSession.allCases,
+  const [inactiveCases, openCases] = partition(
+    allCases,
     item => item.removedFromTrial === true,
   );
+
+  trialSession.openCases = openCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, openCases),
+    )
+    .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
+
+  trialSession.inactiveCases = inactiveCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
+    )
+    .sort(
+      compareCasesByDocketNumberFactory({
+        allCases: inactiveCases,
+      }),
+    );
+
+  trialSession.allCases = allCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, allCases),
+    )
+    .sort(
+      compareCasesByDocketNumberFactory({
+        allCases,
+      }),
+    );
 
   trialSession.formattedTerm = `${
     trialSession.term
