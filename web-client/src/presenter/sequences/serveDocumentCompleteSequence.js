@@ -29,14 +29,16 @@ export const serveDocumentCompleteSequence = [
   isPrintPreviewPreparedAction,
   {
     no: [
-      getCaseAction,
-      setCaseAction,
-      getConsolidatedCasesByCaseAction,
-      setConsolidatedCasesForCaseAction,
       followRedirectAction,
       {
         default: [navigateToCaseDetailAction],
-        success: [setDocumentToDisplayFromDocumentIdAction],
+        success: [
+          getCaseAction,
+          setCaseAction,
+          getConsolidatedCasesByCaseAction,
+          setConsolidatedCasesForCaseAction,
+          setDocumentToDisplayFromDocumentIdAction,
+        ],
       },
     ],
     yes: [navigateToPrintPaperServiceAction],
