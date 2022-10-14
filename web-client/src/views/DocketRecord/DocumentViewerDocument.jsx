@@ -99,7 +99,7 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
                       docketEntryId: viewerDocumentToDisplay.docketEntryId,
-                      redirectUrl: documentViewerHelper.documentViewerLink,
+                      redirectUrl: documentViewerLinksHelper.documentViewerLink,
                     });
                   }}
                 >

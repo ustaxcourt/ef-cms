@@ -1,17 +1,17 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-const {
+import {
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} = require('../../../test/mockCase');
-const { addPaperFilingInteractor } = require('./addPaperFilingInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { docketClerkUser } = require('../../../test/mockUsers');
+} from '../../../test/mockCase';
+import { addPaperFilingInteractor } from './addPaperFilingInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('addPaperFilingInteractor', () => {
   const mockClientConnectionId = '987654';
@@ -37,23 +37,50 @@ describe('addPaperFilingInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      addPaperFilingInteractor(applicationContext, {}),
+      addPaperFilingInteractor(applicationContext, {
+        clientConnectionId: undefined,
+        consolidatedGroupDocketNumbers: undefined,
+        documentMetadata: {},
+        isSavingForLater: undefined,
+        primaryDocumentFileId: undefined,
+      }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error when the document metadata is not provided', async () => {
     await expect(
-      addPaperFilingInteractor(applicationContext, {}),
+      addPaperFilingInteractor(applicationContext, {
+        clientConnectionId: undefined,
+        consolidatedGroupDocketNumbers: undefined,
+        documentMetadata: undefined,
+        isSavingForLater: undefined,
+        primaryDocumentFileId: undefined,
+      }),
     ).rejects.toThrow('Did not receive meta data for docket entry');
   });
 
   it('should throw an error when primaryDocumentFileId is not provided', async () => {
     await expect(
       addPaperFilingInteractor(applicationContext, {
+        clientConnectionId: undefined,
+        consolidatedGroupDocketNumbers: undefined,
         documentMetadata: {},
+        isSavingForLater: undefined,
         primaryDocumentFileId: undefined,
       }),
     ).rejects.toThrow('Did not receive a primaryDocumentFileId');
+  });
+
+  it('should throw an error if documentMetadata is not provided', async () => {
+    await expect(
+      addPaperFilingInteractor(applicationContext, {
+        clientConnectionId: undefined,
+        consolidatedGroupDocketNumbers: undefined,
+        documentMetadata: undefined,
+        isSavingForLater: undefined,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('Did not receive meta data for docket entry');
   });
 
   it('should add documents and send service emails for electronic service parties', async () => {
@@ -235,6 +262,7 @@ describe('addPaperFilingInteractor', () => {
 
   it('add documents and workItem to inbox when NOT saving for later if a document is attached', async () => {
     await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: undefined,
       consolidatedGroupDocketNumbers: [mockCase.docketNumber],
       documentMetadata: {
         docketNumber: mockCase.docketNumber,
