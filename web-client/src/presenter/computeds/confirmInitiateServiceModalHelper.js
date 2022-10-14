@@ -28,7 +28,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const formattedCaseDetail = get(state.formattedCaseDetail);
 
-  // let { eventCode } = get(state.form);
   const form = get(state.form);
 
   const consolidatedCasesPropagateDocketEntriesFlag = get(
@@ -41,10 +40,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const docketEntryId = get(state.docketEntryId);
 
-  console.log(
-    'event code, ',
-    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(form.eventCode),
-  );
   let { eventCode } = form;
 
   if (!eventCode) {
