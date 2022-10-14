@@ -52,7 +52,7 @@ describe('addPaperFilingInteractor', () => {
       addPaperFilingInteractor(applicationContext, {
         clientConnectionId: undefined,
         consolidatedGroupDocketNumbers: undefined,
-        documentMetadata: {},
+        documentMetadata: undefined,
         isSavingForLater: undefined,
         primaryDocumentFileId: undefined,
       }),
