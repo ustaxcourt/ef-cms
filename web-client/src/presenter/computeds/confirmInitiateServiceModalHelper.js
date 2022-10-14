@@ -45,12 +45,13 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     'event code, ',
     NON_MULTI_DOCKETABLE_EVENT_CODES.includes(form.eventCode),
   );
+  let { eventCode } = form;
 
-  // if (!eventCode) {
-  //   ({ eventCode } = formattedCaseDetail.docketEntries.find(
-  //     doc => doc.docketEntryId === docketEntryId,
-  //   ));
-  // }
+  if (!eventCode) {
+    ({ eventCode } = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    ));
+  }
 
   // this is temporary until the flow for 9616 is implemented (QC workflow)
   const editingDocketEntry = !!get(state.isEditingDocketEntry);
