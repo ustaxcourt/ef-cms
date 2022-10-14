@@ -3836,11 +3836,11 @@
         }
       }
     },
-    "/practitioner-documents/:practitionerDocumentFileId/document-download-url": {
+    "/practitioner-documents/{practitionerDocumentFileId}/document-download-url": {
       "parameters": [
         {
           "name": "practitionerDocumentFileId",
-          "in": "body",
+          "in": "path",
           "required": true,
           "type": "string"
         }
