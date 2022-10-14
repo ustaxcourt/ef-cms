@@ -168,7 +168,11 @@ export const PractitionerAddDocument = connect(
               </div>
               <div className="grid-row margin-bottom-6 margin-top-5">
                 <div className="grid-col-12">
-                  <Button onClick={submitAddPractitionerDocumentSequence}>
+                  <Button
+                    onClick={() => {
+                      submitAddPractitionerDocumentSequence();
+                    }}
+                  >
                     Add File
                   </Button>
                   <Button
