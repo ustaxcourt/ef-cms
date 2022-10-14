@@ -5,6 +5,7 @@ import { contactPrimaryFromState, waitForCondition } from '../helpers';
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
   cerebralTest,
   documentFormValues,
+  expectedDocumentType,
 }) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
@@ -48,18 +49,15 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
     });
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      'Motion for Leave to File',
+      expectedDocumentType,
     );
 
-    await cerebralTest.runSequence('updateScreenMetadataSequence', {
-      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      value: false,
-    });
-
-    await cerebralTest.runSequence('updateScreenMetadataSequence', {
-      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      value: true,
-    });
+    if (documentFormValues.secondaryDocumentFile) {
+      await cerebralTest.runSequence('updateScreenMetadataSequence', {
+        key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
+        value: true,
+      });
+    }
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
