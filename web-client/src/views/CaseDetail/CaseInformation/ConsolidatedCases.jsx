@@ -16,7 +16,7 @@ export const ConsolidatedCases = connect(
         <div className="grid-container padding-left-0 margin-bottom-2">
           {caseDetail.consolidatedCases.map(consolidatedCase => (
             <div
-              className="grid-row margin-top-3 align-center"
+              className="grid-row margin-top-3 align-items-baseline"
               key={consolidatedCase.docketNumber}
             >
               <NonMobile>
