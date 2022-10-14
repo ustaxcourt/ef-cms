@@ -4,10 +4,13 @@ import { runAction } from 'cerebral/test';
 import { shouldSetupConsolidatedCasesAction } from './shouldSetupConsolidatedCasesAction';
 
 describe('shouldSetupConsolidatedCasesAction', () => {
+  const mockDocketEntryId = '123333333';
   let pathYesStub;
   let pathNoStub;
-  const { SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES } =
-    applicationContext.getConstants();
+  let {
+    ENTERED_AND_SERVED_EVENT_CODES,
+    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   beforeAll(() => {
     pathYesStub = jest.fn();
@@ -21,30 +24,66 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     };
   });
 
-  it('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.forEach(eventCode => {
+    it(`should return the no path when the eventCode ${eventCode} is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES`, async () => {
+      await runAction(shouldSetupConsolidatedCasesAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            eventCode: 'M083',
+          },
+        },
+      });
+
+      expect(pathNoStub).toHaveBeenCalled();
+    });
+  });
+
+  ENTERED_AND_SERVED_EVENT_CODES.forEach(eventCode => {
+    it(`should return the no path when the eventCode ${eventCode} is one of ENTERED_AND_SERVED_EVENT_CODES`, async () => {
+      await runAction(shouldSetupConsolidatedCasesAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            eventCode,
+          },
+        },
+      });
+
+      expect(pathNoStub).toHaveBeenCalled();
+    });
+  });
+
+  it('should return the yes path when the form eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          eventCode: SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES[0],
+          eventCode: 'A',
         },
       },
     });
 
-    expect(pathNoStub).toHaveBeenCalled();
+    expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('should return the yes path when the eventCode is NOT one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  it('should return the yes path when the docket entry eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
-        form: {
-          eventCode: 'O',
+        caseDetail: {
+          docketEntries: [{ docketEntryId: mockDocketEntryId, eventCode: 'A' }],
         },
+        docketEntryId: mockDocketEntryId,
+        form: {},
       },
     });
 

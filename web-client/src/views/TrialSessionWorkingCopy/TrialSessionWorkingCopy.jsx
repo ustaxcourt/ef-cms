@@ -18,21 +18,26 @@ export const TrialSessionWorkingCopy = connect(
     batchDownloadTrialSessionSequence:
       sequences.batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    openPrintableTrialSessionWorkingCopyModalSequence:
+      sequences.openPrintableTrialSessionWorkingCopyModalSequence,
     showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
+    trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
   function TrialSessionWorkingCopy({
     batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails,
+    openPrintableTrialSessionWorkingCopyModalSequence,
     showModal,
     trialSessionHeaderHelper,
+    trialSessionWorkingCopyHelper,
   }) {
     return (
       <>
         <TrialSessionDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row">
-            <div className="grid-col-9">
+            <div className="grid-col-8">
               <h2 className="heading-1">
                 {trialSessionHeaderHelper.nameToDisplay} - Session Copy
                 {trialSessionHeaderHelper.showSwitchToSessionDetail && (
@@ -45,9 +50,25 @@ export const TrialSessionWorkingCopy = connect(
                 )}
               </h2>
             </div>
-
+            {trialSessionWorkingCopyHelper.showPrintButton ? (
+              <div className="grid-col-2 text-right padding-top-1">
+                <Button
+                  link
+                  aria-label="Print session copy"
+                  icon="print"
+                  id="print-session-working-copy"
+                  onClick={() =>
+                    openPrintableTrialSessionWorkingCopyModalSequence()
+                  }
+                >
+                  Print
+                </Button>
+              </div>
+            ) : (
+              <div className="grid-col-2 text-right padding-top-1" />
+            )}
             {trialSessionHeaderHelper.showBatchDownloadButton && (
-              <div className="grid-col-3 text-right padding-top-2">
+              <div className="grid-col-2 text-right padding-top-1">
                 <Button
                   link
                   aria-label="Download batch of documents in a trial session"
