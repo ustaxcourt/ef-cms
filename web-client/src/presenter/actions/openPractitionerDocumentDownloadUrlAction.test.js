@@ -31,7 +31,7 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
       });
   });
 
-  it('should should open a new tab with the downloaded file', async () => {
+  it('should open a new tab with the downloaded file', async () => {
     await runAction(openPractitionerDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
@@ -43,25 +43,23 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
     expect(window.open().location.href).toEqual('http://example.com');
   });
 
-  it('should close the window after download if a word doc is being downloaded', async () => {
-    await runAction(openPractitionerDocumentDownloadUrlAction, {
-      modules: { presenter },
-      props: {
-        fileName: 'file.docx',
-        practitionerDocumentFileId: 'mockFileId1234',
-      },
+  it('should close the window after a word document has been downloaded', async () => {
+    global.setTimeout = cb => cb();
+    await openUrlInNewTab('file.docx', () => {
+      return { url: 'example.com' };
     });
-    expect(window.close()).toHaveBeenCalled();
+
+    expect(closeSpy).toHaveBeenCalled();
   });
 
-  // it('should throw an error when document file ID is left blank', async () => {
-  //   expect(
-  //     await runAction(openPractitionerDocumentDownloadUrlAction, {
-  //       props: {
-  //         fileName: 'file.pdf',
-  //         practitionerDocumentFileId: undefined,
-  //       },
-  //     }),
-  //   ).rejects.toThrow();
-  // });
+  it('should throw an error if url is invalid', async () => {
+    global.setTimeout = cb => cb();
+    await expect(
+      openUrlInNewTab('file.docx', () => {
+        throw new Error();
+      }),
+    ).rejects.toThrow();
+
+    expect(closeSpy).toHaveBeenCalled();
+  });
 });
