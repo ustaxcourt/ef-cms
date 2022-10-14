@@ -43,6 +43,7 @@ describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents Vi
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater({
     cerebralTest,
     documentFormValues,
+    expectedDocumentType: 'Motion for Leave to File',
   });
   docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
   docketClerkViewsCaseDetailDocumentView(cerebralTest);

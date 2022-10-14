@@ -28,6 +28,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const formattedCaseDetail = get(state.formattedCaseDetail);
 
+  // let { eventCode } = get(state.form);
   const form = get(state.form);
 
   const consolidatedCasesPropagateDocketEntriesFlag = get(
@@ -39,13 +40,17 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases.length > 0;
 
   const docketEntryId = get(state.docketEntryId);
-  let { eventCode } = form;
 
-  if (!eventCode) {
-    ({ eventCode } = formattedCaseDetail.docketEntries.find(
-      doc => doc.docketEntryId === docketEntryId,
-    ));
-  }
+  console.log(
+    'event code, ',
+    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(form.eventCode),
+  );
+
+  // if (!eventCode) {
+  //   ({ eventCode } = formattedCaseDetail.docketEntries.find(
+  //     doc => doc.docketEntryId === docketEntryId,
+  //   ));
+  // }
 
   // this is temporary until the flow for 9616 is implemented (QC workflow)
   const editingDocketEntry = !!get(state.isEditingDocketEntry);

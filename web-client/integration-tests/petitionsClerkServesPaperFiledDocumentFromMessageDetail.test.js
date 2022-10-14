@@ -50,6 +50,7 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater({
     cerebralTest,
     documentFormValues,
+    expectedDocumentType: 'Motion for Leave to File',
   });
 
   createNewMessageOnCase(cerebralTest);

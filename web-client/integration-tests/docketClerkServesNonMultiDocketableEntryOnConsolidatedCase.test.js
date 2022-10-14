@@ -1,47 +1,31 @@
-import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
-import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
+import {
+  OBJECTIONS_OPTIONS_MAP,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+} from '../../shared/src/business/entities/EntityConstants';
+import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
+import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
-import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkFilesAndServesDocumentOnLeadCase } from './journey/docketClerkFilesAndServesDocumentOnLeadCase';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServesDocumentOnLeadCase';
-import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import {
-  loginAs,
-  setConsolidatedCasesPropagateEntriesFlag,
-  setupTest,
-  uploadPetition,
-} from './helpers';
-import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
-import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { fakeFile } from '../integration-tests-public/helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Docket Clerk serves non multi-docketable entry on consolidated case', () => {
   const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
-
-  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-  const overrides = {
-    preferredTrialCity: trialLocation,
-    trialLocation,
-  };
 
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(async () => {
-    await setConsolidatedCasesPropagateEntriesFlag(true);
     cerebralTest.closeSocket();
   });
 
   it('login as a petitioner and create the lead case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
@@ -52,7 +36,7 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
 
   it('login as a petitioner and create a case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
@@ -72,19 +56,40 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
     dateReceivedDay: 1,
     dateReceivedMonth: 1,
     dateReceivedYear: 2018,
-    eventCode: 'M115',
+    eventCode: SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES[0],
     objections: OBJECTIONS_OPTIONS_MAP.NO,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 100,
-    'secondaryDocument.addToCoversheet': true,
-    'secondaryDocument.additionalInfo': 'Test Secondary Additional Info',
-    'secondaryDocument.eventCode': 'APPW',
-    secondaryDocumentFile: fakeFile,
-    secondaryDocumentFileSize: 100,
   };
 
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater({
     cerebralTest,
     documentFormValues,
+    expectedDocumentType: 'Agreed Computation for Entry of Decision',
+  });
+
+  it('docket clerk serves decision document from document viewer', async () => {
+    await cerebralTest.runSequence(
+      'openConfirmServePaperFiledDocumentSequence',
+      {
+        docketEntryId: cerebralTest.docketEntryId,
+        redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
+      },
+    );
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiatePaperDocumentServiceModal',
+    );
+  });
+
+  it('docket clerk verifies consolidated case checkboxes do NOT display for case decision service', () => {
+    const modalHelper = runCompute(
+      withAppContextDecorator(confirmInitiateServiceModalHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(modalHelper.showConsolidatedCasesForService).toBe(false);
   });
 });

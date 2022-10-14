@@ -40,6 +40,7 @@ describe('Docket clerk saves and then edits a paper filing', () => {
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater({
     cerebralTest,
     documentFormValues,
+    expectedDocumentType: 'Motion for Leave to File',
   });
 
   docketClerkEditsPaperFiledDocketEntryFromQC(cerebralTest);
