@@ -26,7 +26,7 @@ describe('navigateToPractitionerDocumentsPageAction', () => {
     });
 
     expect(routeStub).toHaveBeenCalledWith(
-      `/practitioner-detail/PT314?tab=practitioner-documentation`,
+      '/practitioner-detail/PT314?tab=practitioner-documentation',
     );
   });
 });
