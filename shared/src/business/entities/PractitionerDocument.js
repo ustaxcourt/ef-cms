@@ -47,16 +47,16 @@ PractitionerDocument.schema = joi.object().keys({
     ...Object.values(PRACTITIONER_DOCUMENT_TYPES),
   ).required(),
   description: JoiValidationConstants.STRING.optional(),
-  practitionerDocumentFileId:
-    JoiValidationConstants.UUID.required().description(
-      'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
-    ),
   fileName: JoiValidationConstants.STRING.required(),
   location: JoiValidationConstants.STRING.when('categoryType', {
     is: PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
+  practitionerDocumentFileId:
+    JoiValidationConstants.UUID.required().description(
+      'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
+    ),
   uploadDate: JoiValidationConstants.ISO_DATE,
 });
 

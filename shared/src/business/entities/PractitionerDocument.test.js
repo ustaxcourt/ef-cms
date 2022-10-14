@@ -3,11 +3,12 @@ const { PRACTITIONER_DOCUMENT_TYPES_MAP } = require('./EntityConstants');
 const { PractitionerDocument } = require('./PractitionerDocument');
 
 describe('Document', () => {
-  it('should create a validate document when passed all required fields', () => {
+  it('should create a valid document when passed all required fields', () => {
     const document = new PractitionerDocument(
       {
         categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
         categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
+        fileName: 'testing.pdf',
         location: null,
       },
       { applicationContext },
@@ -15,11 +16,12 @@ describe('Document', () => {
     expect(document.isValid()).toBeTruthy();
   });
 
-  it('should mark the entity as valid when categoryName is not provided', () => {
+  it('should mark the entity as invalid when categoryName is not provided', () => {
     const document = new PractitionerDocument(
       {
         categoryName: null,
         categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
+        fileName: 'testing.pdf',
         location: null,
       },
       { applicationContext },
@@ -32,6 +34,7 @@ describe('Document', () => {
       {
         categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
         categoryType: 'some unknown type',
+        fileName: 'testing.pdf',
         location: null,
       },
       { applicationContext },
@@ -46,6 +49,7 @@ describe('Document', () => {
           PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
         categoryType:
           PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        fileName: 'testing.pdf',
         location: null,
       },
       { applicationContext },
@@ -60,6 +64,7 @@ describe('Document', () => {
           PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
         categoryType:
           PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        fileName: 'testing.pdf',
         location: 'Colorado',
       },
       { applicationContext },
