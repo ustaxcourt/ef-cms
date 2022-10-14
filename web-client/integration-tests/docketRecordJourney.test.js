@@ -425,14 +425,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     expect(cerebralTest.getState('currentPage')).toBe('PaperFiling');
 
-    await cerebralTest.runSequence(
-      'openConfirmServePaperFiledDocumentSequence',
-      {
-        docketEntryId: cerebralTest.docketEntryId,
-      },
-    );
+    await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
 
-    await cerebralTest.runSequence('servePaperFiledDocumentSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
     await waitForCondition({
       booleanExpressionCondition: () =>

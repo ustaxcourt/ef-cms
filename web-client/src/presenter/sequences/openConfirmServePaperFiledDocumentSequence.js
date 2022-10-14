@@ -17,6 +17,9 @@ export const openConfirmServePaperFiledDocumentSequence = [
   setDocketEntryIdAction,
   clearModalStateAction,
   shouldSetupConsolidatedCasesAction,
-  { no: [], yes: [setupConsolidatedCasesAction] },
+  {
+    no: [],
+    yes: [setupConsolidatedCasesAction],
+  },
   setShowModalFactoryAction('ConfirmInitiatePaperDocumentServiceModal'),
 ];
