@@ -20,7 +20,7 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
     jest.setTimeout(30000);
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     cerebralTest.closeSocket();
   });
 
@@ -33,25 +33,6 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-
-  it('login as a petitioner and create a case to consolidate with', async () => {
-    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-  });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-  docketClerkOpensCaseConsolidateModal(cerebralTest);
-  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest, 2);
-
-  //add paper filing (of type caseDecision === true) on lead case
-  //save for later
-  //serve paper filing from document viewer
-  //verify modal does not have consolidated case checkboxes
-  //fix me
   const documentFormValues = {
     dateReceivedDay: 1,
     dateReceivedMonth: 1,
@@ -68,12 +49,29 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
     expectedDocumentType: 'Agreed Computation for Entry of Decision',
   });
 
+  it('login as a petitioner and create a case to consolidate with', async () => {
+    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+    const caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  docketClerkOpensCaseConsolidateModal(cerebralTest);
+  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest, 2);
+
   it('docket clerk serves decision document from document viewer', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.leadDocketNumber,
+    });
+
     await cerebralTest.runSequence(
       'openConfirmServePaperFiledDocumentSequence',
       {
         docketEntryId: cerebralTest.docketEntryId,
-        redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
+        redirectUrl: `/case-detail/${cerebralTest.leadDocketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
       },
     );
 
