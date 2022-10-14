@@ -20,7 +20,7 @@ esbuildHelper({
   entryPoint: 'index.js',
   hostPort: 1234,
   indexName: 'index.html',
-  jsRegex: /index\.[A-Z0-9]+\.js/,
+  jsRegex: /^index\.[A-Z0-9]+\.js$/,
   outdir: 'dist',
   replaceHtmlFile,
   servePort: 5555,
