@@ -1,4 +1,3 @@
-/** @jest-environment jsdom */
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   openPractitionerDocumentDownloadUrlAction,
