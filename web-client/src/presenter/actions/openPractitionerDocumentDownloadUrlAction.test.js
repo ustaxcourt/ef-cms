@@ -43,7 +43,7 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
     expect(window.open().location.href).toEqual('http://example.com');
   });
 
-  it('should close the window after a word document has been downloaded', async () => {
+  it('should close the new tab after a word document has been downloaded', async () => {
     global.setTimeout = cb => cb();
     await openUrlInNewTab('file.docx', () => {
       return { url: 'example.com' };
