@@ -1,14 +1,11 @@
-import {
-  DOCUMENT_RELATIONSHIPS,
-  OBJECTIONS_OPTIONS_MAP,
-} from '../../../shared/src/business/entities/EntityConstants';
+import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
-export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
+export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
   cerebralTest,
-  fakeFile,
-) => {
+  documentFormValues,
+}) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
   return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
@@ -38,70 +35,17 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
 
-    //primary document
-    const docketEntryEventCode = 'M115';
-
-    const motionToLeaveForFileWithSupportingDocument = [
-      {
-        key: 'dateReceivedMonth',
-        value: 1,
-      },
-      {
-        key: 'dateReceivedDay',
-        value: 1,
-      },
-      {
-        key: 'dateReceivedYear',
-        value: 2018,
-      },
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-      {
-        key: 'primaryDocumentFileSize',
-        value: 100,
-      },
-      {
-        key: 'eventCode',
-        value: docketEntryEventCode,
-      },
-      {
-        key: 'objections',
-        value: OBJECTIONS_OPTIONS_MAP.NO,
-      },
-      {
-        key: 'secondaryDocument.eventCode',
-        value: 'APPW',
-      },
-      {
-        key: 'secondaryDocumentFile',
-        value: fakeFile,
-      },
-      {
-        key: 'secondaryDocumentFileSize',
-        value: 100,
-      },
-      {
-        key: 'secondaryDocument.additionalInfo',
-        value: 'Test Secondary Additional Info',
-      },
-      {
-        key: 'secondaryDocument.addToCoversheet',
-        value: true,
-      },
-      {
-        key: `filersMap.${contactId}`,
-        value: true,
-      },
-    ];
-
-    for (const item of motionToLeaveForFileWithSupportingDocument) {
-      await cerebralTest.runSequence(
-        'updateDocketEntryFormValueSequence',
-        item,
-      );
+    for (const [key, value] of Object.entries(documentFormValues)) {
+      await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+        key,
+        value,
+      });
     }
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: `filersMap.${contactId}`,
+      value: true,
+    });
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
       'Motion for Leave to File',
@@ -121,14 +65,18 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       isSavingForLater: true,
     });
 
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
     await waitForCondition({
       booleanExpressionCondition: () =>
         cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
 
-    cerebralTest.docketEntryId = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === docketEntryEventCode).docketEntryId;
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+
+    cerebralTest.docketEntryId = docketEntries.find(
+      doc => doc.eventCode === documentFormValues.eventCode,
+    ).docketEntryId;
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to the docket record.',
