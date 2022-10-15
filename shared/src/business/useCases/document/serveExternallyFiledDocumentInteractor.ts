@@ -122,32 +122,41 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
-  let pdfUrl;
   let stampedPdf;
+  let paperServicePdfUrl;
 
   try {
+    let consolidatedGroupHasPaperServiceCase: boolean;
+
     for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await applicationContext
+      const rawCaseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
           applicationContext,
           docketNumber,
         });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
-    }
-
-    const coversheetLength = 1;
-    const filedDocumentPromises = caseEntities.map(caseEntity =>
-      fileDocumentOnOneCase({
+      let caseEntityToUpdate = new Case(rawCaseToUpdate, {
         applicationContext,
-        caseEntity,
-        numberOfPages: numberOfPages + coversheetLength,
-        originalSubjectDocketEntry,
-        user,
-      }),
-    );
-    caseEntities = await Promise.all(filedDocumentPromises);
+      });
+
+      try {
+        const coversheetLength = 1;
+
+        ({ consolidatedGroupHasPaperServiceCase, newCase: caseEntityToUpdate } =
+          await fileDocumentOnOneCase({
+            applicationContext,
+            caseEntity: caseEntityToUpdate,
+            consolidatedGroupHasPaperServiceCase,
+            numberOfPages: numberOfPages + coversheetLength,
+            originalSubjectDocketEntry,
+            user,
+          }));
+      } catch (e) {
+        continue;
+      }
+      caseEntities.push(caseEntityToUpdate);
+    }
 
     const { pdfData: servedDocWithCover } = await addCoverToPdf({
       applicationContext,
@@ -162,14 +171,18 @@ export const serveExternallyFiledDocumentInteractor = async (
       pdfData: servedDocWithCover,
     });
 
-    ({ pdfUrl } = await applicationContext
+    let paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
         stampedPdf,
-      }));
+      });
+
+    if (consolidatedGroupHasPaperServiceCase) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
   } finally {
     for (const caseEntity of caseEntities) {
       try {
@@ -210,7 +223,7 @@ export const serveExternallyFiledDocumentInteractor = async (
         message: successMessage,
         overwritable: false,
       },
-      pdfUrl,
+      pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
   });
@@ -239,11 +252,15 @@ const stampDocument = async ({ applicationContext, form, pdfData }) => {
 const fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
+  consolidatedGroupHasPaperServiceCase,
   numberOfPages,
   originalSubjectDocketEntry,
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
+  if (servedParties.paper.length > 0) {
+    consolidatedGroupHasPaperServiceCase = true;
+  }
 
   const docketEntryEntity = new DocketEntry(
     {
@@ -326,5 +343,8 @@ const fileDocumentOnOneCase = async ({
       caseToUpdate: caseEntity,
     });
 
-  return new Case(validRawCaseEntity, { applicationContext });
+  return {
+    consolidatedGroupHasPaperServiceCase,
+    newCase: new Case(validRawCaseEntity, { applicationContext }),
+  };
 };
