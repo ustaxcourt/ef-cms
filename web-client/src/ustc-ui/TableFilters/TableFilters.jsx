@@ -51,7 +51,7 @@ export const TableFilters = ({ filters, onSelect }) => {
               onChange={e => {
                 onSelect({
                   key,
-                  value: e.target.value,
+                  value: e,
                 });
               }}
               onKeyDown={e => {
