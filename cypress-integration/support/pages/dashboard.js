@@ -44,3 +44,15 @@ exports.getWorkItemRow = docketNumber => {
 exports.getSendButton = () => {
   return cy.contains('button', 'Send');
 };
+
+exports.getCaseStatusFilter = () => {
+  return cy.get('select#caseStatusFilter');
+};
+
+exports.selectsCaseStatusFilter = () => {
+  exports.getCaseStatusFilter().select('New');
+};
+
+exports.messagesShouldBeFiltered = () => {
+  return cy.get('table').contains('td', 'Calendared').should('not.exist');
+};
