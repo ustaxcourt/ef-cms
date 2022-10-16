@@ -5,6 +5,7 @@ import {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -71,6 +72,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           name: 'Guy Fieri',
           phone: '1234567890',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'CA',
         },
       ],
