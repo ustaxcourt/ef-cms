@@ -1,6 +1,6 @@
 const {
   getCaseStatusFilter,
-  selectsCaseStatusFilter,
+  selectsCaseStatusFilterNew,
   messagesShouldBeFiltered,
 } = require('../support/pages/dashboard');
 const {
@@ -78,7 +78,7 @@ describe('Messages', () => {
     it('should be able to filter messages', () => {
       cy.login('adc');
       getCaseStatusFilter();
-      selectsCaseStatusFilter();
+      selectsCaseStatusFilterNew();
       messagesShouldBeFiltered();
     });
   });

@@ -49,7 +49,7 @@ exports.getCaseStatusFilter = () => {
   return cy.get('select#caseStatusFilter');
 };
 
-exports.selectsCaseStatusFilter = () => {
+exports.selectsCaseStatusFilterNew = () => {
   exports.getCaseStatusFilter().select('New');
 };
 
