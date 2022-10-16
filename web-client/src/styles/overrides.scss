@@ -274,6 +274,10 @@ option:first-child {
   margin-top: 7.7rem;
 }
 
+.margin-right-50 {
+  margin-right: 50px;
+}
+
 p {
   max-width: 700px;
   line-height: 24px;
@@ -335,4 +339,10 @@ input[type='file']::-webkit-file-upload-button {
 
 .modal-button-link .svg-inline--fa {
   margin-right: 0.5rem;
+}
+
+@media only screen and (max-width: $medium-screen + 180px) {
+  .margin-right-mobile {
+    margin-right: 20px;
+  }
 }

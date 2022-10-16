@@ -13,6 +13,7 @@ const FORMATS = {
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
+  SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
   TIME_TZ: "h:mm a 'ET'",
