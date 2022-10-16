@@ -26,8 +26,8 @@ const { omit } = require('lodash');
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
+ * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  */
 export const serveExternallyFiledDocumentInteractor = async (
@@ -158,10 +158,16 @@ export const serveExternallyFiledDocumentInteractor = async (
       caseEntities.push(caseEntityToUpdate);
     }
 
+    const updatedSubjectCaseEntity = caseEntities.find(
+      c => c.docketNumber === subjectCaseDocketNumber,
+    );
+    const updatedSubjectDocketEntry =
+      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
+
     const { pdfData: servedDocWithCover } = await addCoverToPdf({
       applicationContext,
-      caseEntity: subjectCaseEntity,
-      docketEntryEntity: originalSubjectDocketEntry,
+      caseEntity: updatedSubjectCaseEntity,
+      docketEntryEntity: updatedSubjectDocketEntry,
       pdfData,
     });
 
