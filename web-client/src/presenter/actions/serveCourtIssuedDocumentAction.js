@@ -7,8 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {Function} providers.get the cerebral get function
  * @param {Function} providers.props the cerebral props function
- * @param {object} providers.router the riot.router object containing the createObjectURL function
- * @returns {object} the user
  */
 export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
@@ -16,10 +14,9 @@ export const serveCourtIssuedDocumentAction = async ({
   props,
 }) => {
   const docketEntryId = get(state.docketEntryId);
-  const caseDetail = get(state.caseDetail);
-  let { docketNumbers } = props;
-
   const clientConnectionId = get(state.clientConnectionId);
+  const caseDetail = get(state.caseDetail);
+  const { docketNumbers } = props;
 
   await applicationContext.getUseCases().serveCourtIssuedDocumentInteractor(
     applicationContext,

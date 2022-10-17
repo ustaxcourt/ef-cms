@@ -5,6 +5,7 @@ import { generateTitleForPaperFilingAction } from '../actions/FileDocument/gener
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getConstants } from '../../getConstants';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
@@ -30,8 +31,14 @@ export const openConfirmPaperServiceModalSequence = [
   computeCertificateOfServiceFormDateAction,
   getComputedFormDateFactoryAction('dateReceived'),
   setComputeFormDateFactoryAction('dateReceived'),
-  shouldSetupConsolidatedCasesAction,
-  { no: [], yes: [setupConsolidatedCasesAction] },
+  isEditingDocketEntryAction,
+  {
+    no: [
+      shouldSetupConsolidatedCasesAction,
+      { no: [], yes: [setupConsolidatedCasesAction] },
+    ],
+    yes: [],
+  },
   setDocumentIsRequiredAction,
   generateTitleForPaperFilingAction,
   setFilersFromFilersMapAction,

@@ -1,23 +1,21 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
+import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
-import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
+import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
+import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -25,20 +23,27 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitPaperFilingAction } from '../actions/DocketEntry/submitPaperFilingAction';
+import { submitAddPaperFilingAction } from '../actions/DocketEntry/submitAddPaperFilingAction';
+import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
-import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const savePaperFiling = showProgressSequenceDecorator([
+const addPaperFilingMultiDocketableFlow = [
+  setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
-  submitPaperFilingAction,
-  setCaseAction,
-  closeFileUploadStatusModalAction,
-  setDocketEntryIdAction,
+  submitAddPaperFilingAction,
+];
+
+const editPaperFilingNotMultiDocketableFlow = [
+  submitEditPaperFilingAction,
+  isCoversheetNeededAction,
+  {
+    no: [],
+    yes: [generateCoversheetAction],
+  },
   getShouldGoToPaperServiceAction,
   {
     no: [
@@ -49,7 +54,7 @@ const savePaperFiling = showProgressSequenceDecorator([
     ],
     yes: [setPdfPreviewUrlAction, gotoPrintPaperServiceSequence],
   },
-]);
+];
 
 export const submitPaperFilingSequence = [
   checkForActiveBatchesAction,
@@ -77,16 +82,24 @@ export const submitPaperFilingSequence = [
         success: [
           stopShowValidationAction,
           clearAlertsAction,
-          isFileAttachedAction,
+          isEditingDocketEntryAction,
           {
-            no: savePaperFiling,
-            yes: [
-              openFileUploadStatusModalAction,
-              getDocumentIdAction,
-              uploadDocketEntryFileAction,
+            no: [
+              isFileAttachedAction,
               {
-                error: [openFileUploadErrorModal],
-                success: savePaperFiling,
+                no: addPaperFilingMultiDocketableFlow,
+                yes: docketEntryFileUploadSequenceDecorator([
+                  addPaperFilingMultiDocketableFlow,
+                ]),
+              },
+            ],
+            yes: [
+              isFileAttachedAction,
+              {
+                no: editPaperFilingNotMultiDocketableFlow,
+                yes: docketEntryFileUploadSequenceDecorator([
+                  editPaperFilingNotMultiDocketableFlow,
+                ]),
               },
             ],
           },

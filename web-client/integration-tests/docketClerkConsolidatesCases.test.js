@@ -20,16 +20,17 @@ import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifie
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
 describe('Case Consolidation Journey', () => {
+  const cerebralTest = setupTest();
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+
+  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });

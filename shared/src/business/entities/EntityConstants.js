@@ -3,7 +3,10 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, uniq, without } = require('lodash');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('./courtIssuedDocument/CourtIssuedDocumentConstants');
+const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -305,6 +308,7 @@ const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
+
 const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Order',
 ).eventCode;
@@ -442,6 +446,11 @@ const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
   .filter(internalEvent => internalEvent.caseDecision)
   .map(x => x.eventCode);
 
+const NON_MULTI_DOCKETABLE_EVENT_CODES = [
+  ...ENTERED_AND_SERVED_EVENT_CODES,
+  ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+];
+
 const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ])
@@ -477,7 +486,12 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
 const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
+  orders: 'Orders',
 };
+
+const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(DOCKET_RECORD_FILTER_OPTIONS, [
+  'exhibits',
+]);
 
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
@@ -1386,6 +1400,7 @@ module.exports = deepFreeze({
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_SECTION,
   EXTERNAL_DOCUMENTS_ARRAY,
   DOCUMENT_EXTERNAL_CATEGORIES,
@@ -1459,6 +1474,7 @@ module.exports = deepFreeze({
   SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   STRICKEN_FROM_TRIAL_SESSION_MESSAGE,

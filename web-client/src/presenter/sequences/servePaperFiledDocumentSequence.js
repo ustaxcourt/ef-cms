@@ -1,29 +1,15 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
-import { hasPaperAction } from '../actions/hasPaperAction';
-import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
 import { servePaperFiledDocumentAction } from '../actions/DocketEntry/servePaperFiledDocumentAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
-import { setDocumentToDisplayFromDocumentIdAction } from '../actions/setDocumentToDisplayFromDocumentIdAction';
-import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 
-export const servePaperFiledDocumentSequence = showProgressSequenceDecorator([
+export const servePaperFiledDocumentSequence = [
   clearModalAction,
   generateTitleAction,
   clearAlertsAction,
+  setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
   servePaperFiledDocumentAction,
-  setAlertSuccessAction,
-  getCaseAction,
-  setCaseAction,
-  hasPaperAction,
-  {
-    electronic: [setDocumentToDisplayFromDocumentIdAction],
-    paper: [setPdfPreviewUrlSequence, navigateToPrintPaperServiceAction],
-  },
-]);
+];

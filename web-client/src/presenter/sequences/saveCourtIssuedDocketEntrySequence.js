@@ -10,6 +10,7 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
 import { shouldSaveToConsolidatedGroupAction } from '../actions/shouldSaveToConsolidatedGroupAction';
+import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation/shouldSetupConsolidatedCasesAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitCourtIssuedDocketEntrySequence } from './submitCourtIssuedDocketEntrySequence';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
@@ -39,7 +40,11 @@ export const saveCourtIssuedDocketEntrySequence = [
             ],
             success: [
               clearModalStateAction,
-              setupConsolidatedCasesAction,
+              shouldSetupConsolidatedCasesAction,
+              {
+                no: [],
+                yes: [setupConsolidatedCasesAction],
+              },
               setShowModalFactoryAction('ConfirmInitiateSaveModal'),
             ],
           },

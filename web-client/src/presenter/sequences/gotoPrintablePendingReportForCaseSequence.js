@@ -3,7 +3,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { setTitleForGlobalReportAction } from '../actions/PendingItems/setTitleForGlobalReportAction';
+import { setTitleForGlobalReportFactoryAction } from '../actions/PendingItems/setTitleForGlobalReportFactoryAction';
 import { setupPropsForPrintablePendingReportAction } from '../actions/PendingItems/setupPropsForPrintablePendingReportAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
@@ -15,6 +15,6 @@ export const gotoPrintablePendingReportForCaseSequence =
     setupPropsForPrintablePendingReportAction,
     generatePrintablePendingReportAction,
     setPdfPreviewUrlSequence,
-    setTitleForGlobalReportAction,
+    setTitleForGlobalReportFactoryAction('Pending Report'),
     setCurrentPageAction('SimplePdfPreviewPage'),
   ]);
