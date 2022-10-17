@@ -5,6 +5,7 @@ import {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -71,6 +72,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           name: 'Guy Fieri',
           phone: '1234567890',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'CA',
         },
       ],
@@ -140,7 +142,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
-    expect(addCoverToPdf).toHaveBeenCalledTimes(1);
+    expect(
+      (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
+    ).toBeDefined();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
@@ -541,6 +545,23 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       }),
       userId: docketClerkUser.userId,
     });
+  });
+
+  it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
+    caseRecord.petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.pdfUrl,
+    ).toBeUndefined();
   });
 
   it('throws an error when the docket entry does not exist on the subject case', async () => {
