@@ -547,6 +547,23 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
   });
 
+  it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
+    caseRecord.petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.pdfUrl,
+    ).toBeUndefined();
+  });
+
   it('throws an error when the docket entry does not exist on the subject case', async () => {
     const mockNonExistentDocketEntryId = 'd9f645b1-c0b6-4782-a798-091760343573';
 
