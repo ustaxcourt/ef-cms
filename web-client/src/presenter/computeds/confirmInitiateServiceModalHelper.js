@@ -39,6 +39,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases.length > 0;
 
   const docketEntryId = get(state.docketEntryId);
+
   let { eventCode } = form;
 
   if (!eventCode) {
