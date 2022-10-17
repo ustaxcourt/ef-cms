@@ -253,11 +253,11 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  const workItemToUpdate = docketEntryEntity.workItem
-    ? new WorkItem({ ...docketEntryEntity.workItem }, { applicationContext })
-    : undefined;
-
-  if (workItemToUpdate) {
+  if (docketEntryEntity.workItem) {
+    const workItemToUpdate = new WorkItem(
+      { ...docketEntryEntity.workItem },
+      { applicationContext },
+    );
     workItemToUpdate.setAsCompleted({
       message: 'completed',
       user,
@@ -271,6 +271,8 @@ const fileDocumentOnOneCase = async ({
       sentBySection: user.section,
       sentByUserId: user.userId,
     });
+
+    docketEntryEntity.setWorkItem(workItemToUpdate);
 
     await applicationContext
       .getPersistenceGateway()
