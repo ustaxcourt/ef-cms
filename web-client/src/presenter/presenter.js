@@ -62,6 +62,7 @@ import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeMod
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { closeModalAndReturnToPractitionerDocumentsPageSequence } from './sequences/closeModalAndReturnToPractitionerDocumentsPageSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { closeTrialSessionSequence } from './sequences/closeTrialSessionSequence';
 import { closeVerifyEmailModalAndNavigateToMyAccountSequence } from './sequences/closeVerifyEmailModalAndNavigateToMyAccountSequence';
@@ -156,6 +157,7 @@ import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
+import { gotoPractitionerAddDocumentSequence } from './sequences/gotoPractitionerAddDocumentSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
@@ -252,6 +254,7 @@ import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleM
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
+import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -354,6 +357,7 @@ import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolid
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
 import { submitAddOtherStatisticsSequence } from './sequences/submitAddOtherStatisticsSequence';
 import { submitAddPetitionerSequence } from './sequences/submitAddPetitionerSequence';
+import { submitAddPractitionerDocumentSequence } from './sequences/submitAddPractitionerDocumentSequence';
 import { submitAddPractitionerSequence } from './sequences/submitAddPractitionerSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
@@ -458,6 +462,7 @@ import { userContactUpdateProgressSequence } from './sequences/userContactUpdate
 import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/CaseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPetitionerSequence } from './sequences/validateAddPetitionerSequence';
+import { validateAddPractitionerDocumentSequence } from './sequences/validateAddPractitionerDocumentSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
 import { validateAddPrivatePractitionerSequence } from './sequences/CaseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
@@ -573,6 +578,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
+    closeModalAndReturnToPractitionerDocumentsPageSequence,
     closeModalAndReturnToTrialSessionsSequence,
     closeTrialSessionSequence,
     closeVerifyEmailModalAndNavigateToMyAccountSequence,
@@ -666,6 +672,7 @@ export const presenter = {
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
     gotoPetitionQcSequence,
+    gotoPractitionerAddDocumentSequence,
     gotoPractitionerDetailSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintPractitionerCasesSequence,
@@ -762,6 +769,7 @@ export const presenter = {
     openForwardMessageModalSequence,
     openGainElectronicAccessToCaseModalSequence,
     openPdfPreviewModalSequence,
+    openPractitionerDocumentDownloadUrlSequence,
     openPrintableTrialSessionWorkingCopyModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
@@ -862,6 +870,7 @@ export const presenter = {
     submitAddDeficiencyStatisticsSequence,
     submitAddOtherStatisticsSequence,
     submitAddPetitionerSequence,
+    submitAddPractitionerDocumentSequence,
     submitAddPractitionerSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
@@ -966,6 +975,7 @@ export const presenter = {
     validateAddDeficiencyStatisticsSequence,
     validateAddIrsPractitionerSequence,
     validateAddPetitionerSequence,
+    validateAddPractitionerDocumentSequence,
     validateAddPractitionerSequence,
     validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,
