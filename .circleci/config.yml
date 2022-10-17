@@ -77,7 +77,7 @@ jobs:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
-    parallelism: 12
+    parallelism: 16
     steps:
       - git-shallow-clone/checkout
       - npm-install
