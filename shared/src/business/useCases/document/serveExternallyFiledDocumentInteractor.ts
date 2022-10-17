@@ -2,20 +2,13 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  createISODateString,
-  formatDateString,
-} = require('../../utilities/DateHandler');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('../addCoverToPdf');
 const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
@@ -122,8 +115,8 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
-  let stampedPdf;
   let paperServicePdfUrl;
+  let pdfWithCoversheet;
 
   try {
     let consolidatedGroupHasPaperServiceCase: boolean;
@@ -164,18 +157,12 @@ export const serveExternallyFiledDocumentInteractor = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
 
-    const { pdfData: servedDocWithCover } = await addCoverToPdf({
+    ({ pdfData: pdfWithCoversheet } = await addCoverToPdf({
       applicationContext,
       caseEntity: updatedSubjectCaseEntity,
       docketEntryEntity: updatedSubjectDocketEntry,
       pdfData,
-    });
-
-    stampedPdf = await stampDocument({
-      applicationContext,
-      form: originalSubjectDocketEntry,
-      pdfData: servedDocWithCover,
-    });
+    }));
 
     let paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -183,7 +170,6 @@ export const serveExternallyFiledDocumentInteractor = async (
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
-        stampedPdf,
       });
 
     if (consolidatedGroupHasPaperServiceCase) {
@@ -211,7 +197,7 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: stampedPdf,
+    document: pdfWithCoversheet,
     key: originalSubjectDocketEntry.docketEntryId,
   });
 
@@ -232,26 +218,6 @@ export const serveExternallyFiledDocumentInteractor = async (
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
-  });
-};
-
-const stampDocument = async ({ applicationContext, form, pdfData }) => {
-  const servedAt = createISODateString();
-
-  let serviceStampType = 'Served';
-
-  if (form.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = form.serviceStamp;
-  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode)) {
-    serviceStampType = 'Entered and Served';
-  }
-
-  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
-
-  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
-    applicationContext,
-    pdfData,
-    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
 };
 
