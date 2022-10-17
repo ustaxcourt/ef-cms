@@ -142,7 +142,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
-    expect(addCoverToPdf).toHaveBeenCalledTimes(1);
+    expect(
+      (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
+    ).toBeDefined();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
