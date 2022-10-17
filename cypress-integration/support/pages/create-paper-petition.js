@@ -38,7 +38,15 @@ exports.fillInCreateCaseFromPaperForm = testData => {
   cy.get('#case-type').scrollIntoView().select('Deficiency');
   cy.get('#has-irs-verified-notice-yes').click();
   cy.get('#year-0').type('1995');
-  cy.get('#deficiency-amount-0').type('104');
+
+  const deficiencyAmount = '120,035';
+  const deficiencyAmountWithoutComma = deficiencyAmount.replace(',', '');
+  cy.get('[data-cy="deficiency-amount-0"]').type(deficiencyAmountWithoutComma);
+  cy.get('[data-cy="deficiency-amount-0"]').should(
+    'have.value',
+    `$${deficiencyAmount}.00`,
+  );
+
   cy.get('button.calculate-penalties').click();
   cy.get('button#modal-button-confirm').click();
 
