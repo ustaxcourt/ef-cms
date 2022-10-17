@@ -39,7 +39,7 @@ export const PractitionerDocumentation = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-label="Date Uploaded" className="small" colSpan="2">
+              <th aria-label="Date Uploaded" className="small">
                 Date Uploaded
               </th>
               <th>File Name</th>
@@ -56,6 +56,7 @@ export const PractitionerDocumentation = connect(
                     <Button
                       link
                       aria-label={`View PDF: ${document.fileName}`}
+                      className="text-left padding-0 file-name-button"
                       onClick={() => {
                         openPractitionerDocumentDownloadUrlSequence({
                           fileName: document.fileName,
