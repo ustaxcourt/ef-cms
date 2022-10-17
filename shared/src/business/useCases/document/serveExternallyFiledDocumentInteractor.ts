@@ -4,10 +4,12 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
 const {
   createISODateString,
   formatDateString,
 } = require('../../utilities/DateHandler');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
@@ -16,11 +18,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-
+const { WorkItem } = require('../../entities/WorkItem');
 /**
  * serveExternallyFiledDocumentInteractor
  *
@@ -53,8 +53,7 @@ export const serveExternallyFiledDocumentInteractor = async (
       )) &&
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT);
 
-  if (!hasPermission) {
-    throw new UnauthorizedError('Unauthorized');
+  if (!hasPermission) { throw new UnauthorizedError('Unauthorized');
   }
 
   const user = await applicationContext
@@ -246,7 +245,7 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  const workItemToUpdate = docketEntryEntity.workItem;
+  const workItemToUpdate = new WorkItem({...docketEntryEntity.workItem}, {applicationContext});
 
   if (workItemToUpdate) {
     workItemToUpdate.setAsCompleted({
