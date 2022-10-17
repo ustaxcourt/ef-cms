@@ -1,13 +1,10 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import {
   ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
   ROLES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 import { Case, isLeadCase } from '../../entities/cases/Case';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
@@ -15,12 +12,14 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
 
 /**
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} providers.clientConnectionId the client connection Id
  * @param {object} providers.consolidatedGroupDocketNumbers the docket numbers from the consolidated group
  * @param {object} providers.documentMetadata the document metadata
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
@@ -30,11 +29,13 @@ import { pick } from 'lodash';
 export const addPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     consolidatedGroupDocketNumbers,
     documentMetadata,
     isSavingForLater,
     primaryDocumentFileId,
   }: {
+    clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: any;
     isSavingForLater: boolean;
@@ -74,8 +75,6 @@ export const addPaperFilingInteractor = async (
       docketNumber,
     });
 
-  let caseEntityToUpdate = new Case(caseToUpdate, { applicationContext });
-
   const baseMetadata = pick(documentMetadata, [
     'filers',
     'partyIrsPractitioner',
@@ -94,8 +93,6 @@ export const addPaperFilingInteractor = async (
     throw new Error('Did not receive a primaryDocumentFileId');
   }
 
-  const servedParties = aggregatePartiesForService(caseEntityToUpdate);
-
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
@@ -113,7 +110,14 @@ export const addPaperFilingInteractor = async (
   }
 
   let filedByFromLeadCase;
+  let consolidatedGroupHasPaperServiceCase: boolean;
+
   for (const caseEntity of caseEntities) {
+    const servedParties = aggregatePartiesForService(caseEntity);
+    if (servedParties.paper.length > 0) {
+      consolidatedGroupHasPaperServiceCase = true;
+    }
+
     const docketEntryEntity = new DocketEntry(
       {
         ...baseMetadata,
@@ -214,9 +218,10 @@ export const addPaperFilingInteractor = async (
   }
 
   let paperServicePdfUrl;
+  let paperServiceResult;
 
   if (readyForService) {
-    const paperServiceResult = await applicationContext
+    paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -224,12 +229,31 @@ export const addPaperFilingInteractor = async (
         docketEntryId,
       });
 
-    if (servedParties.paper.length > 0) {
+    if (consolidatedGroupHasPaperServiceCase) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
   }
 
-  return { caseDetail: caseEntityToUpdate.toRawObject(), paperServicePdfUrl };
+  const successMessage =
+    consolidatedGroupDocketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Your entry has been added to the docket record.';
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      docketEntryId,
+      generateCoversheet: readyForService,
+      pdfUrl: paperServicePdfUrl,
+    },
+    userId: user.userId,
+  });
 };
 
 /**

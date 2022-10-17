@@ -1,4 +1,8 @@
-import { contactPrimaryFromState, fakeFile } from '../helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  waitForCondition,
+} from '../helpers';
 
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
   cerebralTest,
@@ -47,11 +51,11 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       );
     }
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: `filersMap.${contactPrimary.contactId}`,
+        key: `filersMap.${contactId}`,
         value: true,
       },
     );
@@ -64,6 +68,11 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
 

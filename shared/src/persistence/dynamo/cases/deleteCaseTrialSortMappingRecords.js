@@ -25,7 +25,7 @@ exports.deleteCaseTrialSortMappingRecords = async ({
   });
 
   const clientDelete = record => {
-    return client.delete({
+    return client.remove({
       applicationContext,
       key: {
         pk: record.pk,

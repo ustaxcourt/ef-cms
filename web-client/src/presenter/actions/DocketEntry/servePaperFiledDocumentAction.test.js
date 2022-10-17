@@ -9,6 +9,7 @@ describe('servePaperFiledDocumentAction', () => {
   const docketEntryId = '456';
   const pdfUrl = 'www.example.com';
   const docketNumbers = [docketNumber];
+  const clientConnectionId = '999999999';
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -34,6 +35,7 @@ describe('servePaperFiledDocumentAction', () => {
       },
       state: {
         caseDetail,
+        clientConnectionId,
         docketEntryId,
         document: '123-456-789-abc',
         form: {
@@ -45,6 +47,7 @@ describe('servePaperFiledDocumentAction', () => {
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][1],
     ).toMatchObject({
+      clientConnectionId,
       docketEntryId,
       docketNumbers,
       subjectCaseDocketNumber: docketNumber,
@@ -74,6 +77,7 @@ describe('servePaperFiledDocumentAction', () => {
       },
       state: {
         caseDetail,
+        clientConnectionId,
         docketEntryId,
         document: '123-456-789-abc',
         form: {
@@ -86,6 +90,7 @@ describe('servePaperFiledDocumentAction', () => {
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][1],
     ).toMatchObject({
+      clientConnectionId,
       docketEntryId,
       docketNumbers,
       subjectCaseDocketNumber: docketNumber,

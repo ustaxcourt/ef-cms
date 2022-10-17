@@ -237,6 +237,9 @@ const {
   getFeatureFlagValueLambda,
 } = require('./featureFlag/getFeatureFlagValueLambda');
 const {
+  getGeneratePrintableTrialSessionCopyReportLambda,
+} = require('./trialSessions/getGeneratePrintableTrialSessionCopyReportLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -598,7 +601,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
-    lambdaWrapper(serveExternallyFiledDocumentLambda),
+    lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/external-document',
@@ -610,7 +613,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(addPaperFilingLambda),
+    lambdaWrapper(addPaperFilingLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',
@@ -1022,6 +1025,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(deleteTrialSessionLambda),
   );
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
+  app.post(
+    '/trial-sessions/:trialSessionId/printable-working-copy',
+    lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
+  );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
   app.put(
     '/async/trial-sessions',

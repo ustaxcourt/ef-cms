@@ -1,5 +1,9 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { contactPrimaryFromState, fakeFile } from '../helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  waitForCondition,
+} from '../helpers';
 
 export const docketClerkAddsPretrialMemorandumToCase = (
   cerebralTest,
@@ -14,64 +18,68 @@ export const docketClerkAddsPretrialMemorandumToCase = (
       docketNumber: cerebralTest[`docketNumber${caseNumber}`],
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 4,
-    });
+    const pretrialMemorandum = [
+      {
+        key: 'dateReceivedMonth',
+        value: 4,
+      },
+      {
+        key: 'dateReceivedDay',
+        value: 30,
+      },
+      {
+        key: 'dateReceivedYear',
+        value: 2001,
+      },
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+      {
+        key: 'primaryDocumentFileSize',
+        value: 100,
+      },
+      {
+        key: 'partyIrsPractitioner',
+        value: filedByPractitioner,
+      },
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+      {
+        key: 'eventCode',
+        value: 'PMT',
+      },
+    ];
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 30,
-    });
+    for (const item of pretrialMemorandum) {
+      await cerebralTest.runSequence(
+        'updateDocketEntryFormValueSequence',
+        item,
+      );
+    }
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2001,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
-    });
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: `filersMap.${contactPrimary.contactId}`,
+        key: `filersMap.${contactId}`,
         value: filedByPetitioner,
       },
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyIrsPractitioner',
-      value: filedByPractitioner,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'PMT',
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
-
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to the docket record.',
     );
-
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(cerebralTest.getState('form')).toEqual({});
 

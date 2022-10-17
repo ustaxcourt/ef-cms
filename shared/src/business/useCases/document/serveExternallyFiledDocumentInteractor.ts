@@ -1,23 +1,15 @@
-import { addCoverToPdf } from '../addCoverToPdf';
-
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
-const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const {
-  createISODateString,
-  formatDateString,
-} = require('../../utilities/DateHandler');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { addCoverToPdf } = require('../addCoverToPdf');
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -26,18 +18,20 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
+ * @param {object} providers.clientConnectionId the client connection Id
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
+ * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- * @returns {Object} the URL of the document that was served
  */
 export const serveExternallyFiledDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     docketEntryId,
     docketNumbers,
     subjectCaseDocketNumber,
   }: {
+    clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
@@ -53,7 +47,8 @@ export const serveExternallyFiledDocumentInteractor = async (
       )) &&
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT);
 
-  if (!hasPermission) { throw new UnauthorizedError('Unauthorized');
+  if (!hasPermission) {
+    throw new UnauthorizedError('Unauthorized');
   }
 
   const user = await applicationContext
@@ -108,7 +103,7 @@ export const serveExternallyFiledDocumentInteractor = async (
       applicationContext,
       docketEntryId,
       documentBytes: pdfData,
-  });
+    });
 
   await applicationContext
     .getPersistenceGateway()
@@ -120,54 +115,66 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
-  let serviceResults;
-  let stampedPdf; 
+  let paperServicePdfUrl;
+  let pdfWithCoversheet;
 
   try {
+    let consolidatedGroupHasPaperServiceCase: boolean;
+
     for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await applicationContext
+      const rawCaseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
           applicationContext,
           docketNumber,
         });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      let caseEntityToUpdate = new Case(rawCaseToUpdate, {
+        applicationContext,
+      });
+
+      try {
+        const coversheetLength = 1;
+
+        ({ consolidatedGroupHasPaperServiceCase, newCase: caseEntityToUpdate } =
+          await fileDocumentOnOneCase({
+            applicationContext,
+            caseEntity: caseEntityToUpdate,
+            consolidatedGroupHasPaperServiceCase,
+            numberOfPages: numberOfPages + coversheetLength,
+            originalSubjectDocketEntry,
+            user,
+          }));
+      } catch (e) {
+        continue;
+      }
+      caseEntities.push(caseEntityToUpdate);
     }
 
-    const coversheetLength = 1;
-    const filedDocumentPromises = caseEntities.map(caseEntity =>
-      fileDocumentOnOneCase({
-        applicationContext,
-        caseEntity,
-        numberOfPages: (numberOfPages + coversheetLength),
-        originalSubjectDocketEntry,
-        user,
-      }),
+    const updatedSubjectCaseEntity = caseEntities.find(
+      c => c.docketNumber === subjectCaseDocketNumber,
     );
-    caseEntities = await Promise.all(filedDocumentPromises);
+    const updatedSubjectDocketEntry =
+      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
 
-    const { pdfData: servedDocWithCover } = await addCoverToPdf({
+    ({ pdfData: pdfWithCoversheet } = await addCoverToPdf({
       applicationContext,
-      caseEntity: subjectCaseEntity,
-      docketEntryEntity: originalSubjectDocketEntry,
+      caseEntity: updatedSubjectCaseEntity,
+      docketEntryEntity: updatedSubjectDocketEntry,
       pdfData,
-    });
+    }));
 
-    stampedPdf = await stampDocument({
-      applicationContext,
-      form: originalSubjectDocketEntry,
-      pdfData: servedDocWithCover,
-    });
-
-    serviceResults = await applicationContext
+    let paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
-        stampedPdf,
       });
+
+    if (consolidatedGroupHasPaperServiceCase) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
   } finally {
     for (const caseEntity of caseEntities) {
       try {
@@ -190,41 +197,42 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: stampedPdf,
+    document: pdfWithCoversheet,
     key: originalSubjectDocketEntry.docketEntryId,
   });
 
-  return serviceResults;
-};
+  const successMessage =
+    docketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Your entry has been added to the docket record.';
 
-const stampDocument = async ({ applicationContext, form, pdfData }) => {
-  const servedAt = createISODateString();
-
-  let serviceStampType = 'Served';
-
-  if (form.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = form.serviceStamp;
-  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode)) {
-    serviceStampType = 'Entered and Served';
-  }
-
-  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
-
-  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
-    pdfData,
-    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      pdfUrl: paperServicePdfUrl,
+    },
+    userId: user.userId,
   });
 };
 
 const fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
+  consolidatedGroupHasPaperServiceCase,
   numberOfPages,
   originalSubjectDocketEntry,
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
+  if (servedParties.paper.length > 0) {
+    consolidatedGroupHasPaperServiceCase = true;
+  }
 
   const docketEntryEntity = new DocketEntry(
     {
@@ -245,7 +253,10 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  const workItemToUpdate = new WorkItem({...docketEntryEntity.workItem}, {applicationContext});
+  const workItemToUpdate = new WorkItem(
+    { ...docketEntryEntity.workItem },
+    { applicationContext },
+  );
 
   if (workItemToUpdate) {
     workItemToUpdate.setAsCompleted({
@@ -307,5 +318,8 @@ const fileDocumentOnOneCase = async ({
       caseToUpdate: caseEntity,
     });
 
-  return new Case(validRawCaseEntity, { applicationContext });
+  return {
+    consolidatedGroupHasPaperServiceCase,
+    newCase: new Case(validRawCaseEntity, { applicationContext }),
+  };
 };

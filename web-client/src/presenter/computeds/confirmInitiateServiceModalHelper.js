@@ -13,10 +13,8 @@ import { uniqBy } from 'lodash';
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const {
     CONTACT_TYPE_TITLES,
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    ENTERED_AND_SERVED_EVENT_CODES,
+    NON_MULTI_DOCKETABLE_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
-    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -36,21 +34,29 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
   );
 
-  const eventCodesNotCompatibleWithConsolidation = [
-    ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  ];
-
   const hasConsolidatedCases =
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
+  const docketEntryId = get(state.docketEntryId);
+
+  let { eventCode } = form;
+
+  if (!eventCode) {
+    ({ eventCode } = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    ));
+  }
+
+  // this is temporary until the flow for 9616 is implemented (QC workflow)
+  const editingDocketEntry = !!get(state.isEditingDocketEntry);
+
   const showConsolidatedCasesForService =
+    !editingDocketEntry &&
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
-    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     hasConsolidatedCases;
 
   const confirmationText = showConsolidatedCasesForService
