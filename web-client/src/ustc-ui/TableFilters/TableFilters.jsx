@@ -1,4 +1,3 @@
-import { BindedSelect } from '../BindedSelect/BindedSelect';
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 
@@ -31,7 +30,7 @@ export const TableFilters = ({ filters, onSelect }) => {
           };
 
           return (
-            <BindedSelect
+            <select
               aria-label={
                 isSelected ? 'reset filter' : `${label} filter drop down`
               }
@@ -51,7 +50,7 @@ export const TableFilters = ({ filters, onSelect }) => {
               onChange={e => {
                 onSelect({
                   key,
-                  value: e,
+                  value: e.target.value,
                 });
               }}
               onKeyDown={e => {
@@ -73,7 +72,7 @@ export const TableFilters = ({ filters, onSelect }) => {
                   {from}
                 </option>
               ))}
-            </BindedSelect>
+            </select>
           );
         })}
       </div>
