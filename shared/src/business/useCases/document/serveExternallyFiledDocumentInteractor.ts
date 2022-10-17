@@ -253,10 +253,9 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  const workItemToUpdate = new WorkItem(
-    { ...docketEntryEntity.workItem },
-    { applicationContext },
-  );
+  const workItemToUpdate = docketEntryEntity.workItem
+    ? new WorkItem({ ...docketEntryEntity.workItem }, { applicationContext })
+    : undefined;
 
   if (workItemToUpdate) {
     workItemToUpdate.setAsCompleted({
