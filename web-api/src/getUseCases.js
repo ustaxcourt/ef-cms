@@ -177,6 +177,9 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
+  generatePrintableTrialSessionCopyReportInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor');
+const {
   generateStandingPretrialOrderForSmallCaseInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
 const {
@@ -615,6 +618,7 @@ const useCases = {
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,
   generatePrintablePendingReportInteractor,
+  generatePrintableTrialSessionCopyReportInteractor,
   generateStandingPretrialOrderForSmallCaseInteractor,
   generateStandingPretrialOrderInteractor,
   generateTrialCalendarPdfInteractor,
