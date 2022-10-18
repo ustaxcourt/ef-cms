@@ -7,7 +7,7 @@ describe('setPractitionerDocumentationPropFromStateAction', () => {
       setPractitionerDocumentationPropFromStateAction,
       {
         state: {
-          practitionerDetails: {
+          practitionerDetail: {
             barNumber: 'PT1234',
           },
         },
