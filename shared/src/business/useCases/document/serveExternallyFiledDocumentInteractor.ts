@@ -2,20 +2,13 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  createISODateString,
-  formatDateString,
-} = require('../../utilities/DateHandler');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('../addCoverToPdf');
 const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
@@ -26,8 +19,8 @@ const { omit } = require('lodash');
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
+ * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  */
 export const serveExternallyFiledDocumentInteractor = async (
@@ -122,54 +115,66 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
-  let pdfUrl;
-  let stampedPdf;
+  let paperServicePdfUrl;
+  let pdfWithCoversheet;
 
   try {
+    let consolidatedGroupHasPaperServiceCase: boolean;
+
     for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await applicationContext
+      const rawCaseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
           applicationContext,
           docketNumber,
         });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      let caseEntityToUpdate = new Case(rawCaseToUpdate, {
+        applicationContext,
+      });
+
+      try {
+        const coversheetLength = 1;
+
+        ({ consolidatedGroupHasPaperServiceCase, newCase: caseEntityToUpdate } =
+          await fileDocumentOnOneCase({
+            applicationContext,
+            caseEntity: caseEntityToUpdate,
+            consolidatedGroupHasPaperServiceCase,
+            numberOfPages: numberOfPages + coversheetLength,
+            originalSubjectDocketEntry,
+            user,
+          }));
+      } catch (e) {
+        continue;
+      }
+      caseEntities.push(caseEntityToUpdate);
     }
 
-    const coversheetLength = 1;
-    const filedDocumentPromises = caseEntities.map(caseEntity =>
-      fileDocumentOnOneCase({
-        applicationContext,
-        caseEntity,
-        numberOfPages: numberOfPages + coversheetLength,
-        originalSubjectDocketEntry,
-        user,
-      }),
+    const updatedSubjectCaseEntity = caseEntities.find(
+      c => c.docketNumber === subjectCaseDocketNumber,
     );
-    caseEntities = await Promise.all(filedDocumentPromises);
+    const updatedSubjectDocketEntry =
+      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
 
-    const { pdfData: servedDocWithCover } = await addCoverToPdf({
+    ({ pdfData: pdfWithCoversheet } = await addCoverToPdf({
       applicationContext,
-      caseEntity: subjectCaseEntity,
-      docketEntryEntity: originalSubjectDocketEntry,
+      caseEntity: updatedSubjectCaseEntity,
+      docketEntryEntity: updatedSubjectDocketEntry,
       pdfData,
-    });
+    }));
 
-    stampedPdf = await stampDocument({
-      applicationContext,
-      form: originalSubjectDocketEntry,
-      pdfData: servedDocWithCover,
-    });
-
-    ({ pdfUrl } = await applicationContext
+    let paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
-        stampedPdf,
-      }));
+      });
+
+    if (consolidatedGroupHasPaperServiceCase) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
   } finally {
     for (const caseEntity of caseEntities) {
       try {
@@ -192,7 +197,7 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: stampedPdf,
+    document: pdfWithCoversheet,
     key: originalSubjectDocketEntry.docketEntryId,
   });
 
@@ -210,40 +215,24 @@ export const serveExternallyFiledDocumentInteractor = async (
         message: successMessage,
         overwritable: false,
       },
-      pdfUrl,
+      pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
-  });
-};
-
-const stampDocument = async ({ applicationContext, form, pdfData }) => {
-  const servedAt = createISODateString();
-
-  let serviceStampType = 'Served';
-
-  if (form.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = form.serviceStamp;
-  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode)) {
-    serviceStampType = 'Entered and Served';
-  }
-
-  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
-
-  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
-    applicationContext,
-    pdfData,
-    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
 };
 
 const fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
+  consolidatedGroupHasPaperServiceCase,
   numberOfPages,
   originalSubjectDocketEntry,
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
+  if (servedParties.paper.length > 0) {
+    consolidatedGroupHasPaperServiceCase = true;
+  }
 
   const docketEntryEntity = new DocketEntry(
     {
@@ -326,5 +315,8 @@ const fileDocumentOnOneCase = async ({
       caseToUpdate: caseEntity,
     });
 
-  return new Case(validRawCaseEntity, { applicationContext });
+  return {
+    consolidatedGroupHasPaperServiceCase,
+    newCase: new Case(validRawCaseEntity, { applicationContext }),
+  };
 };

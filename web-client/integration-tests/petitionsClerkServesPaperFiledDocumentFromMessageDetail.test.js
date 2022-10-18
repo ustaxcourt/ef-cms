@@ -1,3 +1,4 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../shared/src/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
@@ -30,7 +31,28 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
   });
 
   loginAs(cerebralTest, 'docketclerk1@example.com');
-  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(cerebralTest, fakeFile);
+
+  const documentFormValues = {
+    dateReceivedDay: 1,
+    dateReceivedMonth: 1,
+    dateReceivedYear: 2018,
+    eventCode: 'M115',
+    objections: OBJECTIONS_OPTIONS_MAP.NO,
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 100,
+    'secondaryDocument.addToCoversheet': true,
+    'secondaryDocument.additionalInfo': 'Test Secondary Additional Info',
+    'secondaryDocument.eventCode': 'APPW',
+    secondaryDocumentFile: fakeFile,
+    secondaryDocumentFileSize: 100,
+  };
+
+  docketClerkAddsPaperFiledDocketEntryAndSavesForLater({
+    cerebralTest,
+    documentFormValues,
+    expectedDocumentType: 'Motion for Leave to File',
+  });
+
   createNewMessageOnCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk1@example.com');

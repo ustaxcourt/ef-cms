@@ -5,11 +5,9 @@ import {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-import {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { GENERIC_ORDER_DOCUMENT_TYPE } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   applicationContext,
   testPdfDoc,
@@ -71,6 +69,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           name: 'Guy Fieri',
           phone: '1234567890',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'CA',
         },
       ],
@@ -140,7 +139,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
-    expect(addCoverToPdf).toHaveBeenCalledTimes(1);
+    expect(
+      (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
+    ).toBeDefined();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
@@ -256,119 +257,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(memberCaseAddedDocketEntry).toBeDefined();
-  });
-
-  it('should stamp document with serviceStamp on the docketEntry when the docketEntry is an Order', async () => {
-    const mockDocketEntryWithWorkItemId =
-      '225d5474-b02b-4137-a78e-2043f7a0f805';
-    const mockServiceStamp = 'Something something';
-
-    caseRecord.docketEntries = [
-      ...caseRecord.docketEntries,
-      {
-        docketEntryId: mockDocketEntryWithWorkItemId,
-        docketNumber: DOCKET_NUMBER,
-        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
-        eventCode: 'O',
-        filedBy: docketClerkUser.name,
-        judge: 'someone',
-        serviceStamp: mockServiceStamp,
-        signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: docketClerkUser.userId,
-        signedJudgeName: 'someone',
-        userId: docketClerkUser.userId,
-        workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-            docketNumber: DOCKET_NUMBER,
-            documentType: GENERIC_ORDER_DOCUMENT_TYPE,
-            entityName: 'DocketEntry',
-            eventCode: 'O',
-            filedBy: docketClerkUser.name,
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: docketClerkUser.name,
-            userId: docketClerkUser.userId,
-          },
-          docketNumber: DOCKET_NUMBER,
-          isInitializeCase: true,
-          section: DOCKET_SECTION,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
-      },
-    ];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    const { serviceStampText } =
-      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
-        .calls[0][0];
-    expect(serviceStampText).toContain(mockServiceStamp);
-  });
-
-  it('should stamp document with serviceStamp as "Entered and Served" when the docketEntry is one of `ENTERED_AND_SERVED_EVENT_CODES`', async () => {
-    const mockDocketEntryWithWorkItemId =
-      '225d5474-b02b-4137-a78e-2043f7a0f805';
-
-    caseRecord.docketEntries = [
-      ...caseRecord.docketEntries,
-      {
-        docketEntryId: mockDocketEntryWithWorkItemId,
-        docketNumber: DOCKET_NUMBER,
-        documentType: 'Order of Dismissal for Lack of Jurisdiction',
-        eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-        filedBy: docketClerkUser.name,
-        judge: 'someone',
-        serviceStamp: 'This should not be the service stamp',
-        signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: docketClerkUser.userId,
-        signedJudgeName: 'someone',
-        userId: docketClerkUser.userId,
-        workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-            docketNumber: DOCKET_NUMBER,
-            documentType: 'Order of Dismissal for Lack of Jurisdiction',
-            entityName: 'DocketEntry',
-            eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-            filedBy: docketClerkUser.name,
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: docketClerkUser.name,
-            userId: docketClerkUser.userId,
-          },
-          docketNumber: DOCKET_NUMBER,
-          isInitializeCase: true,
-          section: DOCKET_SECTION,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
-      },
-    ];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    const { serviceStampText } =
-      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
-        .calls[0][0];
-    expect(serviceStampText).toContain('Entered and Served');
   });
 
   it('should update the case with the completed work item when the work item exists', async () => {
@@ -541,6 +429,23 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       }),
       userId: docketClerkUser.userId,
     });
+  });
+
+  it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
+    caseRecord.petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.pdfUrl,
+    ).toBeUndefined();
   });
 
   it('throws an error when the docket entry does not exist on the subject case', async () => {

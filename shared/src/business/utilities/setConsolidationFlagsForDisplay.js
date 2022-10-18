@@ -1,8 +1,9 @@
+const { isLeadCase } = require('../entities/cases/Case');
+
 exports.setConsolidationFlagsForDisplay = (
   caseItem,
   eligibleCasesInGroup = [],
 ) => {
-  const { isLeadCase } = require('../entities/cases/Case');
   const newCaseItem = { ...caseItem };
   newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
 
