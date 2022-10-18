@@ -81,6 +81,7 @@ import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerDocumentationFormHelper } from './computeds/practitionerDocumentationFormHelper';
 import { practitionerDocumentationHelper } from './computeds/practitionerDocumentationHelper';
+import { practitionerInformationHelper } from './computeds/practitionerInformationHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
@@ -198,6 +199,7 @@ const helpers = {
   practitionerDetailHelper,
   practitionerDocumentationFormHelper,
   practitionerDocumentationHelper,
+  practitionerInformationHelper,
   practitionerSearchFormHelper,
   printPaperServiceHelper,
   recentMessagesHelper,

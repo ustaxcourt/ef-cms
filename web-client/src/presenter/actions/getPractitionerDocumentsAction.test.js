@@ -17,9 +17,6 @@ describe('getPractitionerDocumentsAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        barNumber: 'AA5678',
-      },
       state: {
         practitionerDetail: {
           barNumber: 'PD1234',
