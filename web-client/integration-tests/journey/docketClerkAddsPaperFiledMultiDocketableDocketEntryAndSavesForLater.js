@@ -69,8 +69,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
           cerebralTest.getState('currentPage') === 'CaseDetailInternal',
       });
 
-      expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
-
       cerebralTest.multiDocketedDocketEntryId = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(doc => doc.eventCode === eventCode).docketEntryId;
