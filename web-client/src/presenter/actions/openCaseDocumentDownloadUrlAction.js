@@ -22,7 +22,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
   } = props;
 
   if (!isForIFrame && !useSameTab) {
-    await openUrlInNewTab(() =>
+    await openUrlInNewTab(`${docketEntryId}.pdf`, () =>
       applicationContext
         .getUseCases()
         .getDocumentDownloadUrlInteractor(applicationContext, {

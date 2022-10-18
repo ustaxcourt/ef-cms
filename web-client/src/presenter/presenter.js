@@ -160,6 +160,7 @@ import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
 import { gotoPractitionerAddDocumentSequence } from './sequences/gotoPractitionerAddDocumentSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
+import { gotoPractitionerDocumentationSequence } from './sequences/gotoPractitionerDocumentationSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
@@ -167,6 +168,7 @@ import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrinta
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
+import { gotoPrintableTrialSessionWorkingCopySequence } from './sequences/gotoPrintableTrialSessionWorkingCopySequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
@@ -203,6 +205,7 @@ import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrint
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
+import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
 import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumbersModalSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
@@ -256,6 +259,7 @@ import { openForwardMessageModalSequence } from './sequences/openForwardMessageM
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
+import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openRemovePetitionerCounselModalSequence } from './sequences/openRemovePetitionerCounselModalSequence';
@@ -675,6 +679,7 @@ export const presenter = {
     gotoPetitionQcSequence,
     gotoPractitionerAddDocumentSequence,
     gotoPractitionerDetailSequence,
+    gotoPractitionerDocumentationSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintPractitionerCasesSequence,
     gotoPrintableCaseConfirmationSequence,
@@ -682,6 +687,7 @@ export const presenter = {
     gotoPrintableDocketRecordSequence,
     gotoPrintablePendingReportForCaseSequence,
     gotoPrintablePendingReportSequence,
+    gotoPrintableTrialSessionWorkingCopySequence,
     gotoPrivacySequence,
     gotoRequestAccessSequence,
     gotoReviewSavedPetitionSequence,
@@ -718,6 +724,7 @@ export const presenter = {
     navigateToPrintableCaseConfirmationSequence,
     notFoundErrorSequence,
     noticeGenerationCompleteSequence,
+    onPractitionerInformationTabSelectSequence,
     openAddDocketNumbersModalSequence,
     openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,
@@ -771,6 +778,7 @@ export const presenter = {
     openGainElectronicAccessToCaseModalSequence,
     openPdfPreviewModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
+    openPrintableTrialSessionWorkingCopyModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openRemovePetitionerCounselModalSequence,

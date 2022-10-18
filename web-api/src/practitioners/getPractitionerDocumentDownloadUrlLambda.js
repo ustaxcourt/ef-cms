@@ -7,10 +7,11 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getPractitionerDocumentDownloadUrlLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
+  genericHandler(event, ({ applicationContext }) => {
+    return applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
-        documentId: event.pathParameters.documentId,
+        practitionerDocumentFileId:
+          event.pathParameters.practitionerDocumentFileId,
       });
   });

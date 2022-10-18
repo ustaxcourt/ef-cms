@@ -1,3 +1,4 @@
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { practitionerDocumentationHelper as practitionerDocumentationHelperComputed } from './practitionerDocumentationHelper';
 import { runCompute } from 'cerebral/test';
@@ -13,32 +14,33 @@ describe('practitionerDetailHelper', () => {
 
   const mockPractitionerDocuments = [
     {
-      categoryName: 'Certificate of Good Standing - Colorado',
-      categoryType: 'Certificate of Good Standing',
+      categoryName: `${PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING} - Colorado`,
+      categoryType:
+        PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
       description: 'test',
-      documentId: '18525e5b-c336-479d-a854-1712432ab8ba',
       entityName: 'Document',
       fileName: 'test_file.pdf',
       location: 'Colorado',
-      uploadDate: '2022-10-11T21:58:40.729Z',
+      practitionerDocumentFileId: '18525e5b-c336-479d-a854-1712432ab8ba',
+      uploadDate: '2022-10-10T21:58:40.729Z',
     },
     {
-      categoryName: 'Application',
-      categoryType: 'Application',
+      categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
+      categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
       description: 'test',
-      documentId: '3b7df133-4340-4d58-8553-65da9f7f52ea',
       entityName: 'Document',
       fileName: 'test_file.docx',
-      uploadDate: '2022-10-11T20:01:56.920Z',
+      practitionerDocumentFileId: '3b7df133-4340-4d58-8553-65da9f7f52ea',
+      uploadDate: '2020-10-10T20:01:56.920Z',
     },
     {
-      categoryName: 'Admission Certificate',
-      categoryType: 'Admission Certificate',
+      categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
+      categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
       description: 'test',
-      documentId: 'c58dcf54-6be7-48b2-a129-6ec20e6a0a73',
       entityName: 'Document',
       fileName: 'Case_Inventory_Report.pdf.1.png',
-      uploadDate: '2022-10-11T22:24:30.010Z',
+      practitionerDocumentFileId: 'c58dcf54-6be7-48b2-a129-6ec20e6a0a73',
+      uploadDate: '2021-10-10T22:24:30.010Z',
     },
   ];
 
@@ -89,7 +91,34 @@ describe('practitionerDetailHelper', () => {
       });
       expect(
         results.formattedPractitionerDocuments[0].formattedUploadDate,
-      ).toEqual('10/11/22');
+      ).toEqual('10/10/22');
+    });
+
+    it('should correctly sort documents by uploadDate ascending', () => {
+      const results = runCompute(practitionerDocumentationHelper, {
+        state: {
+          permissions: {
+            UPLOAD_PRACTITIONER_DOCUMENT: false,
+          },
+          practitionerDocuments: [...mockPractitionerDocuments],
+          user: { role: 'admissionsclerk' },
+        },
+      });
+      console.log(
+        'results.formattedPractitionerDocuments',
+        results.formattedPractitionerDocuments,
+      );
+      expect(results.formattedPractitionerDocuments).toEqual([
+        expect.objectContaining({
+          formattedUploadDate: '10/10/20',
+        }),
+        expect.objectContaining({
+          formattedUploadDate: '10/10/21',
+        }),
+        expect.objectContaining({
+          formattedUploadDate: '10/10/22',
+        }),
+      ]);
     });
   });
 

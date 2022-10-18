@@ -22,11 +22,9 @@ export const validateAddPractitionerDocumentFormAction = ({
     .getUseCases()
     .validateAddPractitionerDocumentFormInteractor(applicationContext, form);
 
-  if (!form.practitionerDocumentFile) {
-    errors = {
-      ...(errors ?? {}),
-      practitionerDocumentFile: 'Please provide a file',
-    };
+  if (errors?.fileName) {
+    delete errors.fileName;
+    errors.practitionerDocumentFile = 'Please provide a file';
   }
 
   if (!errors) {

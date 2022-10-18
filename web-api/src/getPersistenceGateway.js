@@ -27,9 +27,6 @@ const {
   confirmAuthCode,
 } = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
-  createPractitionerDocument,
-} = require('../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument');
-const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -56,6 +53,9 @@ const {
 const {
   createOrUpdateUser,
 } = require('../../shared/src/persistence/dynamo/users/createOrUpdateUser');
+const {
+  createPractitionerDocument,
+} = require('../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument');
 const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
@@ -87,6 +87,9 @@ const {
   deleteMessage,
 } = require('../../shared/src/persistence/sqs/deleteMessage');
 const {
+  deletePractitionerDocument,
+} = require('../../shared/src/persistence/dynamo/practitioners/deletePractitionerDocument');
+const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
@@ -110,9 +113,6 @@ const {
 const {
   fetchPendingItems,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
-const {
-  getPractitionerDocuments,
-} = require('../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments');
 const {
   getAllWebSocketConnections,
 } = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
@@ -225,6 +225,9 @@ const {
 const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
+const {
+  getPractitionerDocuments,
+} = require('../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments');
 const {
   getPractitionersByName,
 } = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
@@ -498,8 +501,8 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createOrUpdateUser,
-    createTrialSession,
     createPractitionerDocument,
+    createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
@@ -574,6 +577,7 @@ const gatewayMethods = {
   deleteDocketEntry,
   deleteDocumentFromS3,
   deleteMessage,
+  deletePractitionerDocument,
   deleteRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
@@ -619,12 +623,12 @@ const gatewayMethods = {
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
   getSectionInboxMessages,
-  getPractitionerDocuments,
   getSectionOutboxMessages,
   getTableStatus,
   getTrialSessionById,

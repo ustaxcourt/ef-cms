@@ -120,6 +120,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
+const {
   createPractitionerUserLambda,
 } = require('./practitioners/createPractitionerUserLambda');
 const {
@@ -237,6 +240,9 @@ const {
   getFeatureFlagValueLambda,
 } = require('./featureFlag/getFeatureFlagValueLambda');
 const {
+  getGeneratePrintableTrialSessionCopyReportLambda,
+} = require('./trialSessions/getGeneratePrintableTrialSessionCopyReportLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -260,6 +266,12 @@ const {
 const {
   getPractitionerByBarNumberLambda,
 } = require('./practitioners/getPractitionerByBarNumberLambda');
+const {
+  getPractitionerDocumentDownloadUrlLambda,
+} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
 const {
   getPractitionersByNameLambda,
 } = require('./practitioners/getPractitionersByNameLambda');
@@ -470,12 +482,6 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const {
-  createPractitionerDocumentLambda,
-} = require('./practitioners/createPractitionerDocumentLambda');
-const {
-  getPractitionerDocumentsLambda,
-} = require('./practitioners/getPractitionerDocumentsLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -922,6 +928,10 @@ app.get(
     '/practitioners/:barNumber/documents',
     lambdaWrapper(createPractitionerDocumentLambda),
   );
+  app.get(
+    '/practitioner-documents/:practitionerDocumentFileId/document-download-url',
+    lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
+  );
   app.put(
     '/async/practitioners/:barNumber',
     lambdaWrapper(updatePractitionerUserLambda, { isAsync: true }),
@@ -1036,6 +1046,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(deleteTrialSessionLambda),
   );
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
+  app.post(
+    '/trial-sessions/:trialSessionId/printable-working-copy',
+    lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
+  );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
   app.put(
     '/async/trial-sessions',

@@ -1,6 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -16,6 +17,7 @@ export const PractitionerAddDocument = connect(
   {
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
@@ -31,6 +33,7 @@ export const PractitionerAddDocument = connect(
   function PractitionerAddDocument({
     constants,
     documentTypes,
+    form,
     formCancelToggleCancelSequence,
     practitionerDocumentationFormHelper,
     showModal,
@@ -160,15 +163,28 @@ export const PractitionerAddDocument = connect(
                       <BindedTextarea
                         bind="form.description"
                         id="documentation-notes"
+                        maxLength={
+                          constants.MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS
+                        }
                         required={false}
                       ></BindedTextarea>
+                      <CharactersRemainingHint
+                        maxCharacters={
+                          constants.MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS
+                        }
+                        stringToCount={form.description}
+                      />
                     </FormGroup>
                   </div>
                 </div>
               </div>
               <div className="grid-row margin-bottom-6 margin-top-5">
                 <div className="grid-col-12">
-                  <Button onClick={submitAddPractitionerDocumentSequence}>
+                  <Button
+                    onClick={() => {
+                      submitAddPractitionerDocumentSequence();
+                    }}
+                  >
                     Add File
                   </Button>
                   <Button

@@ -15,15 +15,12 @@ export const createPractitionerDocumentAction = async ({
   const { practitionerDocumentFile, ...form } = get(state.form);
   const { barNumber } = get(state.practitionerDetail);
 
-  // uploads to s3
   const practitionerDocumentFileId = await applicationContext
     .getUseCases()
     .uploadOrderDocumentInteractor(applicationContext, {
       documentFile: practitionerDocumentFile,
     });
-  console.log(practitionerDocumentFile);
 
-  // create the document entity and store it in dynamo
   await applicationContext
     .getUseCases()
     .createPractitionerDocumentInteractor(applicationContext, {

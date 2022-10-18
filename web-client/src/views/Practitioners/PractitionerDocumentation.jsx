@@ -110,25 +110,27 @@ export const PractitionerDocumentation = connect(
           <tbody>
             {practitionerDocumentationHelper.formattedPractitionerDocuments.map(
               document => (
-                <tr key={document.documentId}>
+                <tr key={document.practitionerDocumentFileId}>
                   <td>{document.formattedUploadDate}</td>
                   <td>
                     <Button
                       link
                       aria-label={`View PDF: ${document.fileName}`}
-                      onClick={() =>
+                      className="text-left padding-0 file-name-button"
+                      onClick={() => {
                         openPractitionerDocumentDownloadUrlSequence({
-                          barNumber,
-                          documentId: document.documentId,
-                        })
-                      }
+                          fileName: document.fileName,
+                          practitionerDocumentFileId:
+                            document.practitionerDocumentFileId,
+                        });
+                      }}
                     >
                       {document.fileName}
                     </Button>
                   </td>
 
                   <td>{document.categoryName}</td>
-                  <td>{document.description}</td>
+                  <td className="file-description">{document.description}</td>
                   <td className="text-align-right">
                     <Button link icon="edit" onClick={() => {}}>
                       Edit

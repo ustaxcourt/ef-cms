@@ -5,7 +5,7 @@ const { DESCENDING } = getConstants();
 
 export const practitionerDocumentationHelper = (get, applicationContext) => {
   const permissions = get(state.permissions);
-  const practitionerDocuments = get(state.practitionerDocuments);
+  const practitionerDocuments = get(state.practitionerDocuments) ?? [];
   const tableSort = get(state.tableSort);
 
   let formattedPractitionerDocuments = practitionerDocuments.map(document => {
