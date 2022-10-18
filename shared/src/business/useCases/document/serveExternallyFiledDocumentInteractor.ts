@@ -2,17 +2,20 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('../addCoverToPdf');
-const { ALLOWLIST_FEATURE_FLAGS, DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { WorkItem } = require('../../entities/WorkItem');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -274,6 +277,7 @@ const fileDocumentOnOneCase = async ({
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         hideFromPendingMessages: true,
         inProgress: true,
+        leadDocketNumber: subjectCaseDocketNumber,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,

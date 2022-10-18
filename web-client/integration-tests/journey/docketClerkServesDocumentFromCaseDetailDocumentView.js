@@ -3,11 +3,14 @@ import { waitForLoadingComponentToHide } from '../helpers';
 export const docketClerkServesDocumentFromCaseDetailDocumentView =
   cerebralTest => {
     return it('Docket clerk serves document from case detail document view', async () => {
+      const docketEntryId =
+        cerebralTest.multiDocketedDocketEntryId || cerebralTest.docketEntryId;
+
       await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
-          docketEntryId: cerebralTest.docketEntryId,
-          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
+          docketEntryId,
+          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${docketEntryId}`,
         },
       );
 
