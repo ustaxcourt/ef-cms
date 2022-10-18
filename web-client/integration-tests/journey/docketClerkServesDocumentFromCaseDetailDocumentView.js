@@ -6,11 +6,14 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView =
       const docketEntryId =
         cerebralTest.multiDocketedDocketEntryId || cerebralTest.docketEntryId;
 
+      const docketNumber =
+        cerebralTest.docketNumber || cerebralTest.leadDocketNumber;
+
       await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
           docketEntryId,
-          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${docketEntryId}`,
+          redirectUrl: `/case-detail/${docketNumber}/document-view?docketEntryId=${docketEntryId}`,
         },
       );
 
