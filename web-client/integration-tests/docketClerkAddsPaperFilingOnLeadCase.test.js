@@ -111,13 +111,14 @@ describe('Docket clerk adds paper filing on lead case', () => {
     const outboxQueue = cerebralTest.getState('workQueue');
 
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      console.log;
       const outboxWorkItem = outboxQueue.find(
         workItem => workItem.docketNumber.docketNumber === docketNumber,
       );
 
       expect(outboxWorkItem).toMatchObject({
         docketEntryId: cerebralTest.docketEntryId,
-        eventCode: 'RPT',
+        eventCode: 'A',
       });
     }
   });
