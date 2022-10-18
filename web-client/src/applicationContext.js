@@ -38,6 +38,7 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
+import { deletePractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/deletePractitionerDocumentProxy';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
@@ -385,6 +386,7 @@ const allUseCases = {
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
+  deletePractitionerDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   editPaperFilingInteractor,

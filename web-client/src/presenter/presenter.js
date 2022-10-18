@@ -88,6 +88,7 @@ import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespo
 import { deleteDeficiencyStatisticsSequence } from './sequences/deleteDeficiencyStatisticsSequence';
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteOtherStatisticsSequence } from './sequences/deleteOtherStatisticsSequence';
+import { deletePractitionerDocumentSequence } from './sequences/deletePractitionerDocumentSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
 import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
@@ -246,6 +247,7 @@ import { openCreateMessageModalSequence } from './sequences/openCreateMessageMod
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
+import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
@@ -602,6 +604,7 @@ export const presenter = {
     deleteDeficiencyStatisticsSequence,
     deleteJudgesCaseNoteFromCaseDetailSequence,
     deleteOtherStatisticsSequence,
+    deletePractitionerDocumentSequence,
     deleteTrialSessionSequence,
     deleteUploadedPdfSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
@@ -759,6 +762,7 @@ export const presenter = {
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openDeleteCaseNoteConfirmModalSequence,
+    openDeletePractitionerDocumentConfirmModalSequence,
     openDeleteSessionNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
