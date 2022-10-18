@@ -962,7 +962,7 @@ const router = {
         setPageTitle('Practitioner Detail');
         const { tab } = route.query();
 
-        return app.getSequence('gotoPractitionerDetailSequence')({
+        return app.getSequence('gotoPractitionerDocumentationSequence')({
           barNumber,
           tab,
         });

@@ -5,16 +5,20 @@ import { PractitionerUserHeader } from './PractitionerUserHeader';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerInformation = connect(
   {
-    practitionerDocumentationHelper: state.practitionerDocumentationHelper,
+    onPractitionerInformationTabSelectSequence:
+      sequences.onPractitionerInformationTabSelectSequence,
+    showDocumentationTab:
+      state.practitionerInformationHelper.showDocumentationTab,
     showModal: state.modal.showModal,
   },
   function PractitionerInformation({
-    practitionerDocumentationHelper,
+    onPractitionerInformationTabSelectSequence,
+    showDocumentationTab,
     showModal,
   }) {
     return (
@@ -36,11 +40,16 @@ export const PractitionerInformation = connect(
             className="classic-horizontal-header3 tab-border"
             defaultActiveTab="practitioner-details"
             marginBottom={false}
+            onSelect={tabName => {
+              onPractitionerInformationTabSelectSequence({
+                tabName,
+              });
+            }}
           >
             <Tab tabName="practitioner-details" title={'Details'}>
               <PractitionerDetails />
             </Tab>
-            {practitionerDocumentationHelper.showDocumentationTab && (
+            {showDocumentationTab && (
               <Tab tabName="practitioner-documentation" title={'Documentation'}>
                 <PractitionerDocumentation />
               </Tab>
