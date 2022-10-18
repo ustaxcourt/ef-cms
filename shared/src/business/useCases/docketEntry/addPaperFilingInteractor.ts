@@ -68,13 +68,6 @@ export const addPaperFilingInteractor = async (
     consolidatedGroupDocketNumbers = [docketNumber];
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
   const baseMetadata = pick(documentMetadata, [
     'filers',
     'partyIrsPractitioner',
@@ -147,18 +140,18 @@ export const addPaperFilingInteractor = async (
       {
         assigneeId: null,
         assigneeName: null,
-        associatedJudge: caseToUpdate.associatedJudge,
-        caseStatus: caseToUpdate.status,
+        associatedJudge: caseEntity.associatedJudge,
+        caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+        docketNumber: caseEntity.docketNumber,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
+        leadDocketNumber: caseEntity.leadDocketNumber,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,

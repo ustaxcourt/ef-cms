@@ -87,6 +87,36 @@ describe('Docket clerk adds paper filing on lead case', () => {
     }
   });
 
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'WorkQueue',
+    });
+
+    const outboxQueue = cerebralTest.getState('workQueue');
+
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      const outboxWorkItem = findWorkItemByDocketNumber(
+        outboxQueue,
+        docketNumber,
+      );
+
+      expect(outboxWorkItem).toMatchObject({
+        docketEntry: {
+          docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+          eventCode: 'A',
+        },
+        leadDocketNumber: cerebralTest.leadDocketNumber,
+      });
+    }
+  });
+
   // this needs to be done on the lead case
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
     cerebralTest,
