@@ -99,4 +99,26 @@ describe('Docket clerk adds paper filing on lead case', () => {
       expect(multiDocketedDocketEntry).toBeDefined();
     }
   });
+
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on', async () => {
+    // go to work item => processed
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    const outboxQueue = cerebralTest.getState('workQueue');
+
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      const outboxWorkItem = outboxQueue.find(
+        workItem => workItem.docketNumber.docketNumber === docketNumber,
+      );
+
+      expect(outboxWorkItem).toMatchObject({
+        docketEntryId: cerebralTest.docketEntryId,
+        eventCode: 'RPT',
+      });
+    }
+  });
 });
