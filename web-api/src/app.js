@@ -138,6 +138,9 @@ const {
   deleteDeficiencyStatisticLambda,
 } = require('./cases/deleteDeficiencyStatisticLambda');
 const {
+  deletePractitionerDocumentLambda,
+} = require('./practitioners/deletePractitionerDocumentLambda');
+const {
   deleteTrialSessionLambda,
 } = require('./trialSessions/deleteTrialSessionLambda');
 const {
@@ -931,6 +934,10 @@ app.get(
   app.get(
     '/practitioner-documents/:practitionerDocumentFileId/document-download-url',
     lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
+  );
+  app.delete(
+    '/practitioners/:barNumber/documents/:practitionerDocumentFileId',
+    lambdaWrapper(deletePractitionerDocumentLambda),
   );
   app.put(
     '/async/practitioners/:barNumber',
