@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { DeletePractitionerDocumentConfirmModal } from './DeletePractitionerDocumentConfirmModal';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -8,16 +9,21 @@ export const PractitionerDocumentation = connect(
   {
     barNumber: state.practitionerDetail.barNumber,
     constants: state.constants,
+    openDeletePractitionerDocumentConfirmModalSequence:
+      sequences.openDeletePractitionerDocumentConfirmModalSequence,
     openPractitionerDocumentDownloadUrlSequence:
       sequences.openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
+    showModal: state.modal.showModal,
     sortTableSequence: sequences.sortTableSequence,
   },
   function PractitionerDocumentation({
     barNumber,
     constants,
+    openDeletePractitionerDocumentConfirmModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper,
+    showModal,
     sortTableSequence,
   }) {
     return (
@@ -131,7 +137,12 @@ export const PractitionerDocumentation = connect(
                       link
                       className="red-warning"
                       icon="trash"
-                      onClick={() => {}}
+                      onClick={() => {
+                        openDeletePractitionerDocumentConfirmModalSequence({
+                          barNumber,
+                          documentId: document.documentId,
+                        });
+                      }}
                     >
                       Delete
                     </Button>
@@ -141,6 +152,9 @@ export const PractitionerDocumentation = connect(
             )}
           </tbody>
         </table>
+        {showModal === 'DeletePractitionerDocumentConfirmModal' && (
+          <DeletePractitionerDocumentConfirmModal onConfirmSequence="deletePractitionerDocumentSequence" />
+        )}
       </>
     );
   },
