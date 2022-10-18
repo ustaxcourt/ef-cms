@@ -38,6 +38,11 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
         docketNumber: cerebralTest.leadDocketNumber,
       });
 
+      console.log(
+        'cerebralTest.leadDocketNumber',
+        cerebralTest.leadDocketNumber,
+      );
+
       await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
         docketNumber: cerebralTest.leadDocketNumber,
       });
