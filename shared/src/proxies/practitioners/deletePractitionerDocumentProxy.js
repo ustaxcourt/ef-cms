@@ -10,10 +10,10 @@ const { remove } = require('../requests');
  */
 exports.deletePractitionerDocumentInteractor = (
   applicationContext,
-  { barNumber, documentId },
+  { barNumber, practitionerDocumentFileId },
 ) => {
   return remove({
     applicationContext,
-    endpoint: `/practitioners/${barNumber}/documents/${documentId}`,
+    endpoint: `/practitioners/${barNumber}/documents/${practitionerDocumentFileId}`,
   });
 };

@@ -11,6 +11,9 @@ export const setDeletePractitionerDocumentModalStateAction = ({
   props,
   store,
 }) => {
-  store.set(state.modal.documentId, props.documentId);
+  store.set(
+    state.modal.practitionerDocumentFileId,
+    props.practitionerDocumentFileId,
+  );
   store.set(state.modal.barNumber, props.barNumber);
 };

@@ -16,10 +16,10 @@ export const deletePractitionerDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
     barNumber,
-    documentId,
+    practitionerDocumentFileId,
   }: {
     barNumber: string;
-    documentId: string;
+    practitionerDocumentFileId: string;
   },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
@@ -34,7 +34,7 @@ export const deletePractitionerDocumentInteractor = async (
 
   await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
     applicationContext,
-    key: documentId,
+    key: practitionerDocumentFileId,
   });
 
   return await applicationContext
@@ -42,6 +42,6 @@ export const deletePractitionerDocumentInteractor = async (
     .deletePractitionerDocument({
       applicationContext,
       barNumber,
-      documentId,
+      practitionerDocumentFileId,
     });
 };
