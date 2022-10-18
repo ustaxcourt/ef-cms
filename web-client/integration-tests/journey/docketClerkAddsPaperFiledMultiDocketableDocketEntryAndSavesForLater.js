@@ -38,11 +38,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
         docketNumber: cerebralTest.leadDocketNumber,
       });
 
-      console.log(
-        'cerebralTest.leadDocketNumber',
-        cerebralTest.leadDocketNumber,
-      );
-
       await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
         docketNumber: cerebralTest.leadDocketNumber,
       });
@@ -61,11 +56,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
           key: `filersMap.${contactPrimary.contactId}`,
           value: true,
         },
-      );
-
-      await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
-      expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ConfirmInitiateServiceModal',
       );
 
       await cerebralTest.runSequence('submitPaperFilingSequence', {
