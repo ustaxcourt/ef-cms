@@ -70,7 +70,7 @@ export const PractitionerDocumentation = connect(
                   </td>
 
                   <td>{document.categoryName}</td>
-                  <td>{document.description}</td>
+                  <td className="file-description">{document.description}</td>
                 </tr>
               ),
             )}
