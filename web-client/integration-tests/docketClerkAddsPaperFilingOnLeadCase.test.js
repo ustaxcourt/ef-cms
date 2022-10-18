@@ -65,7 +65,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  // this is going through save AND serve flow
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
     cerebralTest,
     'A',
@@ -117,7 +116,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
     }
   });
 
-  // this needs to be done on the lead case
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
     cerebralTest,
     'RPT',
@@ -151,15 +149,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
   });
 
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
-    console.log(
-      '****** consolidatedCasesThatShouldReceiveDocketEntries',
-      cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries,
-    );
-    console.log(
-      '****** multiDocketedDocketEntryId',
-      cerebralTest.multiDocketedDocketEntryId,
-    );
-
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber,
