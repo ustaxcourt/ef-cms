@@ -42,7 +42,7 @@ export const serveExternallyFiledDocumentInteractor = async (
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-
+  console.log('inside serveExternallyFiledDocumentInteractor');
   const hasPermission =
     (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
       isAuthorized(

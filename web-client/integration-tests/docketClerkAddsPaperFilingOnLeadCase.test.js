@@ -59,32 +59,35 @@ describe('Docket clerk adds paper filing on lead case', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
-    cerebralTest,
-    'A',
-  );
+  // this is going through save AND serve flow
+  // docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
+  //   cerebralTest,
+  //   'A',
+  // );
 
-  it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
-    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber,
-      });
+  // it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
+  //   for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber,
+  //     });
 
-      const multiDocketedDocketEntry = cerebralTest
-        .getState('caseDetail.docketEntries')
-        .find(
-          doc => doc.docketEntryId === cerebralTest.multiDocketedDocketEntryId,
-        );
+  //     const multiDocketedDocketEntry = cerebralTest
+  //       .getState('caseDetail.docketEntries')
+  //       .find(
+  //         doc => doc.docketEntryId === cerebralTest.multiDocketedDocketEntryId,
+  //       );
 
-      expect(multiDocketedDocketEntry).toBeDefined();
-    }
-  });
+  //     expect(multiDocketedDocketEntry).toBeDefined();
+  //   }
+  // });
 
+  // this needs to be done on the lead case
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
     cerebralTest,
     'RPT',
   );
 
+  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -100,8 +103,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
       expect(multiDocketedDocketEntry).toBeDefined();
     }
   });
-
-  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
 
   it('verify a completed work item exists for each case in the consolidated group that the document was filed on', async () => {
     // go to work item => processed
