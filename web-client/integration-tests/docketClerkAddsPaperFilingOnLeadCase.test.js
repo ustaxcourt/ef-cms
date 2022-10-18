@@ -5,9 +5,11 @@ import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpens
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import {
+  findWorkItemByDocketNumber,
   loginAs,
   setupTest,
   uploadPetition,
+  waitForCondition,
   waitForLoadingComponentToHide,
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -85,6 +87,36 @@ describe('Docket clerk adds paper filing on lead case', () => {
     }
   });
 
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'WorkQueue',
+    });
+
+    const outboxQueue = cerebralTest.getState('workQueue');
+
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      const outboxWorkItem = findWorkItemByDocketNumber(
+        outboxQueue,
+        docketNumber,
+      );
+
+      expect(outboxWorkItem).toMatchObject({
+        docketEntry: {
+          docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+          eventCode: 'A',
+        },
+        leadDocketNumber: cerebralTest.leadDocketNumber,
+      });
+    }
+  });
+
   // this needs to be done on the lead case
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
     cerebralTest,
@@ -92,7 +124,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
   );
 
   it('docket clerk serves document from case detail document view', async () => {
-    console.log(cerebralTest.leadDocketNumber, '****');
     await cerebralTest.runSequence(
       'openConfirmServeCourtIssuedDocumentSequence',
       {
@@ -144,25 +175,32 @@ describe('Docket clerk adds paper filing on lead case', () => {
     }
   });
 
-  it('verify a completed work item exists for each case in the consolidated group that the document was filed on', async () => {
-    // go to work item => processed
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
     });
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'WorkQueue',
+    });
+
     const outboxQueue = cerebralTest.getState('workQueue');
 
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
-      console.log;
-      const outboxWorkItem = outboxQueue.find(
-        workItem => workItem.docketNumber.docketNumber === docketNumber,
+      const outboxWorkItem = findWorkItemByDocketNumber(
+        outboxQueue,
+        docketNumber,
       );
 
       expect(outboxWorkItem).toMatchObject({
-        docketEntryId: cerebralTest.docketEntryId,
-        eventCode: 'A',
+        docketEntry: {
+          docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+          eventCode: 'RPT',
+        },
+        leadDocketNumber: cerebralTest.leadDocketNumber,
       });
     }
   });
