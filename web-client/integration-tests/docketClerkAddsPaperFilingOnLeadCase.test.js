@@ -3,9 +3,13 @@ import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes } from './
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  setupTest,
+  uploadPetition,
+  waitForLoadingComponentToHide,
+} from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Docket clerk adds paper filing on lead case', () => {
@@ -60,26 +64,26 @@ describe('Docket clerk adds paper filing on lead case', () => {
   docketClerkConsolidatesCases(cerebralTest, 2);
 
   // this is going through save AND serve flow
-  // docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
-  //   cerebralTest,
-  //   'A',
-  // );
+  docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
+    cerebralTest,
+    'A',
+  );
 
-  // it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
-  //   for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber,
-  //     });
+  it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
 
-  //     const multiDocketedDocketEntry = cerebralTest
-  //       .getState('caseDetail.docketEntries')
-  //       .find(
-  //         doc => doc.docketEntryId === cerebralTest.multiDocketedDocketEntryId,
-  //       );
+      const multiDocketedDocketEntry = cerebralTest
+        .getState('caseDetail.docketEntries')
+        .find(
+          doc => doc.docketEntryId === cerebralTest.multiDocketedDocketEntryId,
+        );
 
-  //     expect(multiDocketedDocketEntry).toBeDefined();
-  //   }
-  // });
+      expect(multiDocketedDocketEntry).toBeDefined();
+    }
+  });
 
   // this needs to be done on the lead case
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
@@ -87,8 +91,44 @@ describe('Docket clerk adds paper filing on lead case', () => {
     'RPT',
   );
 
-  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
+  it('docket clerk serves document from case detail document view', async () => {
+    console.log(cerebralTest.leadDocketNumber, '****');
+    await cerebralTest.runSequence(
+      'openConfirmServeCourtIssuedDocumentSequence',
+      {
+        docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+        redirectUrl: `/case-detail/${cerebralTest.leadDocketNumber}/document-view?docketEntryId=${cerebralTest.multiDocketedDocketEntryId}`,
+      },
+    );
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiateCourtIssuedDocumentServiceModal',
+    );
+
+    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+
+    expect(cerebralTest.getState('alertSuccess')).toEqual({
+      message: 'Document served to selected cases in group. ',
+      overwritable: false,
+    });
+
+    expect(
+      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+    ).toEqual('documentView');
+  });
+
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
+    console.log(
+      '****** consolidatedCasesThatShouldReceiveDocketEntries',
+      cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries,
+    );
+    console.log(
+      '****** multiDocketedDocketEntryId',
+      cerebralTest.multiDocketedDocketEntryId,
+    );
+
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber,
