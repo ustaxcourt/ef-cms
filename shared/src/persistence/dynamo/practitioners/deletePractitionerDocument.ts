@@ -3,18 +3,18 @@ import * as client from '../../dynamodbClientService';
 exports.deletePractitionerDocument = async ({
   applicationContext,
   barNumber,
-  documentId,
+  practitionerDocumentFileId,
 }: {
   applicationContext: IApplicationContext;
   barNumber: string;
-  documentId: string;
+  practitionerDocumentFileId: string;
 }) => {
   barNumber = barNumber.toLowerCase();
   await client.remove({
     applicationContext,
     key: {
       pk: `practitioner|${barNumber}`,
-      sk: `document|${documentId}`,
+      sk: `document|${practitionerDocumentFileId}`,
     },
   });
 };

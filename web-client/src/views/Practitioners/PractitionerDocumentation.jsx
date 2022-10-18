@@ -142,7 +142,8 @@ export const PractitionerDocumentation = connect(
                       onClick={() => {
                         openDeletePractitionerDocumentConfirmModalSequence({
                           barNumber,
-                          documentId: document.documentId,
+                          practitionerDocumentFileId:
+                            document.practitionerDocumentFileId,
                         });
                       }}
                     >

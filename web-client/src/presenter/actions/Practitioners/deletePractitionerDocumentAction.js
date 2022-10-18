@@ -13,17 +13,19 @@ export const deletePractitionerDocumentAction = async ({
   get,
   path,
 }) => {
-  const documentId = get(state.modal.documentId);
+  const practitionerDocumentFileId = get(
+    state.modal.practitionerDocumentFileId,
+  );
   const barNumber = get(state.modal.barNumber);
 
-  //TODO: success message?
+  //TODO: success message
 
   try {
     await applicationContext
       .getUseCases()
       .deletePractitionerDocumentInteractor(applicationContext, {
         barNumber,
-        documentId,
+        practitionerDocumentFileId,
       });
   } catch (err) {
     return path.error({

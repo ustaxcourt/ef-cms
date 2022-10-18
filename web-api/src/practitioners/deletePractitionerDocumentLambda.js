@@ -12,6 +12,7 @@ exports.deletePractitionerDocumentLambda = event =>
       .getUseCases()
       .deletePractitionerDocumentInteractor(applicationContext, {
         barNumber: event.pathParameters.barNumber,
-        documentId: event.pathParameters.documentId,
+        practitionerDocumentFileId:
+          event.pathParameters.practitionerDocumentFileId,
       });
   });
