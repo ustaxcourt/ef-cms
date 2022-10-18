@@ -71,4 +71,20 @@ describe('Document', () => {
     );
     expect(document.isValid()).toBeTruthy();
   });
+
+  it('should consider an empty string description as valid', () => {
+    const document = new PractitionerDocument(
+      {
+        categoryName:
+          PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        categoryType:
+          PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        description: '',
+        fileName: 'testing.pdf',
+        location: 'Colorado',
+      },
+      { applicationContext },
+    );
+    expect(document.isValid()).toBeTruthy();
+  });
 });
