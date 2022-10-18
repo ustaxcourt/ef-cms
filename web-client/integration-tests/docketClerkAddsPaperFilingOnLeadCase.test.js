@@ -3,6 +3,7 @@ import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes } from './
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
+import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -99,6 +100,8 @@ describe('Docket clerk adds paper filing on lead case', () => {
       expect(multiDocketedDocketEntry).toBeDefined();
     }
   });
+
+  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
 
   it('verify a completed work item exists for each case in the consolidated group that the document was filed on', async () => {
     // go to work item => processed
