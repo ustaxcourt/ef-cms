@@ -12,7 +12,7 @@ const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-const { WorkItem } = require('../../entities/WorkItem');
+
 /**
  * serveExternallyFiledDocumentInteractor
  *
@@ -253,11 +253,9 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  if (docketEntryEntity.workItem) {
-    const workItemToUpdate = new WorkItem(
-      { ...docketEntryEntity.workItem },
-      { applicationContext },
-    );
+  const workItemToUpdate = docketEntryEntity.workItem;
+
+  if (workItemToUpdate) {
     workItemToUpdate.setAsCompleted({
       message: 'completed',
       user,
@@ -271,8 +269,6 @@ const fileDocumentOnOneCase = async ({
       sentBySection: user.section,
       sentByUserId: user.userId,
     });
-
-    docketEntryEntity.setWorkItem(workItemToUpdate);
 
     await applicationContext
       .getPersistenceGateway()
