@@ -159,6 +159,7 @@ import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
 import { gotoPractitionerAddDocumentSequence } from './sequences/gotoPractitionerAddDocumentSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
+import { gotoPractitionerDocumentationSequence } from './sequences/gotoPractitionerDocumentationSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
@@ -203,6 +204,7 @@ import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrint
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
+import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
 import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumbersModalSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
@@ -674,6 +676,7 @@ export const presenter = {
     gotoPetitionQcSequence,
     gotoPractitionerAddDocumentSequence,
     gotoPractitionerDetailSequence,
+    gotoPractitionerDocumentationSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintPractitionerCasesSequence,
     gotoPrintableCaseConfirmationSequence,
@@ -718,6 +721,7 @@ export const presenter = {
     navigateToPrintableCaseConfirmationSequence,
     notFoundErrorSequence,
     noticeGenerationCompleteSequence,
+    onPractitionerInformationTabSelectSequence,
     openAddDocketNumbersModalSequence,
     openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,

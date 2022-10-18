@@ -4,6 +4,7 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const {
+  MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
   PRACTITIONER_DOCUMENT_TYPES,
   PRACTITIONER_DOCUMENT_TYPES_MAP,
 } = require('./EntityConstants');
@@ -46,7 +47,11 @@ PractitionerDocument.schema = joi.object().keys({
   categoryType: JoiValidationConstants.STRING.valid(
     ...Object.values(PRACTITIONER_DOCUMENT_TYPES),
   ).required(),
-  description: JoiValidationConstants.STRING.optional(),
+  description: JoiValidationConstants.STRING.max(
+    MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
+  )
+    .optional()
+    .allow(''),
   fileName: JoiValidationConstants.STRING.required(),
   location: JoiValidationConstants.STRING.when('categoryType', {
     is: PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
