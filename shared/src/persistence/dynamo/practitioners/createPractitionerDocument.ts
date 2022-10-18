@@ -15,7 +15,7 @@ export const createPractitionerDocument = async ({
     Item: {
       ...practitionerDocument,
       pk: `practitioner|${barNumber}`,
-      sk: `document|${practitionerDocument.documentId}`,
+      sk: `document|${practitionerDocument.practitionerDocumentFileId}`,
     },
     applicationContext,
   });

@@ -145,6 +145,15 @@ table,
     }
     /* stylelint-enable value-no-vendor-prefix */
 
+    .file-name-button {
+      word-break: break-all;
+    }
+
+    &.file-description {
+      inline-size: 550px;
+      word-break: break-all;
+    }
+
     label {
       margin: 0;
     }
@@ -194,6 +203,10 @@ table,
 
       .collapse-header {
         padding: 0;
+      }
+
+      &.consolidated-indicators {
+        width: 70px;
       }
     }
   }

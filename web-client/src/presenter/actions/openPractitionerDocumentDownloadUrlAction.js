@@ -1,4 +1,4 @@
-export const openUrlInNewTab = async getUrlCb => {
+export const openUrlInNewTab = async (fileName, getUrlCb) => {
   let openedPdfWindow;
   openedPdfWindow = window.open();
   openedPdfWindow.document.write('Loading your document...');
@@ -6,6 +6,11 @@ export const openUrlInNewTab = async getUrlCb => {
   try {
     const { url } = await getUrlCb();
     openedPdfWindow.location.href = url;
+    if (/\.docx?/.test(fileName)) {
+      setTimeout(() => {
+        openedPdfWindow?.close();
+      }, 1);
+    }
   } catch (e) {
     openedPdfWindow?.close();
     throw new Error(`Unable to get document download url. ${e.message}`);
@@ -23,13 +28,13 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const { documentId } = props;
+  const { fileName, practitionerDocumentFileId } = props;
 
-  await openUrlInNewTab(() =>
+  await openUrlInNewTab(fileName, () =>
     applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
-        documentId,
+        practitionerDocumentFileId,
       }),
   );
 };

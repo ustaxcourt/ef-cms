@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * fetches all documents associated with the practitioner.
  *
@@ -6,12 +8,11 @@
  * @param {object} providers.props the cerebral props object containing the props.barNumber
  * @returns {object} containing practitionerDetail
  */
-
 export const getPractitionerDocumentsAction = async ({
   applicationContext,
-  props,
+  get,
 }) => {
-  const { barNumber } = props;
+  const { barNumber } = get(state.practitionerDetail);
 
   const practitionerDocuments = await applicationContext
     .getUseCases()

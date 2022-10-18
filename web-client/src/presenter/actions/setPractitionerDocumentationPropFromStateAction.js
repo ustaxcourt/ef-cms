@@ -9,6 +9,6 @@ import { state } from 'cerebral';
  * @returns {object} barNumber
  */
 export const setPractitionerDocumentationPropFromStateAction = ({ get }) => {
-  const barNumber = get(state.practitionerDetails.barNumber);
+  const barNumber = get(state.practitionerDetail.barNumber);
   return { barNumber };
 };

@@ -12,9 +12,17 @@ export const validateAddPractitionerDocumentFormInteractor = (
   applicationContext,
   form,
 ) => {
-  const errors = new PractitionerDocument(form, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+  const errors = new PractitionerDocument(
+    {
+      categoryName: form.categoryName,
+      categoryType: form.categoryType,
+      fileName: form.practitionerDocumentFile?.name,
+      location: form.location,
+    },
+    {
+      applicationContext,
+    },
+  ).getFormattedValidationErrors();
 
   return errors || null;
 };
