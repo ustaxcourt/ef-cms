@@ -4,7 +4,14 @@ import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesC
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  findWorkItemByDocketNumber,
+  loginAs,
+  setupTest,
+  uploadPetition,
+  waitForCondition,
+  waitForLoadingComponentToHide,
+} from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Docket clerk adds paper filing on lead case', () => {
@@ -79,10 +86,67 @@ describe('Docket clerk adds paper filing on lead case', () => {
     }
   });
 
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'WorkQueue',
+    });
+
+    const outboxQueue = cerebralTest.getState('workQueue');
+
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      const outboxWorkItem = findWorkItemByDocketNumber(
+        outboxQueue,
+        docketNumber,
+      );
+
+      expect(outboxWorkItem).toMatchObject({
+        docketEntry: {
+          docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+          eventCode: 'A',
+        },
+        leadDocketNumber: cerebralTest.leadDocketNumber,
+      });
+    }
+  });
+
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
     cerebralTest,
     'RPT',
   );
+
+  it('docket clerk serves document from case detail document view', async () => {
+    await cerebralTest.runSequence(
+      'openConfirmServeCourtIssuedDocumentSequence',
+      {
+        docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+        redirectUrl: `/case-detail/${cerebralTest.leadDocketNumber}/document-view?docketEntryId=${cerebralTest.multiDocketedDocketEntryId}`,
+      },
+    );
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiateCourtIssuedDocumentServiceModal',
+    );
+
+    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+
+    expect(cerebralTest.getState('alertSuccess')).toEqual({
+      message: 'Document served to selected cases in group. ',
+      overwritable: false,
+    });
+
+    expect(
+      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+    ).toEqual('documentView');
+  });
 
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
@@ -97,6 +161,36 @@ describe('Docket clerk adds paper filing on lead case', () => {
         );
 
       expect(multiDocketedDocketEntry).toBeDefined();
+    }
+  });
+
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'WorkQueue',
+    });
+
+    const outboxQueue = cerebralTest.getState('workQueue');
+
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      const outboxWorkItem = findWorkItemByDocketNumber(
+        outboxQueue,
+        docketNumber,
+      );
+
+      expect(outboxWorkItem).toMatchObject({
+        docketEntry: {
+          docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+          eventCode: 'RPT',
+        },
+        leadDocketNumber: cerebralTest.leadDocketNumber,
+      });
     }
   });
 });

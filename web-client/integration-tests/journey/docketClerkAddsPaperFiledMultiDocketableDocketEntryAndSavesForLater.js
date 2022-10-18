@@ -58,11 +58,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
         },
       );
 
-      await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
-      expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ConfirmInitiateServiceModal',
-      );
-
       await cerebralTest.runSequence('submitPaperFilingSequence', {
         isSavingForLater: true,
       });
@@ -73,8 +68,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
         booleanExpressionCondition: () =>
           cerebralTest.getState('currentPage') === 'CaseDetailInternal',
       });
-
-      expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
 
       cerebralTest.multiDocketedDocketEntryId = cerebralTest
         .getState('caseDetail.docketEntries')

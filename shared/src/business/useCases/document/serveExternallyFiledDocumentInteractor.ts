@@ -2,16 +2,20 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('../addCoverToPdf');
-const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -253,6 +257,35 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
+  const subjectCaseDocketNumber = originalSubjectDocketEntry.docketNumber;
+
+  const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
+
+  if (!docketEntryEntity.workItem || !isSubjectCase) {
+    docketEntryEntity.workItem = new WorkItem(
+      {
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseEntity.associatedJudge,
+        caseStatus: caseEntity.status,
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseEntity.docketNumber,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+        hideFromPendingMessages: true,
+        inProgress: true,
+        leadDocketNumber: subjectCaseDocketNumber,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      },
+      { applicationContext },
+    );
+  }
+
   const workItemToUpdate = docketEntryEntity.workItem;
 
   if (workItemToUpdate) {
@@ -312,7 +345,7 @@ const fileDocumentOnOneCase = async ({
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      caseToUpdate: caseEntity.validate(),
     });
 
   return {
