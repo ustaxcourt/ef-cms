@@ -133,6 +133,7 @@ export const PaperFiling = connect(
           <ConfirmInitiateServiceModal
             confirmSequence={submitPaperFilingSequence}
             documentTitle={form.documentTitle}
+            isPaper={true}
           />
         )}
       </>
