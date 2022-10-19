@@ -1047,6 +1047,28 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
+      - deploy-switch-colors-cron:
+          requires:
+            - smoketests-readonly
+          filters:
+            branches:
+              only:
+                - develop
+      - wait-for-switch:
+          type: approval
+          requires:
+            - deploy-switch-colors-cron
+          filters:
+            branches:
+              only:
+                - develop
+      - disable-switch-colors-cron:
+          requires:
+            - wait-for-switch
+          filters:
+            branches:
+              only:
+                - develop
       - switch-colors:
           requires:
             - smoketests-readonly
@@ -1063,9 +1085,26 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - cleanup:
+      - backup-source-dynamo-table:
+          <<: *build-and-deploy-defaults
           requires:
             - switch-colors
+          filters:
+            branches:
+              only:
+                - develop
+      - delete-api-mappings:
+          <<: *build-and-deploy-defaults
+          requires:
+            - switch-colors
+          filters:
+            branches:
+              only:
+                - develop
+      - cleanup:
+          requires:
+            - backup-source-dynamo-table
+            - delete-api-mappings
           filters:
             branches:
               only:
