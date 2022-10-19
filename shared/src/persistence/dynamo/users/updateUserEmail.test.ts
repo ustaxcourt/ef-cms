@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
   PETITIONS_SECTION,
   ROLES,
-} = require('../../../business/entities/EntityConstants');
-const { updateUserEmail } = require('./updateUserEmail');
+} from '../../../business/entities/EntityConstants';
+import { updateUserEmail } from './updateUserEmail';
 
 describe('updateUserEmail', () => {
   const mockUserId = '9b52c605-edba-41d7-b045-d5f992a499d3';
