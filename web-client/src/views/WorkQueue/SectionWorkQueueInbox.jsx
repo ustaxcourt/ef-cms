@@ -170,17 +170,12 @@ SectionWorkQueueTable.Row = React.memo(
 export const SectionWorkQueueInbox = connect(
   {
     formattedWorkQueueLength: state.formattedWorkQueue.length,
-    showSendToBar: state.workQueueHelper.showSendToBar,
     users: state.users,
   },
-  function SectionWorkQueueInbox({
-    formattedWorkQueueLength,
-    showSendToBar,
-    users,
-  }) {
+  function SectionWorkQueueInbox({ formattedWorkQueueLength, users }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments showSendToBar={showSendToBar} users={users} />
+        <WorkQueueAssignments users={users} />
         <SectionWorkQueueTable />
         {formattedWorkQueueLength === 0 && <p>There are no documents.</p>}
       </React.Fragment>

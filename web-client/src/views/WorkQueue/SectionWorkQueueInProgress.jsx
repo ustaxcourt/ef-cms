@@ -107,10 +107,7 @@ export const SectionWorkQueueInProgress = connect(
   }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments
-          showSendToBar={workQueueHelper.showSendToBar}
-          users={users}
-        />
+        <WorkQueueAssignments users={users} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
