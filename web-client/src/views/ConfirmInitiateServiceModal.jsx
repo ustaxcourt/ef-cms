@@ -140,7 +140,20 @@ export const ConfirmInitiateServiceModal = connect(
           </Hint>
         )}
         {confirmInitiateServiceModalHelper.showConsolidatedCasesForService &&
-          isPaper && (
+          isPaper &&
+          confirmInitiateServiceModalHelper.flagflag && (
+            <ConsolidatedCasesCheckboxes
+              consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
+              consolidatedCaseCheckboxAllChange={
+                consolidatedCaseCheckboxAllChange
+              }
+              formattedCaseDetail={formattedCaseDetail}
+              updateCaseCheckbox={updateCaseCheckbox}
+            />
+          )}
+
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService &&
+          !isPaper && (
             <ConsolidatedCasesCheckboxes
               consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
               consolidatedCaseCheckboxAllChange={
