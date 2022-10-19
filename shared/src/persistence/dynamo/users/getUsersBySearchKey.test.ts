@@ -1,13 +1,15 @@
-const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getUsersBySearchKey } = require('./getUsersBySearchKey');
-const { ROLES } = require('../../../business/entities/EntityConstants');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
+  batchGet,
+  query,
+} from '../../../../../shared/src/persistence/dynamodbClientService';
+import { getUsersBySearchKey } from './getUsersBySearchKey';
+import { ROLES } from '../../../business/entities/EntityConstants';
 
-describe('getUsersBySearchKey', () => {
-  beforeEach(() => {
-    client.batchGet = jest.fn().mockReturnValue([
+jest.mock('../../dynamodbClientService', () => ({
+  batchGet: jest.fn().mockImplementation(() => {
+    const { ROLES } = require('../../../business/entities/EntityConstants');
+    return [
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
@@ -17,16 +19,17 @@ describe('getUsersBySearchKey', () => {
         sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
         userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
       },
-    ]);
+    ];
+  }),
+  query: jest.fn().mockReturnValue([
+    {
+      pk: 'Test Practitioner|privatePractitioner',
+      sk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ]),
+}));
 
-    client.query = jest.fn().mockReturnValue([
-      {
-        pk: 'Test Practitioner|privatePractitioner',
-        sk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    ]);
-  });
-
+describe('getUsersBySearchKey', () => {
   it('should return data as received from persistence', async () => {
     const result = await getUsersBySearchKey({
       applicationContext,
@@ -48,7 +51,8 @@ describe('getUsersBySearchKey', () => {
   });
 
   it('should return an empty array if no mapping records are returned from the query', async () => {
-    client.query = jest.fn().mockReturnValue([]);
+    // query = jest.fn().mockReturnValue([]);
+    query.mockReturnValueOnce([]);
     const result = await getUsersBySearchKey({
       applicationContext,
       searchKey: 'Test Practitioner',
@@ -59,14 +63,14 @@ describe('getUsersBySearchKey', () => {
   });
 
   it('should convert search key to upper case before calling dynamo', async () => {
-    client.query = jest.fn().mockReturnValue([]);
+    // client.query = jest.fn().mockReturnValue([]);
     await getUsersBySearchKey({
       applicationContext,
       searchKey: 'pt1234',
       type: 'privatePractitioner',
     });
 
-    expect(client.query.mock.calls[0][0]).toMatchObject({
+    expect((query as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':pk': 'privatePractitioner|PT1234',
       },

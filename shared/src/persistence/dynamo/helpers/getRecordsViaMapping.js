@@ -1,7 +1,7 @@
-const client = require('../../dynamodbClientService');
+const { batchGet, query } = require('../../dynamodbClientService');
 
 exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
-  const mappings = await client.query({
+  const mappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -16,7 +16,7 @@ exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
 
   const ids = mappings.map(metadata => metadata.sk);
 
-  const batchGetResults = await client.batchGet({
+  const batchGetResults = await batchGet({
     applicationContext,
     keys: ids.map(id => ({
       pk: id,
