@@ -65,7 +65,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  // this is going through save AND serve flow
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
     cerebralTest,
     'A',
@@ -87,7 +86,36 @@ describe('Docket clerk adds paper filing on lead case', () => {
     }
   });
 
-  // this needs to be done on the lead case
+  it('verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'WorkQueue',
+    });
+
+    const outboxQueue = cerebralTest.getState('workQueue');
+
+    for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
+      const outboxWorkItem = findWorkItemByDocketNumber(
+        outboxQueue,
+        docketNumber,
+      );
+
+      expect(outboxWorkItem).toMatchObject({
+        docketEntry: {
+          docketEntryId: cerebralTest.multiDocketedDocketEntryId,
+          eventCode: 'A',
+        },
+        leadDocketNumber: cerebralTest.leadDocketNumber,
+      });
+    }
+  });
+
   docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater(
     cerebralTest,
     'RPT',
@@ -121,15 +149,6 @@ describe('Docket clerk adds paper filing on lead case', () => {
   });
 
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
-    console.log(
-      '****** consolidatedCasesThatShouldReceiveDocketEntries',
-      cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries,
-    );
-    console.log(
-      '****** multiDocketedDocketEntryId',
-      cerebralTest.multiDocketedDocketEntryId,
-    );
-
     for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber,
