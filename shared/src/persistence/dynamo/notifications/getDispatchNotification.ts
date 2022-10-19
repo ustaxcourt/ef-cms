@@ -1,4 +1,4 @@
-const { query } = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 /**
  * getDispatchNotification
@@ -11,7 +11,13 @@ const { query } = require('../../dynamodbClientService');
  * @param {string} providers.topic the topic of the dispatch being sent
  * @returns {array} an array of the results returned by the query
  */
-exports.getDispatchNotification = ({ applicationContext, topic }) =>
+export const getDispatchNotification = ({
+  applicationContext,
+  topic,
+}: {
+  applicationContext: IApplicationContext;
+  topic: string;
+}) =>
   query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

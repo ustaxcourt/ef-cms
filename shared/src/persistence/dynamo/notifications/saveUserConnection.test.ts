@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { saveUserConnection } = require('./saveUserConnection');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { saveUserConnection } from './saveUserConnection';
 
 describe('saveUserConnection', () => {
   beforeAll(() => {
@@ -14,7 +12,8 @@ describe('saveUserConnection', () => {
     await saveUserConnection({
       applicationContext,
       connectionId: 'abc',
-      endpoint: {},
+      endpoint: 'test',
+      clientConnectionId: 'bb',
       userId: 'a66ac519-fd1a-44ac-8226-b4a53d348677',
     });
 

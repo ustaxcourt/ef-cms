@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { get } from '../../dynamodbClientService';
 
 /**
  * deleteUserConnection
@@ -8,7 +8,13 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.connectionId the websocket connection id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
+export const deleteUserConnection = async ({
+  applicationContext,
+  connectionId,
+}: {
+  applicationContext: IApplicationContext;
+  connectionId: string;
+}) => {
   const connection = await client.get({
     Key: {
       pk: `connection|${connectionId}`,

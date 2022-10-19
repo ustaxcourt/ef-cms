@@ -1,4 +1,4 @@
-const { query } = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 /**
  * getWebSocketConnectionsByUserId
@@ -8,7 +8,13 @@ const { query } = require('../../dynamodbClientService');
  * @param {object} providers.userId the user id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getWebSocketConnectionsByUserId = ({ applicationContext, userId }) =>
+export const getWebSocketConnectionsByUserId = ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) =>
   query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

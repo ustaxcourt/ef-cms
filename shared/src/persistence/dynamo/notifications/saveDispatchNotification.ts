@@ -1,8 +1,14 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 const TIME_TO_EXIST = 300; // seconds
 
-exports.saveDispatchNotification = ({ applicationContext, topic }) =>
+export const saveDispatchNotification = ({
+  applicationContext,
+  topic,
+}: {
+  applicationContext: IApplicationContext;
+  topic: string;
+}) =>
   put({
     Item: {
       pk: 'dispatch-notification',

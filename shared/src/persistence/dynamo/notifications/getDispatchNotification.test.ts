@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getDispatchNotification } = require('./getDispatchNotification');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getDispatchNotification } from './getDispatchNotification';
 
 describe('getDispatchNotification', () => {
   beforeEach(() => {

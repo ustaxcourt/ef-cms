@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { deleteUserConnection } = require('./deleteUserConnection');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteUserConnection } from './deleteUserConnection';
 
 describe('deleteUserConnection', () => {
   it('attempts to to delete the user connection', async () => {
