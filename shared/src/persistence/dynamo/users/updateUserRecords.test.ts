@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { ROLES } = require('../../../business/entities/EntityConstants');
-const { updateUserRecords } = require('./updateUserRecords');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { ROLES } from '../../../business/entities/EntityConstants';
+import { updateUserRecords } from './updateUserRecords';
 
 describe('updateUserRecords', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';

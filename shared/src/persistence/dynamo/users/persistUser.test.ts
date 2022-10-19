@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { persistUser } = require('./persistUser');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { persistUser } from './persistUser';
 
 describe('persistUser', () => {
   it('attempts to persist the user record', async () => {
