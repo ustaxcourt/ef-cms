@@ -180,7 +180,7 @@ export const SectionWorkQueueInbox = connect(
   }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments showSendToBar={showSendToBar} users={users} />
+        <WorkQueueAssignments users={users} />
         <SectionWorkQueueTable />
         {formattedWorkQueueLength === 0 && <p>There are no documents.</p>}
       </React.Fragment>
