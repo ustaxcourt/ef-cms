@@ -73,12 +73,8 @@ import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
 
-const {
-  ALLOWLIST_FEATURE_FLAGS,
-  CASE_TYPES_MAP,
-  PARTY_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} = applicationContext.getConstants();
+const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+  applicationContext.getConstants();
 
 const formattedDocketEntries = withAppContextDecorator(
   formattedDocketEntriesComputed,
