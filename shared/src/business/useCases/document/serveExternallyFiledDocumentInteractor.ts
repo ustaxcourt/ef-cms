@@ -42,7 +42,7 @@ export const serveExternallyFiledDocumentInteractor = async (
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  console.log('inside serveExternallyFiledDocumentInteractor');
+
   const hasPermission =
     (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
       isAuthorized(
@@ -86,7 +86,8 @@ export const serveExternallyFiledDocumentInteractor = async (
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PAPER_FILING_DOCKET_ENTRIES
+          .key,
     });
 
   if (!consolidateCaseDuplicateDocketEntries) {

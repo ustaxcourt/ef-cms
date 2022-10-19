@@ -11,7 +11,7 @@ export const openConfirmServePaperFiledDocumentSequence = [
   setRedirectUrlAction,
   getFeatureFlagValueFactoryAction(
     getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
+      .CONSOLIDATED_CASES_PAPER_FILING_DOCKET_ENTRIES,
     true,
   ),
   setDocketEntryIdAction,
