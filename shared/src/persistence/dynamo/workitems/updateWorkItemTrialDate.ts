@@ -5,6 +5,11 @@ export const updateWorkItemTrialDate = ({
   docketNumber,
   trialDate,
   workItemId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  trialDate: string;
+  workItemId: string;
 }) =>
   update({
     ExpressionAttributeNames: {
