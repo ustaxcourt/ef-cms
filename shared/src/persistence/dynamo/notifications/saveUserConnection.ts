@@ -1,4 +1,4 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 const TIME_TO_EXIST = 60 * 60 * 24;
 
@@ -12,12 +12,18 @@ const TIME_TO_EXIST = 60 * 60 * 24;
  * @param {string} providers.userId the user id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.saveUserConnection = ({
+export const saveUserConnection = ({
   applicationContext,
   clientConnectionId,
   connectionId,
   endpoint,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  clientConnectionId: string;
+  connectionId: string;
+  endpoint: string;
+  userId: string;
 }) =>
   Promise.all([
     put({

@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getWebSocketConnectionsByUserId,
-} = require('./getWebSocketConnectionsByUserId');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getWebSocketConnectionsByUserId } from './getWebSocketConnectionsByUserId';
 
 describe('getWebSocketConnectionsByUserId', () => {
   it('attempts to retrieve the connections for a user', async () => {

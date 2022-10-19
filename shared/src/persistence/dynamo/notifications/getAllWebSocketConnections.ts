@@ -1,4 +1,4 @@
-const { queryFull } = require('../../dynamodbClientService');
+import { queryFull } from '../../dynamodbClientService';
 
 /**
  * getAllWebSocketConnections
@@ -7,7 +7,11 @@ const { queryFull } = require('../../dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getAllWebSocketConnections = ({ applicationContext }) =>
+export const getAllWebSocketConnections = ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}) =>
   queryFull({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
