@@ -61,7 +61,8 @@ export const addPaperFilingInteractor = async (
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PAPER_FILING_DOCKET_ENTRIES
+          .key,
     });
 
   if (!isCaseConsolidationFeatureOn) {
