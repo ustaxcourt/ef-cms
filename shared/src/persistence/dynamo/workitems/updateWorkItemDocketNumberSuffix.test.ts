@@ -1,16 +1,12 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  updateWorkItemDocketNumberSuffix,
-} = require('./updateWorkItemDocketNumberSuffix');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateWorkItemDocketNumberSuffix } from './updateWorkItemDocketNumberSuffix';
+
+jest.mock('../../dynamodbClientService', () => ({
+  update: jest.fn(),
+}));
 
 describe('updateWorkItemDocketNumberSuffix', () => {
-  beforeEach(() => {
-    client.update = jest.fn();
-  });
-
   it('should call client.update with passed in docket number suffix and work item pk and sk', async () => {
     const mockDocketNumberSuffix = 'S';
     const mockPk = 'case|pk';
@@ -23,7 +19,7 @@ describe('updateWorkItemDocketNumberSuffix', () => {
       workItemId: 'sk',
     });
 
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    expect((update as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':docketNumberSuffix': mockDocketNumberSuffix,
       },

@@ -1,12 +1,17 @@
-const client = require('../../dynamodbClientService');
+import { update } from '../../dynamodbClientService';
 
 exports.updateWorkItemDocketNumberSuffix = ({
   applicationContext,
   docketNumber,
   docketNumberSuffix,
   workItemId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  docketNumberSuffix: string;
+  workItemId: string;
 }) =>
-  client.update({
+  update({
     ExpressionAttributeNames: {
       '#docketNumberSuffix': 'docketNumberSuffix',
     },

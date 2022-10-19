@@ -1,14 +1,12 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { updateWorkItemCaseTitle } = require('./updateWorkItemCaseTitle');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateWorkItemCaseTitle } from './updateWorkItemCaseTitle';
+
+jest.mock('../../dynamodbClientService', () => ({
+  update: jest.fn(),
+}));
 
 describe('updateWorkItemCaseTitle', () => {
-  beforeEach(() => {
-    client.update = jest.fn();
-  });
-
   it('should call client.update with passed in case title and work item pk and sk', async () => {
     const mockCaseTitle = 'An Updated Title';
 
@@ -19,7 +17,7 @@ describe('updateWorkItemCaseTitle', () => {
       workItemId: '123',
     });
 
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    expect((update as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':caseTitle': mockCaseTitle,
       },
