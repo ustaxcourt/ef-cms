@@ -10,29 +10,33 @@ type TCaseDeadline = {
 
 type DocketEntry = {
   additionalInfo: string;
-  caseCaption: string;
-  descriptionDisplay: string;
-  docketNumber: string;
-  docketEntryId: string;
-  documentTitle: string;
-  lodged: boolean;
-  documentType: string;
-  certificateOfService: string;
-  filingDate: string;
   addToCoversheet: boolean;
-  mailingDate: string;
+  caseCaption: string;
+  certificateOfService: string;
+  createdAt: string;
+  descriptionDisplay: string;
+  docketEntryId: string;
+  docketNumber: string;
+  documentTitle: string;
+  documentType: string;
   eventCode: string;
   filedBy: string;
-  index: string;
-  isFileAttached: string;
+  filingDate: string;
+  index: number;
+  isFileAttached: boolean;
   isPaper: string;
+  lodged: boolean;
+  mailingDate: string;
   otherFilingParty: string;
+  editState: object;
+  isLegacyServed: boolean;
+  processingStatus: string;
+  pk: string;
   receivedAt: string;
   sentBy: string;
   servedAt: string;
-  userId: string;
-  pk: string;
   sk: string;
+  userId: string;
 };
 
 type TDocketEntryEntity = {
@@ -50,7 +54,7 @@ type WorkItem = {
   docketNumber: string;
 };
 
-type OutboxItem = {
+type TOutboxItem = {
   caseStatus: string;
   caseTitle: string;
   completedAt: string;
@@ -66,7 +70,13 @@ type OutboxItem = {
   workItemId: string;
 } & WorkItem;
 
-type DynamoRecord = {
+type TOutboxItemEntity = {
+  validate(): TOutboxItemEntity;
+  isValid(): boolean;
+  toRawObject(): TOutboxItem;
+} & TOutboxItem;
+
+type TDynamoRecord = {
   pk: string;
   sk: string;
   gsi1pk?: string;
@@ -74,7 +84,7 @@ type DynamoRecord = {
   [key: string]: any;
 };
 
-type OutboxDynamoRecord = OutboxItem & DynamoRecord;
+type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
 
 type TSectionWorkItem = {
   createdAt: string;

@@ -32,7 +32,7 @@ const createSectionOutboxArchiveRecord = async ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  Item: OutboxItem & DynamoRecord;
+  Item: TOutboxItem & TDynamoRecord;
   section: string;
 }) => {
   const skMonth = formatDateString(Item.sk, FORMATS.YYYYMM);
@@ -61,7 +61,7 @@ const createSectionOutboxRecentRecord = ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  Item: OutboxItem & DynamoRecord;
+  Item: TOutboxItem & TDynamoRecord;
   section: string;
 }) =>
   put({
@@ -89,7 +89,7 @@ const createSectionOutboxRecords = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-  workItem: OutboxItem;
+  workItem: TOutboxItem;
 }) => {
   const Item: any = {
     ...workItem,
