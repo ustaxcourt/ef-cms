@@ -9,4 +9,4 @@
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-aws dynamodb delete-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '"S":"consolidated-cases-propagate-docket-entries"'
+aws dynamodb delete-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"consolidated-cases-propagate-docket-entries"},"sk":{"S":"consolidated-cases-propagate-docket-entries"}}'
