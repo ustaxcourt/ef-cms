@@ -391,13 +391,6 @@ export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
   return await setFeatureFlag(isEnabled, `${keyPrefix}-order-search-enabled`);
 };
 
-export const setConsolidatedCasesPropagateEntriesFlag = async isEnabled => {
-  return await setFeatureFlag(
-    isEnabled,
-    ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
-  );
-};
-
 export const setFeatureFlag = async (isEnabled, key) => {
   return await client.put({
     Item: {

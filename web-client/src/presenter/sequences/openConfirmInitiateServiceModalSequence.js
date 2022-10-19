@@ -19,11 +19,6 @@ export const openConfirmInitiateServiceModalSequence = [
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       clearModalStateAction,
-      getFeatureFlagValueFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
-        true,
-      ),
       getConsolidatedCasesByCaseAction,
       setConsolidatedCasesForCaseAction,
       setupConsolidatedCasesAction,
