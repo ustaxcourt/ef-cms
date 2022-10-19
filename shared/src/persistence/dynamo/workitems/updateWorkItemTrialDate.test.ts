@@ -1,14 +1,12 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { updateWorkItemTrialDate } = require('./updateWorkItemTrialDate');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateWorkItemTrialDate } from './updateWorkItemTrialDate';
+
+jest.mock('../../dynamodbClientService', () => ({
+  update: jest.fn(),
+}));
 
 describe('updateWorkItemTrialDate', () => {
-  beforeEach(() => {
-    client.update = jest.fn();
-  });
-
   it('should call client.update with passed in trial date and work item pk and sk', async () => {
     const mockTrialDate = '2019-08-25T05:00:00.000Z';
     const mockPk = 'case|pk';
@@ -21,7 +19,7 @@ describe('updateWorkItemTrialDate', () => {
       workItemId: 'sk',
     });
 
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    expect((update as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':trialDate': mockTrialDate,
       },
