@@ -1,16 +1,12 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  updateWorkItemAssociatedJudge,
-} = require('./updateWorkItemAssociatedJudge');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateWorkItemAssociatedJudge } from './updateWorkItemAssociatedJudge';
+
+jest.mock('../../dynamodbClientService', () => ({
+  update: jest.fn(),
+}));
 
 describe('updateWorkItemAssociatedJudge', () => {
-  beforeEach(() => {
-    client.update = jest.fn();
-  });
-
   it('should call client.update with passed in associated judge and work item pk and sk', async () => {
     const mockAssociatedJudge = 'Judge Cat';
     const mockPk = 'case|pk';
@@ -23,7 +19,7 @@ describe('updateWorkItemAssociatedJudge', () => {
       workItemId: 'sk',
     });
 
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    expect((update as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':associatedJudge': mockAssociatedJudge,
       },

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { query, update } from '../../dynamodbClientService';
 
 /**
  * setPriorityOnAllWorkItems
@@ -15,8 +15,13 @@ exports.setPriorityOnAllWorkItems = async ({
   docketNumber,
   highPriority,
   trialDate,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  highPriority: boolean;
+  trialDate: string;
 }) => {
-  const workItemMappings = await client.query({
+  const workItemMappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -31,7 +36,7 @@ exports.setPriorityOnAllWorkItems = async ({
 
   const requests = [];
   for (let mapping of workItemMappings) {
-    const workItems = await client.query({
+    const workItems = await query({
       ExpressionAttributeNames: {
         '#gsi1pk': 'gsi1pk',
       },
@@ -45,7 +50,7 @@ exports.setPriorityOnAllWorkItems = async ({
 
     for (let workItem of workItems) {
       requests.push(
-        client.update({
+        update({
           ExpressionAttributeNames: {
             '#highPriority': 'highPriority',
             '#trialDate': 'trialDate',

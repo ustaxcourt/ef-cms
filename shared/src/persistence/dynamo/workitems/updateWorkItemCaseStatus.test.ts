@@ -1,17 +1,12 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-} = require('../../../business/entities/EntityConstants');
-const { updateWorkItemCaseStatus } = require('./updateWorkItemCaseStatus');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { updateWorkItemCaseStatus } from './updateWorkItemCaseStatus';
 
+jest.mock('../../dynamodbClientService', () => ({
+  update: jest.fn(),
+}));
 describe('updateWorkItemCaseStatus', () => {
-  beforeEach(() => {
-    client.update = jest.fn();
-  });
-
   it('should call client.update with passed in case status and work item pk and sk', async () => {
     const mockCaseStatus = CASE_STATUS_TYPES.generalDocket;
     const mockPk = 'case|pk';
@@ -24,7 +19,7 @@ describe('updateWorkItemCaseStatus', () => {
       workItemId: 'sk',
     });
 
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    expect((update as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':caseStatus': mockCaseStatus,
       },
