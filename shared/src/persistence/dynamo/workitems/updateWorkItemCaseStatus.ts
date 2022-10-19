@@ -1,12 +1,17 @@
-const client = require('../../dynamodbClientService');
+import { update } from '../../dynamodbClientService';
 
 exports.updateWorkItemCaseStatus = ({
   applicationContext,
   caseStatus,
   docketNumber,
   workItemId,
+}: {
+  applicationContext: IApplicationContext;
+  caseStatus: string;
+  docketNumber: string;
+  workItemId: string;
 }) =>
-  client.update({
+  update({
     ExpressionAttributeNames: {
       '#caseStatus': 'caseStatus',
     },

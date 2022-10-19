@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { setPriorityOnAllWorkItems } = require('./setPriorityOnAllWorkItems');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { setPriorityOnAllWorkItems } from './setPriorityOnAllWorkItems';
 
 describe('setPriorityOnAllWorkItems', () => {
   beforeAll(() => {

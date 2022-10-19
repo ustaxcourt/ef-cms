@@ -1,12 +1,17 @@
-const client = require('../../dynamodbClientService');
+import { update } from '../../dynamodbClientService';
 
 exports.updateWorkItemAssociatedJudge = ({
   applicationContext,
   associatedJudge,
   docketNumber,
   workItemId,
+}: {
+  applicationContext: IApplicationContext;
+  associatedJudge: string;
+  docketNumber: string;
+  workItemId: string;
 }) =>
-  client.update({
+  update({
     ExpressionAttributeNames: {
       '#associatedJudge': 'associatedJudge',
     },
