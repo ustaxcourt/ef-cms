@@ -89,6 +89,7 @@ export const ConfirmInitiateServiceModal = connect(
     documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     formattedCaseDetail,
+    isPaper,
     updateCaseCheckbox,
     waitingForResponse,
   }) {
@@ -138,17 +139,22 @@ export const ConfirmInitiateServiceModal = connect(
             )}
           </Hint>
         )}
-        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
-          <ConsolidatedCasesCheckboxes
-            consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
-            consolidatedCaseCheckboxAllChange={
-              consolidatedCaseCheckboxAllChange
-            }
-            formattedCaseDetail={formattedCaseDetail}
-            updateCaseCheckbox={updateCaseCheckbox}
-          />
-        )}
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService &&
+          isPaper && (
+            <ConsolidatedCasesCheckboxes
+              consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
+              consolidatedCaseCheckboxAllChange={
+                consolidatedCaseCheckboxAllChange
+              }
+              formattedCaseDetail={formattedCaseDetail}
+              updateCaseCheckbox={updateCaseCheckbox}
+            />
+          )}
       </ModalDialog>
+
+      //if showConsolidatedCasesForService is true
+      //if paper is true and paper flag is on, show checkboxes
+      //if not paper, show checkboxes
     );
   },
 );

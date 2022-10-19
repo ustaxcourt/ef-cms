@@ -50,12 +50,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   // this is temporary until the flow for 9616 is implemented (QC workflow)
   const editingDocketEntry = !!get(state.isEditingDocketEntry);
+  const flagflag = consolidatedCasesPropagateDocketEntriesFlag;
 
   const showConsolidatedCasesForService =
     !editingDocketEntry &&
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
-    consolidatedCasesPropagateDocketEntriesFlag &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     hasConsolidatedCases;
 
@@ -137,6 +137,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     caseOrGroup,
     confirmationText,
     contactsNeedingPaperService,
+    flagflag,
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
