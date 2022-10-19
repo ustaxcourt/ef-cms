@@ -1,8 +1,9 @@
-const {
+import {
   formatDateString,
   FORMATS,
-} = require('../../../business/utilities/DateHandler');
-const { put } = require('../../dynamodbClientService');
+} from '../../../business/utilities/DateHandler';
+import { put } from '../../dynamodbClientService';
+
 const TIME_TO_EXIST = 60 * 60 * 24 * 8; // 8 days
 
 /**
@@ -29,6 +30,10 @@ const createSectionOutboxArchiveRecord = async ({
   applicationContext,
   Item,
   section,
+}: {
+  applicationContext: IApplicationContext;
+  Item: OutboxItem & DynamoRecord;
+  section: string;
 }) => {
   const skMonth = formatDateString(Item.sk, FORMATS.YYYYMM);
 
@@ -54,6 +59,10 @@ const createSectionOutboxRecentRecord = ({
   applicationContext,
   Item,
   section,
+}: {
+  applicationContext: IApplicationContext;
+  Item: OutboxItem & DynamoRecord;
+  section: string;
 }) =>
   put({
     Item: {
@@ -77,11 +86,17 @@ const createSectionOutboxRecords = ({
   applicationContext,
   section,
   workItem,
+}: {
+  applicationContext: IApplicationContext;
+  section: string;
+  workItem: OutboxItem;
 }) => {
-  const Item = {
+  const Item: any = {
     ...workItem,
     gsi1pk: `work-item|${workItem.workItemId}`,
-    sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
+    sk: workItem.completedAt
+      ? workItem.completedAt
+      : (workItem as any).updatedAt,
   };
 
   return Promise.all([
@@ -98,7 +113,4 @@ const createSectionOutboxRecords = ({
   ]);
 };
 
-module.exports = {
-  TIME_TO_EXIST,
-  createSectionOutboxRecords,
-};
+export { TIME_TO_EXIST, createSectionOutboxRecords };

@@ -50,6 +50,32 @@ type WorkItem = {
   docketNumber: string;
 };
 
+type OutboxItem = {
+  caseStatus: string;
+  caseTitle: string;
+  completedAt: string;
+  completedBy: string;
+  caseIsInProgress: boolean;
+  docketEntry: DocketEntry;
+  docketNumber: string;
+  highPriority: boolean;
+  inProgress: boolean;
+  leadDocketNumber: string;
+  section: string;
+  trialDate: string;
+  workItemId: string;
+} & WorkItem;
+
+type DynamoRecord = {
+  pk: string;
+  sk: string;
+  gsi1pk?: string;
+  ttl?: number;
+  [key: string]: any;
+};
+
+type OutboxDynamoRecord = OutboxItem & DynamoRecord;
+
 type TSectionWorkItem = {
   createdAt: string;
   docketEntry: DocketEntry[];
