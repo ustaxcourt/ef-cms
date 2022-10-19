@@ -1,82 +1,70 @@
-const {
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-} = require('./EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { OutboxItem } = require('./OutboxItem');
+} from './EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { OutboxItem } from './OutboxItem';
 
 describe('OutboxItem', () => {
+  const validOutboxItem: TOutboxItem = {
+    caseStatus: CASE_STATUS_TYPES.new,
+    caseTitle: 'Johnny Joe Jacobson',
+    docketEntry: {} as any,
+    docketNumber: '101-18',
+    assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+    caseIsInProgress: false,
+    completedAt: '2018-11-21T20:49:28.192Z',
+    completedBy: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+    createdAt: '2018-11-21T20:49:28.192Z',
+    highPriority: false,
+    inProgress: false,
+    leadDocketNumber: '101-20',
+    trialDate: '2018-11-21T20:49:28.192Z',
+    workItemId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+    section: DOCKET_SECTION,
+  };
+
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
-      expect(() => new OutboxItem({}, {})).toThrow();
+      expect(() => new OutboxItem({} as any, {} as any)).toThrow();
     });
 
     it('Creates a valid OutboxItem', () => {
-      const outboxItem = new OutboxItem(
-        {
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketEntry: {},
-          docketNumber: '101-18',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          section: DOCKET_SECTION,
-        },
-        { applicationContext },
-      );
+      const outboxItem = new OutboxItem(validOutboxItem, {
+        applicationContext,
+      });
       expect(outboxItem.isValid()).toBeTruthy();
     });
+
     it('should fail validation when fields are missing', () => {
       const outboxItem = new OutboxItem(
         {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        },
+          ...validOutboxItem,
+          section: undefined,
+        } as any,
         { applicationContext },
       );
       expect(outboxItem.isValid()).toBeFalsy();
     });
   });
 
-  it('is set high priority if case is calendared or overridden', () => {
-    let outboxItem = new OutboxItem(
+  it('is set high priority if case is calendared', () => {
+    const outboxItem = new OutboxItem(
       {
-        caseStatus: CASE_STATUS_TYPES.new,
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        section: DOCKET_SECTION,
-      },
-      { applicationContext },
-    );
-    expect(outboxItem.highPriority).toBe(false);
-
-    outboxItem = new OutboxItem(
-      {
+        ...validOutboxItem,
         caseStatus: CASE_STATUS_TYPES.calendared,
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        section: DOCKET_SECTION,
       },
       { applicationContext },
     );
     expect(outboxItem.highPriority).toBe(true);
+  });
 
-    outboxItem = new OutboxItem(
+  it('is set high priority if item is manually set as high priority', () => {
+    const outboxItem = new OutboxItem(
       {
-        caseStatus: CASE_STATUS_TYPES.new,
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        ...validOutboxItem,
         highPriority: true,
-        section: DOCKET_SECTION,
       },
       { applicationContext },
     );
@@ -86,6 +74,7 @@ describe('OutboxItem', () => {
   it('Creates a workItem containing a docketEntry with only the picked fields', () => {
     const outboxItem = new OutboxItem(
       {
+        ...validOutboxItem,
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
         docketEntry: {
@@ -104,9 +93,8 @@ describe('OutboxItem', () => {
           processingStatus: 'pending',
           receivedAt: '2018-03-01T00:01:00.000Z',
           servedAt: '2019-08-25T05:00:00.000Z',
-        },
+        } as any,
         docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         leadDocketNumber: '101-18',
         section: DOCKET_SECTION,
       },
