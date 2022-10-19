@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
   createSectionOutboxRecords,
   TIME_TO_EXIST,
-} = require('./createSectionOutboxRecords');
+} from './createSectionOutboxRecords';
 
 describe('createSectionOutboxRecords', () => {
   let mockWorkItem;

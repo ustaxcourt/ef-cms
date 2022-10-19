@@ -83,18 +83,23 @@ export const describeDeployTable = async ({ applicationContext }) => {
  * @param {object} params the params to put
  * @returns {object} the item that was put
  */
-export const put = params => {
-  const filteredParams = filterEmptyStrings(params);
-  return params.applicationContext
+export const put = ({
+  Item,
+  applicationContext,
+}: {
+  Item: DynamoRecord;
+  applicationContext: IApplicationContext;
+}): Promise<DynamoRecord> => {
+  return applicationContext
     .getDocumentClient()
     .put({
       TableName: getTableName({
-        applicationContext: params.applicationContext,
+        applicationContext,
       }),
-      ...filteredParams,
+      Item: filterEmptyStrings(Item),
     })
     .promise()
-    .then(() => params.Item);
+    .then(() => Item);
 };
 
 /**
