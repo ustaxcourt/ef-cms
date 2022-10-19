@@ -1,12 +1,12 @@
-const client = require('../../dynamodbClientService');
+import { update } from '../../dynamodbClientService';
 
-exports.updateWorkItemTrialDate = ({
+export const updateWorkItemTrialDate = ({
   applicationContext,
   docketNumber,
   trialDate,
   workItemId,
 }) =>
-  client.update({
+  update({
     ExpressionAttributeNames: {
       '#trialDate': 'trialDate',
     },
