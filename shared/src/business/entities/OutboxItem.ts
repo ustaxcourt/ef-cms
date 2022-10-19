@@ -1,10 +1,10 @@
-const {
+import {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('./JoiValidationDecorator');
-const { CASE_STATUS_TYPES } = require('./EntityConstants');
-const { OUTBOX_ITEM_VALIDATION_RULES } = require('./EntityValidationConstants');
-const { pick } = require('lodash');
+} from './JoiValidationDecorator';
+import { CASE_STATUS_TYPES } from './EntityConstants';
+import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
+import { pick } from 'lodash';
 
 /**
  * constructor
@@ -12,11 +12,11 @@ const { pick } = require('lodash');
  * @param {object} rawOutboxItem the raw work item data
  * @constructor
  */
-function OutboxItem() {
+function _OutboxItem() {
   this.entityName = 'OutboxItem';
 }
 
-OutboxItem.prototype.init = function init(
+_OutboxItem.prototype.init = function init(
   rawOutboxItem,
   { applicationContext },
 ) {
@@ -58,6 +58,26 @@ OutboxItem.prototype.init = function init(
     rawOutboxItem.workItemId || applicationContext.getUniqueId();
 };
 
-joiValidationDecorator(OutboxItem, OUTBOX_ITEM_VALIDATION_RULES);
+joiValidationDecorator(_OutboxItem, OUTBOX_ITEM_VALIDATION_RULES);
 
-exports.OutboxItem = validEntityDecorator(OutboxItem);
+interface IOutboxItemConstructor {
+  new (
+    rawWorkItem: TOutboxItem,
+    {
+      applicationContext,
+    }: {
+      applicationContext: IApplicationContext;
+    },
+  ): TOutboxItemEntity;
+
+  validateRawCollection(
+    rawOutboxItems: TOutboxItem[],
+    context: { applicationContext: IApplicationContext },
+  ): TOutboxItem;
+
+  validate(): TOutboxItemEntity;
+  toRawObject(): TOutboxItem;
+}
+
+export const OutboxItem: IOutboxItemConstructor =
+  validEntityDecorator(_OutboxItem);
