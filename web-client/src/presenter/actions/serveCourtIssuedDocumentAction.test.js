@@ -167,9 +167,6 @@ describe('serveCourtIssuedDocumentAction', () => {
           },
           clientConnectionId,
           docketEntryId,
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
-          },
         },
       });
 
