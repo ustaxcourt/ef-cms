@@ -305,9 +305,6 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntriesFlag: true,
-          },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: {
