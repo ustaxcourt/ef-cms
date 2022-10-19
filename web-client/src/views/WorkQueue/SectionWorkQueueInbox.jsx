@@ -170,14 +170,9 @@ SectionWorkQueueTable.Row = React.memo(
 export const SectionWorkQueueInbox = connect(
   {
     formattedWorkQueueLength: state.formattedWorkQueue.length,
-    showSendToBar: state.workQueueHelper.showSendToBar,
     users: state.users,
   },
-  function SectionWorkQueueInbox({
-    formattedWorkQueueLength,
-    showSendToBar,
-    users,
-  }) {
+  function SectionWorkQueueInbox({ formattedWorkQueueLength, users }) {
     return (
       <React.Fragment>
         <WorkQueueAssignments users={users} />
