@@ -1,6 +1,14 @@
-const { batchGet, query } = require('../../dynamodbClientService');
+import { batchGet, query } from '../../dynamodbClientService';
 
-exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
+export const getRecordsViaMapping = async ({
+  applicationContext,
+  pk,
+  prefix,
+}: {
+  applicationContext: IApplicationContext;
+  pk: string;
+  prefix: string;
+}) => {
   const mappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

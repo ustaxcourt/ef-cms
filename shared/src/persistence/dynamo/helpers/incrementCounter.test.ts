@@ -1,14 +1,12 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { incrementCounter } = require('./incrementCounter');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { incrementCounter } from './incrementCounter';
+import { updateConsistent } from '../../dynamodbClientService';
+
+jest.mock('../../dynamodbClientService', () => ({
+  updateConsistent: jest.fn().mockReturnValue({ id: 1 }),
+}));
 
 describe('incrementCounter', () => {
-  beforeEach(() => {
-    client.updateConsistent = jest.fn().mockReturnValue({ id: 1 });
-  });
-
   it('should update the docketNumber counter for the provided year', async () => {
     await incrementCounter({
       applicationContext,
@@ -16,7 +14,7 @@ describe('incrementCounter', () => {
       year: '2029',
     });
 
-    expect(client.updateConsistent.mock.calls[0][0]).toMatchObject({
+    expect((updateConsistent as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeNames: { '#id': 'id' },
       ExpressionAttributeValues: {
         ':value': 1,
@@ -38,7 +36,7 @@ describe('incrementCounter', () => {
       key: '4',
     });
 
-    expect(client.updateConsistent.mock.calls[0][0]).toMatchObject({
+    expect((updateConsistent as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeNames: { '#id': 'id' },
       ExpressionAttributeValues: {
         ':value': 1,

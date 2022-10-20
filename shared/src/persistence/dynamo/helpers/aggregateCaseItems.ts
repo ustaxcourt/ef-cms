@@ -1,4 +1,4 @@
-const { sortBy } = require('lodash');
+import { sortBy } from 'lodash';
 
 const getAssociatedJudge = (theCase, caseAndCaseItems) => {
   if (theCase && theCase.judgeUserId) {
@@ -34,7 +34,7 @@ const isIrsPractitionerItem = item => item.sk.startsWith('irsPractitioner|');
 const isPrivatePractitionerItem = item =>
   item.sk.startsWith('privatePractitioner|');
 
-exports.aggregateCaseItems = caseAndCaseItems => {
+const aggregateCaseItems = caseAndCaseItems => {
   let archivedCorrespondences = [];
   let archivedDocketEntries = [];
   let caseRecords = [];
@@ -106,13 +106,16 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   };
 };
 
-exports.getAssociatedJudge = getAssociatedJudge;
-exports.isArchivedCorrespondenceItem = isArchivedCorrespondenceItem;
-exports.isArchivedDocketEntryItem = isArchivedDocketEntryItem;
-exports.isCaseItem = isCaseItem;
-exports.isCorrespondenceItem = isCorrespondenceItem;
-exports.isDocketEntryItem = isDocketEntryItem;
-exports.isHearingItem = isHearingItem;
-exports.isIrsPractitionerItem = isIrsPractitionerItem;
-exports.isPrivatePractitionerItem = isPrivatePractitionerItem;
-exports.isWorkItemItem = isWorkItemItem;
+export {
+  aggregateCaseItems,
+  getAssociatedJudge,
+  isArchivedDocketEntryItem,
+  isArchivedCorrespondenceItem,
+  isCaseItem,
+  isCorrespondenceItem,
+  isDocketEntryItem,
+  isHearingItem,
+  isIrsPractitionerItem,
+  isPrivatePractitionerItem,
+  isWorkItemItem,
+};
