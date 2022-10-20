@@ -1,16 +1,30 @@
-const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getUserByEmail } = require('./getUserByEmail');
-jest.mock('./getUserById');
-const { getUserById } = require('./getUserById');
+import { query } from '../../../../../shared/src/persistence/dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getUserByEmail } from './getUserByEmail';
+import { getUserById } from './getUserById';
+
+jest.mock('./getUserById', () => ({
+  getUserById: jest.fn(),
+}));
+
+const getUserByIdMock = getUserById as jest.Mock;
+const mockEmail = 'found@example.com';
+const mockFoundUser = {
+  email: mockEmail,
+  userId: 'petitioner1',
+};
+
+jest.mock('../../dynamodbClientService', () => ({
+  query: jest.fn().mockImplementation(() => {
+    return [
+      {
+        userId: mockFoundUser.userId,
+      },
+    ];
+  }),
+}));
 
 describe('getUserByEmail', () => {
-  beforeAll(() => {
-    client.query = jest.fn();
-  });
-
   it('should return undefined when a user is not found with the provided email', async () => {
     const mockEmail = 'notfound@example.com';
 
@@ -23,30 +37,20 @@ describe('getUserByEmail', () => {
   });
 
   it('should format the provided email by removing whitespace and transforming to lowercase', async () => {
-    const mockEmail = 'FOUND@example.com   ';
+    const mockUglyEmail = 'FOUND@example.com   ';
 
     await getUserByEmail({
       applicationContext,
-      email: mockEmail,
+      email: mockUglyEmail,
     });
 
     expect(
-      client.query.mock.calls[0][0].ExpressionAttributeValues[':pk'],
+      (query as jest.Mock).mock.calls[0][0].ExpressionAttributeValues[':pk'],
     ).toEqual('user-email|found@example.com');
   });
 
   it('should return a user object when one is found with the email provided', async () => {
-    const mockEmail = 'found@example.com';
-    const mockFoundUser = {
-      email: mockEmail,
-      userId: 'petitioner1',
-    };
-    client.query = jest.fn().mockReturnValue([
-      {
-        userId: mockFoundUser.userId,
-      },
-    ]);
-    getUserById.mockReturnValue(mockFoundUser);
+    getUserByIdMock.mockReturnValue(mockFoundUser);
 
     const result = await getUserByEmail({
       applicationContext,
