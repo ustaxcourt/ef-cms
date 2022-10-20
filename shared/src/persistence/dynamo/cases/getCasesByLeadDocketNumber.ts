@@ -1,4 +1,4 @@
-const { query } = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 /**
  * getCasesByLeadDocketNumber
@@ -8,9 +8,12 @@ const { query } = require('../../dynamodbClientService');
  * @param {object} providers.leadDocketNumber the lead case docket number
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getCasesByLeadDocketNumber = async ({
+export const getCasesByLeadDocketNumber = async ({
   applicationContext,
   leadDocketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  leadDocketNumber: string;
 }) => {
   let consolidatedCases = await query({
     ExpressionAttributeNames: {

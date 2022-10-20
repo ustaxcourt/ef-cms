@@ -1,12 +1,17 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
-exports.updateIrsPractitionerOnCase = ({
+export const updateIrsPractitionerOnCase = ({
   applicationContext,
   docketNumber,
   practitioner,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  practitioner: TPractitioner;
+  userId: string;
 }) =>
-  client.put({
+  put({
     Item: {
       ...practitioner,
       pk: `case|${docketNumber}`,
@@ -15,13 +20,18 @@ exports.updateIrsPractitionerOnCase = ({
     applicationContext,
   });
 
-exports.updatePrivatePractitionerOnCase = ({
+export const updatePrivatePractitionerOnCase = ({
   applicationContext,
   docketNumber,
   practitioner,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  practitioner: TPractitioner;
+  userId: string;
 }) =>
-  client.put({
+  put({
     Item: {
       ...practitioner,
       pk: `case|${docketNumber}`,

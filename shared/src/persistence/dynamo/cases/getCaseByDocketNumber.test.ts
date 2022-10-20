@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   ROLES,
-} = require('../../../business/entities/EntityConstants');
-const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
+} from '../../../business/entities/EntityConstants';
+import { getCaseByDocketNumber } from './getCaseByDocketNumber';
 
 describe('getCaseByDocketNumber', () => {
   it('should return data as received from persistence', async () => {

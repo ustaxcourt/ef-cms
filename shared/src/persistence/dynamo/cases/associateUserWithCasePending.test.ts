@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  associateUserWithCasePending,
-} = require('./associateUserWithCasePending');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { associateUserWithCasePending } from './associateUserWithCasePending';
 
 describe('associateUserWithCasePending', () => {
   it('should create mapping request that creates pending association request', async () => {

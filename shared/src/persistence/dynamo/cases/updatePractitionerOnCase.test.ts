@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
-} = require('./updatePractitionerOnCase');
+} from './updatePractitionerOnCase';
 
 describe('updatePractitionerOnCase', () => {
   let putStub;
@@ -23,7 +21,7 @@ describe('updatePractitionerOnCase', () => {
       await updateIrsPractitionerOnCase({
         applicationContext,
         docketNumber: '109-11',
-        practitioner: { name: 'Someone' },
+        practitioner: { name: 'Someone' } as any,
         userId: '31487024-8377-46f9-a3ef-797fbf54734d',
       });
 
@@ -40,7 +38,7 @@ describe('updatePractitionerOnCase', () => {
       await updatePrivatePractitionerOnCase({
         applicationContext,
         docketNumber: '109-11',
-        practitioner: { name: 'Someone else' },
+        practitioner: { name: 'Someone else' } as any,
         userId: '31487024-8377-46f9-a3ef-797fbf54734d',
       });
 

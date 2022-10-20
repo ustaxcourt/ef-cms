@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-} = require('../../../business/entities/EntityConstants');
-const { createCase } = require('./createCase');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { createCase } from './createCase';
 
 describe('createCase', () => {
   it('should remove fields not stored on main case record and put into persistence', async () => {
@@ -22,7 +18,7 @@ describe('createCase', () => {
         privatePractitioners: [{}],
         status: CASE_STATUS_TYPES.generalDocket,
         userId: 'petitioner',
-      },
+      } as any,
     });
 
     const createCaseCall = applicationContext

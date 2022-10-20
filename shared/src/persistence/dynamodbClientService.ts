@@ -39,7 +39,9 @@ const filterEmptyStrings = params => {
   return params;
 };
 
-const getTableName = ({ applicationContext }) =>
+const getTableName = ({
+  applicationContext,
+}): { applicationContext: IApplicationContext } =>
   (applicationContext.environment &&
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&
@@ -415,7 +417,13 @@ export const batchDelete = ({ applicationContext, items }) => {
   }
 };
 
-export const remove = ({ applicationContext, key }) => {
+export const remove = ({
+  applicationContext,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  key: Record<string, string>;
+}) => {
   return applicationContext
     .getDocumentClient()
     .delete({

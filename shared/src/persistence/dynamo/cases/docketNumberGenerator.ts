@@ -1,9 +1,9 @@
-const client = require('../../dynamodbClientService');
-const {
+import { get } from '../../dynamodbClientService';
+import {
   formatDateString,
   formatNow,
   FORMATS,
-} = require('../../../business/utilities/DateHandler');
+} from '../../../business/utilities/DateHandler';
 
 /**
  * gets the next docket number in the series
@@ -13,7 +13,13 @@ const {
  * @param {object} providers.year the year in which the docket number is to be generator
  * @returns {string} the generated docket number
  */
-exports.getNextDocketNumber = async ({ applicationContext, year }) => {
+export const getNextDocketNumber = async ({
+  applicationContext,
+  year,
+}: {
+  applicationContext: IApplicationContext;
+  year: string;
+}) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
     key: 'docketNumberCounter',
@@ -32,8 +38,14 @@ exports.getNextDocketNumber = async ({ applicationContext, year }) => {
  * @param {object} providers.docketNumber a docket number to verify as available
  * @returns {string} the generated docket number
  */
-exports.checkCaseExists = async ({ applicationContext, docketNumber }) => {
-  const caseMetadata = await client.get({
+export const checkCaseExists = async ({
+  applicationContext,
+  docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+}) => {
+  const caseMetadata = await get({
     Key: {
       pk: `case|${docketNumber}`,
       sk: `case|${docketNumber}`,
@@ -44,7 +56,7 @@ exports.checkCaseExists = async ({ applicationContext, docketNumber }) => {
   return !!caseMetadata;
 };
 
-exports.MAX_ATTEMPTS = 5;
+export const MAX_ATTEMPTS = 5;
 
 /**
  * creates a new unique docket number
@@ -54,7 +66,13 @@ exports.MAX_ATTEMPTS = 5;
  * @param {object} providers.receivedAt the receivedAt date for determining the year portion of the docket number
  * @returns {string} the generated docket number
  */
-exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
+export const createDocketNumber = async ({
+  applicationContext,
+  receivedAt,
+}: {
+  applicationContext: IApplicationContext;
+  receivedAt: string;
+}) => {
   const year = receivedAt
     ? formatDateString(receivedAt, FORMATS.YEAR)
     : formatNow(FORMATS.YEAR);
@@ -63,13 +81,13 @@ exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
   let nextDocketNumber;
 
   const docketNumber = await (async () => {
-    while (attempt < exports.MAX_ATTEMPTS) {
-      nextDocketNumber = await exports.getNextDocketNumber({
+    while (attempt < MAX_ATTEMPTS) {
+      nextDocketNumber = await getNextDocketNumber({
         applicationContext,
         year,
       });
 
-      const caseExists = await exports.checkCaseExists({
+      const caseExists = await checkCaseExists({
         applicationContext,
         docketNumber: nextDocketNumber,
       });

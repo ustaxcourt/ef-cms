@@ -1,5 +1,5 @@
-const client = require('../../dynamodbClientService');
-const { aggregateCaseItems } = require('../helpers/aggregateCaseItems');
+import { get, query } from '../../dynamodbClientService';
+import { aggregateCaseItems } from '../helpers/aggregateCaseItems';
 
 /**
  * getCaseByDocketNumber
@@ -10,12 +10,15 @@ const { aggregateCaseItems } = require('../helpers/aggregateCaseItems');
  * @param {string} providers.docketNumber the docket number to get
  * @returns {object} the case details
  */
-exports.getCaseMetadataWithCounsel = async ({
+export const getCaseMetadataWithCounsel = async ({
   applicationContext,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
 }) => {
   const caseItems = [
-    await client.get({
+    await get({
       Key: {
         pk: `case|${docketNumber}`,
         sk: `case|${docketNumber}`,
@@ -23,7 +26,7 @@ exports.getCaseMetadataWithCounsel = async ({
       applicationContext,
     }),
 
-    ...(await client.query({
+    ...(await query({
       ExpressionAttributeNames: {
         '#pk': 'pk',
         '#sk': 'sk',
@@ -36,7 +39,7 @@ exports.getCaseMetadataWithCounsel = async ({
       applicationContext,
     })),
 
-    ...(await client.query({
+    ...(await query({
       ExpressionAttributeNames: {
         '#pk': 'pk',
         '#sk': 'sk',

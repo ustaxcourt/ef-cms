@@ -1,13 +1,13 @@
 jest.mock('../../dynamodbClientService');
-const client = require('../../dynamodbClientService');
+import { get } from '../../dynamodbClientService';
 
-const DateHandler = require('../../../business/utilities/DateHandler');
-const {
+import DateHandler from '../../../business/utilities/DateHandler';
+import {
   checkCaseExists,
   createDocketNumber,
   getNextDocketNumber,
   MAX_ATTEMPTS,
-} = require('./docketNumberGenerator');
+} from './docketNumberGenerator';
 
 let applicationContext;
 const startingCounter = 123;
@@ -41,7 +41,7 @@ describe('Create docket number', function () {
   });
 
   it('should throw an exception if attempting to create a case with an existing docket number after the MAX_ATTEMPTS limit is reached', async () => {
-    client.get.mockImplementation(() =>
+    (get as jest.Mock).mockImplementation(() =>
       Promise.resolve({ docketNumber: '223-45' }),
     );
 
@@ -52,11 +52,11 @@ describe('Create docket number', function () {
       }),
     ).rejects.toThrow('docket number already exists');
 
-    expect(client.get).toHaveBeenCalledTimes(MAX_ATTEMPTS);
+    expect(get).toHaveBeenCalledTimes(MAX_ATTEMPTS);
   });
 
   it('should return an available docketNumber within the specified MAX_ATTEMPTS', async () => {
-    client.get = jest.fn().mockImplementation(({ Key }) => {
+    (get as jest.Mock).mockImplementation(({ Key }) => {
       let caseMeta;
       const docketNumber = Key.pk.replace('case|', '');
 
@@ -86,7 +86,7 @@ describe('Create docket number', function () {
       receivedAt: '2045-08-21T20:07:44.018Z',
     });
 
-    expect(client.get).toHaveBeenCalledTimes(2); // first attempt returned an existing case, second attempt did not
+    expect(get).toHaveBeenCalledTimes(2); // first attempt returned an existing case, second attempt did not
     expect(result).toEqual('224-45');
   });
 
@@ -106,7 +106,7 @@ describe('Create docket number', function () {
         getUtilities: () => {
           return { ...DateHandler, formatNow: () => '96' };
         },
-      },
+      } as any,
       receivedAt: '2032-08-21T20:07:44.018Z',
     });
 
@@ -115,12 +115,12 @@ describe('Create docket number', function () {
 
   describe('checkCaseExists', () => {
     it('returns true if a case with the given docketNumber exists', async () => {
-      client.get.mockImplementationOnce(() =>
+      (get as jest.Mock).mockImplementationOnce(() =>
         Promise.resolve({ docketNumber: '223-45' }),
       );
 
       const result = await checkCaseExists({
-        applicationContext: {},
+        applicationContext: {} as any,
         docketNumber: '223-45',
       });
 
@@ -128,10 +128,12 @@ describe('Create docket number', function () {
     });
 
     it('returns false if a case with the given docketNumber does not exist', async () => {
-      client.get.mockImplementationOnce(() => Promise.resolve(undefined));
+      (get as jest.Mock).mockImplementationOnce(() =>
+        Promise.resolve(undefined),
+      );
 
       const result = await checkCaseExists({
-        applicationContext: {},
+        applicationContext: {} as any,
         docketNumber: '223-45',
       });
 
@@ -153,7 +155,7 @@ describe('Create docket number', function () {
               incrementCounter: incrementCounterMock,
             };
           },
-        },
+        } as any,
         year: '2020',
       });
 

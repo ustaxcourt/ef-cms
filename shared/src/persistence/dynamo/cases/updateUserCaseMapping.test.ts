@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { updateUserCaseMapping } = require('./updateUserCaseMapping');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateUserCaseMapping } from './updateUserCaseMapping';
 
 describe('updateUserCaseMapping', () => {
   it('should update the user case mapping', async () => {

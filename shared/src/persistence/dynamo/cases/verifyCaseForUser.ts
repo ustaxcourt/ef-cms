@@ -1,11 +1,15 @@
-const client = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
-exports.verifyCaseForUser = async ({
+export const verifyCaseForUser = async ({
   applicationContext,
   docketNumber,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  userId: string;
 }) => {
-  const myCase = await client.query({
+  const myCase = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
