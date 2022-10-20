@@ -4697,6 +4697,11 @@
     "current": true
   },
   {
+    "pk": "consolidated-cases-party-association",
+    "sk": "consolidated-cases-party-association",
+    "current": true
+  },
+  {
     "pk": "stamp-disposition-enabled",
     "sk": "stamp-disposition-enabled",
     "current": true
@@ -12732,9 +12737,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Guy Fieri",
       "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -23914,7 +23917,7 @@
       {
         "isAddressSealed": false,
         "city": "Los Angeles",
-        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416", 
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "address1": "111 Fast Ln",
         "postalCode": "12355",
         "contactType": "primary",
@@ -23954,9 +23957,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Brian Earl Spilner",
       "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
