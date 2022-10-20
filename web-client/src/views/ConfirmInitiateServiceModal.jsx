@@ -140,20 +140,9 @@ export const ConfirmInitiateServiceModal = connect(
           </Hint>
         )}
         {confirmInitiateServiceModalHelper.showConsolidatedCasesForService &&
-          isPaper &&
-          confirmInitiateServiceModalHelper.flagflag && (
-            <ConsolidatedCasesCheckboxes
-              consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
-              consolidatedCaseCheckboxAllChange={
-                consolidatedCaseCheckboxAllChange
-              }
-              formattedCaseDetail={formattedCaseDetail}
-              updateCaseCheckbox={updateCaseCheckbox}
-            />
-          )}
-
-        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService &&
-          !isPaper && (
+          (!isPaper ||
+            (isPaper &&
+              confirmInitiateServiceModalHelper.consolidatedCasesPaperFilingDocketEntriesFlag)) && (
             <ConsolidatedCasesCheckboxes
               consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
               consolidatedCaseCheckboxAllChange={
@@ -164,10 +153,6 @@ export const ConfirmInitiateServiceModal = connect(
             />
           )}
       </ModalDialog>
-
-      //if showConsolidatedCasesForService is true
-      //if paper is true and paper flag is on, show checkboxes
-      //if not paper, show checkboxes
     );
   },
 );
