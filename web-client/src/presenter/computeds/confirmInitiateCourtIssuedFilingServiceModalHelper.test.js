@@ -9,18 +9,19 @@ import {
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
-import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
+import { confirmInitiateCourtIssuedFilingServiceModalHelper as confirmInitiateCourtIssuedFilingServiceModalHelperComputed } from './confirmInitiateCourtIssuedFilingServiceModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('confirmInitiateServiceModalHelper', () => {
+describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
   const mockContactId = 'f6847fdb-3669-4ad7-8f82-c4ac3b945523';
   const mockEventCode = 'OSC';
 
-  const confirmInitiateServiceModalHelper = withAppContextDecorator(
-    confirmInitiateServiceModalHelperComputed,
-    applicationContext,
-  );
+  const confirmInitiateCourtIssuedFilingServiceModalHelper =
+    withAppContextDecorator(
+      confirmInitiateCourtIssuedFilingServiceModalHelperComputed,
+      applicationContext,
+    );
 
   const FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES = {
     irsPractitioners: [
@@ -67,15 +68,18 @@ describe('confirmInitiateServiceModalHelper', () => {
   };
 
   it('returns the expected contacts needed if someone needs paper without consolidated cases', () => {
-    const result = runCompute(confirmInitiateServiceModalHelper, {
-      state: {
-        form: {
-          eventCode: mockEventCode,
+    const result = runCompute(
+      confirmInitiateCourtIssuedFilingServiceModalHelper,
+      {
+        state: {
+          form: {
+            eventCode: mockEventCode,
+          },
+          formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
-        formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
-        modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
-    });
+    );
 
     expect(result).toEqual({
       caseOrGroup: 'case',
@@ -94,33 +98,36 @@ describe('confirmInitiateServiceModalHelper', () => {
   });
 
   it('returns the expected values if no contacts need paper service', () => {
-    const result = runCompute(confirmInitiateServiceModalHelper, {
-      state: {
-        form: {
-          eventCode: mockEventCode,
+    const result = runCompute(
+      confirmInitiateCourtIssuedFilingServiceModalHelper,
+      {
+        state: {
+          form: {
+            eventCode: mockEventCode,
+          },
+          formattedCaseDetail: {
+            irsPractitioners: [],
+            isPaper: false,
+            petitioners: [
+              {
+                address1: '609 East Cowley Parkway',
+                address2: 'Ullamco quibusdam ea',
+                address3: 'Consectetur quos do',
+                city: 'asdf',
+                contactType: CONTACT_TYPES.primary,
+                countryType: COUNTRY_TYPES.DOMESTIC,
+                email: 'petitioner@example.com',
+                name: 'Callie Bullock',
+                postalCode: '33333',
+                state: 'AK',
+              },
+            ],
+            privatePractitioners: [],
+          },
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
-        formattedCaseDetail: {
-          irsPractitioners: [],
-          isPaper: false,
-          petitioners: [
-            {
-              address1: '609 East Cowley Parkway',
-              address2: 'Ullamco quibusdam ea',
-              address3: 'Consectetur quos do',
-              city: 'asdf',
-              contactType: CONTACT_TYPES.primary,
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              email: 'petitioner@example.com',
-              name: 'Callie Bullock',
-              postalCode: '33333',
-              state: 'AK',
-            },
-          ],
-          privatePractitioners: [],
-        },
-        modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
-    });
+    );
 
     expect(result).toEqual({
       caseOrGroup: 'case',
@@ -204,13 +211,16 @@ describe('confirmInitiateServiceModalHelper', () => {
         consolidatedCases: [LEAD_CASE, nonLeadCase],
         isLeadCase: true,
       };
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: { eventCode: 'O' },
-          formattedCaseDetail,
-          modal: { showModal: 'ConfirmInitiateServiceModal' },
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            form: { eventCode: 'O' },
+            formattedCaseDetail,
+            modal: { showModal: 'ConfirmInitiateServiceModal' },
+          },
         },
-      });
+      );
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
@@ -234,13 +244,16 @@ describe('confirmInitiateServiceModalHelper', () => {
         isLeadCase: true,
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: { eventCode: 'OSC' },
-          formattedCaseDetail,
-          modal: { showModal: 'ConfirmInitiateServiceModal' },
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            form: { eventCode: 'OSC' },
+            formattedCaseDetail,
+            modal: { showModal: 'ConfirmInitiateServiceModal' },
+          },
         },
-      });
+      );
 
       expect(result.contactsNeedingPaperService.length).toEqual(4);
       expect(result.caseOrGroup).toEqual('group');
@@ -256,16 +269,19 @@ describe('confirmInitiateServiceModalHelper', () => {
         isLeadCase: true,
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          featureFlagHelper: {
-            consolidatedCasesPaperFilingDocketEntries: true,
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              consolidatedCasesPaperFilingDocketEntries: true,
+            },
+            form: { eventCode: 'A' },
+            formattedCaseDetail,
+            modal: { showModal: 'ConfirmInitiateServiceModal' },
           },
-          form: { eventCode: 'A' },
-          formattedCaseDetail,
-          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
-      });
+      );
 
       expect(result.showConsolidatedCasesForService).toBe(true);
     });
@@ -294,17 +310,20 @@ describe('confirmInitiateServiceModalHelper', () => {
         ],
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          featureFlagHelper: {
-            consolidatedCasesPaperFilingDocketEntries: true,
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              consolidatedCasesPaperFilingDocketEntries: true,
+            },
+            form: { eventCode: 'A' },
+            formattedCaseDetail,
+            isEditingDocketEntry: true,
+            modal: { showModal: 'ConfirmInitiateServiceModal' },
           },
-          form: { eventCode: 'A' },
-          formattedCaseDetail,
-          isEditingDocketEntry: true,
-          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
-      });
+      );
 
       expect(result.showConsolidatedCasesForService).toBe(false);
     });
@@ -333,16 +352,19 @@ describe('confirmInitiateServiceModalHelper', () => {
         ],
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          featureFlagHelper: {
-            consolidatedCasesPaperFilingDocketEntries: true,
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              consolidatedCasesPaperFilingDocketEntries: true,
+            },
+            form: { eventCode: 'PSDE' },
+            formattedCaseDetail,
+            modal: { showModal: 'ConfirmInitiateServiceModal' },
           },
-          form: { eventCode: 'PSDE' },
-          formattedCaseDetail,
-          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
-      });
+      );
 
       expect(result.showConsolidatedCasesForService).toBe(false);
     });
@@ -385,15 +407,18 @@ describe('confirmInitiateServiceModalHelper', () => {
         isLeadCase: true,
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: { eventCode: 'OSC' },
-          formattedCaseDetail,
-          modal: {
-            showModal: 'ConfirmInitiateCourtIssuedDocumentServiceModal',
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            form: { eventCode: 'OSC' },
+            formattedCaseDetail,
+            modal: {
+              showModal: 'ConfirmInitiateCourtIssuedFilingServiceModal',
+            },
           },
         },
-      });
+      );
 
       expect(result.contactsNeedingPaperService.length).toEqual(3);
     });
@@ -419,22 +444,25 @@ describe('confirmInitiateServiceModalHelper', () => {
     //   expect(result.showConsolidatedCasesForService).toEqual(false);
     // });
 
-    it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedDocumentServiceModal', () => {
+    it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedFilingServiceModal', () => {
       const formattedCaseDetail = {
         ...LEAD_CASE,
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: { eventCode: 'OSC' },
-          formattedCaseDetail,
-          modal: {
-            showModal: 'PaperServiceConfirmModal',
+      const result = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            form: { eventCode: 'OSC' },
+            formattedCaseDetail,
+            modal: {
+              showModal: 'PaperServiceConfirmModal',
+            },
           },
         },
-      });
+      );
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.showConsolidatedCasesForService).toEqual(false);
