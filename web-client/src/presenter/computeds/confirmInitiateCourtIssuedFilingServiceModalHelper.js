@@ -24,7 +24,6 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
   const modalName = get(state.modal.showModal);
 
   const showConsolidatedOptions = [
-    'ConfirmInitiateServiceModal',
     'ConfirmInitiateCourtIssuedDocumentServiceModal',
     'ConfirmInitiatePaperDocumentServiceModal',
   ].includes(modalName);
