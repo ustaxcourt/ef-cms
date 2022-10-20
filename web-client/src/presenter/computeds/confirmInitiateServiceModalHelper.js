@@ -30,8 +30,8 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const form = get(state.form);
 
-  const consolidatedCasesPropagateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  const consolidatedCasesPaperFilingDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPaperFilingDocketEntries,
   );
 
   const hasConsolidatedCases =
@@ -50,7 +50,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   // this is temporary until the flow for 9616 is implemented (QC workflow)
   const editingDocketEntry = !!get(state.isEditingDocketEntry);
-  const flagflag = consolidatedCasesPropagateDocketEntriesFlag;
 
   const showConsolidatedCasesForService =
     !editingDocketEntry &&
@@ -136,8 +135,8 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   return {
     caseOrGroup,
     confirmationText,
+    consolidatedCasesPaperFilingDocketEntriesFlag,
     contactsNeedingPaperService,
-    flagflag,
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
