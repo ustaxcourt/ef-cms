@@ -1,0 +1,32 @@
+# DevEfCms.DocketEntry
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**addToCoversheet** | **Boolean** | if the docket entry was added to the coversheet | [optional] 
+**createdAt** | **String** | the date the docket entry was created | [optional] 
+**docketEntryId** | **String** | the docket entry id to identify the docket entry | [optional] 
+**docketNumber** | **String** | the docket number the docket entry belongs to | [optional] 
+**documentTitle** | **String** | the title of the docket entry | [optional] 
+**documentType** | **String** | the type of docket entry | [optional] 
+**draftOrderState** | **Object** | keeps track of the text written inside the draft order | [optional] 
+**entityName** | **String** | the type of entity | [optional] 
+**eventCode** | **String** | the event code type of entity | [optional] 
+**filedBy** | **String** | who filed the docket entry | [optional] 
+**filingDate** | **String** | the date the docket entry was filed | [optional] 
+**index** | **Number** | the position in the docket record | [optional] 
+**isDraft** | **Boolean** | used to know if the docket entry is a draft | [optional] 
+**isFileAttached** | **Boolean** | used to know if a file is attached to the docket entry | [optional] 
+**isMinuteEntry** | **Boolean** | used to know if the docket entry is a minute entry | [optional] 
+**isOnDocketRecord** | **Boolean** | used to know if the docket entry is on the docket record | [optional] 
+**isSealed** | **Boolean** | used to know if the docket entry has been sealed | [optional] 
+**isStricken** | **Boolean** | used to know if the docket entry has been stricken | [optional] 
+**pending** | **Boolean** | used to know if the docket entry is pending | [optional] 
+**processingStatus** | **String** | keeps track of the processing state of the docket entry | [optional] 
+**receivedAt** | **String** | the date the docket entry was received | [optional] 
+**sealedTo** | **String** | who the docket entry is sealed to | [optional] 
+**servedAt** | **String** | when the docket entry was served | [optional] 
+**signedAt** | **String** | when the docket entry was signed | [optional] 
+**signedByUserId** | **String** | who signed the docket entry | [optional] 
+**signedJudgeName** | **String** | the name of the judge who signed the docket entry | [optional] 
+**userId** | **String** | the userId of who created the docket entry | [optional] 
