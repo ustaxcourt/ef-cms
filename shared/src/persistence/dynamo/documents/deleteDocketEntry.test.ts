@@ -1,8 +1,8 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { deleteDocketEntry } = require('./deleteDocketEntry');
+import { remove } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteDocketEntry } from './deleteDocketEntry';
+
+jest.mock('../../dynamodbClientService');
 
 const mockDocketEntryId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 const mockDocketNumber = '999-99';
@@ -12,8 +12,6 @@ describe('deleteDocketEntry', () => {
     applicationContext.filterCaseMetadata.mockImplementation(
       ({ cases }) => cases,
     );
-
-    client.remove = jest.fn();
   });
 
   it('makes a delete request with the given docket entry data for the matching docketEntryId', async () => {
@@ -23,7 +21,7 @@ describe('deleteDocketEntry', () => {
       docketNumber: mockDocketNumber,
     });
 
-    expect(client.remove.mock.calls[0][0]).toMatchObject({
+    expect((remove as jest.Mock).mock.calls[0][0]).toMatchObject({
       key: {
         pk: `case|${mockDocketNumber}`,
         sk: `docket-entry|${mockDocketEntryId}`,

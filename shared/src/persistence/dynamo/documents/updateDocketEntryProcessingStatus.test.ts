@@ -1,13 +1,11 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-} = require('../../../business/entities/EntityConstants');
-const {
-  updateDocketEntryProcessingStatus,
-} = require('./updateDocketEntryProcessingStatus');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { updateDocketEntryProcessingStatus } from './updateDocketEntryProcessingStatus';
+
+jest.mock('../../dynamodbClientService');
+
+const updateMock = update as jest.Mock;
 
 describe('updateDocketEntryProcessingStatus', () => {
   beforeAll(() => {
@@ -15,7 +13,7 @@ describe('updateDocketEntryProcessingStatus', () => {
       ({ cases }) => cases,
     );
 
-    client.update = jest.fn().mockReturnValue({
+    updateMock.mockReturnValue({
       docketNumber: '123-20',
       pk: '123',
       sk: '123',
@@ -26,10 +24,10 @@ describe('updateDocketEntryProcessingStatus', () => {
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await updateDocketEntryProcessingStatus({
       applicationContext,
-      docketEntryId: 3,
+      docketEntryId: '3',
       docketNumber: '123-20',
     });
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    expect(updateMock.mock.calls[0][0]).toMatchObject({
       Key: { pk: 'case|123-20', sk: 'docket-entry|3' },
       UpdateExpression: 'SET #processingStatus = :status',
     });

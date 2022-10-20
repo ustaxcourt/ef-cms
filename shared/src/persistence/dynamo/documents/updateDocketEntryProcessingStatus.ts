@@ -1,14 +1,16 @@
-const client = require('../../dynamodbClientService');
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../../../business/entities/EntityConstants');
+import { update } from '../../dynamodbClientService';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../../business/entities/EntityConstants';
 
-exports.updateDocketEntryProcessingStatus = async ({
+export const updateDocketEntryProcessingStatus = async ({
   applicationContext,
   docketEntryId,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketEntryId: string;
+  docketNumber: string;
 }) => {
-  await client.update({
+  await update({
     ExpressionAttributeNames: {
       '#processingStatus': 'processingStatus',
     },

@@ -1,13 +1,18 @@
-const client = require('../../dynamodbClientService');
-const { omit } = require('lodash');
+import { put } from '../../dynamodbClientService';
+import { omit } from 'lodash';
 
-exports.updateDocketEntry = async ({
+export const updateDocketEntry = ({
   applicationContext,
   docketEntryId,
   docketNumber,
   document,
-}) => {
-  await client.put({
+}: {
+  applicationContext: IApplicationContext;
+  docketEntryId: string;
+  docketNumber: string;
+  document: any;
+}) =>
+  put({
     Item: {
       pk: `case|${docketNumber}`,
       sk: `docket-entry|${docketEntryId}`,
@@ -15,4 +20,3 @@ exports.updateDocketEntry = async ({
     },
     applicationContext,
   });
-};

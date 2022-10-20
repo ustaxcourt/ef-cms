@@ -111,11 +111,13 @@ export const put = ({
  */
 export const update = ({
   ExpressionAttributeNames,
+  ConditionExpression,
   ExpressionAttributeValues,
   Key,
   UpdateExpression,
   applicationContext,
 }: {
+  ConditionExpression?: string;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string | boolean>;
   Key: Record<string, string>;
@@ -132,6 +134,7 @@ export const update = ({
       ExpressionAttributeValues: filteredValues,
       ExpressionAttributeNames,
       Key,
+      ConditionExpression,
       UpdateExpression,
     })
     .promise()

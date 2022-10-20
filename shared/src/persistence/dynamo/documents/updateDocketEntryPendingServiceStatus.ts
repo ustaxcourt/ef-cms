@@ -1,13 +1,18 @@
-const client = require('../../dynamodbClientService');
+import { update } from '../../dynamodbClientService';
 
-exports.updateDocketEntryPendingServiceStatus = async ({
+export const updateDocketEntryPendingServiceStatus = async ({
   applicationContext,
   docketEntryId,
   docketNumber,
   status,
+}: {
+  applicationContext: IApplicationContext;
+  docketEntryId: string;
+  docketNumber: string;
+  status: string;
 }) => {
   try {
-    await client.update({
+    await update({
       ConditionExpression: 'attribute_exists(docketEntryId)', //this function should never create a docket entry record if it does not already exist
       ExpressionAttributeNames: {
         '#isPendingService': 'isPendingService',

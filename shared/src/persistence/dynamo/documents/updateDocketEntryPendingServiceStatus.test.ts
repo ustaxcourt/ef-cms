@@ -1,10 +1,8 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  updateDocketEntryPendingServiceStatus,
-} = require('./updateDocketEntryPendingServiceStatus');
+import { update } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateDocketEntryPendingServiceStatus } from './updateDocketEntryPendingServiceStatus';
+
+jest.mock('../../dynamodbClientService');
 
 describe('updateDocketEntryPendingServiceStatus', () => {
   beforeAll(() => {
@@ -12,7 +10,7 @@ describe('updateDocketEntryPendingServiceStatus', () => {
       ({ cases }) => cases,
     );
 
-    client.update = jest.fn().mockReturnValue({
+    (update as jest.Mock).mockReturnValue({
       docketNumber: '123-20',
       pk: '123',
       sk: '123',
@@ -22,18 +20,18 @@ describe('updateDocketEntryPendingServiceStatus', () => {
   it('should update the given docketEntry record with a isPendingService value', async () => {
     await updateDocketEntryPendingServiceStatus({
       applicationContext,
-      docketEntryId: 3,
+      docketEntryId: 'asdf',
       docketNumber: '123-20',
       status: true,
-    });
-    expect(client.update.mock.calls[0][0]).toMatchObject({
+    } as any);
+    expect((update as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeNames: {
         '#isPendingService': 'isPendingService',
       },
       ExpressionAttributeValues: {
         ':status': true,
       },
-      Key: { pk: 'case|123-20', sk: 'docket-entry|3' },
+      Key: { pk: 'case|123-20', sk: 'docket-entry|asdf' },
       UpdateExpression: 'SET #isPendingService = :status',
     });
   });
