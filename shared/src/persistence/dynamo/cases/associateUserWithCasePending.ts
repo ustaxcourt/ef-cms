@@ -1,11 +1,11 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
-exports.associateUserWithCasePending = ({
+export const associateUserWithCasePending = ({
   applicationContext,
   docketNumber,
   userId,
 }) =>
-  client.put({
+  put({
     Item: {
       pk: `user|${userId}`,
       sk: `pending-case|${docketNumber}`,

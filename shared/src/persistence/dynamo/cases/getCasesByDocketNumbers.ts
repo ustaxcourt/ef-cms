@@ -1,5 +1,5 @@
-const client = require('../../dynamodbClientService');
-const { uniq } = require('lodash');
+import { batchGet } from '../../dynamodbClientService';
+import { uniq } from 'lodash';
 
 /**
  * getCasesByDocketNumbers
@@ -9,8 +9,11 @@ const { uniq } = require('lodash');
  * @param {Array} providers.docketNumbers the docket numbers to get
  * @returns {Array} the case details
  */
-exports.getCasesByDocketNumbers = ({ applicationContext, docketNumbers }) =>
-  client.batchGet({
+export const getCasesByDocketNumbers = ({
+  applicationContext,
+  docketNumbers,
+}) =>
+  batchGet({
     applicationContext,
     keys: uniq(docketNumbers).map(docketNumber => ({
       pk: `case|${docketNumber}`,

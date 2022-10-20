@@ -1,13 +1,16 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  createCaseTrialSortMappingRecords,
-} = require('./createCaseTrialSortMappingRecords');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createCaseTrialSortMappingRecords } from './createCaseTrialSortMappingRecords';
+import { remove, put, query } from '../../dynamodbClientService';
+
+jest.mock('../../dynamodbClientService');
+
+const queryMock = query as jest.Mock;
+const removeMock = remove as jest.Mock;
+const putMock = put as jest.Mock;
 
 describe('createCaseTrialSortMappingRecords', () => {
   it('attempts to persist the case trial sort mapping records', async () => {
-    applicationContext.getDocumentClient().query = jest.fn().mockReturnValue({
+    queryMock.mockReturnValue({
       promise: () => {
         return Promise.resolve({ Items: [] });
       },
@@ -22,9 +25,7 @@ describe('createCaseTrialSortMappingRecords', () => {
       docketNumber: '123-20',
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
+    expect(putMock.mock.calls[0][0]).toMatchObject({
       Item: {
         docketNumber: '123-20',
         gsi1pk: 'eligible-for-trial-case-catalog|123-20',
@@ -32,9 +33,7 @@ describe('createCaseTrialSortMappingRecords', () => {
         sk: 'nonhybridSortRecord',
       },
     });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0],
-    ).toMatchObject({
+    expect(putMock.mock.calls[1][0]).toMatchObject({
       Item: {
         docketNumber: '123-20',
         gsi1pk: 'eligible-for-trial-case-catalog|123-20',
@@ -43,17 +42,11 @@ describe('createCaseTrialSortMappingRecords', () => {
       },
     });
 
-    expect(
-      applicationContext.getDocumentClient().delete.mock.calls.length,
-    ).toEqual(0);
+    expect(removeMock.mock.calls.length).toEqual(0);
   });
 
   it('deletes old mapping records for the given case if they exist', async () => {
-    applicationContext.getDocumentClient().query = jest.fn().mockReturnValue({
-      promise: () => {
-        return Promise.resolve({ Items: [{ sk: 'abc' }, { sk: '123' }] });
-      },
-    });
+    queryMock.mockResolvedValue([{ sk: 'abc' }, { sk: '123' }]);
 
     await createCaseTrialSortMappingRecords({
       applicationContext,
@@ -64,8 +57,6 @@ describe('createCaseTrialSortMappingRecords', () => {
       docketNumber: '123-20',
     });
 
-    expect(
-      applicationContext.getDocumentClient().delete.mock.calls.length,
-    ).toEqual(2);
+    expect(removeMock.mock.calls.length).toEqual(2);
   });
 });

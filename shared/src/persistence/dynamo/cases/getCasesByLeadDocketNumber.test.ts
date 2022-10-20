@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-} = require('../../../business/entities/EntityConstants');
-const { getCasesByLeadDocketNumber } = require('./getCasesByLeadDocketNumber');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { getCasesByLeadDocketNumber } from './getCasesByLeadDocketNumber';
 
 describe('getCasesByLeadDocketNumber', () => {
   it('attempts to retrieve the cases by leadDocketNumber', async () => {

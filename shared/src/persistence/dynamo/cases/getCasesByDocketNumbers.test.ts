@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getCasesByDocketNumbers } = require('./getCasesByDocketNumbers');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getCasesByDocketNumbers } from './getCasesByDocketNumbers';
 
 describe('getCasesByDocketNumbers', () => {
   it('should call batchGet with keys for docket numbers passed in', async () => {

@@ -1,7 +1,7 @@
-const client = require('../../dynamodbClientService');
-const { omit } = require('lodash');
+import { put } from '../../dynamodbClientService';
+import { omit } from 'lodash';
 
-const fieldsToOmitBeforePersisting = [
+export const fieldsToOmitBeforePersisting = [
   'archivedCorrespondences',
   'archivedDocketEntries',
   'correspondence',
@@ -19,8 +19,14 @@ const fieldsToOmitBeforePersisting = [
  * @param {object} providers.caseToCreate the case data
  * @returns {object} the case data
  */
-exports.createCase = ({ applicationContext, caseToCreate }) =>
-  client.put({
+export const createCase = ({
+  applicationContext,
+  caseToCreate,
+}: {
+  applicationContext: IApplicationContext;
+  caseToCreate: TCase;
+}) =>
+  put({
     Item: {
       ...omit(caseToCreate, fieldsToOmitBeforePersisting),
       pk: `case|${caseToCreate.docketNumber}`,
@@ -28,5 +34,3 @@ exports.createCase = ({ applicationContext, caseToCreate }) =>
     },
     applicationContext,
   });
-
-exports.fieldsToOmitBeforePersisting = fieldsToOmitBeforePersisting;

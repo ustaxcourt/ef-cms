@@ -1,6 +1,6 @@
-const client = require('../../dynamodbClientService');
-const { fieldsToOmitBeforePersisting } = require('./createCase');
-const { omit } = require('lodash');
+import { put } from '../../dynamodbClientService';
+import { fieldsToOmitBeforePersisting } from './createCase';
+import { omit } from 'lodash';
 
 /**
  * updateCase
@@ -10,12 +10,18 @@ const { omit } = require('lodash');
  * @param {object} providers.caseToUpdate the case data to update
  * @returns {Promise} the promise of the persistence calls
  */
-exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
+export const updateCase = async ({
+  applicationContext,
+  caseToUpdate,
+}: {
+  applicationContext: IApplicationContext;
+  caseToUpdate: TCase;
+}) => {
   const setLeadCase = caseToUpdate.leadDocketNumber
     ? { gsi1pk: `case|${caseToUpdate.leadDocketNumber}` }
     : {};
 
-  await client.put({
+  await put({
     Item: {
       ...setLeadCase,
       ...omit(caseToUpdate, fieldsToOmitBeforePersisting),

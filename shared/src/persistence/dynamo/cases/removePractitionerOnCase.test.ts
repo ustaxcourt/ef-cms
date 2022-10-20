@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
-} = require('./removePractitionerOnCase');
+} from './removePractitionerOnCase';
 
 describe('removeIrsPractitionerOnCase', () => {
   it('should call delete using the provided docketNumber and userId', async () => {

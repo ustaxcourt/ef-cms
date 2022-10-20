@@ -1,15 +1,27 @@
-const client = require('../../dynamodbClientService');
+import { queryFull } from '../../dynamodbClientService';
 
-exports.getDocketNumbersByUser = async ({ applicationContext, userId }) => {
-  const cases = await exports.getCasesAssociatedWithUser({
+export const getDocketNumbersByUser = async ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) => {
+  const cases = await getCasesAssociatedWithUser({
     applicationContext,
     userId,
   });
   return cases.map(mapping => mapping.sk.split('|')[1]);
 };
 
-exports.getCasesAssociatedWithUser = ({ applicationContext, userId }) =>
-  client.queryFull({
+export const getCasesAssociatedWithUser = ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) =>
+  queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { remove, query } from '../../dynamodbClientService';
 
 /**
  * deleteCaseTrialSortMappingRecords
@@ -8,11 +8,14 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.docketNumber the docket number of the case to delete the mapping records for
  * @returns {Promise} the return from the persistence delete calls
  */
-exports.deleteCaseTrialSortMappingRecords = async ({
+export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
 }) => {
-  const records = await client.query({
+  const records = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -25,7 +28,7 @@ exports.deleteCaseTrialSortMappingRecords = async ({
   });
 
   const clientDelete = record => {
-    return client.remove({
+    return remove({
       applicationContext,
       key: {
         pk: record.pk,

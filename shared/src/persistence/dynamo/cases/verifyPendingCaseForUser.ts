@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 /**
  * verifyPendingCaseForUser
@@ -9,12 +9,16 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the id of the user to verify
  * @returns {object} the case if it was verified, null otherwise
  */
-exports.verifyPendingCaseForUser = async ({
+export const verifyPendingCaseForUser = async ({
   applicationContext,
   docketNumber,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  userId: string;
 }) => {
-  const myCase = await client.query({
+  const myCase = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',

@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { deleteUserFromCase } = require('./deleteUserFromCase');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteUserFromCase } from './deleteUserFromCase';
 
 describe('deleteUserFromCase', () => {
   it('attempts to delete the user from the case', async () => {

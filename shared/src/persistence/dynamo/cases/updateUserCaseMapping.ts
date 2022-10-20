@@ -1,7 +1,13 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
-exports.updateUserCaseMapping = ({ applicationContext, userCaseItem }) =>
-  client.put({
+export const updateUserCaseMapping = ({
+  applicationContext,
+  userCaseItem,
+}: {
+  applicationContext: IApplicationContext;
+  userCaseItem: any;
+}) =>
+  put({
     Item: {
       ...userCaseItem,
       gsi1pk: `user-case|${userCaseItem.docketNumber}`,

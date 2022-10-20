@@ -1,7 +1,5 @@
-const {
-  deleteCaseTrialSortMappingRecords,
-} = require('./deleteCaseTrialSortMappingRecords');
-const { put, query } = require('../../dynamodbClientService');
+import { deleteCaseTrialSortMappingRecords } from './deleteCaseTrialSortMappingRecords';
+import { put, query } from '../../dynamodbClientService';
 
 /**
  * createCaseTrialSortMappingRecords
@@ -11,10 +9,14 @@ const { put, query } = require('../../dynamodbClientService');
  * @param {string} providers.docketNumber the docket number to create the trial sort mapping records for
  * @param {object} providers.caseSortTags the hybrid and nonHybrid sort tags
  */
-exports.createCaseTrialSortMappingRecords = async ({
+export const createCaseTrialSortMappingRecords = async ({
   applicationContext,
   caseSortTags,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  caseSortTags: any;
+  docketNumber: string;
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
 

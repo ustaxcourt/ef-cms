@@ -1,10 +1,10 @@
-const client = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 exports.getUserCaseMappingsByDocketNumber = ({
   applicationContext,
   docketNumber,
 }) =>
-  client.query({
+  query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },

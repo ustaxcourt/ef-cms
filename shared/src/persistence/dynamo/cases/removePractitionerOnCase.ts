@@ -1,11 +1,11 @@
-const client = require('../../dynamodbClientService');
+import { remove } from '../../dynamodbClientService';
 
-exports.removeIrsPractitionerOnCase = ({
+export const removeIrsPractitionerOnCase = ({
   applicationContext,
   docketNumber,
   userId,
 }) =>
-  client.remove({
+  remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,
@@ -13,12 +13,12 @@ exports.removeIrsPractitionerOnCase = ({
     },
   });
 
-exports.removePrivatePractitionerOnCase = ({
+export const removePrivatePractitionerOnCase = ({
   applicationContext,
   docketNumber,
   userId,
 }) =>
-  client.remove({
+  remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,

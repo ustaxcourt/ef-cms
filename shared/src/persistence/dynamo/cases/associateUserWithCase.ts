@@ -1,12 +1,17 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
-exports.associateUserWithCase = ({
+export const associateUserWithCase = ({
   applicationContext,
   docketNumber,
   userCase,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  userCase: TCase;
+  userId: string;
 }) =>
-  client.put({
+  put({
     Item: {
       ...userCase,
       gsi1pk: `user-case|${docketNumber}`,
