@@ -1,135 +1,47 @@
-const {
-  addDocketEntryForSystemGeneratedOrder,
-} = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
-const {
-  addDraftStampOrderDocketEntryInteractor,
-} = require('../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor');
-const {
-  addExistingUserToCase,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
-const {
-  addServedStampToDocument,
-} = require('../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument');
-const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
-const {
-  countPagesInDocument,
-} = require('../../shared/src/business/useCaseHelper/countPagesInDocument');
-const {
-  createAndServeNoticeDocketEntry,
-} = require('../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry');
-const {
-  createCaseAndAssociations,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations');
-const {
-  createTrialSessionAndWorkingCopy,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy');
-const {
-  createUserForContact,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
-const {
-  fetchPendingItemsByDocketNumber,
-} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
-const {
-  formatAndSortConsolidatedCases,
-} = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
-const {
-  generateAndServeDocketEntry,
-} = require('../../shared/src/business/useCaseHelper/service/createChangeItems');
-const {
-  generateCaseInventoryReportPdf,
-} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
-const {
-  generateNoticeOfChangeToInPersonProceeding,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding');
-const {
-  generateStampedCoversheetInteractor,
-} = require('../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor');
-const {
-  getConsolidatedCasesForLeadCase,
-} = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
-const {
-  getJudgeInSectionHelper,
-} = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
-const {
-  getUnassociatedLeadCase,
-} = require('../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase');
-const {
-  getUserIdForNote,
-} = require('../../shared/src/business/useCaseHelper/getUserIdForNote');
-const {
-  parseAndScrapePdfContents,
-} = require('../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
-const {
-  processUserAssociatedCases,
-} = require('../../shared/src/business/useCaseHelper/consolidatedCases/processUserAssociatedCases');
-const {
-  removeCounselFromRemovedPetitioner,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
-const {
-  removeCoversheet,
-} = require('../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
-const {
-  savePaperServicePdf,
-} = require('../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf');
-const {
-  sealInLowerEnvironment,
-} = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
-const {
-  sendEmailVerificationLink,
-} = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
-const {
-  sendIrsSuperuserPetitionEmail,
-} = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
-const {
-  sendServedPartiesEmails,
-} = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
-const {
-  serveDocumentAndGetPaperServicePdf,
-} = require('../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf');
-const {
-  serveGeneratedNoticesOnCase,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase');
-const {
-  setNoticeOfChangeOfTrialJudge,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge');
-const {
-  setNoticeOfChangeToInPersonProceeding,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding');
-const {
-  setNoticeOfChangeToRemoteProceeding,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding');
-const {
-  setPdfFormFields,
-} = require('../../shared/src/business/useCaseHelper/pdf/setPdfFormFields');
-const {
-  updateAssociatedJudgeOnWorkItems,
-} = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
-const {
-  updateCaseAndAssociations,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
-const {
-  updateCaseAutomaticBlock,
-} = require('../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
-const {
-  updateCaseStatusOnWorkItems,
-} = require('../../shared/src/business/useCaseHelper/workItems/updateCaseStatusOnWorkItems');
-const {
-  updateCaseTitleOnWorkItems,
-} = require('../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems');
-const {
-  updateDocketNumberSuffixOnWorkItems,
-} = require('../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems');
-const {
-  updateInitialFilingDocuments,
-} = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
-const {
-  updateTrialDateOnWorkItems,
-} = require('../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems');
+import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
+import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
+import { addServedStampToDocument } from '../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
+import { appendPaperServiceAddressPageToPdf } from '../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
+import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
+import { createAndServeNoticeDocketEntry } from '../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
+import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
+import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
+import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
+import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber';
+import { formatAndSortConsolidatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases';
+import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
+import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
+import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
+import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
+import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
+import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
+import { getUnassociatedLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase';
+import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
+import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
+import { processUserAssociatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/processUserAssociatedCases';
+import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
+import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
+import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
+import { savePaperServicePdf } from '../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf';
+import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
+import { sendEmailVerificationLink } from '../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink';
+import { sendIrsSuperuserPetitionEmail } from '../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
+import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
+import { serveDocumentAndGetPaperServicePdf } from '../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf';
+import { serveGeneratedNoticesOnCase } from '../../shared/src/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
+import { setNoticeOfChangeOfTrialJudge } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge';
+import { setNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
+import { setNoticeOfChangeToRemoteProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
+import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/setPdfFormFields';
+import { updateAssociatedJudgeOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems';
+import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseStatusOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateCaseStatusOnWorkItems';
+import { updateCaseTitleOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems';
+import { updateDocketNumberSuffixOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems';
+import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
+import { updateTrialDateOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems';
 
 const useCaseHelpers = {
   addDocketEntryForSystemGeneratedOrder,
@@ -178,4 +90,10 @@ const useCaseHelpers = {
   updateTrialDateOnWorkItems,
 };
 
-exports.getUseCaseHelpers = () => useCaseHelpers;
+export const getUseCaseHelpers = () => useCaseHelpers;
+
+type _IGetUseCaseHelpers = typeof getUseCaseHelpers;
+
+declare global {
+  interface IGetUseCaseHelpers extends _IGetUseCaseHelpers {}
+}
