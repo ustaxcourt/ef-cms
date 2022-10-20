@@ -12,7 +12,7 @@ import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
-export const openConfirmInitiateServiceModalSequence = [
+export const openConfirmInitiateCourtIssuedFilingServiceModalSequence = [
   clearAlertsAction,
   startShowValidationAction,
   validateCourtIssuedDocketEntryAction,
