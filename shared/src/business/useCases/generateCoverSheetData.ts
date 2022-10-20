@@ -1,5 +1,4 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
@@ -110,19 +109,13 @@ export const generateCoverSheetData = async ({
     ]);
   }
 
-  const isMultiDocketablePaperFilingsFeatureEnabled = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
   const isMultiDocketableCourtIssued =
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       docketEntryEntity.eventCode,
     );
-  const isMultiDocketablePaperFiled =
-    MULTI_DOCKET_FILING_EVENT_CODES.includes(docketEntryEntity.eventCode) &&
-    isMultiDocketablePaperFilingsFeatureEnabled;
-
+  const isMultiDocketablePaperFiled = MULTI_DOCKET_FILING_EVENT_CODES.includes(
+    docketEntryEntity.eventCode,
+  );
   if (
     isLeadCase(caseEntity) &&
     (isMultiDocketableCourtIssued || isMultiDocketablePaperFiled)
