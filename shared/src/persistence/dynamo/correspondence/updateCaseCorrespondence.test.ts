@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { Correspondence } = require('../../../business/entities/Correspondence');
-const { updateCaseCorrespondence } = require('./updateCaseCorrespondence');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { Correspondence } from '../../../business/entities/Correspondence';
+import { updateCaseCorrespondence } from './updateCaseCorrespondence';
 
 describe('updateCaseCorrespondence', () => {
   let putStub;

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { updateToDeployTable } from '../../dynamodbClientService';
 
 /**
  * updateMaintenanceMode
@@ -8,8 +8,14 @@ const client = require('../../dynamodbClientService');
  * @param {boolean} providers.maintenanceMode true to turn maintenance mode on, false otherwise
  */
 
-exports.updateMaintenanceMode = ({ applicationContext, maintenanceMode }) =>
-  client.updateToDeployTable({
+export const updateMaintenanceMode = ({
+  applicationContext,
+  maintenanceMode,
+}: {
+  applicationContext: IApplicationContext;
+  maintenanceMode: string;
+}) =>
+  updateToDeployTable({
     ExpressionAttributeNames: {
       '#current': 'current',
     },

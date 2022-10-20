@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * updateCaseCorrespondence
@@ -9,12 +9,16 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.correspondence the correspondence document to update
  * @returns {Promise} resolved promise upon completion of client request
  */
-exports.updateCaseCorrespondence = ({
+export const updateCaseCorrespondence = ({
   applicationContext,
   correspondence,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  correspondence: any;
+  docketNumber: string;
 }) =>
-  client.put({
+  put({
     Item: {
       ...correspondence,
       pk: `case|${docketNumber}`,

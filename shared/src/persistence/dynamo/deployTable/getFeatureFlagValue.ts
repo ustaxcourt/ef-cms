@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { getFromDeployTable } from '../../dynamodbClientService';
 
 /**
  * getFeatureFlagValue
@@ -9,8 +9,14 @@ const client = require('../../dynamodbClientService');
  * @returns {object} the dynamo record
  */
 
-exports.getFeatureFlagValue = ({ applicationContext, featureFlag }) =>
-  client.getFromDeployTable({
+export const getFeatureFlagValue = ({
+  applicationContext,
+  featureFlag,
+}: {
+  applicationContext: IApplicationContext;
+  featureFlag: string;
+}) =>
+  getFromDeployTable({
     Key: {
       pk: featureFlag,
       sk: featureFlag,

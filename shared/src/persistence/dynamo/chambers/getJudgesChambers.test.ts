@@ -1,9 +1,9 @@
-const {
+import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
-} = require('./getJudgesChambers');
+} from './getJudgesChambers';
 
 describe('getJudgesChambers', () => {
   it('should return a map of judge chambers with labels and sections', () => {
@@ -15,7 +15,7 @@ describe('getJudgesChambers', () => {
 
     expect(result[firstKey]).toMatchObject({
       label: expect.anything(),
-      section: expect.anything(0),
+      section: expect.anything(),
     });
   });
 
