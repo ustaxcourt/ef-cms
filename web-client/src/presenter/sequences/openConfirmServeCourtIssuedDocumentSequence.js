@@ -14,5 +14,5 @@ export const openConfirmServeCourtIssuedDocumentSequence = [
     no: [],
     yes: [setupConsolidatedCasesAction],
   },
-  setShowModalFactoryAction('ConfirmInitiateCourtIssuedDocumentServiceModal'),
+  setShowModalFactoryAction('ConfirmInitiateCourtIssuedFilingServiceModal'),
 ];

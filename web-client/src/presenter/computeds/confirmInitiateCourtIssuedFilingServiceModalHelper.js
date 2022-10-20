@@ -2,13 +2,11 @@ import { state } from 'cerebral';
 import { uniqBy } from 'lodash';
 
 /**
- * returns computed values for the confirm initiate service modal
+ * Returns computed values for the confirm initiate court issued filing service modal
  *
  * @param {Function} get the cerebral get function used
  * @param {object} applicationContext the application context
- * for getting state.caseDetail.partyType and state.constants
- * @returns {object} the contactPrimary and/or contactSecondary
- * view options
+ * @returns {object} the computed values
  */
 export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
   get,
@@ -21,22 +19,9 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
     USER_ROLES,
   } = applicationContext.getConstants();
 
-  const modalName = get(state.modal.showModal);
-
-  const showConsolidatedOptions = [
-    'ConfirmInitiateCourtIssuedDocumentServiceModal',
-    'ConfirmInitiatePaperDocumentServiceModal',
-  ].includes(modalName);
-
-  const formattedCaseDetail = get(state.formattedCaseDetail);
-
-  const form = get(state.form);
-
-  const hasConsolidatedCases =
-    formattedCaseDetail.consolidatedCases &&
-    formattedCaseDetail.consolidatedCases.length > 0;
-
   const docketEntryId = get(state.docketEntryId);
+  const formattedCaseDetail = get(state.formattedCaseDetail);
+  const form = get(state.form);
 
   let { eventCode } = form;
 
@@ -46,15 +31,9 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
     ));
   }
 
-  // this is temporary until the flow for 9616 is implemented (QC workflow)
-  const editingDocketEntry = !!get(state.isEditingDocketEntry);
-
   const showConsolidatedCasesForService =
-    !editingDocketEntry &&
     formattedCaseDetail.isLeadCase &&
-    showConsolidatedOptions &&
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
-    hasConsolidatedCases;
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
