@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { getFromDeployTable } from '../../dynamodbClientService';
 
 /**
  *
@@ -7,11 +7,14 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.configurationItemKey the configuration item key to get the value for
  * @returns {object} the dynamo record
  */
-exports.getConfigurationItemValue = async ({
+export const getConfigurationItemValue = async ({
   applicationContext,
   configurationItemKey,
+}: {
+  applicationContext: IApplicationContext;
+  configurationItemKey: string;
 }) => {
-  const result = await client.getFromDeployTable({
+  const result = await getFromDeployTable({
     Key: {
       pk: configurationItemKey,
       sk: configurationItemKey,

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { getFromDeployTable } from '../../dynamodbClientService';
 
 /**
  * getMaintenanceMode
@@ -7,8 +7,12 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise<string>} the value of the maintenance-mode flag on the dynamodb deploy table
  */
-exports.getMaintenanceMode = ({ applicationContext }) =>
-  client.getFromDeployTable({
+export const getMaintenanceMode = ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}) =>
+  getFromDeployTable({
     Key: {
       pk: 'maintenance-mode',
       sk: 'maintenance-mode',
