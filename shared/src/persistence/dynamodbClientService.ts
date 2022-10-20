@@ -87,9 +87,9 @@ export const put = ({
   Item,
   applicationContext,
 }: {
-  Item: DynamoRecord;
+  Item: TDynamoRecord;
   applicationContext: IApplicationContext;
-}): Promise<DynamoRecord> => {
+}): Promise<TDynamoRecord> => {
   return applicationContext
     .getDocumentClient()
     .put({
