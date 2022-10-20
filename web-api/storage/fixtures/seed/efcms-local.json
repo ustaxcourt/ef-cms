@@ -4025,6 +4025,11 @@
     "pk": "external-order-search-enabled"
   },
   {
+    "sk": "consolidated-cases-paper-filing-docket-entries",
+    "current": true,
+    "pk": "consolidated-cases-paper-filing-docket-entries"
+  },
+  {
     "sk": "b2a1d128-784f-4dfb-a2a4-deb138b85542",
     "template": "{\"docketNumber\":\"129-20\",\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">November 30, 2020</div></div></div><br/><br/><p>A new Petition has been served:</p><div id=\\\"case-information\\\"><div>Case Information:</div><div>Docket Number: <!-- -->129-20</div><div>Case Title: <!-- -->Valentine Holman</div><div>Requested Place of Trial: <!-- -->Tampa, Florida</div></div><br/><div id=\\\"document-information\\\"><div>Document Information:</div><div>Document Name: <!-- -->Petition</div><div>Docket Entry No.: <!-- -->1</div><div>Filed Date: <!-- -->01/20/20</div><div>25-Sep-1995</div><div>Served: <!-- -->11/30/20 5:58 pm ET</div></div><br/><div id=\\\"petitioner-information\\\"><div>Petitioner Information:</div><div>Valentine Holman</div><div><div>71 East Green Nobel Lane</div><div>Sed eligendi exercit</div><div>Soluta voluptas eius</div><div><span>Consequatur cum ven<!-- -->, </span><span>CO<!-- --> </span><span>93000</span></div><div>+1 (677) 974-4448</div></div><div>Service: <!-- -->Paper</div></div><p>To view this document,<!-- --> <a href=\\\"https://app.exp2.ustc-case-mgmt.flexion.us\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->129-20</div><div>docketEntryNo: <!-- -->1</div><div>docketEntryId: <!-- -->1a92894e-83a5-48ba-9994-3ada44235deb</div><div>eventCode: <!-- -->P</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-irsSuperuser@example.com"
@@ -5835,9 +5840,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.643Z",
@@ -5903,9 +5906,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.636Z",
@@ -12714,9 +12715,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{}",
     "pk": "case|111-19",
@@ -12891,9 +12890,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.564Z",
@@ -12929,9 +12926,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.554Z",
@@ -24233,9 +24228,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.670Z",
@@ -24271,9 +24264,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.667Z",
