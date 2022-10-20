@@ -31,7 +31,7 @@ export const openConfirmInitiateCourtIssuedFilingServiceModalSequence = [
         no: [],
         yes: [setupConsolidatedCasesAction],
       },
-      setShowModalFactoryAction('ConfirmInitiateServiceModal'),
+      setShowModalFactoryAction('ConfirmInitiateCourtIssuedFilingServiceModal'),
     ],
   },
 ];

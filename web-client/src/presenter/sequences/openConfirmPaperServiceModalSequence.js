@@ -50,7 +50,7 @@ export const openConfirmPaperServiceModalSequence = [
     ],
     success: [
       clearModalStateAction,
-      setShowModalFactoryAction('ConfirmInitiateServiceModal'),
+      setShowModalFactoryAction('ConfirmInitiatePaperFilingServiceModal'),
     ],
   },
 ];
