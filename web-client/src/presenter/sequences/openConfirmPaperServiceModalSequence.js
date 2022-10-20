@@ -20,8 +20,7 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 export const openConfirmPaperServiceModalSequence = [
   getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_PAPER_FILING_DOCKET_ENTRIES,
+    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS,
     true,
   ),
   clearAlertsAction,
