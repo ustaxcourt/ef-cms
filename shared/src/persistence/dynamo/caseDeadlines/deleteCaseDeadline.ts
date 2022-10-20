@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { get, remove } from '../../dynamodbClientService';
 
 /**
  * deleteCaseDeadline
@@ -9,12 +9,16 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.docketNumber the docket number of the case the deadline is attached to
  * @returns {Array<Promise>} the promises for the persistence delete calls
  */
-exports.deleteCaseDeadline = async ({
+export const deleteCaseDeadline = async ({
   applicationContext,
   caseDeadlineId,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  caseDeadlineId: string;
+  docketNumber: string;
 }) => {
-  const originalCaseDeadline = await client.get({
+  const originalCaseDeadline = await get({
     Key: {
       pk: `case-deadline|${caseDeadlineId}`,
       sk: `case-deadline|${caseDeadlineId}`,
@@ -24,14 +28,14 @@ exports.deleteCaseDeadline = async ({
 
   if (originalCaseDeadline) {
     await Promise.all([
-      client.remove({
+      remove({
         applicationContext,
         key: {
           pk: `case-deadline|${caseDeadlineId}`,
           sk: `case-deadline|${caseDeadlineId}`,
         },
       }),
-      client.remove({
+      remove({
         applicationContext,
         key: {
           pk: `case|${docketNumber}`,

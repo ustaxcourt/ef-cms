@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { createCaseDeadline } = require('./createCaseDeadline');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createCaseDeadline } from './createCaseDeadline';
 
 describe('createCaseDeadline', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -11,7 +9,7 @@ describe('createCaseDeadline', () => {
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '123-20',
-  };
+  } as any;
 
   it('attempts to persist the case deadline', async () => {
     await createCaseDeadline({

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * createCaseDeadline
@@ -8,10 +8,16 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {Promise} resolves upon creation of case deadline
  */
-exports.createCaseDeadline = ({ applicationContext, caseDeadline }) => {
+export const createCaseDeadline = ({
+  applicationContext,
+  caseDeadline,
+}: {
+  applicationContext: IApplicationContext;
+  caseDeadline: TCaseDeadline;
+}) => {
   const { caseDeadlineId, docketNumber } = caseDeadline;
   return Promise.all([
-    client.put({
+    put({
       Item: {
         ...caseDeadline,
         pk: `case-deadline|${caseDeadlineId}`,
@@ -19,7 +25,7 @@ exports.createCaseDeadline = ({ applicationContext, caseDeadline }) => {
       },
       applicationContext,
     }),
-    client.put({
+    put({
       Item: {
         pk: `case|${docketNumber}`,
         sk: `case-deadline|${caseDeadlineId}`,

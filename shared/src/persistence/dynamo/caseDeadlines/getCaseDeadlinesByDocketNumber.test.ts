@@ -1,10 +1,11 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getCaseDeadlinesByDocketNumber,
-} = require('./getCaseDeadlinesByDocketNumber');
+import { batchGet, query } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getCaseDeadlinesByDocketNumber } from './getCaseDeadlinesByDocketNumber';
+
+jest.mock('../../dynamodbClientService', () => ({
+  query: jest.fn(),
+  batchGet: jest.fn(),
+}));
 
 const mockCaseDeadline = {
   caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -14,15 +15,18 @@ const mockCaseDeadline = {
 };
 
 describe('getCaseDeadlinesByDocketNumber', () => {
+  const mockBatchGet = batchGet as jest.Mock;
+  const mockQuery = query as jest.Mock;
+
   beforeEach(() => {
-    client.batchGet = jest.fn().mockReturnValue([
+    mockBatchGet.mockReturnValue([
       {
         ...mockCaseDeadline,
         pk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
         sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
       },
     ]);
-    client.query = jest.fn().mockReturnValue([
+    mockQuery.mockReturnValue([
       {
         pk: `case|${mockCaseDeadline.docketNumber}`,
         sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
@@ -52,7 +56,7 @@ describe('getCaseDeadlinesByDocketNumber', () => {
       applicationContext,
       docketNumber: mockCaseDeadline.docketNumber,
     });
-    expect(client.batchGet.mock.calls[0][0].keys).toEqual([
+    expect(mockBatchGet.mock.calls[0][0].keys).toEqual([
       {
         pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
