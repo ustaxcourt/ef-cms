@@ -1071,7 +1071,7 @@ workflows:
                 - develop
       - switch-colors:
           requires:
-            - smoketests-readonly
+            - disable-switch-colors-cron
           filters:
             branches:
               only:
