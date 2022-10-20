@@ -16,7 +16,7 @@ describe('Create bar number', function () {
         getUtilities: () => {
           return { ...DateHandler, formatNow: () => '20' };
         },
-      },
+      } as any,
       initials: 'EJ',
     });
     expect(result).toEqual('EJ20123');
@@ -36,7 +36,7 @@ describe('Create bar number', function () {
         getUtilities: () => {
           return { ...DateHandler, formatNow: () => '21' };
         },
-      },
+      } as any,
       initials: 'EJ',
     });
     expect(result).toEqual('EJ21009');

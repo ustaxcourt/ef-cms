@@ -238,13 +238,15 @@ export const query = ({
   ExpressionAttributeNames,
   ExpressionAttributeValues,
   IndexName,
+  FilterExpression,
   KeyConditionExpression,
   applicationContext,
   ...params
 }: {
   ExpressionAttributeNames: Record<string, string>;
-  ExpressionAttributeValues: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string | number>;
   IndexName?: string;
+  FilterExpression?: string;
   KeyConditionExpression: string;
   applicationContext: IApplicationContext;
   params?: Record<string, any>;
@@ -304,11 +306,13 @@ export const queryFull = async ({
   ExpressionAttributeNames,
   ExpressionAttributeValues,
   KeyConditionExpression,
+  IndexName,
   applicationContext,
   ...params
 }: {
   applicationContext: IApplicationContext;
   params?: Record<string, any>;
+  IndexName?: string;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
   KeyConditionExpression: string;

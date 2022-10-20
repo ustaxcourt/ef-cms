@@ -53,7 +53,7 @@ describe('createOrUpdatePractitionerUser', () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => {
         const error = new Error();
-        error.code = 'UserNotFoundException';
+        (error as any).code = 'UserNotFoundException';
         return Promise.reject(error);
       },
     });
@@ -217,7 +217,7 @@ describe('createOrUpdatePractitionerUser', () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => {
         const error = new Error();
-        error.code = 'UserNotFoundException';
+        (error as any).code = 'UserNotFoundException';
         return Promise.reject(error);
       },
     });

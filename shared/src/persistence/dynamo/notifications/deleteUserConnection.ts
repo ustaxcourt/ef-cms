@@ -1,4 +1,4 @@
-import { get } from '../../dynamodbClientService';
+import { get, batchDelete } from '../../dynamodbClientService';
 
 /**
  * deleteUserConnection
@@ -15,7 +15,7 @@ export const deleteUserConnection = async ({
   applicationContext: IApplicationContext;
   connectionId: string;
 }) => {
-  const connection = await client.get({
+  const connection = await get({
     Key: {
       pk: `connection|${connectionId}`,
       sk: `connection|${connectionId}`,
@@ -29,7 +29,7 @@ export const deleteUserConnection = async ({
 
   const toDelete = [connection];
 
-  const userConnection = await client.get({
+  const userConnection = await get({
     Key: {
       pk: `user|${connection.userId}`,
       sk: `connection|${connection.connectionId}`,
@@ -41,7 +41,7 @@ export const deleteUserConnection = async ({
     toDelete.push(userConnection);
   }
 
-  await client.batchDelete({
+  await batchDelete({
     applicationContext,
     items: toDelete,
   });
