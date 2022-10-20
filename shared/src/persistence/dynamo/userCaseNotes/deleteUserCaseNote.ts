@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { remove } from '../../dynamodbClientService';
 
 /**
  * deleteUserCaseNote
@@ -9,8 +9,12 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the id of the user who owns the case notes
  * @returns {Array<Promise>} the promises for the persistence delete calls
  */
-exports.deleteUserCaseNote = ({ applicationContext, docketNumber, userId }) =>
-  client.remove({
+export const deleteUserCaseNote = ({
+  applicationContext,
+  docketNumber,
+  userId,
+}) =>
+  remove({
     applicationContext,
     key: {
       pk: `user-case-note|${docketNumber}`,

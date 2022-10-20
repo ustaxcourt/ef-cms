@@ -1,5 +1,5 @@
-import { update } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { update } from '../../dynamodbClientService';
 import { updateWorkItemTrialDate } from './updateWorkItemTrialDate';
 
 jest.mock('../../dynamodbClientService', () => ({

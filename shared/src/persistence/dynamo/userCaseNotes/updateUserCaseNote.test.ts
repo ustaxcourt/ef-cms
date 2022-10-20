@@ -1,8 +1,11 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { updateUserCaseNote } = require('./updateUserCaseNote');
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { put } from '../../dynamodbClientService';
+import { updateUserCaseNote } from './updateUserCaseNote';
+
+jest.mock('../../dynamodbClientService', () => ({
+  put: jest.fn(),
+}));
 
 describe('updateUserCaseNote', () => {
   const USER_ID = '42f68c70-b803-4883-985d-ea1903e31ae2';
@@ -17,9 +20,7 @@ describe('updateUserCaseNote', () => {
       },
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
+    expect((put as jest.Mock).mock.calls[0][0]).toMatchObject({
       Item: {
         notes: 'something!!!',
         pk: `user-case-note|${MOCK_CASE.docketNumber}`,

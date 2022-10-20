@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { batchGet } from '../../dynamodbClientService';
 
 /**
  * getUserCaseNoteForCases
@@ -9,12 +9,12 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the id of the user to get the case notes for
  * @returns {Promise} the promise of the persistence call to get the record
  */
-exports.getUserCaseNoteForCases = ({
+export const getUserCaseNoteForCases = ({
   applicationContext,
   docketNumbers,
   userId,
 }) =>
-  client.batchGet({
+  batchGet({
     applicationContext,
     keys: docketNumbers.map(docketNumber => ({
       pk: `user-case-note|${docketNumber}`,
