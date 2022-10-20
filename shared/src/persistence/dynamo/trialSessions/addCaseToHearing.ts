@@ -1,5 +1,5 @@
-const { put } = require('../../dynamodbClientService');
-const { updateTrialSession } = require('./updateTrialSession');
+import { put } from '../../dynamodbClientService';
+import { updateTrialSession } from './updateTrialSession';
 
 /**
  * addCaseToHearing
@@ -10,10 +10,14 @@ const { updateTrialSession } = require('./updateTrialSession');
  * @param {object} providers.trialSession trial session to add as a hearing
  * @returns {Promise} the promise of the call to persistence
  */
-exports.addCaseToHearing = ({
+export const addCaseToHearing = ({
   applicationContext,
   docketNumber,
   trialSession,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  trialSession: TTrialSessionData;
 }) =>
   Promise.all([
     // Create mapping record

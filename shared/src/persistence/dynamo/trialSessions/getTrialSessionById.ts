@@ -1,6 +1,12 @@
 const { get } = require('../../dynamodbClientService');
 
-exports.getTrialSessionById = ({ applicationContext, trialSessionId }) =>
+export const getTrialSessionById = ({
+  applicationContext,
+  trialSessionId,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionId: string;
+}) =>
   get({
     Key: {
       pk: `trial-session|${trialSessionId}`,

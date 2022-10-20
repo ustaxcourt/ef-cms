@@ -1,11 +1,17 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getEligibleCasesForTrialSession,
-} = require('./getEligibleCasesForTrialSession');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { batchGet, query } from '../../dynamodbClientService';
+import { getEligibleCasesForTrialSession } from './getEligibleCasesForTrialSession';
+import { MOCK_CASE } from '../../../test/mockCase';
+
+const limit = 5;
+const skPrefix = 'trialSession';
+
+jest.mock('../../dynamodbClientService', () => ({
+  query: jest.fn(),
+  batchGet: jest.fn(),
+}));
+const queryMock = query as jest.Mock;
+const batchGetMock = batchGet as jest.Mock;
 
 describe('getEligibleCasesForTrialSession', () => {
   let getCaseByDocketNumberSpy;
@@ -17,17 +23,16 @@ describe('getEligibleCasesForTrialSession', () => {
       privatePractitioners: [{ userId: 'abc-123' }],
     });
 
-    client.query = jest.fn().mockReturnValue([
+    queryMock.mockReturnValue([
       {
         docketNumber: MOCK_CASE.docketNumber,
         pk: 'eligible-for-trial-case-catalog',
         sk: 'WashingtonDistrictofColumbia-R-A-20181212000000-101-18',
       },
     ]);
-
-    client.batchGet = jest
-      .fn()
-      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.docketNumber }]);
+    batchGetMock.mockReturnValue([
+      { ...MOCK_CASE, pk: MOCK_CASE.docketNumber },
+    ]);
   });
 
   it('should get the cases for a trial session', async () => {
@@ -36,6 +41,8 @@ describe('getEligibleCasesForTrialSession', () => {
       .getCaseByDocketNumber.mockImplementation(getCaseByDocketNumberSpy);
     const result = await getEligibleCasesForTrialSession({
       applicationContext,
+      limit,
+      skPrefix,
     });
     expect(getCaseByDocketNumberSpy).toHaveBeenCalled();
     expect(result).toEqual([
@@ -49,7 +56,7 @@ describe('getEligibleCasesForTrialSession', () => {
   });
 
   it('should remove duplicate docketNumbers returned by the eligible-for-trial-case-catalog query', async () => {
-    client.query = jest.fn().mockReturnValue([
+    queryMock.mockReturnValueOnce([
       {
         docketNumber: MOCK_CASE.docketNumber,
         pk: 'eligible-for-trial-case-catalog',
@@ -64,8 +71,10 @@ describe('getEligibleCasesForTrialSession', () => {
 
     await getEligibleCasesForTrialSession({
       applicationContext,
+      limit,
+      skPrefix,
     });
-    expect(client.batchGet).toHaveBeenCalledWith({
+    expect(batchGetMock).toHaveBeenCalledWith({
       applicationContext,
       keys: [
         {
@@ -89,7 +98,7 @@ describe('getEligibleCasesForTrialSession', () => {
         };
       });
 
-    client.batchGet = jest.fn().mockReturnValue(
+    batchGetMock.mockReturnValueOnce(
       new Array(CASES_TO_TEST).fill({
         ...MOCK_CASE,
         pk: MOCK_CASE.docketNumber,
@@ -98,6 +107,8 @@ describe('getEligibleCasesForTrialSession', () => {
 
     await getEligibleCasesForTrialSession({
       applicationContext,
+      limit,
+      skPrefix,
     });
   }, 1000);
 });

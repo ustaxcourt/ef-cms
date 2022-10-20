@@ -1,11 +1,15 @@
-const client = require('../../dynamodbClientService');
+import { query, batchGet } from '../../dynamodbClientService';
 
-exports.getEligibleCasesForTrialSession = async ({
+export const getEligibleCasesForTrialSession = async ({
   applicationContext,
   limit,
   skPrefix,
+}: {
+  applicationContext: IApplicationContext;
+  limit: number;
+  skPrefix: string;
 }) => {
-  const mappings = await client.query({
+  const mappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -31,7 +35,7 @@ exports.getEligibleCasesForTrialSession = async ({
     }
   });
 
-  const results = await client.batchGet({
+  const results = await batchGet({
     applicationContext,
     keys: docketNumbers.map(docketNumber => ({
       pk: `case|${docketNumber}`,

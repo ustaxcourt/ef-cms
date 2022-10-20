@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  deleteTrialSessionWorkingCopy,
-} = require('./deleteTrialSessionWorkingCopy');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteTrialSessionWorkingCopy } from './deleteTrialSessionWorkingCopy';
 
 const mockTrialSessionId = '456';
 const mockUserId = '338';

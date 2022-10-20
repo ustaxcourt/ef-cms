@@ -1,4 +1,4 @@
-const { updateConsistent } = require('../../dynamodbClientService');
+import { updateConsistent } from '../../dynamodbClientService';
 
 /**
  * createJobStatus
@@ -9,7 +9,15 @@ const { updateConsistent } = require('../../dynamodbClientService');
  * @param {object} providers.jobId the unique jobId for this job
  * @returns {Promise} the promise of the call to persistence
  */
-exports.createJobStatus = ({ applicationContext, docketNumbers, jobId }) =>
+export const createJobStatus = ({
+  applicationContext,
+  docketNumbers,
+  jobId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumbers: string[];
+  jobId: string;
+}) =>
   updateConsistent({
     ExpressionAttributeNames: {
       '#unfinishedCases': 'unfinishedCases',

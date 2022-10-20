@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { addCaseToHearing } = require('./addCaseToHearing');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateTrialSession } from './updateTrialSession';
+import { addCaseToHearing } from './addCaseToHearing';
 
 jest.mock('./updateTrialSession');
-const { updateTrialSession } = require('./updateTrialSession');
 
 const mockTrialSession = {
   trialSessionId: '123',
@@ -15,7 +13,7 @@ describe('addCaseToHearing', () => {
     await addCaseToHearing({
       applicationContext,
       docketNumber: '123-20',
-      trialSession: mockTrialSession,
+      trialSession: mockTrialSession as any,
     });
 
     expect(
@@ -33,10 +31,10 @@ describe('addCaseToHearing', () => {
     await addCaseToHearing({
       applicationContext,
       docketNumber: '123-20',
-      trialSession: mockTrialSession,
+      trialSession: mockTrialSession as any,
     });
 
-    expect(updateTrialSession.mock.calls[0][0]).toMatchObject({
+    expect((updateTrialSession as jest.Mock).mock.calls[0][0]).toMatchObject({
       applicationContext,
       trialSessionToUpdate: mockTrialSession,
     });

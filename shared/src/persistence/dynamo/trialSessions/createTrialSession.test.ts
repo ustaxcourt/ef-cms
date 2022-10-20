@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { createTrialSession } = require('./createTrialSession');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createTrialSession } from './createTrialSession';
 
 const mockTrialSession = {
   trialSessionId: '123',
@@ -11,7 +9,7 @@ describe('createTrialSession', () => {
   it('attempts to persist the trial session', async () => {
     await createTrialSession({
       applicationContext,
-      trialSession: mockTrialSession,
+      trialSession: mockTrialSession as any,
     });
 
     expect(
