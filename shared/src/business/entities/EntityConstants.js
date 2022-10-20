@@ -65,11 +65,6 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to add multiple docket entries to an order is disabled.',
     key: 'consolidated-cases-add-docket-numbers',
   },
-  CONSOLIDATED_CASES_PAPER_FILING_DOCKET_ENTRIES: {
-    disabledMessage:
-      'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
-    key: 'consolidated-cases-paper-filing-docket-entries',
-  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
@@ -89,6 +84,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage:
       'Order search has been temporarily disabled. Please try again later.',
     key: 'internal-order-search-enabled',
+  },
+  MULTI_DOCKETABLE_PAPER_FILINGS: {
+    disabledMessage:
+      'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
+    key: 'multi-docketable-paper-filings',
   },
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
