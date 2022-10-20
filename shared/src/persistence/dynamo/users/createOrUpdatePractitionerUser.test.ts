@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import {
   createOrUpdatePractitionerUser,
   createUserRecords,
-} = require('./createOrUpdatePractitionerUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
+} from './createOrUpdatePractitionerUser';
+import { ROLES } from '../../../business/entities/EntityConstants';
 
 describe('createOrUpdatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
@@ -138,7 +136,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: privatePractitionerUserWithoutBarNumber,
+      user: privatePractitionerUserWithoutBarNumber as any,
     });
 
     expect(
@@ -155,7 +153,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: privatePractitionerUserWithSection,
+      user: privatePractitionerUserWithSection as any,
     });
 
     expect(
@@ -176,7 +174,7 @@ describe('createOrUpdatePractitionerUser', () => {
         ...privatePractitionerUserWithSection,
         email: undefined,
         pendingEmail: mockPendingEmail,
-      },
+      } as any,
     });
 
     expect(
@@ -189,7 +187,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: irsPractitionerUser,
+      user: irsPractitionerUser as any,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
@@ -203,7 +201,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: inactivePractitionerUser,
+      user: inactivePractitionerUser as any,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
@@ -226,7 +224,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: privatePractitionerUserWithSection,
+      user: privatePractitionerUserWithSection as any,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
@@ -249,7 +247,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: privatePractitionerUserWithSection,
+      user: privatePractitionerUserWithSection as any,
     });
 
     expect(
@@ -263,7 +261,10 @@ describe('createOrUpdatePractitionerUser', () => {
 
   it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {
     await expect(
-      createOrUpdatePractitionerUser({ applicationContext, user: otherUser }),
+      createOrUpdatePractitionerUser({
+        applicationContext,
+        user: otherUser as any,
+      }),
     ).rejects.toThrow(
       `Role must be ${ROLES.privatePractitioner}, ${ROLES.irsPractitioner}, or ${ROLES.inactivePractitioner}`,
     );
@@ -281,7 +282,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: privatePractitionerUser,
+      user: privatePractitionerUser as any,
     });
 
     expect(
