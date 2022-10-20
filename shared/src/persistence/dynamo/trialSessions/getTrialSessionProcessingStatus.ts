@@ -1,4 +1,4 @@
-const { get } = require('../../dynamodbClientService');
+import { get } from '../../dynamodbClientService';
 
 /**
  * getTrialSessionProcessingStatus
@@ -8,9 +8,12 @@ const { get } = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionId the trial session id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getTrialSessionProcessingStatus = ({
+export const getTrialSessionProcessingStatus = ({
   applicationContext,
   trialSessionId,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionId: string;
 }) =>
   get({
     ConsistentRead: true,

@@ -1,20 +1,14 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { updateCaseHearing } = require('./updateCaseHearing');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateCaseHearing } from './updateCaseHearing';
 
 describe('updateCaseHearing', () => {
-  let putStub;
-  beforeEach(() => {
-    putStub = jest.fn().mockReturnValue({
+  beforeAll(() => {
+    applicationContext.getDocumentClient().put.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
   });
 
   it('invokes the persistence layer with pk of case|{docketNumber}, sk of hearing|{trialSessionId} and other expected params', async () => {
-    applicationContext.getDocumentClient.mockReturnValue({
-      put: putStub,
-    });
     await updateCaseHearing({
       applicationContext,
       docketNumber: '123-45',
@@ -26,9 +20,11 @@ describe('updateCaseHearing', () => {
           },
         ],
         trialSessionId: '123',
-      },
+      } as any,
     });
-    expect(putStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         caseOrder: [
           {
@@ -40,7 +36,6 @@ describe('updateCaseHearing', () => {
         sk: 'hearing|123',
         trialSessionId: '123',
       },
-      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

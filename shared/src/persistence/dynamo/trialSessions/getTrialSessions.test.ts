@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getTrialSessions } = require('./getTrialSessions');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getTrialSessions } from './getTrialSessions';
 
 const mockTrialSessions = [
   {

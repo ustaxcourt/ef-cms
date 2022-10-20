@@ -1,6 +1,12 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
-exports.updateTrialSession = ({ applicationContext, trialSessionToUpdate }) =>
+export const updateTrialSession = ({
+  applicationContext,
+  trialSessionToUpdate,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionToUpdate: TTrialSessionData;
+}) =>
   put({
     Item: {
       ...trialSessionToUpdate,
