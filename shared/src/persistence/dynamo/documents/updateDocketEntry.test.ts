@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { updateDocketEntry } = require('./updateDocketEntry');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateDocketEntry } from './updateDocketEntry';
 
 const mockDocketEntryId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 const mockDocketNumber = '101-20';

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { remove } from '../../dynamodbClientService';
 
 /**
  * deleteDocketEntry
@@ -8,16 +8,19 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.docketNumber the docket number of the record to delete from
  * @param {object} providers.docketEntryId the docketEntryId of the record to delete
  */
-exports.deleteDocketEntry = async ({
+export const deleteDocketEntry = async ({
   applicationContext,
   docketEntryId,
   docketNumber,
-}) => {
-  await client.remove({
+}: {
+  applicationContext: IApplicationContext;
+  docketEntryId: string;
+  docketNumber: string;
+}) =>
+  remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,
       sk: `docket-entry|${docketEntryId}`,
     },
   });
-};
