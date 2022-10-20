@@ -10,7 +10,10 @@ import { uniqBy } from 'lodash';
  * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
-export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
+export const confirmInitiatePaperFilingServiceModalHelper = (
+  get,
+  applicationContext,
+) => {
   const {
     CONTACT_TYPE_TITLES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,
