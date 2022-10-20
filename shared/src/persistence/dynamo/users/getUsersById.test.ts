@@ -1,8 +1,6 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getUsersById } = require('./getUsersById');
+import { batchGet } from '../../dynamodbClientService';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getUsersById } from './getUsersById';
 
 const mockUser1 = {
   contact: {},
@@ -24,9 +22,9 @@ const mockUserIds = [
   'a805d1ab-18d0-43ec-bafb-654e83405412',
 ];
 
-describe('getUsersById', () => {
-  beforeEach(() => {
-    client.batchGet = jest.fn().mockReturnValue([
+jest.mock('../../dynamodbClientService', () => ({
+  batchGet: jest.fn().mockImplementation(() => {
+    return [
       {
         ...mockUser1,
         pk: `user|${mockUser1.userId}`,
@@ -37,9 +35,11 @@ describe('getUsersById', () => {
         pk: `user|${mockUser2.userId}`,
         sk: `user|${mockUser2.userId}`,
       },
-    ]);
-  });
+    ];
+  }),
+}));
 
+describe('getUsersById', () => {
   it('should return data as received from persistence with unique userIds', async () => {
     const result = await getUsersById({
       applicationContext,

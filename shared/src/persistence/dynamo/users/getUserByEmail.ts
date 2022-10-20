@@ -1,4 +1,4 @@
-import * as client from '../../dynamodbClientService';
+import { query } from '../../dynamodbClientService';
 import { getUserById } from './getUserById';
 
 /**
@@ -16,7 +16,7 @@ export const getUserByEmail = async ({
 }) => {
   const formattedEmail = email.toLowerCase().trim();
 
-  const results = await client.query({
+  const results = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
