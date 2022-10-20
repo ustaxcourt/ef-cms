@@ -121,9 +121,9 @@ describe('Docket clerk adds paper filing on lead case', () => {
     'RPT',
   );
 
-  it('docket clerk serves document from case detail document view', async () => {
+  it('docket clerk serves paper filing from case detail document view', async () => {
     await cerebralTest.runSequence(
-      'openConfirmServeCourtIssuedDocumentSequence',
+      'openConfirmServePaperFiledDocumentSequence',
       {
         docketEntryId: cerebralTest.multiDocketedDocketEntryId,
         redirectUrl: `/case-detail/${cerebralTest.leadDocketNumber}/document-view?docketEntryId=${cerebralTest.multiDocketedDocketEntryId}`,
@@ -131,10 +131,10 @@ describe('Docket clerk adds paper filing on lead case', () => {
     );
 
     expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiateCourtIssuedDocumentServiceModal',
+      'ConfirmInitiatePaperFilingServiceModal',
     );
 
-    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('servePaperFiledDocumentSequence');
 
     await waitForLoadingComponentToHide({ cerebralTest });
 
