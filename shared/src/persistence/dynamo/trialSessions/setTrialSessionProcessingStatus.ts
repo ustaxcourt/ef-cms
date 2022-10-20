@@ -1,4 +1,4 @@
-const { updateConsistent } = require('../../dynamodbClientService');
+import { updateConsistent } from '../../dynamodbClientService';
 
 /**
  * setTrialSessionProcessingStatus
@@ -9,10 +9,14 @@ const { updateConsistent } = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionStatus the status of trial session processing
  * @returns {Promise} the promise of the call to persistence
  */
-exports.setTrialSessionProcessingStatus = ({
+export const setTrialSessionProcessingStatus = ({
   applicationContext,
   trialSessionId,
   trialSessionStatus,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionId: string;
+  trialSessionStatus: string;
 }) =>
   updateConsistent({
     ExpressionAttributeNames: {

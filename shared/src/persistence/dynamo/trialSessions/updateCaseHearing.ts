@@ -1,9 +1,13 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
-exports.updateCaseHearing = ({
+export const updateCaseHearing = ({
   applicationContext,
   docketNumber,
   hearingToUpdate,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  hearingToUpdate: TTrialSessionEntity;
 }) =>
   put({
     Item: {

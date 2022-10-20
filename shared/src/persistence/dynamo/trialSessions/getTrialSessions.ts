@@ -1,6 +1,10 @@
-const { queryFull } = require('../../dynamodbClientService');
+import { queryFull } from '../../dynamodbClientService';
 
-exports.getTrialSessions = ({ applicationContext }) =>
+export const getTrialSessions = ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}) =>
   queryFull({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',

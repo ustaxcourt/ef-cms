@@ -1,4 +1,4 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * updateTrialSessionWorkingCopy
@@ -8,10 +8,13 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
  * @returns {Promise} the promise of the call to persistence
  */
-exports.updateTrialSessionWorkingCopy = ({
+export const updateTrialSessionWorkingCopy = ({
   applicationContext,
   trialSessionWorkingCopyToUpdate,
-}) =>
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionWorkingCopyToUpdate: TTrialSessionWorkingCopyData;
+}): Promise<any> =>
   put({
     Item: {
       ...trialSessionWorkingCopyToUpdate,

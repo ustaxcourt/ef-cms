@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { removeCaseFromHearing } = require('./removeCaseFromHearing');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { removeCaseFromHearing } from './removeCaseFromHearing';
 
 describe('removeCaseFromHearing', () => {
   it('removes a mapping record for the case / hearing', async () => {

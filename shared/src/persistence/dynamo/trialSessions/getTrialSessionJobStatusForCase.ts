@@ -1,4 +1,4 @@
-const { get } = require('../../dynamodbClientService');
+import { get } from '../../dynamodbClientService';
 
 /**
  * getTrialSessionJobStatusForCase
@@ -8,7 +8,13 @@ const { get } = require('../../dynamodbClientService');
  * @param {object} providers.jobId the unique jobId for this job
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getTrialSessionJobStatusForCase = ({ applicationContext, jobId }) =>
+export const getTrialSessionJobStatusForCase = ({
+  applicationContext,
+  jobId,
+}: {
+  applicationContext: IApplicationContext;
+  jobId: string;
+}) =>
   get({
     ConsistentRead: true,
     Key: {

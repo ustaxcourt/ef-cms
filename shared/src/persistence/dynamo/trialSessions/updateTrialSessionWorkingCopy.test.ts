@@ -1,33 +1,27 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  updateTrialSessionWorkingCopy,
-} = require('./updateTrialSessionWorkingCopy');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { updateTrialSessionWorkingCopy } from './updateTrialSessionWorkingCopy';
 
 describe('updateTrialSessionWorkingCopy', () => {
-  let putStub;
-  beforeEach(() => {
-    putStub = jest.fn().mockReturnValue({
+  beforeAll(() => {
+    applicationContext.getDocumentClient().put.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
   });
 
   it('invokes the persistence layer with pk of trial-session-working-copy|{trialSessionId}, sk of {userId} and other expected params', async () => {
-    applicationContext.getDocumentClient.mockReturnValue({
-      put: putStub,
-    });
-
     await updateTrialSessionWorkingCopy({
-      applicationContext,
       trialSessionWorkingCopyToUpdate: {
         sort: 'practitioner',
         sortOrder: 'desc',
         trialSessionId: '456',
         userId: '123',
-      },
+      } as any,
+      applicationContext,
     });
-    expect(putStub.mock.calls[0][0]).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         pk: 'trial-session-working-copy|456',
         sk: 'user|123',
@@ -36,7 +30,6 @@ describe('updateTrialSessionWorkingCopy', () => {
         trialSessionId: '456',
         userId: '123',
       },
-      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });
