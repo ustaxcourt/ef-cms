@@ -464,29 +464,6 @@ describe('generateCoverSheetData', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should NOT append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case and the feature flag is disabled', async () => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
-
-    await generateCoverSheetData({
-      applicationContext,
-      caseEntity: {
-        ...testingCaseData,
-        leadDocketNumber: testingCaseData.docketNumber,
-      },
-      docketEntryEntity: {
-        ...testingCaseData.docketEntries[0],
-        eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
-      },
-    } as any);
-
-    expect(
-      applicationContext.getUseCaseHelpers()
-        .formatConsolidatedCaseCoversheetData,
-    ).not.toHaveBeenCalled();
-  });
-
   it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case and the feature flag is enabled', async () => {
     applicationContext
       .getUseCases()
