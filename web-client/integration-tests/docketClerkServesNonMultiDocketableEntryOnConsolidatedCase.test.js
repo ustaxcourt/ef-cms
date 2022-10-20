@@ -2,7 +2,7 @@ import {
   OBJECTIONS_OPTIONS_MAP,
   SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
+import { confirmInitiatePaperFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiatePaperFilingServiceModalHelper';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
@@ -76,13 +76,13 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
     );
 
     expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiatePaperDocumentServiceModal',
+      'ConfirmInitiatePaperFilingServiceModal',
     );
   });
 
   it('docket clerk verifies consolidated case checkboxes do NOT display for case decision service', () => {
     const modalHelper = runCompute(
-      withAppContextDecorator(confirmInitiateServiceModalHelper),
+      withAppContextDecorator(confirmInitiatePaperFilingServiceModalHelper),
       {
         state: cerebralTest.getState(),
       },
