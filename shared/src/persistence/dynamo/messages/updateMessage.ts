@@ -1,4 +1,4 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * updateMessage
@@ -8,7 +8,7 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.message the message data
  * @returns {object} the created message
  */
-exports.updateMessage = ({ applicationContext, message }) =>
+export const updateMessage = ({ applicationContext, message }) =>
   put({
     Item: {
       ...message,

@@ -1,7 +1,11 @@
-const client = require('../../dynamodbClientService');
+import { update } from '../../dynamodbClientService';
 
-exports.setMessageAsRead = ({ applicationContext, docketNumber, messageId }) =>
-  client.update({
+export const setMessageAsRead = ({
+  applicationContext,
+  docketNumber,
+  messageId,
+}) =>
+  update({
     ExpressionAttributeNames: {
       '#isRead': 'isRead',
     },

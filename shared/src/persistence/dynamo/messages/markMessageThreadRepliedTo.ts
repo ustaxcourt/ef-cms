@@ -1,5 +1,5 @@
-const { getMessageThreadByParentId } = require('./getMessageThreadByParentId');
-const { update } = require('../../dynamodbClientService');
+import { getMessageThreadByParentId } from './getMessageThreadByParentId';
+import { update } from '../../dynamodbClientService';
 
 /**
  * markMessageThreadRepliedTo
@@ -9,7 +9,7 @@ const { update } = require('../../dynamodbClientService');
  * @param {string} providers.messageId the id of the message to update
  * @returns {object} the created message
  */
-exports.markMessageThreadRepliedTo = async ({
+export const markMessageThreadRepliedTo = async ({
   applicationContext,
   parentMessageId,
 }) => {

@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  PETITIONS_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const { getMessageThreadByParentId } = require('./getMessageThreadByParentId');
+import { PETITIONS_SECTION } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getMessageThreadByParentId } from './getMessageThreadByParentId';
 
 const mockMessage = {
   createdAt: '2019-03-01T21:40:46.415Z',
@@ -31,7 +27,7 @@ describe('getMessageThreadByParentId', () => {
   it('retrieves the message from persistence', async () => {
     const retrievedMessage = await getMessageThreadByParentId({
       applicationContext,
-      messageId: mockMessage.messageId,
+      parentMessageId: mockMessage.messageId,
     });
 
     expect(retrievedMessage).toEqual([mockMessage]);

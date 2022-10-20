@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { setMessageAsRead } = require('./setMessageAsRead');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { setMessageAsRead } from './setMessageAsRead';
 
 describe('setMessageAsRead', () => {
   beforeAll(() => {
