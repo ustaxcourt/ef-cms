@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
+import { ConfirmInitiatePaperFilingServiceModal } from '../ConfirmInitiatePaperFilingServiceModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -129,11 +129,10 @@ export const PaperFiling = connect(
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal confirmSequence={submitPaperFilingSequence} />
         )}
-        {showModal === 'ConfirmInitiateServiceModal' && (
-          <ConfirmInitiateServiceModal
+        {showModal === 'ConfirmInitiatePaperFilingServiceModal' && (
+          <ConfirmInitiatePaperFilingServiceModal
             confirmSequence={submitPaperFilingSequence}
             documentTitle={form.documentTitle}
-            isPaper={true}
           />
         )}
       </>
