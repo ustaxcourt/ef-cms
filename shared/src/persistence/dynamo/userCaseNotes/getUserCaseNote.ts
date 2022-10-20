@@ -9,7 +9,15 @@ import { get } from '../../dynamodbClientService';
  * @param {string} providers.userId the id of the user to get the case notes for
  * @returns {Promise} the promise of the persistence call to get the record
  */
-export const getUserCaseNote = ({ applicationContext, docketNumber, userId }) =>
+export const getUserCaseNote = ({
+  applicationContext,
+  docketNumber,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  userId: string;
+}) =>
   get({
     Key: {
       pk: `user-case-note|${docketNumber}`,

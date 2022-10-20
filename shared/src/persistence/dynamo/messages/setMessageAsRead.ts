@@ -4,6 +4,10 @@ export const setMessageAsRead = ({
   applicationContext,
   docketNumber,
   messageId,
+}: {
+  applicationContext: IApplicationContext;
+  messageId: string;
+  docketNumber: string;
 }) =>
   update({
     ExpressionAttributeNames: {

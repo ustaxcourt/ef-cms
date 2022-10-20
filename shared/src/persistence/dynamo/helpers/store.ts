@@ -58,7 +58,15 @@ export const incrementKeyCount = ({ applicationContext, key }) =>
  * @param {string} providers.expiresAt the expiresAt of the item
  * @returns {Promise} the promise of the call to persistence
  */
-export const setExpiresAt = ({ applicationContext, expiresAt, key }) =>
+export const setExpiresAt = ({
+  applicationContext,
+  expiresAt,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  expiresAt: string;
+  key: string;
+}) =>
   updateConsistent({
     ExpressionAttributeNames: {
       '#expiresAt': 'expiresAt',

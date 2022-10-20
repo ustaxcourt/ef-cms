@@ -8,7 +8,13 @@ import { put } from '../../dynamodbClientService';
  * @param {object} providers.caseNoteToUpdate the case note data to update
  * @returns {Promise} the promise of the call to persistence
  */
-export const updateUserCaseNote = ({ applicationContext, caseNoteToUpdate }) =>
+export const updateUserCaseNote = ({
+  applicationContext,
+  caseNoteToUpdate,
+}: {
+  applicationContext: IApplicationContext;
+  caseNoteToUpdate: TCaseNote;
+}) =>
   put({
     Item: {
       ...caseNoteToUpdate,

@@ -11,6 +11,9 @@ import { query } from '../../dynamodbClientService';
 export const getMessagesByDocketNumber = ({
   applicationContext,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
 }) =>
   query({
     ExpressionAttributeNames: {

@@ -11,6 +11,9 @@ import { query } from '../../dynamodbClientService';
 export const getMessageThreadByParentId = ({
   applicationContext,
   parentMessageId,
+}: {
+  applicationContext: IApplicationContext;
+  parentMessageId: string;
 }) =>
   query({
     ExpressionAttributeNames: {

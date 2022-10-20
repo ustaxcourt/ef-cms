@@ -13,6 +13,10 @@ export const getMessageById = ({
   applicationContext,
   docketNumber,
   messageId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  messageId: string;
 }) =>
   get({
     Key: {
