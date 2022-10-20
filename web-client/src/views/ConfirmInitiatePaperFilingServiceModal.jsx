@@ -1,4 +1,4 @@
-import { ConsolidatedCasesCheckboxes } from './ConfirmInitiateServiceModal';
+import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
