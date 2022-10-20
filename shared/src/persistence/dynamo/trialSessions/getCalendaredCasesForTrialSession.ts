@@ -1,12 +1,15 @@
-const client = require('../../dynamodbClientService');
-const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
-const { map } = require('lodash');
+import { get } from '../../dynamodbClientService';
+import { getCaseByDocketNumber } from '../cases/getCaseByDocketNumber';
+import { map } from 'lodash';
 
-exports.getCalendaredCasesForTrialSession = async ({
+export const getCalendaredCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionId: string;
 }) => {
-  const trialSession = await client.get({
+  const trialSession = await get({
     Key: {
       pk: `trial-session|${trialSessionId}`,
       sk: `trial-session|${trialSessionId}`,

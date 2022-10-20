@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { remove } from '../../dynamodbClientService';
 
 /**
  * deleteTrialSession
@@ -8,8 +8,14 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionId the trial session id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.deleteTrialSession = ({ applicationContext, trialSessionId }) =>
-  client.remove({
+export const deleteTrialSession = ({
+  applicationContext,
+  trialSessionId,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionId: string;
+}) =>
+  remove({
     applicationContext,
     key: {
       pk: `trial-session|${trialSessionId}`,

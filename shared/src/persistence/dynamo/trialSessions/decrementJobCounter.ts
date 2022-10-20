@@ -1,4 +1,4 @@
-const { decrementCounter } = require('../helpers/decrementCounter');
+import { decrementCounter } from '../helpers/decrementCounter';
 
 /**
  * createJobStatus
@@ -8,7 +8,13 @@ const { decrementCounter } = require('../helpers/decrementCounter');
  * @param {object} providers.jobId the unique jobId for this job
  * @returns {Promise} the promise of the call to persistence
  */
-exports.decrementJobCounter = ({ applicationContext, jobId }) =>
+export const decrementJobCounter = ({
+  applicationContext,
+  jobId,
+}: {
+  applicationContext: IApplicationContext;
+  jobId: string;
+}) =>
   decrementCounter({
     applicationContext,
     counterKey: 'unfinishedCases',

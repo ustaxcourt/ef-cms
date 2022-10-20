@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  createTrialSessionWorkingCopy,
-} = require('./createTrialSessionWorkingCopy');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createTrialSessionWorkingCopy } from './createTrialSessionWorkingCopy';
 
 const userId = 'a66ac519-fd1a-44ac-8226-b4a53d348677';
 
@@ -16,7 +12,7 @@ describe('createTrialSessionWorkingCopy', () => {
   it('attempts to persist the trial session', async () => {
     await createTrialSessionWorkingCopy({
       applicationContext,
-      trialSessionWorkingCopy: mockTrialSessionWorkingCopy,
+      trialSessionWorkingCopy: mockTrialSessionWorkingCopy as any,
     });
 
     expect(

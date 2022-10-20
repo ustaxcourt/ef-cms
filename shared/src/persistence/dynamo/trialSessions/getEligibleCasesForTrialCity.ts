@@ -1,12 +1,16 @@
-const client = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
-exports.getEligibleCasesForTrialCity = async ({
+export const getEligibleCasesForTrialCity = async ({
   applicationContext,
   procedureType,
   trialCity,
+}: {
+  applicationContext: IApplicationContext;
+  procedureType: string;
+  trialCity: string;
 }) => {
   const prefix = `${trialCity}-${procedureType.charAt(0)}`;
-  const eligibleCases = await client.query({
+  const eligibleCases = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',

@@ -1,18 +1,19 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-} = require('../../../business/entities/EntityConstants');
-const {
-  getCalendaredCasesForTrialSession,
-} = require('./getCalendaredCasesForTrialSession');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { get, queryFull } from '../../dynamodbClientService';
+import { getCalendaredCasesForTrialSession } from './getCalendaredCasesForTrialSession';
+import { MOCK_CASE } from '../../../test/mockCase';
+
+jest.mock('../../dynamodbClientService', () => ({
+  get: jest.fn(),
+  queryFull: jest.fn(),
+}));
+const getMock = get as jest.Mock;
+const queryFullMock = queryFull as jest.Mock;
 
 describe('getCalendaredCasesForTrialSession', () => {
-  beforeEach(() => {
-    client.get = jest.fn().mockReturnValue({
+  beforeAll(() => {
+    getMock.mockReturnValue({
       caseOrder: [
         {
           disposition: 'something',
@@ -22,7 +23,7 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    client.queryFull = jest.fn().mockReturnValue([
+    queryFullMock.mockReturnValue([
       {
         docketNumber: MOCK_CASE.docketNumber,
         pk: `case|${MOCK_CASE.docketNumber}`,
@@ -50,6 +51,7 @@ describe('getCalendaredCasesForTrialSession', () => {
   it('should get the cases calendared for a trial session', async () => {
     const result = await getCalendaredCasesForTrialSession({
       applicationContext,
+      trialSessionId: 'testId111',
     });
     expect(result).toEqual([
       {

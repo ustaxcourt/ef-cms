@@ -1,4 +1,4 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * createTrialSession
@@ -8,7 +8,13 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise} the promise of the call to persistence
  */
-exports.createTrialSession = ({ applicationContext, trialSession }) =>
+export const createTrialSession = ({
+  applicationContext,
+  trialSession,
+}: {
+  applicationContext: IApplicationContext;
+  trialSession: TTrialSessionData;
+}) =>
   put({
     Item: {
       gsi1pk: 'trial-session-catalog',
