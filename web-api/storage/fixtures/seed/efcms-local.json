@@ -4025,9 +4025,15 @@
     "pk": "external-order-search-enabled"
   },
   {
+<<<<<<< HEAD
     "sk": "multi-docketable-paper-filings",
     "current": true,
     "pk": "multi-docketable-paper-filings"
+=======
+    "sk": "consolidated-cases-paper-filing-docket-entries",
+    "current": true,
+    "pk": "consolidated-cases-paper-filing-docket-entries"
+>>>>>>> 542bf987ee464ce9fb7958681ef0fd6bbf2d7f4c
   },
   {
     "sk": "b2a1d128-784f-4dfb-a2a4-deb138b85542",
