@@ -1,446 +1,166 @@
 /* eslint-disable max-lines */
-const {
-  addCaseToHearing,
-} = require('../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing');
-const {
-  advancedDocumentSearch,
-} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
-const {
-  associateUserWithCase,
-} = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
-const {
-  associateUserWithCasePending,
-} = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
-const {
-  bulkDeleteRecords,
-} = require('../../shared/src/persistence/elasticsearch/bulkDeleteRecords');
-const {
-  bulkIndexRecords,
-} = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
-const {
-  caseAdvancedSearch,
-} = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
-const {
-  casePublicSearch: casePublicSearchPersistence,
-} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
-const {
-  confirmAuthCode,
-} = require('../../shared/src/persistence/cognito/confirmAuthCode');
-const {
-  createCase,
-} = require('../../shared/src/persistence/dynamo/cases/createCase');
-const {
-  createCaseDeadline,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline');
-const {
-  createCaseTrialSortMappingRecords,
-} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
-const {
-  createJobStatus,
-} = require('../../shared/src/persistence/dynamo/trialSessions/createJobStatus');
-const {
-  createMessage,
-} = require('../../shared/src/persistence/dynamo/messages/createMessage');
-const {
-  createNewPetitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/createNewPetitionerUser');
-const {
-  createNewPractitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
-const {
-  createOrUpdatePractitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser');
-const {
-  createOrUpdateUser,
-} = require('../../shared/src/persistence/dynamo/users/createOrUpdateUser');
-const {
-  createTrialSession,
-} = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
-const {
-  createTrialSessionWorkingCopy,
-} = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy');
-const {
-  decrementJobCounter,
-} = require('../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter');
-const {
-  deleteCaseDeadline,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
-const {
-  deleteCaseTrialSortMappingRecords,
-} = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
-const {
-  deleteDocketEntry,
-} = require('../../shared/src/persistence/dynamo/documents/deleteDocketEntry');
-const {
-  deleteDocumentFromS3,
-} = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
-const {
+import { addCaseToHearing } from '../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing';
+import { advancedDocumentSearch } from '../../shared/src/persistence/elasticsearch/advancedDocumentSearch';
+import { associateUserWithCase } from '../../shared/src/persistence/dynamo/cases/associateUserWithCase';
+import { associateUserWithCasePending } from '../../shared/src/persistence/dynamo/cases/associateUserWithCasePending';
+import { bulkDeleteRecords } from '../../shared/src/persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '../../shared/src/persistence/elasticsearch/bulkIndexRecords';
+import { caseAdvancedSearch } from '../../shared/src/persistence/elasticsearch/caseAdvancedSearch';
+import { casePublicSearch as casePublicSearchPersistence } from '../../shared/src/persistence/elasticsearch/casePublicSearch';
+import { confirmAuthCode } from '../../shared/src/persistence/cognito/confirmAuthCode';
+import { createCase } from '../../shared/src/persistence/dynamo/cases/createCase';
+import { createCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline';
+import { createCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
+import { createJobStatus } from '../../shared/src/persistence/dynamo/trialSessions/createJobStatus';
+import { createMessage } from '../../shared/src/persistence/dynamo/messages/createMessage';
+import { createNewPetitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPetitionerUser';
+import { createNewPractitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPractitionerUser';
+import { createOrUpdatePractitionerUser } from '../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
+import { createOrUpdateUser } from '../../shared/src/persistence/dynamo/users/createOrUpdateUser';
+import { createTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSession';
+import { createTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
+import { decrementJobCounter } from '../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter';
+import { deleteCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline';
+import { deleteCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { deleteDocketEntry } from '../../shared/src/persistence/dynamo/documents/deleteDocketEntry';
+import { deleteDocumentFromS3 } from '../../shared/src/persistence/s3/deleteDocumentFromS3';
+import {
   deleteKeyCount,
   getLimiterByKey,
   incrementKeyCount,
   setExpiresAt,
-} = require('../../shared/src/persistence/dynamo/helpers/store');
-const {
-  deleteMessage,
-} = require('../../shared/src/persistence/sqs/deleteMessage');
-const {
-  deleteRecord,
-} = require('../../shared/src/persistence/elasticsearch/deleteRecord');
-const {
-  deleteTrialSession,
-} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
-const {
-  deleteTrialSessionWorkingCopy,
-} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy');
-const {
-  deleteUserCaseNote,
-} = require('../../shared/src/persistence/dynamo/userCaseNotes/deleteUserCaseNote');
-const {
-  deleteUserConnection,
-} = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
-const {
-  deleteUserFromCase,
-} = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
-const {
-  deleteWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
-const {
-  fetchPendingItems,
-} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
-const {
-  getAllWebSocketConnections,
-} = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
-const {
-  getBlockedCases,
-} = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
-const {
-  getCalendaredCasesForTrialSession,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession');
-const {
-  getCaseByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getCaseDeadlinesByDateRange,
-} = require('../../shared/src/persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange');
-const {
-  getCaseDeadlinesByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
-const {
-  getCaseInventoryReport,
-} = require('../../shared/src/persistence/elasticsearch/getCaseInventoryReport');
-const {
-  getCaseMetadataWithCounsel,
-} = require('../../shared/src/persistence/dynamo/cases/getCaseMetadataWithCounsel');
-const {
+} from '../../shared/src/persistence/dynamo/helpers/store';
+import { deleteMessage } from '../../shared/src/persistence/sqs/deleteMessage';
+import { deleteRecord } from '../../shared/src/persistence/elasticsearch/deleteRecord';
+import { deleteTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession';
+import { deleteTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
+import { deleteUserCaseNote } from '../../shared/src/persistence/dynamo/userCaseNotes/deleteUserCaseNote';
+import { deleteUserConnection } from '../../shared/src/persistence/dynamo/notifications/deleteUserConnection';
+import { deleteUserFromCase } from '../../shared/src/persistence/dynamo/cases/deleteUserFromCase';
+import { deleteWorkItem } from '../../shared/src/persistence/dynamo/workitems/deleteWorkItem';
+import { fetchPendingItems } from '../../shared/src/persistence/elasticsearch/fetchPendingItems';
+import { getAllWebSocketConnections } from '../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getBlockedCases } from '../../shared/src/persistence/elasticsearch/getBlockedCases';
+import { getCalendaredCasesForTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
+import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseDeadlinesByDateRange } from '../../shared/src/persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
+import { getCaseDeadlinesByDocketNumber } from '../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseInventoryReport } from '../../shared/src/persistence/elasticsearch/getCaseInventoryReport';
+import { getCaseMetadataWithCounsel } from '../../shared/src/persistence/dynamo/cases/getCaseMetadataWithCounsel';
+import {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
-const {
-  getCasesByDocketNumbers,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers');
-const {
-  getCasesByLeadDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
-const {
-  getCasesByUserId,
-} = require('../../shared/src/persistence/elasticsearch/getCasesByUserId');
-const {
-  getCasesForUser,
-} = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
-const {
-  getClientId,
-} = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getCognitoUserIdByEmail,
-} = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
-const {
-  getCompletedSectionInboxMessages,
-} = require('../../shared/src/persistence/elasticsearch/messages/getCompletedSectionInboxMessages');
-const {
-  getCompletedUserInboxMessages,
-} = require('../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages');
-const {
-  getConfigurationItemValue,
-} = require('../../shared/src/persistence/dynamo/deployTable/getConfigurationItemValue');
-const {
-  getDeployTableStatus,
-} = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
-const {
-  getDispatchNotification,
-} = require('../../shared/src/persistence/dynamo/notifications/getDispatchNotification');
-const {
-  getDocketEntriesServedWithinTimeframe,
-} = require('../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe');
-const {
-  getDocumentIdFromSQSMessage,
-} = require('../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage');
-const {
-  getDocumentQCInboxForSection,
-} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
-const {
-  getDocumentQCInboxForUser,
-} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
-const {
-  getDocumentQCServedForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection');
-const {
-  getDocumentQCServedForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser');
-const {
-  getDownloadPolicyUrl,
-} = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
-const {
-  getEligibleCasesForTrialCity,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
-const {
-  getEligibleCasesForTrialSession,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
-const {
-  getFeatureFlagValue,
-} = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
-const {
-  getFirstSingleCaseRecord,
-} = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
-const {
-  getInternalUsers,
-} = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
-const {
-  getMaintenanceMode,
-} = require('../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode');
-const {
-  getMessageById,
-} = require('../../shared/src/persistence/dynamo/messages/getMessageById');
-const {
-  getMessagesByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber');
-const {
-  getMessageThreadByParentId,
-} = require('../../shared/src/persistence/dynamo/messages/getMessageThreadByParentId');
-const {
-  getPractitionerByBarNumber,
-} = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
-const {
-  getPractitionersByName,
-} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
-const {
-  getPublicDownloadPolicyUrl,
-} = require('../../shared/src/persistence/s3/getPublicDownloadPolicyUrl');
-const {
-  getReadyForTrialCases,
-} = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
-const {
-  getReconciliationReport,
-} = require('../../shared/src/persistence/elasticsearch/getReconciliationReport');
-const {
-  getSectionInboxMessages,
-} = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
-const {
-  getSectionOutboxMessages,
-} = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
-const {
-  getSesStatus,
-} = require('../../shared/src/persistence/ses/getSesStatus');
-const {
-  getTableStatus,
-} = require('../../shared/src/persistence/dynamo/getTableStatus');
-const {
-  getTrialSessionById,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
-const {
-  getTrialSessionJobStatusForCase,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase');
-const {
-  getTrialSessionProcessingStatus,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionProcessingStatus');
-const {
-  getTrialSessions,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
-const {
-  getTrialSessionWorkingCopy,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionWorkingCopy');
-const {
-  getUploadPolicy,
-} = require('../../shared/src/persistence/s3/getUploadPolicy');
-const {
-  getUserByEmail,
-} = require('../../shared/src/persistence/dynamo/users/getUserByEmail');
-const {
-  getUserById,
-} = require('../../shared/src/persistence/dynamo/users/getUserById');
-const {
-  getUserCaseMappingsByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
-const {
-  getUserCaseNote,
-} = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
-const {
-  getUserCaseNoteForCases,
-} = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNoteForCases');
-const {
-  getUserInboxMessages,
-} = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
-const {
-  getUserOutboxMessages,
-} = require('../../shared/src/persistence/elasticsearch/messages/getUserOutboxMessages');
-const {
-  getUsersById,
-} = require('../../shared/src/persistence/dynamo/users/getUsersById');
-const {
-  getUsersBySearchKey,
-} = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
-const {
-  getUsersInSection,
-} = require('../../shared/src/persistence/dynamo/users/getUsersInSection');
-const {
-  getWebSocketConnectionsByUserId,
-} = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
-const {
-  getWorkItemById,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
-const {
-  getWorkItemsByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByDocketNumber');
-const {
-  getWorkItemsByWorkItemId,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
-const {
-  incrementCounter,
-} = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
-const {
-  isEmailAvailable,
-} = require('../../shared/src/persistence/cognito/isEmailAvailable');
-const {
-  isFileExists,
-} = require('../../shared/src/persistence/s3/isFileExists');
-const {
-  markMessageThreadRepliedTo,
-} = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
-const {
-  persistUser,
-} = require('../../shared/src/persistence/dynamo/users/persistUser');
-const {
-  putWorkItemInOutbox,
-} = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
-const {
-  putWorkItemInUsersOutbox,
-} = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
-const {
-  refreshToken,
-} = require('../../shared/src/persistence/cognito/refreshToken');
-const {
-  removeCaseFromHearing,
-} = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
-const {
+} from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
+import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers';
+import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
+import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
+import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
+import { getClientId } from '../../shared/src/persistence/cognito/getClientId';
+import { getCognitoUserIdByEmail } from '../../shared/src/persistence/cognito/getCognitoUserIdByEmail';
+import { getCompletedSectionInboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
+import { getCompletedUserInboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages';
+import { getConfigurationItemValue } from '../../shared/src/persistence/dynamo/deployTable/getConfigurationItemValue';
+import { getDeployTableStatus } from '../../shared/src/persistence/dynamo/getDeployTableStatus';
+import { getDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/getDispatchNotification';
+import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
+import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCInboxForUser } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser';
+import { getDocumentQCServedForSection } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection';
+import { getDocumentQCServedForUser } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser';
+import { getDownloadPolicyUrl } from '../../shared/src/persistence/s3/getDownloadPolicyUrl';
+import { getEligibleCasesForTrialCity } from '../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
+import { getEligibleCasesForTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
+import { getFeatureFlagValue } from '../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue';
+import { getFirstSingleCaseRecord } from '../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord';
+import { getInternalUsers } from '../../shared/src/persistence/dynamo/users/getInternalUsers';
+import { getMaintenanceMode } from '../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMessageById } from '../../shared/src/persistence/dynamo/messages/getMessageById';
+import { getMessagesByDocketNumber } from '../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber';
+import { getMessageThreadByParentId } from '../../shared/src/persistence/dynamo/messages/getMessageThreadByParentId';
+import { getPractitionerByBarNumber } from '../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber';
+import { getPractitionersByName } from '../../shared/src/persistence/elasticsearch/getPractitionersByName';
+import { getPublicDownloadPolicyUrl } from '../../shared/src/persistence/s3/getPublicDownloadPolicyUrl';
+import { getReadyForTrialCases } from '../../shared/src/persistence/elasticsearch/getReadyForTrialCases';
+import { getReconciliationReport } from '../../shared/src/persistence/elasticsearch/getReconciliationReport';
+import { getSectionInboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages';
+import { getSectionOutboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages';
+import { getSesStatus } from '../../shared/src/persistence/ses/getSesStatus';
+import { getTableStatus } from '../../shared/src/persistence/dynamo/getTableStatus';
+import { getTrialSessionById } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById';
+import { getTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
+import { getTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
+import { getTrialSessions } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessions';
+import { getTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
+import { getUploadPolicy } from '../../shared/src/persistence/s3/getUploadPolicy';
+import { getUserByEmail } from '../../shared/src/persistence/dynamo/users/getUserByEmail';
+import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
+import { getUserCaseMappingsByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber';
+import { getUserCaseNote } from '../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote';
+import { getUserCaseNoteForCases } from '../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
+import { getUserInboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages';
+import { getUserOutboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getUserOutboxMessages';
+import { getUsersById } from '../../shared/src/persistence/dynamo/users/getUsersById';
+import { getUsersBySearchKey } from '../../shared/src/persistence/dynamo/users/getUsersBySearchKey';
+import { getUsersInSection } from '../../shared/src/persistence/dynamo/users/getUsersInSection';
+import { getWebSocketConnectionsByUserId } from '../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId';
+import { getWorkItemById } from '../../shared/src/persistence/dynamo/workitems/getWorkItemById';
+import { getWorkItemsByDocketNumber } from '../../shared/src/persistence/dynamo/workitems/getWorkItemsByDocketNumber';
+import { getWorkItemsByWorkItemId } from '../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId';
+import { incrementCounter } from '../../shared/src/persistence/dynamo/helpers/incrementCounter';
+import { isEmailAvailable } from '../../shared/src/persistence/cognito/isEmailAvailable';
+import { isFileExists } from '../../shared/src/persistence/s3/isFileExists';
+import { markMessageThreadRepliedTo } from '../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo';
+import { persistUser } from '../../shared/src/persistence/dynamo/users/persistUser';
+import { putWorkItemInOutbox } from '../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox';
+import { putWorkItemInUsersOutbox } from '../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox';
+import { refreshToken } from '../../shared/src/persistence/cognito/refreshToken';
+import { removeCaseFromHearing } from '../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing';
+import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
-} = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
-const {
-  saveDispatchNotification,
-} = require('../../shared/src/persistence/dynamo/notifications/saveDispatchNotification');
-const {
-  saveDocumentFromLambda,
-} = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
-const {
-  saveUserConnection,
-} = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
-const {
-  saveWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
-const {
-  saveWorkItemForDocketClerkFilingExternalDocument,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
-const {
-  setMessageAsRead,
-} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
-const {
-  setPriorityOnAllWorkItems,
-} = require('../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems');
-const {
-  setTrialSessionJobStatusForCase,
-} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase');
-const {
-  setTrialSessionProcessingStatus,
-} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus');
-const {
-  updateCase,
-} = require('../../shared/src/persistence/dynamo/cases/updateCase');
-const {
-  updateCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
-const {
-  updateCaseHearing,
-} = require('../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing');
-const {
-  updateDocketEntry,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntry');
-const {
-  updateDocketEntryPendingServiceStatus,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryPendingServiceStatus');
-const {
-  updateDocketEntryProcessingStatus,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
-const {
+} from '../../shared/src/persistence/dynamo/cases/removePractitionerOnCase';
+import { saveDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/saveDispatchNotification';
+import { saveDocumentFromLambda } from '../../shared/src/persistence/s3/saveDocumentFromLambda';
+import { saveUserConnection } from '../../shared/src/persistence/dynamo/notifications/saveUserConnection';
+import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/saveWorkItem';
+import { saveWorkItemForDocketClerkFilingExternalDocument } from '../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
+import { setMessageAsRead } from '../../shared/src/persistence/dynamo/messages/setMessageAsRead';
+import { setPriorityOnAllWorkItems } from '../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems';
+import { setTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
+import { setTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
+import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCaseCorrespondence } from '../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
+import { updateCaseHearing } from '../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing';
+import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
+import { updateDocketEntryPendingServiceStatus } from '../../shared/src/persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
+import { updateDocketEntryProcessingStatus } from '../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus';
+import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
-} = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
-const {
-  updateMaintenanceMode,
-} = require('../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode');
-const {
-  updateMessage,
-} = require('../../shared/src/persistence/dynamo/messages/updateMessage');
-const {
-  updatePractitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/updatePractitionerUser');
-const {
-  updateTrialSession,
-} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
-const {
-  updateTrialSessionWorkingCopy,
-} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
-const {
-  updateUser,
-} = require('../../shared/src/persistence/dynamo/users/updateUser');
-const {
-  updateUserCaseMapping,
-} = require('../../shared/src/persistence/dynamo/cases/updateUserCaseMapping');
-const {
-  updateUserCaseNote,
-} = require('../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote');
-const {
-  updateUserEmail,
-} = require('../../shared/src/persistence/dynamo/users/updateUserEmail');
-const {
-  updateUserRecords,
-} = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
-const {
-  updateWorkItemAssociatedJudge,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
-const {
-  updateWorkItemCaseStatus,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus');
-const {
-  updateWorkItemCaseTitle,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle');
-const {
-  updateWorkItemDocketNumberSuffix,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix');
-const {
-  updateWorkItemTrialDate,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
-const {
-  verifyCaseForUser,
-} = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
-const {
-  verifyPendingCaseForUser,
-} = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
-const {
-  zipDocuments,
-} = require('../../shared/src/persistence/s3/zipDocuments');
-const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
-const { getMessages } = require('../../shared/src/persistence/sqs/getMessages');
+} from '../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase';
+import { updateMaintenanceMode } from '../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode';
+import { updateMessage } from '../../shared/src/persistence/dynamo/messages/updateMessage';
+import { updatePractitionerUser } from '../../shared/src/persistence/dynamo/users/updatePractitionerUser';
+import { updateTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/updateTrialSession';
+import { updateTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
+import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
+import { updateUserCaseMapping } from '../../shared/src/persistence/dynamo/cases/updateUserCaseMapping';
+import { updateUserCaseNote } from '../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote';
+import { updateUserEmail } from '../../shared/src/persistence/dynamo/users/updateUserEmail';
+import { updateUserRecords } from '../../shared/src/persistence/dynamo/users/updateUserRecords';
+import { updateWorkItemAssociatedJudge } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge';
+import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus';
+import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
+import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
+import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
+import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
+import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
+import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
+import { getDocument } from '../../shared/src/persistence/s3/getDocument';
+import { getMessages } from '../../shared/src/persistence/sqs/getMessages';
 
-const isValidatedDecorator = persistenceGatewayMethods => {
+const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
    * Decorates the function to verify any entities passed have the isValid flag.
    * Should be used whenever a persistence method might be called by an interactor via lambda
@@ -548,6 +268,7 @@ const gatewayMethods = {
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
     ? (applicationContext, { code }) => {
+        // TODO: can these be refactored to `import` ?
         const jwt = require('jsonwebtoken');
         const { userMap } = require('../../shared/src/test/mockUserTokenMap');
         const user = {
@@ -652,4 +373,10 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-exports.getPersistenceGateway = () => gatewayMethods;
+export const getPersistenceGateway = () => gatewayMethods;
+
+type _IGetPersistenceGateway = typeof getPersistenceGateway;
+
+declare global {
+  interface IGetPersistenceGateway extends _IGetPersistenceGateway {}
+}
