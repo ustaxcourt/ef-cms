@@ -12,6 +12,9 @@ import { update } from '../../dynamodbClientService';
 export const markMessageThreadRepliedTo = async ({
   applicationContext,
   parentMessageId,
+}: {
+  applicationContext: IApplicationContext;
+  parentMessageId: string;
 }) => {
   const messages = await getMessageThreadByParentId({
     applicationContext,

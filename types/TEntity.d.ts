@@ -319,6 +319,11 @@ type TPetitioner = {
   contactType: string;
 };
 
+type TCaseNote = {
+  userId: string;
+  docketNumber: string;
+};
+
 type TPractitioner = {
   entityName: string;
   additionalPhone: string;

@@ -8,7 +8,13 @@ import { put } from '../../dynamodbClientService';
  * @param {object} providers.message the message data
  * @returns {object} the created message
  */
-export const updateMessage = ({ applicationContext, message }) =>
+export const updateMessage = ({
+  applicationContext,
+  message,
+}: {
+  applicationContext: IApplicationContext;
+  message: TMessageData;
+}) =>
   put({
     Item: {
       ...message,

@@ -13,6 +13,10 @@ export const getUserCaseNoteForCases = ({
   applicationContext,
   docketNumbers,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumbers: string[];
+  userId: string;
 }) =>
   batchGet({
     applicationContext,

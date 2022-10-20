@@ -13,6 +13,10 @@ export const deleteUserCaseNote = ({
   applicationContext,
   docketNumber,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  userId: string;
 }) =>
   remove({
     applicationContext,
