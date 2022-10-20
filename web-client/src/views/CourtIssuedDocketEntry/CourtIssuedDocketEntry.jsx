@@ -29,8 +29,8 @@ export const CourtIssuedDocketEntry = connect(
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
-    openConfirmInitiateServiceModalSequence:
-      sequences.openConfirmInitiateServiceModalSequence,
+    openConfirmInitiateCourtIssuedFilingServiceModalSequence:
+      sequences.openConfirmInitiateCourtIssuedFilingServiceModalSequence,
     saveCourtIssuedDocketEntrySequence:
       sequences.saveCourtIssuedDocketEntrySequence,
     showModal: state.modal.showModal,
@@ -46,7 +46,7 @@ export const CourtIssuedDocketEntry = connect(
     form,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
-    openConfirmInitiateServiceModalSequence,
+    openConfirmInitiateCourtIssuedFilingServiceModalSequence,
     saveCourtIssuedDocketEntrySequence,
     showModal,
     updateCourtIssuedDocketEntryFormValueSequence,
@@ -246,7 +246,7 @@ export const CourtIssuedDocketEntry = connect(
                     <Button
                       id="serve-to-parties-btn"
                       onClick={() => {
-                        openConfirmInitiateServiceModalSequence();
+                        openConfirmInitiateCourtIssuedFilingServiceModalSequence();
                       }}
                     >
                       Save and Serve
