@@ -750,4 +750,10 @@ const useCases = {
       : virusScanPdfInteractor(applicationContext, args),
 };
 
-exports.getUseCases = () => useCases;
+export const getUseCases = () => useCases;
+
+type _IGetUseCases = typeof getUseCases;
+
+declare global {
+  interface IGetUseCases extends _IGetUseCases {}
+}
