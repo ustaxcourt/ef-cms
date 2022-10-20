@@ -1,5 +1,6 @@
-const client = require('../../dynamodbClientService');
+import { updateConsistent } from '../../dynamodbClientService';
 
+// eslint-disable-next-line spellcheck/spell-checker
 /**
  * decrementCounter
  *
@@ -10,14 +11,19 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.counterKey the actual key to decrement
  * @returns {Promise} the promise of the call to persistence
  */
-exports.decrementCounter = async ({
+export const decrementCounter = async ({
   applicationContext,
   counterKey,
   pk,
   sk,
-}) => {
-  return (
-    await client.updateConsistent({
+}: {
+  applicationContext: IApplicationContext;
+  counterKey: string;
+  pk: string;
+  sk: string;
+}) =>
+  (
+    await updateConsistent({
       ExpressionAttributeNames: {
         '#id': counterKey,
       },
@@ -33,4 +39,3 @@ exports.decrementCounter = async ({
       applicationContext,
     })
   )[counterKey];
-};

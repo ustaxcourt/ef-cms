@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { updateConsistent } from '../../dynamodbClientService';
 const {
   getMonthDayYearInETObj,
 } = require('../../../business/utilities/DateHandler');
@@ -11,13 +11,21 @@ const {
  * @param {string} providers.year the year of the item to increment, formatted as YYYY
  * @returns {Promise} the promise of the call to persistence
  */
-exports.incrementCounter = async ({ applicationContext, key, year }) => {
+export const incrementCounter = async ({
+  applicationContext,
+  key,
+  year,
+}: {
+  applicationContext: IApplicationContext;
+  key: string;
+  year?: string;
+}) => {
   if (!year) {
     year = `${getMonthDayYearInETObj().year}`;
   }
 
   return (
-    await client.updateConsistent({
+    await updateConsistent({
       ExpressionAttributeNames: {
         '#id': 'id',
       },

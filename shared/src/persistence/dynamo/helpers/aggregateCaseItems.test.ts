@@ -1,4 +1,4 @@
-const {
+import {
   aggregateCaseItems,
   getAssociatedJudge,
   isArchivedCorrespondenceItem,
@@ -10,7 +10,7 @@ const {
   isIrsPractitionerItem,
   isPrivatePractitionerItem,
   isWorkItemItem,
-} = require('./aggregateCaseItems');
+} from './aggregateCaseItems';
 
 describe('aggregateCaseItems', () => {
   const caseDocketNumber = '123-45';

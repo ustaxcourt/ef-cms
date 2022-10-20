@@ -1,4 +1,4 @@
-import { query, batchDelete } from '../../dynamodbClientService';
+import { batchDelete, query } from '../../dynamodbClientService';
 
 /**
  * deleteByGsi
@@ -8,7 +8,13 @@ import { query, batchDelete } from '../../dynamodbClientService';
  * @param {object} providers.gsi the gsi to search and delete
  * @returns {Promise} the promise of the call to persistence
  */
-export const deleteByGsi = async ({ applicationContext, gsi }) => {
+export const deleteByGsi = async ({
+  applicationContext,
+  gsi,
+}: {
+  applicationContext: IApplicationContext;
+  gsi: string;
+}) => {
   const items = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',

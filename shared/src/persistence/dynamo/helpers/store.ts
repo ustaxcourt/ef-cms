@@ -1,4 +1,8 @@
-const client = require('../../dynamodbClientService');
+import {
+  getFromDeployTable,
+  remove,
+  updateConsistent,
+} from '../../dynamodbClientService';
 
 /**
  * getLimiterByKey
@@ -8,8 +12,8 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.key the key for retrieving the correct rate limiter
  * @returns {Promise<object>} an object containing the value of maxInvocations and windowTime
  */
-exports.getLimiterByKey = async ({ applicationContext, key }) => {
-  const result = await client.getFromDeployTable({
+export const getLimiterByKey = async ({ applicationContext, key }) => {
+  const result = await getFromDeployTable({
     Key: {
       pk: key,
       sk: key,
@@ -28,8 +32,8 @@ exports.getLimiterByKey = async ({ applicationContext, key }) => {
  * @param {string} providers.key the key of the item to increment
  * @returns {Promise} the promise of the call to persistence
  */
-exports.incrementKeyCount = ({ applicationContext, key }) =>
-  client.updateConsistent({
+export const incrementKeyCount = ({ applicationContext, key }) =>
+  updateConsistent({
     ExpressionAttributeNames: {
       '#id': 'id',
     },
@@ -54,8 +58,8 @@ exports.incrementKeyCount = ({ applicationContext, key }) =>
  * @param {string} providers.expiresAt the expiresAt of the item
  * @returns {Promise} the promise of the call to persistence
  */
-exports.setExpiresAt = ({ applicationContext, expiresAt, key }) =>
-  client.updateConsistent({
+export const setExpiresAt = ({ applicationContext, expiresAt, key }) =>
+  updateConsistent({
     ExpressionAttributeNames: {
       '#expiresAt': 'expiresAt',
       '#id': 'id',
@@ -73,5 +77,5 @@ exports.setExpiresAt = ({ applicationContext, expiresAt, key }) =>
     applicationContext,
   });
 
-exports.deleteKeyCount = ({ applicationContext, key }) =>
-  client.remove({ applicationContext, key: { pk: key, sk: key } });
+export const deleteKeyCount = ({ applicationContext, key }) =>
+  remove({ applicationContext, key: { pk: key, sk: key } });

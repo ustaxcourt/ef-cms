@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { getFromDeployTable } from '../../dynamodbClientService';
 
 /**
  * Checks to see if the environment currentColor matches that of the deploy table
@@ -6,8 +6,10 @@ const client = require('../../dynamodbClientService');
  * @param {object} applicationContext The applicationContext
  * @returns {Promise} which resolves to whether or not the current color matches what's in the deploy table
  */
-exports.isCurrentColorActive = async applicationContext => {
-  const { current: currentColor } = await client.getFromDeployTable({
+export const isCurrentColorActive = async (
+  applicationContext: IApplicationContext,
+) => {
+  const { current: currentColor } = await getFromDeployTable({
     Key: {
       pk: 'current-color',
       sk: 'current-color',

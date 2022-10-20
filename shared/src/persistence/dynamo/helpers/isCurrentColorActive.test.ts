@@ -1,19 +1,20 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { isCurrentColorActive } = require('./isCurrentColorActive');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getFromDeployTable } from '../../dynamodbClientService';
+import { isCurrentColorActive } from './isCurrentColorActive';
+
+jest.mock('../../dynamodbClientService', () => ({
+  getFromDeployTable: jest.fn().mockReturnValue({
+    current: 'blue',
+    pk: 'current-color',
+    sk: 'current-color',
+  }),
+}));
 
 describe('isCurrentColorActive', () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
-    client.getFromDeployTable = jest.fn().mockReturnValue({
-      current: 'blue',
-      pk: 'current-color',
-      sk: 'current-color',
-    });
-    process.env = { ...OLD_ENV }; // make a copy
+    process.env = { ...OLD_ENV };
   });
 
   afterAll(() => {
@@ -24,7 +25,7 @@ describe('isCurrentColorActive', () => {
     process.env.CURRENT_COLOR = 'blue';
     const val = await isCurrentColorActive(applicationContext);
 
-    expect(client.getFromDeployTable.mock.calls[0][0]).toMatchObject({
+    expect((getFromDeployTable as jest.Mock).mock.calls[0][0]).toMatchObject({
       Key: {
         pk: 'current-color',
         sk: 'current-color',
