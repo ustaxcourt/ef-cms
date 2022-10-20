@@ -34,7 +34,7 @@ describe('updatePractitionerUser', () => {
     await expect(
       updatePractitionerUser({
         applicationContext,
-        user: updatedUser,
+        user: updatedUser as any,
       }),
     ).rejects.toThrow('User not found');
     expect(applicationContext.logger.error).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe('updatePractitionerUser', () => {
 
     const results = await updatePractitionerUser({
       applicationContext,
-      user: { ...updatedUser, userId },
+      user: { ...updatedUser, userId } as any,
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
@@ -73,8 +73,7 @@ describe('updatePractitionerUser', () => {
 
     await updatePractitionerUser({
       applicationContext,
-      isNewAccount: false,
-      user: updatedUser,
+      user: updatedUser as any,
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();

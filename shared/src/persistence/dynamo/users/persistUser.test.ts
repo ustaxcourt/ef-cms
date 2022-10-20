@@ -10,7 +10,7 @@ describe('persistUser', () => {
       user: {
         name: 'Someone',
         userId: USER_ID,
-      },
+      } as any,
     });
 
     expect(
