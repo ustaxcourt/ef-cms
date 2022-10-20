@@ -1,27 +1,23 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { deleteUserConnection } from './deleteUserConnection';
+import { get, batchDelete } from '../../dynamodbClientService';
+
+jest.mock('../../dynamodbClientService');
+
+const getMock = get as jest.Mock;
+const batchDeleteMock = batchDelete as jest.Mock;
 
 describe('deleteUserConnection', () => {
   it('attempts to to delete the user connection', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            connectionId: '123',
-            pk: 'connection|123',
-            sk: 'connection|123',
-            userId: 'abc',
-          },
-        }),
+    getMock.mockReturnValueOnce({
+      connectionId: '123',
+      pk: 'connection|123',
+      sk: 'connection|123',
+      userId: 'abc',
     });
-    applicationContext.getDocumentClient().get.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            pk: 'user|abc',
-            sk: 'connection|123',
-          },
-        }),
+    getMock.mockReturnValueOnce({
+      pk: 'user|abc',
+      sk: 'connection|123',
     });
 
     await deleteUserConnection({
@@ -29,85 +25,51 @@ describe('deleteUserConnection', () => {
       connectionId: '123',
     });
 
-    expect(
-      applicationContext.getDocumentClient().batchWrite,
-    ).toHaveBeenCalledWith({
-      RequestItems: {
-        'efcms-local': expect.arrayContaining([
-          expect.objectContaining({
-            DeleteRequest: {
-              Key: {
-                pk: 'user|abc',
-                sk: 'connection|123',
-              },
-            },
-          }),
-          expect.objectContaining({
-            DeleteRequest: {
-              Key: {
-                pk: 'connection|123',
-                sk: 'connection|123',
-              },
-            },
-          }),
-        ]),
+    expect(batchDeleteMock.mock.calls[0][0].items).toEqual([
+      {
+        connectionId: '123',
+        pk: 'connection|123',
+        sk: 'connection|123',
+        userId: 'abc',
       },
-    });
+      { pk: 'user|abc', sk: 'connection|123' },
+    ]);
   });
 
   it('if no connection is found given the connectionId, nothing else happens', async () => {
-    // the connection must have expired via ttl
-    applicationContext.getDocumentClient().get.mockReturnValueOnce({
-      promise: () => Promise.resolve({}),
-    });
+    getMock.mockReturnValueOnce(null);
 
     await deleteUserConnection({
       applicationContext,
       connectionId: '123',
     });
 
-    expect(
-      applicationContext.getDocumentClient().batchWrite,
-    ).not.toHaveBeenCalled();
+    expect(batchDeleteMock).not.toHaveBeenCalled();
   });
 
   it('if no user connection is found given the connectionId, it only deletes the connection', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            connectionId: '123',
-            pk: 'connection|123',
-            sk: 'connection|123',
-            userId: 'abc',
-          },
-        }),
+    getMock.mockReturnValueOnce({
+      connectionId: '123',
+      pk: 'connection|123',
+      sk: 'connection|123',
+      userId: 'abc',
     });
-    // the user connection must have expired via ttl
-    applicationContext.getDocumentClient().get.mockReturnValueOnce({
-      promise: () => Promise.resolve({}),
-    });
+
+    getMock.mockReturnValueOnce({});
 
     await deleteUserConnection({
       applicationContext,
       connectionId: '123',
     });
 
-    expect(
-      applicationContext.getDocumentClient().batchWrite,
-    ).toHaveBeenCalledWith({
-      RequestItems: {
-        'efcms-local': [
-          {
-            DeleteRequest: {
-              Key: {
-                pk: 'connection|123',
-                sk: 'connection|123',
-              },
-            },
-          },
-        ],
+    expect(batchDeleteMock.mock.calls[0][0].items).toEqual([
+      {
+        connectionId: '123',
+        pk: 'connection|123',
+        sk: 'connection|123',
+        userId: 'abc',
       },
-    });
+      {},
+    ]);
   });
 });
