@@ -1,6 +1,6 @@
 interface IApplicationContext {
   [key: string]: any;
-  getPersistenceGateway(): TPersistenceGateway;
+  getPersistenceGateway: IGetPersistenceGateway;
   getUseCaseHelpers(): TUseCaseHelpers;
   getDispatchers(): TGetDispatchers;
 }
