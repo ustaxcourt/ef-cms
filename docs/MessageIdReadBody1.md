@@ -1,6 +1,0 @@
-# DevEfCms.MessageIdReadBody1
-
-## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**docketNumber** | **String** |  | [optional] 
