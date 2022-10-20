@@ -1,5 +1,5 @@
-const DateHandler = require('../../../business/utilities/DateHandler');
-const { createBarNumber } = require('./barNumberGenerator');
+import DateHandler from '../../../business/utilities/DateHandler';
+import { createBarNumber } from './barNumberGenerator';
 
 describe('Create bar number', function () {
   it('should create a bar number', async () => {

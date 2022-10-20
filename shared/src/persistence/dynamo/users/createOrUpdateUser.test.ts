@@ -1,14 +1,9 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  createOrUpdateUser,
-  createUserRecords,
-} = require('./createOrUpdateUser');
-const {
-  PETITIONS_SECTION,
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createOrUpdateUser, createUserRecords } from './createOrUpdateUser';
+import {
   ROLES,
-} = require('../../../business/entities/EntityConstants');
+  PETITIONS_SECTION,
+} from '../../../business/entities/EntityConstants';
 
 const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
   .getPersistenceGateway()
@@ -17,9 +12,11 @@ const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
 describe('createOrUpdateUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
   const petitionsClerkUser = {
+    email: 'test@example.com',
     name: 'Test Petitionsclerk',
     role: ROLES.petitionsClerk,
     section: PETITIONS_SECTION,
+    password: 'tempPass',
   };
   const privatePractitionerUser = {
     barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
@@ -63,12 +60,6 @@ describe('createOrUpdateUser', () => {
   });
 
   it('should create a user only if the user does not already exist', async () => {
-    const petitionsclerkUser = {
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      section: PETITIONS_SECTION,
-    };
-
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => {
         const error = new Error();
@@ -79,7 +70,9 @@ describe('createOrUpdateUser', () => {
 
     await createOrUpdateUser({
       applicationContext,
-      user: petitionsclerkUser,
+      disableCognitoUser: false,
+      password: petitionsClerkUser.password,
+      user: petitionsClerkUser as any,
     });
 
     expect(
@@ -91,12 +84,6 @@ describe('createOrUpdateUser', () => {
   });
 
   it('should create a user and cognito record, but disable the cognito user', async () => {
-    const petitionsclerkUser = {
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      section: PETITIONS_SECTION,
-    };
-
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => {
         const error = new Error();
@@ -108,7 +95,8 @@ describe('createOrUpdateUser', () => {
     await createOrUpdateUser({
       applicationContext,
       disableCognitoUser: true,
-      user: petitionsclerkUser,
+      password: petitionsClerkUser.password,
+      user: petitionsClerkUser as any,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
@@ -120,14 +108,12 @@ describe('createOrUpdateUser', () => {
   });
 
   it('should call adminCreateUser with the correct UserAttributes', async () => {
-    const petitionsclerkUser = {
-      email: 'test@example.com',
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      section: PETITIONS_SECTION,
-    };
-
-    await createOrUpdateUser({ applicationContext, user: petitionsclerkUser });
+    await createOrUpdateUser({
+      applicationContext,
+      disableCognitoUser: false,
+      password: petitionsClerkUser.password,
+      user: petitionsClerkUser as any,
+    });
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
@@ -163,7 +149,12 @@ describe('createOrUpdateUser', () => {
         }),
     });
 
-    await createOrUpdateUser({ applicationContext, user: petitionsClerkUser });
+    await createOrUpdateUser({
+      applicationContext,
+      disableCognitoUser: false,
+      password: petitionsClerkUser.password,
+      user: petitionsClerkUser as any,
+    });
 
     expect(
       applicationContext.getCognito().adminCreateUser,

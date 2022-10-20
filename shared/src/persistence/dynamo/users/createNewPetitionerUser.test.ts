@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { createNewPetitionerUser } = require('./createNewPetitionerUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createNewPetitionerUser } from './createNewPetitionerUser';
+import { ROLES } from '../../../business/entities/EntityConstants';
 
 describe('createNewPetitionerUser', () => {
   beforeEach(() => {});
@@ -20,7 +18,7 @@ describe('createNewPetitionerUser', () => {
         role: ROLES.petitioner,
         section: 'petitioner',
         userId: mockUserId,
-      },
+      } as any,
     });
 
     expect(
@@ -56,7 +54,7 @@ describe('createNewPetitionerUser', () => {
 
     await createNewPetitionerUser({
       applicationContext,
-      user: mockUser,
+      user: mockUser as any,
     });
 
     expect(

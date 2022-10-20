@@ -1,11 +1,12 @@
-jest.mock('../../dynamodbClientService');
-const client = require('../../dynamodbClientService');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createNewPractitionerUser } from './createNewPractitionerUser';
+import { put } from '../../dynamodbClientService';
+import { ROLES } from '../../../business/entities/EntityConstants';
 
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { createNewPractitionerUser } = require('./createNewPractitionerUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
+jest.mock('../../dynamodbClientService', () => ({
+  put: jest.fn(),
+}));
+const mockPut = put as jest.Mock;
 
 describe('createNewPractitionerUser', () => {
   it('should not log an error when creating a new cognito account for a practitioner user', async () => {
@@ -18,7 +19,7 @@ describe('createNewPractitionerUser', () => {
         role: ROLES.privatePractitioner,
         section: 'practitioner',
         userId: '123',
-      },
+      } as any,
     });
 
     expect(
@@ -50,7 +51,7 @@ describe('createNewPractitionerUser', () => {
 
   describe('updateUserRecords', () => {
     beforeEach(() => {
-      client.put = jest.fn().mockReturnValue(null);
+      mockPut.mockReturnValue(null);
     });
 
     it('should put new records with uppercase name and bar number', async () => {
@@ -63,11 +64,11 @@ describe('createNewPractitionerUser', () => {
           role: ROLES.privatePractitioner,
           section: 'practitioner',
           userId: '123',
-        },
+        } as any,
       });
 
-      const putItem2 = client.put.mock.calls[1][0].Item;
-      const putItem3 = client.put.mock.calls[2][0].Item;
+      const putItem2 = mockPut.mock.calls[1][0].Item;
+      const putItem3 = mockPut.mock.calls[2][0].Item;
 
       expect(putItem2.pk).toEqual(
         `${ROLES.privatePractitioner}|TEST PRIVATE PRACTITIONER`,
