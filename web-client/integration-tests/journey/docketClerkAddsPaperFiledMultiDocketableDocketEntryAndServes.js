@@ -62,7 +62,7 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
 
     await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
     expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiateServiceModal',
+      'ConfirmInitiatePaperFilingServiceModal',
     );
 
     await cerebralTest.runSequence('submitPaperFilingSequence');

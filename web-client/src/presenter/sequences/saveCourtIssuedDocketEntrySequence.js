@@ -24,29 +24,19 @@ export const saveCourtIssuedDocketEntrySequence = [
       computeFilingFormDateAction,
       validateCourtIssuedDocketEntryAction,
       {
-        no: [submitCourtIssuedDocketEntrySequence],
-        yes: [
-          clearAlertsAction,
-          startShowValidationAction,
-          getComputedFormDateFactoryAction(null),
-          computeFilingFormDateAction,
-          validateCourtIssuedDocketEntryAction,
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
+        success: [
+          clearModalStateAction,
+          shouldSetupConsolidatedCasesAction,
           {
-            error: [
-              setAlertErrorAction,
-              setValidationErrorsAction,
-              setValidationAlertErrorsAction,
-            ],
-            success: [
-              clearModalStateAction,
-              shouldSetupConsolidatedCasesAction,
-              {
-                no: [],
-                yes: [setupConsolidatedCasesAction],
-              },
-              setShowModalFactoryAction('ConfirmInitiateSaveModal'),
-            ],
+            no: [],
+            yes: [setupConsolidatedCasesAction],
           },
+          setShowModalFactoryAction('ConfirmInitiateSaveModal'),
         ],
       },
     ],
