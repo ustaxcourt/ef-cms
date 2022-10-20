@@ -70,11 +70,6 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
     key: 'consolidated-cases-paper-filing-docket-entries',
   },
-  CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES: {
-    disabledMessage:
-      'Docket entries are not being duplicated across consolidated cases temporarily.',
-    key: 'consolidated-cases-propagate-docket-entries',
-  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
