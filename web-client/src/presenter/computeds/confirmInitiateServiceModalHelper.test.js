@@ -15,6 +15,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {
   const mockContactId = 'f6847fdb-3669-4ad7-8f82-c4ac3b945523';
+  const mockEventCode = 'OSC';
 
   const confirmInitiateServiceModalHelper = withAppContextDecorator(
     confirmInitiateServiceModalHelperComputed,
@@ -68,7 +69,9 @@ describe('confirmInitiateServiceModalHelper', () => {
   it('returns the expected contacts needed if someone needs paper without consolidated cases', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
-        form: {},
+        form: {
+          eventCode: mockEventCode,
+        },
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
         modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
@@ -93,7 +96,9 @@ describe('confirmInitiateServiceModalHelper', () => {
   it('returns the expected values if no contacts need paper service', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
-        form: {},
+        form: {
+          eventCode: mockEventCode,
+        },
         formattedCaseDetail: {
           irsPractitioners: [],
           isPaper: false,
@@ -253,7 +258,9 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          featureFlagHelper: featureFlagHelperState,
+          featureFlagHelper: {
+            consolidatedCasesPaperFilingDocketEntries: true,
+          },
           form: { eventCode: 'A' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
@@ -289,7 +296,9 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          featureFlagHelper: featureFlagHelperState,
+          featureFlagHelper: {
+            consolidatedCasesPaperFilingDocketEntries: true,
+          },
           form: { eventCode: 'A' },
           formattedCaseDetail,
           isEditingDocketEntry: true,
@@ -326,7 +335,9 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          featureFlagHelper: featureFlagHelperState,
+          featureFlagHelper: {
+            consolidatedCasesPaperFilingDocketEntries: true,
+          },
           form: { eventCode: 'PSDE' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },

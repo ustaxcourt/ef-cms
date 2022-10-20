@@ -73,6 +73,7 @@ export const ConfirmInitiateServiceModal = connect(
     consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange:
       sequences.consolidatedCaseCheckboxAllChangeSequence,
+    consolidatedCasesPaperFilingDocketEntriesFlag: state.featureFlagHelper,
     documentTitle: props.documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
       sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,

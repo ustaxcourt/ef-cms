@@ -30,10 +30,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const form = get(state.form);
 
-  const consolidatedCasesPaperFilingDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPaperFilingDocketEntries,
-  );
-
   const hasConsolidatedCases =
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
@@ -135,7 +131,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   return {
     caseOrGroup,
     confirmationText,
-    consolidatedCasesPaperFilingDocketEntriesFlag,
     contactsNeedingPaperService,
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
