@@ -31,7 +31,6 @@ export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
     documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     formattedCaseDetail,
-    isPaper,
     updateCaseCheckbox,
     waitingForResponse,
   }) {
@@ -82,19 +81,16 @@ export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
             )}
           </Hint>
         )}
-        {confirmInitiateCourtIssuedFilingServiceModalHelper.showConsolidatedCasesForService &&
-          (!isPaper ||
-            (isPaper &&
-              confirmInitiateCourtIssuedFilingServiceModalHelper.consolidatedCasesPaperFilingDocketEntriesFlag)) && (
-            <ConsolidatedCasesCheckboxes
-              consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
-              consolidatedCaseCheckboxAllChange={
-                consolidatedCaseCheckboxAllChange
-              }
-              formattedCaseDetail={formattedCaseDetail}
-              updateCaseCheckbox={updateCaseCheckbox}
-            />
-          )}
+        {confirmInitiateCourtIssuedFilingServiceModalHelper.showConsolidatedCasesForService && (
+          <ConsolidatedCasesCheckboxes
+            consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
+            consolidatedCaseCheckboxAllChange={
+              consolidatedCaseCheckboxAllChange
+            }
+            formattedCaseDetail={formattedCaseDetail}
+            updateCaseCheckbox={updateCaseCheckbox}
+          />
+        )}
       </ModalDialog>
     );
   },
