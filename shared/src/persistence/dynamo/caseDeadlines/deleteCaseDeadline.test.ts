@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { deleteCaseDeadline } = require('./deleteCaseDeadline');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteCaseDeadline } from './deleteCaseDeadline';
 
 describe('deleteCaseDeadline', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
