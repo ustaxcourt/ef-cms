@@ -1,4 +1,4 @@
-const { query } = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 /**
  * getMessageThreadByParentId
@@ -8,7 +8,7 @@ const { query } = require('../../dynamodbClientService');
  * @param {string} providers.parentMessageId the id of the parent message
  * @returns {object} the created message
  */
-exports.getMessageThreadByParentId = ({
+export const getMessageThreadByParentId = ({
   applicationContext,
   parentMessageId,
 }) =>

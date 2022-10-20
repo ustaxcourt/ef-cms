@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { markMessageThreadRepliedTo } = require('./markMessageThreadRepliedTo');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { markMessageThreadRepliedTo } from './markMessageThreadRepliedTo';
 
 describe('markMessageThreadRepliedTo', () => {
   const DOCKET_NUMBER = '123-20';

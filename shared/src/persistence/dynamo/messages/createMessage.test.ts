@@ -1,10 +1,11 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  PETITIONS_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const { createMessage } = require('./createMessage');
+import { PETITIONS_SECTION } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createMessage } from './createMessage';
+import { put } from '../../dynamodbClientService';
+
+jest.mock('../../dynamodbClientService', () => ({
+  put: jest.fn(),
+}));
 
 const mockMessage = {
   createdAt: '2019-03-01T21:40:46.415Z',
@@ -22,25 +23,14 @@ const mockMessage = {
 };
 
 describe('createMessage', () => {
-  beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
-  });
-
   it('attempts to persist the message record', async () => {
     await createMessage({
       applicationContext,
       message: mockMessage,
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls.length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
-    ).toMatchObject({
+    expect((put as jest.Mock).mock.calls.length).toEqual(1);
+    expect((put as jest.Mock).mock.calls[0][0].Item).toMatchObject({
       gsi1pk: `message|${mockMessage.parentMessageId}`,
       pk: 'case|123-20',
       sk: `message|${mockMessage.messageId}`,

@@ -1,4 +1,4 @@
-const { query } = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 /**
  * getMessagesByDocketNumber
@@ -8,7 +8,10 @@ const { query } = require('../../dynamodbClientService');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the created message
  */
-exports.getMessagesByDocketNumber = ({ applicationContext, docketNumber }) =>
+export const getMessagesByDocketNumber = ({
+  applicationContext,
+  docketNumber,
+}) =>
   query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
