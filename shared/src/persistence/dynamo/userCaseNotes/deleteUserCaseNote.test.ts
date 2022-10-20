@@ -1,8 +1,11 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { deleteUserCaseNote } = require('./deleteUserCaseNote');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteUserCaseNote } from './deleteUserCaseNote';
+import { remove } from '../../dynamodbClientService';
+
+jest.mock('../../dynamodbClientService', () => ({
+  remove: jest.fn(),
+}));
 
 describe('deleteUserCaseNote', () => {
   const USER_ID = '10ecc428-ca35-4e36-aef2-e844660ce22d';
@@ -14,10 +17,8 @@ describe('deleteUserCaseNote', () => {
       userId: USER_ID,
     });
 
-    expect(
-      applicationContext.getDocumentClient().delete.mock.calls[0][0],
-    ).toMatchObject({
-      Key: {
+    expect((remove as jest.Mock).mock.calls[0][0]).toMatchObject({
+      key: {
         pk: `user-case-note|${MOCK_CASE.docketNumber}`,
         sk: `user|${USER_ID}`,
       },

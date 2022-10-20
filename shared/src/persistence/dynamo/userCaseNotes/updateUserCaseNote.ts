@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * updateUserCaseNote
@@ -8,8 +8,8 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.caseNoteToUpdate the case note data to update
  * @returns {Promise} the promise of the call to persistence
  */
-exports.updateUserCaseNote = ({ applicationContext, caseNoteToUpdate }) =>
-  client.put({
+export const updateUserCaseNote = ({ applicationContext, caseNoteToUpdate }) =>
+  put({
     Item: {
       ...caseNoteToUpdate,
       pk: `user-case-note|${caseNoteToUpdate.docketNumber}`,

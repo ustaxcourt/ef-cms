@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { get } from '../../dynamodbClientService';
 
 /**
  * getUserCaseNote
@@ -9,8 +9,8 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the id of the user to get the case notes for
  * @returns {Promise} the promise of the persistence call to get the record
  */
-exports.getUserCaseNote = ({ applicationContext, docketNumber, userId }) =>
-  client.get({
+export const getUserCaseNote = ({ applicationContext, docketNumber, userId }) =>
+  get({
     Key: {
       pk: `user-case-note|${docketNumber}`,
       sk: `user|${userId}`,
