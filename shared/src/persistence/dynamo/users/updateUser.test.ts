@@ -18,7 +18,7 @@ describe('updateUser', () => {
   it('makes put request with the given user data for the matching user id', async () => {
     await updateUser({
       applicationContext,
-      user: mockUser,
+      user: mockUser as any,
     });
 
     expect(
