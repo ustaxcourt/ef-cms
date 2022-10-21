@@ -23,6 +23,8 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
 
+  const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
+
   let { eventCode } = form;
 
   if (!eventCode) {
@@ -33,7 +35,8 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
 
   const showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
+    !isOnMessageDetailPage;
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
