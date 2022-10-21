@@ -1,8 +1,10 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const OpenCases = connect(
   {
@@ -21,6 +23,10 @@ export const OpenCases = connect(
         >
           <thead>
             <tr>
+              <th
+                aria-label="consolidated group indicator"
+                className="consolidated-indicators"
+              ></th>
               <th aria-label="docket number">Docket No.</th>
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>
@@ -33,9 +39,23 @@ export const OpenCases = connect(
             <tbody key={item.docketNumber}>
               <tr className="eligible-cases-row">
                 <td>
-                  <CaseLink formattedCase={item} />
+                  <span
+                    className={classNames({
+                      'margin-left-2': item.shouldIndent,
+                    })}
+                  >
+                    <ConsolidatedCaseIcon caseItem={item} />
+                  </span>
                 </td>
-
+                <td>
+                  <span
+                    className={classNames({
+                      'margin-left-2': item.shouldIndent,
+                    })}
+                  >
+                    <CaseLink formattedCase={item} />
+                  </span>
+                </td>
                 <td>
                   {item.isManuallyAdded && (
                     <span aria-label="manually added indicator">

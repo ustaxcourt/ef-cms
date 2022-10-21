@@ -5,7 +5,7 @@ exports.removeIrsPractitionerOnCase = ({
   docketNumber,
   userId,
 }) =>
-  client.delete({
+  client.remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,
@@ -18,7 +18,7 @@ exports.removePrivatePractitionerOnCase = ({
   docketNumber,
   userId,
 }) =>
-  client.delete({
+  client.remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,

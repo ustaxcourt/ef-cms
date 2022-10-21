@@ -1,3 +1,4 @@
+import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
@@ -46,6 +47,9 @@ export const state = {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
+  },
+  sessionMetadata: {
+    docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
   },
   todaysOpinions: [],
   todaysOrders: {

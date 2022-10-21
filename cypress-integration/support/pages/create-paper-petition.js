@@ -36,7 +36,19 @@ exports.fillInCreateCaseFromPaperForm = testData => {
 
   cy.get('#tab-irs-notice').click();
   cy.get('#case-type').scrollIntoView().select('Deficiency');
-  cy.get('#has-irs-verified-notice-no').click();
+  cy.get('#has-irs-verified-notice-yes').click();
+  cy.get('#year-0').type('1995');
+
+  const deficiencyAmount = '120,035';
+  const deficiencyAmountWithoutComma = deficiencyAmount.replace(',', '');
+  cy.get('[data-cy="deficiency-amount-0"]').type(deficiencyAmountWithoutComma);
+  cy.get('[data-cy="deficiency-amount-0"]').should(
+    'have.value',
+    `$${deficiencyAmount}.00`,
+  );
+
+  cy.get('button.calculate-penalties').click();
+  cy.get('button#modal-button-confirm').click();
 
   cy.get('#upload-mode-upload').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
