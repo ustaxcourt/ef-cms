@@ -2,9 +2,10 @@ import { OBJECTIONS_OPTIONS_MAP } from '../../shared/src/business/entities/Entit
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petitionsClerk1ServesDocumentFromMessageDetail';
+import { petitionsClerk1ServesPaperFilingFromMessageDetail } from './journey/petitionsClerk1ServesPaperFilingFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
@@ -30,6 +31,9 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
   loginAs(cerebralTest, 'docketclerk1@example.com');
 
   const documentFormValues = {
@@ -52,11 +56,10 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
     documentFormValues,
     expectedDocumentType: 'Motion for Leave to File',
   });
-
   createNewMessageOnCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(cerebralTest);
   petitionsClerk1ViewsMessageDetail(cerebralTest);
-  petitionsClerk1ServesDocumentFromMessageDetail(cerebralTest);
+  petitionsClerk1ServesPaperFilingFromMessageDetail(cerebralTest);
 });
