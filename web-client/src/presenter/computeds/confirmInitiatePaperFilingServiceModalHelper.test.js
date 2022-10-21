@@ -71,6 +71,9 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
   it('returns the expected contacts needed if someone needs paper without consolidated cases', () => {
     const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
       state: {
+        featureFlagHelper: {
+          areMultiDocketablePaperFilingsEnabled: false,
+        },
         form: {
           eventCode: mockEventCode,
         },
@@ -79,7 +82,7 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       caseOrGroup: 'case',
       confirmationText: 'The following document will be served on all parties:',
       contactsNeedingPaperService: [
@@ -98,6 +101,9 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
   it('returns the expected values if no contacts need paper service', () => {
     const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
       state: {
+        featureFlagHelper: {
+          areMultiDocketablePaperFilingsEnabled: false,
+        },
         form: {
           eventCode: mockEventCode,
         },
@@ -124,7 +130,7 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       caseOrGroup: 'case',
       confirmationText: 'The following document will be served on all parties:',
       contactsNeedingPaperService: [],
@@ -204,10 +210,21 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
       };
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, nonLeadCase],
+        irsPractitioners: [],
         isLeadCase: true,
+        petitioners: [
+          {
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        privatePractitioners: [],
       };
+
       const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
         state: {
+          featureFlagHelper: {
+            areMultiDocketablePaperFilingsEnabled: true,
+          },
           form: { eventCode: 'O' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
@@ -237,6 +254,9 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
         state: {
+          featureFlagHelper: {
+            areMultiDocketablePaperFilingsEnabled: true,
+          },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
@@ -290,6 +310,9 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
         state: {
+          featureFlagHelper: {
+            areMultiDocketablePaperFilingsEnabled: true,
+          },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: {
