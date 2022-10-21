@@ -765,6 +765,46 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress-readonly/videos/
 
+  deploy-switch-colors-cron:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.8.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Deploy Switch Colors Cron
+          command: |
+            npm run deploy:switch-colors-cron -- $ENV
+
+  disable-switch-colors-cron:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.8.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Disable Switch Colors Cron
+          command: |
+            npm run destroy:switch-colors-cron -- $ENV
+
   switch-colors:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.9.0
@@ -1093,10 +1133,20 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - disable-reindex-cron
+      - deploy-switch-colors-cron:
+          requires:
+            - smoketests-readonly
+      - wait-for-switch:
+          type: approval
+          requires:
+            - deploy-switch-colors-cron
+      - disable-switch-colors-cron:
+          requires:
+            - wait-for-switch
       - switch-colors:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - smoketests-readonly
+            - disable-switch-colors-cron
       - backup-source-dynamo-table:
           <<: *build-and-deploy-with-context-defaults
           requires:
