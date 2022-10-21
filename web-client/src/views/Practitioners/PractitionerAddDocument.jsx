@@ -25,7 +25,7 @@ export const PractitionerAddDocument = connect(
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER_GOOD_STANDING,
+    usStatesOther: state.constants.US_STATES_OTHER,
     validateAddPractitionerDocumentSequence:
       sequences.validateAddPractitionerDocumentSequence,
     validationErrors: state.validationErrors,
