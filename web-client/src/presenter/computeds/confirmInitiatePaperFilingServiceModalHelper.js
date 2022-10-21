@@ -26,6 +26,8 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     state.featureFlagHelper,
   );
 
+  const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
+
   let { eventCode } = form;
 
   if (!eventCode) {
@@ -41,7 +43,8 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     !editingDocketEntry &&
     areMultiDocketablePaperFilingsEnabled &&
     formattedCaseDetail.isLeadCase &&
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
+    !isOnMessageDetailPage;
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
