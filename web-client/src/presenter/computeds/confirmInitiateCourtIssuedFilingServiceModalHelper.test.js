@@ -1,6 +1,8 @@
 import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -227,7 +229,6 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesForService).toEqual(true);
     });
 
     it('should say group if any non-lead case is checked & have the correct number of contacts', () => {
@@ -260,113 +261,6 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesForService).toEqual(true);
-    });
-
-    it('showConsolidatedCasesForService should be true when form.eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
-      const formattedCaseDetail = {
-        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
-        isLeadCase: true,
-      };
-
-      const result = runCompute(
-        confirmInitiateCourtIssuedFilingServiceModalHelper,
-        {
-          state: {
-            featureFlagHelper: {
-              areMultiDocketablePaperFilingsEnabled: true,
-            },
-            form: { eventCode: 'A' },
-            formattedCaseDetail,
-            modal: { showModal: 'ConfirmInitiateServiceModal' },
-          },
-        },
-      );
-
-      expect(result.showConsolidatedCasesForService).toBe(true);
-    });
-
-    it('showConsolidatedCasesForService should be false when editingDocketEntry', () => {
-      const formattedCaseDetail = {
-        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
-        irsPractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        isLeadCase: true,
-        petitioners: [
-          {
-            ...SECOND_CASE.petitioners[0],
-            contactId: LEAD_CASE.petitioners[0].contactId,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      };
-
-      const result = runCompute(
-        confirmInitiateCourtIssuedFilingServiceModalHelper,
-        {
-          state: {
-            featureFlagHelper: {
-              areMultiDocketablePaperFilingsEnabled: true,
-            },
-            form: { eventCode: 'A' },
-            formattedCaseDetail,
-            isEditingDocketEntry: true,
-            modal: { showModal: 'ConfirmInitiateServiceModal' },
-          },
-        },
-      );
-
-      expect(result.showConsolidatedCasesForService).toBe(false);
-    });
-
-    it('showConsolidatedCasesForService should be false when form.eventCode is in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
-      const formattedCaseDetail = {
-        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
-        irsPractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        isLeadCase: true,
-        petitioners: [
-          {
-            ...SECOND_CASE.petitioners[0],
-            contactId: LEAD_CASE.petitioners[0].contactId,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      };
-
-      const result = runCompute(
-        confirmInitiateCourtIssuedFilingServiceModalHelper,
-        {
-          state: {
-            featureFlagHelper: {
-              areMultiDocketablePaperFilingsEnabled: true,
-            },
-            form: { eventCode: 'PSDE' },
-            formattedCaseDetail,
-            modal: { showModal: 'ConfirmInitiateServiceModal' },
-          },
-        },
-      );
-
-      expect(result.showConsolidatedCasesForService).toBe(false);
     });
 
     it('should remove duplicated paper contacts', () => {
@@ -422,50 +316,71 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(3);
     });
+  });
 
-    // it('should preserve non-consolidated functionality if the CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES is false', () => {
-    //   const formattedCaseDetail = {
-    //     ...LEAD_CASE,
-    //     consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
-    //     isLeadCase: true,
-    //   };
-
-    //   const result = runCompute(confirmInitiateServiceModalHelper, {
-    //     state: {
-    //       featureFlagHelper: { consolidatedCasesPropagateDocketEntries: false },
-    //       form: { eventCode: 'OSC' },
-    //       formattedCaseDetail,
-    //       modal: { showModal: 'ConfirmInitiateServiceModal' },
-    //     },
-    //   });
-
-    //   expect(result.contactsNeedingPaperService.length).toEqual(1);
-    //   expect(result.caseOrGroup).toEqual('case');
-    //   expect(result.showConsolidatedCasesForService).toEqual(false);
-    // });
-
-    it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedFilingServiceModal', () => {
-      const formattedCaseDetail = {
-        ...LEAD_CASE,
-        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
-        isLeadCase: true,
-      };
-
-      const result = runCompute(
+  describe('showConsolidatedCasesForService', () => {
+    it('should be false when the case the docket entry is being filed on is NOT a lead case', () => {
+      const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateCourtIssuedFilingServiceModalHelper,
         {
           state: {
-            form: { eventCode: 'OSC' },
-            formattedCaseDetail,
-            modal: {
-              showModal: 'PaperServiceConfirmModal',
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: false,
+              petitioners: [],
+              privatePractitioners: [],
             },
           },
         },
       );
 
-      expect(result.contactsNeedingPaperService.length).toEqual(1);
-      expect(result.showConsolidatedCasesForService).toEqual(false);
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when the the docket entry is NOT a document type that can be multi-docketed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            form: {
+              eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be true when the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              consolidatedCases: [],
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(true);
     });
   });
 });

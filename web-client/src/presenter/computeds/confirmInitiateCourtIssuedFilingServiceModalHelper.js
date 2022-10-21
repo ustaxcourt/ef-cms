@@ -102,9 +102,8 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
   let caseOrGroup = 'case';
 
   if (
-    formattedCaseDetail.isLeadCase &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1 &&
-    showConsolidatedCasesForService
+    showConsolidatedCasesForService &&
+    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
   ) {
     caseOrGroup = 'group';
   }
