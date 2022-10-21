@@ -111,39 +111,6 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
     });
   });
 
-  it('should ONLY return the lead docketNumber for a multi-docketable document on a lead case when consolidatedCasesPropagateDocketEntries is false', async () => {
-    const { output } = await runAction(
-      getDocketNumbersForConsolidatedServiceAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          caseDetail: {
-            consolidatedCases: [
-              { checked: true, docketNumber: MOCK_CASE.docketNumber },
-              {
-                checked: true,
-                docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
-              },
-            ],
-            docketNumber: MOCK_CASE.docketNumber,
-            leadDocketNumber: MOCK_CASE.docketNumber,
-          },
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: false,
-          },
-          form: {
-            eventCode: 'A',
-          },
-        },
-      },
-    );
-    expect(output).toEqual({
-      docketNumbers: [MOCK_CASE.docketNumber],
-    });
-  });
-
   it('should ONLY return the lead docketNumber for a multi-docketable document on a case when the case has no consolidatedCases associated with it', async () => {
     const { output } = await runAction(
       getDocketNumbersForConsolidatedServiceAction,

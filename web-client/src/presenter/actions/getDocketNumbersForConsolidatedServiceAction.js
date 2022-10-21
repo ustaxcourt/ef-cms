@@ -21,9 +21,6 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
 
   const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
 
-  const currentDocketEntryNotCompatibleWithConsolidation =
-    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
-
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumber);
@@ -31,7 +28,7 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   if (
     !isLeadCase ||
     docketNumbers.length === 0 ||
-    currentDocketEntryNotCompatibleWithConsolidation
+    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)
   ) {
     docketNumbers = [caseDetail.docketNumber];
   }
