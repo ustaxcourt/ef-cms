@@ -412,6 +412,25 @@
       }
     },
     "/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "Retrieve open and closed cases for the currently authenticated user",
+        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "post": {
         "tags": ["cases"],
         "summary": "create a case",
@@ -1147,50 +1166,6 @@
             "description": "422 response",
             "schema": {
               "$ref": "#/definitions/unprocessableEntityError"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cases": {
-      "get": {
-        "tags": ["cases"],
-        "summary": "Retrieve open and closed cases for the currently authenticated user",
-        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
             }
           }
         },
@@ -4836,7 +4811,8 @@
                 "type": "object"
               },
               "formattedCases": {
-                "type": "array"
+                "type": "array",
+                "items": {}
               },
               "formattedTrialSession": {
                 "type": "object"
@@ -4851,7 +4827,14 @@
                 "type": "string"
               }
             },
-            "required": ["showCaseNotes", "filters", "formattedCases", "formattedTrialSession", "sort", "userHeading"]
+            "required": [
+              "showCaseNotes",
+              "filters",
+              "formattedCases",
+              "formattedTrialSession",
+              "sort",
+              "userHeading"
+            ]
           }
         }
       ],
@@ -6994,7 +6977,8 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array"
+                "type": "array",
+                "items": {}
               },
               "docketNumber": {
                 "type": "string"
@@ -7074,7 +7058,8 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array"
+                "type": "array",
+                "items": {}
               },
               "docketNumber": {
                 "type": "string"
@@ -7904,6 +7889,7 @@
       "properties": {
         "attachments": {
           "type": "array",
+          "items": {},
           "description": "array of document metadata objects attached to the message"
         },
         "caseStatus": {
