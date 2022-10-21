@@ -960,21 +960,21 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
-const US_STATES_OTHER = [
-  'AA',
-  'AE',
-  'AP',
-  'AS',
-  'FM',
-  'GU',
-  'MH',
-  'MP',
-  'PR',
-  'PW',
-  'VI',
-];
+// const US_STATES_OTHER = [
+//   'AA',
+//   'AE',
+//   'AP',
+//   'AS',
+//   'FM',
+//   'GU',
+//   'MH',
+//   'MP',
+//   'PR',
+//   'PW',
+//   'VI',
+// ];
 
-const US_STATES_OTHER_GOOD_STANDING = {
+const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
   AP: 'Armed Forces Pacific',
@@ -1516,5 +1516,4 @@ module.exports = deepFreeze({
   PRACTITIONER_DOCUMENT_TYPES_MAP,
   US_STATES,
   US_STATES_OTHER,
-  US_STATES_OTHER_GOOD_STANDING,
 });
