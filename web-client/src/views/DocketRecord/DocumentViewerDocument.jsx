@@ -195,14 +195,12 @@ export const DocumentViewerDocument = connect(
               <ConfirmInitiateCourtIssuedFilingServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
-                isPaper={false}
               />
             )}
             {showModal == 'ConfirmInitiatePaperFilingServiceModal' && (
               <ConfirmInitiatePaperFilingServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
-                isPaper={true}
               />
             )}
           </>

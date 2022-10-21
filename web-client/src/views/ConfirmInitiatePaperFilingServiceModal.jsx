@@ -23,7 +23,6 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
     confirmSequence,
     documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
-    isPaper,
     waitingForResponse,
   }) {
     let isSubmitDebounced = false;
@@ -72,12 +71,9 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
             )}
           </Hint>
         )}
-        {confirmInitiatePaperFilingServiceModalHelper.showConsolidatedCasesForService &&
-          (!isPaper ||
-            (isPaper &&
-              confirmInitiatePaperFilingServiceModalHelper.areMultiDocketablePaperFilingsEnabledFlag)) && (
-            <ConsolidatedCasesCheckboxes />
-          )}
+        {confirmInitiatePaperFilingServiceModalHelper.showConsolidatedCasesForService && (
+          <ConsolidatedCasesCheckboxes />
+        )}
       </ModalDialog>
     );
   },
