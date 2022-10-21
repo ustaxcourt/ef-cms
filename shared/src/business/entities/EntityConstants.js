@@ -974,6 +974,20 @@ const US_STATES_OTHER = [
   'VI',
 ];
 
+const US_STATES_OTHER_GOOD_STANDING = {
+  AA: 'Armed Forces Americas',
+  AE: 'Armed Forces Europe',
+  AP: 'Armed Forces Pacific',
+  AS: 'American Samoa',
+  FM: 'Federated States of Micronesia',
+  GU: 'Guam',
+  MH: 'Marshall Islands',
+  MP: 'Norther Mariana Islands',
+  PR: 'Puerto Rico',
+  PW: 'Palau',
+  VI: 'Virgin Islands',
+};
+
 const STATE_NOT_AVAILABLE = 'N/A';
 
 const PARTY_TYPES = {
@@ -1502,4 +1516,5 @@ module.exports = deepFreeze({
   PRACTITIONER_DOCUMENT_TYPES_MAP,
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_OTHER_GOOD_STANDING,
 });
