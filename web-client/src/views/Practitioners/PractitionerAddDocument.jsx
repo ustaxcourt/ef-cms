@@ -141,10 +141,14 @@ export const PractitionerAddDocument = connect(
                             })}
                           </optgroup>
                           <optgroup label="Other">
-                            {usStatesOther.map(abbrev => {
+                            {Object.keys(usStatesOther).map(abbrev => {
+                              const fullOtherStateName = usStatesOther[abbrev];
                               return (
-                                <option key={abbrev} value={abbrev}>
-                                  {abbrev}
+                                <option
+                                  key={fullOtherStateName}
+                                  value={fullOtherStateName}
+                                >
+                                  {fullOtherStateName}
                                 </option>
                               );
                             })}

@@ -981,19 +981,19 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
-const US_STATES_OTHER = [
-  'AA',
-  'AE',
-  'AP',
-  'AS',
-  'FM',
-  'GU',
-  'MH',
-  'MP',
-  'PR',
-  'PW',
-  'VI',
-];
+const US_STATES_OTHER = {
+  AA: 'Armed Forces Americas',
+  AE: 'Armed Forces Europe',
+  AP: 'Armed Forces Pacific',
+  AS: 'American Samoa',
+  FM: 'Federated States of Micronesia',
+  GU: 'Guam',
+  MH: 'Marshall Islands',
+  MP: 'Norther Mariana Islands',
+  PR: 'Puerto Rico',
+  PW: 'Palau',
+  VI: 'Virgin Islands',
+};
 
 const STATE_NOT_AVAILABLE = 'N/A';
 
