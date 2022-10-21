@@ -21,7 +21,7 @@
     "@sparticuz/chrome-aws-lambda": "17.1.3",
     "archiver": "^5.3.1",
     "aws-sdk": "^2.1237.0",
-    "axios": "^1.1.3",
+    "axios": "^0.27.2",
     "broadcast-channel": "^4.17.0",
     "canvas": "^2.10.1",
     "cerebral": "5.2.1",
