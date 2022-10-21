@@ -7,11 +7,11 @@ import React from 'react';
 
 export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
   {
+    areMultiDocketablePaperFilingsEnabledFlag: state.featureFlagHelper,
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateCourtIssuedFilingServiceModalHelper:
       state.confirmInitiateCourtIssuedFilingServiceModalHelper,
     confirmSequence: props.confirmSequence,
-    consolidatedCasesPaperFilingDocketEntriesFlag: state.featureFlagHelper,
     documentTitle: props.documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
       sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,

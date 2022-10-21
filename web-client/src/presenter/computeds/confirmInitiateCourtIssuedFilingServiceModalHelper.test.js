@@ -274,7 +274,7 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
         {
           state: {
             featureFlagHelper: {
-              consolidatedCasesPaperFilingDocketEntries: true,
+              areMultiDocketablePaperFilingsEnabled: true,
             },
             form: { eventCode: 'A' },
             formattedCaseDetail,
@@ -315,7 +315,7 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
         {
           state: {
             featureFlagHelper: {
-              consolidatedCasesPaperFilingDocketEntries: true,
+              areMultiDocketablePaperFilingsEnabled: true,
             },
             form: { eventCode: 'A' },
             formattedCaseDetail,
@@ -357,7 +357,7 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
         {
           state: {
             featureFlagHelper: {
-              consolidatedCasesPaperFilingDocketEntries: true,
+              areMultiDocketablePaperFilingsEnabled: true,
             },
             form: { eventCode: 'PSDE' },
             formattedCaseDetail,
