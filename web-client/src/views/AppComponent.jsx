@@ -59,7 +59,8 @@ import { MyAccount } from './MyAccount';
 import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
-import { PractitionerDetail } from './Practitioners/PractitionerDetail';
+import { PractitionerAddDocument } from './Practitioners/PractitionerAddDocument';
+import { PractitionerInformation } from './Practitioners/PractitionerInformation';
 import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
@@ -149,7 +150,8 @@ const pages = {
   PaperFiling,
   PendingReport,
   PetitionQc,
-  PractitionerDetail,
+  PractitionerAddDocument,
+  PractitionerInformation,
   PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintPaperTrialNotices,
@@ -264,3 +266,5 @@ export const AppComponent = connect(
     );
   },
 );
+
+AppComponent.displayName = 'AppComponent';

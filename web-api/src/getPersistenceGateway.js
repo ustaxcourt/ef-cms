@@ -54,6 +54,9 @@ const {
   createOrUpdateUser,
 } = require('../../shared/src/persistence/dynamo/users/createOrUpdateUser');
 const {
+  createPractitionerDocument,
+} = require('../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument');
+const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
@@ -219,6 +222,9 @@ const {
 const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
+const {
+  getPractitionerDocuments,
+} = require('../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments');
 const {
   getPractitionersByName,
 } = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
@@ -492,6 +498,7 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createOrUpdateUser,
+    createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
@@ -612,6 +619,7 @@ const gatewayMethods = {
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
