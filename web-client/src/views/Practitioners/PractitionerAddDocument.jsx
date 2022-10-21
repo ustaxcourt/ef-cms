@@ -25,7 +25,7 @@ export const PractitionerAddDocument = connect(
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
+    usStatesOther: state.constants.US_STATES_OTHER_GOOD_STANDING,
     validateAddPractitionerDocumentSequence:
       sequences.validateAddPractitionerDocumentSequence,
     validationErrors: state.validationErrors,
@@ -141,10 +141,14 @@ export const PractitionerAddDocument = connect(
                             })}
                           </optgroup>
                           <optgroup label="Other">
-                            {usStatesOther.map(abbrev => {
+                            {Object.keys(usStatesOther).map(abbrev => {
+                              const fullOtherStateName = usStatesOther[abbrev];
                               return (
-                                <option key={abbrev} value={abbrev}>
-                                  {abbrev}
+                                <option
+                                  key={fullOtherStateName}
+                                  value={fullOtherStateName}
+                                >
+                                  {fullOtherStateName}
                                 </option>
                               );
                             })}
