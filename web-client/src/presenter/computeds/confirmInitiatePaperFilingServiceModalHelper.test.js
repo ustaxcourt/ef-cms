@@ -401,7 +401,7 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
-    it('should be false when the the docket entry is NOT a document type that can be multi-docketed', () => {
+    it('should be false when the docket entry is NOT a document type that can be multi-docketed', () => {
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiatePaperFilingServiceModalHelper,
         {
@@ -426,11 +426,38 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
-    it('should be true when the docket entry is NOT being edited, the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is true, the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
+    it('should be false when the docket entry is being served from a message', () => {
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiatePaperFilingServiceModalHelper,
         {
           state: {
+            currentPage: 'MessageDetail',
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be true when the docket entry is NOT being edited, the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is true, the docket entry is being filed on a lead case, the docket entry is a document type that can be multi-docketed, and the docket entry is NOT being served from a message', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            currentPage: 'CaseDetail',
             featureFlagHelper: {
               areMultiDocketablePaperFilingsEnabled: true,
             },
