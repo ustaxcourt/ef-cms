@@ -1,38 +1,39 @@
 import { waitForLoadingComponentToHide } from '../helpers';
 
-export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail = cerebralTest => {
-  return it('petitions clerk 1 serves court issued document from message detail', async () => {
-    await cerebralTest.runSequence(
-      'openConfirmServeCourtIssuedDocumentSequence',
-      {
-        docketEntryId: cerebralTest.docketEntryId,
-        redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
-      },
-    );
+export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail =
+  cerebralTest => {
+    return it('petitions clerk 1 serves court issued document from message detail', async () => {
+      await cerebralTest.runSequence(
+        'openConfirmServeCourtIssuedDocumentSequence',
+        {
+          docketEntryId: cerebralTest.docketEntryId,
+          redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+        },
+      );
 
-    expect(cerebralTest.getState('redirectUrl')).toBe(
-      `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
-    );
-    expect(cerebralTest.getState('docketEntryId')).toBe(
-      cerebralTest.docketEntryId,
-    );
+      expect(cerebralTest.getState('redirectUrl')).toBe(
+        `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+      );
+      expect(cerebralTest.getState('docketEntryId')).toBe(
+        cerebralTest.docketEntryId,
+      );
 
-    expect(cerebralTest.getState('modal.showModal')).toBe(
-      'ConfirmInitiateCourtIssuedFilingServiceModal',
-    );
+      expect(cerebralTest.getState('modal.showModal')).toBe(
+        'ConfirmInitiateCourtIssuedFilingServiceModal',
+      );
 
-    await cerebralTest.setState('iframeSrc', undefined);
+      await cerebralTest.setState('iframeSrc', undefined);
 
-    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence', {});
+      await cerebralTest.runSequence('serveCourtIssuedDocumentSequence', {});
 
-    await waitForLoadingComponentToHide({ cerebralTest });
+      await waitForLoadingComponentToHide({ cerebralTest });
 
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
-      message: 'Document served. ',
-      overwritable: false,
+      expect(cerebralTest.getState('alertSuccess')).toEqual({
+        message: 'Document served. ',
+        overwritable: false,
+      });
+      expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
+
+      expect(cerebralTest.getState('iframeSrc')).not.toBeUndefined();
     });
-    expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
-
-    expect(cerebralTest.getState('iframeSrc')).not.toBeUndefined();
-  });
-};
+  };
