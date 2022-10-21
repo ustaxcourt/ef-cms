@@ -1,11 +1,5 @@
-import {
-  caseContactAddressSealedFormatter,
-  caseSealedFormatter,
-} from '../../utilities/caseFilter';
-import { Case, isSealedCase } from '../../entities/cases/Case';
-import { decorateForCaseStatus } from '../getCaseInteractor';
-import { NotFoundError } from '../../../errors/errors';
-import { PublicCase } from '../../entities/cases/PublicCase';
+import { Case } from '../../entities/cases/Case';
+import { formatPublicCase } from '../../useCaseHelper/consolidatedCases/formatPublicCase';
 
 /**
  * getPublicCaseInteractor
@@ -26,22 +20,5 @@ export const getPublicCaseInteractor = async (
       docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
-  if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
-    const error = new NotFoundError(`Case ${docketNumber} was not found.`);
-    error.skipLogging = true;
-    throw error;
-  }
-  rawCaseRecord.isSealed = isSealedCase(rawCaseRecord);
-  if (isSealedCase(rawCaseRecord)) {
-    rawCaseRecord = caseSealedFormatter(rawCaseRecord);
-  }
-
-  rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
-  rawCaseRecord = decorateForCaseStatus(rawCaseRecord);
-
-  const publicCaseDetail = new PublicCase(rawCaseRecord, {
-    applicationContext,
-  });
-
-  return publicCaseDetail.validate().toRawObject();
+  return formatPublicCase({ applicationContext, docketNumber, rawCaseRecord });
 };
