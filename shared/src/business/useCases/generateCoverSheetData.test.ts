@@ -27,14 +27,6 @@ describe('generateCoverSheetData', () => {
     ],
   };
 
-  beforeEach(() => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockResolvedValue({
-        isFeatureFlagEnabled: true,
-      });
-  });
-
   it('should append Certificate of Service to the coversheet when the document is filed with a Certificate of Service', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
@@ -464,11 +456,7 @@ describe('generateCoverSheetData', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case and the feature flag is enabled', async () => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
-
+  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case', async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {
