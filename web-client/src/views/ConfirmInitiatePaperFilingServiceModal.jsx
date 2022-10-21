@@ -11,28 +11,19 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
     confirmInitiatePaperFilingServiceModalHelper:
       state.confirmInitiatePaperFilingServiceModalHelper,
     confirmSequence: props.confirmSequence,
-    consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
-    consolidatedCaseCheckboxAllChange:
-      sequences.consolidatedCaseCheckboxAllChangeSequence,
     consolidatedCasesPaperFilingDocketEntriesFlag: state.featureFlagHelper,
     documentTitle: props.documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
       sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
-    formattedCaseDetail: state.formattedCaseDetail,
-    updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiatePaperFilingServiceModal({
     cancelSequence,
     confirmInitiatePaperFilingServiceModalHelper,
     confirmSequence,
-    consolidatedCaseAllCheckbox,
-    consolidatedCaseCheckboxAllChange,
     documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
-    formattedCaseDetail,
     isPaper,
-    updateCaseCheckbox,
     waitingForResponse,
   }) {
     let isSubmitDebounced = false;
@@ -85,14 +76,7 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
           (!isPaper ||
             (isPaper &&
               confirmInitiatePaperFilingServiceModalHelper.consolidatedCasesPaperFilingDocketEntriesFlag)) && (
-            <ConsolidatedCasesCheckboxes
-              consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
-              consolidatedCaseCheckboxAllChange={
-                consolidatedCaseCheckboxAllChange
-              }
-              formattedCaseDetail={formattedCaseDetail}
-              updateCaseCheckbox={updateCaseCheckbox}
-            />
+            <ConsolidatedCasesCheckboxes />
           )}
       </ModalDialog>
     );

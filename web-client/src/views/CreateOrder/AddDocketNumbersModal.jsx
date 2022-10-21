@@ -9,20 +9,11 @@ export const AddDocketNumbersModal = connect(
     addDocketNumbersModalHelper: state.addDocketNumbersModalHelper,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitUpdateAddDocketNumbersToOrderSequence,
-    consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
-    consolidatedCaseCheckboxAllChange:
-      sequences.consolidatedCaseCheckboxAllChangeSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
-    updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
   },
   function AddDocketNumbersModal({
     addDocketNumbersModalHelper,
     cancelSequence,
     confirmSequence,
-    consolidatedCaseAllCheckbox,
-    consolidatedCaseCheckboxAllChange,
-    formattedCaseDetail,
-    updateCaseCheckbox,
   }) {
     return (
       <ModalDialog
@@ -40,14 +31,7 @@ export const AddDocketNumbersModal = connect(
             than one case is selected.
           </p>
 
-          <ConsolidatedCasesCheckboxes
-            consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
-            consolidatedCaseCheckboxAllChange={
-              consolidatedCaseCheckboxAllChange
-            }
-            formattedCaseDetail={formattedCaseDetail}
-            updateCaseCheckbox={updateCaseCheckbox}
-          />
+          <ConsolidatedCasesCheckboxes />
         </div>
       </ModalDialog>
     );
