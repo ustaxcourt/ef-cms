@@ -1,9 +1,9 @@
 import { waitForLoadingComponentToHide } from '../helpers';
 
-export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
-  return it('petitions clerk 1 serves document from message detail', async () => {
+export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail = cerebralTest => {
+  return it('petitions clerk 1 serves court issued document from message detail', async () => {
     await cerebralTest.runSequence(
-      'openConfirmServePaperFiledDocumentSequence',
+      'openConfirmServeCourtIssuedDocumentSequence',
       {
         docketEntryId: cerebralTest.docketEntryId,
         redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
@@ -18,7 +18,7 @@ export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
     );
 
     expect(cerebralTest.getState('modal.showModal')).toBe(
-      'ConfirmInitiatePaperFilingServiceModal',
+      'ConfirmInitiateCourtIssuedFilingServiceModal',
     );
 
     await cerebralTest.setState('iframeSrc', undefined);
