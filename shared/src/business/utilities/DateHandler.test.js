@@ -342,6 +342,15 @@ describe('DateHandler', () => {
       );
       expect(result).toBe('8:40 pm ET');
     });
+
+    it('creates a formatted EST time using DateHandler internal format "TIME_TZ"', () => {
+      const dateRetrievedFromStorage = '2001-01-01';
+      const result = DateHandler.formatDateString(
+        dateRetrievedFromStorage,
+        FORMATS.SHORT_MONTH_DAY_YEAR,
+      );
+      expect(result).toBe('Jan 1, 2001');
+    });
   });
 
   describe('formatNow', () => {
