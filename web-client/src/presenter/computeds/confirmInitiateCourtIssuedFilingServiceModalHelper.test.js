@@ -361,6 +361,28 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
+    it('should be false when the docket entry is being served from a message', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            currentPage: 'MessageDetail',
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
     it('should be true when the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateCourtIssuedFilingServiceModalHelper,
