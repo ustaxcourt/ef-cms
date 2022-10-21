@@ -960,20 +960,6 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
-// const US_STATES_OTHER = [
-//   'AA',
-//   'AE',
-//   'AP',
-//   'AS',
-//   'FM',
-//   'GU',
-//   'MH',
-//   'MP',
-//   'PR',
-//   'PW',
-//   'VI',
-// ];
-
 const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
