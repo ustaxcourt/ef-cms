@@ -1,5 +1,9 @@
 import { DOCKET_SECTION } from '../../shared/src/business/entities/EntityConstants';
 import { confirmInitiateCourtIssuedFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
+import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
+import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
+import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
+import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import {
   fakeFile,
   loginAs,
@@ -8,26 +12,20 @@ import {
   uploadPetition,
   waitForLoadingComponentToHide,
 } from './helpers';
-import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
-import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
-import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 
 describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Detail', () => {
   const cerebralTest = setupTest();
 
   const miscellaneousForm = {
-    eventCode: 'MISC',
-    documentType: 'Miscellaneous',
     documentTitle: 'Court issued document filed on lead case',
-    filingDateDay: 1,
+    documentType: 'Miscellaneous',
+    eventCode: 'MISC',
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 100,
-    filingDateYear: 2021,
   };
 
   const miscellaneousCaseMessageForm = {
