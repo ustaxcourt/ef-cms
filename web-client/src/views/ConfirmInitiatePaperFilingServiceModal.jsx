@@ -7,11 +7,11 @@ import React from 'react';
 
 export const ConfirmInitiatePaperFilingServiceModal = connect(
   {
+    areMultiDocketablePaperFilingsEnabledFlag: state.featureFlagHelper,
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiatePaperFilingServiceModalHelper:
       state.confirmInitiatePaperFilingServiceModalHelper,
     confirmSequence: props.confirmSequence,
-    consolidatedCasesPaperFilingDocketEntriesFlag: state.featureFlagHelper,
     documentTitle: props.documentTitle,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
       sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
@@ -75,7 +75,7 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
         {confirmInitiatePaperFilingServiceModalHelper.showConsolidatedCasesForService &&
           (!isPaper ||
             (isPaper &&
-              confirmInitiatePaperFilingServiceModalHelper.consolidatedCasesPaperFilingDocketEntriesFlag)) && (
+              confirmInitiatePaperFilingServiceModalHelper.areMultiDocketablePaperFilingsEnabledFlag)) && (
             <ConsolidatedCasesCheckboxes />
           )}
       </ModalDialog>

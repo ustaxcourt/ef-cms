@@ -22,6 +22,9 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const docketEntryId = get(state.docketEntryId);
   const form = get(state.form);
+  const { areMultiDocketablePaperFilingsEnabled } = get(
+    state.featureFlagHelper,
+  );
 
   let { eventCode } = form;
 
@@ -36,6 +39,7 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
 
   const showConsolidatedCasesForService =
     !editingDocketEntry &&
+    areMultiDocketablePaperFilingsEnabled &&
     formattedCaseDetail.isLeadCase &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
@@ -106,9 +110,8 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
   let caseOrGroup = 'case';
 
   if (
-    formattedCaseDetail.isLeadCase &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1 &&
-    showConsolidatedCasesForService
+    showConsolidatedCasesForService &&
+    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
   ) {
     caseOrGroup = 'group';
   }
