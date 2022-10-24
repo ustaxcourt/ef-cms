@@ -1,6 +1,4 @@
 import { Case } from '../entities/cases/Case';
-import { User } from '../entities/User';
-
 import { ROLES } from '../entities/EntityConstants';
 import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPublicCase';
 
@@ -25,13 +23,20 @@ export const getConsolidatedCasesByCaseInteractor = async (
       leadDocketNumber: docketNumber,
     });
 
-  if (User.isInternalUser(user.role)) {
+  if (
+    ![
+      ROLES.petitioner,
+      ROLES.privatePractitioner,
+      ROLES.irsPractitioner,
+    ].includes(user.role)
+  ) {
     return Case.validateRawCollection(consolidatedCases, {
       applicationContext,
     });
   }
 
   const validatedConsolidatedCases = [];
+  console.error('Before for loop');
 
   for (const consolidatedCase of consolidatedCases) {
     const isAssociated = await applicationContext
@@ -41,7 +46,11 @@ export const getConsolidatedCasesByCaseInteractor = async (
         docketNumber: consolidatedCase.docketNumber,
         userId: user.userId,
       });
-    console.log('isAssociated', isAssociated);
+    console.error('isAssociated***', isAssociated);
+    console.error(
+      'consolidatedCase.caseCaption***',
+      consolidatedCase.caseCaption,
+    );
 
     if (isAssociated) {
       validatedConsolidatedCases.push(
