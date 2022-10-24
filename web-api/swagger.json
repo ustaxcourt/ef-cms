@@ -8101,7 +8101,6 @@
     },
     "printableWorkingCopyData": {
       "type": "object",
-      "description": "a docket entry",
       "properties": {
         "filters": {
           "type": "object",
