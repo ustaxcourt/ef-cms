@@ -1,4 +1,4 @@
-import { camelCase, partition, pickBy } from 'lodash';
+import { camelCase, concat, isEmpty, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -66,14 +66,34 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
-  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
+  const [leadCases, memberConsolidatedCasesAndUnconsolidatedCases] = partition(
     formattedCases,
     calendaredCase => {
-      return (
-        !calendaredCase.leadDocketNumber ||
-        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
-      );
+      return calendaredCase.docketNumber === calendaredCase.leadDocketNumber;
     },
+  );
+
+  const [unconsolidatedCases, memberConsolidatedCases] = partition(
+    memberConsolidatedCasesAndUnconsolidatedCases,
+    calendaredCase => {
+      return !calendaredCase.leadDocketNumber;
+    },
+  );
+
+  let leadAndUnconsolidatedCases = [];
+  // WIP this would only work if you only had 1 lead case associated with the trial session
+  // not multiple
+  if (isEmpty(leadCases)) {
+    leadAndUnconsolidatedCases = concat(
+      unconsolidatedCases,
+      memberConsolidatedCases,
+    );
+  } else {
+    leadAndUnconsolidatedCases = concat(unconsolidatedCases, leadCases);
+  }
+
+  leadAndUnconsolidatedCases.sort(
+    applicationContext.getUtilities().compareCasesByDocketNumber,
   );
 
   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
