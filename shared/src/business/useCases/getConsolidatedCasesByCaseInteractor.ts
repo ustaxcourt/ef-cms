@@ -36,7 +36,6 @@ export const getConsolidatedCasesByCaseInteractor = async (
   }
 
   const validatedConsolidatedCases = [];
-  console.error('Before for loop');
 
   for (const consolidatedCase of consolidatedCases) {
     const isAssociated = await applicationContext
@@ -46,11 +45,6 @@ export const getConsolidatedCasesByCaseInteractor = async (
         docketNumber: consolidatedCase.docketNumber,
         userId: user.userId,
       });
-    console.error('isAssociated***', isAssociated);
-    console.error(
-      'consolidatedCase.caseCaption***',
-      consolidatedCase.caseCaption,
-    );
 
     if (isAssociated) {
       validatedConsolidatedCases.push(
