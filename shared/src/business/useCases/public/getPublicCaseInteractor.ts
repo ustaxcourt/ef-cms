@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { NotFoundError } from '../../../errors/errors';
 import { formatPublicCase } from '../../useCaseHelper/consolidatedCases/formatPublicCase';
 
 /**
@@ -20,5 +21,11 @@ export const getPublicCaseInteractor = async (
       docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
-  return formatPublicCase({ applicationContext, docketNumber, rawCaseRecord });
+  if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
+    const error = new NotFoundError(`Case ${docketNumber} was not found.`);
+    error.skipLogging = true;
+    throw error;
+  }
+
+  return formatPublicCase({ applicationContext, rawCaseRecord });
 };
