@@ -223,6 +223,9 @@ const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
 const {
+  getPractitionerDocumentByFileId,
+} = require('../../shared/src/persistence/dynamo/practitioners/getPractitionerDocumentByFileId');
+const {
   getPractitionerDocuments,
 } = require('../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments');
 const {
@@ -506,6 +509,7 @@ const gatewayMethods = {
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
+    getPractitionerDocumentByFileId,
     getSesStatus,
     getTrialSessionJobStatusForCase,
     getTrialSessionProcessingStatus,

@@ -59,6 +59,7 @@ export const PractitionerDocumentation = connect(
                       className="text-left padding-0 file-name-button"
                       onClick={() => {
                         openPractitionerDocumentDownloadUrlSequence({
+                          barNumber,
                           fileName: document.fileName,
                           practitionerDocumentFileId:
                             document.practitionerDocumentFileId,

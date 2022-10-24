@@ -11,6 +11,7 @@ exports.getPractitionerDocumentDownloadUrlLambda = event =>
     return applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
+        barNumber: event.pathParameters.barNumber,
         practitionerDocumentFileId:
           event.pathParameters.practitionerDocumentFileId,
       });
