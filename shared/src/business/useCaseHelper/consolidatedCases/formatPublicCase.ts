@@ -1,4 +1,3 @@
-import { NotFoundError } from '../../../errors/errors';
 import { PublicCase } from '../../entities/cases/PublicCase';
 import {
   caseContactAddressSealedFormatter,
@@ -19,21 +18,16 @@ import { isSealedCase } from '../../entities/cases/Case';
 
 export const formatPublicCase = ({
   applicationContext,
-  docketNumber,
   rawCaseRecord,
 }: {
   applicationContext: IApplicationContext;
   rawCaseRecord?: TCase;
-  docketNumber: string;
 }) => {
-  if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
-    const error = new NotFoundError(`Case ${docketNumber} was not found.`);
-    error.skipLogging = true;
-    throw error;
-  }
-  rawCaseRecord.isSealed = isSealedCase(rawCaseRecord);
   if (isSealedCase(rawCaseRecord)) {
     rawCaseRecord = caseSealedFormatter(rawCaseRecord);
+    rawCaseRecord.isSealed = true;
+  } else {
+    rawCaseRecord.isSealed = false;
   }
 
   rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
