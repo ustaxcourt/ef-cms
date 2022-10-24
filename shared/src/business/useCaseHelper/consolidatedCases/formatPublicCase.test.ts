@@ -23,7 +23,7 @@ describe('getPublicCaseInteractor', () => {
     petitioners: [mockCaseContactPrimary],
   };
 
-  it('should return a public contact entity with no petitioners array when the requested case has been sealed', async () => {
+  it('should return a PublicCase entity with no petitioners array when the requested case has been sealed', async () => {
     const expectedSealedCaseInfo = {
       docketNumber: '101-18',
       isSealed: true,
@@ -54,7 +54,7 @@ describe('getPublicCaseInteractor', () => {
     expect(result.petitioners).toBeUndefined();
   });
 
-  it('should return a public contact entity with PublicContact entities for petitioners when the requested case has a sealed docket entry', async () => {
+  it('should return a PublicCase entity with PublicContact entities for petitioners when the requested case has a sealed docket entry', async () => {
     const expectedSealedCaseInfo = {
       docketNumber: '101-18',
       isSealed: false,
@@ -81,7 +81,7 @@ describe('getPublicCaseInteractor', () => {
     expect(result).toMatchObject(expectedSealedCaseInfo);
   });
 
-  it('should return a public contact entity with PublicContact entities for petitioners when the requested case contact address has been sealed', async () => {
+  it('should return a PublicCase entity with PublicContact entities for petitioners when the requested case contact address has been sealed', async () => {
     const expectedSealedCaseInfo = {
       docketNumber: '101-18',
       isSealed: false,
@@ -105,7 +105,7 @@ describe('getPublicCaseInteractor', () => {
     expect(result).toMatchObject(expectedSealedCaseInfo);
   });
 
-  it('should return a public contact entity with PublicContact entities for petitioners when nothing has been sealed', async () => {
+  it('should return a PublicCase entity with PublicContact entities for petitioners when nothing has been sealed', async () => {
     const expectedSealedCaseInfo = {
       docketNumber: '101-18',
       isSealed: false,
