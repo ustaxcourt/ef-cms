@@ -322,6 +322,7 @@ type TPetitioner = {
 type TCaseNote = {
   userId: string;
   docketNumber: string;
+  notes: string;
 };
 
 type TPractitioner = {

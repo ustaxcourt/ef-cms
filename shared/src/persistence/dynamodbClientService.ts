@@ -39,9 +39,7 @@ const filterEmptyStrings = params => {
   return params;
 };
 
-const getTableName = ({
-  applicationContext,
-}): { applicationContext: IApplicationContext } =>
+const getTableName = ({ applicationContext }): string =>
   (applicationContext.environment &&
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&
@@ -238,6 +236,7 @@ export const query = ({
   ExpressionAttributeNames,
   ExpressionAttributeValues,
   IndexName,
+  Limit,
   FilterExpression,
   KeyConditionExpression,
   applicationContext,
@@ -246,6 +245,7 @@ export const query = ({
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string | number>;
   IndexName?: string;
+  Limit?: number;
   FilterExpression?: string;
   KeyConditionExpression: string;
   applicationContext: IApplicationContext;

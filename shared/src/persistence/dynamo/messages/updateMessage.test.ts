@@ -15,7 +15,7 @@ const mockMessage = {
   to: 'Test Petitionsclerk2',
   toSection: PETITIONS_SECTION,
   toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
-};
+} as TMessageData;
 
 describe('updateMessage', () => {
   beforeAll(() => {
