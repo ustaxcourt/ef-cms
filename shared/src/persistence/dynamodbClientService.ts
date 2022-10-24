@@ -329,8 +329,12 @@ export const queryFull = async ({
         TableName: getTableName({
           applicationContext,
         }),
-        ...params,
+        ExpressionAttributeNames,
+        ExpressionAttributeValues,
+        KeyConditionExpression,
+        IndexName,
         ExclusiveStartKey: lastKey,
+        ...params,
       })
       .promise();
 
