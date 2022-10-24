@@ -1,8 +1,4 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import {
-  STATUS_TYPES,
-  TRIAL_STATUS_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
@@ -200,144 +196,87 @@ describe('trial session working copy computed', () => {
       ]);
       expect(casesShownCount).toEqual(5);
     });
-  });
 
-  it('should set calendarNotes on cases that have them', () => {
-    const mockCaseWithCalendarNotes = '102-19';
-    const mockCaseWithoutCalendarNotes = '5000-17';
-    const mockCaseWithCalendarNotesNotInSelectedTrialSession = '999-99';
-    const mockCalendarNote = 'this is a test note';
-
-    const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
-      state: {
-        constants: {
-          STATUS_TYPES,
-          TRIAL_STATUS_TYPES,
-        },
-        trialSession: {
-          ...MOCK_TRIAL_SESSION,
-          calendaredCases: [
-            MOCK_CASE,
-            { ...MOCK_CASE, docketNumber: mockCaseWithCalendarNotes },
-            { ...MOCK_CASE, docketNumber: mockCaseWithoutCalendarNotes },
-          ],
-          caseOrder: [
-            {
-              calendarNotes: mockCalendarNote,
-              docketNumber: mockCaseWithCalendarNotes,
+    it('should return lead and unconsolidated cases, and sort consolidated cases within a lead case in ascending order', () => {
+      const { casesShownCount, formattedCases } = runCompute(
+        trialSessionWorkingCopyHelper,
+        {
+          state: {
+            trialSession: {
+              ...MOCK_TRIAL_SESSION,
+              calendaredCases: [
+                MOCK_CASE,
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '102-19',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '5000-17',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [{}, {}],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '500-17',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [{}, {}],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '90-18',
+                  leadDocketNumber: '500-17',
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '101-21',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '115-20',
+                  privatePractitioners: [],
+                },
+              ],
+              caseOrder: [],
             },
-            {
-              calendarNotes: mockCalendarNote,
-              docketNumber: mockCaseWithCalendarNotesNotInSelectedTrialSession,
+            trialSessionWorkingCopy: {
+              caseMetadata: {},
+              filters: { statusUnassigned: true },
+              sort: 'docket',
+              sortOrder: 'asc',
+              userNotes: {},
             },
-          ],
-        },
-        trialSessionWorkingCopy: {
-          caseMetadata: {},
-          filters: { statusUnassigned: true },
-          sort: 'docket',
-          sortOrder: 'asc',
-          userNotes: {},
-        },
-      },
-    });
-
-    expect(
-      formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithCalendarNotes,
-      ).calendarNotes,
-    ).toEqual(mockCalendarNote);
-    expect(
-      formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithoutCalendarNotes,
-      ).calendarNotes,
-    ).toBeUndefined();
-  });
-
-  it('should set userNotes on cases that are calendared on the trial session when they have them', () => {
-    const mockCaseWithUserNotes = '102-19';
-    const mockCaseWithoutUserNotes = '90-07';
-    const mockCaseWithUserNotesNotInSelectedTrialSession = '999-99';
-    const mockUserNote = 'this is a test note';
-
-    const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
-      state: {
-        constants: {
-          STATUS_TYPES,
-          TRIAL_STATUS_TYPES,
-        },
-        trialSession: {
-          ...MOCK_TRIAL_SESSION,
-          calendaredCases: [
-            { ...MOCK_CASE, docketNumber: mockCaseWithUserNotes },
-            { ...MOCK_CASE, docketNumber: mockCaseWithoutUserNotes },
-          ],
-          caseOrder: [
-            {
-              docketNumber: mockCaseWithUserNotes,
-            },
-          ],
-        },
-        trialSessionWorkingCopy: {
-          caseMetadata: {},
-          filters: { statusUnassigned: true },
-          sort: 'docket',
-          sortOrder: 'asc',
-          userNotes: {
-            [mockCaseWithUserNotes]: { notes: mockUserNote },
-            [mockCaseWithUserNotesNotInSelectedTrialSession]: { notes: 'blah' },
           },
         },
-      },
+      );
+
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '500-17' },
+        { docketNumber: '101-18' },
+        { docketNumber: '115-20' },
+      ]);
+      expect(formattedCases[0].consolidatedCases).toMatchObject([
+        { docketNumber: '5000-17' },
+        { docketNumber: '90-18' },
+        { docketNumber: '102-19' },
+        { docketNumber: '101-21' },
+      ]);
+      expect(casesShownCount).toEqual(7);
     });
 
-    expect(
-      formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithUserNotes,
-      ).userNotes,
-    ).toEqual(mockUserNote);
-    expect(
-      formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithoutUserNotes,
-      ).userNotes,
-    ).toBeUndefined();
-  });
-
-  it('should return lead and unconsolidated cases, and sort consolidated cases within a lead case in ascending order', () => {
-    const { casesShownCount, formattedCases } = runCompute(
-      trialSessionWorkingCopyHelper,
-      {
+    it('should return a member case (without a lead case on the trial session) and unconsolidated cases', () => {
+      const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           trialSession: {
             ...MOCK_TRIAL_SESSION,
             calendaredCases: [
-              MOCK_CASE,
               {
                 ...MOCK_CASE,
                 docketNumber: '102-19',
-                leadDocketNumber: '500-17',
-                privatePractitioners: [],
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '5000-17',
-                leadDocketNumber: '500-17',
-                privatePractitioners: [{}, {}],
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '500-17',
-                leadDocketNumber: '500-17',
-                privatePractitioners: [{}, {}],
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '90-18',
-                leadDocketNumber: '500-17',
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '101-21',
                 leadDocketNumber: '500-17',
                 privatePractitioners: [],
               },
@@ -357,116 +296,16 @@ describe('trial session working copy computed', () => {
             userNotes: {},
           },
         },
-      },
-    );
+      });
 
-    expect(formattedCases).toMatchObject([
-      { docketNumber: '500-17' },
-      { docketNumber: '101-18' },
-      { docketNumber: '115-20' },
-    ]);
-    expect(formattedCases[0].consolidatedCases).toMatchObject([
-      { docketNumber: '5000-17' },
-      { docketNumber: '90-18' },
-      { docketNumber: '102-19' },
-      { docketNumber: '101-21' },
-    ]);
-    expect(casesShownCount).toEqual(7);
-  });
-
-  it('should return a member case (without a lead case on the trial session) and unconsolidated cases', () => {
-    const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
-      state: {
-        trialSession: {
-          ...MOCK_TRIAL_SESSION,
-          calendaredCases: [
-            {
-              ...MOCK_CASE,
-              docketNumber: '102-19',
-              leadDocketNumber: '500-17',
-              privatePractitioners: [],
-            },
-            {
-              ...MOCK_CASE,
-              docketNumber: '115-20',
-              privatePractitioners: [],
-            },
-          ],
-          caseOrder: [],
-        },
-        trialSessionWorkingCopy: {
-          caseMetadata: {},
-          filters: { statusUnassigned: true },
-          sort: 'docket',
-          sortOrder: 'asc',
-          userNotes: {},
-        },
-      },
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '102-19' },
+        { docketNumber: '115-20' },
+      ]);
     });
 
-    expect(formattedCases).toMatchObject([
-      { docketNumber: '102-19' },
-      { docketNumber: '115-20' },
-    ]);
-  });
-
-  it('should return a member case (without a lead case on the trial session), a lead case, and unconsolidated cases sorted in ascending order', () => {
-    const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
-      state: {
-        trialSession: {
-          ...MOCK_TRIAL_SESSION,
-          calendaredCases: [
-            {
-              ...MOCK_CASE,
-              docketNumber: '102-19',
-              leadDocketNumber: '500-17',
-              privatePractitioners: [],
-            },
-            {
-              ...MOCK_CASE,
-              docketNumber: '111-17',
-              leadDocketNumber: '111-17',
-              privatePractitioners: [],
-            },
-            {
-              ...MOCK_CASE,
-              docketNumber: '122-17',
-              leadDocketNumber: '111-17',
-              privatePractitioners: [],
-            },
-            {
-              ...MOCK_CASE,
-              docketNumber: '115-20',
-              privatePractitioners: [],
-            },
-          ],
-          caseOrder: [],
-        },
-        trialSessionWorkingCopy: {
-          caseMetadata: {},
-          filters: { statusUnassigned: true },
-          sort: 'docket',
-          sortOrder: 'asc',
-          userNotes: {},
-        },
-      },
-    });
-
-    expect(formattedCases).toMatchObject([
-      { docketNumber: '111-17' },
-      { docketNumber: '102-19' },
-      { docketNumber: '115-20' },
-    ]);
-
-    expect(formattedCases[0].consolidatedCases).toMatchObject([
-      { docketNumber: '122-17' },
-    ]);
-  });
-
-  it('should assign consolidated member cases to the correct lead case and sort them correctly', () => {
-    const { casesShownCount, formattedCases } = runCompute(
-      trialSessionWorkingCopyHelper,
-      {
+    it('should return a member case (without a lead case on the trial session), a lead case, and unconsolidated cases sorted in ascending order', () => {
+      const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           trialSession: {
             ...MOCK_TRIAL_SESSION,
@@ -474,42 +313,24 @@ describe('trial session working copy computed', () => {
               {
                 ...MOCK_CASE,
                 docketNumber: '102-19',
-                leadDocketNumber: '90-18',
+                leadDocketNumber: '500-17',
                 privatePractitioners: [],
               },
               {
                 ...MOCK_CASE,
-                docketNumber: '5000-17',
-                leadDocketNumber: '500-17',
-                privatePractitioners: [{}, {}],
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '500-17',
-                leadDocketNumber: '500-17',
-                privatePractitioners: [{}, {}],
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '90-18',
-                leadDocketNumber: '90-18',
-              },
-              {
-                ...MOCK_CASE,
-                docketNumber: '101-21',
-                leadDocketNumber: '116-20',
+                docketNumber: '111-17',
+                leadDocketNumber: '111-17',
                 privatePractitioners: [],
               },
               {
                 ...MOCK_CASE,
-                docketNumber: '116-20',
-                leadDocketNumber: '116-20',
+                docketNumber: '122-17',
+                leadDocketNumber: '111-17',
                 privatePractitioners: [],
               },
               {
                 ...MOCK_CASE,
-                docketNumber: '111-22',
-                leadDocketNumber: '500-17',
+                docketNumber: '115-20',
                 privatePractitioners: [],
               },
             ],
@@ -519,28 +340,102 @@ describe('trial session working copy computed', () => {
             caseMetadata: {},
             filters: { statusUnassigned: true },
             sort: 'docket',
-            sortOrder: 'desc',
+            sortOrder: 'asc',
             userNotes: {},
           },
         },
-      },
-    );
+      });
 
-    expect(formattedCases).toMatchObject([
-      { docketNumber: '116-20' },
-      { docketNumber: '90-18' },
-      { docketNumber: '500-17' },
-    ]);
-    expect(formattedCases[0].consolidatedCases).toMatchObject([
-      { docketNumber: '101-21' },
-    ]);
-    expect(formattedCases[1].consolidatedCases).toMatchObject([
-      { docketNumber: '102-19' },
-    ]);
-    expect(formattedCases[2].consolidatedCases).toMatchObject([
-      { docketNumber: '5000-17' },
-      { docketNumber: '111-22' },
-    ]);
-    expect(casesShownCount).toEqual(7);
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '111-17' },
+        { docketNumber: '102-19' },
+        { docketNumber: '115-20' },
+      ]);
+
+      expect(formattedCases[0].consolidatedCases).toMatchObject([
+        { docketNumber: '122-17' },
+      ]);
+    });
+
+    it('should assign consolidated member cases to the correct lead case and sort them correctly', () => {
+      const { casesShownCount, formattedCases } = runCompute(
+        trialSessionWorkingCopyHelper,
+        {
+          state: {
+            trialSession: {
+              ...MOCK_TRIAL_SESSION,
+              calendaredCases: [
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '102-19',
+                  leadDocketNumber: '90-18',
+                  privatePractitioners: [],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '5000-17',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [{}, {}],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '500-17',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [{}, {}],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '90-18',
+                  leadDocketNumber: '90-18',
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '101-21',
+                  leadDocketNumber: '116-20',
+                  privatePractitioners: [],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '116-20',
+                  leadDocketNumber: '116-20',
+                  privatePractitioners: [],
+                },
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '111-22',
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [],
+                },
+              ],
+              caseOrder: [],
+            },
+            trialSessionWorkingCopy: {
+              caseMetadata: {},
+              filters: { statusUnassigned: true },
+              sort: 'docket',
+              sortOrder: 'desc',
+              userNotes: {},
+            },
+          },
+        },
+      );
+
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '116-20' },
+        { docketNumber: '90-18' },
+        { docketNumber: '500-17' },
+      ]);
+      expect(formattedCases[0].consolidatedCases).toMatchObject([
+        { docketNumber: '101-21' },
+      ]);
+      expect(formattedCases[1].consolidatedCases).toMatchObject([
+        { docketNumber: '102-19' },
+      ]);
+      expect(formattedCases[2].consolidatedCases).toMatchObject([
+        { docketNumber: '5000-17' },
+        { docketNumber: '111-22' },
+      ]);
+      expect(casesShownCount).toEqual(7);
+    });
   });
 });
