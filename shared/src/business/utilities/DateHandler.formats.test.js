@@ -22,6 +22,7 @@ describe('DateHandler', () => {
       MMDDYYYY_DASHED: '07-02-2018',
       MONTH_DAY_YEAR: 'July 2, 2018',
       MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'Monday, July 2, 2018',
+      SHORT_MONTH_DAY_YEAR: 'Jul 2, 2018',
       SORTABLE_CALENDAR: '2018/07/02',
       TIME: '03:56 am',
       TIME_TZ: '3:56 am ET',

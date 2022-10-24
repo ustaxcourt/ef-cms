@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
 import { flattenDeep } from 'lodash';
+import AWS from 'aws-sdk';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.

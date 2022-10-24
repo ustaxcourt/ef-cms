@@ -41,16 +41,6 @@ const getPriorityGroups = eligibleCases => {
   return groups;
 };
 
-const compareTrialSessionEligibleCases = eligibleCases => {
-  const groups = getPriorityGroups(eligibleCases);
-
-  return (a, b) => {
-    const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
-    const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
-    return aSortString.localeCompare(bSortString);
-  };
-};
-
 const getSortableDocketNumber = docketNumber => {
   const [number, year] = docketNumber.split('-');
   return `${year}-${number.padStart(6, '0')}`;
@@ -80,6 +70,16 @@ const getFullSortString = (theCase, cases) => {
         : theCase.leadDocketNumber
       : theCase.docketNumber,
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+};
+
+const compareTrialSessionEligibleCases = eligibleCases => {
+  const groups = getPriorityGroups(eligibleCases);
+
+  return (a, b) => {
+    const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
+    const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
+    return aSortString.localeCompare(bSortString);
+  };
 };
 
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {

@@ -273,7 +273,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(
       applicationContext.getUtilities().setConsolidationFlagsForDisplay,
-    ).toHaveBeenCalledTimes(3);
+    ).toHaveBeenCalledTimes(9);
     expect(result.allCases.length).toEqual(3);
     expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
     expect(result.allCases[0].caseTitle).toEqual('Someone Else');
@@ -301,15 +301,15 @@ describe('formattedTrialSessionDetails', () => {
           { ...MOCK_CASE, docketNumber: '102-19' },
           { ...MOCK_CASE, docketNumber: '5000-17' },
           { ...MOCK_CASE, docketNumber: '500-17' },
-          { ...MOCK_CASE, docketNumber: '90-07' },
+          { ...MOCK_CASE, docketNumber: '190-07' },
         ],
       },
     });
     expect(
       applicationContext.getUtilities().setConsolidationFlagsForDisplay,
-    ).toHaveBeenCalledTimes(5);
+    ).toHaveBeenCalledTimes(15);
     expect(result.allCases).toMatchObject([
-      { docketNumber: '90-07' },
+      { docketNumber: '190-07' },
       { docketNumber: '500-17' },
       { docketNumber: '5000-17' },
       { docketNumber: '101-18' },
@@ -360,5 +360,51 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
     expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
+  });
+
+  it('should set the correct consolidated case flags', () => {
+    const result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          { ...MOCK_CASE, docketNumber: '101-11' },
+          { ...MOCK_CASE, docketNumber: '102-19', removedFromTrial: true },
+          { ...MOCK_CASE, docketNumber: '5000-17' },
+          {
+            ...MOCK_CASE,
+            docketNumber: '500-17',
+            leadDocketNumber: '500-17',
+            removedFromTrial: true,
+          },
+          { ...MOCK_CASE, docketNumber: '501-17', leadDocketNumber: '500-17' },
+        ],
+      },
+    });
+    expect(result.openCases).toMatchObject([
+      expect.objectContaining({ docketNumber: '101-11' }),
+      expect.objectContaining({
+        consolidatedIconTooltipText: 'Consolidated case',
+        docketNumber: '501-17',
+        inConsolidatedGroup: true,
+      }),
+      expect.objectContaining({ docketNumber: '5000-17' }),
+    ]);
+    expect(result.openCases[1].shouldIndent).toBeFalsy();
+    expect(result.inactiveCases).toMatchObject([
+      expect.objectContaining({
+        consolidatedIconTooltipText: 'Lead case',
+        docketNumber: '500-17',
+        leadCase: true,
+      }),
+      expect.objectContaining({ docketNumber: '102-19' }),
+    ]);
+    expect(result.allCases).toMatchObject([
+      expect.objectContaining({ docketNumber: '101-11' }),
+      expect.objectContaining({ docketNumber: '500-17' }),
+      expect.objectContaining({ docketNumber: '501-17' }),
+      expect.objectContaining({ docketNumber: '5000-17' }),
+      expect.objectContaining({ docketNumber: '102-19' }),
+    ]);
   });
 });
