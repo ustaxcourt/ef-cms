@@ -410,6 +410,59 @@ describe('trial session working copy computed', () => {
     ]);
   });
 
+  it('should return a member case (without a lead case on the trial session), a lead case, and unconsolidated cases sorted in ascending order', () => {
+    const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
+      state: {
+        trialSession: {
+          ...MOCK_TRIAL_SESSION,
+          calendaredCases: [
+            {
+              ...MOCK_CASE,
+              docketNumber: '102-19',
+              leadDocketNumber: '500-17',
+              privatePractitioners: [],
+            },
+            {
+              ...MOCK_CASE,
+              docketNumber: '111-17',
+              leadDocketNumber: '111-17',
+              privatePractitioners: [],
+            },
+            {
+              ...MOCK_CASE,
+              docketNumber: '122-17',
+              leadDocketNumber: '111-17',
+              privatePractitioners: [],
+            },
+            {
+              ...MOCK_CASE,
+              docketNumber: '115-20',
+              privatePractitioners: [],
+            },
+          ],
+          caseOrder: [],
+        },
+        trialSessionWorkingCopy: {
+          caseMetadata: {},
+          filters: { statusUnassigned: true },
+          sort: 'docket',
+          sortOrder: 'asc',
+          userNotes: {},
+        },
+      },
+    });
+
+    expect(formattedCases).toMatchObject([
+      { docketNumber: '111-17' },
+      { docketNumber: '102-19' },
+      { docketNumber: '115-20' },
+    ]);
+
+    expect(formattedCases[0].consolidatedCases).toMatchObject([
+      { docketNumber: '122-17' },
+    ]);
+  });
+
   it('should assign consolidated member cases to the correct lead case and sort them correctly', () => {
     const { casesShownCount, formattedCases } = runCompute(
       trialSessionWorkingCopyHelper,

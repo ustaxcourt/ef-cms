@@ -1,4 +1,4 @@
-import { camelCase, concat, isEmpty, partition, pickBy } from 'lodash';
+import { camelCase, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -66,34 +66,14 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
-  const [leadCases, memberConsolidatedCasesAndUnconsolidatedCases] = partition(
+  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
     formattedCases,
     calendaredCase => {
-      return calendaredCase.docketNumber === calendaredCase.leadDocketNumber;
+      return (
+        !calendaredCase.leadDocketNumber ||
+        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+      );
     },
-  );
-
-  const [unconsolidatedCases, memberConsolidatedCases] = partition(
-    memberConsolidatedCasesAndUnconsolidatedCases,
-    calendaredCase => {
-      return !calendaredCase.leadDocketNumber;
-    },
-  );
-
-  let leadAndUnconsolidatedCases = [];
-  // WIP this would only work if you only had 1 lead case associated with the trial session
-  // not multiple
-  if (isEmpty(leadCases)) {
-    leadAndUnconsolidatedCases = concat(
-      unconsolidatedCases,
-      memberConsolidatedCases,
-    );
-  } else {
-    leadAndUnconsolidatedCases = concat(unconsolidatedCases, leadCases);
-  }
-
-  leadAndUnconsolidatedCases.sort(
-    applicationContext.getUtilities().compareCasesByDocketNumber,
   );
 
   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
@@ -110,12 +90,27 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
+  let casesAssociatedWithTrialSession = leadAndUnconsolidatedCases;
+
+  memberConsolidatedCases.forEach(memberCase => {
+    const leadCaseAssociatedWithTrialSession = leadAndUnconsolidatedCases.find(
+      c => c.docketNumber === memberCase.leadDocketNumber,
+    );
+    if (!leadCaseAssociatedWithTrialSession) {
+      casesAssociatedWithTrialSession.push(memberCase);
+    }
+  });
+
+  casesAssociatedWithTrialSession.sort(
+    applicationContext.getUtilities().compareCasesByDocketNumber,
+  );
+
   if (sort === 'practitioner') {
-    leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
+    casesAssociatedWithTrialSession.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    leadAndUnconsolidatedCases.reverse();
+    casesAssociatedWithTrialSession.reverse();
   }
 
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
@@ -125,7 +120,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   return {
     casesShownCount: formattedCases.length,
-    formattedCases: leadAndUnconsolidatedCases,
+    formattedCases: casesAssociatedWithTrialSession,
     showPrintButton: formattedCases.length > 0,
     trialStatusOptions,
   };
