@@ -74,8 +74,6 @@ describe('getPublicCaseInteractor', () => {
         address1: 'address 1',
         email: 'email 1',
       });
-
-      expect(petitioner.entityName).toEqual('PublicContact');
     });
 
     expect(result).toMatchObject(expectedSealedCaseInfo);
@@ -98,8 +96,6 @@ describe('getPublicCaseInteractor', () => {
         address1: 'address 1',
         email: 'email 1',
       });
-
-      expect(petitioner.entityName).toEqual('PublicContact');
     });
 
     expect(result).toMatchObject(expectedSealedCaseInfo);
@@ -122,8 +118,6 @@ describe('getPublicCaseInteractor', () => {
         address1: 'address 1',
         email: 'email 1',
       });
-
-      expect(petitioner.entityName).toEqual('PublicContact');
     });
 
     expect(result).toMatchObject(expectedSealedCaseInfo);
