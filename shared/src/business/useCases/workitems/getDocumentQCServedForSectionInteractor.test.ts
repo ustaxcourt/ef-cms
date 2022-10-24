@@ -166,7 +166,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       ]);
 
       expect(result[0].docketEntry.createdAt).toBeUndefined();
-      expect(result[0].docketNumberWithSuffix).toBeUndefined();
     });
   });
 
