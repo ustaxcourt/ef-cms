@@ -43,7 +43,7 @@ describe('deleteWorkItem', () => {
         docketNumber: mockDocketNumber,
         gsi1pk: `work-item|${mockWorkItemId}`,
         workItemId: mockWorkItemId,
-      },
+      } as any,
     });
 
     expect(

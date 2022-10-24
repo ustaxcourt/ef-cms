@@ -1,6 +1,6 @@
 import { update } from '../../dynamodbClientService';
 
-exports.updateWorkItemAssociatedJudge = ({
+export const updateWorkItemAssociatedJudge = ({
   applicationContext,
   associatedJudge,
   docketNumber,

@@ -48,7 +48,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
         docketNumber: '456-20',
         section: DOCKET_SECTION,
         workItemId: '123',
-      },
+      } as any,
     });
 
     expect(putStub.mock.calls).toEqual(
