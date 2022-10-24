@@ -42,7 +42,7 @@ describe('putWorkItemInOutbox', () => {
       applicationContext,
       workItem: {
         workItemId: '123',
-      },
+      } as any,
     });
     expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {

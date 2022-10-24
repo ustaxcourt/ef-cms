@@ -9,7 +9,15 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.workItem the work item data
  * @returns {Promise} resolves upon completion of persistence request
  */
-exports.createUserOutboxRecord = ({ applicationContext, userId, workItem }) =>
+export const createUserOutboxRecord = ({
+  applicationContext,
+  userId,
+  workItem,
+}: {
+  applicationContext: IApplicationContext;
+  workItem: TOutboxItem;
+  userId: string;
+}) =>
   put({
     Item: {
       ...workItem,

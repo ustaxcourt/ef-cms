@@ -52,6 +52,10 @@ type WorkItem = {
   assigneeId: string;
   docketEntry: DocketEntry;
   docketNumber: string;
+  workItemId: string;
+  completedAt: string;
+  updatedAt: string;
+  gsi1pk: string;
 };
 
 type TOutboxItem = {

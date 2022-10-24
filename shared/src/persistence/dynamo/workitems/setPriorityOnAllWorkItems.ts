@@ -10,16 +10,16 @@ import { query, update } from '../../dynamodbClientService';
  * @param {string} providers.trialDate the date of the trial or undefined
  * @returns {Promise} the promise of the persistence calls
  */
-exports.setPriorityOnAllWorkItems = async ({
+export const setPriorityOnAllWorkItems = async ({
   applicationContext,
   docketNumber,
   highPriority,
-  trialDate,
+  trialDate = null,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
   highPriority: boolean;
-  trialDate: string;
+  trialDate?: string;
 }) => {
   const workItemMappings = await query({
     ExpressionAttributeNames: {
@@ -57,7 +57,7 @@ exports.setPriorityOnAllWorkItems = async ({
           },
           ExpressionAttributeValues: {
             ':highPriority': highPriority,
-            ':trialDate': trialDate || null,
+            ':trialDate': trialDate,
           },
           Key: {
             pk: workItem.pk,

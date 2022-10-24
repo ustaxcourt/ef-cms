@@ -1,6 +1,6 @@
 import { update } from '../../dynamodbClientService';
 
-exports.updateWorkItemCaseStatus = ({
+export const updateWorkItemCaseStatus = ({
   applicationContext,
   caseStatus,
   docketNumber,

@@ -1,6 +1,6 @@
 import { update } from '../../dynamodbClientService';
 
-exports.updateWorkItemDocketNumberSuffix = ({
+export const updateWorkItemDocketNumberSuffix = ({
   applicationContext,
   docketNumber,
   docketNumberSuffix,
