@@ -5,7 +5,7 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 
 export const uploadCorrespondenceDocumentInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any,
   {
     documentFile,
     keyToOverwrite,

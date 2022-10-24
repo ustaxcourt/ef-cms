@@ -16,5 +16,5 @@ exports.getDocumentQCServedForSection = ({
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
-  });
+  }) as Promise<OutboxDynamoRecord[]>;
 };
