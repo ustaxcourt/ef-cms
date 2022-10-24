@@ -6,10 +6,9 @@ import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { formatPublicCase } from './formatPublicCase';
-import { getConsolidatedCasesForLeadCase } from '../getConsolidatedCasesForLeadCase';
 import { getContactPrimary } from '../../entities/cases/Case';
 
-describe('formatPublicCase', () => {
+describe('getPublicCaseInteractor', () => {
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
   const mockCase = {
@@ -69,35 +68,105 @@ describe('formatPublicCase', () => {
       });
   });
 
-  //   it('should format the given docket number, removing leading zeroes and suffix', () => {
-  //     applicationContext
-  //       .getPersistenceGateway()
-  //       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  it('should format the given docket number, removing leading zeroes and suffix', () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-  //     getPublicCaseInteractor(applicationContext, {
-  //       docketNumber: '0000123-19S',
-  //     });
+    getPublicCaseInteractor(applicationContext, {
+      docketNumber: '0000123-19S',
+    });
 
-  //     expect(
-  //       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-  //         .calls[0][0],
-  //     ).toEqual({
-  //       applicationContext,
-  //       docketNumber: '123-19',
-  //     });
-  //   });
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+        .calls[0][0],
+    ).toEqual({
+      applicationContext,
+      docketNumber: '123-19',
+    });
+  });
 
-  it.skip('Should return a Not Found error if the case does not exist', async () => {
+  it('Should return a Not Found error if the case does not exist', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({ archivedCorrespondences: [] });
 
     await expect(
-      formatPublicCase({
-        applicationContext,
+      getPublicCaseInteractor(applicationContext, {
         docketNumber: '999',
-        rawCaseRecord: {},
       }),
     ).rejects.toThrow('Case 999 was not found.');
+  });
+
+  it('Should search by docketNumber when docketNumber parameter is a valid docketNumber', async () => {
+    const docketNumber = '123-45';
+
+    const result = await getPublicCaseInteractor(applicationContext, {
+      docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
+    expect(result).toMatchObject({
+      docketNumber: '123-45',
+      petitioners: [
+        {
+          name: mockCaseContactPrimary.name,
+          state: mockCaseContactPrimary.state,
+        },
+      ],
+    });
+  });
+
+  it('should return minimal information when the requested case has been sealed', async () => {
+    const docketNumber = '102-20';
+
+    const result = await getPublicCaseInteractor(applicationContext, {
+      docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketNumber,
+      isSealed: true,
+    });
+  });
+
+  it('should return minimal information when the requested case has a sealed docket entry', async () => {
+    const docketNumber = '120-20';
+
+    const result = await getPublicCaseInteractor(applicationContext, {
+      docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketNumber,
+      isSealed: false,
+    });
+  });
+
+  it('should return minimal information when the requested case contact address has been sealed', async () => {
+    const docketNumber = '188-88';
+
+    const result = await getPublicCaseInteractor(applicationContext, {
+      docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketNumber,
+    });
+    expect(getContactPrimary(result).address1).toBeUndefined();
+  });
+
+  it('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
+    const docketNumber = '190-92';
+
+    await expect(
+      getPublicCaseInteractor(applicationContext, {
+        docketNumber,
+      }),
+    ).resolves.toMatchObject({
+      docketNumber,
+    });
   });
 });

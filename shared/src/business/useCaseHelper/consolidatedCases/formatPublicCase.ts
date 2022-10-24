@@ -7,8 +7,6 @@ import {
 import { decorateForCaseStatus } from '../../useCases/getCaseInteractor';
 import { isSealedCase } from '../../entities/cases/Case';
 
-// TODO: WRITE UNNNNNNIIIIIIITTTTTTT TEST!!!!!!!!!!!
-
 /**
  * formatPublicCase takes a rawCase and formats to a public case
  *
@@ -18,6 +16,7 @@ import { isSealedCase } from '../../entities/cases/Case';
  * @param {object} providers.rawCaseRecord the rawCaseRecord
  * @returns {object} the validated public case data
  */
+
 export const formatPublicCase = ({
   applicationContext,
   docketNumber,
