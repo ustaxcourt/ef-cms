@@ -54,7 +54,6 @@ export const getConsolidatedCasesByCaseInteractor = async (
     } else {
       const formattedPublicCase = formatPublicCase({
         applicationContext,
-        docketNumber: consolidatedCase.docketNumber,
         rawCaseRecord: consolidatedCase,
       });
       validatedConsolidatedCases.push(formattedPublicCase);
