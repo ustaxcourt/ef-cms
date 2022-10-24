@@ -73,7 +73,7 @@ interface IOutboxItemConstructor {
   validateRawCollection(
     rawOutboxItems: TOutboxItem[],
     context: { applicationContext: IApplicationContext },
-  ): TOutboxItem;
+  ): TOutboxItem[];
 
   validate(): TOutboxItemEntity;
   toRawObject(): TOutboxItem;

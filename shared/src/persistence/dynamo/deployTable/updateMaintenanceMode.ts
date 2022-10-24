@@ -13,7 +13,7 @@ export const updateMaintenanceMode = ({
   maintenanceMode,
 }: {
   applicationContext: IApplicationContext;
-  maintenanceMode: string;
+  maintenanceMode: boolean;
 }) =>
   updateToDeployTable({
     ExpressionAttributeNames: {

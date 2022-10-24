@@ -1,8 +1,11 @@
 import { query } from '../../dynamodbClientService';
 
-exports.getUserCaseMappingsByDocketNumber = ({
+export const getUserCaseMappingsByDocketNumber = ({
   applicationContext,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
 }) =>
   query({
     ExpressionAttributeNames: {

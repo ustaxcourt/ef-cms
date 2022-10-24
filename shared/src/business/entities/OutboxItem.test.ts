@@ -7,7 +7,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { OutboxItem } from './OutboxItem';
 
 describe('OutboxItem', () => {
-  const validOutboxItem: TOutboxItem = {
+  const validOutboxItem = {
     caseStatus: CASE_STATUS_TYPES.new,
     caseTitle: 'Johnny Joe Jacobson',
     docketEntry: {} as any,
@@ -23,7 +23,7 @@ describe('OutboxItem', () => {
     trialDate: '2018-11-21T20:49:28.192Z',
     workItemId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     section: DOCKET_SECTION,
-  };
+  } as TOutboxItem;
 
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {

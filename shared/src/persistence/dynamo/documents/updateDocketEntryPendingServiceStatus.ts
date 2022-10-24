@@ -9,7 +9,7 @@ export const updateDocketEntryPendingServiceStatus = async ({
   applicationContext: IApplicationContext;
   docketEntryId: string;
   docketNumber: string;
-  status: string;
+  status: boolean;
 }) => {
   try {
     await update({
