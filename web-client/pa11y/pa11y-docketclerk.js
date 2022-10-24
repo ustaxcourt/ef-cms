@@ -272,7 +272,7 @@ module.exports = [
       'wait for .modal-dialog to be visible',
     ],
     notes:
-      'checks a11y of ConfirmInitiateServiceModal on paper filing for a consolidated group',
+      'checks a11y of ConfirmInitiatePaperFilingServiceModal on paper filing for a consolidated group',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19',
   },
 ];

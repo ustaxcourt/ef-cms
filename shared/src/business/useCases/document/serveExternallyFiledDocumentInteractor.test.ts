@@ -475,7 +475,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should should only do things on the subjectcase when the CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES flag is off', async () => {
+  it('should only update the subjectCase when the MULTI_DOCKETABLE_PAPER_FILINGS flag is off', async () => {
     applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(false);

@@ -2,15 +2,16 @@ import { state } from 'cerebral';
 import { uniqBy } from 'lodash';
 
 /**
- * returns computed values for the confirm initiate service modal
+ * Returns computed values for the confirm initiate court issued filing service modal
  *
  * @param {Function} get the cerebral get function used
  * @param {object} applicationContext the application context
- * for getting state.caseDetail.partyType and state.constants
- * @returns {object} the contactPrimary and/or contactSecondary
- * view options
+ * @returns {object} the computed values
  */
-export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
+export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
+  get,
+  applicationContext,
+) => {
   const {
     CONTACT_TYPE_TITLES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,
@@ -18,27 +19,11 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     USER_ROLES,
   } = applicationContext.getConstants();
 
-  const modalName = get(state.modal.showModal);
-
-  const showConsolidatedOptions = [
-    'ConfirmInitiateServiceModal',
-    'ConfirmInitiateCourtIssuedDocumentServiceModal',
-    'ConfirmInitiatePaperDocumentServiceModal',
-  ].includes(modalName);
-
+  const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
-
   const form = get(state.form);
 
-  const consolidatedCasesPropagateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
-  );
-
-  const hasConsolidatedCases =
-    formattedCaseDetail.consolidatedCases &&
-    formattedCaseDetail.consolidatedCases.length > 0;
-
-  const docketEntryId = get(state.docketEntryId);
+  const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
 
   let { eventCode } = form;
 
@@ -48,16 +33,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     ));
   }
 
-  // this is temporary until the flow for 9616 is implemented (QC workflow)
-  const editingDocketEntry = !!get(state.isEditingDocketEntry);
-
   const showConsolidatedCasesForService =
-    !editingDocketEntry &&
     formattedCaseDetail.isLeadCase &&
-    showConsolidatedOptions &&
-    consolidatedCasesPropagateDocketEntriesFlag &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
-    hasConsolidatedCases;
+    !isOnMessageDetailPage;
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
@@ -126,9 +105,8 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   let caseOrGroup = 'case';
 
   if (
-    formattedCaseDetail.isLeadCase &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1 &&
-    showConsolidatedCasesForService
+    showConsolidatedCasesForService &&
+    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
   ) {
     caseOrGroup = 'group';
   }

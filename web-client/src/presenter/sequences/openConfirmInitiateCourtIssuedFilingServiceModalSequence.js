@@ -12,7 +12,7 @@ import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
-export const openConfirmInitiateServiceModalSequence = [
+export const openConfirmInitiateCourtIssuedFilingServiceModalSequence = [
   clearAlertsAction,
   startShowValidationAction,
   validateCourtIssuedDocketEntryAction,
@@ -21,8 +21,7 @@ export const openConfirmInitiateServiceModalSequence = [
     success: [
       clearModalStateAction,
       getFeatureFlagValueFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
+        getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS,
         true,
       ),
       getConsolidatedCasesByCaseAction,
@@ -32,7 +31,7 @@ export const openConfirmInitiateServiceModalSequence = [
         no: [],
         yes: [setupConsolidatedCasesAction],
       },
-      setShowModalFactoryAction('ConfirmInitiateServiceModal'),
+      setShowModalFactoryAction('ConfirmInitiateCourtIssuedFilingServiceModal'),
     ],
   },
 ];

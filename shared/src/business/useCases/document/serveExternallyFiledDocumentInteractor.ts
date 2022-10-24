@@ -85,8 +85,7 @@ export const serveExternallyFiledDocumentInteractor = async (
   const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
     });
 
   if (!consolidateCaseDuplicateDocketEntries) {

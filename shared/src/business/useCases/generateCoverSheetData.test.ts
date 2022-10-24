@@ -27,14 +27,6 @@ describe('generateCoverSheetData', () => {
     ],
   };
 
-  beforeEach(() => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockResolvedValue({
-        isFeatureFlagEnabled: true,
-      });
-  });
-
   it('should append Certificate of Service to the coversheet when the document is filed with a Certificate of Service', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
@@ -445,7 +437,7 @@ describe('generateCoverSheetData', () => {
     );
   });
 
-  it('should append consolidated group information to the coversheet when the document filed is multi-docketable', async () => {
+  it("should append consolidated group information to the coversheet when the document filed is a multi-docketable court-issued document and it's being filed on the lead case", async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -454,7 +446,7 @@ describe('generateCoverSheetData', () => {
       },
       docketEntryEntity: {
         ...testingCaseData.docketEntries[0],
-        eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+        eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
       },
     } as any);
 
@@ -464,7 +456,7 @@ describe('generateCoverSheetData', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should append consolidated group information to the coversheet when the document filed is multi-docketable and an internal event code', async () => {
+  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case', async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -473,7 +465,7 @@ describe('generateCoverSheetData', () => {
       },
       docketEntryEntity: {
         ...testingCaseData.docketEntries[0],
-        eventCode: 'NOT',
+        eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
       },
     } as any);
 

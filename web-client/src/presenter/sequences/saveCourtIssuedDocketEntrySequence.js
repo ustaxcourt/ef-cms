@@ -2,8 +2,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -16,38 +14,29 @@ import { submitCourtIssuedDocketEntrySequence } from './submitCourtIssuedDocketE
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
 export const saveCourtIssuedDocketEntrySequence = [
-  getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
-  ),
+  shouldSaveToConsolidatedGroupAction,
   {
     no: [submitCourtIssuedDocketEntrySequence],
     yes: [
-      shouldSaveToConsolidatedGroupAction,
+      clearAlertsAction,
+      startShowValidationAction,
+      getComputedFormDateFactoryAction(null),
+      computeFilingFormDateAction,
+      validateCourtIssuedDocketEntryAction,
       {
-        no: [submitCourtIssuedDocketEntrySequence],
-        yes: [
-          clearAlertsAction,
-          startShowValidationAction,
-          getComputedFormDateFactoryAction(null),
-          computeFilingFormDateAction,
-          validateCourtIssuedDocketEntryAction,
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
+        success: [
+          clearModalStateAction,
+          shouldSetupConsolidatedCasesAction,
           {
-            error: [
-              setAlertErrorAction,
-              setValidationErrorsAction,
-              setValidationAlertErrorsAction,
-            ],
-            success: [
-              clearModalStateAction,
-              shouldSetupConsolidatedCasesAction,
-              {
-                no: [],
-                yes: [setupConsolidatedCasesAction],
-              },
-              setShowModalFactoryAction('ConfirmInitiateSaveModal'),
-            ],
+            no: [],
+            yes: [setupConsolidatedCasesAction],
           },
+          setShowModalFactoryAction('ConfirmInitiateSaveModal'),
         ],
       },
     ],
