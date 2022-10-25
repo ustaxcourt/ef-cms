@@ -1,6 +1,6 @@
-import { remove } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { deleteDocketEntry } from './deleteDocketEntry';
+import { remove } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');
 

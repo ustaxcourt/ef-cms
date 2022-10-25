@@ -1,6 +1,6 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { createCaseTrialSortMappingRecords } from './createCaseTrialSortMappingRecords';
-import { remove, put, query } from '../../dynamodbClientService';
+import { put, query, remove } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');
 

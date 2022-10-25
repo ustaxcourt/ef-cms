@@ -1,8 +1,8 @@
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { get, queryFull } from '../../dynamodbClientService';
 import { getCalendaredCasesForTrialSession } from './getCalendaredCasesForTrialSession';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 jest.mock('../../dynamodbClientService', () => ({
   get: jest.fn(),

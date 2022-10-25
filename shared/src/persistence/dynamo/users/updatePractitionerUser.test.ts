@@ -1,5 +1,5 @@
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { ROLES } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { updatePractitionerUser } from './updatePractitionerUser';
 
 describe('updatePractitionerUser', () => {

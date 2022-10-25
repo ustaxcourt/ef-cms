@@ -1,6 +1,6 @@
+import { ROLES } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { createPetitionerUserRecords } from './createPetitionerUserRecords';
-import { ROLES } from '../../../business/entities/EntityConstants';
 
 describe('createPetitionerUserRecords', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';

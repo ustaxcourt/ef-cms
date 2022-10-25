@@ -1,5 +1,5 @@
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { Correspondence } from '../../../business/entities/Correspondence';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { updateCaseCorrespondence } from './updateCaseCorrespondence';
 
 describe('updateCaseCorrespondence', () => {

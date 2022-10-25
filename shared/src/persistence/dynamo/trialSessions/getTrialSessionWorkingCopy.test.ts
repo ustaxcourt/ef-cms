@@ -1,17 +1,19 @@
-import { get } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { get } from '../../dynamodbClientService';
 import { getTrialSessionWorkingCopy } from './getTrialSessionWorkingCopy';
 
-jest.mock('../../dynamodbClientService', () => ({
-  get: jest.fn().mockReturnValue({
-    pk: 'trial-session-working-copy|123',
-    sk: '456',
-    sort: 'practitioner',
-    sortOrder: 'desc',
-    trialSessionId: '123',
-    userId: '456',
-  }),
-}));
+jest.mock('../../dynamodbClientService');
+
+const getMock = get as jest.Mock;
+
+getMock.mockReturnValue({
+  pk: 'trial-session-working-copy|123',
+  sk: '456',
+  sort: 'practitioner',
+  sortOrder: 'desc',
+  trialSessionId: '123',
+  userId: '456',
+});
 
 describe('getTrialSessionWorkingCopy', () => {
   it('should get the trial session by id', async () => {

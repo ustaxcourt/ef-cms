@@ -1,7 +1,7 @@
+import { ROLES } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { createNewPractitionerUser } from './createNewPractitionerUser';
 import { put } from '../../dynamodbClientService';
-import { ROLES } from '../../../business/entities/EntityConstants';
 
 jest.mock('../../dynamodbClientService', () => ({
   put: jest.fn(),

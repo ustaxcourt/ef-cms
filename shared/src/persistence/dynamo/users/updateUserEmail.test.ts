@@ -1,8 +1,8 @@
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { updateUserEmail } from './updateUserEmail';
 
 describe('updateUserEmail', () => {

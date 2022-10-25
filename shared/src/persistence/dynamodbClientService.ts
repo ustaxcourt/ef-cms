@@ -84,8 +84,8 @@ export const describeDeployTable = async ({ applicationContext }) => {
  * @returns {object} the item that was put
  */
 export const put = ({
-  Item,
   applicationContext,
+  Item,
 }: {
   Item: TDynamoRecord;
   applicationContext: IApplicationContext;
@@ -93,10 +93,10 @@ export const put = ({
   return applicationContext
     .getDocumentClient()
     .put({
+      Item: filterEmptyStrings(Item),
       TableName: getTableName({
         applicationContext,
       }),
-      Item: filterEmptyStrings(Item),
     })
     .promise()
     .then(() => Item);
@@ -108,12 +108,12 @@ export const put = ({
  * @returns {object} the item that was updated
  */
 export const update = ({
-  ExpressionAttributeNames,
+  applicationContext,
   ConditionExpression,
+  ExpressionAttributeNames,
   ExpressionAttributeValues,
   Key,
   UpdateExpression,
-  applicationContext,
 }: {
   ConditionExpression?: string;
   ExpressionAttributeNames: Record<string, string>;
@@ -126,13 +126,13 @@ export const update = ({
   return applicationContext
     .getDocumentClient()
     .update({
+      ConditionExpression,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues: filteredValues,
+      Key,
       TableName: getTableName({
         applicationContext,
       }),
-      ExpressionAttributeValues: filteredValues,
-      ExpressionAttributeNames,
-      Key,
-      ConditionExpression,
       UpdateExpression,
     })
     .promise()
@@ -233,13 +233,13 @@ export const getFromDeployTable = params => {
  * @returns {object} the item that was updated
  */
 export const query = ({
+  applicationContext,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
-  IndexName,
-  Limit,
   FilterExpression,
+  IndexName,
   KeyConditionExpression,
-  applicationContext,
+  Limit,
   ...params
 }: {
   ExpressionAttributeNames: Record<string, string>;
@@ -254,13 +254,15 @@ export const query = ({
   return applicationContext
     .getDocumentClient()
     .query({
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      FilterExpression,
+      IndexName,
+      KeyConditionExpression,
+      Limit,
       TableName: getTableName({
         applicationContext,
       }),
-      ExpressionAttributeNames,
-      ExpressionAttributeValues,
-      IndexName,
-      KeyConditionExpression,
       ...params,
     })
     .promise()
@@ -303,11 +305,11 @@ export const scan = async params => {
  * @returns {object} the item that was updated
  */
 export const queryFull = async ({
+  applicationContext,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
-  KeyConditionExpression,
   IndexName,
-  applicationContext,
+  KeyConditionExpression,
   ...params
 }: {
   applicationContext: IApplicationContext;
@@ -326,14 +328,14 @@ export const queryFull = async ({
     const subsetResults = await applicationContext
       .getDocumentClient()
       .query({
+        ExclusiveStartKey: lastKey,
+        ExpressionAttributeNames,
+        ExpressionAttributeValues,
+        IndexName,
+        KeyConditionExpression,
         TableName: getTableName({
           applicationContext,
         }),
-        ExpressionAttributeNames,
-        ExpressionAttributeValues,
-        KeyConditionExpression,
-        IndexName,
-        ExclusiveStartKey: lastKey,
         ...params,
       })
       .promise();

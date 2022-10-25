@@ -1,6 +1,6 @@
-import { put } from '../../dynamodbClientService';
 import { fieldsToOmitBeforePersisting } from './createCase';
 import { omit } from 'lodash';
+import { put } from '../../dynamodbClientService';
 
 /**
  * updateCase

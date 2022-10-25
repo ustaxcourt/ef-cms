@@ -1,4 +1,3 @@
-import { batchGet } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getUsersById } from './getUsersById';
 

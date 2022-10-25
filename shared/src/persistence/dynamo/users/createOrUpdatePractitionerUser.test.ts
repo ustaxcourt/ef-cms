@@ -1,9 +1,9 @@
+import { ROLES } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import {
   createOrUpdatePractitionerUser,
   createUserRecords,
 } from './createOrUpdatePractitionerUser';
-import { ROLES } from '../../../business/entities/EntityConstants';
 
 describe('createOrUpdatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';

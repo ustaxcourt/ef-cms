@@ -11,9 +11,9 @@ describe('saveUserConnection', () => {
   it('attempts to persist the websocket connection details', async () => {
     await saveUserConnection({
       applicationContext,
+      clientConnectionId: 'bb',
       connectionId: 'abc',
       endpoint: 'test',
-      clientConnectionId: 'bb',
       userId: 'a66ac519-fd1a-44ac-8226-b4a53d348677',
     });
 

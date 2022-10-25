@@ -1,4 +1,4 @@
-import { query, batchGet } from '../../dynamodbClientService';
+import { batchGet, query } from '../../dynamodbClientService';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,

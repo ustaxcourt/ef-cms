@@ -1,6 +1,6 @@
+import { ROLES } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { createNewPetitionerUser } from './createNewPetitionerUser';
-import { ROLES } from '../../../business/entities/EntityConstants';
 
 describe('createNewPetitionerUser', () => {
   beforeEach(() => {});
