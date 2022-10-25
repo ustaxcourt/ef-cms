@@ -12,10 +12,10 @@ const { get } = require('./requests');
  */
 exports.getPractitionerDocumentDownloadUrlInteractor = (
   applicationContext,
-  { practitionerDocumentFileId },
+  { barNumber, practitionerDocumentFileId },
 ) => {
   return get({
     applicationContext,
-    endpoint: `/practitioner-documents/${practitionerDocumentFileId}/document-download-url`,
+    endpoint: `/practitioner-documents/${barNumber}/${practitionerDocumentFileId}/document-download-url`,
   });
 };
