@@ -1134,13 +1134,16 @@ workflows:
           requires:
             - disable-reindex-cron
       - deploy-switch-colors-cron:
+          <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
       - wait-for-switch:
+          <<: *build-and-deploy-with-context-defaults
           type: approval
           requires:
             - deploy-switch-colors-cron
       - disable-switch-colors-cron:
+          <<: *build-and-deploy-with-context-defaults
           requires:
             - wait-for-switch
       - switch-colors:
