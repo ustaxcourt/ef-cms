@@ -73,12 +73,8 @@ import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
 
-const {
-  ALLOWLIST_FEATURE_FLAGS,
-  CASE_TYPES_MAP,
-  PARTY_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} = applicationContext.getConstants();
+const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+  applicationContext.getConstants();
 
 const formattedDocketEntries = withAppContextDecorator(
   formattedDocketEntriesComputed,
@@ -389,13 +385,6 @@ export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
 
 export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
   return await setFeatureFlag(isEnabled, `${keyPrefix}-order-search-enabled`);
-};
-
-export const setConsolidatedCasesPropagateEntriesFlag = async isEnabled => {
-  return await setFeatureFlag(
-    isEnabled,
-    ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
-  );
 };
 
 export const setFeatureFlag = async (isEnabled, key) => {
