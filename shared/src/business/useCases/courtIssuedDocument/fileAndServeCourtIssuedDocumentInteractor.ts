@@ -1,8 +1,5 @@
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_SECTION,
-} from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
+import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -67,22 +64,6 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
-  const consolidateCaseDuplicateDocketEntries = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
-    });
-
-  if (
-    eventCodeCanOnlyBeServedOnSubjectCase ||
-    !consolidateCaseDuplicateDocketEntries
-  ) {
-    docketNumbers = [subjectCaseDocketNumber];
-  }
 
   const subjectCase = await applicationContext
     .getPersistenceGateway()
@@ -208,7 +189,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'file_and_serve_court_issued_document_complete',
+      action: 'serve_document_complete',
       alertSuccess: {
         message: successMessage,
         overwritable: false,

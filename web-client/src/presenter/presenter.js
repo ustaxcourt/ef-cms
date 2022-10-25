@@ -62,6 +62,7 @@ import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeMod
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { closeModalAndReturnToPractitionerDocumentsPageSequence } from './sequences/closeModalAndReturnToPractitionerDocumentsPageSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { closeTrialSessionSequence } from './sequences/closeTrialSessionSequence';
 import { closeVerifyEmailModalAndNavigateToMyAccountSequence } from './sequences/closeVerifyEmailModalAndNavigateToMyAccountSequence';
@@ -156,7 +157,9 @@ import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
+import { gotoPractitionerAddDocumentSequence } from './sequences/gotoPractitionerAddDocumentSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
+import { gotoPractitionerDocumentationSequence } from './sequences/gotoPractitionerDocumentationSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
@@ -201,6 +204,7 @@ import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrint
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
+import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
 import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumbersModalSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
@@ -230,7 +234,7 @@ import { openConfirmDeleteOtherStatisticsModalSequence } from './sequences/openC
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
-import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
+import { openConfirmInitiateCourtIssuedFilingServiceModalSequence } from './sequences/openConfirmInitiateCourtIssuedFilingServiceModalSequence';
 import { openConfirmModalSequence } from './sequences/openConfirmModalSequence';
 import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
@@ -252,6 +256,7 @@ import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleM
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
+import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -307,8 +312,8 @@ import { selectDocumentForScanSequence } from './sequences/selectDocumentForScan
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
-import { serveCourtIssuedDocumentCompleteSequence } from './sequences/serveCourtIssuedDocumentCompleteSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
+import { serveDocumentCompleteSequence } from './sequences/serveDocumentCompleteSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
@@ -354,6 +359,7 @@ import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolid
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
 import { submitAddOtherStatisticsSequence } from './sequences/submitAddOtherStatisticsSequence';
 import { submitAddPetitionerSequence } from './sequences/submitAddPetitionerSequence';
+import { submitAddPractitionerDocumentSequence } from './sequences/submitAddPractitionerDocumentSequence';
 import { submitAddPractitionerSequence } from './sequences/submitAddPractitionerSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
@@ -458,6 +464,7 @@ import { userContactUpdateProgressSequence } from './sequences/userContactUpdate
 import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/CaseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPetitionerSequence } from './sequences/validateAddPetitionerSequence';
+import { validateAddPractitionerDocumentSequence } from './sequences/validateAddPractitionerDocumentSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
 import { validateAddPrivatePractitionerSequence } from './sequences/CaseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
@@ -573,6 +580,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
+    closeModalAndReturnToPractitionerDocumentsPageSequence,
     closeModalAndReturnToTrialSessionsSequence,
     closeTrialSessionSequence,
     closeVerifyEmailModalAndNavigateToMyAccountSequence,
@@ -666,7 +674,9 @@ export const presenter = {
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
     gotoPetitionQcSequence,
+    gotoPractitionerAddDocumentSequence,
     gotoPractitionerDetailSequence,
+    gotoPractitionerDocumentationSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintPractitionerCasesSequence,
     gotoPrintableCaseConfirmationSequence,
@@ -711,6 +721,7 @@ export const presenter = {
     navigateToPrintableCaseConfirmationSequence,
     notFoundErrorSequence,
     noticeGenerationCompleteSequence,
+    onPractitionerInformationTabSelectSequence,
     openAddDocketNumbersModalSequence,
     openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,
@@ -740,7 +751,7 @@ export const presenter = {
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
-    openConfirmInitiateServiceModalSequence,
+    openConfirmInitiateCourtIssuedFilingServiceModalSequence,
     openConfirmModalSequence,
     openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
@@ -762,6 +773,7 @@ export const presenter = {
     openForwardMessageModalSequence,
     openGainElectronicAccessToCaseModalSequence,
     openPdfPreviewModalSequence,
+    openPractitionerDocumentDownloadUrlSequence,
     openPrintableTrialSessionWorkingCopyModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
@@ -817,8 +829,8 @@ export const presenter = {
     selectScannerSequence,
     selectWorkItemSequence,
     serveCaseToIrsSequence,
-    serveCourtIssuedDocumentCompleteSequence,
     serveCourtIssuedDocumentSequence,
+    serveDocumentCompleteSequence,
     servePaperFiledDocumentSequence,
     setCaseDetailPageTabSequence,
     setCaseDetailPrimaryTabSequence,
@@ -862,6 +874,7 @@ export const presenter = {
     submitAddDeficiencyStatisticsSequence,
     submitAddOtherStatisticsSequence,
     submitAddPetitionerSequence,
+    submitAddPractitionerDocumentSequence,
     submitAddPractitionerSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
@@ -966,6 +979,7 @@ export const presenter = {
     validateAddDeficiencyStatisticsSequence,
     validateAddIrsPractitionerSequence,
     validateAddPetitionerSequence,
+    validateAddPractitionerDocumentSequence,
     validateAddPractitionerSequence,
     validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,

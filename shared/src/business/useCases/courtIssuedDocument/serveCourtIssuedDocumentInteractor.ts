@@ -1,8 +1,5 @@
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_SECTION,
-} from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
+import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -55,7 +52,7 @@ const completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
-    section: user.section,
+    section: user.section ? user.section : DOCKET_SECTION,
     userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
@@ -131,22 +128,6 @@ export const serveCourtIssuedDocumentInteractor = async (
         docketNumber: subjectCaseEntity.docketNumber,
         status: true,
       });
-  }
-
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode);
-  const consolidateCaseDuplicateDocketEntries = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
-    });
-
-  if (
-    eventCodeCanOnlyBeServedOnSubjectCase ||
-    !consolidateCaseDuplicateDocketEntries
-  ) {
-    docketNumbers = [subjectCaseDocketNumber];
   }
 
   courtIssuedDocument.numberOfPages = await applicationContext
@@ -234,7 +215,7 @@ export const serveCourtIssuedDocumentInteractor = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'serve_court_issued_document_complete',
+      action: 'serve_document_complete',
       alertSuccess: {
         message: successMessage,
         overwritable: false,
