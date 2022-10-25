@@ -1,9 +1,13 @@
-const { queryFull } = require('../../dynamodbClientService');
+import { queryFull } from '../../dynamodbClientService';
 
-exports.getDocumentQCServedForSection = ({
+export const getDocumentQCServedForSection = ({
   afterDate,
   applicationContext,
   section,
+}: {
+  afterDate: string;
+  applicationContext: IApplicationContext;
+  section: string;
 }) => {
   return queryFull({
     ExpressionAttributeNames: {

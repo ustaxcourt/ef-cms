@@ -1,10 +1,16 @@
-const {
+import {
   calculateISODate,
   createISODateAtStartOfDayEST,
-} = require('../../../business/utilities/DateHandler');
-const { queryFull } = require('../../dynamodbClientService');
+} from '../../../business/utilities/DateHandler';
+import { queryFull } from '../../dynamodbClientService';
 
-exports.getDocumentQCServedForUser = ({ applicationContext, userId }) => {
+export const getDocumentQCServedForUser = ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) => {
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
     dateString: startOfDay,

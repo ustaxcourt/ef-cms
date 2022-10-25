@@ -1,8 +1,8 @@
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import {
-  createSectionOutboxRecords,
   TIME_TO_EXIST,
+  createSectionOutboxRecords,
 } from './createSectionOutboxRecords';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
 
 describe('createSectionOutboxRecords', () => {
   let mockWorkItem;

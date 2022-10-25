@@ -1,8 +1,8 @@
-const { createSectionOutboxRecords } = require('./createSectionOutboxRecords');
-const { createUserOutboxRecord } = require('./createUserOutboxRecord');
-const { get } = require('../../dynamodbClientService');
+import { createSectionOutboxRecords } from './createSectionOutboxRecords';
+import { createUserOutboxRecord } from './createUserOutboxRecord';
+import { get } from '../../dynamodbClientService';
 
-exports.putWorkItemInOutbox = async ({ applicationContext, workItem }) => {
+export const putWorkItemInOutbox = async ({ applicationContext, workItem }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await get({

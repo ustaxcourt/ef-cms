@@ -1,6 +1,7 @@
-const { createSectionOutboxRecords } = require('./createSectionOutboxRecords');
-const { createUserOutboxRecord } = require('./createUserOutboxRecord');
-const { put } = require('../../dynamodbClientService');
+import { createSectionOutboxRecords } from './createSectionOutboxRecords';
+import { createUserOutboxRecord } from './createUserOutboxRecord';
+import { put } from '../../dynamodbClientService';
+
 /**
  * saveWorkItemForDocketClerkFilingExternalDocument
  *
@@ -9,9 +10,12 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.workItem the work item data
  * @returns {Promise} resolves upon completion of persistence requests
  */
-exports.saveWorkItemForDocketClerkFilingExternalDocument = ({
+export const saveWorkItemForDocketClerkFilingExternalDocument = ({
   applicationContext,
   workItem,
+}: {
+  applicationContext: IApplicationContext;
+  workItem: TOutboxItem;
 }) =>
   Promise.all([
     createSectionOutboxRecords({

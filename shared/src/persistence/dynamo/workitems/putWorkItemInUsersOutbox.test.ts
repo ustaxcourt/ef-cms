@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  DOCKET_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const { putWorkItemInUsersOutbox } = require('./putWorkItemInUsersOutbox');
+import { DOCKET_SECTION } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { putWorkItemInUsersOutbox } from './putWorkItemInUsersOutbox';
 
 describe('putWorkItemInUsersOutbox', () => {
   let putStub;

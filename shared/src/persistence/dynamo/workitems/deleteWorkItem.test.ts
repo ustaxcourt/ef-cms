@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { deleteWorkItem } = require('./deleteWorkItem');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { deleteWorkItem } from './deleteWorkItem';
 
 const mockWorkItemId = '437da979-89f3-49fc-bf3e-7b09d9691410';
 const mockDocketNumber = '101-21';

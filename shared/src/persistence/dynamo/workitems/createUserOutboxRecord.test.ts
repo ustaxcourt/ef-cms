@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { createUserOutboxRecord } = require('./createUserOutboxRecord');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createUserOutboxRecord } from './createUserOutboxRecord';
 
 describe('createUserOutboxRecord', () => {
   let mockWorkItem;

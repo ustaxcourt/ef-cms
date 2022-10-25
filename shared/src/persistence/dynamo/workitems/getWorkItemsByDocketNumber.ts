@@ -1,6 +1,12 @@
-const { query } = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
-exports.getWorkItemsByDocketNumber = ({ applicationContext, docketNumber }) =>
+export const getWorkItemsByDocketNumber = ({
+  applicationContext,
+  docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+}) =>
   query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

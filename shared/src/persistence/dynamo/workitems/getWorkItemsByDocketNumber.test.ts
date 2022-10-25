@@ -1,9 +1,9 @@
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getWorkItemsByDocketNumber } from './getWorkItemsByDocketNumber';
+import { query } from '../../dynamodbClientService';
 jest.mock('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getWorkItemsByDocketNumber } = require('./getWorkItemsByDocketNumber');
-const { query } = require('../../dynamodbClientService');
+
+const queryMock = query as jest.Mock;
 
 describe('getWorkItemsByDocketNumber', () => {
   it('should call client.query with pk of case|{docketNumber}', async () => {
@@ -14,7 +14,7 @@ describe('getWorkItemsByDocketNumber', () => {
       docketNumber: mockDocketNumber,
     });
 
-    expect(query.mock.calls[0][0]).toMatchObject({
+    expect(queryMock.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':pk': `case|${mockDocketNumber}`,
         ':prefix': 'work-item',

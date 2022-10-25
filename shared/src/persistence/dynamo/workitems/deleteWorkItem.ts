@@ -1,4 +1,10 @@
-const { deleteByGsi } = require('../helpers/deleteByGsi');
+import { deleteByGsi } from '../helpers/deleteByGsi';
 
-exports.deleteWorkItem = ({ applicationContext, workItem }) =>
+export const deleteWorkItem = ({
+  applicationContext,
+  workItem,
+}: {
+  applicationContext: IApplicationContext;
+  workItem: WorkItem;
+}) =>
   deleteByGsi({ applicationContext, gsi: `work-item|${workItem.workItemId}` });

@@ -1,12 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  DOCKET_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const {
-  getDocumentQCServedForSection,
-} = require('./getDocumentQCServedForSection');
+import { DOCKET_SECTION } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getDocumentQCServedForSection } from './getDocumentQCServedForSection';
 
 describe('getDocumentQCServedForSection', () => {
   let queryStub;
@@ -61,6 +55,7 @@ describe('getDocumentQCServedForSection', () => {
       query: queryStub,
     });
     const items = await getDocumentQCServedForSection({
+      afterDate: 'testing',
       applicationContext,
       section: DOCKET_SECTION,
     });

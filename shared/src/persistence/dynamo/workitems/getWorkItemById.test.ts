@@ -1,12 +1,13 @@
-const client = require('../../dynamodbClientService');
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getWorkItemById } = require('./getWorkItemById');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getWorkItemById } from './getWorkItemById';
+import { query } from '../../dynamodbClientService';
+
+jest.mock('../../dynamodbClientService');
+const queryMock = query as jest.Mock;
 
 describe('getWorkItemById', () => {
   beforeEach(() => {
-    client.query = jest.fn().mockReturnValue([
+    queryMock.mockReturnValue([
       {
         gsi1pk: 'work-item|abc',
         pk: 'case|abc',
@@ -25,6 +26,7 @@ describe('getWorkItemById', () => {
   it('returns the result from query that has a pk starting with case|', async () => {
     const result = await getWorkItemById({
       applicationContext,
+      workItemId: 'abc',
     });
     expect(result).toEqual({
       gsi1pk: 'work-item|abc',
