@@ -4687,11 +4687,6 @@
     "pk": "internal-opinion-search-enabled"
   },
   {
-    "pk": "consolidated-cases-propagate-docket-entries",
-    "sk": "consolidated-cases-propagate-docket-entries",
-    "current": true
-  },
-  {
     "pk": "consolidated-cases-add-docket-numbers",
     "sk": "consolidated-cases-add-docket-numbers",
     "current": true
