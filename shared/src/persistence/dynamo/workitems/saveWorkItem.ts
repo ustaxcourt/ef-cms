@@ -1,4 +1,4 @@
-const { put } = require('../../dynamodbClientService');
+import { put } from '../../dynamodbClientService';
 
 /**
  * saveWorkItem
@@ -8,7 +8,13 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.workItem the work item data
  * @returns {Promise} resolves upon completion of persistence request
  */
-exports.saveWorkItem = ({ applicationContext, workItem }) =>
+export const saveWorkItem = ({
+  applicationContext,
+  workItem,
+}: {
+  applicationContext: IApplicationContext;
+  workItem: WorkItem;
+}) =>
   put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,

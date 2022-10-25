@@ -1,8 +1,13 @@
-const client = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
-// TODO wait, what are these things we're fetching here?
-exports.getWorkItemsByWorkItemId = ({ applicationContext, workItemId }) =>
-  client.query({
+export const getWorkItemsByWorkItemId = ({
+  applicationContext,
+  workItemId,
+}: {
+  applicationContext: IApplicationContext;
+  workItemId: string;
+}) =>
+  query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },

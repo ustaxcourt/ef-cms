@@ -1,12 +1,6 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  DOCKET_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const {
-  saveWorkItemForDocketClerkFilingExternalDocument,
-} = require('./saveWorkItemForDocketClerkFilingExternalDocument');
+import { DOCKET_SECTION } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { saveWorkItemForDocketClerkFilingExternalDocument } from './saveWorkItemForDocketClerkFilingExternalDocument';
 
 describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
   let putStub;
