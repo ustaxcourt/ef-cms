@@ -1,5 +1,4 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
-import { batchGet, query } from '../../dynamodbClientService';
 import { getInternalUsers } from './getInternalUsers';
 
 jest.mock('../../dynamodbClientService', () => ({

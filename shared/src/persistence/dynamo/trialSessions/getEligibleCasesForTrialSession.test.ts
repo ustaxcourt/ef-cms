@@ -1,14 +1,14 @@
+import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { batchGet, query } from '../../dynamodbClientService';
 import { getEligibleCasesForTrialSession } from './getEligibleCasesForTrialSession';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 const limit = 5;
 const skPrefix = 'trialSession';
 
 jest.mock('../../dynamodbClientService', () => ({
-  query: jest.fn(),
   batchGet: jest.fn(),
+  query: jest.fn(),
 }));
 const queryMock = query as jest.Mock;
 const batchGetMock = batchGet as jest.Mock;

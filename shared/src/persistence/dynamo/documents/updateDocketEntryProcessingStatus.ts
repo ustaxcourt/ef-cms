@@ -1,5 +1,5 @@
-import { update } from '../../dynamodbClientService';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../../business/entities/EntityConstants';
+import { update } from '../../dynamodbClientService';
 
 export const updateDocketEntryProcessingStatus = async ({
   applicationContext,

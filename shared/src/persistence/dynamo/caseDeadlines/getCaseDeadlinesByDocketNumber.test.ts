@@ -1,10 +1,10 @@
-import { batchGet, query } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { batchGet, query } from '../../dynamodbClientService';
 import { getCaseDeadlinesByDocketNumber } from './getCaseDeadlinesByDocketNumber';
 
 jest.mock('../../dynamodbClientService', () => ({
-  query: jest.fn(),
   batchGet: jest.fn(),
+  query: jest.fn(),
 }));
 
 const mockCaseDeadline = {

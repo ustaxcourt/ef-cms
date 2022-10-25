@@ -1,5 +1,5 @@
-import { query } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { query } from '../../dynamodbClientService';
 import { verifyPendingCaseForUser } from './verifyPendingCaseForUser';
 
 jest.mock('../../dynamodbClientService');

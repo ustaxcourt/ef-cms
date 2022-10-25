@@ -1,5 +1,5 @@
-import { queryFull } from '../../dynamodbClientService';
 import { aggregateCaseItems } from '../helpers/aggregateCaseItems';
+import { queryFull } from '../../dynamodbClientService';
 
 /**
  * getCaseByDocketNumber

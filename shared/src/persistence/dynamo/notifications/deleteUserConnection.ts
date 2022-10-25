@@ -1,4 +1,4 @@
-import { get, batchDelete } from '../../dynamodbClientService';
+import { batchDelete, get } from '../../dynamodbClientService';
 
 /**
  * deleteUserConnection

@@ -1,4 +1,4 @@
-import { remove, query } from '../../dynamodbClientService';
+import { query, remove } from '../../dynamodbClientService';
 
 /**
  * deleteCaseTrialSortMappingRecords

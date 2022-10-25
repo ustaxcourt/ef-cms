@@ -1,5 +1,5 @@
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { CASE_STATUS_TYPES } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getCasesByLeadDocketNumber } from './getCasesByLeadDocketNumber';
 
 describe('getCasesByLeadDocketNumber', () => {

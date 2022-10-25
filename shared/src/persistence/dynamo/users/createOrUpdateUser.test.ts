@@ -1,9 +1,9 @@
+import {
+  PETITIONS_SECTION,
+  ROLES,
+} from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { createOrUpdateUser, createUserRecords } from './createOrUpdateUser';
-import {
-  ROLES,
-  PETITIONS_SECTION,
-} from '../../../business/entities/EntityConstants';
 
 const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
   .getPersistenceGateway()
@@ -14,9 +14,9 @@ describe('createOrUpdateUser', () => {
   const petitionsClerkUser = {
     email: 'test@example.com',
     name: 'Test Petitionsclerk',
+    password: 'tempPass',
     role: ROLES.petitionsClerk,
     section: PETITIONS_SECTION,
-    password: 'tempPass',
   };
   const privatePractitionerUser = {
     barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted

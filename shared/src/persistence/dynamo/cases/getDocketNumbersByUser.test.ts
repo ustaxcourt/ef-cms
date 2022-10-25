@@ -1,6 +1,6 @@
-import { queryFull } from '../../dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getDocketNumbersByUser } from './getDocketNumbersByUser';
+import { queryFull } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');
 

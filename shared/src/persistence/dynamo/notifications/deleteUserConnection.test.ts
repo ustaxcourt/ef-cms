@@ -1,6 +1,6 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { batchDelete, get } from '../../dynamodbClientService';
 import { deleteUserConnection } from './deleteUserConnection';
-import { get, batchDelete } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');
 

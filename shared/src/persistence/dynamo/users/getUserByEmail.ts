@@ -1,5 +1,5 @@
-import { query } from '../../dynamodbClientService';
 import { getUserById } from './getUserById';
+import { query } from '../../dynamodbClientService';
 
 /**
  * getUserByEmail

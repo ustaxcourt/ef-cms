@@ -1,5 +1,4 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
-import { get } from '../../dynamodbClientService';
 import { getTrialSessionById } from './getTrialSessionById';
 
 jest.mock('../../dynamodbClientService', () => ({

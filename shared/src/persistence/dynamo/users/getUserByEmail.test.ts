@@ -1,14 +1,14 @@
-import { query } from '../../../../../shared/src/persistence/dynamodbClientService';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getUserByEmail } from './getUserByEmail';
 import { getUserById } from './getUserById';
+import { query } from '../../../../../shared/src/persistence/dynamodbClientService';
 
 jest.mock('./getUserById', () => ({
   getUserById: jest.fn(),
 }));
 
 const getUserByIdMock = getUserById as jest.Mock;
-const mockEmail = 'found@example.com';
+let mockEmail = 'found@example.com';
 const mockFoundUser = {
   email: mockEmail,
   userId: 'petitioner1',
@@ -26,7 +26,7 @@ jest.mock('../../dynamodbClientService', () => ({
 
 describe('getUserByEmail', () => {
   it('should return undefined when a user is not found with the provided email', async () => {
-    const mockEmail = 'notfound@example.com';
+    mockEmail = 'notfound@example.com';
 
     const result = await getUserByEmail({
       applicationContext,

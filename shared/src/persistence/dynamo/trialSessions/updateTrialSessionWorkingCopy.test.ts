@@ -10,13 +10,13 @@ describe('updateTrialSessionWorkingCopy', () => {
 
   it('invokes the persistence layer with pk of trial-session-working-copy|{trialSessionId}, sk of {userId} and other expected params', async () => {
     await updateTrialSessionWorkingCopy({
+      applicationContext,
       trialSessionWorkingCopyToUpdate: {
         sort: 'practitioner',
         sortOrder: 'desc',
         trialSessionId: '456',
         userId: '123',
       } as any,
-      applicationContext,
     });
 
     expect(

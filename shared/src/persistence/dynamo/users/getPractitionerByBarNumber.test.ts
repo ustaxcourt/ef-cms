@@ -1,7 +1,7 @@
-import { batchGet, query } from '../../dynamodbClientService';
-import { applicationContext } from '../../../business/test/createTestApplicationContext';
-import { getPractitionerByBarNumber } from './getPractitionerByBarNumber';
 import { ROLES } from '../../../business/entities/EntityConstants';
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { batchGet, query } from '../../dynamodbClientService';
+import { getPractitionerByBarNumber } from './getPractitionerByBarNumber';
 
 const mappingRecords = [
   {

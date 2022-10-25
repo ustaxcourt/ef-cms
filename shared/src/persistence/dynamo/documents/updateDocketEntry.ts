@@ -1,5 +1,5 @@
-import { put } from '../../dynamodbClientService';
 import { omit } from 'lodash';
+import { put } from '../../dynamodbClientService';
 
 export const updateDocketEntry = ({
   applicationContext,

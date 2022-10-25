@@ -1,9 +1,9 @@
-import { get } from '../../dynamodbClientService';
 import {
+  FORMATS,
   formatDateString,
   formatNow,
-  FORMATS,
 } from '../../../business/utilities/DateHandler';
+import { get } from '../../dynamodbClientService';
 
 /**
  * gets the next docket number in the series

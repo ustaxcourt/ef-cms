@@ -1,6 +1,6 @@
+import { addCaseToHearing } from './addCaseToHearing';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { updateTrialSession } from './updateTrialSession';
-import { addCaseToHearing } from './addCaseToHearing';
 
 jest.mock('./updateTrialSession');
 
