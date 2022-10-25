@@ -1,9 +1,14 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { put } from '../../dynamodbClientService';
 import { saveDispatchNotification } from './saveDispatchNotification';
+
+jest.mock('../../dynamodbClientService');
+
+const putMock = put as jest.Mock;
 
 describe('saveDispatchNotification', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().put.mockReturnValue({
+    putMock.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
   });
@@ -14,9 +19,7 @@ describe('saveDispatchNotification', () => {
       topic: 'test-topic',
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
+    expect(putMock.mock.calls[0][0]).toMatchObject({
       Item: {
         pk: 'dispatch-notification',
         sk: 'test-topic',
@@ -35,11 +38,9 @@ describe('saveDispatchNotification', () => {
       topic: 'test-topic',
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0].Item.ttl,
-    ).toBeGreaterThanOrEqual(fiveMinutesFromNow);
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0].Item.ttl,
-    ).toBeLessThan(sixMinutesFromNow);
+    expect(putMock.mock.calls[0][0].Item.ttl).toBeGreaterThanOrEqual(
+      fiveMinutesFromNow,
+    );
+    expect(putMock.mock.calls[0][0].Item.ttl).toBeLessThan(sixMinutesFromNow);
   });
 });
