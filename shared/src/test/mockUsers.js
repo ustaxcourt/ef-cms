@@ -76,6 +76,41 @@ exports.MOCK_USERS = {
   },
 };
 
+exports.MOCK_INTERNAL_USERS = {
+  'a7d90c05-f6cd-442c-a168-202db587f16f': docketClerkUser,
+  'c7d90c05-f6cd-442c-a168-202db587f16f': petitionsClerkUser,
+  'g7d90c05-f6cd-442c-a168-202db587f16f': {
+    name: 'ADC',
+    role: ROLES.adc,
+    section: ADC_SECTION,
+    userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
+  },
+};
+
+exports.MOCK_EXTERNAL_USERS = {
+  '330d4b65-620a-489d-8414-6623653ebc4f': {
+    barNumber: 'BN1234',
+    name: 'Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+    userId: '330d4b65-620a-489d-8414-6623653ebc4f',
+  },
+  'd7d90c05-f6cd-442c-a168-202db587f16f': {
+    name: 'Tax Payer',
+    role: ROLES.petitioner,
+    section: 'petitioner',
+    userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  },
+  'f7d90c05-f6cd-442c-a168-202db587f16f': {
+    barNumber: 'BN2345',
+    contact: {},
+    name: 'IRS Practitioner',
+    role: ROLES.irsPractitioner,
+    section: 'irsPractitioner',
+    userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+  },
+};
+
 exports.MOCK_PRACTITIONER = {
   admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
