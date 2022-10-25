@@ -929,7 +929,7 @@ app.get(
     lambdaWrapper(createPractitionerDocumentLambda),
   );
   app.get(
-    '/practitioner-documents/:practitionerDocumentFileId/document-download-url',
+    '/practitioner-documents/:barNumber/:practitionerDocumentFileId/document-download-url',
     lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
   );
   app.put(
