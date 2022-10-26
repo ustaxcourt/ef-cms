@@ -23,7 +23,7 @@ exports.getDownloadPolicyUrl = ({
         Expires: 120,
         Key: key,
         ResponseContentDisposition: filename
-          ? `inline; attachment; filename="${filename}"`
+          ? `inline;filename="${filename}"`
           : undefined,
       },
       (err, data) => {
