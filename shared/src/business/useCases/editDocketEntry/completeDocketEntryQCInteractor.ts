@@ -92,6 +92,12 @@ export const completeDocketEntryQCInteractor = async (
     docketEntryId,
   });
 
+  // Questions:
+  // 1. should this exist at all when it already exists in editablefields
+
+  //Approaches
+  // By default editableFields documentTitle should be currentDocketEntry.documentTitle
+
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
     additionalInfo: entryMetadata.additionalInfo,
@@ -141,11 +147,14 @@ export const completeDocketEntryQCInteractor = async (
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
+  console.log('updatedDocumentTitle', updatedDocumentTitle);
 
   let currentDocumentTitle = getDocumentTitle({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
+
+  console.log('currentDocumentTitle', currentDocumentTitle);
 
   const needsNewCoversheet = getNeedsNewCoversheet({
     currentDocketEntry,

@@ -20,15 +20,15 @@ export const completeDocketEntryQCAction = async ({
   const docketEntryId = get(state.docketEntryId);
   const { overridePaperServiceAddress } = props;
 
-  let entryMetadata = omit(
+  const formMetaData = omit(
     {
       ...get(state.form),
     },
     ['workitem', 'dateReceivedMonth', 'dateReceivedDay', 'dateReceivedYear'],
   );
 
-  entryMetadata = {
-    ...entryMetadata,
+  const entryMetadata = {
+    ...formMetaData,
     createdAt: entryMetadata.dateReceived,
     docketEntryId,
     docketNumber,

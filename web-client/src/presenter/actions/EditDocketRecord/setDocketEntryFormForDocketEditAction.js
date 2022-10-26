@@ -27,7 +27,9 @@ export const setDocketEntryFormForDocketEditAction = ({
   );
 
   let docketEntryFormData = cloneDeep(docketEntry);
+  console.log('docketEntry', docketEntry);
 
+  console.log('docketEntry.editState', docketEntry.editState);
   if (docketEntry.editState) {
     const parsedJson = JSON.parse(docketEntry.editState);
     if (parsedJson.docketNumber) {

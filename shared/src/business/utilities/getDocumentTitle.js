@@ -12,6 +12,8 @@ const {
  */
 
 const getDocumentTitle = ({ applicationContext, docketEntry }) => {
+  console.log('docketEntry', docketEntry);
+
   let { documentTitle } = docketEntry;
   const filingsAndProceedings = getFilingsAndProceedings(
     formatDocketEntry(applicationContext, docketEntry),
