@@ -39,7 +39,7 @@ describe('documentGenerators', () => {
   });
 
   describe('addressLabelCoverSheet', () => {
-    it('generates an Address Label Cover Sheet document', async () => {
+    it('generates an Address Label Cover Sheet document with a country included', async () => {
       const pdf = await addressLabelCoverSheet({
         applicationContext,
         data: {
