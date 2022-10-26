@@ -13,7 +13,13 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const getPractitionerDocumentDownloadUrlInteractor = async (
   applicationContext: IApplicationContext,
-  { practitionerDocumentFileId }: { practitionerDocumentFileId: string },
+  {
+    barNumber,
+    practitionerDocumentFileId,
+  }: {
+    barNumber: string;
+    practitionerDocumentFileId: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -21,10 +27,19 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const practitionerDocument = await applicationContext
+    .getPersistenceGateway()
+    .getPractitionerDocumentByFileId({
+      applicationContext,
+      barNumber,
+      fileId: practitionerDocumentFileId,
+    });
+
   const policyUrl = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
       applicationContext,
+      filename: practitionerDocument.fileName,
       key: practitionerDocumentFileId,
     });
 

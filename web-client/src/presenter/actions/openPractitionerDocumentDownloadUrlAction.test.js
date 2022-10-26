@@ -34,6 +34,7 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
     await runAction(openPractitionerDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
+        barNumber: 'PT1234',
         fileName: 'file.png',
         practitionerDocumentFileId: 'mockFileId1234',
       },
