@@ -14,6 +14,16 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
     practitionerDocumentFileId: '07044afe-641b-4d75-a84f-0698870b7650',
   } as any;
 
+  const mockPractitioner = { barNumber: 'PT1234' };
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionerDocumentByFileId.mockReturnValue({
+        fileName: 'SomeFile.pdf',
+      });
+  });
+
   it('should throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
     testUser = {
       role: ROLES.petitioner,
@@ -24,6 +34,7 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
 
     await expect(
       getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
+        barNumber: mockPractitioner.barNumber,
         practitionerDocumentFileId:
           mockDocumentMetadata.practitionerDocumentFileId,
       }),
@@ -41,6 +52,7 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
     const results = await getPractitionerDocumentDownloadUrlInteractor(
       applicationContext,
       {
+        barNumber: mockPractitioner.barNumber,
         practitionerDocumentFileId:
           mockDocumentMetadata.practitionerDocumentFileId,
       },
