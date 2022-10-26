@@ -285,3 +285,5 @@ export const Header = connect(
     );
   },
 );
+
+Header.displayName = 'Header';

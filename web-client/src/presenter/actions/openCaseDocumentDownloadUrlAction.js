@@ -1,3 +1,4 @@
+import { openUrlInNewTab } from './openPractitionerDocumentDownloadUrlAction';
 import { state } from 'cerebral';
 
 /**
@@ -20,13 +21,17 @@ export const openCaseDocumentDownloadUrlAction = async ({
     useSameTab,
   } = props;
 
-  let openedPdfWindow;
   if (!isForIFrame && !useSameTab) {
-    openedPdfWindow = window.open();
-    openedPdfWindow.document.write('Loading your document...');
-  }
-
-  try {
+    await openUrlInNewTab(`${docketEntryId}.pdf`, () =>
+      applicationContext
+        .getUseCases()
+        .getDocumentDownloadUrlInteractor(applicationContext, {
+          docketNumber,
+          isPublic,
+          key: docketEntryId,
+        }),
+    );
+  } else {
     const { url } = await applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor(applicationContext, {
@@ -39,12 +44,6 @@ export const openCaseDocumentDownloadUrlAction = async ({
       store.set(state.iframeSrc, url);
     } else if (useSameTab) {
       window.location.href = url;
-    } else {
-      openedPdfWindow.location.href = url;
     }
-  } catch (e) {
-    openedPdfWindow?.close();
-
-    throw new Error(`Unable to get document download url. ${e.message}`);
   }
 };

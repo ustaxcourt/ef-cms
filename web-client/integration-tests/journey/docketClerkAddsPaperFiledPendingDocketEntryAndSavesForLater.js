@@ -1,16 +1,15 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
+  fakeFile,
   getFormattedDocketEntriesForTest,
+  waitForCondition,
 } from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   cerebralTest,
-  fakeFile,
   caseDocketNumber,
 ) => {
-  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
-
   return it('docket clerk adds paper filed docket entry and saves for later', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDocketNumber || cerebralTest.docketNumber,
@@ -25,46 +24,60 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       value: false,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
-    });
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const paperFiledAnswer = [
+      {
+        key: 'dateReceivedMonth',
+        value: 1,
+      },
+      {
+        key: 'dateReceivedDay',
+        value: 1,
+      },
+      {
+        key: 'dateReceivedYear',
+        value: 2018,
+      },
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+      {
+        key: 'primaryDocumentFileSize',
+        value: 100,
+      },
+      {
+        key: 'eventCode',
+        value: 'A',
+      },
+      {
+        key: 'pending',
+        value: true,
+      },
+    ];
 
+    for (const item of paperFiledAnswer) {
+      await cerebralTest.runSequence(
+        'updateDocketEntryFormValueSequence',
+        item,
+      );
+    }
+
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: `filersMap.${contactPrimary.contactId}`,
+        key: `filersMap.${contactId}`,
         value: true,
       },
     );
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'A',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'pending',
-      value: true,
-    });
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetail',
     });
 
     cerebralTest.docketEntryId = cerebralTest
