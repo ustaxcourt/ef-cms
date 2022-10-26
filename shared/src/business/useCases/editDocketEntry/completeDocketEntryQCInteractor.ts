@@ -92,16 +92,6 @@ export const completeDocketEntryQCInteractor = async (
     docketEntryId,
   });
 
-  // Questions:
-  // 1. should this exist at all when it already exists in editablefields
-
-  //Approaches
-  // 1. By default editableFields documentTitle should be currentDocketEntry.documentTitle
-  //    - it assumes that other parts of the data (editableFields) cant be in a bad state
-  // 2. Only change document title if the form has been changed
-  //    - still need to make sure editableFields are correct by default
-  //
-
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
     additionalInfo: entryMetadata.additionalInfo,
@@ -146,6 +136,8 @@ export const completeDocketEntryQCInteractor = async (
     { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
+
+  // Get the persisted docket entry of the response to get the proper doc title
 
   let updatedDocumentTitle = getDocumentTitle({
     applicationContext,
