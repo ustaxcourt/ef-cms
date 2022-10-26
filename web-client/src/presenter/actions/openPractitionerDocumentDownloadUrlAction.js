@@ -1,19 +1,19 @@
 export const openUrlInNewTab = async (fileName, getUrlCb) => {
-  let openedPdfWindow;
-  openedPdfWindow = window.open();
-  openedPdfWindow.document.write('Loading your document...');
+  let openFileViewerWindow;
+  let url;
 
   try {
-    const { url } = await getUrlCb();
-    openedPdfWindow.location.href = url;
-    if (/\.docx?/.test(fileName)) {
-      setTimeout(() => {
-        openedPdfWindow?.close();
-      }, 1);
-    }
-  } catch (e) {
-    openedPdfWindow?.close();
+    ({ url } = await getUrlCb());
+  } catch (err) {
     throw new Error(`Unable to get document download url. ${e.message}`);
+  }
+
+  if (/\.docx?/.test(fileName)) {
+    window.location.href = url;
+  } else {
+    openFileViewerWindow = window.open();
+    openFileViewerWindow.document.write('Loading your document...');
+    openFileViewerWindow.location.href = url;
   }
 };
 
