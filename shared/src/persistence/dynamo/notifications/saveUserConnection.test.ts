@@ -1,9 +1,12 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { put } from '../../dynamodbClientService';
 import { saveUserConnection } from './saveUserConnection';
+jest.mock('../../dynamodbClientService');
+const putMock = put as jest.Mock;
 
 describe('saveUserConnection', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().put.mockReturnValue({
+    putMock.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
   });
@@ -17,9 +20,7 @@ describe('saveUserConnection', () => {
       userId: 'a66ac519-fd1a-44ac-8226-b4a53d348677',
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
+    expect(putMock.mock.calls[0][0]).toMatchObject({
       Item: {
         connectionId: 'abc',
         endpoint: {},
