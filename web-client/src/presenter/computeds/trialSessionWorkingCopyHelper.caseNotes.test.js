@@ -29,9 +29,9 @@ describe('trial session working copy computed', () => {
   };
 
   const mockCaseWithNotes = '102-19';
-  const mockCaseWithoutCalendarNotes = '5000-17';
   const mockCaseWithNotesNotInSelectedTrialSession = '999-99';
   const mockNote = 'this is a test note';
+  const mockCaseWithoutNotes = '5000-17';
 
   it('should set calendarNotes on cases that have them', () => {
     const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
@@ -45,7 +45,7 @@ describe('trial session working copy computed', () => {
           calendaredCases: [
             MOCK_CASE,
             { ...MOCK_CASE, docketNumber: mockCaseWithNotes },
-            { ...MOCK_CASE, docketNumber: mockCaseWithoutCalendarNotes },
+            { ...MOCK_CASE, docketNumber: mockCaseWithoutNotes },
           ],
           caseOrder: [
             {
@@ -75,14 +75,12 @@ describe('trial session working copy computed', () => {
     ).toEqual(mockNote);
     expect(
       formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithoutCalendarNotes,
+        ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).calendarNotes,
     ).toBeUndefined();
   });
 
   it('should set userNotes on cases that are calendared on the trial session when they have them', () => {
-    const mockCaseWithoutUserNotes = '90-07';
-
     const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
@@ -93,7 +91,7 @@ describe('trial session working copy computed', () => {
           ...MOCK_TRIAL_SESSION,
           calendaredCases: [
             { ...MOCK_CASE, docketNumber: mockCaseWithNotes },
-            { ...MOCK_CASE, docketNumber: mockCaseWithoutUserNotes },
+            { ...MOCK_CASE, docketNumber: mockCaseWithoutNotes },
           ],
           caseOrder: [
             {
@@ -121,7 +119,7 @@ describe('trial session working copy computed', () => {
     ).toEqual(mockNote);
     expect(
       formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithoutUserNotes,
+        ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).userNotes,
     ).toBeUndefined();
   });
