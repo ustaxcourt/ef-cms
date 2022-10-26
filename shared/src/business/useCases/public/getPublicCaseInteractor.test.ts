@@ -1,12 +1,12 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTY_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getContactPrimary } from '../../entities/cases/Case';
 import { getPublicCaseInteractor } from './getPublicCaseInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('getPublicCaseInteractor', () => {
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
@@ -68,12 +68,12 @@ describe('getPublicCaseInteractor', () => {
       });
   });
 
-  it('should format the given docket number, removing leading zeroes and suffix', async () => {
+  it('should format the given docket number, removing leading zeroes and suffix', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await getPublicCaseInteractor(applicationContext, {
+    getPublicCaseInteractor(applicationContext, {
       docketNumber: '0000123-19S',
     });
 
