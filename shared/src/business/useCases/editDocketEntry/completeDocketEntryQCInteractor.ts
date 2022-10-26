@@ -96,7 +96,11 @@ export const completeDocketEntryQCInteractor = async (
   // 1. should this exist at all when it already exists in editablefields
 
   //Approaches
-  // By default editableFields documentTitle should be currentDocketEntry.documentTitle
+  // 1. By default editableFields documentTitle should be currentDocketEntry.documentTitle
+  //    - it assumes that other parts of the data (editableFields) cant be in a bad state
+  // 2. Only change document title if the form has been changed
+  //    - still need to make sure editableFields are correct by default
+  //
 
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
