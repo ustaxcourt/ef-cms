@@ -45,7 +45,7 @@ describe('documentGenerators', () => {
         data: {
           address1: '123 Some Street',
           city: 'Some City',
-          countryName: 'USA',
+          country: 'USA',
           docketNumberWithSuffix: '123-45S',
           name: 'Test Person',
           postalCode: '89890',
