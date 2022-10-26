@@ -51,6 +51,7 @@ DocketEntry.prototype.initUnfilteredForInternalUsers =
         : rawDocketEntry.pending;
     if (rawDocketEntry.previousDocument) {
       this.previousDocument = {
+        additionalInfo: rawDocketEntry.previousDocument.additionalInfo,
         docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
         documentTitle: rawDocketEntry.previousDocument.documentTitle,
         documentType: rawDocketEntry.previousDocument.documentType,

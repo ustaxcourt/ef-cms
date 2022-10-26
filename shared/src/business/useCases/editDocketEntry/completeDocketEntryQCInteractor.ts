@@ -84,8 +84,22 @@ export const completeDocketEntryQCInteractor = async (
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
+  // console.log('Current case entity:', caseEntity);
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
     record => record.docketEntryId === docketEntryId,
+  );
+
+  console.log(
+    'Document title from entryMetadata:',
+    entryMetadata.documentTitle,
+  );
+  console.log(
+    'Additional info from entryMetadata:',
+    entryMetadata.additionalInfo,
+  );
+  console.log(
+    'Additional info 2 from entryMetadata:',
+    entryMetadata.additionalInfo2,
   );
 
   const currentDocketEntry = caseEntity.getDocketEntryById({

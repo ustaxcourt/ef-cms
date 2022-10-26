@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from '../../entities/externalDocument/ExternalDocumentFactory';
-import { cloneDeep } from 'lodash';
 
 /**
  * generateDocumentTitleInteractor
@@ -13,7 +12,9 @@ export const generateDocumentTitleInteractor = (
   applicationContext: IApplicationContext,
   { documentMetadata },
 ) => {
-  documentMetadata = cloneDeep(documentMetadata);
+  console.log('documentMetadata', documentMetadata);
+  //    get the entire docket entry for the previous document
+  //    then pass that as docketEntry
 
   if (documentMetadata.previousDocument) {
     documentMetadata.previousDocument.documentTitle = applicationContext
