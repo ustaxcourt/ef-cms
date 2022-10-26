@@ -5,7 +5,7 @@ export const openUrlInNewTab = async (fileName, getUrlCb) => {
   try {
     ({ url } = await getUrlCb());
   } catch (err) {
-    throw new Error(`Unable to get document download url. ${e.message}`);
+    throw new Error(`Unable to get document download url. ${err.message}`);
   }
 
   if (/\.docx?/.test(fileName)) {
