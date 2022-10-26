@@ -13,9 +13,6 @@ export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
 }) => {
-  const consolidatedCasesPropagateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
-  );
   const docketEntryId = get(state.docketEntryId);
   const caseDetail = get(state.caseDetail);
   const {
@@ -44,7 +41,6 @@ export const serveCourtIssuedDocumentAction = async ({
 
   if (
     !isLeadCase ||
-    !consolidatedCasesPropagateDocketEntriesFlag ||
     docketNumbers.length === 0 ||
     !currentDocketEntryCompatibleWithConsolidation
   ) {
