@@ -133,7 +133,11 @@ export const PractitionerDocumentation = connect(
                   <td>{document.categoryName}</td>
                   <td className="file-description">{document.description}</td>
                   <td className="text-align-right">
-                    <Button link icon="edit" onClick={() => {}}>
+                    <Button
+                      link
+                      href={`/practitioner-detail/${barNumber}/edit-document/${document.practitionerDocumentFileId}`}
+                      icon="edit"
+                    >
                       Edit
                     </Button>
                     <Button
