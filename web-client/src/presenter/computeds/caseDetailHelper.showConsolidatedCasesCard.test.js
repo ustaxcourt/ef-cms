@@ -27,7 +27,7 @@ const getBaseState = user => {
 };
 
 describe('showConsolidatedCasesCard', () => {
-  it('should be true when the user is a petitioner and the case is in a consolidated group', () => {
+  it('should be true when the user has VIEW_CONSOLIDATED_CASES_CARD permission and the case is in a consolidated group', () => {
     const user = petitionerUser;
 
     const result = runCompute(caseDetailHelper, {
@@ -42,7 +42,7 @@ describe('showConsolidatedCasesCard', () => {
     expect(result.showConsolidatedCasesCard).toEqual(true);
   });
 
-  it('should be true when the user is a private practitioner and the case is in a consolidated group', () => {
+  it('should be true when the user is a private practitioner and has the VIEW_CONSOLIDATED_CASES_CARD permission and the case is in a consolidated group', () => {
     const user = privatePractitionerUser;
 
     const result = runCompute(caseDetailHelper, {
@@ -57,7 +57,7 @@ describe('showConsolidatedCasesCard', () => {
     expect(result.showConsolidatedCasesCard).toEqual(true);
   });
 
-  it('should be true when the user is an IRS practitioner and the case is in a consolidated group', () => {
+  it('should be true when the user is an IRS practitioner and has the VIEW_CONSOLIDATED_CASES_CARD permission and the case is in a consolidated group', () => {
     const user = irsPractitionerUser;
 
     const result = runCompute(caseDetailHelper, {
