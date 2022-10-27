@@ -1,20 +1,15 @@
-export const openUrlInNewTab = async (fileName, getUrlCb) => {
-  let openFileViewerWindow;
+export const openUrlInNewTab = async getUrlCb => {
   let url;
 
   try {
     ({ url } = await getUrlCb());
   } catch (err) {
-    throw new Error(`Unable to get document download url. ${e.message}`);
+    throw new Error(`Unable to get document download url. ${err.message}`);
   }
 
-  if (/\.docx?/.test(fileName)) {
-    window.location.href = url;
-  } else {
-    openFileViewerWindow = window.open();
-    openFileViewerWindow.document.write('Loading your document...');
-    openFileViewerWindow.location.href = url;
-  }
+  const openFileViewerWindow = window.open();
+  openFileViewerWindow.document.write('Loading your document...');
+  openFileViewerWindow.location.href = url;
 };
 
 /**
@@ -28,9 +23,9 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const { barNumber, fileName, practitionerDocumentFileId } = props;
+  const { barNumber, practitionerDocumentFileId } = props;
 
-  await openUrlInNewTab(fileName, () =>
+  await openUrlInNewTab(() =>
     applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
