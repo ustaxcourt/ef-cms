@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
+import { ConfirmInitiateCourtIssuedFilingServiceModal } from '../ConfirmInitiateCourtIssuedFilingServiceModal';
+import { ConfirmInitiatePaperFilingServiceModal } from '../ConfirmInitiatePaperFilingServiceModal';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -235,14 +236,14 @@ export const MessageDocument = connect(
                 title={messageViewerDocumentToDisplay.documentTitle}
               />
             )}
-            {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
-              <ConfirmInitiateServiceModal
+            {showModal == 'ConfirmInitiateCourtIssuedFilingServiceModal' && (
+              <ConfirmInitiateCourtIssuedFilingServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
                 documentTitle={messageViewerDocumentToDisplay.documentTitle}
               />
             )}
-            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
-              <ConfirmInitiateServiceModal
+            {showModal == 'ConfirmInitiatePaperFilingServiceModal' && (
+              <ConfirmInitiatePaperFilingServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={messageViewerDocumentToDisplay.documentTitle}
               />

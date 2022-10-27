@@ -609,8 +609,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(saveSignedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve',
-    lambdaWrapper(serveExternallyFiledDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
+    lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/external-document',
@@ -622,7 +622,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(addPaperFilingLambda),
+    lambdaWrapper(addPaperFilingLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',
