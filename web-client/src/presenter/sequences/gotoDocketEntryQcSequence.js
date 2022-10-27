@@ -5,12 +5,14 @@ import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/decons
 import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocketRecord/setQCWorkItemIdToMarkAsReadIfNeededAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTabAction } from '../actions/setTabAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -25,6 +27,11 @@ export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
+  isWorkItemAlreadyCompletedAction,
+  {
+    no: [],
+    yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
+  },
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,

@@ -9,6 +9,7 @@ import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
 import { SuccessNotification } from './SuccessNotification';
+import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -120,7 +121,12 @@ export const DocketEntryQc = connect(
             confirmSequence={completeDocketEntryQCSequence}
           />
         )}
+        {showModal === 'WorkItemAlreadyCompletedModal' && (
+          <WorkItemAlreadyCompletedModal />
+        )}
       </>
     );
   },
 );
+
+DocketEntryQc.displayName = 'DocketEntryQc';
