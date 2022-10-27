@@ -89,18 +89,15 @@ export const completeDocketEntryQCInteractor = async (
     record => record.docketEntryId === docketEntryId,
   );
 
-  console.log(
-    'Document title from entryMetadata:',
-    entryMetadata.documentTitle,
-  );
-  console.log(
-    'Additional info from entryMetadata:',
-    entryMetadata.additionalInfo,
-  );
-  console.log(
-    'Additional info 2 from entryMetadata:',
-    entryMetadata.additionalInfo2,
-  );
+  console.log('entryMetadata: ******', entryMetadata.documentTitle);
+  // console.log(
+  //   'Additional info from entryMetadata:',
+  //   entryMetadata.additionalInfo,
+  // );
+  // console.log(
+  //   'Additional info 2 from entryMetadata:',
+  //   entryMetadata.additionalInfo2,
+  // );
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -133,12 +130,13 @@ export const completeDocketEntryQCInteractor = async (
     scenario: entryMetadata.scenario,
     serviceDate: entryMetadata.serviceDate,
   };
+  console.log('currentDocketEntry***', currentDocketEntry);
 
   const updatedDocketEntry = new DocketEntry(
     {
       ...currentDocketEntry,
       ...editableFields,
-      documentTitle: editableFields.documentTitle,
+      documentTitle: editableFields.documentTitle, // TODO: find out necesity of this!
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
@@ -151,20 +149,31 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  // Get the persisted docket entry of the response to get the proper doc title
+  console.log('updatedDocketEntry***', updatedDocketEntry);
+
+  // POSSIBLE SOLUTION
+  // 1. use info from <docketentry>.workItem.docketEntry.documentTitle and check for
+  // the need to generate a new coversheet and make request for changing docket entry
+  //        - we'll need to check for changes in editableFields' documentTitle and possible
+  //          change in order (selected when qc'ing)
+  //
+  //        - make sure to compare the  <docketentry>.workItem.docketEntry.docketEntryId to the id of the
+  //          updatedDocketEntry.previousDocument.docketEntryId because we want to tell if the docketclerk selected
+  //          a different previous document
+  //         - check if additionalInfo exists on the updatedDocketEntry
 
   let updatedDocumentTitle = getDocumentTitle({
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
-  console.log('updatedDocumentTitle', updatedDocumentTitle);
+  // console.log('updatedDocumentTitle', updatedDocumentTitle);
 
   let currentDocumentTitle = getDocumentTitle({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
 
-  console.log('currentDocumentTitle', currentDocumentTitle);
+  // console.log('currentDocumentTitle', currentDocumentTitle);
 
   const needsNewCoversheet = getNeedsNewCoversheet({
     currentDocketEntry,

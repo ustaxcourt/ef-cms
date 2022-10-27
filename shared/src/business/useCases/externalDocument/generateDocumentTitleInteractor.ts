@@ -12,8 +12,12 @@ export const generateDocumentTitleInteractor = (
   applicationContext: IApplicationContext,
   { documentMetadata },
 ) => {
-  console.log('documentMetadata', documentMetadata);
-  //    get the entire docket entry for the previous document
+  console.log('generateDocumentTitleInteractor is CALLED *****');
+  console.log('documentMetadata ********', documentMetadata);
+
+  // console.log('documentMetadata', documentMetadata);
+  //    POSSIBLE SOLUTION:
+  //    1. get the entire docket entry for the previous document
   //    then pass that as docketEntry
 
   if (documentMetadata.previousDocument) {
