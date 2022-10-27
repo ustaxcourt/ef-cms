@@ -43,17 +43,9 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
     expect(window.open().location.href).toEqual('http://example.com');
   });
 
-  it('should change the location for the current page when downloading a docx', async () => {
-    await openUrlInNewTab('file.docx', () => {
-      return { url: 'example.com' };
-    });
-
-    expect(window.location.href).toEqual('example.com');
-  });
-
   it('should throw an error if url is invalid', async () => {
     await expect(
-      openUrlInNewTab('file.pdf', () => {
+      openUrlInNewTab(() => {
         throw new Error();
       }),
     ).rejects.toThrow();
