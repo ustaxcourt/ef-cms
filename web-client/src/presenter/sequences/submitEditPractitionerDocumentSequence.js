@@ -2,7 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { computeCategoryNameAction } from '../actions/computeCategoryNameAction';
 import { editPractitionerDocumentAction } from '../actions/editPractitionerDocumentAction';
-import { getUploadPractitionerDocumentAlertSuccessAction } from '../actions/Practitioners/getUploadPractitionerDocumentAlertSuccessAction';
+import { getEditPractitionerDocumentAlertSuccessAction } from '../actions/Practitioners/getEditPractitionerDocumentAlertSuccessAction';
 import { navigateToPractitionerDocumentsPageAction } from '../actions/navigateToPractitionerDocumentsPageAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -27,7 +27,7 @@ export const submitEditPractitionerDocumentSequence = [
       showProgressSequenceDecorator([editPractitionerDocumentAction]),
       clearAlertsAction,
       clearFormAction,
-      getUploadPractitionerDocumentAlertSuccessAction,
+      getEditPractitionerDocumentAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       navigateToPractitionerDocumentsPageAction,
