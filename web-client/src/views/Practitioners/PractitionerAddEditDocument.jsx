@@ -13,31 +13,43 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PractitionerAddDocument = connect(
+export const PractitionerAddEditDocument = connect(
   {
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isEditingPractitionerDocument: state.isEditingPractitionerDocument,
+    openPractitionerDocumentDownloadUrlSequence:
+      sequences.openPractitionerDocumentDownloadUrlSequence,
+    practitionerDetail: state.practitionerDetail,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
     showModal: state.modal.showModal,
+    showPractitionerDocumentLinkSequence:
+      sequences.showPractitionerDocumentLinkSequence,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
+    submitEditPractitionerDocumentSequence:
+      sequences.submitEditPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     validateAddPractitionerDocumentSequence:
       sequences.validateAddPractitionerDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  function PractitionerAddDocument({
+  function PractitionerAddEditDocument({
     constants,
     documentTypes,
     form,
     formCancelToggleCancelSequence,
+    openPractitionerDocumentDownloadUrlSequence,
+    practitionerDetail,
     practitionerDocumentationFormHelper,
     showModal,
+    showPractitionerDocumentLinkSequence,
     submitAddPractitionerDocumentSequence,
+    submitEditPractitionerDocumentSequence,
     usStates,
     usStatesOther,
     validateAddPractitionerDocumentSequence,
@@ -58,32 +70,72 @@ export const PractitionerAddDocument = connect(
               <div className="blue-container">
                 <div className="grid-row grid-gap">
                   <div className="grid-col-5">
-                    <FormGroup
-                      errorText={validationErrors.practitionerDocumentFile}
-                    >
-                      <label
-                        className={classNames(
-                          'usa-label ustc-upload with-hint',
-                        )}
-                        htmlFor="practitioner-document-file"
-                        id="practitioner-document-label"
+                    {form.showPractitionerDocumentLink ? (
+                      <div className="margin-bottom-3">
+                        <label
+                          className="usa-label"
+                          htmlFor="practitioner-document-file"
+                          id="-practitioner-document-file-label"
+                        >
+                          File
+                        </label>
+                        <Button
+                          link
+                          aria-label={`View PDF: ${form.fileName}`}
+                          className="text-left padding-0 file-name-button"
+                          id="practitioner-document-file"
+                          onClick={() => {
+                            openPractitionerDocumentDownloadUrlSequence({
+                              barNumber: practitionerDetail.barNumber,
+                              fileName: form.fileName,
+                              practitionerDocumentFileId:
+                                form.practitionerDocumentFileId,
+                            });
+                          }}
+                        >
+                          {form.fileName}
+                        </Button>
+                        <Button
+                          // link
+                          aria-label={'replace file'}
+                          // id="practitioner-document-file"
+                          onClick={() => {
+                            showPractitionerDocumentLinkSequence({
+                              showPractitionerDocumentLink: false,
+                            });
+                          }}
+                        >
+                          Replace
+                        </Button>
+                      </div>
+                    ) : (
+                      <FormGroup
+                        errorText={validationErrors.practitionerDocumentFile}
                       >
-                        Upload your file{' '}
-                      </label>
-                      <span className="usa-hint">
-                        File must be in PDF format (.pdf), MS-Word (.doc, .docx)
-                        or an image file (.jpg, .jpeg, .png). Max file size{' '}
-                        {constants.MAX_FILE_SIZE_MB}MB.
-                      </span>
-                      <StateDrivenFileInput
-                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                        aria-describedby="practitioner-document-file-label"
-                        id="practitioner-document-file"
-                        name="practitionerDocumentFile"
-                        updateFormValueSequence="updateFormValueSequence"
-                        validationSequence="validateAddPractitionerDocumentSequence"
-                      />
-                    </FormGroup>
+                        <label
+                          className={classNames(
+                            'usa-label ustc-upload with-hint',
+                          )}
+                          htmlFor="practitioner-document-file"
+                          id="practitioner-document-label"
+                        >
+                          Upload your file{' '}
+                        </label>
+                        <span className="usa-hint">
+                          File must be in PDF format (.pdf), MS-Word (.doc,
+                          .docx) or an image file (.jpg, .jpeg, .png). Max file
+                          size {constants.MAX_FILE_SIZE_MB}MB.
+                        </span>
+                        <StateDrivenFileInput
+                          accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                          aria-describedby="practitioner-document-file-label"
+                          id="practitioner-document-file"
+                          name="practitionerDocumentFile"
+                          updateFormValueSequence="updateFormValueSequence"
+                          validationSequence="validateAddPractitionerDocumentSequence"
+                        />
+                      </FormGroup>
+                    )}
                     <FormGroup errorText={validationErrors.categoryType}>
                       <label
                         className="usa-label"
@@ -184,13 +236,23 @@ export const PractitionerAddDocument = connect(
               </div>
               <div className="grid-row margin-bottom-6 margin-top-5">
                 <div className="grid-col-12">
-                  <Button
-                    onClick={() => {
-                      submitAddPractitionerDocumentSequence();
-                    }}
-                  >
-                    Add File
-                  </Button>
+                  {form.isEditingDocument ? (
+                    <Button
+                      onClick={() => {
+                        submitEditPractitionerDocumentSequence();
+                      }}
+                    >
+                      Update Document
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        submitAddPractitionerDocumentSequence();
+                      }}
+                    >
+                      Add File
+                    </Button>
+                  )}
                   <Button
                     link
                     id="cancel-button"
@@ -200,6 +262,7 @@ export const PractitionerAddDocument = connect(
                   >
                     Cancel
                   </Button>
+
                   {showModal === 'FormCancelModalDialog' && (
                     <FormCancelModalDialog onCancelSequence="closeModalAndReturnToPractitionerDocumentsPageSequence" />
                   )}
@@ -213,4 +276,4 @@ export const PractitionerAddDocument = connect(
   },
 );
 
-PractitionerAddDocument.displayName = 'PractitionerAddDocument';
+PractitionerAddEditDocument.displayName = 'PractitionerAddEditDocument';
