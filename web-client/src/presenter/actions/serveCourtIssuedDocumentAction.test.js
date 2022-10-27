@@ -120,9 +120,6 @@ describe('serveCourtIssuedDocumentAction', () => {
           },
           clientConnectionId,
           docketEntryId,
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
-          },
         },
       });
 
@@ -170,9 +167,6 @@ describe('serveCourtIssuedDocumentAction', () => {
           },
           clientConnectionId,
           docketEntryId,
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
-          },
         },
       });
 
@@ -180,61 +174,6 @@ describe('serveCourtIssuedDocumentAction', () => {
         applicationContext.getUseCases().serveCourtIssuedDocumentInteractor.mock
           .calls[0][1].docketNumbers,
       ).toEqual([thisDocketNumber]);
-    });
-
-    // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-    it('should pass only one docket number if the consolidatedCasesPropagateDocketEntries flag is false', async () => {
-      const leadDocketNumber = '123-20';
-
-      await runAction(serveCourtIssuedDocumentAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          caseDetail: {
-            consolidatedCases: [
-              {
-                checked: true,
-                docketNumber: leadDocketNumber,
-              },
-              {
-                checked: true,
-                docketNumber: '333-22',
-              },
-              {
-                checked: false,
-                docketNumber: '222-22',
-              },
-              {
-                checked: true,
-                docketNumber: '111-21',
-              },
-            ],
-            docketEntries: [
-              {
-                docketEntryId,
-                eventCode: 'O',
-              },
-              {
-                docketEntryId: 'a57d7c0c-94a0-4587-8637-36b5effdc424',
-                eventCide: 'OST',
-              },
-            ],
-            docketNumber: leadDocketNumber,
-            leadDocketNumber,
-          },
-          clientConnectionId,
-          docketEntryId,
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: false,
-          },
-        },
-      });
-
-      expect(
-        applicationContext.getUseCases().serveCourtIssuedDocumentInteractor.mock
-          .calls[0][1].docketNumbers,
-      ).toEqual([leadDocketNumber]);
     });
 
     eventCodesNotCompatibleWithConsolidation.forEach(notCompatibleEventCode => {
@@ -276,9 +215,6 @@ describe('serveCourtIssuedDocumentAction', () => {
             },
             clientConnectionId,
             docketEntryId,
-            featureFlagHelper: {
-              consolidatedCasesPropagateDocketEntries: true,
-            },
           },
         });
 
