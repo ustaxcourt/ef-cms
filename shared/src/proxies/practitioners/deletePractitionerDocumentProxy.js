@@ -14,6 +14,6 @@ exports.deletePractitionerDocumentInteractor = (
 ) => {
   return remove({
     applicationContext,
-    endpoint: `/practitioners/${barNumber}/documents/${practitionerDocumentFileId}`,
+    endpoint: `/practitioner-documents/${barNumber}/documents/${practitionerDocumentFileId}`,
   });
 };

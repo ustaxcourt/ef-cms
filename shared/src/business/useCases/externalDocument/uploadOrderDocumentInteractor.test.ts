@@ -1,14 +1,14 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { uploadOrderDocumentInteractor } from './uploadOrderDocumentInteractor';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { uploadOrderDocumentInteractor } from './uploadOrderDocumentInteractor';
 
 describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     await expect(
       uploadOrderDocumentInteractor(applicationContext, {
-        docketEntryIdToOverwrite: 123,
         documentFile: '',
+        fileIdToOverwrite: '123',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -20,8 +20,8 @@ describe('uploadOrderDocumentInteractor', () => {
     });
 
     await uploadOrderDocumentInteractor(applicationContext, {
-      docketEntryIdToOverwrite: 123,
       documentFile: 'document file',
+      fileIdToOverwrite: '123',
     });
 
     expect(

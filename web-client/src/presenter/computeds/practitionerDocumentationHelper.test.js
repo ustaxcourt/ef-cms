@@ -104,10 +104,7 @@ describe('practitionerDetailHelper', () => {
           user: { role: 'admissionsclerk' },
         },
       });
-      console.log(
-        'results.formattedPractitionerDocuments',
-        results.formattedPractitionerDocuments,
-      );
+
       expect(results.formattedPractitionerDocuments).toEqual([
         expect.objectContaining({
           formattedUploadDate: '10/10/20',
