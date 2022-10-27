@@ -350,6 +350,7 @@ import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecor
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { showPractitionerDocumentLinkSequence } from './sequences/showPractitionerDocumentLinkSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -870,6 +871,7 @@ export const presenter = {
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
     showMoreResultsSequence,
+    showPractitionerDocumentLinkSequence,
     showViewPetitionerCounselModalSequence,
     signOutSequence,
     skipSigningOrderSequence,
