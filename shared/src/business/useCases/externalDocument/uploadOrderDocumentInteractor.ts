@@ -8,16 +8,16 @@ import { UnauthorizedError } from '../../../errors/errors';
  *
  * @param {object} applicationContext application context
  * @param {object} object the argument object
- * @param {string} object.docketEntryIdToOverwrite docket entry id to overwrite
+ * @param {string} object.fileIdToOverwrite docket entry id to overwrite
  * @param {object} object.documentFile file object to upload to S3
  * @returns {string} uploaded docket entry id
  */
 export const uploadOrderDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
-    docketEntryIdToOverwrite,
     documentFile,
-  }: { docketEntryIdToOverwrite: number; documentFile: any },
+    fileIdToOverwrite,
+  }: { fileIdToOverwrite: string; documentFile: any },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -30,7 +30,7 @@ export const uploadOrderDocumentInteractor = async (
     .uploadDocumentFromClient({
       applicationContext,
       document: documentFile,
-      key: docketEntryIdToOverwrite,
+      key: fileIdToOverwrite,
     });
 
   return orderDocketEntryId;
