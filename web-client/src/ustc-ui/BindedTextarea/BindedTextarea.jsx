@@ -45,3 +45,5 @@ export const BindedTextarea = connect(
     return <textarea {...textAreaProps}></textarea>;
   },
 );
+
+BindedTextarea.displayName = 'BindedTextarea';

@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
@@ -124,6 +125,21 @@ export const CaseInformationExternal = connect(
                 </div>
               </div>
             </div>
+            <div className="grid-row grid-gap margin-top-4">
+              <div className="tablet:grid-col-6">
+                {caseDetailHelper.showConsolidatedCasesCard && (
+                  <div className="card height-full">
+                    <div className="content-wrapper">
+                      <h3 className="underlined">Consolidated Cases</h3>
+                      <ConsolidatedCases
+                        caseDetail={formattedCaseDetail}
+                        caseDetailHelper={caseDetailHelper}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </NonMobile>
         <Mobile>
@@ -160,6 +176,17 @@ export const CaseInformationExternal = connect(
                 <TrialInformation caseDetail={formattedCaseDetail} />
               </div>
             </div>
+            {caseDetailHelper.showConsolidatedCasesCard && (
+              <div className="margin-top-2">
+                <div className="case-info-card">
+                  <h3>Consolidated Cases</h3>
+                  <ConsolidatedCases
+                    caseDetail={formattedCaseDetail}
+                    caseDetailHelper={caseDetailHelper}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </Mobile>
       </div>

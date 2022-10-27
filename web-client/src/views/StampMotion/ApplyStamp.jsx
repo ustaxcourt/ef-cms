@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -10,6 +11,8 @@ import React, { useEffect, useRef } from 'react';
 export const ApplyStamp = connect(
   {
     JURISDICTIONAL_OPTIONS: state.constants.JURISDICTIONAL_OPTIONS,
+    MAX_STAMP_CUSTOM_TEXT_CHARACTERS:
+      state.constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
     MOTION_DISPOSITIONS: state.constants.MOTION_DISPOSITIONS,
     STRICKEN_FROM_TRIAL_SESSION_MESSAGE:
       state.constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
@@ -36,6 +39,7 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence,
     form,
     JURISDICTIONAL_OPTIONS,
+    MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
     MOTION_DISPOSITIONS,
     navigateBackSequence,
     pdfForSigning,
@@ -390,7 +394,7 @@ export const ApplyStamp = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="custom-text"
-                        maxLength="60"
+                        maxLength={MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
                         name="customText"
                         type="text"
                         value={form.customText}
@@ -401,14 +405,10 @@ export const ApplyStamp = connect(
                           });
                         }}
                       ></textarea>
-                      <span
-                        aria-live="polite"
-                        className="usa-hint usa-character-count__message"
-                        id="with-hint-textarea-info"
-                      >
-                        {applyStampFormHelper.customOrderTextCharacterCount}{' '}
-                        characters remaining
-                      </span>
+                      <CharactersRemainingHint
+                        maxCharacters={MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
+                        stringToCount={form.customText}
+                      />
                     </div>
                   </FormGroup>
                   <Button

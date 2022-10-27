@@ -1,8 +1,14 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { flipConsolidatedCaseAllCheckboxAction } from './flipConsolidatedCaseAllCheckboxAction';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('flipConsolidatedCaseAllCheckboxAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   const LEAD_CASE = {
     ...MOCK_CASE,
     checkboxDisabled: true,
@@ -23,6 +29,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     const changedCheckValue = false;
 
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+      modules: { presenter },
       state: {
         caseDetail: {
           ...LEAD_CASE,
@@ -54,6 +61,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
 
   it('should set checked to true for all cases & disable all checkboxes when consolidatedCaseAllCheckbox is set to checked', async () => {
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+      modules: { presenter },
       state: {
         caseDetail: {
           ...LEAD_CASE,
@@ -92,6 +100,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
 
   it('should only have lead case checked & all sub-cases are enabled & lead case is disabled & lead case as a tooltip when consolidatedCaseAllCheckbox is set to unchecked', async () => {
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+      modules: { presenter },
       state: {
         caseDetail: {
           ...LEAD_CASE,

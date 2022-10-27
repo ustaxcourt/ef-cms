@@ -15,13 +15,18 @@ describe('processUserAssociatedCases', () => {
   });
 
   it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', () => {
-    mockFoundCasesList = [{ ...MOCK_CASE, isLeadCase: true }];
+    const mockLeadCase = {
+      ...MOCK_CASE,
+      leadDocketNumber: MOCK_CASE.docketNumber,
+    };
+
+    mockFoundCasesList = [mockLeadCase];
 
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
       result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.docketNumber],
-    ).toEqual({ ...MOCK_CASE, isLeadCase: true });
+    ).toEqual(mockLeadCase);
   });
 
   it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadDocketNumber', () => {
