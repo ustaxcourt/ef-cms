@@ -111,6 +111,9 @@ const {
   deleteWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
 const {
+  editPractitionerDocument,
+} = require('../../shared/src/persistence/dynamo/practitioners/editPractitionerDocument');
+const {
   fetchPendingItems,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
@@ -508,6 +511,7 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
+    editPractitionerDocument,
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,

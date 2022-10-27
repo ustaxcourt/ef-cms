@@ -123,6 +123,9 @@ const {
   editPaperFilingInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/editPaperFilingInteractor');
 const {
+  editPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/editPractitionerDocumentInteractor');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -615,6 +618,7 @@ const useCases = {
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   editPaperFilingInteractor,
+  editPractitionerDocumentInteractor,
   fetchPendingItemsInteractor,
   fileAndServeCourtIssuedDocumentInteractor,
   fileCorrespondenceDocumentInteractor,
