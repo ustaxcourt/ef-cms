@@ -150,6 +150,9 @@ const {
   downloadPolicyUrlLambda,
 } = require('./documents/downloadPolicyUrlLambda');
 const {
+  editPractitionerDocumentLambda,
+} = require('./practitioners/editPractitionerDocumentLambda');
+const {
   fetchPendingItemsLambda,
 } = require('./pendingItems/fetchPendingItemsLambda');
 const {
@@ -272,6 +275,9 @@ const {
 const {
   getPractitionerDocumentDownloadUrlLambda,
 } = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
+const {
+  getPractitionerDocumentLambda,
+} = require('./practitioners/getPractitionerDocumentLambda');
 const {
   getPractitionerDocumentsLambda,
 } = require('./practitioners/getPractitionerDocumentsLambda');
@@ -931,12 +937,20 @@ app.get(
     '/practitioners/:barNumber/documents',
     lambdaWrapper(createPractitionerDocumentLambda),
   );
+  app.put(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(editPractitionerDocumentLambda),
+  );
   app.get(
     '/practitioner-documents/:barNumber/:practitionerDocumentFileId/document-download-url',
     lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
   );
+  app.get(
+    '/practitioner-documents/:barNumber/:practitionerDocumentFileId',
+    lambdaWrapper(getPractitionerDocumentLambda),
+  );
   app.delete(
-    '/practitioners/:barNumber/documents/:practitionerDocumentFileId',
+    '/practitioner-documents/:barNumber/documents/:practitionerDocumentFileId',
     lambdaWrapper(deletePractitionerDocumentLambda),
   );
   app.put(

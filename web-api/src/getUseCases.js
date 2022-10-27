@@ -300,6 +300,9 @@ const {
   getPractitionerDocumentDownloadUrlInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor');
 const {
+  getPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentInteractor');
+const {
   getPractitionerDocumentsInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
 const {
@@ -671,6 +674,7 @@ const useCases = {
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
+  getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
