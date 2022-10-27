@@ -5,13 +5,12 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
- * @param {object} providers.props the cerebral sequence props
  * @param {object} providers.path the cerebral path function
  * @returns {object} the list of section work items
  */
-export const isWorkItemAlreadyCompletedAction = ({ get, path, props }) => {
+export const isWorkItemAlreadyCompletedAction = ({ get, path }) => {
   const caseDetail = get(state.caseDetail);
-  const { docketEntryId } = props;
+  const docketEntryId = get(state.docketEntryId);
 
   const { workItem } = caseDetail.docketEntries.find(
     entry => entry.docketEntryId === docketEntryId,
