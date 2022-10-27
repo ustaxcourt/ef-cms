@@ -19,6 +19,7 @@ export const DocketEntryQc = connect(
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     docketEntryQcHelper: state.docketEntryQcHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     openCompleteAndSendMessageModalSequence:
       sequences.openCompleteAndSendMessageModalSequence,
     showModal: state.modal.showModal,
@@ -27,6 +28,7 @@ export const DocketEntryQc = connect(
     completeDocketEntryQCSequence,
     docketEntryQcHelper,
     formCancelToggleCancelSequence,
+    navigateToPathSequence,
     openCompleteAndSendMessageModalSequence,
     showModal,
   }) {
@@ -122,7 +124,13 @@ export const DocketEntryQc = connect(
           />
         )}
         {showModal === 'WorkItemAlreadyCompletedModal' && (
-          <WorkItemAlreadyCompletedModal />
+          <WorkItemAlreadyCompletedModal
+            confirmSequence={() =>
+              navigateToPathSequence({
+                path: '/document-qc/section/inbox',
+              })
+            }
+          />
         )}
       </>
     );

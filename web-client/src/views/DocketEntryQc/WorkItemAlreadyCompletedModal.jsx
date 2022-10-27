@@ -1,20 +1,20 @@
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
 export const WorkItemAlreadyCompletedModal = connect(
   {},
-  function WorkItemAlreadyCompletedModal() {
+  function WorkItemAlreadyCompletedModal({ confirmSequence }) {
     return (
-      <ConfirmModal
-        noCancel
-        noCloseBtn
+      <ModalDialog
+        cancelLink={false}
+        closeLink={false}
         confirmLabel="Take Me Back"
+        confirmSequence={confirmSequence}
         title={'ERROR!'}
-        onConfirmSequence="navigateToCaseDetailSequence"
       >
         The docket entry QC has already been completed.
-      </ConfirmModal>
+      </ModalDialog>
     );
   },
 );
