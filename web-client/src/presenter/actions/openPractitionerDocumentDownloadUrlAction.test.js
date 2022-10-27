@@ -43,23 +43,19 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
     expect(window.open().location.href).toEqual('http://example.com');
   });
 
-  it('should close the new tab after a word document has been downloaded', async () => {
-    global.setTimeout = cb => cb();
+  it('should change the location for the current page when downloading a docx', async () => {
     await openUrlInNewTab('file.docx', () => {
       return { url: 'example.com' };
     });
 
-    expect(closeSpy).toHaveBeenCalled();
+    expect(window.location.href).toEqual('example.com');
   });
 
   it('should throw an error if url is invalid', async () => {
-    global.setTimeout = cb => cb();
     await expect(
-      openUrlInNewTab('file.docx', () => {
+      openUrlInNewTab('file.pdf', () => {
         throw new Error();
       }),
     ).rejects.toThrow();
-
-    expect(closeSpy).toHaveBeenCalled();
   });
 });
