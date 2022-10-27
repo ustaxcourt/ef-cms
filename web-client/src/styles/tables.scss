@@ -150,8 +150,12 @@ table,
     }
 
     &.file-description {
-      inline-size: 550px;
+      inline-size: 500px;
       word-break: break-all;
+    }
+
+    &.uploadedDate {
+      inline-size: 180px;
     }
 
     label {

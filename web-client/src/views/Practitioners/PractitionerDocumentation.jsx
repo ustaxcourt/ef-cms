@@ -111,7 +111,9 @@ export const PractitionerDocumentation = connect(
             {practitionerDocumentationHelper.formattedPractitionerDocuments.map(
               document => (
                 <tr key={document.practitionerDocumentFileId}>
-                  <td>{document.formattedUploadDate}</td>
+                  <td className="uploadedDate">
+                    {document.formattedUploadDate}
+                  </td>
                   <td>
                     <Button
                       link
