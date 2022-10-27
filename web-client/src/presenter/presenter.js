@@ -161,6 +161,7 @@ import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
 import { gotoPractitionerAddDocumentSequence } from './sequences/gotoPractitionerAddDocumentSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
 import { gotoPractitionerDocumentationSequence } from './sequences/gotoPractitionerDocumentationSequence';
+import { gotoPractitionerEditDocumentSequence } from './sequences/gotoPractitionerEditDocumentSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
@@ -380,6 +381,7 @@ import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTi
 import { submitEditOtherStatisticsSequence } from './sequences/submitEditOtherStatisticsSequence';
 import { submitEditPetitionerCounselSequence } from './sequences/submitEditPetitionerCounselSequence';
 import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSequence';
+import { submitEditPractitionerDocumentSequence } from './sequences/submitEditPractitionerDocumentSequence';
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -680,6 +682,7 @@ export const presenter = {
     gotoPractitionerAddDocumentSequence,
     gotoPractitionerDetailSequence,
     gotoPractitionerDocumentationSequence,
+    gotoPractitionerEditDocumentSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintPractitionerCasesSequence,
     gotoPrintableCaseConfirmationSequence,
@@ -897,6 +900,7 @@ export const presenter = {
     submitEditOtherStatisticsSequence,
     submitEditPetitionerCounselSequence,
     submitEditPetitionerSequence,
+    submitEditPractitionerDocumentSequence,
     submitEditRespondentCounselSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
