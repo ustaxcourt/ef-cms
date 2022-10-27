@@ -4,14 +4,18 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import React from 'react';
 import classNames from 'classnames';
 
 export const DocumentViewerDocument = connect(
   {
     caseDetail: state.caseDetail,
+    gotoCompleteDocketEntryQCSequence:
+      sequences.gotoCompleteDocketEntryQCSequence,
     documentViewerHelper: state.documentViewerHelper,
     documentViewerLinksHelper: state.documentViewerLinksHelper,
+    gotoCaseDetailSequence: sequences.gotoCaseDetailSequence,
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
@@ -29,8 +33,10 @@ export const DocumentViewerDocument = connect(
   },
   function DocumentViewerDocument({
     caseDetail,
+    gotoCompleteDocketEntryQCSequence,
     documentViewerHelper,
     documentViewerLinksHelper,
+    gotoCaseDetailSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -147,7 +153,11 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showCompleteQcButton && (
                 <Button
                   link
-                  href={documentViewerLinksHelper.completeQcLink}
+                  onClick={() => {
+                    gotoCompleteDocketEntryQCSequence({
+                      docketEntryId: viewerDocumentToDisplay.docketEntryId,
+                    });
+                  }}
                   icon="star"
                 >
                   Complete QC
@@ -199,6 +209,11 @@ export const DocumentViewerDocument = connect(
               <ConfirmInitiateServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal === 'WorkItemAlreadyCompletedModal' && (
+              <WorkItemAlreadyCompletedModal
+                confirmSequence={gotoCaseDetailSequence}
               />
             )}
           </>
