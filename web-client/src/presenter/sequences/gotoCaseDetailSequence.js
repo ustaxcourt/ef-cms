@@ -33,6 +33,7 @@ import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessions
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
+import { clearModalAction } from '../actions/clearModalAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -78,6 +79,7 @@ export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
+  clearModalAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,

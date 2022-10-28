@@ -15,7 +15,8 @@ export const DocumentViewerDocument = connect(
       sequences.gotoCompleteDocketEntryQCSequence,
     documentViewerHelper: state.documentViewerHelper,
     documentViewerLinksHelper: state.documentViewerLinksHelper,
-    gotoCaseDetailSequence: sequences.gotoCaseDetailSequence,
+    confirmWorkItemAlreadyCompleteSequence:
+      sequences.confirmWorkItemAlreadyCompleteSequence,
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
@@ -36,7 +37,7 @@ export const DocumentViewerDocument = connect(
     gotoCompleteDocketEntryQCSequence,
     documentViewerHelper,
     documentViewerLinksHelper,
-    gotoCaseDetailSequence,
+    confirmWorkItemAlreadyCompleteSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -213,7 +214,7 @@ export const DocumentViewerDocument = connect(
             )}
             {showModal === 'WorkItemAlreadyCompletedModal' && (
               <WorkItemAlreadyCompletedModal
-                confirmSequence={gotoCaseDetailSequence}
+                confirmSequence={confirmWorkItemAlreadyCompleteSequence}
               />
             )}
           </>
