@@ -3,10 +3,8 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { getConstants } from '../../getConstants';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -42,28 +40,16 @@ export const submitCourtIssuedDocketEntrySequence = [
       {
         getDocketEntryAlertSuccessAction,
         no: [
-          getFeatureFlagValueFactoryAction(
-            getConstants().ALLOWLIST_FEATURE_FLAGS
-              .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
-          ),
+          shouldSaveToConsolidatedGroupAction,
           {
             no: [
               submitCourtIssuedDocketEntryAction,
               getDocketEntryAlertSuccessAction,
             ],
             yes: [
-              shouldSaveToConsolidatedGroupAction,
-              {
-                no: [
-                  submitCourtIssuedDocketEntryAction,
-                  getDocketEntryAlertSuccessAction,
-                ],
-                yes: [
-                  submitCourtIssuedDocketEntryToConsolidatedGroupAction,
-                  getDocketEntryAlertSuccessForConsolidatedGroupAction,
-                  clearModalAction,
-                ],
-              },
+              submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+              getDocketEntryAlertSuccessForConsolidatedGroupAction,
+              clearModalAction,
             ],
           },
         ],
