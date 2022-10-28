@@ -160,10 +160,6 @@ export const getConstants = () => ({
   CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
-  FROM_PAGES: {
-    qcSectionInbox: 'qc-section-inbox',
-    caseDetail: 'case-detail',
-  },
   COURT_ISSUED_EVENT_CODES,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DATE_FORMATS: FORMATS,
@@ -187,6 +183,10 @@ export const getConstants = () => ({
   EXTERNAL_DOCUMENTS_ARRAY,
   EXTERNAL_USER_DASHBOARD_TABS,
   FILING_TYPES,
+  FROM_PAGES: {
+    caseDetail: 'case-detail',
+    qcSectionInbox: 'qc-section-inbox',
+  },
   GENERIC_ORDER_EVENT_CODE,
   IDLE_STATUS: { ACTIVE: 'active', IDLE: 'idle' },
   INITIAL_DOCUMENT_TYPES,
