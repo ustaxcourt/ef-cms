@@ -17,9 +17,9 @@ import React from 'react';
 export const DocketEntryQc = connect(
   {
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
-    docketEntryQcHelper: state.docketEntryQcHelper,
     confirmWorkItemAlreadyCompleteSequence:
       sequences.confirmWorkItemAlreadyCompleteSequence,
+    docketEntryQcHelper: state.docketEntryQcHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence:
       sequences.openCompleteAndSendMessageModalSequence,
@@ -27,8 +27,8 @@ export const DocketEntryQc = connect(
   },
   function DocketEntryQc({
     completeDocketEntryQCSequence,
-    docketEntryQcHelper,
     confirmWorkItemAlreadyCompleteSequence,
+    docketEntryQcHelper,
     formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence,
     showModal,

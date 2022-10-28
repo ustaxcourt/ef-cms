@@ -594,6 +594,7 @@ export const presenter = {
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    confirmWorkItemAlreadyCompleteSequence,
     consolidatedCaseCheckboxAllChangeSequence,
     contactPrimaryCountryTypeChangeSequence,
     convertHtml2PdfSequence,

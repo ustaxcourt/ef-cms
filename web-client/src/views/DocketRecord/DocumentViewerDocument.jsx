@@ -3,21 +3,21 @@ import { ConfirmInitiateCourtIssuedFilingServiceModal } from '../ConfirmInitiate
 import { ConfirmInitiatePaperFilingServiceModal } from '../ConfirmInitiatePaperFilingServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
+import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import React from 'react';
 import classNames from 'classnames';
 
 export const DocumentViewerDocument = connect(
   {
     caseDetail: state.caseDetail,
-    gotoCompleteDocketEntryQCSequence:
-      sequences.gotoCompleteDocketEntryQCSequence,
-    documentViewerHelper: state.documentViewerHelper,
-    documentViewerLinksHelper: state.documentViewerLinksHelper,
     confirmWorkItemAlreadyCompleteSequence:
       sequences.confirmWorkItemAlreadyCompleteSequence,
+    documentViewerHelper: state.documentViewerHelper,
+    documentViewerLinksHelper: state.documentViewerLinksHelper,
+    gotoCompleteDocketEntryQCSequence:
+      sequences.gotoCompleteDocketEntryQCSequence,
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
@@ -35,10 +35,10 @@ export const DocumentViewerDocument = connect(
   },
   function DocumentViewerDocument({
     caseDetail,
-    gotoCompleteDocketEntryQCSequence,
+    confirmWorkItemAlreadyCompleteSequence,
     documentViewerHelper,
     documentViewerLinksHelper,
-    confirmWorkItemAlreadyCompleteSequence,
+    gotoCompleteDocketEntryQCSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -156,12 +156,12 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showCompleteQcButton && (
                 <Button
                   link
+                  icon="star"
                   onClick={() => {
                     gotoCompleteDocketEntryQCSequence({
                       docketEntryId: viewerDocumentToDisplay.docketEntryId,
                     });
                   }}
-                  icon="star"
                 >
                   Complete QC
                 </Button>

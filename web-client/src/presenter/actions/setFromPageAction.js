@@ -6,6 +6,6 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for clearing the form
  */
-export const setFromPageAction = ({ store, props }) => {
+export const setFromPageAction = ({ props, store }) => {
   store.set(state.fromPage, props.fromPage);
 };

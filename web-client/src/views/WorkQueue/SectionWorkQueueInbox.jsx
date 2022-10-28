@@ -8,22 +8,22 @@ import React from 'react';
 
 const SectionWorkQueueTable = connect(
   {
+    FROM_PAGES: state.constants.FROM_PAGES,
     formattedWorkQueue: state.formattedWorkQueue,
     hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
     hideIconColumn: state.workQueueHelper.hideIconColumn,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
     showSelectColumn: state.workQueueHelper.showSelectColumn,
-    FROM_PAGES: state.constants.FROM_PAGES,
   },
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
+    FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
     selectWorkItemSequence,
     showAssignedToColumn,
     showSelectColumn,
-    FROM_PAGES,
   }) {
     return (
       <table
@@ -50,6 +50,7 @@ const SectionWorkQueueTable = connect(
         {formattedWorkQueue.map(formattedWorkItem => {
           return (
             <SectionWorkQueueTable.Row
+              FROM_PAGES={FROM_PAGES}
               hideFiledByColumn={hideFiledByColumn}
               hideIconColumn={hideIconColumn}
               item={formattedWorkItem}
@@ -57,7 +58,6 @@ const SectionWorkQueueTable = connect(
               selectWorkItemSequence={selectWorkItemSequence}
               showAssignedToColumn={showAssignedToColumn}
               showSelectColumn={showSelectColumn}
-              FROM_PAGES={FROM_PAGES}
             />
           );
         })}
@@ -68,13 +68,13 @@ const SectionWorkQueueTable = connect(
 
 SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
+    FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
     item,
     selectWorkItemSequence,
     showAssignedToColumn,
     showSelectColumn,
-    FROM_PAGES,
   }) {
     return (
       <tbody>

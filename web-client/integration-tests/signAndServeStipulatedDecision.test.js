@@ -2,7 +2,6 @@ import { adcsSignsProposedStipulatedDecisionFromMessage } from './journey/adcsSi
 import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
 import { docketClerkCompletesDocketEntryQcAndSendsMessage } from './journey/docketClerkCompletesDocketEntryQcAndSendsMessage';
 import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './journey/docketClerkCreatesDocketEntryForSignedStipulatedDecision';
-import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkTriesToCompleteSameEntry } from './journey/docketClerkTriesToCompleteSameEntry';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
