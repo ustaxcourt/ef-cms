@@ -41,7 +41,9 @@ export const admissionsClerkEditsPractitionerInfo = cerebralTest => {
 
     await refreshElasticsearchIndex(5000);
 
-    expect(cerebralTest.getState('currentPage')).toEqual('PractitionerDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PractitionerInformation',
+    );
     expect(cerebralTest.getState('practitionerDetail.barNumber')).toEqual(
       cerebralTest.barNumber,
     );

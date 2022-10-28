@@ -49,7 +49,7 @@ CaseSearch.schema = joi.object().keys({
   petitionerName: JoiValidationConstants.STRING.max(500).required(),
   petitionerState: JoiValidationConstants.STRING.valid(
     ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
+    ...Object.keys(US_STATES_OTHER),
   ).optional(),
   yearFiledMax: JoiValidationConstants.YEAR_MAX_CURRENT.min(
     joi.ref('yearFiledMin'),

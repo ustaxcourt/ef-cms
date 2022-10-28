@@ -113,7 +113,9 @@ describe('admissions clerk practitioner journey', () => {
     );
 
     expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
-    expect(cerebralTest.getState('currentPage')).toEqual('PractitionerDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PractitionerInformation',
+    );
 
     await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
       barNumber: cerebralTest.barNumber,
