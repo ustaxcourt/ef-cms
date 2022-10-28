@@ -1,14 +1,10 @@
 /* eslint-disable max-lines */
 import {
-  CASE_STATUS_TYPES,
-  COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import {
   applicationContext,
@@ -17,7 +13,6 @@ import {
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
-import { v4 as uuidv4 } from 'uuid';
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -45,24 +40,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     userId: docketClerkUser.userId,
     workItem: mockWorkItem,
   };
-
-  const docketEntriesWithCaseClosingEventCodes =
-    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
-      const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
-        entry => entry.eventCode === eventCode,
-      );
-
-      return {
-        docketEntryId: uuidv4(),
-        documentType: eventCodeMap.documentType,
-        eventCode,
-        signedAt: createISODateString(),
-        signedByUserId: uuidv4(),
-        signedJudgeName: 'Chief Judge',
-        userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-        workItem: mockWorkItem,
-      };
-    });
 
   beforeAll(() => {
     applicationContext
@@ -148,6 +125,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
+    applicationContext
+      .getUseCaseHelpers()
+      .fileDocumentOnOneCase.mockReturnValue(caseRecord);
+
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
         Body: testPdfDoc,
@@ -203,33 +184,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should set the document as served and update the case and work items for a generic order document', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[0],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
-    const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry =>
-        docketEntry.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
-    );
-
-    expect(updatedDocument.servedAt).toBeDefined();
-    expect(updatedDocument.filingDate).toBeDefined();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-  });
-
   it('should set the number of pages present in the document to be served', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
@@ -239,140 +193,16 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
-    const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry =>
-        docketEntry.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
-    );
-
-    expect(updatedDocument.numberOfPages).toBe(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+        .calls[0][0].numberOfPages,
+    ).toBe(1);
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument.mock
         .calls[0][0],
     ).toMatchObject({
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
     });
-  });
-
-  it('should set the document as served and update the case and work items for a non-generic order document', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[1],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
-    const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry =>
-        docketEntry.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
-    );
-
-    expect(updatedDocument.servedAt).toBeDefined();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-  });
-
-  it('should set the leadDocketNumber for work items', async () => {
-    const leadDocketNumber = MOCK_CASE.docketNumber;
-    const caseRecordWithLeadDocketNumber = {
-      ...MOCK_CASE,
-      docketEntries: [mockDocketEntryWithWorkItem],
-      leadDocketNumber,
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseRecordWithLeadDocketNumber)
-      .mockReturnValueOnce(caseRecordWithLeadDocketNumber);
-
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId:
-        caseRecordWithLeadDocketNumber.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecordWithLeadDocketNumber.docketNumber],
-      form: caseRecordWithLeadDocketNumber.docketEntries[0],
-      subjectCaseDocketNumber: caseRecordWithLeadDocketNumber.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].workItem,
-    ).toMatchObject({
-      leadDocketNumber,
-    });
-  });
-
-  it('should delete the case from the trial session if the case has a trialSessionId and is not calendared and the order document has an event code that should close the case', async () => {
-    mockTrialSession.isCalendared = false;
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-  });
-
-  it('should remove the case from the trial session if the case has a trialSessionId and isCalendared and the order document has an event code that should close the case', async () => {
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords if the order document has an event code that should close the case', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
@@ -403,159 +233,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       }),
       userId: docketClerkUser.userId,
     });
-  });
-
-  it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[1],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    const { caseToUpdate } =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
-    const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
-      d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
-    );
-    expect(docketEntryInCaseToUpdate).toMatchObject({
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      pending: true,
-    });
-  });
-
-  it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[2].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[2],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    const newlyFiledDocument =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[2];
-
-    expect(newlyFiledDocument).toMatchObject({
-      isDraft: false,
-    });
-  });
-
-  it('should update the work item and set as completed when a work item previously existed on the docket entry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
-      docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
-      form: mockDocketEntryWithWorkItem,
-      subjectCaseDocketNumber: mockDocketEntryWithWorkItem.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
-      workItem: { completedAt: expect.anything() },
-    });
-  });
-
-  it('should delete the draftOrderState from the docketEntry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
-      docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
-      form: {
-        ...mockDocketEntryWithWorkItem,
-        draftOrderState: {
-          documentContents: 'Some content',
-          richText: 'some content',
-        },
-      },
-      subjectCaseDocketNumber: mockDocketEntryWithWorkItem.docketNumber,
-    });
-
-    const docketEntryToUpdate = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.docketEntryId === mockDocketEntryWithWorkItem.docketEntryId,
-      );
-
-    expect(docketEntryToUpdate).toMatchObject({ draftOrderState: null });
-  });
-
-  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
-    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        form: {
-          ...caseRecord.docketEntries[0],
-          eventCode: docketEntry.eventCode,
-        },
-        subjectCaseDocketNumber: caseRecord.docketNumber,
-      });
-
-      const updatedCase =
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-          .caseToUpdate;
-
-      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
-      expect(
-        applicationContext.getPersistenceGateway()
-          .deleteCaseTrialSortMappingRecords,
-      ).toHaveBeenCalled();
-    });
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[1],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].workItem,
-    ).toMatchObject({
-      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
-    });
-  });
-
-  it('should throw an error if there is no one on the case with electronic or paper service', async () => {
-    const petitioners = [
-      {
-        ...caseRecord.petitioners[0],
-        serviceIndicator: 'None',
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
-        ...caseRecord,
-        petitioners,
-      })
-      .mockReturnValueOnce({
-        ...caseRecord,
-        petitioners,
-      });
-
-    await expect(
-      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        form: caseRecord.docketEntries[0],
-        subjectCaseDocketNumber: caseRecord.docketNumber,
-      }),
-    ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
   });
 
   it('should throw an error if the document is already pending service', async () => {
