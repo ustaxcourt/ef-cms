@@ -1,3 +1,4 @@
+import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { navigateToDocketQcAction } from '../actions/navigateToDocketQcAction';
@@ -9,7 +10,7 @@ export const gotoCompleteDocketEntryQCSequence = [
   setCaseAction,
   isWorkItemAlreadyCompletedAction,
   {
-    no: [navigateToDocketQcAction],
+    no: [clearModalAction, navigateToDocketQcAction],
     yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
   },
 ];
