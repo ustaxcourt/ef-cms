@@ -7,11 +7,11 @@ export const WorkItemAlreadyCompletedModal = connect(
   function WorkItemAlreadyCompletedModal({ confirmSequence }) {
     return (
       <ModalDialog
+        preventCancelOnBlur
         cancelLink={false}
         closeLink={false}
         confirmLabel="Take Me Back"
         confirmSequence={confirmSequence}
-        preventCancelOnBlur
         title={'ERROR!'}
       >
         The docket entry QC has already been completed.
