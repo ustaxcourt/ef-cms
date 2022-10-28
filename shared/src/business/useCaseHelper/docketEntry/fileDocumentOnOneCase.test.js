@@ -1,35 +1,47 @@
-const {
-  COURT_ISSUED_EVENT_CODES,
-  DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
+/* eslint-disable max-lines */
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
-const { fileDocumentOnOneCase } = require('./fileDocumentOnOneCase');
-const { ENTERED_AND_SERVED_EVENT_CODES } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
-  SERVICE_INDICATOR_TYPES,
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
+  DOCKET_SECTION,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { getFakeFile } = require('../../test/getFakeFile');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { v4: uuidv4 } = require('uuid');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { docketClerkUser } = require('../../../test/mockUsers');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } = require('../../../test/mockCase');
+const {
+  SERVICE_INDICATOR_TYPES,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
+const { docketClerkUser } = require('../../../test/mockUsers');
+const { fileDocumentOnOneCase } = require('./fileDocumentOnOneCase');
+const { getFakeFile } = require('../../test/getFakeFile');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+const { v4: uuidv4 } = require('uuid');
 
 describe('fileDocumentOnOneCase', () => {
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const mockUserId = '85a5b1c81eed44b6932a967af060597a';
   const mockNotice = 'The rain falls mainly on the plane';
+  const mockPdfUrl = 'www.example.com';
+  const clientConnectionId = 'ABC123';
 
   let updateDocketEntrySpy;
   let addDocketEntrySpy;
+  let consolidatedCase1DocketEntries;
+  let leadCaseDocketEntries;
 
   updateDocketEntrySpy = jest.spyOn(Case.prototype, 'updateDocketEntry');
   addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
@@ -39,6 +51,42 @@ describe('fileDocumentOnOneCase', () => {
     sentBy: docketClerkUser.name,
     sentByUserId: docketClerkUser.userId,
     workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+  };
+
+  const mockDocketEntryWithWorkItem = {
+    docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+    docketNumber: MOCK_CASE.docketNumber,
+    documentTitle: 'Order',
+    documentType: 'Order',
+    eventCode: 'O',
+    signedAt: '2019-03-01T21:40:46.415Z',
+    signedByUserId: docketClerkUser.userId,
+    signedJudgeName: 'Dredd',
+    userId: docketClerkUser.userId,
+    workItem: mockWorkItem,
+  };
+
+  let mockTrialSession = {
+    caseOrder: [
+      {
+        docketNumber: '101-20',
+      },
+    ],
+    isCalendared: true,
+    judge: {
+      name: 'Judge Colvin',
+      userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    },
+    maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    sessionType: 'Regular',
+    startDate: '2019-11-27T05:00:00.000Z',
+    startTime: '10:00',
+    swingSession: true,
+    swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+    term: 'Fall',
+    termYear: '2019',
+    trialLocation: 'Houston, Texas',
   };
 
   beforeAll(() => {
@@ -125,13 +173,12 @@ describe('fileDocumentOnOneCase', () => {
               docketEntries: [],
             };
         }
-
-  });
+      });
   });
 
   it('should save the generated notice to s3', async () => {
     await fileDocumentOnOneCase(applicationContext, {
-      caseEntity: mockCaseEntity,
+      caseEntity: MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
       noticePdf: mockNotice,
@@ -149,14 +196,14 @@ describe('fileDocumentOnOneCase', () => {
 
   it('should create and serve a docket entry and add it to the docket record', async () => {
     await fileDocumentOnOneCase(applicationContext, {
-      caseEntity: mockCaseEntity,
+      caseEntity: MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
       noticePdf: mockNotice,
       userId: mockUserId,
     });
 
-    const expectedNotice = mockCaseEntity.docketEntries.find(
+    const expectedNotice = MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries.find(
       doc =>
         doc.documentTitle ===
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge
@@ -177,10 +224,10 @@ describe('fileDocumentOnOneCase', () => {
   it('should make a call to serveGeneratedNoticesOnCase', async () => {
     const mockCaseWithPaperService = new Case(
       {
-        ...mockCaseEntity,
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
         petitioners: [
           {
-            ...mockCaseEntity.petitioners[0],
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.petitioners[0],
             email: undefined,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
@@ -202,7 +249,7 @@ describe('fileDocumentOnOneCase', () => {
     ).toHaveBeenCalled();
   });
 
-  it.skip('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
@@ -286,7 +333,7 @@ describe('fileDocumentOnOneCase', () => {
     ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
   });
 
-  it.skip('should create a work item and add it to the outbox for each case', async () => {
+  it('should create a work item and add it to the outbox for each case', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
@@ -329,10 +376,11 @@ describe('fileDocumentOnOneCase', () => {
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId: 'testing',
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[0],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     const updatedCase =
@@ -340,7 +388,8 @@ describe('fileDocumentOnOneCase', () => {
         .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
-        docketEntry.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
+        docketEntry.docketEntryId ===
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -356,10 +405,11 @@ describe('fileDocumentOnOneCase', () => {
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[1],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     const updatedCase =
@@ -367,7 +417,8 @@ describe('fileDocumentOnOneCase', () => {
         .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
-        docketEntry.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
+        docketEntry.docketEntryId ===
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1].docketEntryId,
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -382,24 +433,27 @@ describe('fileDocumentOnOneCase', () => {
   it('should use original case caption to create case title when creating work item', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[1],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
         .calls[0][0].workItem,
     ).toMatchObject({
-      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
+      caseTitle: Case.getCaseTitle(
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.caseCaption,
+      ),
     });
   });
 
   it('should throw an error if there is no one on the case with electronic or paper service', async () => {
     const petitioners = [
       {
-        ...caseRecord.petitioners[0],
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.petitioners[0],
         serviceIndicator: 'None',
       },
     ];
@@ -407,28 +461,29 @@ describe('fileDocumentOnOneCase', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce({
-        ...caseRecord,
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
         petitioners,
       })
       .mockReturnValueOnce({
-        ...caseRecord,
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
         petitioners,
       });
 
     await expect(
       fileDocumentOnOneCase(applicationContext, {
         clientConnectionId,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        form: caseRecord.docketEntries[0],
-        subjectCaseDocketNumber: caseRecord.docketNumber,
+        docketEntryId:
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
+        docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+        form: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       }),
     ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
   });
 
   it('should set the leadDocketNumber for work items', async () => {
     const leadDocketNumber = MOCK_CASE.docketNumber;
-    const caseRecordWithLeadDocketNumber = {
+    const MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber = {
       ...MOCK_CASE,
       docketEntries: [mockDocketEntryWithWorkItem],
       leadDocketNumber,
@@ -436,16 +491,25 @@ describe('fileDocumentOnOneCase', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseRecordWithLeadDocketNumber)
-      .mockReturnValueOnce(caseRecordWithLeadDocketNumber);
+      .getCaseByDocketNumber.mockReturnValueOnce(
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber,
+      )
+      .mockReturnValueOnce(
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber,
+      );
 
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
       docketEntryId:
-        caseRecordWithLeadDocketNumber.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecordWithLeadDocketNumber.docketNumber],
-      form: caseRecordWithLeadDocketNumber.docketEntries[0],
-      subjectCaseDocketNumber: caseRecordWithLeadDocketNumber.docketNumber,
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber.docketEntries[0]
+          .docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber.docketNumber,
+      ],
+      form: MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber
+        .docketEntries[0],
+      subjectCaseDocketNumber:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICEWithLeadDocketNumber.docketNumber,
     });
 
     expect(
@@ -462,15 +526,20 @@ describe('fileDocumentOnOneCase', () => {
 
   it('should delete the case from the trial session if the case has a trialSessionId and is not calendared and the order document has an event code that should close the case', async () => {
     mockTrialSession.isCalendared = false;
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
+    MOCK_LEAD_CASE_WITH_PAPER_SERVICE.trialSessionId =
+      'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    MOCK_LEAD_CASE_WITH_PAPER_SERVICE.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+        eventCode: 'OD',
+      },
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     expect(
@@ -482,15 +551,20 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId and isCalendared and the order document has an event code that should close the case', async () => {
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
+    MOCK_LEAD_CASE_WITH_PAPER_SERVICE.trialSessionId =
+      'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    MOCK_LEAD_CASE_WITH_PAPER_SERVICE.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+        eventCode: 'OD',
+      },
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     expect(
@@ -504,10 +578,14 @@ describe('fileDocumentOnOneCase', () => {
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords if the order document has an event code that should close the case', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId: 'testing',
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+        eventCode: 'OD',
+      },
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     expect(
@@ -522,10 +600,11 @@ describe('fileDocumentOnOneCase', () => {
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[2].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[2],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[2].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[2],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     const newlyFiledDocument =
@@ -600,13 +679,14 @@ describe('fileDocumentOnOneCase', () => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await fileDocumentOnOneCase(applicationContext, {
         clientConnectionId,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
+        docketEntryId:
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0].docketEntryId,
+        docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
         form: {
-          ...caseRecord.docketEntries[0],
+          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
           eventCode: docketEntry.eventCode,
         },
-        subjectCaseDocketNumber: caseRecord.docketNumber,
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       });
 
       const updatedCase =
@@ -624,10 +704,11 @@ describe('fileDocumentOnOneCase', () => {
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
     await fileDocumentOnOneCase(applicationContext, {
       clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: caseRecord.docketEntries[1],
-      subjectCaseDocketNumber: caseRecord.docketNumber,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1].docketEntryId,
+      docketNumbers: [MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber],
+      form: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
     expect(
@@ -636,10 +717,13 @@ describe('fileDocumentOnOneCase', () => {
     const { caseToUpdate } =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
-      d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
+      d =>
+        d.docketEntryId ===
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1].docketEntryId,
     );
     expect(docketEntryInCaseToUpdate).toMatchObject({
-      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+      docketEntryId:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[1].docketEntryId,
       pending: true,
     });
   });
