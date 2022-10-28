@@ -28,12 +28,12 @@ describe('trial session working copy computed', () => {
     trialLocation: 'Hartford, Connecticut',
   };
 
-  it('should set calendarNotes on cases that have them', () => {
-    const mockCaseWithCalendarNotes = '102-19';
-    const mockCaseWithoutCalendarNotes = '5000-17';
-    const mockCaseWithCalendarNotesNotInSelectedTrialSession = '999-99';
-    const mockCalendarNote = 'this is a test note';
+  const mockCaseWithNotes = '102-19';
+  const mockCaseWithNotesNotInSelectedTrialSession = '999-99';
+  const mockNote = 'this is a test note';
+  const mockCaseWithoutNotes = '5000-17';
 
+  it('should set calendarNotes on cases that have them', () => {
     const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
@@ -44,17 +44,17 @@ describe('trial session working copy computed', () => {
           ...MOCK_TRIAL_SESSION,
           calendaredCases: [
             MOCK_CASE,
-            { ...MOCK_CASE, docketNumber: mockCaseWithCalendarNotes },
-            { ...MOCK_CASE, docketNumber: mockCaseWithoutCalendarNotes },
+            { ...MOCK_CASE, docketNumber: mockCaseWithNotes },
+            { ...MOCK_CASE, docketNumber: mockCaseWithoutNotes },
           ],
           caseOrder: [
             {
-              calendarNotes: mockCalendarNote,
-              docketNumber: mockCaseWithCalendarNotes,
+              calendarNotes: mockNote,
+              docketNumber: mockCaseWithNotes,
             },
             {
-              calendarNotes: mockCalendarNote,
-              docketNumber: mockCaseWithCalendarNotesNotInSelectedTrialSession,
+              calendarNotes: mockNote,
+              docketNumber: mockCaseWithNotesNotInSelectedTrialSession,
             },
           ],
         },
@@ -70,22 +70,17 @@ describe('trial session working copy computed', () => {
 
     expect(
       formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithCalendarNotes,
+        ({ docketNumber }) => docketNumber === mockCaseWithNotes,
       ).calendarNotes,
-    ).toEqual(mockCalendarNote);
+    ).toEqual(mockNote);
     expect(
       formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithoutCalendarNotes,
+        ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).calendarNotes,
     ).toBeUndefined();
   });
 
   it('should set userNotes on cases that are calendared on the trial session when they have them', () => {
-    const mockCaseWithUserNotes = '102-19';
-    const mockCaseWithoutUserNotes = '90-07';
-    const mockCaseWithUserNotesNotInSelectedTrialSession = '999-99';
-    const mockUserNote = 'this is a test note';
-
     const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
@@ -95,12 +90,12 @@ describe('trial session working copy computed', () => {
         trialSession: {
           ...MOCK_TRIAL_SESSION,
           calendaredCases: [
-            { ...MOCK_CASE, docketNumber: mockCaseWithUserNotes },
-            { ...MOCK_CASE, docketNumber: mockCaseWithoutUserNotes },
+            { ...MOCK_CASE, docketNumber: mockCaseWithNotes },
+            { ...MOCK_CASE, docketNumber: mockCaseWithoutNotes },
           ],
           caseOrder: [
             {
-              docketNumber: mockCaseWithUserNotes,
+              docketNumber: mockCaseWithNotes,
             },
           ],
         },
@@ -110,8 +105,8 @@ describe('trial session working copy computed', () => {
           sort: 'docket',
           sortOrder: 'asc',
           userNotes: {
-            [mockCaseWithUserNotes]: { notes: mockUserNote },
-            [mockCaseWithUserNotesNotInSelectedTrialSession]: { notes: 'blah' },
+            [mockCaseWithNotes]: { notes: mockNote },
+            [mockCaseWithNotesNotInSelectedTrialSession]: { notes: 'blah' },
           },
         },
       },
@@ -119,12 +114,12 @@ describe('trial session working copy computed', () => {
 
     expect(
       formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithUserNotes,
+        ({ docketNumber }) => docketNumber === mockCaseWithNotes,
       ).userNotes,
-    ).toEqual(mockUserNote);
+    ).toEqual(mockNote);
     expect(
       formattedCases.find(
-        ({ docketNumber }) => docketNumber === mockCaseWithoutUserNotes,
+        ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).userNotes,
     ).toBeUndefined();
   });

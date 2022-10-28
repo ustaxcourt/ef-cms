@@ -1,5 +1,6 @@
 import { Case } from '../entities/cases/Case';
 import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
 import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPublicCase';
 
 /**
@@ -23,13 +24,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
       leadDocketNumber: docketNumber,
     });
 
-  if (
-    ![
-      ROLES.petitioner,
-      ROLES.privatePractitioner,
-      ROLES.irsPractitioner,
-    ].includes(user.role)
-  ) {
+  if (User.isInternalUser(user.role) || ROLES.irsSuperuser === user.role) {
     return Case.validateRawCollection(consolidatedCases, {
       applicationContext,
     });
