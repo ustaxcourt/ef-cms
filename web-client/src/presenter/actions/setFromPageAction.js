@@ -1,0 +1,11 @@
+import { state } from 'cerebral';
+
+/**
+ * tracks the page we were previous on
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store object used for clearing the form
+ */
+export const setFromPageAction = ({ store, props }) => {
+  store.set(state.fromPage, props.fromPage);
+};

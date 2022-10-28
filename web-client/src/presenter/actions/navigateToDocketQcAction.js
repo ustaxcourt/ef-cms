@@ -18,9 +18,11 @@ export const navigateToDocketQcAction = async ({ get, props, router }) => {
 
   const docketEntryId = props.docketEntryId;
 
+  const { FROM_PAGES } = get(state.constants);
+
   if (docketNumber) {
     await router.route(
-      `/case-detail/${docketNumber}/documents/${docketEntryId}/edit`,
+      `/case-detail/${docketNumber}/documents/${docketEntryId}/edit?fromPage=${FROM_PAGES.caseDetail}`,
     );
   }
 };

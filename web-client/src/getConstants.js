@@ -160,6 +160,10 @@ export const getConstants = () => ({
   CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
+  FROM_PAGES: {
+    qcSectionInbox: 'qc-section-inbox',
+    caseDetail: 'case-detail',
+  },
   COURT_ISSUED_EVENT_CODES,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DATE_FORMATS: FORMATS,

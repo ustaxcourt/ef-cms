@@ -13,6 +13,7 @@ const SectionWorkQueueTable = connect(
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
     showSelectColumn: state.workQueueHelper.showSelectColumn,
+    FROM_PAGES: state.constants.FROM_PAGES,
   },
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
@@ -21,6 +22,7 @@ const SectionWorkQueueTable = connect(
     selectWorkItemSequence,
     showAssignedToColumn,
     showSelectColumn,
+    FROM_PAGES,
   }) {
     return (
       <table
@@ -54,6 +56,7 @@ const SectionWorkQueueTable = connect(
               selectWorkItemSequence={selectWorkItemSequence}
               showAssignedToColumn={showAssignedToColumn}
               showSelectColumn={showSelectColumn}
+              FROM_PAGES={FROM_PAGES}
             />
           );
         })}
@@ -70,6 +73,7 @@ SectionWorkQueueTable.Row = React.memo(
     selectWorkItemSequence,
     showAssignedToColumn,
     showSelectColumn,
+    FROM_PAGES,
   }) {
     return (
       <tbody>
@@ -147,7 +151,10 @@ SectionWorkQueueTable.Row = React.memo(
           )}
           <td className="message-queue-row max-width-25">
             <div className="message-document-title">
-              <a className="case-link" href={item.editLink}>
+              <a
+                className="case-link"
+                href={`${item.editLink}?fromPage=${FROM_PAGES.qcSectionInbox}`}
+              >
                 {item.docketEntry.descriptionDisplay}
               </a>
             </div>

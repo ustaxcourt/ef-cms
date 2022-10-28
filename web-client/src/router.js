@@ -350,14 +350,16 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/edit',
+      '/case-detail/*/documents/*/edit..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
+        const { fromPage } = route.query();
         return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
