@@ -9,5 +9,7 @@ import { state } from 'cerebral';
 export const setTabFromPropsAction = ({ props, store }) => {
   if (props.tab) {
     store.set(state.currentViewMetadata.tab, props.tab);
+  } else {
+    store.unset(state.currentViewMetadata.tab);
   }
 };
