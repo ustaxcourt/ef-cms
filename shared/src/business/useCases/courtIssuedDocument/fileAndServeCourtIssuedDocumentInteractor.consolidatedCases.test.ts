@@ -1,4 +1,3 @@
-import { Case } from '../../entities/cases/Case';
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
@@ -42,8 +41,6 @@ describe('consolidated cases', () => {
 
   const clientConnectionId = 'ABC123';
 
-  let updateDocketEntrySpy;
-  let addDocketEntrySpy;
   let leadCaseDocketEntries;
   let consolidatedCase1DocketEntries;
 
@@ -111,9 +108,6 @@ describe('consolidated cases', () => {
       };
     });
 
-    updateDocketEntrySpy = jest.spyOn(Case.prototype, 'updateDocketEntry');
-    addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
@@ -135,90 +129,6 @@ describe('consolidated cases', () => {
             };
         }
       });
-  });
-
-  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-      docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      form: leadCaseDocketEntries[0],
-      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0],
-    ).toEqual({
-      applicationContext: expect.anything(),
-      clientConnectionId,
-      message: expect.objectContaining({
-        action: 'serve_document_complete',
-        alertSuccess: {
-          message: 'Document served to selected cases in group. ',
-          overwritable: false,
-        },
-        pdfUrl: mockPdfUrl,
-      }),
-      userId: docketClerkUser.userId,
-    });
-
-    expect(addDocketEntrySpy).toHaveBeenCalledTimes(2);
-
-    const leadCaseDocketEntry = updateDocketEntrySpy.mock.calls[0][0];
-    const consolidatedCase1DocketEntry = addDocketEntrySpy.mock.calls[0][0];
-    const consolidatedCase2DocketEntry = addDocketEntrySpy.mock.calls[1][0];
-
-    expect(leadCaseDocketEntry).toEqual(
-      expect.objectContaining({
-        docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        workItem: expect.objectContaining(mockDocketEntryWithWorkItem.workItem),
-      }),
-    );
-
-    expect(consolidatedCase1DocketEntry).toEqual(
-      expect.objectContaining({
-        docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        workItem: expect.objectContaining({
-          caseStatus: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.status,
-          caseTitle: Case.getCaseTitle(
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.caseCaption,
-          ),
-          docketNumber:
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        }),
-      }),
-    );
-
-    expect(consolidatedCase2DocketEntry).toEqual(
-      expect.objectContaining({
-        docketNumber: MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        workItem: expect.objectContaining({
-          caseStatus: MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.status,
-          caseTitle: Case.getCaseTitle(
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.caseCaption,
-          ),
-          docketNumber:
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        }),
-      }),
-    );
-
-    const initialCall = 1;
-    const finallyBlockCalls = 3;
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
   });
 
   it('should set each docketEntry`s pendingStatus to false even when an error occurs while filing the docket entries', async () => {
@@ -296,46 +206,6 @@ describe('consolidated cases', () => {
     expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
       innerError,
     );
-  });
-
-  it('should create a work item and add it to the outbox for each case', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-      docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      form: leadCaseDocketEntries[0],
-      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem.docketNumber,
-    ).toEqual(MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber);
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[1][0]
-        .workItem.docketNumber,
-    ).toEqual(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber);
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[2][0]
-        .workItem.docketNumber,
-    ).toEqual(MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber);
-
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].workItem.docketNumber,
-    ).toEqual(mockWorkItem.docketNumber);
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[1][0].workItem.docketNumber,
-    ).toEqual(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber);
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[2][0].workItem.docketNumber,
-    ).toEqual(MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber);
   });
 
   it('should create a single source of truth for the document by saving only one copy', async () => {
