@@ -1,4 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
@@ -33,7 +34,6 @@ import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessions
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
-import { clearModalAction } from '../actions/clearModalAction';
 
 const { USER_ROLES } = getConstants();
 

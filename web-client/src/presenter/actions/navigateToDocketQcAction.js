@@ -16,7 +16,7 @@ export const navigateToDocketQcAction = async ({ get, props, router }) => {
       ? props.caseDetail.docketNumber
       : get(state.caseDetail.docketNumber));
 
-  const docketEntryId = props.docketEntryId;
+  const { docketEntryId } = props;
 
   const { FROM_PAGES } = get(state.constants);
 
