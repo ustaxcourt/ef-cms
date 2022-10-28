@@ -20,6 +20,9 @@ const {
   createAndServeNoticeDocketEntry,
 } = require('../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry');
 const {
+  fileDocumentOnOneCase,
+} = require('../../shared/src/business/useCaseHelper/docketEntry/fileDocumentOnOneCase');
+const {
   createCaseAndAssociations,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations');
 const {
@@ -142,6 +145,7 @@ const useCaseHelpers = {
   appendPaperServiceAddressPageToPdf,
   countPagesInDocument,
   createAndServeNoticeDocketEntry,
+  fileDocumentOnOneCase,
   createCaseAndAssociations,
   createTrialSessionAndWorkingCopy,
   createUserForContact,
