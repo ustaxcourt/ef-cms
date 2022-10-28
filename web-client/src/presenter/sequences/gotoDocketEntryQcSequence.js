@@ -18,12 +18,16 @@ import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
+import { clearModalAction } from '../actions/clearModalAction';
+import { setFromPageAction } from '../actions/setFromPageAction';
 
 export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
+  setFromPageAction,
   clearScansAction,
   clearFormAction,
+  clearModalAction,
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
