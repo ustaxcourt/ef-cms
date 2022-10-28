@@ -76,6 +76,10 @@ describe('consolidated cases', () => {
       }),
     });
 
+    applicationContext
+      .getUseCaseHelpers()
+      .fileDocumentOnOneCase.mockReturnValue(MOCK_LEAD_CASE_WITH_PAPER_SERVICE);
+
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
       {
@@ -167,7 +171,6 @@ describe('consolidated cases', () => {
       userId: docketClerkUser.userId,
     });
 
-    expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
     expect(addDocketEntrySpy).toHaveBeenCalledTimes(2);
 
     const leadCaseDocketEntry = updateDocketEntrySpy.mock.calls[0][0];
@@ -218,12 +221,11 @@ describe('consolidated cases', () => {
     ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
   });
 
-  it('should call updateDocketEntryPendingServiceStatus on error', async () => {
+  it('should set each docketEntry`s pendingStatus to false even when an error occurs while filing the docket entries', async () => {
     const expectedErrorString = 'expected error';
-
     applicationContext
-      .getPersistenceGateway()
-      .saveWorkItem.mockImplementationOnce(() => {})
+      .getUseCaseHelpers()
+      .fileDocumentOnOneCase.mockImplementationOnce(() => {})
       .mockImplementationOnce(() => {})
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
