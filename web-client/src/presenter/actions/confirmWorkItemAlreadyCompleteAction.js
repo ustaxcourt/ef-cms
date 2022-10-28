@@ -14,10 +14,10 @@ export const confirmWorkItemAlreadyCompleteAction = ({ get }) => {
 
   switch (fromPage) {
     case FROM_PAGES.qcSectionInbox:
-      location.href = '/document-qc/section/inbox';
+      window.location.href = '/document-qc/section/inbox';
       break;
     default:
-      location.href = `/case-detail/${caseDetail.docketNumber}`;
+      window.location.href = `/case-detail/${caseDetail.docketNumber}`;
       break;
   }
 };

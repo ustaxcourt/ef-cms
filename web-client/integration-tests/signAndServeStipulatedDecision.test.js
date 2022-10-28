@@ -43,7 +43,6 @@ describe('a user signs and serves a stipulated decision', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAssignWorkItemToSelf(cerebralTest);
   docketClerkCompletesDocketEntryQcAndSendsMessage(cerebralTest);
-
   docketClerkTriesToCompleteSameEntry(cerebralTest);
 
   loginAs(cerebralTest, 'adc@example.com');

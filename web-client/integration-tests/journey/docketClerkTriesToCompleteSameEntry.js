@@ -1,10 +1,4 @@
-import { docketClerkQCsDocketEntry } from './docketClerkQCsDocketEntry';
-import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
-import { refreshElasticsearchIndex } from '../helpers';
-import { runSequence } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+import { waitForPage } from '../helpers';
 
 export const docketClerkTriesToCompleteSameEntry = cerebralTest => {
   return it('docketclerk tries to complete same docket entry QC for the proposed stipulated decision', async () => {
@@ -19,6 +13,9 @@ export const docketClerkTriesToCompleteSameEntry = cerebralTest => {
 
     await cerebralTest.runSequence('confirmWorkItemAlreadyCompleteSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    await waitForPage({
+      cerebralTest,
+      expectedPage: 'CaseDetailInternal',
+    });
   });
 };

@@ -982,6 +982,19 @@ export const waitForLoadingComponentToHide = async ({
   console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
+export const waitForPage = async ({
+  cerebralTest,
+  expectedPage,
+  maxWait = 10000,
+}) => {
+  const waitTime = await waitForCondition({
+    booleanExpressionCondition: () =>
+      cerebralTest.getState('currentPage') === expectedPage,
+    maxWait,
+  });
+  console.log(`Waited ${waitTime}ms for ${expectedPage}`);
+};
+
 export const waitForExpectedItem = async ({
   cerebralTest,
   currentItem,
