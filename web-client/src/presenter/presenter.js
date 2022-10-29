@@ -976,7 +976,6 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     uploadCorrespondenceDocumentSequence,
     uploadCourtIssuedDocumentSequence,
-    confirmWorkItemAlreadyCompleteSequence,
     userContactUpdateCompleteSequence,
     userContactUpdateErrorSequence,
     userContactUpdateInitialUpdateCompleteSequence,
