@@ -6,7 +6,7 @@
 export const getDeletePractitionerDocumentAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      message: 'The file has been deleted.',
+      message: 'The document has been deleted.',
     },
   };
 };
