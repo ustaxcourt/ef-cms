@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * delete a case note from a case
+ * delete a practitioner document
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -17,8 +17,6 @@ export const deletePractitionerDocumentAction = async ({
     state.modal.practitionerDocumentFileId,
   );
   const barNumber = get(state.modal.barNumber);
-
-  //TODO: success message
 
   try {
     await applicationContext
