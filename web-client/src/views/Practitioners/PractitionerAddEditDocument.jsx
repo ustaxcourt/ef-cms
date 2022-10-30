@@ -84,7 +84,7 @@ export const PractitionerAddEditDocument = connect(
                         <Button
                           link
                           aria-label={`View PDF: ${form.fileName}`}
-                          className="text-left padding-0 file-name-button"
+                          className="text-left padding-0 file-name-button margin-bottom-1"
                           id="practitioner-document-file"
                           onClick={() => {
                             openPractitionerDocumentDownloadUrlSequence({
