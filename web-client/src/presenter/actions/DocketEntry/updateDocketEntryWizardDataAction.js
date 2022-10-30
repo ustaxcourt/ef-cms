@@ -40,6 +40,9 @@ export const updateDocketEntryWizardDataAction = ({
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   let form;
   let supporting = get(state.screenMetadata.supporting);
+  console.log('props.key', props.key);
+  console.log('props', props);
+
   switch (props.key) {
     case 'initEventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
@@ -49,6 +52,9 @@ export const updateDocketEntryWizardDataAction = ({
         propertyList: ['category', 'documentType', 'scenario'],
       });
       store.set(state.form, form);
+      console.log('IN initEventCode');
+      console.log('UPDATED FORM', get(state.form));
+
       break;
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
@@ -63,7 +69,10 @@ export const updateDocketEntryWizardDataAction = ({
         formProperties: get(state.form),
         propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
       });
+
       store.set(state.form, form);
+      console.log('IN eventCode');
+      console.log('UPDATED FORM', get(state.form));
       if (!supporting) {
         store.unset(state.form.previousDocument);
       } else {
@@ -149,7 +158,11 @@ export const updateDocketEntryWizardDataAction = ({
     case 'additionalInfo2':
       if (!props.value) {
         store.unset(state.form[props.key]);
+        console.log('IT DOESNT HAVE A VALUE');
+        console.log('UPDATED FORM', get(state.form));
       }
+      console.log('HAS A VALUE');
+      console.log('UPDATED FORM', get(state.form));
       break;
     case 'hasOtherFilingParty':
       store.unset(state.form.otherFilingParty);

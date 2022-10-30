@@ -45,6 +45,15 @@ export const getNeedsNewCoversheet = ({
   );
 };
 
+export const overrideDocumentTitle = (docketEntry, formData) => {
+  const documentTitleThatShouldHaveBeenInTheFirstPlace =
+    docketEntry.workItem.docketEntry.documentTitle;
+  const editedAdditionalInfo1 = formData.additionalInfo || '';
+  const editedAdditionalInfo2 = formData.additionalInfo || '';
+
+  return `${documentTitleThatShouldHaveBeenInTheFirstPlace} ${editedAdditionalInfo1} ${editedAdditionalInfo2}`;
+};
+
 /**
  * completeDocketEntryQCInteractor
  *
@@ -88,8 +97,9 @@ export const completeDocketEntryQCInteractor = async (
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
     record => record.docketEntryId === docketEntryId,
   );
+  console.log('entryMetadata: ******', entryMetadata);
 
-  console.log('entryMetadata: ******', entryMetadata.documentTitle);
+  // console.log('entryMetadata: ******', entryMetadata.documentTitle);
   // console.log(
   //   'Additional info from entryMetadata:',
   //   entryMetadata.additionalInfo,
@@ -136,7 +146,7 @@ export const completeDocketEntryQCInteractor = async (
     {
       ...currentDocketEntry,
       ...editableFields,
-      documentTitle: editableFields.documentTitle, // TODO: find out necesity of this!
+      // documentTitle: overrideDocumentTitle(currentDocketEntry, editableFields),
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
@@ -156,11 +166,20 @@ export const completeDocketEntryQCInteractor = async (
   // the need to generate a new coversheet and make request for changing docket entry
   //        - we'll need to check for changes in editableFields' documentTitle and possible
   //          change in order (selected when qc'ing)
-  //
+  //              (ANSWER): editableFields documentTitle is updated but the additional info is duplicated (wrong). However, the other
+  //                        form changes are captured correctly in editableFields
   //        - make sure to compare the  <docketentry>.workItem.docketEntry.docketEntryId to the id of the
   //          updatedDocketEntry.previousDocument.docketEntryId because we want to tell if the docketclerk selected
   //          a different previous document
+  // TODO: CAN YOU CHANGE THE DOCUMENT TYPE WHEN QCING
+  //                (ANSWER): in the event a docketclerk changes the document to respond to, a 'previousDocument' property
+  //                          is added to editableFields which is copied to updatedDocketEntry. updatedDocketEntry
+  //                          becomes the newly selected document (docketEntry) to be qc'd instead of the original qc request.
+  //                          Any changes made on the form will be for the new document (selected docket entry)
+
+  //                          No checks have been added just yet. Need to test for that flow
   //         - check if additionalInfo exists on the updatedDocketEntry
+  //                (ANSWER): Yes it exists. It comes from editableFields (form)
 
   let updatedDocumentTitle = getDocumentTitle({
     applicationContext,
