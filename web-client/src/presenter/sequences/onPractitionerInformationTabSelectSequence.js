@@ -1,3 +1,4 @@
+import { clearPractitionerDocumentsAction } from '../actions/clearPractitionerDocumentsAction';
 import { getPractitionerDocumentsAction } from '../actions/getPractitionerDocumentsAction';
 import { handlePractitionerInformationTabSelectAction } from '../actions/handlePractitionerInformationTabSelectAction';
 import { setPractitionerDocumentsAction } from '../actions/setPractitionerDocumentsAction';
@@ -8,6 +9,7 @@ export const onPractitionerInformationTabSelectSequence = [
   {
     details: [],
     documentation: showProgressSequenceDecorator([
+      clearPractitionerDocumentsAction,
       getPractitionerDocumentsAction,
       setPractitionerDocumentsAction,
     ]),
