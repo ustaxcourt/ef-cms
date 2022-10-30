@@ -1,7 +1,11 @@
-import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import {
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
+  US_STATES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest, waitForExpectedItem } from './helpers';
 
-describe('Admissions Clerk uploads a practitioner document', () => {
+describe('Practitioner documentation journey', () => {
+  const barNumber = 'PT1234';
   const cerebralTest = setupTest();
 
   beforeAll(() => {
@@ -11,52 +15,173 @@ describe('Admissions Clerk uploads a practitioner document', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+  describe('Admissions Clerk uploads a practitioner document', () => {
+    loginAs(cerebralTest, 'admissionsclerk@example.com');
 
-  loginAs(cerebralTest, 'admissionsclerk@example.com');
+    it('view the add practitioner document page', async () => {
+      await cerebralTest.runSequence('gotoPractitionerDetailSequence', {
+        barNumber,
+        tab: 'practitioner-documents',
+      });
 
-  it('view the practitioner documents tab', async () => {
-    await cerebralTest.runSequence('gotoPractitionerDetailSequence', {
-      barNumber: 'PT1234',
-      tab: 'practitioner-documents',
+      await cerebralTest.runSequence('gotoPractitionerAddDocumentSequence', {
+        barNumber,
+      });
     });
 
-    await cerebralTest.runSequence('gotoPractitionerAddDocumentSequence', {
-      barNumber: 'PT1234',
+    it('upload practitioner document but submit before completing form', async () => {
+      cerebralTest.setState('form.practitionerDocumentFile', fakeFile);
+
+      await cerebralTest.runSequence('submitAddPractitionerDocumentSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({
+        categoryType: expect.any(String),
+      });
     });
 
-    cerebralTest.setState('form.practitionerDocumentFile', fakeFile);
+    it('complete practitioner document upload', async () => {
+      cerebralTest.setState(
+        'form.categoryType',
+        PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
+      );
+      cerebralTest.expectedDescription = `my integration test ${Math.random()}`;
+      cerebralTest.setState(
+        'form.description',
+        cerebralTest.expectedDescription,
+      );
 
-    await cerebralTest.runSequence('submitAddPractitionerDocumentSequence');
+      await cerebralTest.runSequence('submitAddPractitionerDocumentSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      categoryType: expect.any(String),
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(cerebralTest.getState('alertSuccess').message).toEqual(
+        'The file has been added.',
+      );
     });
 
-    cerebralTest.setState(
-      'form.categoryType',
-      PRACTITIONER_DOCUMENT_TYPES_MAP.APPLICATION,
-    );
-    cerebralTest.expectedDescription = `my integration test ${Math.random()}`;
-    cerebralTest.setState('form.description', cerebralTest.expectedDescription);
+    it('confirm document upload', async () => {
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'currentPage',
+        expectedItem: 'PractitionerInformation',
+      });
 
-    await cerebralTest.runSequence('submitAddPractitionerDocumentSequence');
+      const practitionerDocuments = cerebralTest.getState(
+        'practitionerDocuments',
+      );
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+      const expectedApplicationDocument = practitionerDocuments.find(
+        document => document.description === cerebralTest.expectedDescription,
+      );
 
-    await waitForExpectedItem({
-      cerebralTest,
-      currentItem: 'currentPage',
-      expectedItem: 'PractitionerInformation',
+      cerebralTest.practitionerDocumentFileId =
+        expectedApplicationDocument.practitionerDocumentFileId;
+
+      expect(expectedApplicationDocument).toBeDefined();
+    });
+  });
+
+  describe('Admissions Clerk edits a practitioner document', () => {
+    it('view the edit practitioner document page', async () => {
+      await cerebralTest.runSequence('gotoPractitionerDetailSequence', {
+        barNumber,
+        tab: 'practitioner-documents',
+      });
+
+      await cerebralTest.runSequence('gotoPractitionerEditDocumentSequence', {
+        barNumber,
+        practitionerDocumentFileId: cerebralTest.practitionerDocumentFileId,
+      });
     });
 
-    const practitionerDocuments = cerebralTest.getState(
-      'practitionerDocuments',
-    );
+    it('edit practitioner document', async () => {
+      cerebralTest.setState(
+        'form.categoryType',
+        PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+      );
+      cerebralTest.setState('form.location', US_STATES.UT);
+      cerebralTest.expectedDescription = `my integration test ${Math.random()}`;
+      cerebralTest.setState(
+        'form.description',
+        cerebralTest.expectedDescription,
+      );
 
-    const expectedApplicationDocument = practitionerDocuments.find(
-      document => document.description === cerebralTest.expectedDescription,
-    );
+      await cerebralTest.runSequence('submitEditPractitionerDocumentSequence');
 
-    expect(expectedApplicationDocument).toBeDefined();
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      expect(cerebralTest.getState('alertSuccess').message).toEqual(
+        'The document has been updated.',
+      );
+    });
+
+    it('confirm document edit', async () => {
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'currentPage',
+        expectedItem: 'PractitionerInformation',
+      });
+
+      const practitionerDocuments = cerebralTest.getState(
+        'practitionerDocuments',
+      );
+
+      const expectedApplicationDocument = practitionerDocuments.find(
+        document =>
+          document.practitionerDocumentFileId ===
+          cerebralTest.practitionerDocumentFileId,
+      );
+
+      expect(expectedApplicationDocument).toMatchObject({
+        categoryName: `${PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING} - ${US_STATES.UT}`,
+        categoryType:
+          PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        description: cerebralTest.expectedDescription,
+      });
+    });
+  });
+
+  describe('Admissions Clerk deletes a practitioner document', () => {
+    it('view the practitioner document page', async () => {
+      await cerebralTest.runSequence('gotoPractitionerDetailSequence', {
+        barNumber,
+        tab: 'practitioner-documents',
+      });
+    });
+
+    it('delete the practitioner document', async () => {
+      await cerebralTest.runSequence(
+        'openDeletePractitionerDocumentConfirmModalSequence',
+        {
+          barNumber,
+          practitionerDocumentFileId: cerebralTest.practitionerDocumentFileId,
+        },
+      );
+
+      await cerebralTest.runSequence('deletePractitionerDocumentSequence');
+
+      expect(cerebralTest.getState('alertSuccess').message).toEqual(
+        'The document has been deleted.',
+      );
+    });
+
+    it('confirm document deletion', async () => {
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'currentPage',
+        expectedItem: 'PractitionerInformation',
+      });
+
+      const practitionerDocuments = cerebralTest.getState(
+        'practitionerDocuments',
+      );
+
+      const expectedApplicationDocument = practitionerDocuments.find(
+        document =>
+          document.practitionerDocumentFileId ===
+          cerebralTest.practitionerDocumentFileId,
+      );
+
+      expect(expectedApplicationDocument).toBeUndefined();
+    });
   });
 });
