@@ -14,8 +14,8 @@ describe('setTabFromPropsAction', () => {
     expect(state.currentViewMetadata.tab).toEqual(tabName);
   });
 
-  it('should not overwrite the current tab in state if no tab in props was defined', async () => {
-    const tabName = 'Document Info';
+  it('should unset the current tab in state if props.tab was undefined', async () => {
+    const tabName = 'Documentation';
     const { state } = await runAction(setTabFromPropsAction, {
       props: {
         tab: undefined,
@@ -27,6 +27,6 @@ describe('setTabFromPropsAction', () => {
       },
     });
 
-    expect(state.currentViewMetadata.tab).toEqual(tabName);
+    expect(state.currentViewMetadata.tab).toBeUndefined();
   });
 });
