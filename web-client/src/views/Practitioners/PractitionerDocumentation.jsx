@@ -132,9 +132,9 @@ export const PractitionerDocumentation = connect(
                     </Button>
                   </td>
 
-                  <td>{document.categoryName}</td>
+                  <td className="categoryName">{document.categoryName}</td>
                   <td className="file-description">{document.description}</td>
-                  <td className="text-align-right edit-delete-buttons">
+                  <td className="text-align-left edit-delete-buttons">
                     <Button
                       link
                       href={`/practitioner-detail/${barNumber}/edit-document/${document.practitionerDocumentFileId}`}
@@ -144,7 +144,7 @@ export const PractitionerDocumentation = connect(
                     </Button>
                     <Button
                       link
-                      className="red-warning"
+                      className="red-warning margin-right-0"
                       icon="trash"
                       onClick={() => {
                         openDeletePractitionerDocumentConfirmModalSequence({
