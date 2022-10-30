@@ -1,6 +1,6 @@
-import * as client from '../../dynamodbClientService';
+import { remove } from '../../dynamodbClientService';
 
-exports.deletePractitionerDocument = async ({
+export const deletePractitionerDocument = async ({
   applicationContext,
   barNumber,
   practitionerDocumentFileId,
@@ -10,7 +10,7 @@ exports.deletePractitionerDocument = async ({
   practitionerDocumentFileId: string;
 }) => {
   barNumber = barNumber.toLowerCase();
-  await client.remove({
+  await remove({
     applicationContext,
     key: {
       pk: `practitioner|${barNumber}`,
