@@ -62,7 +62,9 @@ export const PractitionerAddEditDocument = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <h1 className="margin-bottom-1">Add File</h1>
+          <h1 className="margin-bottom-1">
+            {form.isEditingDocument ? 'Edit' : 'Add'} File
+          </h1>
           <div className="grid-row margin-bottom-4">
             <div className="grid-col-12">
               <p>All fields required unless otherwise noted</p>
@@ -105,7 +107,7 @@ export const PractitionerAddEditDocument = connect(
                             });
                           }}
                         >
-                          Replace
+                          Update File
                         </Button>
                       </div>
                     ) : (
