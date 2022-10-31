@@ -33,7 +33,7 @@ describe('uploadOrderDocumentInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       document: 'document file',
-      key: 123,
+      key: '123',
     });
   });
 });
