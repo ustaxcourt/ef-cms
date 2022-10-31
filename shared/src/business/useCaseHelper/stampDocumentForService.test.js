@@ -5,8 +5,6 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { stampDocumentForService } = require('./stampDocumentForService');
 
 describe('stampDocumentForService', () => {
-  beforeEach(() => {});
-
   it('should set `Served` as the stamp text when the documentType is NOT order and the document eventCode is not one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await stampDocumentForService({
       applicationContext,
