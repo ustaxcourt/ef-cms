@@ -66,7 +66,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       docketNumber: subjectCaseDocketNumber,
     });
 
-  let subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
   const originalSubjectDocketEntry = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -177,8 +177,8 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
 
   const successMessage =
     docketNumbers.length > 1
-      ? 'Document served to selected cases in group. '
-      : 'Document served. ';
+      ? 'Document served to selected cases in group.'
+      : 'Document served.';
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
