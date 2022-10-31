@@ -995,7 +995,6 @@ export const presenter = {
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
     validatePetitionerSequence,
-    confirmWorkItemAlreadyCompleteSequence,
     validatePractitionerSearchByBarNumberFormSequence,
     validatePractitionerSearchByNameFormSequence,
     validatePrioritizeCaseSequence,

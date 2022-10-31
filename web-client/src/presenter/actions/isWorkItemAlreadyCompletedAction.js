@@ -16,7 +16,7 @@ export const isWorkItemAlreadyCompletedAction = ({ get, path }) => {
     entry => entry.docketEntryId === docketEntryId,
   );
 
-  if (workItem.completedAt) {
+  if (workItem?.completedAt) {
     return path['yes']();
   } else {
     return path['no']();
