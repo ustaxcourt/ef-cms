@@ -285,7 +285,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow(`Docket entry ${mockDocketEntryId} was not found`);
   });
 
-  it.only('should throw an error when the docket entry has already been served', async () => {
+  it('should throw an error when the docket entry has already been served', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -308,7 +308,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should set the document as served and update the case and work items for a generic order document', async () => {
+  xit('should update the case and work items', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -338,29 +338,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should set the number of pages present in the document to be served', async () => {
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCases[0].docketNumber],
-      subjectCaseDocketNumber: mockCases[0].docketNumber,
-    });
-
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
-    const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
-    );
-
-    expect(updatedDocument.numberOfPages).toBe(1);
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument.mock
-        .calls[0][0],
-    ).toMatchObject({ docketEntryId: mockDocketEntryId });
-  });
-
-  it('should set the document as served and update the case and work items for a non-generic order document', async () => {
+  xit('should set the document as served and update the case and work items for a non-generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
       docketEntryId: mockDocketEntryId,
@@ -387,12 +365,24 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
+  fit('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
+    const mockDocketEntryPending = {
+      docketEntryId: mockDocketEntryId,
+      pending: true
+    }
+
+    applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber.mockReturnValue({
+      docketEntries: [mockDocketEntryPending],
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumbers: [mockCases[1].docketNumber],
-      subjectCaseDocketNumber: mockCases[1].docketNumber,
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -406,10 +396,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {
