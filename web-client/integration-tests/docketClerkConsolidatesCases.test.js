@@ -100,7 +100,7 @@ describe('Case Consolidation Journey', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
     expect(alertSuccess.message).toEqual(
-      'Document served to selected cases in group. ',
+      'Document served to selected cases in group.',
     );
     expect(alertSuccess.overwritable).toEqual(false);
   });
@@ -205,7 +205,7 @@ describe('Case Consolidation Journey', () => {
   it('should have a success message that mentions the document was served (and not on multiple cases)', async () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
-    expect(alertSuccess.message).toEqual('Document served. ');
+    expect(alertSuccess.message).toEqual('Document served.');
     expect(alertSuccess.overwritable).toEqual(false);
   });
 
