@@ -35,6 +35,9 @@ const {
   formatAndSortConsolidatedCases,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
 const {
+  formatConsolidatedCaseCoversheetData,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData');
+const {
   generateAndServeDocketEntry,
 } = require('../../shared/src/business/useCaseHelper/service/createChangeItems');
 const {
@@ -144,6 +147,7 @@ const useCaseHelpers = {
   createUserForContact,
   fetchPendingItemsByDocketNumber,
   formatAndSortConsolidatedCases,
+  formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,

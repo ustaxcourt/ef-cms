@@ -3,6 +3,9 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('./courtIssuedDocument/CourtIssuedDocumentConstants');
 const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
@@ -13,6 +16,10 @@ const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
+
+const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
+
+const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
@@ -81,6 +88,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage:
       'Order search has been temporarily disabled. Please try again later.',
     key: 'internal-order-search-enabled',
+  },
+  MULTI_DOCKETABLE_PAPER_FILINGS: {
+    disabledMessage:
+      'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
+    key: 'multi-docketable-paper-filings',
   },
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
@@ -329,6 +341,7 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
 );
 const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -430,6 +443,23 @@ const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => internalEvent.caseDecision)
+  .map(x => x.eventCode);
+
+const NON_MULTI_DOCKETABLE_EVENT_CODES = [
+  ...ENTERED_AND_SERVED_EVENT_CODES,
+  ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+];
+
+const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => !internalEvent.caseDecision)
+  .map(x => x.eventCode);
 
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
@@ -951,19 +981,19 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
-const US_STATES_OTHER = [
-  'AA',
-  'AE',
-  'AP',
-  'AS',
-  'FM',
-  'GU',
-  'MH',
-  'MP',
-  'PR',
-  'PW',
-  'VI',
-];
+const US_STATES_OTHER = {
+  AA: 'Armed Forces Americas',
+  AE: 'Armed Forces Europe',
+  AP: 'Armed Forces Pacific',
+  AS: 'American Samoa',
+  FM: 'Federated States of Micronesia',
+  GU: 'Guam',
+  MH: 'Marshall Islands',
+  MP: 'Norther Mariana Islands',
+  PR: 'Puerto Rico',
+  PW: 'Palau',
+  VI: 'Virgin Islands',
+};
 
 const STATE_NOT_AVAILABLE = 'N/A';
 
@@ -1316,6 +1346,23 @@ const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
 const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
+const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION: 'Application',
+  CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
+  FEE_RECEIPT: 'Fee Receipt',
+  ADMISSIONS_CERTIFICATE: 'Admission Certificate',
+  REFERENCE_INQUIRY: 'Reference Inquiry',
+  RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
+  DISCIPLINARY: 'Disciplinary',
+  CHANGE_OF_NAME: 'Change of Name',
+  EXAM_RELATED: 'Exam-Related',
+  MISCELLANEOUS: 'Miscellaneous',
+};
+
+const PRACTITIONER_DOCUMENT_TYPES = Object.values(
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
+);
+
 module.exports = deepFreeze({
   AMENDED_PETITION_FORM_NAME,
   ADC_SECTION,
@@ -1404,8 +1451,10 @@ module.exports = deepFreeze({
   JURISDICTIONAL_OPTIONS,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
+  MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
+  MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
   MAX_SEARCH_CLIENT_RESULTS: 200,
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MESSAGE_QUEUE_TYPES,
@@ -1430,6 +1479,7 @@ module.exports = deepFreeze({
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  PRACTITIONER_DOCUMENT_TYPES,
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   PROPOSED_STIPULATED_DECISION_EVENT_CODE,
@@ -1445,8 +1495,10 @@ module.exports = deepFreeze({
   SESSION_TERMS,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
@@ -1455,6 +1507,7 @@ module.exports = deepFreeze({
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   REVISED_TRANSCRIPT_EVENT_CODE,
@@ -1470,6 +1523,7 @@ module.exports = deepFreeze({
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
   ALLOWLIST_FEATURE_FLAGS,
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
   US_STATES,
   US_STATES_OTHER,
 });

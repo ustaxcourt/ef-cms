@@ -52,7 +52,6 @@ export const getCasesForUserInteractor = async (
     if (!casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber]) {
       casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber] =
         applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
-          casesAssociatedWithUserOrLeadCaseMap,
           consolidatedCases,
           leadDocketNumber,
         });

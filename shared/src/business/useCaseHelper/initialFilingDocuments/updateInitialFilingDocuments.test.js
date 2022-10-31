@@ -45,8 +45,6 @@ describe('addNewInitialFilingToCase', () => {
     userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
   };
 
-  beforeAll(() => {});
-
   it('should add a new initial filing document to the case when the document does not exist on the original case', async () => {
     mockOriginalCase = new Case(
       { ...MOCK_CASE, docketEntries: [mockPetition] },

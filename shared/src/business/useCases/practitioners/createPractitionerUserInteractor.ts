@@ -1,10 +1,10 @@
-import { createPractitionerUser } from '../../utilities/createPractitionerUser';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Practitioner } from '../../entities/Practitioner';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { createPractitionerUser } from '../../utilities/createPractitionerUser';
 
 /**
  * createPractitionerUserInteractor

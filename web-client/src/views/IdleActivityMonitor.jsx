@@ -37,3 +37,5 @@ export const IdleActivityMonitor = connect(
     return <>{showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}</>;
   },
 );
+
+IdleActivityMonitor.displayName = 'IdleActivityMonitor';

@@ -459,7 +459,9 @@ export const serveDocument = async ({
     docketNumber,
   });
 
-  await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+  await cerebralTest.runSequence(
+    'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+  );
   await cerebralTest.runSequence(
     'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
   );
