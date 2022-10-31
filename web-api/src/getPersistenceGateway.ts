@@ -216,6 +216,7 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createOrUpdateUser,
+    createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
