@@ -1,11 +1,8 @@
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
-  CONTACT_TYPES,
-  COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
-  PARTY_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
@@ -22,7 +19,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const mockClientConnectionId = '167e78f8-a11b-4c80-b787-a7a3cf23e25a';
-  let extendCase;
   let mockTrialSession;
 
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
@@ -100,7 +96,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-      //todo: replace w MOCK_TRIAL_SESSION
+    //todo: replace w MOCK_TRIAL_SESSION
     mockTrialSession = {
       caseOrder: [
         {
@@ -231,10 +227,24 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should mark the docket entry as served', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            docketEntryId: mockDocketEntryId,
+            filingDate: undefined,
+            servedAt: undefined,
+          },
+        ],
+      });
+
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
+      docketNumbers: [MOCK_CASE.docketNumber],
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -244,16 +254,27 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
-
     expect(updatedDocument.servedAt).toBeDefined();
     expect(updatedDocument.filingDate).toBeDefined();
   });
 
   it('should update the work items', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
+
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
+      docketNumbers: [MOCK_CASE.docketNumber],
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -299,17 +320,28 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {
-    const mockCaseWithTrialInfo = {...MOCK_CASE,
+    const mockCaseWithTrialInfo = {
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+          eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
+          signedAt: '2019-11-27T05:00:00.000Z',
+          signedByUserId: '63a6a137-94c2-44a4-8335-d04c9756bbee',
+          signedJudgeName: 'Judy',
+        },
+      ],
+      trialDate: '2019-11-27T05:00:00.000Z',
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      trialDate: '2019-11-27T05:00:00.000Z'
     };
     applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
-      docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
+      docketEntryId: mockDocketEntryId,
       docketNumbers: [mockCaseWithTrialInfo.docketNumber],
       subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
     });
@@ -326,20 +358,34 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should delete the case from the trial session if the case has a trialSessionId and trialSession is not calendared', async () => {
-    mockTrialSession.isCalendared = false;
-
-    const mockCaseWithTrialInfo = {...MOCK_CASE,
+    const mockCaseWithTrialInfo = {
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+          eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
+          signedAt: '2019-11-27T05:00:00.000Z',
+          signedByUserId: '63a6a137-94c2-44a4-8335-d04c9756bbee',
+          signedJudgeName: 'Judy',
+        },
+      ],
+      trialDate: '2019-11-27T05:00:00.000Z',
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      trialDate: '2019-11-27T05:00:00.000Z'
     };
     applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
-
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...mockTrialSession,
+        isCalendared: false,
+      });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
       docketNumbers: [mockCaseWithTrialInfo.docketNumber],
       subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
     });
