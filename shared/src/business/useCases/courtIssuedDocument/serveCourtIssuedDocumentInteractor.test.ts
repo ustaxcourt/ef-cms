@@ -21,6 +21,7 @@ import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentIn
 import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
+  const mockClientConnectionId = '167e78f8-a11b-4c80-b787-a7a3cf23e25a';
   let extendCase;
   let mockTrialSession;
 
@@ -243,7 +244,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
+        clientConnectionId: mockClientConnectionId,
         docketEntryId: '',
         docketNumbers: [],
         subjectCaseDocketNumber: '',
@@ -258,7 +259,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
+        clientConnectionId: mockClientConnectionId,
         docketEntryId: '',
         docketNumbers: [],
         subjectCaseDocketNumber: MOCK_CASE.docketNumber,
@@ -276,7 +277,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
+        clientConnectionId: mockClientConnectionId,
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
         subjectCaseDocketNumber: MOCK_CASE.docketNumber,
@@ -284,13 +285,25 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow(`Docket entry ${mockDocketEntryId} was not found`);
   });
 
-  it.only('should throw an error if the docket entry has already been served', async () => {
+  it.only('should throw an error when the docket entry has already been served', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        docketEntries: [
+          {
+            docketEntryId: mockServedDocketEntryId,
+            servedAt: '2018-03-01T05:00:00.000Z',
+          },
+        ],
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
+        clientConnectionId: '',
         docketEntryId: mockServedDocketEntryId,
-        docketNumbers: [mockCases[0].docketNumber],
-        subjectCaseDocketNumber: mockCases[0].docketNumber,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Docket entry has already been served');
   });
