@@ -37,9 +37,7 @@ describe('setPractitionerDocumentFormForEditAction', () => {
       description: practitionerDocument.description,
       fileName: practitionerDocument.fileName,
       isEditingDocument: true,
-      practitionerDocumentFileId:
-        practitionerDocument.practitionerDocumentFileId,
-      showPractitionerDocumentLink: true,
+      practitionerDocumentFile: { name: practitionerDocument.fileName },
     });
   });
 });

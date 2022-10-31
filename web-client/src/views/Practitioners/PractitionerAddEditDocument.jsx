@@ -20,14 +20,9 @@ export const PractitionerAddEditDocument = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isEditingPractitionerDocument: state.isEditingPractitionerDocument,
-    openPractitionerDocumentDownloadUrlSequence:
-      sequences.openPractitionerDocumentDownloadUrlSequence,
-    practitionerDetail: state.practitionerDetail,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
     showModal: state.modal.showModal,
-    showPractitionerDocumentLinkSequence:
-      sequences.showPractitionerDocumentLinkSequence,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
     submitEditPractitionerDocumentSequence:
@@ -43,11 +38,8 @@ export const PractitionerAddEditDocument = connect(
     documentTypes,
     form,
     formCancelToggleCancelSequence,
-    openPractitionerDocumentDownloadUrlSequence,
-    practitionerDetail,
     practitionerDocumentationFormHelper,
     showModal,
-    showPractitionerDocumentLinkSequence,
     submitAddPractitionerDocumentSequence,
     submitEditPractitionerDocumentSequence,
     usStates,
@@ -72,72 +64,33 @@ export const PractitionerAddEditDocument = connect(
               <div className="blue-container">
                 <div className="grid-row grid-gap">
                   <div className="grid-col-5">
-                    {form.showPractitionerDocumentLink ? (
-                      <div className="margin-bottom-3">
-                        <label
-                          className="usa-label"
-                          htmlFor="practitioner-document-file"
-                          id="-practitioner-document-file-label"
-                        >
-                          File
-                        </label>
-                        <Button
-                          link
-                          aria-label={`View PDF: ${form.fileName}`}
-                          className="text-left padding-0 file-name-button margin-bottom-1"
-                          id="practitioner-document-file"
-                          onClick={() => {
-                            openPractitionerDocumentDownloadUrlSequence({
-                              barNumber: practitionerDetail.barNumber,
-                              fileName: form.fileName,
-                              practitionerDocumentFileId:
-                                form.practitionerDocumentFileId,
-                            });
-                          }}
-                        >
-                          {form.fileName}
-                        </Button>
-                        <Button
-                          // link
-                          aria-label={'replace file'}
-                          // id="practitioner-document-file"
-                          onClick={() => {
-                            showPractitionerDocumentLinkSequence({
-                              showPractitionerDocumentLink: false,
-                            });
-                          }}
-                        >
-                          Update File
-                        </Button>
-                      </div>
-                    ) : (
-                      <FormGroup
-                        errorText={validationErrors.practitionerDocumentFile}
+                    <FormGroup
+                      errorText={validationErrors.practitionerDocumentFile}
+                    >
+                      <label
+                        className={classNames(
+                          'usa-label ustc-upload with-hint',
+                        )}
+                        htmlFor="practitioner-document-file"
+                        id="practitioner-document-label"
                       >
-                        <label
-                          className={classNames(
-                            'usa-label ustc-upload with-hint',
-                          )}
-                          htmlFor="practitioner-document-file"
-                          id="practitioner-document-label"
-                        >
-                          Upload your file{' '}
-                        </label>
-                        <span className="usa-hint">
-                          File must be in PDF format (.pdf), MS-Word (.doc,
-                          .docx) or an image file (.jpg, .jpeg, .png). Max file
-                          size {constants.MAX_FILE_SIZE_MB}MB.
-                        </span>
-                        <StateDrivenFileInput
-                          accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                          aria-describedby="practitioner-document-file-label"
-                          id="practitioner-document-file"
-                          name="practitionerDocumentFile"
-                          updateFormValueSequence="updateFormValueSequence"
-                          validationSequence="validateAddPractitionerDocumentSequence"
-                        />
-                      </FormGroup>
-                    )}
+                        Upload your file{' '}
+                      </label>
+                      <span className="usa-hint">
+                        File must be in PDF format (.pdf), MS-Word (.doc, .docx)
+                        or an image file (.jpg, .jpeg, .png). Max file size{' '}
+                        {constants.MAX_FILE_SIZE_MB}MB.
+                      </span>
+                      <StateDrivenFileInput
+                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                        aria-describedby="practitioner-document-file-label"
+                        fileInputName="existingFile"
+                        id="practitioner-document-file"
+                        name="practitionerDocumentFile"
+                        updateFormValueSequence="updateFormValueSequence"
+                        validationSequence="validateAddPractitionerDocumentSequence"
+                      />
+                    </FormGroup>
                     <FormGroup errorText={validationErrors.categoryType}>
                       <label
                         className="usa-label"

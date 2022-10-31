@@ -13,6 +13,8 @@ export const setPractitionerDocumentFormForEditAction = ({ props, store }) => {
 
   store.set(state.form, practitionerDocument);
   store.set(state.form.barNumber, barNumber);
-  store.set(state.form.showPractitionerDocumentLink, true);
+  store.set(state.form.practitionerDocumentFile, {
+    name: practitionerDocument.fileName,
+  });
   store.set(state.form.isEditingDocument, true);
 };
