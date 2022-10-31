@@ -57,100 +57,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       };
     });
 
-  const mockCases = [
-    {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          docketNumber: MOCK_CASE.docketNumber,
-          documentType: 'Order',
-          eventCode: 'O',
-          serviceStamp: 'Served',
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        {
-          docketEntryId: mockDocketEntryId,
-          docketNumber: MOCK_CASE.docketNumber,
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        {
-          docketEntryId: mockServedDocketEntryId,
-          docketNumber: MOCK_CASE.docketNumber,
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          servedAt: createISODateString(),
-          servedParties: [
-            {
-              name: 'Bernard Lowe',
-            },
-          ],
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        ...docketEntriesWithCaseClosingEventCodes,
-      ],
-    },
-    {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          docketNumber: '102-20',
-          documentType: 'Order',
-          eventCode: 'O',
-          pending: true,
-          serviceStamp: 'Served',
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        {
-          docketEntryId: mockDocketEntryId,
-          docketNumber: '102-20',
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        ...docketEntriesWithCaseClosingEventCodes,
-      ],
-      docketNumber: '102-20',
-      partyType: PARTY_TYPES.petitionerSpouse,
-      petitioners: [
-        ...MOCK_CASE.petitioners,
-        {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          contactType: CONTACT_TYPES.secondary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'Contact Secondary',
-          phone: '123123134',
-          postalCode: '12345',
-          state: 'TN',
-        },
-      ],
-    },
-  ];
-
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -184,8 +90,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   beforeEach(() => {
-    extendCase = {};
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -194,22 +98,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        const theCase = mockCases.find(
-          mockCase => mockCase.docketNumber === docketNumber,
-        );
-        if (theCase) {
-          return {
-            ...theCase,
-            ...extendCase,
-          };
-        } else return {};
-      });
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
+      //todo: replace w MOCK_TRIAL_SESSION
     mockTrialSession = {
       caseOrder: [
         {
-          docketNumber: mockCases[0].docketNumber,
+          docketNumber: MOCK_CASE.docketNumber,
         },
       ],
       createdAt: '2019-10-27T05:00:00.000Z',
@@ -370,33 +265,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it.skip('should set the document as served and update the case and work items for a non-generic order document', async () => {
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCases[0].docketNumber],
-      subjectCaseDocketNumber: mockCases[0].docketNumber,
-    });
-
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
-    const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
-    );
-
-    expect(updatedDocument.servedAt).toBeDefined();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-  });
-
   it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
     const mockDocketEntryPending = {
       ...MOCK_DOCUMENTS[0],
@@ -431,14 +299,19 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {
-    extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    extendCase.trialDate = '2019-11-27T05:00:00.000Z';
+    const mockCaseWithTrialInfo = {...MOCK_CASE,
+      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      trialDate: '2019-11-27T05:00:00.000Z'
+    };
+    applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumbers: [mockCases[0].docketNumber],
-      subjectCaseDocketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCaseWithTrialInfo.docketNumber],
+      subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
     });
 
     expect(
@@ -455,14 +328,20 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should delete the case from the trial session if the case has a trialSessionId and trialSession is not calendared', async () => {
     mockTrialSession.isCalendared = false;
 
-    extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    extendCase.trialDate = '2019-11-27T05:00:00.000Z';
+    const mockCaseWithTrialInfo = {...MOCK_CASE,
+      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      trialDate: '2019-11-27T05:00:00.000Z'
+    };
+    applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
+
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumbers: [mockCases[0].docketNumber],
-      subjectCaseDocketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCaseWithTrialInfo.docketNumber],
+      subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
     });
 
     expect(
@@ -475,12 +354,59 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    const mockCaseWithDocketEntries = {
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: MOCK_CASE.docketNumber,
+          documentType: 'Order',
+          eventCode: 'O',
+          serviceStamp: 'Served',
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItem: mockWorkItem,
+        },
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: MOCK_CASE.docketNumber,
+          documentType: 'Order that case is assigned',
+          eventCode: 'OAJ',
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItem: mockWorkItem,
+        },
+        {
+          docketEntryId: mockServedDocketEntryId,
+          docketNumber: MOCK_CASE.docketNumber,
+          documentType: 'Order that case is assigned',
+          eventCode: 'OAJ',
+          servedAt: createISODateString(),
+          servedParties: [
+            {
+              name: 'Bernard Lowe',
+            },
+          ],
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItem: mockWorkItem,
+        },
+        ...docketEntriesWithCaseClosingEventCodes,
+      ],
+    };
+
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId: 'testing',
         docketEntryId: docketEntry.docketEntryId,
-        docketNumbers: [mockCases[0].docketNumber],
-        subjectCaseDocketNumber: mockCases[0].docketNumber,
+        docketNumbers: [mockCaseWithDocketEntries.docketNumber], //take this out?
+        subjectCaseDocketNumber: mockCaseWithDocketEntries.docketNumber,
       });
 
       const updatedCase =
