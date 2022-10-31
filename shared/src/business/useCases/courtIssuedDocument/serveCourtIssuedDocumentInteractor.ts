@@ -12,45 +12,6 @@ import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { createISODateString } from '../../utilities/DateHandler';
 
-const completeWorkItem = async ({
-  applicationContext,
-  docketEntryEntity,
-  leadDocketNumber,
-  user,
-  workItemToUpdate,
-}) => {
-  Object.assign(workItemToUpdate, {
-    docketEntry: {
-      ...docketEntryEntity.validate().toRawObject(),
-    },
-  });
-
-  workItemToUpdate.leadDocketNumber = leadDocketNumber;
-
-  workItemToUpdate.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section ? user.section : DOCKET_SECTION,
-    sentBy: user.name,
-    sentBySection: user.section ? user.section : DOCKET_SECTION,
-    sentByUserId: user.userId,
-  });
-
-  workItemToUpdate.setAsCompleted({ message: 'completed', user });
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-};
-
 /**
  * serveCourtIssuedDocumentInteractor
  *
@@ -226,6 +187,45 @@ export const serveCourtIssuedDocumentInteractor = async (
       pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
     },
     userId: user.userId,
+  });
+};
+
+const completeWorkItem = async ({
+  applicationContext,
+  docketEntryEntity,
+  leadDocketNumber,
+  user,
+  workItemToUpdate,
+}) => {
+  Object.assign(workItemToUpdate, {
+    docketEntry: {
+      ...docketEntryEntity.validate().toRawObject(),
+    },
+  });
+
+  workItemToUpdate.leadDocketNumber = leadDocketNumber;
+
+  workItemToUpdate.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section ? user.section : DOCKET_SECTION,
+    sentBy: user.name,
+    sentBySection: user.section ? user.section : DOCKET_SECTION,
+    sentByUserId: user.userId,
+  });
+
+  workItemToUpdate.setAsCompleted({ message: 'completed', user });
+
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: user.section,
+    userId: user.userId,
+    workItem: workItemToUpdate.validate().toRawObject(),
   });
 };
 
