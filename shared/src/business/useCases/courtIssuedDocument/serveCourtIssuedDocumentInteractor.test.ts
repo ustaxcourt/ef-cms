@@ -335,28 +335,33 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it.skip('should update the case and work items', async () => {
+  it('should mark the docket entry as served', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumbers: [mockCases[0].docketNumber],
-      subjectCaseDocketNumber: mockCases[0].docketNumber,
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
     const updatedCase =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry =>
-        docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
     expect(updatedDocument.filingDate).toBeDefined();
-    expect(updatedDocument.leadDocketNumber).not.toBeDefined();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+  });
+
+  it('should update the work items', async () => {
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
@@ -518,10 +523,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
   });
 
-  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
-    const docketEntry = mockCases[0].docketEntries[0];
-    docketEntry.isPendingService = false;
-
+  it('should unset the pending service status on the document when there is an error when serving', async () => {
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
@@ -531,29 +533,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId: 'testing',
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumbers: [mockCases[0].docketNumber],
-        subjectCaseDocketNumber: mockCases[0].docketNumber,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('whoops, that is an error!');
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
-      status: true,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+    ).toMatchObject({
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
       status: false,
     });
   });
