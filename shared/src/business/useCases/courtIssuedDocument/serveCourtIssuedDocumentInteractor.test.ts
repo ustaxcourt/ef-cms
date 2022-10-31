@@ -238,48 +238,53 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getTrialSessionById.mockReturnValue(mockTrialSession);
   });
 
-  it('should throw an Unauthorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
-    // petitioner role does NOT have the SERVE_DOCUMENT permission
-    const user = { ...docketClerkUser, role: ROLES.petitioner };
-    applicationContext.getCurrentUser.mockReturnValue(user);
+  it('should throw an error when the user role does not have the SERVE_DOCUMENT permission', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
-        docketEntryId: '000',
-        docketNumbers: ['101-20'],
-        subjectCaseDocketNumber: '101-20',
+        clientConnectionId: '',
+        docketEntryId: '',
+        docketNumbers: [],
+        subjectCaseDocketNumber: '',
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should throw a Not Found error if the case can not be found', async () => {
+  it('should throw an error when the case can not be found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({});
+      .getCaseByDocketNumber.mockReturnValue({});
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
-        docketEntryId: '000',
-        docketNumbers: ['000-00'],
-        subjectCaseDocketNumber: '000-00',
+        clientConnectionId: '',
+        docketEntryId: '',
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
       }),
-    ).rejects.toThrow('Case 000-00 was not found');
+    ).rejects.toThrow(`Case ${MOCK_CASE.docketNumber} was not found`);
   });
 
-  it('should throw a Not Found error if the document can not be found', async () => {
+  it('should throw an error when the docketEntry was not found on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        docketEntries: [],
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
-        docketEntryId: '000',
-        docketNumbers: [mockCases[0].docketNumber],
-        subjectCaseDocketNumber: mockCases[0].docketNumber,
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
       }),
-    ).rejects.toThrow('Docket entry 000 was not found');
+    ).rejects.toThrow(`Docket entry ${mockDocketEntryId} was not found`);
   });
 
-  it('should throw an error if the docket entry has already been served', async () => {
+  it.only('should throw an error if the docket entry has already been served', async () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId: 'testing',
