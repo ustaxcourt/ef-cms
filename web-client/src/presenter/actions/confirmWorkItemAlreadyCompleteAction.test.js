@@ -1,6 +1,6 @@
 import { confirmWorkItemAlreadyCompleteAction } from './confirmWorkItemAlreadyCompleteAction';
-import { runAction } from 'cerebral/test';
 import { presenter } from '../presenter-mock';
+import { runAction } from 'cerebral/test';
 
 describe('confirmWorkItemAlreadyCompleteAction', () => {
   let routeStub;
@@ -36,7 +36,7 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
         fromPage: 'qc-section-inbox',
       },
     });
-    expect(routeStub).toBeCalledWith('/document-qc/section/inbox');
+    expect(routeStub).toHaveBeenCalledWith('/document-qc/section/inbox');
   });
 
   it('should redirect to the case detail page when fromPage is not qc-section-inbox', async () => {
@@ -56,6 +56,6 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
         fromPage: 'case-detail',
       },
     });
-    expect(routeStub).toBeCalledWith('/case-detail/101-20');
+    expect(routeStub).toHaveBeenCalledWith('/case-detail/101-20');
   });
 });
