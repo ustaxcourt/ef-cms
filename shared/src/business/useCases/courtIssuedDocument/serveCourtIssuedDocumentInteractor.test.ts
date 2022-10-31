@@ -6,11 +6,11 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   PARTY_TYPES,
-  ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import {
   applicationContext,
   testPdfDoc,
@@ -308,7 +308,34 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  xit('should update the case and work items', async () => {
+  it('should throw an error if the document is already pending service', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            isPendingService: true,
+          },
+        ],
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
+    await expect(
+      serveCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it.skip('should update the case and work items', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -338,7 +365,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  xit('should set the document as served and update the case and work items for a non-generic order document', async () => {
+  it.skip('should set the document as served and update the case and work items for a non-generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
       docketEntryId: mockDocketEntryId,
@@ -365,18 +392,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  fit('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
+  it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
     const mockDocketEntryPending = {
+      ...MOCK_DOCUMENTS[0],
       docketEntryId: mockDocketEntryId,
-      pending: true
-    }
-
+      pending: true,
+    };
     applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber.mockReturnValue({
-      docketEntries: [mockDocketEntryPending],
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [mockDocketEntryPending],
+      });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -403,7 +430,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     extendCase.trialDate = '2019-11-27T05:00:00.000Z';
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
+      clientConnectionId: '',
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
       docketNumbers: [mockCases[0].docketNumber],
       subjectCaseDocketNumber: mockCases[0].docketNumber,
@@ -412,7 +439,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
-
     const updatedTrialSession =
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate;
@@ -437,7 +463,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
-
     const updatedTrialSession =
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate;
@@ -465,32 +490,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
   });
 
-  it('should throw an error if the document is already pending service', async () => {
-    mockCases[0].docketEntries[0].isPendingService = true;
-
-    await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
-        docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
-        docketNumbers: [mockCases[0].docketNumber],
-        subjectCaseDocketNumber: mockCases[0].docketNumber,
-      }),
-    ).rejects.toThrow('Docket entry is already being served');
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should call the persistence method to set and unset the pending service status on the document', async () => {
-    const docketEntry = mockCases[0].docketEntries[0];
-    docketEntry.isPendingService = false;
-
+  it('should mark the docketEntry as pending service while processing is ongoing and unset pending when processing has completed', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumbers: [mockCases[0].docketNumber],
-      subjectCaseDocketNumber: mockCases[0].docketNumber,
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -498,18 +503,17 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         .updateDocketEntryPendingServiceStatus,
     ).toHaveBeenCalledWith({
       applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
       status: true,
     });
-
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,
     ).toHaveBeenCalledWith({
       applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
       status: false,
     });
   });
