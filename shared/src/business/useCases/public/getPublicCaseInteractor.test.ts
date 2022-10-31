@@ -68,12 +68,12 @@ describe('getPublicCaseInteractor', () => {
       });
   });
 
-  it('should format the given docket number, removing leading zeroes and suffix', () => {
+  it('should format the given docket number, removing leading zeroes and suffix', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    getPublicCaseInteractor(applicationContext, {
+    await getPublicCaseInteractor(applicationContext, {
       docketNumber: '0000123-19S',
     });
 
