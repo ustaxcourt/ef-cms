@@ -49,9 +49,8 @@ export const overrideDocumentTitle = (docketEntry, formData) => {
   const documentTitleThatShouldHaveBeenInTheFirstPlace =
     docketEntry.workItem.docketEntry.documentTitle;
   const editedAdditionalInfo1 = formData.additionalInfo || '';
-  const editedAdditionalInfo2 = formData.additionalInfo || '';
 
-  return `${documentTitleThatShouldHaveBeenInTheFirstPlace} ${editedAdditionalInfo1} ${editedAdditionalInfo2}`;
+  return `${documentTitleThatShouldHaveBeenInTheFirstPlace} ${editedAdditionalInfo1}`;
 };
 
 /**
@@ -146,7 +145,8 @@ export const completeDocketEntryQCInteractor = async (
     {
       ...currentDocketEntry,
       ...editableFields,
-      // documentTitle: overrideDocumentTitle(currentDocketEntry, editableFields),
+      documentTitle: overrideDocumentTitle(currentDocketEntry, editableFields),
+      // documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,

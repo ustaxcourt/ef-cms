@@ -10,21 +10,25 @@ const {
  * @param {object} docketEntry the docketEntry
  * @returns {object} the document title
  */
-
 const getDocumentTitle = ({ applicationContext, docketEntry }) => {
-  // console.log('docketEntry', docketEntry);
-
   let { documentTitle } = docketEntry;
   const filingsAndProceedings = getFilingsAndProceedings(
     formatDocketEntry(applicationContext, docketEntry),
   );
 
-  documentTitle = `${documentTitle} ${
-    docketEntry.additionalInfo || ''
-  } ${filingsAndProceedings} ${docketEntry.additionalInfo2 || ''}`
-    .trim()
-    .replace('   ', ' ')
-    .replace('  ', ' ');
+  const documentTitleWithAdditionalInfo = documentTitle.includes(
+    docketEntry.additionalInfo,
+  )
+    ? documentTitle
+    : `${documentTitle} ${docketEntry.additionalInfo}`;
+
+  documentTitle =
+    `${documentTitleWithAdditionalInfo} ${filingsAndProceedings} ${
+      docketEntry.additionalInfo2 || ''
+    }`
+      .trim()
+      .replace('   ', ' ')
+      .replace('  ', ' ');
 
   return documentTitle;
 };

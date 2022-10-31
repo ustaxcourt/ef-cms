@@ -24,6 +24,8 @@ export const generateCaseAssociationTitleAction = ({
     });
   store.set(state.form.documentTitle, documentTitle);
 
+  console.log('WE ARE IN generateCaseAssociationTitleAction');
+
   if (!isEmpty(caseAssociationRequest.supportingDocumentMetadata)) {
     caseAssociationRequest.supportingDocumentMetadata.previousDocument = {
       documentTitle,
