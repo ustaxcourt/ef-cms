@@ -113,6 +113,9 @@ const {
   setPdfFormFields,
 } = require('../../shared/src/business/useCaseHelper/pdf/setPdfFormFields');
 const {
+  stampDocumentForService,
+} = require('../../shared/src/business/useCaseHelper/stampDocumentForService');
+const {
   updateAssociatedJudgeOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
 const {
@@ -176,6 +179,7 @@ const useCaseHelpers = {
   setNoticeOfChangeToInPersonProceeding,
   setNoticeOfChangeToRemoteProceeding,
   setPdfFormFields,
+  stampDocumentForService,
   updateAssociatedJudgeOnWorkItems,
   updateCaseAndAssociations,
   updateCaseAutomaticBlock,
