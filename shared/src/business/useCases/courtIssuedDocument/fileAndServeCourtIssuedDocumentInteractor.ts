@@ -128,9 +128,9 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       caseEntities.push(new Case(caseToUpdate, { applicationContext }));
     }
 
-    const filedDocumentPromises = caseEntities.map(
-      async caseEntity =>
-        await applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
+    caseEntities = await Promise.all(
+      caseEntities.map(caseEntity =>
+        applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
           applicationContext,
           caseEntity,
           form,
@@ -138,8 +138,8 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
           originalSubjectDocketEntry,
           user,
         }),
+      ),
     );
-    caseEntities = await Promise.all(filedDocumentPromises);
 
     serviceResults = await applicationContext
       .getUseCaseHelpers()
