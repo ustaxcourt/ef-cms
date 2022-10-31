@@ -7,7 +7,7 @@ const { stampDocumentForService } = require('./stampDocumentForService');
 describe('stampDocumentForService', () => {
   beforeEach(() => {});
 
-  it('should set `Served` as the serviceStampType when the documentType is NOT order and the document eventCode is not one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
+  it('should set `Served` as the stamp text when the documentType is NOT order and the document eventCode is not one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await stampDocumentForService({
       applicationContext,
       documentToStamp: {
@@ -23,7 +23,7 @@ describe('stampDocumentForService', () => {
     ).toContain('Served');
   });
 
-  it('should set serviceStampType from the document when the documentType is Order', async () => {
+  it('should set stamp text from the document when the documentType is Order', async () => {
     const mockServiceStamp = 'This document is urgent!';
 
     await stampDocumentForService({
@@ -41,7 +41,7 @@ describe('stampDocumentForService', () => {
     ).toContain(mockServiceStamp);
   });
 
-  it('should include `Entered and Served` in the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
+  it('should set `Entered and Served` as the stamp text when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await stampDocumentForService({
       applicationContext,
       documentToStamp: {
@@ -54,5 +54,27 @@ describe('stampDocumentForService', () => {
       applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
         .calls[0][0].serviceStampText,
     ).toContain('Entered and Served');
+  });
+
+  it('should include the date served as today, formatted as "MMDDYY" in the service stamp', async () => {
+    const mockToday = '2009-03-01T21:40:46.415Z';
+    const mockTodayFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(mockToday, 'MMDDYY');
+
+    applicationContext
+      .getUtilities()
+      .createISODateString.mockReturnValue(mockToday);
+
+    await stampDocumentForService({
+      applicationContext,
+      documentToStamp: {},
+      pdfData: {},
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
+        .calls[0][0].serviceStampText,
+    ).toContain(mockTodayFormatted);
   });
 });

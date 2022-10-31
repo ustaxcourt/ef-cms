@@ -1,8 +1,4 @@
 const {
-  createISODateString,
-  formatDateString,
-} = require('../utilities/DateHandler');
-const {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
 } = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
@@ -12,8 +8,6 @@ exports.stampDocumentForService = async ({
   documentToStamp,
   pdfData,
 }) => {
-  const servedAt = createISODateString();
-
   let serviceStampType = 'Served';
 
   if (documentToStamp.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
@@ -24,7 +18,10 @@ exports.stampDocumentForService = async ({
     serviceStampType = 'Entered and Served';
   }
 
-  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
+  const servedAt = applicationContext.getUtilities().createISODateString();
+  const serviceStampDate = applicationContext
+    .getUtilities()
+    .formatDateString(servedAt, 'MMDDYY');
 
   return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
     applicationContext,
