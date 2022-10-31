@@ -1,3 +1,4 @@
+import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { state } from 'cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -46,6 +47,7 @@ export const getShowDocumentViewerLink = ({
   isHiddenToPublic,
   isInitialDocument,
   isLegacySealed,
+  isPassingAgeRequirement,
   isSealed,
   isSealedToExternal,
   isServed,
@@ -62,8 +64,9 @@ export const getShowDocumentViewerLink = ({
     if (isStricken) return false;
     if (isLegacySealed) return false;
     if (isSealed) {
-      if (userHasAccessToCase && !isSealedToExternal) return true;
-      else {
+      if (userHasAccessToCase && !isSealedToExternal) {
+        return isPassingAgeRequirement;
+      } else {
         return false;
       }
     }
@@ -194,6 +197,7 @@ export const getFormattedDocketEntry = ({
     isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode),
     isInitialDocument,
     isLegacySealed: entry.isLegacySealed,
+    isPassingAgeRequirement: documentMeetsAgeRequirements(entry),
     isSealed: entry.isSealed,
     isSealedToExternal:
       entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
