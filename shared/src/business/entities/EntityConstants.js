@@ -62,11 +62,6 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to add multiple docket entries to an order is disabled.',
     key: 'consolidated-cases-add-docket-numbers',
   },
-  CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES: {
-    disabledMessage:
-      'Docket entries are not being duplicated across consolidated cases temporarily.',
-    key: 'consolidated-cases-propagate-docket-entries',
-  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
