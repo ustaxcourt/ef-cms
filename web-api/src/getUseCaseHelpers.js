@@ -32,6 +32,9 @@ const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
+  fileDocumentOnOneCase,
+} = require('../../shared/src/business/useCaseHelper/docketEntry/fileDocumentOnOneCase');
+const {
   formatAndSortConsolidatedCases,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
 const {
@@ -146,6 +149,7 @@ const useCaseHelpers = {
   createTrialSessionAndWorkingCopy,
   createUserForContact,
   fetchPendingItemsByDocketNumber,
+  fileDocumentOnOneCase,
   formatAndSortConsolidatedCases,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
