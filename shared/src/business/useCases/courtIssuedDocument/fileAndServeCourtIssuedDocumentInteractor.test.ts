@@ -163,6 +163,20 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should make a call to stamp the document as served', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[0],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().stampDocumentForService,
+    ).toHaveBeenCalled();
+  });
+
   it('should count the number of pages in the document to be served', async () => {
     const mockNumberOfPages = 90;
     applicationContext
