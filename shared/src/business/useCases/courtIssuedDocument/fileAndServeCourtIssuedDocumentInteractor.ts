@@ -1,17 +1,9 @@
 import { Case } from '../../entities/cases/Case';
-import {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  createISODateString,
-  formatDateString,
-} from '../../utilities/DateHandler';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
@@ -90,11 +82,13 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     })
     .promise();
 
-  const stampedPdf = await stampDocument({
-    applicationContext,
-    form,
-    pdfData,
-  });
+  const stampedPdf = await applicationContext
+    .getUseCaseHelpers()
+    .stampDocumentForService({
+      applicationContext,
+      documentToStamp: form,
+      pdfData,
+    });
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -192,25 +186,5 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
     },
     userId: user.userId,
-  });
-};
-
-const stampDocument = async ({ applicationContext, form, pdfData }) => {
-  const servedAt = createISODateString();
-
-  let serviceStampType = 'Served';
-
-  if (form.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = form.serviceStamp;
-  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode)) {
-    serviceStampType = 'Entered and Served';
-  }
-
-  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
-
-  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
-    applicationContext,
-    pdfData,
-    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
 };

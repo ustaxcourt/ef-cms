@@ -94,6 +94,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .serveDocumentAndGetPaperServicePdf.mockReturnValue({
         pdfUrl: mockPdfUrl,
       });
+
+    applicationContext
+      .getUseCaseHelpers()
+      .stampDocumentForService.mockReturnValue(testPdfDoc);
   });
 
   it('should throw an error when the user is not authorized to file and serve a court issued document', async () => {
@@ -245,25 +249,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketNumber: caseRecord.docketNumber,
       status: false,
     });
-  });
-
-  it('should include `Entered and Served` in the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: {
-        ...caseRecord.docketEntries[0],
-        documentType: 'Notice',
-        eventCode: 'ODJ',
-      },
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
-        .calls[0][0].serviceStampText,
-    ).toContain('Entered and Served');
   });
 
   it('should save the generated notice to s3', async () => {
