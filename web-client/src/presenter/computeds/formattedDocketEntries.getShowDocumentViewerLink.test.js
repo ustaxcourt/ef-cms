@@ -250,6 +250,7 @@ describe('getShowDocumentViewerLink', () => {
         hasDocument: true,
         isCourtIssuedDocument: true,
         isExternalUser: true,
+        isPassingAgeRequirement: true,
         isSealed: true,
         isServed: true,
         userHasAccessToCase: true,
@@ -267,6 +268,18 @@ describe('getShowDocumentViewerLink', () => {
         userHasAccessToCase: true,
       },
       output: true,
+    },
+    {
+      inputs: {
+        hasDocument: true,
+        isCourtIssuedDocument: true,
+        isExternalUser: true,
+        isPassingAgeRequirement: false,
+        isSealed: true,
+        isServed: true,
+        userHasAccessToCase: true,
+      },
+      output: false,
     },
   ];
 
