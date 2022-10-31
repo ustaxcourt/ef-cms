@@ -1,15 +1,29 @@
 import { confirmWorkItemAlreadyCompleteAction } from './confirmWorkItemAlreadyCompleteAction';
 import { runAction } from 'cerebral/test';
+import { presenter } from '../presenter-mock';
 
 describe('confirmWorkItemAlreadyCompleteAction', () => {
+  let routeStub;
+
   beforeEach(() => {
     global.location = {
       href: '',
     };
   });
 
+  beforeAll(() => {
+    routeStub = jest.fn();
+
+    presenter.providers.router = {
+      route: routeStub,
+    };
+  });
+
   it('should redirect to the section inbox when from page was qc-section-inbox', async () => {
     await runAction(confirmWorkItemAlreadyCompleteAction, {
+      modules: {
+        presenter,
+      },
       state: {
         caseDetail: {
           docketNumber: '101-20',
@@ -22,11 +36,14 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
         fromPage: 'qc-section-inbox',
       },
     });
-    expect(global.location.href).toEqual('/document-qc/section/inbox');
+    expect(routeStub).toBeCalledWith('/document-qc/section/inbox');
   });
 
   it('should redirect to the case detail page when fromPage is not qc-section-inbox', async () => {
     await runAction(confirmWorkItemAlreadyCompleteAction, {
+      modules: {
+        presenter,
+      },
       state: {
         caseDetail: {
           docketNumber: '101-20',
@@ -39,6 +56,6 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
         fromPage: 'case-detail',
       },
     });
-    expect(global.location.href).toEqual('/case-detail/101-20');
+    expect(routeStub).toBeCalledWith('/case-detail/101-20');
   });
 });
