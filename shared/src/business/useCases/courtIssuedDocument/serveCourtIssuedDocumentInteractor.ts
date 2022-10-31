@@ -237,14 +237,18 @@ const serveDocumentOnOneCase = async ({
   subjectCaseDocketNumber,
   user,
 }) => {
-  const docketEntryEntity = new DocketEntry(courtIssuedDocument, {
-    applicationContext,
-  });
+  const docketEntryEntity = new DocketEntry(
+    {
+      ...courtIssuedDocument,
+      filingDate: createISODateString(),
+      isOnDocketRecord: true,
+    },
+    {
+      applicationContext,
+    },
+  );
 
   const servedParties = aggregatePartiesForService(caseEntity);
-
-  docketEntryEntity.filingDate = createISODateString();
-  docketEntryEntity.isOnDocketRecord = true;
 
   docketEntryEntity.setAsServed(servedParties.all);
 
