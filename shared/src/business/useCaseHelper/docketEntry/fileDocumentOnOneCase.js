@@ -1,8 +1,18 @@
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
+const {
+  DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../../entities/EntityConstants');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+const { Case } = require('../../entities/cases/Case');
+const { DocketEntry } = require('../../entities/DocketEntry');
+const { omit } = require('lodash');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { WorkItem } = require('../../entities/WorkItem');
 
 exports.fileDocumentOnOneCase = async ({
   applicationContext,
@@ -12,8 +22,6 @@ exports.fileDocumentOnOneCase = async ({
   originalSubjectDocketEntry,
   user,
 }) => {
-  const servedParties = aggregatePartiesForService(caseEntity);
-
   const docketEntryEntity = new DocketEntry(
     {
       ...omit(originalSubjectDocketEntry, 'filedBy'),
@@ -22,20 +30,19 @@ exports.fileDocumentOnOneCase = async ({
       docketNumber: caseEntity.docketNumber,
       documentTitle: form.generatedDocumentTitle,
       documentType: form.documentType,
-      draftOrderState: null,
       editState: JSON.stringify({
         ...form,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
       }),
       eventCode: form.eventCode,
-      filingDate: createISODateString(),
       freeText: form.freeText,
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,
       judge: form.judge,
       numberOfPages,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       scenario: form.scenario,
       serviceStamp: form.serviceStamp,
       userId: user.userId,
@@ -43,12 +50,11 @@ exports.fileDocumentOnOneCase = async ({
     { applicationContext },
   );
 
+  const servedParties = aggregatePartiesForService(caseEntity);
   docketEntryEntity.setAsServed(servedParties.all).validate();
-  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   const isSubjectCase =
     originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
-
   if (!docketEntryEntity.workItem || !isSubjectCase) {
     docketEntryEntity.workItem = new WorkItem(
       {
@@ -87,26 +93,29 @@ exports.fileDocumentOnOneCase = async ({
   docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
 
   if (
-    caseEntity.docketEntries.some(
-      docketEntry =>
-        docketEntry.docketEntryId === docketEntryEntity.docketEntryId,
-    )
+    caseEntity.getDocketEntryById({
+      docketEntryId: docketEntryEntity.docketEntryId,
+    })
   ) {
     caseEntity.updateDocketEntry(docketEntryEntity);
   } else {
     caseEntity.addDocketEntry(docketEntryEntity);
   }
 
+  const validatedRawDocketEntry = docketEntryEntity.workItem
+    .validate()
+    .toRawObject();
+
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItem: docketEntryEntity.workItem.validate().toRawObject(),
+    workItem: validatedRawDocketEntry,
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
     section: user.section,
     userId: user.userId,
-    workItem: docketEntryEntity.workItem.validate().toRawObject(),
+    workItem: validatedRawDocketEntry,
   });
 
   caseEntity = await applicationContext
@@ -117,7 +126,7 @@ exports.fileDocumentOnOneCase = async ({
     });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+    await exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity,
     });
@@ -133,7 +142,7 @@ exports.fileDocumentOnOneCase = async ({
   return new Case(validRawCaseEntity, { applicationContext });
 };
 
-const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
+exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
   applicationContext,
   caseEntity,
 }) => {
