@@ -1,10 +1,7 @@
 import { Case } from '../../entities/cases/Case';
 import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -12,12 +9,8 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { WorkItem } from '../../entities/WorkItem';
-import { addServedStampToDocument } from './addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import {
-  createISODateString,
-  formatDateString,
-} from '../../utilities/DateHandler';
+import { createISODateString } from '../../utilities/DateHandler';
 
 const completeWorkItem = async ({
   applicationContext,
@@ -137,11 +130,21 @@ export const serveCourtIssuedDocumentInteractor = async (
       docketEntryId,
     });
 
-  const stampedPdf = await retrieveAndStampDocument({
-    applicationContext,
-    courtIssuedDocument,
-    docketEntryId,
-  });
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    })
+    .promise();
+
+  const stampedPdf = await applicationContext
+    .getUseCaseHelpers()
+    .stampDocumentForService({
+      applicationContext,
+      documentToStamp: courtIssuedDocument,
+      pdfData,
+    });
 
   let serviceResults;
 
@@ -312,39 +315,6 @@ const serveDocumentOnOneCase = async ({
     });
 
   return new Case(validRawCaseEntity, { applicationContext });
-};
-
-const retrieveAndStampDocument = async ({
-  applicationContext,
-  courtIssuedDocument,
-  docketEntryId,
-}) => {
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
-
-  let serviceStampType = 'Served';
-
-  if (courtIssuedDocument.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = courtIssuedDocument.serviceStamp;
-  } else if (
-    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
-  ) {
-    serviceStampType = 'Entered and Served';
-  }
-
-  const servedAt = createISODateString();
-  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
-
-  return await addServedStampToDocument({
-    applicationContext,
-    pdfData,
-    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
-  });
 };
 
 const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
