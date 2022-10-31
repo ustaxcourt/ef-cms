@@ -287,6 +287,7 @@ const gatewayMethods = {
         };
       }
     : confirmAuthCode,
+  createPractitionerDocument,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
