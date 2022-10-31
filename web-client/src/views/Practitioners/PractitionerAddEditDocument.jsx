@@ -84,7 +84,6 @@ export const PractitionerAddEditDocument = connect(
                       <StateDrivenFileInput
                         accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
                         aria-describedby="practitioner-document-file-label"
-                        fileInputName="existingFile"
                         id="practitioner-document-file"
                         name="practitionerDocumentFile"
                         updateFormValueSequence="updateFormValueSequence"

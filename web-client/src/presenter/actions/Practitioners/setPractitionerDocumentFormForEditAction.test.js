@@ -35,9 +35,9 @@ describe('setPractitionerDocumentFormForEditAction', () => {
       barNumber,
       categoryType: practitionerDocument.categoryType,
       description: practitionerDocument.description,
+      existingFileName: practitionerDocument.fileName,
       fileName: practitionerDocument.fileName,
       isEditingDocument: true,
-      practitionerDocumentFile: { name: practitionerDocument.fileName },
     });
   });
 });
