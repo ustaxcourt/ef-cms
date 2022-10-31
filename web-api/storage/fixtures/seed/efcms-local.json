@@ -71,7 +71,7 @@
         "entityName": "Petitioner",
         "name": "Astra Santiago",
         "state": "NY",
-        "email": "petitioner@example.com"
+        "email": "petitioner2@example.com"
       }
     ],
     "initialDocketNumberSuffix": "L",
@@ -4689,6 +4689,11 @@
   {
     "pk": "consolidated-cases-add-docket-numbers",
     "sk": "consolidated-cases-add-docket-numbers",
+    "current": true
+  },
+  {
+    "pk": "consolidated-cases-party-association",
+    "sk": "consolidated-cases-party-association",
     "current": true
   },
   {
