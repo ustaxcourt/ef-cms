@@ -1,9 +1,9 @@
+import { appendFormAndOverwriteOrderFileAction } from './appendFormAndOverwriteOrderFileAction';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { overwriteOrderFileAction } from './overwriteOrderFileAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('overwriteOrderFileAction', () => {
+describe('appendFormAndOverwriteOrderFileAction', () => {
   let errorStub;
   let successStub;
 
@@ -19,7 +19,7 @@ describe('overwriteOrderFileAction', () => {
   });
 
   it('overwrites the file for an order', async () => {
-    await runAction(overwriteOrderFileAction, {
+    await runAction(appendFormAndOverwriteOrderFileAction, {
       modules: {
         presenter,
       },
@@ -27,36 +27,12 @@ describe('overwriteOrderFileAction', () => {
         documentToEdit: {
           docketEntryId: 'document-id-123',
         },
-        form: {
-          primaryDocumentFile: {},
-        },
       },
     });
 
     expect(
-      applicationContextForClient.getUseCases().uploadOrderDocumentInteractor,
+      applicationContextForClient.getUseCases()
+        .appendAmendedPetitionFormInteractor,
     ).toHaveBeenCalled();
-  });
-
-  it('fails to overwrite the file for an order', () => {
-    applicationContextForClient
-      .getUseCases()
-      .uploadOrderDocumentInteractor.mockImplementation(() => {
-        throw new Error();
-      });
-
-    runAction(overwriteOrderFileAction, {
-      modules: { presenter },
-      state: {
-        documentToEdit: {
-          docketEntryId: 'document-id-123',
-        },
-        form: {
-          primaryDocumentFile: {},
-        },
-      },
-    });
-
-    expect(errorStub).toHaveBeenCalled();
   });
 });
