@@ -1,4 +1,4 @@
-import * as client from '../../dynamodbClientService';
+import { put } from '../../dynamodbClientService';
 
 export const updateUserRecords = async ({
   applicationContext,
@@ -9,7 +9,7 @@ export const updateUserRecords = async ({
   updatedUser: any;
   userId: String;
 }) => {
-  await client.put({
+  await put({
     Item: {
       ...updatedUser,
       pk: `user|${userId}`,
@@ -19,7 +19,7 @@ export const updateUserRecords = async ({
     applicationContext,
   });
 
-  await client.put({
+  await put({
     Item: {
       pk: `${updatedUser.role}|${updatedUser.name.toUpperCase()}`,
       sk: `user|${userId}`,
@@ -27,7 +27,7 @@ export const updateUserRecords = async ({
     applicationContext,
   });
 
-  await client.put({
+  await put({
     Item: {
       pk: `${updatedUser.role}|${updatedUser.barNumber.toUpperCase()}`,
       sk: `user|${userId}`,
@@ -46,7 +46,7 @@ export const createNewPractitionerUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: TPractitioner;
 }) => {
   const { userId } = user;
 

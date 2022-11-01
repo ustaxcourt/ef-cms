@@ -1,11 +1,11 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 
 export const filePetitionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any,
   {
     ownershipDisclosureFile,
     ownershipDisclosureUploadProgress,
