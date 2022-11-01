@@ -5,7 +5,7 @@ import {
 import { UnauthorizedError } from '../../errors/errors';
 
 export const filePetitionFromPaperInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any,
   {
     applicationForWaiverOfFilingFeeFile,
     applicationForWaiverOfFilingFeeUploadProgress,
