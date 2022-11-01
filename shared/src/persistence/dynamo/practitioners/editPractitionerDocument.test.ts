@@ -30,7 +30,6 @@ describe('editPractitionerDocument', () => {
         sk: `document|${practitionerDocumentFileId}`,
         ...practitionerDocument,
       },
-      applicationContext,
     });
   });
 });
