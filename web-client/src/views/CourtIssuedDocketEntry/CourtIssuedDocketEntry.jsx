@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { ConfirmInitiateCourtIssuedFilingServiceModal } from '../ConfirmInitiateCourtIssuedFilingServiceModal';
 import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
-import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
@@ -29,8 +29,8 @@ export const CourtIssuedDocketEntry = connect(
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
-    openConfirmInitiateServiceModalSequence:
-      sequences.openConfirmInitiateServiceModalSequence,
+    openConfirmInitiateCourtIssuedFilingServiceModalSequence:
+      sequences.openConfirmInitiateCourtIssuedFilingServiceModalSequence,
     saveCourtIssuedDocketEntrySequence:
       sequences.saveCourtIssuedDocketEntrySequence,
     showModal: state.modal.showModal,
@@ -46,7 +46,7 @@ export const CourtIssuedDocketEntry = connect(
     form,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
-    openConfirmInitiateServiceModalSequence,
+    openConfirmInitiateCourtIssuedFilingServiceModalSequence,
     saveCourtIssuedDocketEntrySequence,
     showModal,
     updateCourtIssuedDocketEntryFormValueSequence,
@@ -246,7 +246,7 @@ export const CourtIssuedDocketEntry = connect(
                     <Button
                       id="serve-to-parties-btn"
                       onClick={() => {
-                        openConfirmInitiateServiceModalSequence();
+                        openConfirmInitiateCourtIssuedFilingServiceModalSequence();
                       }}
                     >
                       Save and Serve
@@ -278,8 +278,8 @@ export const CourtIssuedDocketEntry = connect(
             </div>
           </div>
         </section>
-        {showModal === 'ConfirmInitiateServiceModal' && (
-          <ConfirmInitiateServiceModal
+        {showModal === 'ConfirmInitiateCourtIssuedFilingServiceModal' && (
+          <ConfirmInitiateCourtIssuedFilingServiceModal
             documentTitle={
               addCourtIssuedDocketEntryHelper.formattedDocumentTitle
             }

@@ -292,6 +292,7 @@ const gatewayMethods = {
         };
       }
     : confirmAuthCode,
+  createPractitionerDocument,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -344,6 +345,8 @@ const gatewayMethods = {
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocumentByFileId,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,

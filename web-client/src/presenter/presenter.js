@@ -74,6 +74,7 @@ import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
@@ -127,6 +128,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
+import { gotoCompleteDocketEntryQCSequence } from './sequences/gotoCompleteDocketEntryQCSequence';
 import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
@@ -236,7 +238,7 @@ import { openConfirmDeleteOtherStatisticsModalSequence } from './sequences/openC
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
-import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
+import { openConfirmInitiateCourtIssuedFilingServiceModalSequence } from './sequences/openConfirmInitiateCourtIssuedFilingServiceModalSequence';
 import { openConfirmModalSequence } from './sequences/openConfirmModalSequence';
 import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
@@ -315,8 +317,8 @@ import { selectDocumentForScanSequence } from './sequences/selectDocumentForScan
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
-import { serveCourtIssuedDocumentCompleteSequence } from './sequences/serveCourtIssuedDocumentCompleteSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
+import { serveDocumentCompleteSequence } from './sequences/serveDocumentCompleteSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
@@ -596,6 +598,7 @@ export const presenter = {
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    confirmWorkItemAlreadyCompleteSequence,
     consolidatedCaseCheckboxAllChangeSequence,
     contactPrimaryCountryTypeChangeSequence,
     convertHtml2PdfSequence,
@@ -648,6 +651,7 @@ export const presenter = {
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoChangeLoginAndServiceEmailSequence,
+    gotoCompleteDocketEntryQCSequence,
     gotoContactEditSequence,
     gotoContactSequence,
     gotoCreateOrderSequence,
@@ -757,7 +761,7 @@ export const presenter = {
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
-    openConfirmInitiateServiceModalSequence,
+    openConfirmInitiateCourtIssuedFilingServiceModalSequence,
     openConfirmModalSequence,
     openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
@@ -836,8 +840,8 @@ export const presenter = {
     selectScannerSequence,
     selectWorkItemSequence,
     serveCaseToIrsSequence,
-    serveCourtIssuedDocumentCompleteSequence,
     serveCourtIssuedDocumentSequence,
+    serveDocumentCompleteSequence,
     servePaperFiledDocumentSequence,
     setCaseDetailPageTabSequence,
     setCaseDetailPrimaryTabSequence,

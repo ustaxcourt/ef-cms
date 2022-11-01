@@ -1,6 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getCompleteTrialSessionAlertSuccessAction } from '../actions/getCompleteTrialSessionAlertSuccessAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -26,11 +27,7 @@ export const updateTrialSessionCompleteSequence = [
   hasPaperAction,
   {
     electronic: [
-      () => ({
-        alertSuccess: {
-          message: 'Trial session updated.',
-        },
-      }),
+      getCompleteTrialSessionAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       navigateToTrialSessionDetailAction,
