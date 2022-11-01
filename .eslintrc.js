@@ -36,7 +36,6 @@ module.exports = {
         'jest/valid-expect': 'off',
         'jest/valid-expect-in-promise': 'off',
         'no-underscore-dangle': 'off',
-        // 'no-unused-vars': 'warn',
         'promise/always-return': 'off',
         'promise/catch-or-return': 'off',
       },
