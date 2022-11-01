@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
@@ -17,7 +17,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @returns {Promise<Object>} the case details with the uploaded document(s) attached
  */
 export const uploadExternalDocumentsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any,
   {
     docketNumbersForFiling,
     documentFiles,
