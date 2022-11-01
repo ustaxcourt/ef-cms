@@ -2,12 +2,11 @@ import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
-  DOCKET_SECTION,
-  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import {
   applicationContext,
   testPdfDoc,
@@ -15,24 +14,9 @@ import {
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
-  const mockClientConnectionId = '167e78f8-a11b-4c80-b787-a7a3cf23e25a';
-  let mockTrialSession;
-
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-  const mockServedDocketEntryId = '736a68f4-d08d-4ba1-8185-117359f46804';
-
-  const mockPdfUrl = 'www.example.com';
-
-  const mockWorkItem = {
-    docketNumber: MOCK_CASE.docketNumber,
-    section: DOCKET_SECTION,
-    sentBy: docketClerkUser.name,
-    sentByUserId: docketClerkUser.userId,
-    workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
-  };
 
   const docketEntriesWithCaseClosingEventCodes =
     ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
@@ -41,28 +25,34 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       );
 
       return {
-        docketEntryId: uuidv4(),
+        docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         documentType: eventCodeMap.documentType,
         eventCode,
         signedAt: createISODateString(),
-        signedByUserId: uuidv4(),
+        signedByUserId: 'ab540a2d-2e61-4ec3-be8e-ea744d12a283',
         signedJudgeName: 'Chief Judge',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-        workItem: mockWorkItem,
+        workItem: {
+          docketNumber: MOCK_CASE.docketNumber,
+          section: docketClerkUser.section,
+          sentBy: docketClerkUser.name,
+          sentByUserId: docketClerkUser.userId,
+          workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+        },
       };
     });
 
-  beforeAll(() => {
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
     applicationContext
       .getPersistenceGateway()
-      .saveDocumentFromLambda.mockImplementation(() => {});
-
-    applicationContext.logger.error.mockImplementation(() => {});
+      .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockResolvedValue(1);
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
@@ -72,62 +62,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .putWorkItemInUsersOutbox.mockImplementation(() => {});
-
-    applicationContext
-      .getPersistenceGateway()
-      .saveWorkItem.mockImplementation(() => {});
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REGULAR);
 
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockReturnValue({
-        pdfUrl: mockPdfUrl,
+        pdfUrl: 'www.example.com',
       });
-  });
-
-  beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    //todo: replace w MOCK_TRIAL_SESSION
-    mockTrialSession = {
-      caseOrder: [
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-      ],
-      createdAt: '2019-10-27T05:00:00.000Z',
-      gsi1pk: 'trial-session-catalog',
-      isCalendared: true,
-      judge: {
-        name: 'Judge Colvin',
-        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-      },
-      maxCases: 100,
-      pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      sessionType: 'Regular',
-      sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      startDate: '2019-11-27T05:00:00.000Z',
-      startTime: '10:00',
-      swingSession: true,
-      swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-      term: 'Fall',
-      termYear: '2019',
-      trialLocation: 'Houston, Texas',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(mockTrialSession);
   });
 
   it('should throw an error when the user role does not have the SERVE_DOCUMENT permission', async () => {
@@ -135,7 +76,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: mockClientConnectionId,
+        clientConnectionId: '',
         docketEntryId: '',
         docketNumbers: [],
         subjectCaseDocketNumber: '',
@@ -150,7 +91,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: mockClientConnectionId,
+        clientConnectionId: '',
         docketEntryId: '',
         docketNumbers: [],
         subjectCaseDocketNumber: MOCK_CASE.docketNumber,
@@ -168,7 +109,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: mockClientConnectionId,
+        clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
         subjectCaseDocketNumber: MOCK_CASE.docketNumber,
@@ -182,7 +123,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         docketEntries: [
           {
-            docketEntryId: mockServedDocketEntryId,
+            docketEntryId: mockDocketEntryId,
             servedAt: '2018-03-01T05:00:00.000Z',
           },
         ],
@@ -192,7 +133,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId: '',
-        docketEntryId: mockServedDocketEntryId,
+        docketEntryId: mockDocketEntryId,
         docketNumbers: [],
         subjectCaseDocketNumber: MOCK_CASE.docketNumber,
       }),
@@ -242,9 +183,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
+      clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [MOCK_CASE.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -272,9 +213,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
+      clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [MOCK_CASE.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -332,17 +273,23 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedJudgeName: 'Judy',
         },
       ],
-      trialDate: '2019-11-27T05:00:00.000Z',
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      trialDate: MOCK_TRIAL_REGULAR.startDate,
+      trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
     };
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_REGULAR,
+        isCalendared: true,
+      });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCaseWithTrialInfo.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
     });
 
@@ -379,14 +326,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...mockTrialSession,
+        ...MOCK_TRIAL_REGULAR,
         isCalendared: false,
       });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCaseWithTrialInfo.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
     });
 
@@ -400,65 +347,24 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
-    const mockCaseWithDocketEntries = {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          docketNumber: MOCK_CASE.docketNumber,
-          documentType: 'Order',
-          eventCode: 'O',
-          serviceStamp: 'Served',
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        {
-          docketEntryId: mockDocketEntryId,
-          docketNumber: MOCK_CASE.docketNumber,
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        {
-          docketEntryId: mockServedDocketEntryId,
-          docketNumber: MOCK_CASE.docketNumber,
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          servedAt: createISODateString(),
-          servedParties: [
-            {
-              name: 'Bernard Lowe',
-            },
-          ],
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItem: mockWorkItem,
-        },
-        ...docketEntriesWithCaseClosingEventCodes,
-      ],
-    };
-
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          docketEntries: [docketEntry],
+        });
+
       await serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
+        clientConnectionId: '',
         docketEntryId: docketEntry.docketEntryId,
-        docketNumbers: [mockCaseWithDocketEntries.docketNumber], //take this out?
-        subjectCaseDocketNumber: mockCaseWithDocketEntries.docketNumber,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
       });
 
       const updatedCase =
         applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
           .caseToUpdate;
-
       expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(
         applicationContext.getPersistenceGateway()
@@ -468,6 +374,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should mark the docketEntry as pending service while processing is ongoing and unset pending when processing has completed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
+
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
@@ -497,6 +415,17 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   it('should unset the pending service status on the document when there is an error when serving', async () => {
     applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
+    applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
         new Error('whoops, that is an error!'),
@@ -504,7 +433,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
+        clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
         subjectCaseDocketNumber: MOCK_CASE.docketNumber,
