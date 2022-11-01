@@ -12,20 +12,18 @@ export const generateDocumentTitleInteractor = (
   applicationContext: IApplicationContext,
   { documentMetadata },
 ) => {
-  console.log('generateDocumentTitleInteractor is CALLED *****');
-  console.log('documentMetadata ********', documentMetadata);
-
-  // console.log('documentMetadata', documentMetadata);
-  //    POSSIBLE SOLUTION:
-  //    1. get the entire docket entry for the previous document
-  //    then pass that as docketEntry
-
   if (documentMetadata.previousDocument) {
-    documentMetadata.previousDocument.documentTitle = applicationContext
-      .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({
-        docketEntry: documentMetadata.previousDocument,
-      });
+    if (
+      !documentMetadata.previousDocument.documentTitle.includes(
+        documentMetadata.previousDocument.additionalInfo,
+      )
+    ) {
+      documentMetadata.previousDocument.documentTitle = applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo({
+          docketEntry: documentMetadata.previousDocument,
+        });
+    }
   }
 
   const externalDocument = ExternalDocumentFactory(documentMetadata);
