@@ -412,6 +412,25 @@
       }
     },
     "/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "Retrieve open and closed cases for the currently authenticated user",
+        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "post": {
         "tags": ["cases"],
         "summary": "create a case",
@@ -1147,50 +1166,6 @@
             "description": "422 response",
             "schema": {
               "$ref": "#/definitions/unprocessableEntityError"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cases": {
-      "get": {
-        "tags": ["cases"],
-        "summary": "Retrieve open and closed cases for the currently authenticated user",
-        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
             }
           }
         },
@@ -4986,38 +4961,7 @@
           "name": "trial session working copy info",
           "description": "the trial session info needed to print a working copy",
           "schema": {
-            "type": "object",
-            "properties": {
-              "showCaseNotes": {
-                "type": "boolean"
-              },
-              "filters": {
-                "type": "object"
-              },
-              "formattedCases": {
-                "type": "array"
-              },
-              "formattedTrialSession": {
-                "type": "object"
-              },
-              "sessionNotes": {
-                "type": "string"
-              },
-              "sort": {
-                "type": "string"
-              },
-              "userHeading": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "showCaseNotes",
-              "filters",
-              "formattedCases",
-              "formattedTrialSession",
-              "sort",
-              "userHeading"
-            ]
+            "$ref": "#/definitions/printableWorkingCopyData"
           }
         }
       ],
@@ -7160,7 +7104,18 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "documentId": {
+                      "type": "string"
+                    },
+                    "documentTitle": {
+                      "type": "string"
+                    }
+                  }
+                }
               },
               "docketNumber": {
                 "type": "string"
@@ -7240,7 +7195,18 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "documentId": {
+                      "type": "string"
+                    },
+                    "documentTitle": {
+                      "type": "string"
+                    }
+                  }
+                }
               },
               "docketNumber": {
                 "type": "string"
@@ -8070,6 +8036,17 @@
       "properties": {
         "attachments": {
           "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string"
+              },
+              "documentTitle": {
+                "type": "string"
+              }
+            }
+          },
           "description": "array of document metadata objects attached to the message"
         },
         "caseStatus": {
@@ -8314,6 +8291,237 @@
         }
       },
       "description": "a user object"
+    },
+    "printableWorkingCopyData": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "object",
+          "properties": {
+            "showAll": {
+              "type": "boolean"
+            },
+            "setForTrial": {
+              "type": "boolean"
+            },
+            "settled": {
+              "type": "boolean"
+            },
+            "recall": {
+              "type": "boolean"
+            },
+            "dismissed": {
+              "type": "boolean"
+            },
+            "rule122": {
+              "type": "boolean"
+            },
+            "continued": {
+              "type": "boolean"
+            },
+            "aBasisReached": {
+              "type": "boolean"
+            },
+            "takenUnderAdvisement": {
+              "type": "boolean"
+            },
+            "statusUnassigned": {
+              "type": "boolean"
+            }
+          }
+        },
+        "formattedCases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "caseTitle": {
+                "type": "string"
+              },
+              "docketNumber": {
+                "type": "string"
+              },
+              "docketNumberWithSuffix": {
+                "type": "string"
+              },
+              "inConsolidatedGroup": {
+                "type": "boolean"
+              },
+              "irsPractitioners": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "entityName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "contact": {
+                      "type": "object",
+                      "properties": {
+                        "address1": {
+                          "type": "string"
+                        },
+                        "address2": {
+                          "type": "string"
+                        },
+                        "address3": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "countryType": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "postalCode": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "barNumber": {
+                      "type": "string"
+                    },
+                    "serviceIndicator": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "leadCase": {
+                "type": "boolean"
+              },
+              "privatePractitioners": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "entityName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "contact": {
+                      "type": "object",
+                      "properties": {
+                        "address1": {
+                          "type": "string"
+                        },
+                        "address2": {
+                          "type": "string"
+                        },
+                        "address3": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "countryType": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "postalCode": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "barNumber": {
+                      "type": "string"
+                    },
+                    "firmName": {
+                      "type": "string"
+                    },
+                    "representing": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "serviceIndicator": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "formattedTrialSession": {
+          "type": "object",
+          "properties": {
+            "computedStatus": {
+              "type": "string"
+            },
+            "formattedJudge": {
+              "type": "string"
+            },
+            "formattedStartDateFull": {
+              "type": "string"
+            },
+            "formattedTerm": {
+              "type": "string"
+            },
+            "startDateForAdditionalPageHeaders": {
+              "type": "string"
+            },
+            "trialLocation": {
+              "type": "string"
+            }
+          }
+        },
+        "showCaseNotes": {
+          "type": "boolean"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "trialSessionId": {
+          "type": "string"
+        },
+        "userHeading": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "showCaseNotes",
+        "filters",
+        "formattedCases",
+        "formattedTrialSession",
+        "sort",
+        "userHeading"
+      ]
     }
   }
 }
