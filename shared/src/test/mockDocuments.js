@@ -24,7 +24,7 @@ exports.MOCK_DOCUMENTS = [
     documentTitle: 'Statement of Taxpayer Identification',
     documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
     eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    filingDate: '',
+    filingDate: '2018-03-01T05:00:00.000Z',
     index: 3,
     isFileAttached: true,
     processingStatus: 'pending',
