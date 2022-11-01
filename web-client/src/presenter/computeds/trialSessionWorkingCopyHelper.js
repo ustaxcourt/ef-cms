@@ -90,12 +90,27 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
+  let casesAssociatedWithTrialSession = leadAndUnconsolidatedCases;
+
+  memberConsolidatedCases.forEach(memberCase => {
+    const leadCaseAssociatedWithTrialSession = leadAndUnconsolidatedCases.find(
+      c => c.docketNumber === memberCase.leadDocketNumber,
+    );
+    if (!leadCaseAssociatedWithTrialSession) {
+      casesAssociatedWithTrialSession.push(memberCase);
+    }
+  });
+
+  casesAssociatedWithTrialSession.sort(
+    applicationContext.getUtilities().compareCasesByDocketNumber,
+  );
+
   if (sort === 'practitioner') {
-    leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
+    casesAssociatedWithTrialSession.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    leadAndUnconsolidatedCases.reverse();
+    casesAssociatedWithTrialSession.reverse();
   }
 
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
@@ -105,7 +120,8 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   return {
     casesShownCount: formattedCases.length,
-    formattedCases: leadAndUnconsolidatedCases,
+    formattedCases: casesAssociatedWithTrialSession,
+    showPrintButton: formattedCases.length > 0,
     trialStatusOptions,
   };
 };

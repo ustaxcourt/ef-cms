@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 type TCaseDeadline = {
   associatedJudge: string;
   caseDeadlineId: number;
@@ -10,29 +11,33 @@ type TCaseDeadline = {
 
 type DocketEntry = {
   additionalInfo: string;
-  caseCaption: string;
-  descriptionDisplay: string;
-  docketNumber: string;
-  docketEntryId: string;
-  documentTitle: string;
-  lodged: boolean;
-  documentType: string;
-  certificateOfService: string;
-  filingDate: string;
   addToCoversheet: boolean;
-  mailingDate: string;
+  caseCaption: string;
+  certificateOfService: string;
+  createdAt: string;
+  descriptionDisplay: string;
+  docketEntryId: string;
+  docketNumber: string;
+  documentTitle: string;
+  documentType: string;
   eventCode: string;
   filedBy: string;
-  index: string;
-  isFileAttached: string;
+  filingDate: string;
+  index: number;
+  isFileAttached: boolean;
   isPaper: string;
+  lodged: boolean;
+  mailingDate: string;
   otherFilingParty: string;
+  editState: object;
+  isLegacyServed: boolean;
+  processingStatus: string;
+  pk: string;
   receivedAt: string;
   sentBy: string;
   servedAt: string;
-  userId: string;
-  pk: string;
   sk: string;
+  userId: string;
 };
 
 type TDocketEntryEntity = {
@@ -48,7 +53,43 @@ type WorkItem = {
   assigneeId: string;
   docketEntry: DocketEntry;
   docketNumber: string;
+  workItemId: string;
+  completedAt: string;
+  updatedAt: string;
+  gsi1pk: string;
 };
+
+type TOutboxItem = {
+  caseStatus: string;
+  caseTitle: string;
+  completedAt: string;
+  completedBy: string;
+  caseIsInProgress: boolean;
+  docketEntry: DocketEntry;
+  docketNumber: string;
+  highPriority: boolean;
+  inProgress: boolean;
+  leadDocketNumber: string;
+  section: string;
+  trialDate: string;
+  workItemId: string;
+} & WorkItem;
+
+type TOutboxItemEntity = {
+  validate(): TOutboxItemEntity;
+  isValid(): boolean;
+  toRawObject(): TOutboxItem;
+} & TOutboxItem;
+
+type TDynamoRecord = {
+  pk: string;
+  sk: string;
+  gsi1pk?: string;
+  ttl?: number;
+  [key: string]: any;
+};
+
+type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
 
 type TSectionWorkItem = {
   createdAt: string;
@@ -277,6 +318,12 @@ type TPetitioner = {
   updatedEmail: string;
   confirmEmail: string;
   contactType: string;
+};
+
+type TCaseNote = {
+  userId: string;
+  docketNumber: string;
+  notes: string;
 };
 
 type TPractitioner = {

@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
@@ -13,7 +13,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @returns {string} uploaded docket entry id
  */
 export const uploadOrderDocumentInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any,
   {
     docketEntryIdToOverwrite,
     documentFile,

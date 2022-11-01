@@ -5,6 +5,7 @@
 * [External Contributors Start Here](external-contributions.md)
 * [Getting Started](getting-started.md)
 * [Team Process](team-process.md)
+* [Dependency Updates](dependency-updates.md)
 * [🆘 Story Lifecycle](story-life-cycle.md)
 * [PR Workflows](pr-workflow.md)
   * [Code Review Process](code-review.md)

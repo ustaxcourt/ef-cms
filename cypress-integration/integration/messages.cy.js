@@ -9,6 +9,11 @@ const {
   selectSection,
   sendMessage,
 } = require('../support/pages/document-qc');
+const {
+  getCaseStatusFilter,
+  messagesShouldBeFiltered,
+  selectsCaseStatusFilterNew,
+} = require('../support/pages/dashboard');
 
 describe('Messages', () => {
   describe('Docket clerk completes qc and sends a message', () => {
@@ -37,7 +42,7 @@ describe('Messages', () => {
     });
   });
 
-  describe('Docket clerk creates and sends a message', () => {
+  describe('Docket clerk creates and sends a message on a "Calendared" case', () => {
     it('should go to case detail and open the dialog to create a new message', () => {
       cy.login('docketclerk', '/case-detail/103-20');
       createMessage();
@@ -50,6 +55,31 @@ describe('Messages', () => {
       fillOutMessageField();
       sendMessage();
       progressIndicatorDoesNotExist();
+    });
+  });
+
+  describe('Docket clerk creates and sends a message on a "New" case', () => {
+    it('should go to case detail and open the dialog to create a new message', () => {
+      cy.login('docketclerk', '/case-detail/102-20');
+      createMessage();
+    });
+
+    it('should fill out the form and send the new message', () => {
+      selectSection('ADC');
+      selectRecipient('Test ADC');
+      enterSubject();
+      fillOutMessageField();
+      sendMessage();
+      progressIndicatorDoesNotExist();
+    });
+  });
+
+  describe('ADC views messages', () => {
+    it('should be able to filter messages', () => {
+      cy.login('adc');
+      getCaseStatusFilter();
+      selectsCaseStatusFilterNew();
+      messagesShouldBeFiltered();
     });
   });
 });
