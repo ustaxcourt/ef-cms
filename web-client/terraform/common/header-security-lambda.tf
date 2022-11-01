@@ -15,5 +15,5 @@ resource "aws_lambda_function" "header_security_lambda" {
   publish          = true
 
   # Lambda@Edge do not yet support nodejs 16.x
-  runtime = "nodejs14.x"
+  runtime = "nodejs16.x"
 }
