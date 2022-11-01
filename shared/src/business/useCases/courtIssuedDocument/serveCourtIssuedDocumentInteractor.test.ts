@@ -71,7 +71,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
   });
 
-  it('should throw an error when the user role does not have the SERVE_DOCUMENT permission', async () => {
+  it('should throw an error when the user role does not have permission to serve a court issued document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
@@ -99,7 +99,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow(`Case ${MOCK_CASE.docketNumber} was not found`);
   });
 
-  it('should throw an error when the docketEntry was not found on the case', async () => {
+  it('should throw an error when the docket entry was not found on the case', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -140,7 +140,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should throw an error if the document is already pending service', async () => {
+  it('should throw an error when the document is already pending service', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -165,6 +165,66 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should calculate and set the number of pages in the document on the docket entry', async () => {
+    const mockNumberOfPages = 3256;
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            docketEntryId: mockDocketEntryId,
+            numberOfPages: undefined,
+          },
+        ],
+      });
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockReturnValue(3256);
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    const servedDocketEntry = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
+      );
+    expect(servedDocketEntry.numberOfPages).toBe(mockNumberOfPages);
+  });
+
+  it('should serve the docketEntry on every case provided in the list of docketNumbers', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            docketEntryId: mockDocketEntryId,
+            filingDate: undefined,
+            servedAt: undefined,
+          },
+        ],
+      });
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [MOCK_CASE.docketNumber, '200-21', '300-33'],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(3);
   });
 
   it('should mark the docket entry as served', async () => {
