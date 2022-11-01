@@ -30,7 +30,7 @@ describe('Case Consolidation Journey', () => {
     jest.setTimeout(30000);
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     cerebralTest.closeSocket();
   });
 
@@ -202,7 +202,7 @@ describe('Case Consolidation Journey', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0, false);
 
-  it('should have a success message that mentions the document was served (and not on multiple cases)', async () => {
+  it('should have a success message that mentions the document was served (and not on multiple cases)', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
     expect(alertSuccess.message).toEqual('Document served.');
