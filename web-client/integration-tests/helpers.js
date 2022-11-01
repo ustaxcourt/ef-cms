@@ -73,12 +73,8 @@ import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
 
-const {
-  ALLOWLIST_FEATURE_FLAGS,
-  CASE_TYPES_MAP,
-  PARTY_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} = applicationContext.getConstants();
+const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+  applicationContext.getConstants();
 
 const formattedDocketEntries = withAppContextDecorator(
   formattedDocketEntriesComputed,
@@ -389,13 +385,6 @@ export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
 
 export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
   return await setFeatureFlag(isEnabled, `${keyPrefix}-order-search-enabled`);
-};
-
-export const setConsolidatedCasesPropagateEntriesFlag = async isEnabled => {
-  return await setFeatureFlag(
-    isEnabled,
-    ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
-  );
 };
 
 export const setFeatureFlag = async (isEnabled, key) => {
@@ -966,13 +955,13 @@ export const wait = time => {
   });
 };
 
-export const waitFor = async ({
-  booleanExpression,
+export const waitForCondition = async ({
+  booleanExpressionCondition,
   maxWait = 10000,
   refreshInterval = 500,
 }) => {
   let waitTime = 0;
-  while (booleanExpression() && waitTime < maxWait) {
+  while (!booleanExpressionCondition() && waitTime < maxWait) {
     waitTime += refreshInterval;
     await wait(refreshInterval);
   }
@@ -985,8 +974,8 @@ export const waitForLoadingComponentToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitFor({
-    booleanExpression: () => cerebralTest.getState(component),
+  const waitTime = await waitForCondition({
+    booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
@@ -999,8 +988,9 @@ export const waitForExpectedItem = async ({
   expectedItem,
   maxWait = 10000,
 }) => {
-  const waitTime = await waitFor({
-    booleanExpression: () => cerebralTest.getState(currentItem) != expectedItem,
+  const waitTime = await waitForCondition({
+    booleanExpressionCondition: () =>
+      cerebralTest.getState(currentItem) === expectedItem,
     maxWait,
   });
   console.log(`Waited ${waitTime}ms for ${expectedItem}`);
@@ -1011,8 +1001,8 @@ export const waitForExpectedItemToExist = async ({
   currentItem,
   maxWait = 10000,
 }) => {
-  const waitTime = await waitFor({
-    booleanExpression: () => !cerebralTest.getState(currentItem),
+  const waitTime = await waitForCondition({
+    booleanExpressionCondition: () => cerebralTest.getState(currentItem),
     maxWait,
   });
   console.log(`Waited ${waitTime}ms for ${currentItem}`);

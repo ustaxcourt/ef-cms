@@ -39,7 +39,7 @@ const addNewInitialFilingToCase = ({
       filers,
       filingDate: caseEntity.receivedAt,
       isFileAttached: true,
-      isOnDocketRecord: true,
+      isOnDocketRecord: eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
       isPaper: true,
       mailingDate: caseEntity.mailingDate,
       receivedAt: caseEntity.receivedAt,
@@ -92,9 +92,10 @@ exports.updateInitialFilingDocuments = async ({
   caseEntity,
   caseToUpdate,
 }) => {
+  const PETITION_KEY = 'petitionFile';
   const initialDocumentTypesWithoutPetition = omit(
     INITIAL_DOCUMENT_TYPES_MAP,
-    'petitionFile',
+    PETITION_KEY,
   );
 
   for (const key of Object.keys(initialDocumentTypesWithoutPetition)) {
