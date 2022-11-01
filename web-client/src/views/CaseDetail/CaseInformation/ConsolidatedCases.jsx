@@ -1,4 +1,5 @@
 import { CaseLink } from '../../../ustc-ui/CaseLink/CaseLink';
+import { Mobile, NonMobile } from '../../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
 import React from 'react';
@@ -12,16 +13,28 @@ export const ConsolidatedCases = connect(
     return (
       <>
         {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
-        <div className="grid-container padding-left-0">
+        <div className="grid-container padding-left-0 margin-bottom-2">
           {caseDetail.consolidatedCases.map(consolidatedCase => (
             <div
-              className="grid-row margin-top-3"
+              className="grid-row margin-top-3 align-items-baseline"
               key={consolidatedCase.docketNumber}
             >
-              <div className="grid-col-2">
-                <CaseLink formattedCase={consolidatedCase} />
-              </div>
-              <div className="grid-col-10">{consolidatedCase.caseTitle}</div>
+              <NonMobile>
+                <div className="tablet:grid-col-3 desktop:grid-col-2">
+                  <CaseLink formattedCase={consolidatedCase} />
+                </div>
+                <div className="tablet:grid-col-9 desktop:grid-col-10">
+                  {consolidatedCase.caseTitle}
+                </div>
+              </NonMobile>
+              <Mobile>
+                <div className="grid-col-4">
+                  <CaseLink formattedCase={consolidatedCase} />
+                </div>
+                <div className="grid-col-8 margin-left-neg-2">
+                  {consolidatedCase.caseTitle}
+                </div>
+              </Mobile>
             </div>
           ))}
         </div>

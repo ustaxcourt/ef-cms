@@ -6,7 +6,7 @@
  * @returns {Promise<string>} the key returned from a successful upload
  */
 export const uploadDocumentAndMakeSafeInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any, // keep as any until the UI is refactored
   {
     document,
     key,
@@ -20,13 +20,14 @@ export const uploadDocumentAndMakeSafeInteractor = async (
       document,
       key,
       onUploadProgress,
-    } as any);
+    });
 
   await applicationContext
     .getUseCases()
     .getStatusOfVirusScanInteractor(applicationContext, {
       key: uploadedKey,
     });
+
   await applicationContext
     .getUseCases()
     .validatePdfInteractor(applicationContext, {
