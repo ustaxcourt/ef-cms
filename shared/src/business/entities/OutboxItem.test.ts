@@ -1,28 +1,24 @@
-import {
-  CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-  DOCKET_SECTION,
-} from './EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES, DOCKET_SECTION } from './EntityConstants';
 import { OutboxItem } from './OutboxItem';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('OutboxItem', () => {
   const validOutboxItem = {
-    caseStatus: CASE_STATUS_TYPES.new,
-    caseTitle: 'Johnny Joe Jacobson',
-    docketEntry: {} as any,
-    docketNumber: '101-18',
     assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     caseIsInProgress: false,
+    caseStatus: CASE_STATUS_TYPES.new,
+    caseTitle: 'Johnny Joe Jacobson',
     completedAt: '2018-11-21T20:49:28.192Z',
     completedBy: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     createdAt: '2018-11-21T20:49:28.192Z',
+    docketEntry: {} as any,
+    docketNumber: '101-18',
     highPriority: false,
     inProgress: false,
     leadDocketNumber: '101-20',
+    section: DOCKET_SECTION,
     trialDate: '2018-11-21T20:49:28.192Z',
     workItemId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-    section: DOCKET_SECTION,
   } as TOutboxItem;
 
   describe('isValid', () => {
