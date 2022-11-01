@@ -1,10 +1,10 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../authorization/authorizationClientService';
-import { Case } from '../entities/cases/Case';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
 import { Petitioner } from '../entities/contacts/Petitioner';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 
 /**

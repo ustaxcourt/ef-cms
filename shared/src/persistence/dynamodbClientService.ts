@@ -39,7 +39,7 @@ const filterEmptyStrings = params => {
   return params;
 };
 
-const getTableName = ({ applicationContext }) =>
+const getTableName = ({ applicationContext }): string =>
   (applicationContext.environment &&
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&
@@ -83,18 +83,23 @@ export const describeDeployTable = async ({ applicationContext }) => {
  * @param {object} params the params to put
  * @returns {object} the item that was put
  */
-export const put = params => {
-  const filteredParams = filterEmptyStrings(params);
-  return params.applicationContext
+export const put = ({
+  applicationContext,
+  Item,
+}: {
+  Item: TDynamoRecord;
+  applicationContext: IApplicationContext;
+}): Promise<TDynamoRecord> => {
+  return applicationContext
     .getDocumentClient()
     .put({
+      Item: filterEmptyStrings(Item),
       TableName: getTableName({
-        applicationContext: params.applicationContext,
+        applicationContext,
       }),
-      ...filteredParams,
     })
     .promise()
-    .then(() => params.Item);
+    .then(() => Item);
 };
 
 /**
@@ -102,18 +107,36 @@ export const put = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-export const update = params => {
-  const filteredParams = filterEmptyStrings(params);
-  return params.applicationContext
+export const update = ({
+  applicationContext,
+  ConditionExpression,
+  ExpressionAttributeNames,
+  ExpressionAttributeValues,
+  Key,
+  UpdateExpression,
+}: {
+  ConditionExpression?: string;
+  ExpressionAttributeNames: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string | boolean>;
+  Key: Record<string, string>;
+  UpdateExpression: string;
+  applicationContext: IApplicationContext;
+}): Promise<TDynamoRecord[]> => {
+  const filteredValues = filterEmptyStrings(ExpressionAttributeValues);
+  return applicationContext
     .getDocumentClient()
     .update({
+      ConditionExpression,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues: filteredValues,
+      Key,
       TableName: getTableName({
-        applicationContext: params.applicationContext,
+        applicationContext,
       }),
-      ...filteredParams,
+      UpdateExpression,
     })
     .promise()
-    .then(() => params.Item);
+    .then(() => undefined);
 };
 
 /**
@@ -209,12 +232,36 @@ export const getFromDeployTable = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-export const query = params => {
-  return params.applicationContext
+export const query = ({
+  applicationContext,
+  ExpressionAttributeNames,
+  ExpressionAttributeValues,
+  FilterExpression,
+  IndexName,
+  KeyConditionExpression,
+  Limit,
+  ...params
+}: {
+  ExpressionAttributeNames: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string | number>;
+  IndexName?: string;
+  Limit?: number;
+  FilterExpression?: string;
+  KeyConditionExpression: string;
+  applicationContext: IApplicationContext;
+  params?: Record<string, any>;
+}): Promise<TDynamoRecord[]> => {
+  return applicationContext
     .getDocumentClient()
     .query({
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      FilterExpression,
+      IndexName,
+      KeyConditionExpression,
+      Limit,
       TableName: getTableName({
-        applicationContext: params.applicationContext,
+        applicationContext,
       }),
       ...params,
     })
@@ -257,21 +304,39 @@ export const scan = async params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-export const queryFull = async params => {
+export const queryFull = async ({
+  applicationContext,
+  ExpressionAttributeNames,
+  ExpressionAttributeValues,
+  IndexName,
+  KeyConditionExpression,
+  ...params
+}: {
+  applicationContext: IApplicationContext;
+  params?: Record<string, any>;
+  IndexName?: string;
+  ExpressionAttributeNames: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string>;
+  KeyConditionExpression: string;
+}): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
   let lastKey = null;
   let allResults = [];
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await params.applicationContext
+    const subsetResults = await applicationContext
       .getDocumentClient()
       .query({
+        ExclusiveStartKey: lastKey,
+        ExpressionAttributeNames,
+        ExpressionAttributeValues,
+        IndexName,
+        KeyConditionExpression,
         TableName: getTableName({
-          applicationContext: params.applicationContext,
+          applicationContext,
         }),
         ...params,
-        ExclusiveStartKey: lastKey,
       })
       .promise();
 
@@ -365,7 +430,13 @@ export const batchDelete = ({ applicationContext, items }) => {
   }
 };
 
-export const remove = ({ applicationContext, key }) => {
+export const remove = ({
+  applicationContext,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  key: Record<string, string>;
+}) => {
   return applicationContext
     .getDocumentClient()
     .delete({
