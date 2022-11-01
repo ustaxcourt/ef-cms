@@ -27,9 +27,9 @@ describe('computeSubmitTrialSessionDataAction', () => {
     expect(spyComputeTermAndUpdateState).toHaveBeenCalled();
   });
 
-  it('should clear trialClerkId and trialClerk when alternateTrialClerkName is present', () => {
+  it('should clear trialClerkId and trialClerk when alternateTrialClerkName is present', async () => {
     const alternateTrialClerkName = 'Wonder Woman';
-    const result = runAction(computeSubmitTrialSessionDataAction, {
+    const result = await runAction(computeSubmitTrialSessionDataAction, {
       state: {
         form: {
           ...form,
@@ -46,8 +46,8 @@ describe('computeSubmitTrialSessionDataAction', () => {
     );
   });
 
-  it('should NOT clear trialClerkId and trialClerk when alternateTrialClerkName is not present', () => {
-    const result = runAction(computeSubmitTrialSessionDataAction, {
+  it('should NOT clear trialClerkId and trialClerk when alternateTrialClerkName is not present', async () => {
+    const result = await runAction(computeSubmitTrialSessionDataAction, {
       state: {
         form: {
           ...form,
