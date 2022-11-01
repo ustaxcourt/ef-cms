@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fetchPendingItemsInteractor } from './fetchPendingItemsInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('fetchPendingItemsInteractor', () => {
   let mockUser;

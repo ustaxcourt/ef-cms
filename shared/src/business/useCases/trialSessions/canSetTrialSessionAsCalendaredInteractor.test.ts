@@ -1,9 +1,9 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
 import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
 
 const MOCK_TRIAL = {
   maxCases: 100,

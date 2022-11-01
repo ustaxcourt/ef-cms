@@ -3,11 +3,11 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { validateAddPetitionerInteractor } from './validateAddPetitionerInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { Case } from '../entities/cases/Case';
 import { ContactFactory } from '../entities/contacts/ContactFactory';
 import { Petitioner } from '../entities/contacts/Petitioner';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validateAddPetitionerInteractor } from './validateAddPetitionerInteractor';
 
 describe('validateAddPetitionerInteractor', () => {
   let mockContact;
