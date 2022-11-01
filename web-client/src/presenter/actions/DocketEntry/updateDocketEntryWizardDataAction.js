@@ -42,6 +42,7 @@ export const updateDocketEntryWizardDataAction = ({
   let supporting = get(state.screenMetadata.supporting);
   console.log('props.key', props.key);
   console.log('props', props);
+  console.log('FORM DATA FROM STATE', get(state.form));
 
   switch (props.key) {
     case 'initEventCode':

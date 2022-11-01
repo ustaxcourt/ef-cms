@@ -26,6 +26,7 @@ export const generateTitleForPaperFilingAction = ({
   }
 
   console.log('WE ARE IN generateTitleForPaperFilingAction');
+  console.log('WE GET HERE WHEN QCING A RESPONSE');
 
   let documentTitle = applicationContext
     .getUseCases()

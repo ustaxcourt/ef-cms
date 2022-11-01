@@ -16,6 +16,8 @@ export const generateTitleForSupportingDocumentsAction = ({
   const documentMetadata = get(state.form);
   let documentTitle;
 
+  console.log('WE ARE IN generateTitleForSupportingDocumentsAction');
+
   const { supportingDocuments } = documentMetadata;
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
