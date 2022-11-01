@@ -1,6 +1,6 @@
-import { uploadDocumentAndMakeSafeInteractor } from './uploadDocumentAndMakeSafeInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { uploadDocumentAndMakeSafeInteractor } from './uploadDocumentAndMakeSafeInteractor';
 
 describe('uploadDocumentAndMakeSafeInteractor', () => {
   const mockDocument = MOCK_DOCUMENTS;
@@ -26,8 +26,8 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
 
   it('calls upload on the provided document', async () => {
     await uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      key: 'abc',
       document: mockDocument,
+      key: 'abc',
       onUploadProgress: () => {},
     });
 

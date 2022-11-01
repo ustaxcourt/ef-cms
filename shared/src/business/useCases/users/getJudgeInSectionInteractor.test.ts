@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getJudgeInSectionInteractor } from './getJudgeInSectionInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('getJudgeInSectionInteractor', () => {
   beforeEach(() => {

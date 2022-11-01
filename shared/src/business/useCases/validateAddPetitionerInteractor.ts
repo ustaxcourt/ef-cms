@@ -1,8 +1,7 @@
-import { Case } from '../entities/cases/Case';
 import { CONTACT_TYPES } from '../entities/EntityConstants';
-import { isEmpty } from 'lodash';
+import { Case } from '../entities/cases/Case';
 import { Petitioner } from '../entities/contacts/Petitioner';
-import { some } from 'lodash';
+import { isEmpty, some } from 'lodash';
 
 /**
  * validateAddPetitionerInteractor
