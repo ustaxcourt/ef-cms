@@ -43,7 +43,7 @@ describe('deletePractitionerDocumentInteractor', () => {
     });
   });
 
-  it('should create a new practitioner document', async () => {
+  it('should delete the practitioner document from the DB', async () => {
     await deletePractitionerDocumentInteractor(applicationContext, {
       barNumber,
       practitionerDocumentFileId,
