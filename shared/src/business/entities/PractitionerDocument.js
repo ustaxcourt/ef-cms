@@ -62,7 +62,7 @@ PractitionerDocument.schema = joi.object().keys({
     JoiValidationConstants.UUID.required().description(
       'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
     ),
-  uploadDate: JoiValidationConstants.ISO_DATE,
+  uploadDate: JoiValidationConstants.ISO_DATE.required(),
 });
 
 joiValidationDecorator(

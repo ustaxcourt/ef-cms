@@ -7,10 +7,8 @@ import { getPractitionerDocumentsAction } from '../actions/getPractitionerDocume
 import { navigateToPractitionerDocumentsPageAction } from '../actions/navigateToPractitionerDocumentsPageAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setInitialTableSortAction } from '../actions/setInitialTableSortAction';
 import { setPractitionerDocumentsAction } from '../actions/setPractitionerDocumentsAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setTabFromPropsAction } from '../actions/setTabFromPropsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const deletePractitionerDocumentSequence = showProgressSequenceDecorator(
@@ -20,8 +18,6 @@ export const deletePractitionerDocumentSequence = showProgressSequenceDecorator(
       error: [setAlertErrorAction],
       success: [
         clearErrorAlertsAction,
-        setTabFromPropsAction,
-        setInitialTableSortAction,
         getPractitionerDocumentsAction,
         setPractitionerDocumentsAction,
         getDeletePractitionerDocumentAlertSuccessAction,
