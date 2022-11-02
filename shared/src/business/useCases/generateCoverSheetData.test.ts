@@ -1,15 +1,15 @@
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
-import {
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
 } from '../entities/EntityConstants';
-import { formatDateString, FORMATS } from '../utilities/DateHandler';
-import { generateCoverSheetData } from './generateCoverSheetData';
+import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { MOCK_CASE } from '../../test/mockCase';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../test/createTestApplicationContext';
+import { generateCoverSheetData } from './generateCoverSheetData';
 
 describe('generateCoverSheetData', () => {
   const testingCaseData = {

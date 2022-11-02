@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getInternalUsersInteractor } from './getInternalUsersInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('Get internal users', () => {
   beforeEach(() => {

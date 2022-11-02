@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { omit } from 'lodash';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
+import { omit } from 'lodash';
 
 describe('getUserCaseNoteForCasesInteractor', () => {
   let mockCurrentUser;

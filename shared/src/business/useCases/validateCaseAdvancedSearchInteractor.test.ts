@@ -1,6 +1,6 @@
-import { validateCaseAdvancedSearchInteractor } from './validateCaseAdvancedSearchInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { CaseSearch } from '../entities/cases/CaseSearch';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validateCaseAdvancedSearchInteractor } from './validateCaseAdvancedSearchInteractor';
 
 describe('validateCaseAdvancedSearchInteractor', () => {
   let validatorSpy;

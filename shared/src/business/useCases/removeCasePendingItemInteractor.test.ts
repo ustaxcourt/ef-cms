@@ -1,9 +1,12 @@
-import { removeCasePendingItemInteractor } from './removeCasePendingItemInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { AUTOMATIC_BLOCKED_REASONS } from '../entities/EntityConstants';
+import {
+  AUTOMATIC_BLOCKED_REASONS,
+  PARTY_TYPES,
+  ROLES,
+} from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { PARTY_TYPES, ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { removeCasePendingItemInteractor } from './removeCasePendingItemInteractor';
 
 describe('removeCasePendingItemInteractor', () => {
   let user;
