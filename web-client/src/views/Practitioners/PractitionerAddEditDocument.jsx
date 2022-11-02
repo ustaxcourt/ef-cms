@@ -196,7 +196,7 @@ export const PractitionerAddEditDocument = connect(
                         submitEditPractitionerDocumentSequence();
                       }}
                     >
-                      Update Document
+                      Update File
                     </Button>
                   ) : (
                     <Button
