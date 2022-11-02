@@ -63,6 +63,7 @@ import { getConfigurationItemValue } from '../../shared/src/persistence/dynamo/d
 import { getDeployTableStatus } from '../../shared/src/persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentQCInboxForUser } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser';
@@ -76,8 +77,9 @@ import { getFirstSingleCaseRecord } from '../../shared/src/persistence/elasticse
 import { getInternalUsers } from '../../shared/src/persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from '../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode';
 import { getMessageById } from '../../shared/src/persistence/dynamo/messages/getMessageById';
-import { getMessagesByDocketNumber } from '../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber';
 import { getMessageThreadByParentId } from '../../shared/src/persistence/dynamo/messages/getMessageThreadByParentId';
+import { getMessages } from '../../shared/src/persistence/sqs/getMessages';
+import { getMessagesByDocketNumber } from '../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber';
 import { getPractitionerByBarNumber } from '../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber';
 import { getPractitionersByName } from '../../shared/src/persistence/elasticsearch/getPractitionersByName';
 import { getPublicDownloadPolicyUrl } from '../../shared/src/persistence/s3/getPublicDownloadPolicyUrl';
@@ -90,8 +92,8 @@ import { getTableStatus } from '../../shared/src/persistence/dynamo/getTableStat
 import { getTrialSessionById } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
 import { getTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
-import { getTrialSessions } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessions';
 import { getTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
+import { getTrialSessions } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { getUserByEmail } from '../../shared/src/persistence/dynamo/users/getUserByEmail';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
@@ -157,8 +159,6 @@ import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/wor
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
-import { getDocument } from '../../shared/src/persistence/s3/getDocument';
-import { getMessages } from '../../shared/src/persistence/sqs/getMessages';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**

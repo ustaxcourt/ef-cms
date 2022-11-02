@@ -1,8 +1,11 @@
-import { CASE_STATUS_TYPES, CONTACT_TYPES } from '../entities/EntityConstants';
-import { getIsUserAuthorized } from './updatePetitionerInformationInteractor';
-import { docketClerkUser, MOCK_PRACTITIONER } from '../../test/mockUsers';
+import {
+  CASE_STATUS_TYPES,
+  CONTACT_TYPES,
+  ROLES,
+} from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { ROLES } from '../entities/EntityConstants';
+import { MOCK_PRACTITIONER, docketClerkUser } from '../../test/mockUsers';
+import { getIsUserAuthorized } from './updatePetitionerInformationInteractor';
 
 describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
   let mockUser;

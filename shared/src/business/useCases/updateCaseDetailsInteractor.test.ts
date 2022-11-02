@@ -3,13 +3,13 @@ import {
   CASE_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
+  ROLES,
 } from '../entities/EntityConstants';
-import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
+import { MOCK_CASE } from '../../test/mockCase';
+import { UnauthorizedError } from '../../errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { MOCK_CASE } from '../../test/mockCase';
-import { ROLES } from '../entities/EntityConstants';
-import { UnauthorizedError } from '../../errors/errors';
+import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
@@ -42,8 +42,8 @@ describe('updateCaseDetailsInteractor', () => {
 
     await expect(
       updateCaseDetailsInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
         caseDetails: {},
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });

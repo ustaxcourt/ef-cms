@@ -1,5 +1,5 @@
-import { validateUpdateUserEmailInteractor } from './validateUpdateUserEmailInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { validateUpdateUserEmailInteractor } from './validateUpdateUserEmailInteractor';
 
 describe('validateUpdateUserEmailInteractor', () => {
   it('runs validation on update user email form data with no invalid properties', () => {

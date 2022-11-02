@@ -1,5 +1,5 @@
-import { validateAddPrivatePractitionerInteractor } from './validateAddPrivatePractitionerInteractor';
 import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { validateAddPrivatePractitionerInteractor } from './validateAddPrivatePractitionerInteractor';
 
 describe('validateAddPrivatePractitionerInteractor', () => {
   it('should return the expected errors when the private practitioner to add is invalid', () => {

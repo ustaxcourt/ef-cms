@@ -1,9 +1,9 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../entities/EntityConstants';
-import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
-import { cloneDeep } from 'lodash';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
+import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
 
 describe('getPublicDownloadPolicyUrlInteractor', () => {
   let mockCase;
