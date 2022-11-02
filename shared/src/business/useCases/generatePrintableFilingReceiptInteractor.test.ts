@@ -1,8 +1,8 @@
-import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { getContactPrimary } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_USERS } from '../../test/mockUsers';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
+import { getContactPrimary } from '../entities/cases/Case';
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;

@@ -1,17 +1,17 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { calculateISODate } from '../../utilities/DateHandler';
+import { getContactPrimary } from '../../entities/cases/Case';
 import {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } from './verifyUserPendingEmailInteractor';
-import { calculateISODate } from '../../utilities/DateHandler';
-import { getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { validUser } from '../../../test/mockUsers';
 
 describe('verifyUserPendingEmailInteractor', () => {

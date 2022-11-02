@@ -1,7 +1,7 @@
-import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
 import { DocumentSearch } from '../../entities/documents/DocumentSearch';
-import { formatNow, FORMATS } from '../../utilities/DateHandler';
+import { FORMATS, formatNow } from '../../utilities/DateHandler';
 import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
+import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
 import { omit } from 'lodash';
 
 /**

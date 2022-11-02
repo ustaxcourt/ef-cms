@@ -1,9 +1,9 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../authorization/authorizationClientService';
-import { Case } from '../entities/cases/Case';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../errors/errors';
 
