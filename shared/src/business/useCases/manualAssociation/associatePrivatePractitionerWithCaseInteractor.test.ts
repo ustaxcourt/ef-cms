@@ -1,5 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -7,6 +5,8 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   const caseRecord = {

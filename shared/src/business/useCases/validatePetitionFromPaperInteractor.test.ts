@@ -5,8 +5,8 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../entities/EntityConstants';
-import { validatePetitionFromPaperInteractor } from './validatePetitionFromPaperInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { validatePetitionFromPaperInteractor } from './validatePetitionFromPaperInteractor';
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {

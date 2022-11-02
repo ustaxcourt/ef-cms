@@ -1,11 +1,10 @@
+import { CASE_STATUS_TYPES, ROLES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   batchDownloadTrialSessionInteractor,
   generateValidDocketEntryFilename,
 } from './batchDownloadTrialSessionInteractor';
-import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let user;

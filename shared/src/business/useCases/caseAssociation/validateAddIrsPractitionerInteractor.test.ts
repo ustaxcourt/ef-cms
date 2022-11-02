@@ -1,7 +1,7 @@
 import { AddIrsPractitioner } from '../../entities/caseAssociation/AddIrsPractitioner';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateAddIrsPractitionerInteractor } from './validateAddIrsPractitionerInteractor';
-import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 
 describe('validateAddIrsPractitionerInteractor', () => {
   it('returns the expected errors object on an empty add irsPractitioner', () => {

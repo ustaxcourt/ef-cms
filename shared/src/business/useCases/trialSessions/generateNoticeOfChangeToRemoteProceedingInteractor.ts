@@ -1,7 +1,7 @@
 import {
+  FORMATS,
   createISODateString,
   formatDateString,
-  FORMATS,
 } from '../../utilities/DateHandler';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';

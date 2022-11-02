@@ -1,6 +1,6 @@
-import { filePetitionFromPaperInteractor } from './filePetitionFromPaperInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { filePetitionFromPaperInteractor } from './filePetitionFromPaperInteractor';
 
 beforeAll(() => {
   applicationContext
