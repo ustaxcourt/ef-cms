@@ -35,6 +35,7 @@ module.exports = {
         'jest/expect-expect': 'off',
         'jest/valid-expect': 'off',
         'jest/valid-expect-in-promise': 'off',
+        'no-underscore-dangle': 'off',
         'promise/always-return': 'off',
         'promise/catch-or-return': 'off',
       },
@@ -51,7 +52,10 @@ module.exports = {
     {
       files: ['**/*.ts', '**/*.tsx'],
       rules: {
+        '@typescript-eslint/no-unused-vars': 'error',
         'no-undef': 'off',
+        'no-underscore-dangle': 'off',
+        'no-unused-vars': 'off',
       },
     },
     {

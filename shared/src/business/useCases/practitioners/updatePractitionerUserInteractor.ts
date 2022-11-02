@@ -1,11 +1,11 @@
+import { Practitioner } from '../../entities/Practitioner';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
-import { Practitioner } from '../../entities/Practitioner';
-import { UnauthorizedError } from '../../../errors/errors';
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
   const isEmailAvailable = await applicationContext

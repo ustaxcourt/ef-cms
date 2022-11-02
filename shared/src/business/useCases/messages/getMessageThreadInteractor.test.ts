@@ -1,11 +1,11 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { getMessageThreadInteractor } from './getMessageThreadInteractor';
 import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getMessageThreadInteractor } from './getMessageThreadInteractor';
 
 describe('getMessageThreadInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {

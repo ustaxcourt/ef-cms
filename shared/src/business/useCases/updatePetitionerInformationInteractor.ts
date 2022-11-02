@@ -1,20 +1,20 @@
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
-import {
-  Case,
-  getPetitionerById,
-  getPractitionersRepresenting,
-} from '../entities/cases/Case';
 import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../authorization/authorizationClientService';
-import { defaults, pick } from 'lodash';
+  Case,
+  getPetitionerById,
+  getPractitionersRepresenting,
+} from '../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { defaults, pick } from 'lodash';
 
 export const getIsUserAuthorized = ({
   oldCase,

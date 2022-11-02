@@ -1,7 +1,9 @@
-import { AMENDED_PETITION_FORM_NAME } from '../../entities/EntityConstants';
+import {
+  AMENDED_PETITION_FORM_NAME,
+  ROLES,
+} from '../../entities/EntityConstants';
 import { appendAmendedPetitionFormInteractor } from './appendAmendedPetitionFormInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { ROLES } from '../../entities/EntityConstants';
 
 const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
