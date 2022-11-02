@@ -250,6 +250,7 @@ describe('getShowDocumentViewerLink', () => {
         hasDocument: true,
         isCourtIssuedDocument: true,
         isExternalUser: true,
+        isPassingAgeRequirement: true,
         isSealed: true,
         isServed: true,
         userHasAccessToCase: true,
@@ -268,10 +269,24 @@ describe('getShowDocumentViewerLink', () => {
       },
       output: true,
     },
+    {
+      description:
+        'a sealed transcript that is under the 90 day threshold should not display a clickable link',
+      inputs: {
+        hasDocument: true,
+        isCourtIssuedDocument: true,
+        isExternalUser: true,
+        isPassingAgeRequirement: false,
+        isSealed: true,
+        isServed: true,
+        userHasAccessToCase: true,
+      },
+      output: false,
+    },
   ];
 
-  tests.forEach(({ inputs, output }) => {
-    it(`returns expected output of '${output}' for inputs ${JSON.stringify(
+  tests.forEach(({ description, inputs, output }) => {
+    it(`${description} - returns expected output of '${output}' for inputs ${JSON.stringify(
       inputs,
     )}`, () => {
       const result = getShowDocumentViewerLink(inputs);
