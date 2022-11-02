@@ -1,6 +1,6 @@
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
 import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
 import { sealCaseInteractor } from './sealCaseInteractor';
 
 describe('sealCaseInteractor', () => {

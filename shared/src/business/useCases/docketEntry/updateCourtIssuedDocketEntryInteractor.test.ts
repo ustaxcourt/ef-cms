@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -6,8 +5,9 @@ import {
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
 } from '../../entities/EntityConstants';
-import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;

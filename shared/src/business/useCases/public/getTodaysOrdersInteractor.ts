@@ -1,13 +1,13 @@
 import {
+  ORDER_EVENT_CODES,
+  TODAYS_ORDERS_PAGE_SIZE,
+} from '../../entities/EntityConstants';
+import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
   deconstructDate,
 } from '../../utilities/DateHandler';
-import {
-  ORDER_EVENT_CODES,
-  TODAYS_ORDERS_PAGE_SIZE,
-} from '../../entities/EntityConstants';
 
 /**
  * getTodaysOrdersInteractor

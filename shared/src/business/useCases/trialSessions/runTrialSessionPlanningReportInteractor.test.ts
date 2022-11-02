@@ -1,10 +1,10 @@
+import { ROLES, TRIAL_CITIES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   getPreviousTerm,
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } from './runTrialSessionPlanningReportInteractor';
-import { ROLES, TRIAL_CITIES } from '../../entities/EntityConstants';
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';

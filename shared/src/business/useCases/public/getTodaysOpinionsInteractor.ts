@@ -1,10 +1,10 @@
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
   deconstructDate,
 } from '../../utilities/DateHandler';
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 
 /**
  * getTodaysOpinionsInteractor

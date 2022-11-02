@@ -1,5 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getEligibleCasesForTrialSessionInteractor } from './getEligibleCasesForTrialSessionInteractor';
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE,
@@ -9,8 +7,10 @@ import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { cloneDeep } from 'lodash';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
+import { getEligibleCasesForTrialSessionInteractor } from './getEligibleCasesForTrialSessionInteractor';
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
   let mockCurrentUser;

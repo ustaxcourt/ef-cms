@@ -1,6 +1,6 @@
+import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getCaseForPublicDocketSearchInteractor } from './getCaseForPublicDocketSearchInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('Get case for public docket record search', () => {
   beforeEach(() => {
