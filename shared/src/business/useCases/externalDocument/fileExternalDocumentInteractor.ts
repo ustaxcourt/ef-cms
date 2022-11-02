@@ -1,18 +1,18 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
 } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { pick } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { pick } from 'lodash';
 
 /**
  *

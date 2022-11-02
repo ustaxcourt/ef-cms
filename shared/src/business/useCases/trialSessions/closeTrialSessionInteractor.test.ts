@@ -1,13 +1,13 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { closeTrialSessionInteractor } from './closeTrialSessionInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
 } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { closeTrialSessionInteractor } from './closeTrialSessionInteractor';
 
 describe('closeTrialSessionInteractor', () => {
   let user;
