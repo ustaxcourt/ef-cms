@@ -1,5 +1,6 @@
-// import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DeletePractitionerDocumentConfirmModal } from './DeletePractitionerDocumentConfirmModal';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -8,14 +9,22 @@ export const PractitionerDocumentation = connect(
   {
     barNumber: state.practitionerDetail.barNumber,
     constants: state.constants,
+    openDeletePractitionerDocumentConfirmModalSequence:
+      sequences.openDeletePractitionerDocumentConfirmModalSequence,
     openPractitionerDocumentDownloadUrlSequence:
       sequences.openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
+    showModal: state.modal.showModal,
+    sortTableSequence: sequences.sortTableSequence,
   },
   function PractitionerDocumentation({
     barNumber,
+    constants,
+    openDeletePractitionerDocumentConfirmModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper,
+    showModal,
+    sortTableSequence,
   }) {
     return (
       <>
@@ -39,19 +48,72 @@ export const PractitionerDocumentation = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-label="Date Uploaded" className="small">
-                Date Uploaded
+              <th aria-label="Date Uploaded">
+                <SortableColumnHeaderButton
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="uploadDate"
+                  title="Date Uploaded"
+                  onClickSequence={sortTableSequence}
+                />
               </th>
-              <th>File Name</th>
-              <th>Category</th>
-              <th>Description</th>
+              <th>
+                <SortableColumnHeaderButton
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="fileName"
+                  title="File Name"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="categoryName"
+                  title="Category"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  defaultSort={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    practitionerDocumentationHelper
+                      .formattedPractitionerDocuments.length
+                  }
+                  sortField="description"
+                  title="Description"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {practitionerDocumentationHelper.formattedPractitionerDocuments.map(
               document => (
                 <tr key={document.practitionerDocumentFileId}>
-                  <td>{document.formattedUploadDate}</td>
+                  <td className="uploadedDate">
+                    {document.formattedUploadDate}
+                  </td>
                   <td>
                     <Button
                       link
@@ -70,13 +132,39 @@ export const PractitionerDocumentation = connect(
                     </Button>
                   </td>
 
-                  <td>{document.categoryName}</td>
+                  <td className="categoryName">{document.categoryName}</td>
                   <td className="file-description">{document.description}</td>
+                  <td className="text-align-left edit-delete-buttons">
+                    <Button
+                      link
+                      href={`/practitioner-detail/${barNumber}/edit-document/${document.practitionerDocumentFileId}`}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      link
+                      className="red-warning margin-right-0"
+                      icon="trash"
+                      onClick={() => {
+                        openDeletePractitionerDocumentConfirmModalSequence({
+                          barNumber,
+                          practitionerDocumentFileId:
+                            document.practitionerDocumentFileId,
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ),
             )}
           </tbody>
         </table>
+        {showModal === 'DeletePractitionerDocumentConfirmModal' && (
+          <DeletePractitionerDocumentConfirmModal onConfirmSequence="deletePractitionerDocumentSequence" />
+        )}
       </>
     );
   },
