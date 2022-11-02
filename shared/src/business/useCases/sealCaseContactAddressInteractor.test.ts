@@ -2,10 +2,10 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
-import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
+import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getOtherFilers } from '../entities/cases/Case';
-import { ROLES } from '../entities/EntityConstants';
+import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
 
 describe('sealCaseContactAddressInteractor', () => {
   beforeEach(() => {

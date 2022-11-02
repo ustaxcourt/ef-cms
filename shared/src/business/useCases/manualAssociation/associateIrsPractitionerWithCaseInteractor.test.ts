@@ -1,5 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { associateIrsPractitionerWithCaseInteractor } from './associateIrsPractitionerWithCaseInteractor';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -9,6 +7,8 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase.js';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associateIrsPractitionerWithCaseInteractor } from './associateIrsPractitionerWithCaseInteractor';
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {

@@ -1,5 +1,5 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { setMessageAsReadInteractor } from './setMessageAsReadInteractor';
 
 describe('setMessageAsReadInteractor', () => {

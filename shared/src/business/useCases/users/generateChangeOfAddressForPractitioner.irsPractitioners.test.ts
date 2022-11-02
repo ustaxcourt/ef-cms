@@ -1,13 +1,13 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -73,16 +73,16 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry: false,
-      firmName: 'my firm',
-      updatedEmail: 'new@exaple.com',
-      requestUserId: 'abc',
-      updatedName: 'rich',
-      websocketMessagePrefix: 'user',
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '23456 Main St',
       } as any,
+      firmName: 'my firm',
+      requestUserId: 'abc',
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
       user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
     });
 
     expect(
@@ -101,16 +101,16 @@ describe('generateChangeOfAddress', () => {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry: false,
-      firmName: 'my firm',
-      updatedEmail: 'new@exaple.com',
-      requestUserId: 'abc',
-      updatedName: 'rich',
-      websocketMessagePrefix: 'user',
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '23456 Main St',
       } as any,
+      firmName: 'my firm',
+      requestUserId: 'abc',
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
       user: { ...mockIrsPractitioner, role: ROLES.adc } as any,
+      websocketMessagePrefix: 'user',
     });
 
     const changeOfAddressDocketEntry = applicationContext
@@ -125,16 +125,16 @@ describe('generateChangeOfAddress', () => {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry: false,
-      firmName: 'my firm',
-      updatedEmail: 'new@exaple.com',
-      requestUserId: 'abc',
-      updatedName: 'rich',
-      websocketMessagePrefix: 'user',
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
+      firmName: 'my firm',
+      requestUserId: 'abc',
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
       user: {} as any,
+      websocketMessagePrefix: 'user',
     });
 
     expect(
@@ -166,16 +166,16 @@ describe('generateChangeOfAddress', () => {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry: false,
-      firmName: 'my firm',
-      updatedEmail: 'new@exaple.com',
-      requestUserId: 'abc',
-      updatedName: 'rich',
-      websocketMessagePrefix: 'user',
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
+      firmName: 'my firm',
+      requestUserId: 'abc',
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
       user: {} as any,
+      websocketMessagePrefix: 'user',
     });
 
     expect(
@@ -192,16 +192,16 @@ describe('generateChangeOfAddress', () => {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry: false,
-      firmName: 'my firm',
-      updatedEmail: 'new@exaple.com',
-      requestUserId: 'abc',
-      updatedName: 'rich',
-      websocketMessagePrefix: 'user',
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
+      firmName: 'my firm',
+      requestUserId: 'abc',
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
       user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
     });
 
     const changeOfAddressDocketEntry = applicationContext
@@ -219,16 +219,16 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry: false,
-      firmName: 'my firm',
-      updatedEmail: 'new@exaple.com',
-      requestUserId: 'abc',
-      updatedName: 'rich',
-      websocketMessagePrefix: 'user',
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
+      firmName: 'my firm',
+      requestUserId: 'abc',
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
       user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
     });
 
     const noticeOfChangeOfAddressDocument = cases[0].docketEntries.find(
