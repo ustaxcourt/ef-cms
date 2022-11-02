@@ -1,11 +1,10 @@
-import { updateCaseTrialSortTagsInteractor } from './updateCaseTrialSortTagsInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { omit } from 'lodash';
-import { ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { omit } from 'lodash';
+import { updateCaseTrialSortTagsInteractor } from './updateCaseTrialSortTagsInteractor';
 
 describe('Update case trial sort tags', () => {
   let mockCase;

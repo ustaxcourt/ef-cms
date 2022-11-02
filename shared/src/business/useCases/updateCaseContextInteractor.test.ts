@@ -4,9 +4,9 @@ import {
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '../../test/mockCase';
-import { updateCaseContextInteractor } from './updateCaseContextInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_TRIAL_REMOTE } from '../../test/mockTrial';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { updateCaseContextInteractor } from './updateCaseContextInteractor';
 
 describe('updateCaseContextInteractor', () => {
   beforeAll(() => {

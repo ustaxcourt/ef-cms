@@ -1,21 +1,21 @@
 import {
+  MOCK_CASE,
+  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+} from '../../../test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { PDFDocument } from 'pdf-lib';
+import {
+  SERVICE_INDICATOR_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../entities/EntityConstants';
+import {
   applicationContext,
   fakeData,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
 import { combineTwoPdfs } from '../../utilities/documentGenerators/combineTwoPdfs';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
-import {
-  MOCK_CASE,
-  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} from '../../../test/mockCase';
-import {
-  SERVICE_INDICATOR_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
 import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { PDFDocument } from 'pdf-lib';
 
 jest.mock('../../utilities/shouldAppendClinicLetter');
 
