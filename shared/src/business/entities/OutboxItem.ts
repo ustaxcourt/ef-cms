@@ -1,9 +1,9 @@
+import { CASE_STATUS_TYPES } from './EntityConstants';
+import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import {
   joiValidationDecorator,
   validEntityDecorator,
 } from './JoiValidationDecorator';
-import { CASE_STATUS_TYPES } from './EntityConstants';
-import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { pick } from 'lodash';
 
 /**

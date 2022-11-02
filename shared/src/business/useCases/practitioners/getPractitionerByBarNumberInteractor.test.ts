@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getPractitionerByBarNumberInteractor } from './getPractitionerByBarNumberInteractor';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getPractitionerByBarNumberInteractor } from './getPractitionerByBarNumberInteractor';
 
 describe('getPractitionerByBarNumberInteractor', () => {
   it('throws an unauthorized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
