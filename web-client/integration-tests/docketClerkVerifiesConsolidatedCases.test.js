@@ -1,4 +1,5 @@
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
+import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
@@ -9,12 +10,13 @@ import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkVerifiesConsolidatedCases } from './journey/docketClerkVerifiesConsolidatedCases';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
+import { removePendingItemFromCase } from './journey/removePendingItemFromCase';
 import { updateACaseCaption } from './journey/updateACaseCaption';
 
 const cerebralTest = setupTest();
@@ -114,5 +116,9 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     expect(caseDetail.caseCaption).toBeDefined();
     expect(caseDetail.caseCaption).toEqual(updatedCaseCaption);
   });
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
+
+  docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile, false);
+  removePendingItemFromCase(cerebralTest, 'Docket Clerk');
   docketClerkVerifiesConsolidatedCases(cerebralTest);
 });
