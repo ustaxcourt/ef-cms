@@ -11,7 +11,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('../addCoverToPdf');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
@@ -243,7 +242,7 @@ const fileDocumentOnOneCase = async ({
       ...omit(originalSubjectDocketEntry, 'filedBy'),
       docketNumber: caseEntity.docketNumber,
       draftOrderState: null,
-      filingDate: createISODateString(),
+      filingDate: applicationContext.getUtilities().createISODateString(),
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,
