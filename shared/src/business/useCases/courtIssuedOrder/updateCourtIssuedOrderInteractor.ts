@@ -1,15 +1,15 @@
+import { Case } from '../../entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   ORDER_TYPES,
 } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { get } from 'lodash';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { get } from 'lodash';
 
 /**
  *

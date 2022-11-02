@@ -14,10 +14,10 @@ export const addCoverToPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  filingDateUpdated,
   pdfData,
   replaceCoversheet = false,
   useInitialData,
-  filingDateUpdated,
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCase;

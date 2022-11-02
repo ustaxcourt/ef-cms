@@ -1,7 +1,7 @@
 import {
+  FORMATS,
   createISODateString,
   formatDateString,
-  FORMATS,
 } from '../../utilities/DateHandler';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';

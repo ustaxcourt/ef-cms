@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { FORMATS, formatNow } from '../../utilities/DateHandler';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
-import { formatNow, FORMATS } from '../../utilities/DateHandler';
 
 describe('validateTrialSessionInteractor', () => {
   it('returns a list of errors when the trial session is invalid', () => {

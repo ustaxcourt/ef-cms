@@ -1,7 +1,7 @@
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import { Case, isSealedCase } from '../../entities/cases/Case';
-import { isPrivateDocument } from '../../entities/cases/PublicCase';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import { isPrivateDocument } from '../../entities/cases/PublicCase';
 
 /**
  * getPublicDownloadPolicyUrlInteractor

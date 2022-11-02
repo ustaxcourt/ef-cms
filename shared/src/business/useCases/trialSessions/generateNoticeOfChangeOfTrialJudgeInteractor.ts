@@ -1,7 +1,7 @@
-import { formatDateString, FORMATS } from '../../utilities/DateHandler';
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 
 /**
  * generateNoticeOfChangeOfTrialJudgeInteractor

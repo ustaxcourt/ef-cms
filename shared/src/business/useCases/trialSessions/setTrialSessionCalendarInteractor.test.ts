@@ -1,12 +1,12 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
 import {
   PARTY_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 
 describe('setTrialSessionCalendarInteractor', () => {
   let user;

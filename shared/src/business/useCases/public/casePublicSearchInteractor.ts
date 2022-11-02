@@ -1,6 +1,6 @@
-import { filterForPublic } from './publicHelpers';
 import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
 import { PublicCase } from '../../entities/cases/PublicCase';
+import { filterForPublic } from './publicHelpers';
 
 /**
  * casePublicSearchInteractor

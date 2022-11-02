@@ -1,6 +1,6 @@
-import { validateOrderAdvancedSearchInteractor } from './validateOrderAdvancedSearchInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { DATE_RANGE_SEARCH_OPTIONS } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validateOrderAdvancedSearchInteractor } from './validateOrderAdvancedSearchInteractor';
 
 describe('validateOrderAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the orderSearch', () => {

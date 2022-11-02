@@ -5,13 +5,13 @@ import {
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
 } from '../../entities/EntityConstants';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { entityName as practitionerEntityName } from '../../entities/Practitioner';
 import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
 import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
-import { MOCK_USERS } from '../../../test/mockUsers';
-import { UnauthorizedError } from '../../../errors/errors';
 
 jest.mock('./generateChangeOfAddress');
 import { generateChangeOfAddress } from './generateChangeOfAddress';
