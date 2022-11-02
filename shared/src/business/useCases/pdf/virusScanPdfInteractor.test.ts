@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { virusScanPdfInteractor } from './virusScanPdfInteractor';
+import fs from 'fs';
+import path from 'path';
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 

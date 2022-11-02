@@ -1,14 +1,14 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { calculateISODate } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
