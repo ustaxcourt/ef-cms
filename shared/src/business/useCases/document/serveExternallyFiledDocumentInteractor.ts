@@ -1,11 +1,11 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { addCoverToPdf } from '../addCoverToPdf';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
 /**
  * serveExternallyFiledDocumentInteractor

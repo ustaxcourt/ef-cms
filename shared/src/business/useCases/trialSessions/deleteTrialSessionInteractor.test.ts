@@ -1,9 +1,9 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { ROLES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
 
 describe('deleteTrialSessionInteractor', () => {
   let user;

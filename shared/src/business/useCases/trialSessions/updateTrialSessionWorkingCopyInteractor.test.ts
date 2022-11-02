@@ -1,8 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
-import { omit } from 'lodash';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { omit } from 'lodash';
+import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
 
 let user;
 

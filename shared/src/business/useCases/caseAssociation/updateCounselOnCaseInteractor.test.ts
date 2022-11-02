@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -7,10 +6,11 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 import { IrsPractitioner } from '../../entities/IrsPractitioner';
 import { MOCK_CASE } from '../../../test/mockCase.js';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [

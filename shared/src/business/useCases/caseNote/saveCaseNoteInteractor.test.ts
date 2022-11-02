@@ -1,8 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { ROLES } from '../../entities/EntityConstants';
-import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
 
 describe('saveCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
@@ -10,8 +10,8 @@ describe('saveCaseNoteInteractor', () => {
 
     await expect(
       saveCaseNoteInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
         caseNote: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized');
   });

@@ -1,5 +1,5 @@
-import { validateExternalDocumentInteractor } from './validateExternalDocumentInteractor';
 import { VALIDATION_ERROR_MESSAGES } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
+import { validateExternalDocumentInteractor } from './validateExternalDocumentInteractor';
 
 describe('validateExternalDocumentInteractor', () => {
   it('returns the expected errors object on an empty message', () => {

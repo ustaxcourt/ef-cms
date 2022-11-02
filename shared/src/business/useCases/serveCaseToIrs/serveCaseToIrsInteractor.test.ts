@@ -1,9 +1,4 @@
 /* eslint-disable max-lines */
-import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -15,17 +10,22 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
 import {
+  FORMATS,
   formatDateString,
   formatNow,
-  FORMATS,
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
-import { getContactPrimary } from '../../entities/cases/Case';
-import { getFakeFile } from '../../test/getFakeFile';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { ROLES } from '../../entities/EntityConstants';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
+import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { getFakeFile } from '../../test/getFakeFile';
+import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 
 describe('serveCaseToIrsInteractor', () => {
   const MOCK_WORK_ITEM = {

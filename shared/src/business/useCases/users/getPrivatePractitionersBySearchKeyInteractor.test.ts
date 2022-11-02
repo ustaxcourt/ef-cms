@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getPrivatePractitionersBySearchKeyInteractor } from './getPrivatePractitionersBySearchKeyInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 let user;
 describe('getPrivatePractitionersBySearchKeyInteractor', () => {

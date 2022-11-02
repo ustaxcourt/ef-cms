@@ -1,8 +1,7 @@
+import { CASE_TYPES_MAP, ROLES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deleteDeficiencyStatisticInteractor } from './deleteDeficiencyStatisticInteractor';
-import { CASE_TYPES_MAP } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('deleteDeficiencyStatisticInteractor', () => {
   const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';

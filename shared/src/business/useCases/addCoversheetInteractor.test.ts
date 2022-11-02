@@ -1,9 +1,3 @@
-import { addCoversheetInteractor } from './addCoversheetInteractor';
-import { addCoverToPdf } from './addCoverToPdf';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
 import {
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -11,6 +5,12 @@ import {
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
+import { addCoverToPdf } from './addCoverToPdf';
+import { addCoversheetInteractor } from './addCoversheetInteractor';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../test/createTestApplicationContext';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
