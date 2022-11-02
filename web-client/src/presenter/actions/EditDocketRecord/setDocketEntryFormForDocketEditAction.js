@@ -27,7 +27,6 @@ export const setDocketEntryFormForDocketEditAction = ({
   );
 
   let docketEntryFormData = cloneDeep(docketEntry);
-  console.log('docketEntry', docketEntry);
 
   if (docketEntry.editState) {
     const parsedJson = JSON.parse(docketEntry.editState);
@@ -53,11 +52,7 @@ export const setDocketEntryFormForDocketEditAction = ({
 
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;
 
-  // Update the docket entry with form's additionalInfo with
-
   store.set(state.form, docketEntryFormData);
-  console.log('docketEntryFormData', docketEntryFormData);
-  console.log('docketEntry after form data recapture', docketEntry);
 
   return {
     docketEntry: docketEntryFormData,

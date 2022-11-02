@@ -10,8 +10,6 @@ import { state } from 'cerebral';
  */
 export const generateTitleAction = ({ applicationContext, get, store }) => {
   const documentMetadata = get(state.form);
-  console.log('WE ARE IN generateTitleAction');
-  console.log('documentMetadata OF generateTitleAction', documentMetadata);
 
   let documentTitle = applicationContext
     .getUseCases()

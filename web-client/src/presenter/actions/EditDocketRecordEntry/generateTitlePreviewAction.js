@@ -23,7 +23,6 @@ export const generateTitlePreviewAction = ({
   if (matchingDocument) {
     documentMetadata.documentTitle = matchingDocument.documentTitle;
   }
-  console.log('WE ARE IN generateTitlePreviewAction');
 
   const formattedDocketEntry = applicationContext
     .getUtilities()

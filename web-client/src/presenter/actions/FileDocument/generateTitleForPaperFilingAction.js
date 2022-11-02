@@ -25,9 +25,6 @@ export const generateTitleForPaperFilingAction = ({
     documentMetadata.documentTitle = matchingDocument.documentTitle;
   }
 
-  console.log('WE ARE IN generateTitleForPaperFilingAction');
-  console.log('WE GET HERE WHEN QCING A RESPONSE');
-
   let documentTitle = applicationContext
     .getUseCases()
     .generateDocumentTitleInteractor(applicationContext, {
