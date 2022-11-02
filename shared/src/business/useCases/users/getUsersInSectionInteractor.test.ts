@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getUsersInSectionInteractor } from './getUsersInSectionInteractor';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import { PETITIONS_SECTION, ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getUsersInSectionInteractor } from './getUsersInSectionInteractor';
 
 describe('Get users in section', () => {
   const MOCK_SECTION = [

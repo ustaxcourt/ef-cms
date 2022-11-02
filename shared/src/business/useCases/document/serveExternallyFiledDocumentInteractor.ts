@@ -1,21 +1,19 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
-const {
-  isAuthorized,
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError } from '../../../../../web-client/src/presenter/errors/NotFoundError';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { addCoverToPdf } = require('../addCoverToPdf');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { omit } = require('lodash');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
+import { addCoverToPdf } from '../addCoverToPdf';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { omit } from 'lodash';
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -243,7 +241,7 @@ const fileDocumentOnOneCase = async ({
       ...omit(originalSubjectDocketEntry, 'filedBy'),
       docketNumber: caseEntity.docketNumber,
       draftOrderState: null,
-      filingDate: createISODateString(),
+      filingDate: applicationContext.getUtilities().createISODateString(),
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,

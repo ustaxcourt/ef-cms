@@ -1,7 +1,7 @@
-import { addDeficiencyStatisticInteractor } from './addDeficiencyStatisticInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { ROLES } from '../../entities/EntityConstants';
+import { addDeficiencyStatisticInteractor } from './addDeficiencyStatisticInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addDeficiencyStatisticInteractor', () => {
   beforeEach(() => {

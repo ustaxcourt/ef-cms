@@ -1,16 +1,16 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
 } from '../../../test/mockTrial';
-import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor should Generate Notices of', () => {
   const mockUser = new User({
