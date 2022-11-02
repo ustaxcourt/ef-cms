@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getUserPendingEmailStatusInteractor } from './getUserPendingEmailStatusInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('getUserPendingEmailStatusInteractor', () => {
   let currentLoggedInUser;

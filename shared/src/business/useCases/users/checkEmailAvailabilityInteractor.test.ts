@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { checkEmailAvailabilityInteractor } from './checkEmailAvailabilityInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('checkEmailAvailabilityInteractor', () => {
   const mockEmail = 'test@example.com';

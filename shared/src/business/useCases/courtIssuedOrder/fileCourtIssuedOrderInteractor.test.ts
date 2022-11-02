@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -8,8 +7,9 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 
 describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();

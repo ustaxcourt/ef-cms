@@ -1,5 +1,5 @@
-import { validateCourtIssuedDocketEntryInteractor } from './validateCourtIssuedDocketEntryInteractor';
 import { VALIDATION_ERROR_MESSAGES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { validateCourtIssuedDocketEntryInteractor } from './validateCourtIssuedDocketEntryInteractor';
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
   it('returns default errors on empty entryMetadata', () => {

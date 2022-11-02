@@ -1,8 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateStandingPretrialOrderInteractor } from './generateStandingPretrialOrderInteractor';
 
 describe('generateStandingPretrialOrderInteractor', () => {

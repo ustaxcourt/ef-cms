@@ -1,10 +1,13 @@
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import {
+  PARTY_TYPES,
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../entities/EntityConstants';
+import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCalendaredTrialSessionInteractor';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { PARTY_TYPES, ROLES } from '../../entities/EntityConstants';
 import { testPdfDoc } from '../../test/getFakeFile';
-import { User } from '../../entities/User';
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   const mockPdfUrl = 'www.example.com';
