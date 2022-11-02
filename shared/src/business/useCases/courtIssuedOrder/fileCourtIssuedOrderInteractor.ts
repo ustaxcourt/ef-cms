@@ -1,13 +1,13 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
 import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
+import { DocketEntry } from '../../entities/DocketEntry';
 import { Message } from '../../entities/Message';
-import { orderBy } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { orderBy } from 'lodash';
 
 /**
  *

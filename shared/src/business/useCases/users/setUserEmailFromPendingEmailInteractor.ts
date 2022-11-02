@@ -1,10 +1,10 @@
+import { Practitioner } from '../../entities/Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { User } from '../../entities/User';
 import {
   updateCasesForPetitioner,
   updatePractitionerCases,
 } from './verifyUserPendingEmailInteractor';
-import { Practitioner } from '../../entities/Practitioner';
-import { User } from '../../entities/User';
 
 /**
  * updatePetitionerCases

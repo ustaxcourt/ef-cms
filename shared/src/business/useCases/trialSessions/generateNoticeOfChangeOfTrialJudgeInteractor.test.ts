@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   DOCKET_NUMBER_SUFFIXES,
   PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './generateNoticeOfChangeOfTrialJudgeInteractor';
 
 describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {

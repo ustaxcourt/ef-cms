@@ -1,16 +1,16 @@
-import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import {
-  entityName as practitionerEntityName,
   Practitioner,
+  entityName as practitionerEntityName,
 } from '../../entities/Practitioner';
-import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { isEqual } from 'lodash';
 import { UnauthorizedError } from '../../../errors/errors';
+import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
+import { isEqual } from 'lodash';
+import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
 
 /**
  * updateUserContactInformationHelper

@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
