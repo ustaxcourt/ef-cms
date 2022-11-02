@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { createTrialSessionInteractor } from './createTrialSessionInteractor';
 import {
   ROLES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createTrialSessionInteractor } from './createTrialSessionInteractor';
 
 const MOCK_TRIAL = {
   maxCases: 100,

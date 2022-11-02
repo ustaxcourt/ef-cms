@@ -1,7 +1,7 @@
 import { applicationContext } from '../test/createTestApplicationContext';
-import { setItemInteractor } from './setItemInteractor';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { setItem } from '../../persistence/localStorage/setItem';
+import { setItemInteractor } from './setItemInteractor';
 
 describe('setItemInteractor', () => {
   it('should be able to set an item', async () => {

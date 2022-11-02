@@ -1,9 +1,9 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
-import { omit } from 'lodash';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { omit } from 'lodash';
+import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
 
 describe('updateUserCaseNoteInteractor', () => {
   const mockCaseNote = {

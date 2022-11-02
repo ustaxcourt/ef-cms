@@ -1,11 +1,11 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { getInboxMessagesForUserInteractor } from './getInboxMessagesForUserInteractor';
 import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getInboxMessagesForUserInteractor } from './getInboxMessagesForUserInteractor';
 import { omit } from 'lodash';
 
 describe('getInboxMessagesForUserInteractor', () => {
