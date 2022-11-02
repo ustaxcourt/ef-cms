@@ -5,7 +5,6 @@ export const DeletePractitionerDocumentConfirmModal = ({
   onConfirmSequence,
 }) => (
   <ConfirmModal
-    noCloseBtn
     cancelLabel="No, Cancel"
     confirmLabel="Yes, Delete"
     preventCancelOnBlur={true}
