@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { uploadOrderDocumentInteractor } from './uploadOrderDocumentInteractor';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { uploadOrderDocumentInteractor } from './uploadOrderDocumentInteractor';
 
 describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {

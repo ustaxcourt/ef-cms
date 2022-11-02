@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
 import { ROLES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
 
 describe('updateCaseDeadlineInteractor', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';

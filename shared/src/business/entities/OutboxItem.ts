@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-underscore-dangle */
 import { CASE_STATUS_TYPES } from './EntityConstants';
 import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import {

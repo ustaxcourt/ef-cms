@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { validateStartCaseWizardInteractor } from './validateStartCaseWizardInteractor';
 import { COUNTRY_TYPES } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateStartCaseWizardInteractor } from './validateStartCaseWizardInteractor';
 
 describe('validateStartCaseWizardInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {

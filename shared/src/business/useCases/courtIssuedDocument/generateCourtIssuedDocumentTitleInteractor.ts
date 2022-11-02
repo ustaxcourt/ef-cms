@@ -1,5 +1,5 @@
-import { CourtIssuedDocumentFactory } from '../../entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 import { COURT_ISSUED_EVENT_CODES } from '../../entities/EntityConstants';
+import { CourtIssuedDocumentFactory } from '../../entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 
 /**
  * generateCourtIssuedDocumentTitleInteractor

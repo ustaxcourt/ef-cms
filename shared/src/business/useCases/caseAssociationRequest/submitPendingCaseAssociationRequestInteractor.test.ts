@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { submitPendingCaseAssociationRequestInteractor } from './submitPendingCaseAssociationRequestInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('submitPendingCaseAssociationRequest', () => {
   let caseRecord = {
