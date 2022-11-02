@@ -18,6 +18,7 @@ export const editPractitionerDocumentAction = async ({
   const { barNumber } = get(state.practitionerDetail);
 
   let fileName;
+  let uploadDate;
 
   if (practitionerDocumentFile) {
     await applicationContext
@@ -28,8 +29,9 @@ export const editPractitionerDocumentAction = async ({
       });
 
     fileName = practitionerDocumentFile.name;
+    uploadDate = applicationContext.getUtilities().createISODateString();
   } else {
-    ({ fileName } = form);
+    ({ fileName, uploadDate } = form);
   }
 
   await applicationContext
@@ -40,6 +42,7 @@ export const editPractitionerDocumentAction = async ({
         ...form,
         fileName,
         practitionerDocumentFileId,
+        uploadDate,
       },
     });
 };
