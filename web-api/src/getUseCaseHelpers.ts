@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from '../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from '../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
+import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from '../../shared/src/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { createAndServeNoticeDocketEntry } from '../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
 import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
@@ -52,6 +54,7 @@ const useCaseHelpers = {
   addExistingUserToCase,
   addServedStampToDocument,
   appendPaperServiceAddressPageToPdf,
+  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
   countPagesInDocument,
   createAndServeNoticeDocketEntry,
   createCaseAndAssociations,
