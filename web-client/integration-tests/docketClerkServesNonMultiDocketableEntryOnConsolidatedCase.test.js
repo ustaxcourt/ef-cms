@@ -10,6 +10,7 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { fakeFile } from '../integration-tests-public/helpers';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -30,6 +31,9 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
     cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
@@ -55,6 +59,9 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
