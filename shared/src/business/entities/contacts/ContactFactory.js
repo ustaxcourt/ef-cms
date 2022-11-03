@@ -86,7 +86,7 @@ const domesticValidationObject = {
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
   state: JoiValidationConstants.STRING.valid(
     ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
+    ...Object.keys(US_STATES_OTHER),
     STATE_NOT_AVAILABLE,
   ).required(),
 };
