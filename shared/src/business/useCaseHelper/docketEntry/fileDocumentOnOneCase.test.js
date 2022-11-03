@@ -3,13 +3,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
-  fileDocumentOnOneCase,
-} = require('./fileDocumentOnOneCase');
-const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
+  fileDocumentOnOneCase,
+} = require('./fileDocumentOnOneCase');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
@@ -18,8 +21,10 @@ const {
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser, judgeUser } = require('../../../test/mockUsers');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -30,6 +35,33 @@ describe('fileDocumentOnOneCase', () => {
 
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const differentDocketNumber = '3875-32';
+  const docketEntriesWithCaseClosingEventCodes =
+    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
+      const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
+        entry => entry.eventCode === eventCode,
+      );
+
+      return new DocketEntry(
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: MOCK_CASE.docketNumber,
+          documentType: eventCodeMap.documentType,
+          eventCode,
+          signedAt: createISODateString(),
+          signedByUserId: 'ab540a2d-2e61-4ec3-be8e-ea744d12a283',
+          signedJudgeName: 'Chief Judge',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItem: {
+            docketNumber: MOCK_CASE.docketNumber,
+            section: docketClerkUser.section,
+            sentBy: docketClerkUser.name,
+            sentByUserId: docketClerkUser.userId,
+            workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+          },
+        },
+        { applicationContext },
+      );
+    });
 
   jest.spyOn(Case.prototype, 'addDocketEntry');
   jest.spyOn(Case.prototype, 'updateDocketEntry');
@@ -101,6 +133,22 @@ describe('fileDocumentOnOneCase', () => {
     expect(DocketEntry.prototype.setAsServed).toHaveBeenCalled();
   });
 
+  it('should not add a new docket entry when it already exists on the case', async () => {
+    const docketEntryOnCase = new DocketEntry(mockCaseEntity.docketEntries[0], {
+      applicationContext,
+    });
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: docketEntryOnCase,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    expect(Case.prototype.addDocketEntry).not.toHaveBeenCalled();
+  });
+
   it('should create a new work item for the docketEntry when it does not already have one', async () => {
     mockDocketEntry = new DocketEntry(
       {
@@ -163,7 +211,7 @@ describe('fileDocumentOnOneCase', () => {
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
       subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      user: docketClerkUser,
+      user: { ...docketClerkUser, section: undefined },
     });
 
     const expectedDocketEntry = applicationContext
@@ -171,9 +219,10 @@ describe('fileDocumentOnOneCase', () => {
       .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         doc => doc.docketEntryId === mockDocketEntryId,
       );
-    expect(expectedDocketEntry.workItem.docketNumber).toBe(
-      mockCaseEntity.docketNumber,
-    );
+    expect(expectedDocketEntry.workItem).toMatchObject({
+      docketNumber: mockCaseEntity.docketNumber,
+      section: DOCKET_SECTION,
+    });
   });
 
   it('should set docketEntry.workItem.leadDocketNumber from caseEntity.leadDocketNumber', async () => {
@@ -359,6 +408,73 @@ describe('fileDocumentOnOneCase', () => {
     ).toBeDefined();
   });
 
+  it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
+    const mockDocketEntryPending = new DocketEntry(
+      {
+        ...MOCK_DOCUMENTS[0],
+        docketEntryId: mockDocketEntryId,
+        pending: true,
+      },
+      { applicationContext },
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCaseEntity,
+        docketEntries: [mockDocketEntryPending],
+      });
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntryPending,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          docketEntries: [docketEntry],
+        });
+
+      await fileDocumentOnOneCase({
+        applicationContext,
+        caseEntity: mockCaseEntity,
+        docketEntryEntity: docketEntry,
+        subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+        user: docketClerkUser,
+      });
+
+      const updatedCase =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0].caseToUpdate;
+
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
+      expect(
+        applicationContext.getPersistenceGateway()
+          .deleteCaseTrialSortMappingRecords,
+      ).toHaveBeenCalled();
+    });
+  });
+
   describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     const mockTrialSessionId = '414ca21e-1399-4a2f-8f24-06cad634f359';
     const mockTrialSession = {
@@ -511,66 +627,6 @@ describe('fileDocumentOnOneCase', () => {
 
       expect(
         applicationContext.getPersistenceGateway().updateTrialSession,
-      ).toHaveBeenCalled();
-    });
-  });
-
-  it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
-    const mockDocketEntryPending = {
-      ...MOCK_DOCUMENTS[0],
-      docketEntryId: mockDocketEntryId,
-      pending: true,
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [mockDocketEntryPending],
-      });
-
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-    });
-  });
-
-  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
-    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          docketEntries: [docketEntry],
-        });
-
-      await serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      });
-
-      const updatedCase =
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-          .caseToUpdate;
-      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
-      expect(
-        applicationContext.getPersistenceGateway()
-          .deleteCaseTrialSortMappingRecords,
       ).toHaveBeenCalled();
     });
   });

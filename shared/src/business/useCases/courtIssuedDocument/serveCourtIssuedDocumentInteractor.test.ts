@@ -1,9 +1,3 @@
-import {
-  AUTOMATIC_BLOCKED_REASONS,
-  CASE_STATUS_TYPES,
-  COURT_ISSUED_EVENT_CODES,
-} from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
@@ -11,37 +5,11 @@ import {
   applicationContext,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
-import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-
-  const docketEntriesWithCaseClosingEventCodes =
-    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
-      const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
-        entry => entry.eventCode === eventCode,
-      );
-
-      return {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: MOCK_CASE.docketNumber,
-        documentType: eventCodeMap.documentType,
-        eventCode,
-        signedAt: createISODateString(),
-        signedByUserId: 'ab540a2d-2e61-4ec3-be8e-ea744d12a283',
-        signedJudgeName: 'Chief Judge',
-        userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-        workItem: {
-          docketNumber: MOCK_CASE.docketNumber,
-          section: docketClerkUser.section,
-          sentBy: docketClerkUser.name,
-          sentByUserId: docketClerkUser.userId,
-          workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
-        },
-      };
-    });
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
