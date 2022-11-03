@@ -28,6 +28,12 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.7.31.zip" -o "a
 
 RUN pip install --upgrade pip
 
+RUN apt-get install -y chromium
+
+RUN apt-get install -y build-essential
+
+RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
 RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.3.3/terraform_1.3.3_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
