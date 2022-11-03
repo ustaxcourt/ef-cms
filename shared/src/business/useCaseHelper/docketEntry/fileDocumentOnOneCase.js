@@ -6,7 +6,6 @@ const {
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
 exports.fileDocumentOnOneCase = async ({
@@ -76,10 +75,12 @@ exports.fileDocumentOnOneCase = async ({
     });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-    await exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
-      applicationContext,
-      caseEntity,
-    });
+    await applicationContext
+      .getUseCaseHelpers()
+      .closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+        applicationContext,
+        caseEntity,
+      });
   }
 
   const validRawCaseEntity = await applicationContext
@@ -129,47 +130,4 @@ const completeWorkItem = async ({
     userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
-};
-
-exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
-  applicationContext,
-  caseEntity,
-}) => {
-  caseEntity.closeCase();
-
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-
-  if (caseEntity.trialSessionId) {
-    const trialSession = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
-        trialSessionId: caseEntity.trialSessionId,
-      });
-
-    const trialSessionEntity = new TrialSession(trialSession, {
-      applicationContext,
-    });
-
-    if (trialSessionEntity.isCalendared) {
-      trialSessionEntity.removeCaseFromCalendar({
-        disposition: 'Status was changed to Closed',
-        docketNumber: caseEntity.docketNumber,
-      });
-    } else {
-      trialSessionEntity.deleteCaseFromCalendar({
-        docketNumber: caseEntity.docketNumber,
-      });
-    }
-
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
-  }
 };
