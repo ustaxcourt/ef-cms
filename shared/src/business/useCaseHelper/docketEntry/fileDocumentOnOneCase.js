@@ -126,10 +126,12 @@ exports.fileDocumentOnOneCase = async ({
     });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-    await exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
-      applicationContext,
-      caseEntity,
-    });
+    await applicationContext
+      .getUseCaseHelpers()
+      .closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+        applicationContext,
+        caseEntity,
+      });
   }
 
   const validRawCaseEntity = await applicationContext
@@ -140,49 +142,4 @@ exports.fileDocumentOnOneCase = async ({
     });
 
   return new Case(validRawCaseEntity, { applicationContext });
-};
-
-exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
-  applicationContext,
-  caseEntity,
-}) => {
-  caseEntity.closeCase();
-
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-
-  if (!caseEntity.trialSessionId) {
-    return;
-  }
-
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId: caseEntity.trialSessionId,
-    });
-
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
-
-  if (trialSessionEntity.isCalendared) {
-    trialSessionEntity.removeCaseFromCalendar({
-      disposition: 'Status was changed to Closed',
-      docketNumber: caseEntity.docketNumber,
-    });
-  } else {
-    trialSessionEntity.deleteCaseFromCalendar({
-      docketNumber: caseEntity.docketNumber,
-    });
-  }
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-  });
 };
