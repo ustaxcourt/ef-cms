@@ -2,59 +2,25 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  DOCKET_SECTION,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../../entities/EntityConstants');
-const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { omit } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 exports.fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
-  form,
-  numberOfPages,
-  originalSubjectDocketEntry,
+  docketEntryEntity,
+  subjectCaseDocketNumber,
   user,
 }) => {
-  const docketEntryEntity = new DocketEntry(
-    {
-      ...omit(originalSubjectDocketEntry, 'filedBy'),
-      attachments: form.attachments,
-      date: form.date,
-      docketNumber: caseEntity.docketNumber,
-      documentTitle: form.generatedDocumentTitle,
-      documentType: form.documentType,
-      editState: JSON.stringify({
-        ...form,
-        docketEntryId: originalSubjectDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-      }),
-      eventCode: form.eventCode,
-      freeText: form.freeText,
-      isDraft: false,
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      judge: form.judge,
-      numberOfPages,
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      scenario: form.scenario,
-      serviceStamp: form.serviceStamp,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
-
   const servedParties = aggregatePartiesForService(caseEntity);
-  docketEntryEntity.setAsServed(servedParties.all).validate();
 
-  const isSubjectCase =
-    originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
+  docketEntryEntity.setAsServed(servedParties.all);
+
+  const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
+
   if (!docketEntryEntity.workItem || !isSubjectCase) {
     docketEntryEntity.workItem = new WorkItem(
       {
@@ -79,44 +45,27 @@ exports.fileDocumentOnOneCase = async ({
     );
   }
 
-  docketEntryEntity.workItem.leadDocketNumber = caseEntity.leadDocketNumber;
-
-  docketEntryEntity.workItem.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
-
-  docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
-
   if (
-    caseEntity.getDocketEntryById({
+    !caseEntity.getDocketEntryById({
       docketEntryId: docketEntryEntity.docketEntryId,
     })
   ) {
-    caseEntity.updateDocketEntry(docketEntryEntity);
-  } else {
     caseEntity.addDocketEntry(docketEntryEntity);
   }
 
-  const validatedRawDocketEntry = docketEntryEntity.workItem
-    .validate()
-    .toRawObject();
+  const workItemToUpdate = docketEntryEntity.workItem;
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
+  await completeWorkItem({
     applicationContext,
-    workItem: validatedRawDocketEntry,
+    docketEntryEntity,
+    leadDocketNumber: caseEntity.leadDocketNumber,
+    user,
+    workItemToUpdate,
   });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
-    workItem: validatedRawDocketEntry,
-  });
+  docketEntryEntity.validate();
+
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -142,4 +91,43 @@ exports.fileDocumentOnOneCase = async ({
     });
 
   return new Case(validRawCaseEntity, { applicationContext });
+};
+
+const completeWorkItem = async ({
+  applicationContext,
+  docketEntryEntity,
+  leadDocketNumber,
+  user,
+  workItemToUpdate,
+}) => {
+  Object.assign(workItemToUpdate, {
+    docketEntry: {
+      ...docketEntryEntity.validate().toRawObject(),
+    },
+  });
+
+  workItemToUpdate.leadDocketNumber = leadDocketNumber;
+
+  workItemToUpdate.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section ? user.section : DOCKET_SECTION,
+    sentBy: user.name,
+    sentBySection: user.section ? user.section : DOCKET_SECTION,
+    sentByUserId: user.userId,
+  });
+
+  workItemToUpdate.setAsCompleted({ message: 'completed', user });
+
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: user.section,
+    userId: user.userId,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
 };
