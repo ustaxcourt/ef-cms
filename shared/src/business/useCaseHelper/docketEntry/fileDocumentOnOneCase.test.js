@@ -514,4 +514,64 @@ describe('fileDocumentOnOneCase', () => {
       ).toHaveBeenCalled();
     });
   });
+
+  it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
+    const mockDocketEntryPending = {
+      ...MOCK_DOCUMENTS[0],
+      docketEntryId: mockDocketEntryId,
+      pending: true,
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [mockDocketEntryPending],
+      });
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          docketEntries: [docketEntry],
+        });
+
+      await serveCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId: '',
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      });
+
+      const updatedCase =
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate;
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
+      expect(
+        applicationContext.getPersistenceGateway()
+          .deleteCaseTrialSortMappingRecords,
+      ).toHaveBeenCalled();
+    });
+  });
 });

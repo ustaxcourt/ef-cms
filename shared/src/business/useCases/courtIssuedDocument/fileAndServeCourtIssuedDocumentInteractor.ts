@@ -70,7 +70,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   });
 
   if (!originalSubjectDocketEntry) {
-    throw new NotFoundError('Docket entry not found');
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
   if (originalSubjectDocketEntry.servedAt) {
     throw new Error('Docket entry has already been served');
