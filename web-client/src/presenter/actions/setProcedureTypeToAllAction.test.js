@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
 import { setProcedureTypeToAllAction } from './setProcedureTypeToAllAction';
 
-describe('setPractitionerDetailAction', () => {
-  it('sets state.form.procedureType to `All`', async () => {
-    const { state } = await runAction(setProcedureTypeToAllAction, {
+describe('setProcedureTypeToAllAction', () => {
+  it('sets state.form.procedureType to All', async () => {
+    const result = await runAction(setProcedureTypeToAllAction, {
       state: {
         form: {
           procedureType: undefined,
@@ -11,6 +11,6 @@ describe('setPractitionerDetailAction', () => {
       },
     });
 
-    expect(state.form.procedureType).toEqual('All');
+    expect(result.state.form.procedureType).toEqual('All');
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 type TCaseDeadline = {
   associatedJudge: string;
   caseDeadlineId: number;
@@ -7,6 +8,18 @@ type TCaseDeadline = {
   docketNumber: string;
   sortableDocketNumber: string;
 };
+
+type TPractitionerDocument = {
+  categoryType: string;
+  categoryName: string;
+  location: string;
+  practitionerDocumentFileId: string;
+};
+
+type TPractitionerDocumentEntity = {
+  validate(): TPractitionerDocumentEntity;
+  toRawObject(): TPractitionerDocument;
+} & TPractitionerDocument;
 
 type DocketEntry = {
   additionalInfo: string;
