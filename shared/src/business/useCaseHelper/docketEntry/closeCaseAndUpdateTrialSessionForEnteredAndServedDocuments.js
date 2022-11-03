@@ -1,4 +1,4 @@
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity }) => {
