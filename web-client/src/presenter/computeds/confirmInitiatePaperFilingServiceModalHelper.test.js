@@ -1,6 +1,8 @@
 import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -9,15 +11,16 @@ import {
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
-import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
+import { confirmInitiatePaperFilingServiceModalHelper as confirmInitiatePaperFilingServiceModalHelperComputed } from './confirmInitiatePaperFilingServiceModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('confirmInitiateServiceModalHelper', () => {
+describe('confirmInitiatePaperFilingServiceModalHelper', () => {
   const mockContactId = 'f6847fdb-3669-4ad7-8f82-c4ac3b945523';
+  const mockEventCode = 'OSC';
 
-  const confirmInitiateServiceModalHelper = withAppContextDecorator(
-    confirmInitiateServiceModalHelperComputed,
+  const confirmInitiatePaperFilingServiceModalHelper = withAppContextDecorator(
+    confirmInitiatePaperFilingServiceModalHelperComputed,
     applicationContext,
   );
 
@@ -66,15 +69,20 @@ describe('confirmInitiateServiceModalHelper', () => {
   };
 
   it('returns the expected contacts needed if someone needs paper without consolidated cases', () => {
-    const result = runCompute(confirmInitiateServiceModalHelper, {
+    const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
       state: {
-        form: {},
+        featureFlagHelper: {
+          areMultiDocketablePaperFilingsEnabled: false,
+        },
+        form: {
+          eventCode: mockEventCode,
+        },
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
         modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       caseOrGroup: 'case',
       confirmationText: 'The following document will be served on all parties:',
       contactsNeedingPaperService: [
@@ -91,9 +99,14 @@ describe('confirmInitiateServiceModalHelper', () => {
   });
 
   it('returns the expected values if no contacts need paper service', () => {
-    const result = runCompute(confirmInitiateServiceModalHelper, {
+    const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
       state: {
-        form: {},
+        featureFlagHelper: {
+          areMultiDocketablePaperFilingsEnabled: false,
+        },
+        form: {
+          eventCode: mockEventCode,
+        },
         formattedCaseDetail: {
           irsPractitioners: [],
           isPaper: false,
@@ -117,7 +130,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       caseOrGroup: 'case',
       confirmationText: 'The following document will be served on all parties:',
       contactsNeedingPaperService: [],
@@ -197,10 +210,21 @@ describe('confirmInitiateServiceModalHelper', () => {
       };
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, nonLeadCase],
+        irsPractitioners: [],
         isLeadCase: true,
+        petitioners: [
+          {
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        privatePractitioners: [],
       };
-      const result = runCompute(confirmInitiateServiceModalHelper, {
+
+      const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
         state: {
+          featureFlagHelper: {
+            areMultiDocketablePaperFilingsEnabled: true,
+          },
           form: { eventCode: 'O' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
@@ -212,7 +236,6 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
     it('should say group if any non-lead case is checked & have the correct number of contacts', () => {
@@ -229,8 +252,11 @@ describe('confirmInitiateServiceModalHelper', () => {
         isLeadCase: true,
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
+      const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
         state: {
+          featureFlagHelper: {
+            areMultiDocketablePaperFilingsEnabled: true,
+          },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
@@ -242,7 +268,6 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
     it('should remove duplicated paper contacts', () => {
@@ -283,38 +308,210 @@ describe('confirmInitiateServiceModalHelper', () => {
         isLeadCase: true,
       };
 
-      const result = runCompute(confirmInitiateServiceModalHelper, {
+      const result = runCompute(confirmInitiatePaperFilingServiceModalHelper, {
         state: {
+          featureFlagHelper: {
+            areMultiDocketablePaperFilingsEnabled: true,
+          },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: {
-            showModal: 'ConfirmInitiateCourtIssuedDocumentServiceModal',
+            showModal: 'ConfirmInitiateCourtIssuedFilingServiceModal',
           },
         },
       });
 
       expect(result.contactsNeedingPaperService.length).toEqual(3);
     });
+  });
 
-    it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedDocumentServiceModal', () => {
-      const formattedCaseDetail = {
-        ...LEAD_CASE,
-        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
-        isLeadCase: true,
-      };
-
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: { eventCode: 'OSC' },
-          formattedCaseDetail,
-          modal: {
-            showModal: 'PaperServiceConfirmModal',
+  describe('showConsolidatedCasesForService', () => {
+    it('should be false when the docket entry is being edited', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: true,
           },
         },
-      });
+      );
 
-      expect(result.contactsNeedingPaperService.length).toEqual(1);
-      expect(result.showConsolidatedCasesFlag).toEqual(false);
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when MULTI_DOCKETABLE_PAPER_FILINGS feature flag is false', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: false,
+            },
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when the case the docket entry is being filed on is NOT a lead case', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: false,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when the docket entry is NOT a document type that can be multi-docketed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when the docket entry is being served from a message', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            currentPage: 'MessageDetail',
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when the docket entry is being served from the document viewer and is not multi docketable', () => {
+      const mockDocketEntryId = '123';
+
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            currentPage: 'DocumentViewer',
+            docketEntryId: mockDocketEntryId,
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: undefined,
+            },
+            formattedCaseDetail: {
+              docketEntries: [
+                {
+                  docketEntryId: mockDocketEntryId,
+                  eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
+                },
+              ],
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be true when the docket entry is NOT being edited, the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is true, the docket entry is being filed on a lead case, the docket entry is a document type that can be multi-docketed, and the docket entry is NOT being served from a message', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiatePaperFilingServiceModalHelper,
+        {
+          state: {
+            currentPage: 'CaseDetail',
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              consolidatedCases: [],
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+            isEditingDocketEntry: false,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(true);
     });
   });
 });

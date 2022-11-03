@@ -10,6 +10,12 @@ export const featureFlagHelper = (get, applicationContext) => {
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key],
   );
 
+  const areMultiDocketablePaperFilingsEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key
+    ],
+  );
+
   let isOrderSearchEnabledForRole = false;
   if (role && isUserInternal) {
     const isInternalOrderSearchEnabled = get(
@@ -35,6 +41,7 @@ export const featureFlagHelper = (get, applicationContext) => {
   }
 
   return {
+    areMultiDocketablePaperFilingsEnabled,
     isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
     isPdfJsEnabled,
