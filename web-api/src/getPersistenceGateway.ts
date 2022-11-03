@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 import { addCaseToHearing } from '../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from '../../shared/src/persistence/elasticsearch/advancedDocumentSearch';
@@ -17,6 +18,7 @@ import { createNewPetitionerUser } from '../../shared/src/persistence/dynamo/use
 import { createNewPractitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from '../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createOrUpdateUser } from '../../shared/src/persistence/dynamo/users/createOrUpdateUser';
+import { createPractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { decrementJobCounter } from '../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter';
@@ -81,6 +83,8 @@ import { getMessageThreadByParentId } from '../../shared/src/persistence/dynamo/
 import { getMessages } from '../../shared/src/persistence/sqs/getMessages';
 import { getMessagesByDocketNumber } from '../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber';
 import { getPractitionerByBarNumber } from '../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber';
+import { getPractitionerDocumentByFileId } from '../../shared/src/persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
+import { getPractitionerDocuments } from '../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from '../../shared/src/persistence/elasticsearch/getPractitionersByName';
 import { getPublicDownloadPolicyUrl } from '../../shared/src/persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from '../../shared/src/persistence/elasticsearch/getReadyForTrialCases';
@@ -212,6 +216,7 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createOrUpdateUser,
+    createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
@@ -219,6 +224,8 @@ const gatewayMethods = {
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
+    getPractitionerDocumentByFileId,
+    getPractitionerDocuments,
     getSesStatus,
     getTrialSessionJobStatusForCase,
     getTrialSessionProcessingStatus,
