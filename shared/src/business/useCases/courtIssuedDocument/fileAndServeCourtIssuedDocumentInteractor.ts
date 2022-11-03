@@ -65,17 +65,17 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
 
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
-  const originalSubjectDocketEntry = subjectCaseEntity.getDocketEntryById({
+  const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!originalSubjectDocketEntry) {
+  if (!docketEntryToServe) {
     throw new NotFoundError('Docket entry not found');
   }
-  if (originalSubjectDocketEntry.servedAt) {
+  if (docketEntryToServe.servedAt) {
     throw new Error('Docket entry has already been served');
   }
-  if (originalSubjectDocketEntry.isPendingService) {
+  if (docketEntryToServe.isPendingService) {
     throw new Error('Docket entry is already being served');
   }
 
@@ -83,7 +83,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: originalSubjectDocketEntry.docketEntryId,
+      Key: docketEntryToServe.docketEntryId,
     })
     .promise();
 
@@ -107,7 +107,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .updateDocketEntryPendingServiceStatus({
       applicationContext,
-      docketEntryId: originalSubjectDocketEntry.docketEntryId,
+      docketEntryId: docketEntryToServe.docketEntryId,
       docketNumber: subjectCaseDocketNumber,
       status: true,
     });
@@ -131,7 +131,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       caseEntities.map(caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
-            ...omit(originalSubjectDocketEntry, 'filedBy'),
+            ...omit(docketEntryToServe, 'filedBy'),
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,
@@ -139,7 +139,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
             documentType: form.documentType,
             editState: JSON.stringify({
               ...form,
-              docketEntryId: originalSubjectDocketEntry.docketEntryId,
+              docketEntryId: docketEntryToServe.docketEntryId,
               docketNumber: caseEntity.docketNumber,
             }),
             eventCode: form.eventCode,
@@ -172,7 +172,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
-        docketEntryId: originalSubjectDocketEntry.docketEntryId,
+        docketEntryId: docketEntryToServe.docketEntryId,
         stampedPdf,
       });
   } finally {
@@ -182,7 +182,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
           .getPersistenceGateway()
           .updateDocketEntryPendingServiceStatus({
             applicationContext,
-            docketEntryId: originalSubjectDocketEntry.docketEntryId,
+            docketEntryId: docketEntryToServe.docketEntryId,
             docketNumber: caseEntity.docketNumber,
             status: false,
           });
@@ -198,7 +198,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: stampedPdf,
-    key: originalSubjectDocketEntry.docketEntryId,
+    key: docketEntryToServe.docketEntryId,
   });
 
   const successMessage =

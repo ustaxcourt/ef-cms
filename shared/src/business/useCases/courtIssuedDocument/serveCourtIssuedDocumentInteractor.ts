@@ -18,8 +18,18 @@ import { createISODateString } from '../../utilities/DateHandler';
  * @param {string} providers.subjectCaseDocketNumber the docket number of the case containing the document to serve
  */
 export const serveCourtIssuedDocumentInteractor = async (
-  applicationContext,
-  { clientConnectionId, docketEntryId, docketNumbers, subjectCaseDocketNumber },
+  applicationContext: IApplicationContext,
+  {
+    clientConnectionId,
+    docketEntryId,
+    docketNumbers,
+    subjectCaseDocketNumber,
+  }: {
+    clientConnectionId: string;
+    docketEntryId: string;
+    docketNumbers: string[];
+    subjectCaseDocketNumber: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
