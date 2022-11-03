@@ -24,6 +24,8 @@ URL=http://localhost:9200/ ./wait-until.sh
 
 npm run build:assets
 
+export ELASTICSEARCH_HOST=localhost
+
 # these exported values expire when script terminates
 # shellcheck disable=SC1091
 . ./setup-local-env.sh

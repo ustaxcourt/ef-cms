@@ -5,7 +5,7 @@ const dynamo = new AWS.DynamoDB({
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
   },
-  endpoint: process.env.MASTER_DYNAMODB_ENDPOINT,
+  endpoint: process.env.DYNAMODB_ENDPOINT,
   region: 'us-east-1',
 });
 
