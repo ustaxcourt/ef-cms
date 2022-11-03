@@ -55,3 +55,5 @@ export const Button = props => {
     </Element>
   );
 };
+
+Button.displayName = 'Button';

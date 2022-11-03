@@ -45,3 +45,5 @@ export const BindedSelect = connect(
     return <select {...selectProps}>{children}</select>;
   },
 );
+
+BindedSelect.displayName = 'BindedSelect';

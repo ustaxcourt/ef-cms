@@ -72,3 +72,5 @@ export const SuccessNotification = connect(
     );
   },
 );
+
+SuccessNotification.displayName = 'SuccessNotification';
