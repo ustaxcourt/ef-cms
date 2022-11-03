@@ -2,8 +2,6 @@ FROM cypress/browsers:node16.17.1-chrome106-ff105-edge
 
 WORKDIR /home/app
 
-RUN echo "clear cache"
-
 RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'
 RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/apt/sources.list
 
