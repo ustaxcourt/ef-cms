@@ -9,6 +9,9 @@ npm run build:assets
 # shellcheck disable=SC1091
 . ./setup-local-env.sh
 
+export ELASTICSEARCH_HOST=elasticsearch
+export DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+
 URL=http://elasticsearch:9200/ ./wait-until.sh
 
 echo "creating elasticsearch index"
@@ -44,10 +47,10 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-ts-node-transpile-only web-api/streams-local.js &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/streams-local.js" &
 nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/websockets-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
