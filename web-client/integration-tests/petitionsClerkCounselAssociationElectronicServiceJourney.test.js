@@ -1,5 +1,8 @@
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   callCognitoTriggerForPendingEmail,
   contactPrimaryFromState,
@@ -9,20 +12,18 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-
-const cerebralTest = setupTest();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
 describe('Petitions Clerk Counsel Association Journey', () => {
+  const cerebralTest = setupTest();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });
