@@ -1,6 +1,8 @@
-FROM cypress/base:16.17.1
+FROM cypress/browsers:node16.17.1-chrome106-ff105-edge
 
 WORKDIR /home/app
+
+RUN echo "clear cache"
 
 RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'
 RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/apt/sources.list
@@ -32,11 +34,5 @@ RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.3.3/terr
   cp terraform /usr/local/bin/
 
 RUN apt-get install -y graphicsmagick=1.4+really1.3.36+hg16481-2 ghostscript=9.53.3~dfsg-7+deb11u2
-
-RUN wget https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_105.0.1343.33-1_amd64.deb
-RUN apt-get -yq install ./microsoft-edge-stable_105.0.1343.33-1_amd64.deb
-
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install ./google-chrome-stable_current_amd64.deb
 
 CMD echo "🔥"
