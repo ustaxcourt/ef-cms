@@ -6,6 +6,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
 } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { omit } = require('lodash');
@@ -70,7 +71,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   });
 
   if (!docketEntryToServe) {
-    throw new NotFoundError('Docket entry not found');
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
   if (docketEntryToServe.servedAt) {
     throw new Error('Docket entry has already been served');
@@ -203,8 +204,8 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
 
   const successMessage =
     docketNumbers.length > 1
-      ? 'Document served to selected cases in group.'
-      : 'Document served.';
+      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+      : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

@@ -6,6 +6,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
+const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
 
 /**
  * serveCourtIssuedDocumentInteractor
@@ -185,8 +186,8 @@ export const serveCourtIssuedDocumentInteractor = async (
 
   const successMessage =
     docketNumbers.length > 1
-      ? 'Document served to selected cases in group. '
-      : 'Document served. ';
+      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+      : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
