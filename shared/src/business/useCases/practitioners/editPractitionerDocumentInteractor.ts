@@ -27,6 +27,7 @@ export const editPractitionerDocumentInteractor = async (
       location?: string;
       practitionerDocumentFileId: string;
       fileName: string;
+      uploadDate: string;
     };
   },
 ) => {
@@ -46,6 +47,7 @@ export const editPractitionerDocumentInteractor = async (
       fileName: documentMetadata.fileName,
       location: documentMetadata.location,
       practitionerDocumentFileId: documentMetadata.practitionerDocumentFileId,
+      uploadDate: documentMetadata.uploadDate,
     },
     { applicationContext },
   );
