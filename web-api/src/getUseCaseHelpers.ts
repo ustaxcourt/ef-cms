@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
@@ -10,6 +11,7 @@ import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useC
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
 import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber';
 import { formatAndSortConsolidatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases';
+import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
@@ -56,6 +58,7 @@ const useCaseHelpers = {
   createUserForContact,
   fetchPendingItemsByDocketNumber,
   formatAndSortConsolidatedCases,
+  formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,

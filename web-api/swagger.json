@@ -412,25 +412,6 @@
       }
     },
     "/cases": {
-      "get": {
-        "tags": ["cases"],
-        "summary": "Retrieve open and closed cases for the currently authenticated user",
-        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
       "post": {
         "tags": ["cases"],
         "summary": "create a case",
@@ -1166,6 +1147,50 @@
             "description": "422 response",
             "schema": {
               "$ref": "#/definitions/unprocessableEntityError"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "Retrieve open and closed cases for the currently authenticated user",
+        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           }
         },
@@ -3704,6 +3729,165 @@
         }
       }
     },
+    "/practitioners/{barNumber}/documents": {
+      "parameters": [
+        {
+          "name": "barNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["practitioners"],
+        "summary": "get the practitioner's documents via bar number",
+        "description": "Get the practitioner's documents via bar number.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/practitionerDocument"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["practitioners"],
+        "summary": "updates a practitioner user",
+        "description": "updates a practitioner user.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "practitioner document metadata",
+            "description": "the trial session info needed to print a working copy",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryName": {
+                  "type": "string"
+                },
+                "categoryType": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "fileName": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "practitionerDocumentFileId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "categoryName",
+                "categoryType",
+                "fileName",
+                "practitionerDocumentFileId"
+              ]
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/practitionerDocument"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/practitioner-documents/{practitionerDocumentFileId}/document-download-url": {
+      "parameters": [
+        {
+          "name": "practitionerDocumentFileId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["practitioners"],
+        "summary": "Download an uploaded file via document file ID",
+        "description": "Download an uploaded file via document file ID.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/internal": {
       "get": {
         "tags": ["workitems"],
@@ -4802,7 +4986,38 @@
           "name": "trial session working copy info",
           "description": "the trial session info needed to print a working copy",
           "schema": {
-            "$ref": "#/definitions/printableWorkingCopyData"
+            "type": "object",
+            "properties": {
+              "showCaseNotes": {
+                "type": "boolean"
+              },
+              "filters": {
+                "type": "object"
+              },
+              "formattedCases": {
+                "type": "array"
+              },
+              "formattedTrialSession": {
+                "type": "object"
+              },
+              "sessionNotes": {
+                "type": "string"
+              },
+              "sort": {
+                "type": "string"
+              },
+              "userHeading": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "showCaseNotes",
+              "filters",
+              "formattedCases",
+              "formattedTrialSession",
+              "sort",
+              "userHeading"
+            ]
           }
         }
       ],
@@ -6945,18 +7160,7 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "documentId": {
-                      "type": "string"
-                    },
-                    "documentTitle": {
-                      "type": "string"
-                    }
-                  }
-                }
+                "type": "array"
               },
               "docketNumber": {
                 "type": "string"
@@ -7036,18 +7240,7 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "documentId": {
-                      "type": "string"
-                    },
-                    "documentTitle": {
-                      "type": "string"
-                    }
-                  }
-                }
+                "type": "array"
               },
               "docketNumber": {
                 "type": "string"
@@ -7877,17 +8070,6 @@
       "properties": {
         "attachments": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "documentId": {
-                "type": "string"
-              },
-              "documentTitle": {
-                "type": "string"
-              }
-            }
-          },
           "description": "array of document metadata objects attached to the message"
         },
         "caseStatus": {
@@ -8098,6 +8280,40 @@
           "description": "the userId of who created the docket entry"
         }
       }
+    },
+    "practitionerDocument": {
+      "type": "object",
+      "properties": {
+        "categoryName": {
+          "type": "string",
+          "description": "the name of the document category type, appended with location if applicable"
+        },
+        "categoryType": {
+          "type": "string",
+          "description": "the type of document category"
+        },
+        "description": {
+          "type": "string",
+          "description": "a description of the uploaded document"
+        },
+        "location": {
+          "type": "string",
+          "description": "the location where the Cerificate of Good Standing was issued, if Certificate of G.S. was selected"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "the file name of the document"
+        },
+        "practitionerDocumentFileId": {
+          "type": "string",
+          "description": "the auto-generated ID of the uploaded file"
+        },
+        "uploadDate": {
+          "type": "string",
+          "description": "date when the document was uploaded"
+        }
+      },
+      "description": "a user object"
     },
     "printableWorkingCopyData": {
       "type": "object",

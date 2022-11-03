@@ -129,3 +129,5 @@ export const Footer = connect(
     );
   },
 );
+
+Footer.displayName = 'Footer';

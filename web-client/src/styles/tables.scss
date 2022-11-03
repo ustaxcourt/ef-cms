@@ -145,6 +145,27 @@ table,
     }
     /* stylelint-enable value-no-vendor-prefix */
 
+    .file-name-button {
+      word-break: break-all;
+    }
+
+    &.file-description {
+      inline-size: 500px;
+      word-break: break-all;
+    }
+
+    &.uploadDate {
+      inline-size: 180px;
+    }
+
+    &.categoryName {
+      inline-size: 180px;
+    }
+
+    &.edit-delete-buttons {
+      inline-size: 80px;
+    }
+
     label {
       margin: 0;
     }

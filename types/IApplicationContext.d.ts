@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 interface IApplicationContext {
   [key: string]: any;
   getPersistenceGateway: IGetPersistenceGateway;
