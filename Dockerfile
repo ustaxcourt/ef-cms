@@ -39,4 +39,8 @@ RUN apt-get -yq install ./microsoft-edge-stable_105.0.1343.33-1_amd64.deb
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt-get install ./google-chrome-stable_current_amd64.deb
 
+COPY . /home/app
+
+RUN npm ci --legacy-peer-dep
+
 CMD echo "🔥"
