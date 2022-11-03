@@ -1,13 +1,13 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { Practitioner } from '../../entities/Practitioner';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,

@@ -6,8 +6,8 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
-import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 
 describe('removePdfFromDocketEntryInteractor', () => {
   const MOCK_CASE = {

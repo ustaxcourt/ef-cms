@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getCaseDeadlinesForCaseInteractor } from './getCaseDeadlinesForCaseInteractor';
 import { ROLES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getCaseDeadlinesForCaseInteractor } from './getCaseDeadlinesForCaseInteractor';
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
   const mockCaseDeadline = {
