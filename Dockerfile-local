@@ -1,0 +1,7 @@
+FROM efcms
+
+COPY . /home/app
+
+RUN npm ci --legacy-peer-dep
+
+CMD echo "🔥"
