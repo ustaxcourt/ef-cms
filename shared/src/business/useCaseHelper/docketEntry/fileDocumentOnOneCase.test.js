@@ -73,6 +73,34 @@ describe('fileDocumentOnOneCase', () => {
     );
   });
 
+  it('should set the docketEntry as served', async () => {
+    mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCaseEntity.docketNumber,
+        documentType: 'Order',
+        eventCode: 'O',
+        judge: judgeUser.name,
+        numberOfPages: 1,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: judgeUser.userId,
+        signedJudgeName: judgeUser.name,
+        workItem: undefined,
+      },
+      { applicationContext },
+    );
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    expect(DocketEntry.prototype.setAsServed).toHaveBeenCalled();
+  });
+
   it('should create a new work item for the docketEntry when it does not already have one', async () => {
     mockDocketEntry = new DocketEntry(
       {
