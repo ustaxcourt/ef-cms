@@ -1,8 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { waitForLoadingComponentToHide } from '../helpers';
 
 export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail =
   cerebralTest => {
     return it('petitions clerk 1 serves court issued document from message detail', async () => {
+      const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
+
       await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
@@ -29,7 +32,7 @@ export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail =
       await waitForLoadingComponentToHide({ cerebralTest });
 
       expect(cerebralTest.getState('alertSuccess')).toEqual({
-        message: 'Document served. ',
+        message: DOCUMENT_SERVED_MESSAGES.GENERIC,
         overwritable: false,
       });
       expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
