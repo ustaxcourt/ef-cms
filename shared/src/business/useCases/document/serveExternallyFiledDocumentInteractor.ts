@@ -4,6 +4,7 @@ const {
 const {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
+  DOCUMENT_SERVED_MESSAGES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -205,8 +206,8 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   const successMessage =
     docketNumbers.length > 1
-      ? 'Document served to selected cases in group. '
-      : 'Your entry has been added to the docket record.';
+      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

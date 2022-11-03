@@ -1,5 +1,6 @@
 import {
   DOCKET_SECTION,
+  DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
@@ -341,7 +342,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       message: expect.objectContaining({
         action: 'serve_document_complete',
         alertSuccess: {
-          message: 'Document served.',
+          message: DOCUMENT_SERVED_MESSAGES.GENERIC,
           overwritable: false,
         },
         pdfUrl: mockPdfUrl,
