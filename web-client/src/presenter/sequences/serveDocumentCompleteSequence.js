@@ -1,7 +1,9 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
+import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
@@ -13,23 +15,30 @@ import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPrevie
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const serveCourtIssuedDocumentCompleteSequence = [
-  setPdfPreviewUrlAction,
-  setAlertSuccessAction,
+export const serveDocumentCompleteSequence = [
   clearModalAction,
-  setSaveAlertsForNavigationAction,
+  isCoversheetNeededAction,
+  {
+    no: [],
+    yes: [generateCoversheetAction],
+  },
   unsetWaitingForResponseAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
+  setPdfPreviewUrlAction,
   isPrintPreviewPreparedAction,
   {
     no: [
-      getCaseAction,
-      setCaseAction,
-      getConsolidatedCasesByCaseAction,
-      setConsolidatedCasesForCaseAction,
       followRedirectAction,
       {
         default: [navigateToCaseDetailAction],
-        success: [setDocumentToDisplayFromDocumentIdAction],
+        success: [
+          getCaseAction,
+          setCaseAction,
+          getConsolidatedCasesByCaseAction,
+          setConsolidatedCasesForCaseAction,
+          setDocumentToDisplayFromDocumentIdAction,
+        ],
       },
     ],
     yes: [navigateToPrintPaperServiceAction],
