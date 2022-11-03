@@ -23,7 +23,9 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
         },
       );
 
-      await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+      await cerebralTest.runSequence(
+        'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+      );
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
       await cerebralTest.runSequence(

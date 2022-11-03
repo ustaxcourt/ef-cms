@@ -1,12 +1,13 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents View', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });
@@ -23,7 +24,27 @@ describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents Vi
   });
 
   loginAs(cerebralTest, 'docketclerk1@example.com');
-  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(cerebralTest, fakeFile);
+
+  const documentFormValues = {
+    dateReceivedDay: 1,
+    dateReceivedMonth: 1,
+    dateReceivedYear: 2018,
+    eventCode: 'M115',
+    objections: OBJECTIONS_OPTIONS_MAP.NO,
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 100,
+    'secondaryDocument.addToCoversheet': true,
+    'secondaryDocument.additionalInfo': 'Test Secondary Additional Info',
+    'secondaryDocument.eventCode': 'APPW',
+    secondaryDocumentFile: fakeFile,
+    secondaryDocumentFileSize: 100,
+  };
+
+  docketClerkAddsPaperFiledDocketEntryAndSavesForLater({
+    cerebralTest,
+    documentFormValues,
+    expectedDocumentType: 'Motion for Leave to File',
+  });
   docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
   docketClerkViewsCaseDetailDocumentView(cerebralTest);
 });
