@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   client:
-    build: .
+    build: ./Dockerfile-local
     container_name: client
     command: bash -c "npm run start:client"
     volumes:
@@ -15,7 +15,7 @@ services:
       - '1234:1234'
 
   public:
-    build: .
+    build: ./Dockerfile-local
     container_name: public
     command: bash -c "npm run start:public"
     environment:
@@ -28,7 +28,7 @@ services:
       - node_modules:/home/app/node_modules
 
   api:
-    build: .
+    build: ./Dockerfile-local
     container_name: api
     command: bash -c "npm run start:api:docker"
     environment:

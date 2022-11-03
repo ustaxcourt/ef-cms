@@ -17,7 +17,7 @@ RUN apt-get install -y -t \
 RUN apt-get install -yq less=551-2 python python-dev python3-pip jq=1.6-2.1
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-RUN apt-get install -y zip curl wget
+RUN apt-get install -y zip curl wget git
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.7.31.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
@@ -38,9 +38,5 @@ RUN apt-get -yq install ./microsoft-edge-stable_105.0.1343.33-1_amd64.deb
 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt-get install ./google-chrome-stable_current_amd64.deb
-
-COPY . /home/app
-
-RUN npm ci --legacy-peer-dep
 
 CMD echo "🔥"

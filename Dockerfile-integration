@@ -17,7 +17,7 @@ RUN apt-get install -y -t \
 RUN apt-get install -yq less=551-2 python python-dev python3-pip jq=1.6-2.1
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-RUN apt-get install -y zip curl wget
+RUN apt-get install -y zip curl wget git
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.7.31.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
