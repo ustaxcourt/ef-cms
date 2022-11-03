@@ -61,6 +61,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     applicationContext
+      .getUseCaseHelpers()
+      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
+
+    applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REGULAR);
 
@@ -192,11 +196,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
-    const servedDocketEntry = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
-      );
+    const servedDocketEntry =
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity;
     expect(servedDocketEntry.numberOfPages).toBe(mockNumberOfPages);
   });
 
@@ -223,11 +225,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase,
     ).toHaveBeenCalledTimes(3);
   });
 
-  it('should mark the docket entry as served', async () => {
+  it('should set the docket entry`s filing date as today', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -237,7 +239,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
             ...MOCK_DOCUMENTS[0],
             docketEntryId: mockDocketEntryId,
             filingDate: undefined,
-            servedAt: undefined,
           },
         ],
       });
@@ -249,188 +250,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
-    const updatedDocument = updatedCase.docketEntries.find(
-      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
-    );
-    expect(updatedDocument.servedAt).toBeDefined();
-    expect(updatedDocument.filingDate).toBeDefined();
-  });
-
-  it('should update the work items', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: mockDocketEntryId,
-          },
-        ],
-      });
-
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-  });
-
-  it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
-    const mockDocketEntryPending = {
-      ...MOCK_DOCUMENTS[0],
-      docketEntryId: mockDocketEntryId,
-      pending: true,
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [mockDocketEntryPending],
-      });
-
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-    });
-  });
-
-  it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {
-    const mockCaseWithTrialInfo = {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          ...MOCK_DOCUMENTS[0],
-          docketEntryId: mockDocketEntryId,
-          eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-          signedAt: '2019-11-27T05:00:00.000Z',
-          signedByUserId: '63a6a137-94c2-44a4-8335-d04c9756bbee',
-          signedJudgeName: 'Judy',
-        },
-      ],
-      trialDate: MOCK_TRIAL_REGULAR.startDate,
-      trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: true,
-      });
-
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    const updatedTrialSession =
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate;
-    expect(updatedTrialSession.caseOrder[0].disposition).toEqual(
-      'Status was changed to Closed',
-    );
-  });
-
-  it('should delete the case from the trial session if the case has a trialSessionId and trialSession is not calendared', async () => {
-    const mockCaseWithTrialInfo = {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          ...MOCK_DOCUMENTS[0],
-          docketEntryId: mockDocketEntryId,
-          eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-          signedAt: '2019-11-27T05:00:00.000Z',
-          signedByUserId: '63a6a137-94c2-44a4-8335-d04c9756bbee',
-          signedJudgeName: 'Judy',
-        },
-      ],
-      trialDate: '2019-11-27T05:00:00.000Z',
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithTrialInfo);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: false,
-      });
-
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCaseWithTrialInfo.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    const updatedTrialSession =
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate;
-    expect(updatedTrialSession.caseOrder.length).toEqual(0);
-  });
-
-  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
-    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          docketEntries: [docketEntry],
-        });
-
-      await serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      });
-
-      const updatedCase =
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-          .caseToUpdate;
-      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
-      expect(
-        applicationContext.getPersistenceGateway()
-          .deleteCaseTrialSortMappingRecords,
-      ).toHaveBeenCalled();
-    });
+    const expectedDocketEntry =
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry.filingDate).toBeDefined();
   });
 
   it('should mark the docketEntry as pending service while processing is ongoing and unset pending when processing has completed', async () => {
