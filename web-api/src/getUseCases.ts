@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 const {
   addCaseToTrialSessionInteractor,
@@ -86,6 +87,9 @@ const {
 const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
+const {
+  createPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor');
 const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
@@ -290,6 +294,12 @@ const {
 const {
   getPractitionerByBarNumberInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
+const {
+  getPractitionerDocumentDownloadUrlInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor');
+const {
+  getPractitionerDocumentsInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
 const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
@@ -588,6 +598,7 @@ const useCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
   createPetitionerAccountInteractor,
+  createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   createUserInteractor,
@@ -656,6 +667,8 @@ const useCases = {
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerDocumentDownloadUrlInteractor,
+  getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getPublicCaseInteractor,

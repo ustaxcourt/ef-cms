@@ -49,3 +49,5 @@ export const AppInstanceManager = connect(
     return <></>;
   },
 );
+
+AppInstanceManager.displayName = 'AppInstanceManager';

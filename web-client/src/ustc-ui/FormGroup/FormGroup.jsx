@@ -45,3 +45,5 @@ export const FormGroup = connect(function FormGroup(props) {
     </div>
   );
 });
+
+FormGroup.displayName = 'FormGroup';

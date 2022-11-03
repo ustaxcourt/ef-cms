@@ -92,3 +92,5 @@ export const UsaBanner = connect(
     );
   },
 );
+
+UsaBanner.displayName = 'UsaBanner';
