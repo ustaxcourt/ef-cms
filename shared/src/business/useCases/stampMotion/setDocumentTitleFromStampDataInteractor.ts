@@ -1,4 +1,4 @@
-import { formatDateString, FORMATS } from '../../utilities/DateHandler';
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 
 /**

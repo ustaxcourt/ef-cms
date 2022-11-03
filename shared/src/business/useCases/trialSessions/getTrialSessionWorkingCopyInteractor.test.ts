@@ -1,8 +1,8 @@
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getTrialSessionWorkingCopyInteractor } from './getTrialSessionWorkingCopyInteractor';
 import { omit } from 'lodash';
-import { ROLES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
 
 const MOCK_WORKING_COPY = {
   sort: 'practitioner',

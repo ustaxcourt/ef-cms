@@ -1,7 +1,7 @@
-import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
 import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
 
 describe('blockCaseFromTrialInteractor', () => {
   beforeEach(() => {
