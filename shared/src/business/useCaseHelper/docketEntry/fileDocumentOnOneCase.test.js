@@ -3,27 +3,65 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
-  fileDocumentOnOneCase,
-} = require('./fileDocumentOnOneCase');
-const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
+  fileDocumentOnOneCase,
+} = require('./fileDocumentOnOneCase');
+const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+const {
+  MOCK_CASE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser, judgeUser } = require('../../../test/mockUsers');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
 describe('fileDocumentOnOneCase', () => {
   let mockCaseEntity;
+  let mockWorkItem;
+  let mockDocketEntry;
 
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
+  const differentDocketNumber = '3875-32';
+  const docketEntriesWithCaseClosingEventCodes =
+    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
+      const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
+        entry => entry.eventCode === eventCode,
+      );
+
+      return new DocketEntry(
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: MOCK_CASE.docketNumber,
+          documentType: eventCodeMap.documentType,
+          eventCode,
+          signedAt: createISODateString(),
+          signedByUserId: 'ab540a2d-2e61-4ec3-be8e-ea744d12a283',
+          signedJudgeName: 'Chief Judge',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItem: {
+            docketNumber: MOCK_CASE.docketNumber,
+            section: docketClerkUser.section,
+            sentBy: docketClerkUser.name,
+            sentByUserId: docketClerkUser.userId,
+            workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+          },
+        },
+        { applicationContext },
+      );
+    });
 
   jest.spyOn(Case.prototype, 'addDocketEntry');
   jest.spyOn(Case.prototype, 'updateDocketEntry');
@@ -42,185 +80,97 @@ describe('fileDocumentOnOneCase', () => {
       .updateCaseAndAssociations.mockImplementation(
         ({ caseToUpdate }) => caseToUpdate,
       );
-  });
 
-  it('should populate attachments, date, documentTitle, documentType, eventCode, freeText, scenario, and serviceStamp from the form on the docketEntry', async () => {
-    const mockAttachments = true;
-    const mockDate = '2009-03-01T21:40:46.415Z';
-    const mockDocumentTitle = 'Important Filing';
-    const mockDocumentType = 'Order';
-    const mockEventCode = 'O';
-    const mockFreeText = 'Hurry! This is urgent';
-    const mockScenario = 'Standard';
-    const mockServiceStamp = 'Blah blah blah';
-
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
-        attachments: mockAttachments,
-        date: mockDate,
-        documentType: mockDocumentType,
-        eventCode: mockEventCode,
-        freeText: mockFreeText,
-        generatedDocumentTitle: mockDocumentTitle,
-        scenario: mockScenario,
-        serviceStamp: mockServiceStamp,
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
+    mockWorkItem = {
+      docketNumber: differentDocketNumber,
+      section: DOCKET_SECTION,
+      sentBy: docketClerkUser.name,
+      sentByUserId: docketClerkUser.userId,
+      workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+    };
+    mockDocketEntry = new DocketEntry(
+      {
         docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
-      user: docketClerkUser,
-    });
-
-    const expectedDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        doc => doc.docketEntryId === mockDocketEntryId,
-      );
-    expect(expectedDocketEntry).toMatchObject({
-      attachments: mockAttachments,
-      date: mockDate,
-      documentTitle: mockDocumentTitle,
-      documentType: mockDocumentType,
-      eventCode: mockEventCode,
-      freeText: mockFreeText,
-      scenario: mockScenario,
-      serviceStamp: mockServiceStamp,
-    });
-  });
-
-  it('should not use filedBy from the original docket entry to populate the new docketEntry`s filedBy value', async () => {
-    const mockFiledBy = 'Someone';
-
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
+        docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        filedBy: mockFiledBy,
         judge: judgeUser.name,
+        numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
+        workItem: mockWorkItem,
       },
-      user: docketClerkUser,
-    });
-
-    const expectedDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        doc => doc.docketEntryId === mockDocketEntryId,
-      );
-    expect(expectedDocketEntry.filedBy).not.toBe(mockFiledBy);
-  });
-
-  it('should set isOnDocketRecord to true on the created docketEntry', async () => {
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
-      user: docketClerkUser,
-    });
-
-    const expectedDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        doc => doc.docketEntryId === mockDocketEntryId,
-      );
-    expect(expectedDocketEntry.isOnDocketRecord).toBe(true);
-  });
-
-  it('should mark the docketEntry as NOT a draft', async () => {
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        isDraft: true,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
-      user: docketClerkUser,
-    });
-
-    const expectedDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        doc => doc.docketEntryId === mockDocketEntryId,
-      );
-    expect(expectedDocketEntry.isDraft).toBe(false);
+      { applicationContext },
+    );
   });
 
   it('should set the docketEntry as served', async () => {
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
+    mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        draftOrderState: 'abc',
         judge: judgeUser.name,
+        numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
+        workItem: undefined,
       },
+      { applicationContext },
+    );
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
     expect(DocketEntry.prototype.setAsServed).toHaveBeenCalled();
   });
 
-  it('should create a new work item for the docketEntry when it does not already have one', async () => {
+  it('should not add a new docket entry when it already exists on the case', async () => {
+    const docketEntryOnCase = new DocketEntry(mockCaseEntity.docketEntries[0], {
+      applicationContext,
+    });
+
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
+      docketEntryEntity: docketEntryOnCase,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    expect(Case.prototype.addDocketEntry).not.toHaveBeenCalled();
+  });
+
+  it('should create a new work item for the docketEntry when it does not already have one', async () => {
+    mockDocketEntry = new DocketEntry(
+      {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCaseEntity.docketNumber,
+        documentType: 'Order',
+        eventCode: 'O',
         judge: judgeUser.name,
+        numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
         workItem: undefined,
       },
+      { applicationContext },
+    );
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -233,33 +183,35 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should create a new work item for the docketEntry when the docketNumber on the originalSubjectDocketEntry does not match the docketNumber of the case to file the docketEntry on', async () => {
-    const differentDocketNumber = '3875-32';
-    const mockWorkItem = {
+    mockWorkItem = {
       docketNumber: differentDocketNumber,
       section: DOCKET_SECTION,
       sentBy: docketClerkUser.name,
       sentByUserId: docketClerkUser.userId,
       workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
     };
-
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
+    mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: differentDocketNumber,
         judge: judgeUser.name,
+        numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
         workItem: mockWorkItem,
       },
-      user: docketClerkUser,
+      { applicationContext },
+    );
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      user: { ...docketClerkUser, section: undefined },
     });
 
     const expectedDocketEntry = applicationContext
@@ -267,9 +219,10 @@ describe('fileDocumentOnOneCase', () => {
       .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         doc => doc.docketEntryId === mockDocketEntryId,
       );
-    expect(expectedDocketEntry.workItem.docketNumber).toBe(
-      mockCaseEntity.docketNumber,
-    );
+    expect(expectedDocketEntry.workItem).toMatchObject({
+      docketNumber: mockCaseEntity.docketNumber,
+      section: DOCKET_SECTION,
+    });
   });
 
   it('should set docketEntry.workItem.leadDocketNumber from caseEntity.leadDocketNumber', async () => {
@@ -281,18 +234,8 @@ describe('fileDocumentOnOneCase', () => {
           applicationContext,
         },
       ),
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -311,18 +254,8 @@ describe('fileDocumentOnOneCase', () => {
           applicationContext,
         },
       ),
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -345,18 +278,8 @@ describe('fileDocumentOnOneCase', () => {
           applicationContext,
         },
       ),
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -370,18 +293,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockCaseEntity.docketEntries[0].docketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -392,18 +305,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -414,18 +317,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -436,18 +329,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -460,18 +343,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -481,21 +354,25 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should make a call to close the case and update trial session information when the docketEntry being filed is one of "ENTERED_AND_SERVED_EVENT_CODES"', async () => {
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
+    const a = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        docketEntryId: mockDocketEntryId,
         documentType: 'Order of Dismissal for Lack of Jurisdiction',
         eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
         judge: judgeUser.name,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
       },
+      { applicationContext },
+    );
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: a,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -506,18 +383,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -530,18 +397,8 @@ describe('fileDocumentOnOneCase', () => {
     const result = await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -549,6 +406,73 @@ describe('fileDocumentOnOneCase', () => {
     expect(
       result.getDocketEntryById({ docketEntryId: mockDocketEntryId }),
     ).toBeDefined();
+  });
+
+  it('should mark the case as automaticBlocked when the docket entry being served is pending', async () => {
+    const mockDocketEntryPending = new DocketEntry(
+      {
+        ...MOCK_DOCUMENTS[0],
+        docketEntryId: mockDocketEntryId,
+        pending: true,
+      },
+      { applicationContext },
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCaseEntity,
+        docketEntries: [mockDocketEntryPending],
+      });
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntryPending,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          docketEntries: [docketEntry],
+        });
+
+      await fileDocumentOnOneCase({
+        applicationContext,
+        caseEntity: mockCaseEntity,
+        docketEntryEntity: docketEntry,
+        subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+        user: docketClerkUser,
+      });
+
+      const updatedCase =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0].caseToUpdate;
+
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
+      expect(
+        applicationContext.getPersistenceGateway()
+          .deleteCaseTrialSortMappingRecords,
+      ).toHaveBeenCalled();
+    });
   });
 
   describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
