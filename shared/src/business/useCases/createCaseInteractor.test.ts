@@ -7,11 +7,11 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { createCaseInteractor } from './createCaseInteractor';
 import { PrivatePractitioner } from '../entities/PrivatePractitioner';
 import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createCaseInteractor } from './createCaseInteractor';
+import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
 
 describe('createCaseInteractor', () => {
   let user;

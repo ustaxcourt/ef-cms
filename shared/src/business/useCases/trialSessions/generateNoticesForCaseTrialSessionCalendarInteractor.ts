@@ -1,13 +1,13 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { copyPagesAndAppendToTargetPdf } from '../../utilities/copyPagesAndAppendToTargetPdf';
+import { Case } from '../../entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
-import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { copyPagesAndAppendToTargetPdf } from '../../utilities/copyPagesAndAppendToTargetPdf';
+import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic

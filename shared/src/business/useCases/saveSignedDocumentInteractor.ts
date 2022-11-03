@@ -1,8 +1,8 @@
+import { Case } from '../entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SIGNED_DOCUMENT_TYPES,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
 import { orderBy } from 'lodash';

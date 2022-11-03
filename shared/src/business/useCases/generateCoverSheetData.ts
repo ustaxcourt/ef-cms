@@ -1,7 +1,4 @@
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-} from '../entities/EntityConstants';
+import { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';

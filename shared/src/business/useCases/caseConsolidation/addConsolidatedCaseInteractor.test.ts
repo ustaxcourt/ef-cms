@@ -1,7 +1,7 @@
-import { addConsolidatedCaseInteractor } from './addConsolidatedCaseInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { ROLES } from '../../entities/EntityConstants';
+import { addConsolidatedCaseInteractor } from './addConsolidatedCaseInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 let mockCases;
 
