@@ -6,7 +6,6 @@ const {
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
