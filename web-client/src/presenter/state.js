@@ -23,7 +23,8 @@ import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
-import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
+import { confirmInitiateCourtIssuedFilingServiceModalHelper } from './computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
+import { confirmInitiatePaperFilingServiceModalHelper } from './computeds/confirmInitiatePaperFilingServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
@@ -144,7 +145,8 @@ const helpers = {
   caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
-  confirmInitiateServiceModalHelper,
+  confirmInitiateCourtIssuedFilingServiceModalHelper,
+  confirmInitiatePaperFilingServiceModalHelper,
   contactsHelper,
   correspondenceViewerHelper,
   createMessageModalHelper,

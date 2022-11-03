@@ -16,6 +16,7 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
   hasPartyWithServiceType,
+  isLeadCase,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -749,6 +750,7 @@ const applicationContext = {
       hasPartyWithServiceType,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isServed,

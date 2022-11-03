@@ -6,20 +6,23 @@ import {
   loginAs,
   setupTest,
   uploadPetition,
+  waitForCondition,
 } from './helpers';
 import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
 
-const cerebralTest = setupTest();
-const judgesChambers = applicationContext
-  .getPersistenceGateway()
-  .getJudgesChambers();
-const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
-const messageSubject = 'Motion to Stamp';
-const deniedMotionDocketEntryTitle = 'Motion DENIED as moot without prejudice';
-const grantedMotionDocketEntryTitle = 'Motion GRANTED';
-const signedJudgeName = 'Mary Ann Cohen';
-
 describe('Stamp disposition journey test', () => {
+  const cerebralTest = setupTest();
+
+  const judgesChambers = applicationContext
+    .getPersistenceGateway()
+    .getJudgesChambers();
+  const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
+  const messageSubject = 'Motion to Stamp';
+  const deniedMotionDocketEntryTitle =
+    'Motion DENIED as moot without prejudice';
+  const grantedMotionDocketEntryTitle = 'Motion GRANTED';
+  const signedJudgeName = 'Mary Ann Cohen';
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -110,6 +113,11 @@ describe('Stamp disposition journey test', () => {
     );
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
