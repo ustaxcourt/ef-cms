@@ -11,6 +11,7 @@ import {
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
+import { omit } from 'lodash';
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -203,56 +204,40 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBe(mockNumberOfPages);
   });
 
-  // it('should populate attachments, date, documentTitle, documentType, eventCode, freeText, scenario, and serviceStamp from the form on the docketEntry', async () => {
-  //   const mockAttachments = true;
-  //   const mockDate = '2009-03-01T21:40:46.415Z';
-  //   const mockDocumentTitle = 'Important Filing';
-  //   const mockDocumentType = 'Order';
-  //   const mockEventCode = 'O';
-  //   const mockFreeText = 'Hurry! This is urgent';
-  //   const mockScenario = 'Standard';
-  //   const mockServiceStamp = 'Blah blah blah';
+  it('should populate attachments, date, documentTitle, documentType, eventCode, freeText, scenario, and serviceStamp from the form on the docketEntry', async () => {
+    const form = {
+      attachments: true,
+      date: '2009-03-01T21:40:46.415Z',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Hurry! This is urgent',
+      generatedDocumentTitle: 'Important Filing',
+      scenario: 'Standard',
+      serviceStamp: 'Blah blah blah',
+    };
 
-  //   await fileDocumentOnOneCase({
-  //     applicationContext,
-  //     caseEntity: mockCaseEntity,
-  //     form: {
-  //       attachments: mockAttachments,
-  //       date: mockDate,
-  //       documentType: mockDocumentType,
-  //       eventCode: mockEventCode,
-  //       freeText: mockFreeText,
-  //       generatedDocumentTitle: mockDocumentTitle,
-  //       scenario: mockScenario,
-  //       serviceStamp: mockServiceStamp,
-  //     },
-  //     numberOfPages: 1,
-  //     originalSubjectDocketEntry: {
-  //       docketEntryId: mockDocketEntryId,
-  //       judge: judgeUser.name,
-  //       signedAt: '2019-03-01T21:40:46.415Z',
-  //       signedByUserId: judgeUser.userId,
-  //       signedJudgeName: judgeUser.name,
-  //     },
-  //     user: docketClerkUser,
-  //   });
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form,
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
 
-  //   const expectedDocketEntry = applicationContext
-  //     .getUseCaseHelpers()
-  //     .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-  //       doc => doc.docketEntryId === mockDocketEntryId,
-  //     );
-  //   expect(expectedDocketEntry).toMatchObject({
-  //     attachments: mockAttachments,
-  //     date: mockDate,
-  //     documentTitle: mockDocumentTitle,
-  //     documentType: mockDocumentType,
-  //     eventCode: mockEventCode,
-  //     freeText: mockFreeText,
-  //     scenario: mockScenario,
-  //     serviceStamp: mockServiceStamp,
-  //   });
-  // });
+    const expectedDocketEntry =
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry).toMatchObject({
+      attachments: true,
+      date: '2009-03-01T21:40:46.415Z',
+      documentTitle: 'Important Filing',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Hurry! This is urgent',
+      scenario: 'Standard',
+      serviceStamp: 'Blah blah blah',
+    });
+  });
 
   // it('should not use filedBy from the original docket entry to populate the new docketEntry`s filedBy value', async () => {
   //   const mockFiledBy = 'Someone';
