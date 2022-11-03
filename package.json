@@ -166,6 +166,7 @@
     "start:api:ci": "CI=true npm run start:api",
     "start:api:resume": "RESUME=true npm run start:api",
     "start:api": "USTC_ENV=dev ./run-local.sh",
+    "start:api:docker": "USTC_ENV=dev ./run-api.sh",
     "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true NODE_ENV=production npm run start:client",
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
