@@ -48,7 +48,7 @@ describe('practitionerDocumentationFormHelper', () => {
       expect(isCertificateOfGoodStanding).toBe(false);
     });
 
-    it('should return false for isCertificateOfGoodStanding if documentationCategory is undefined', () => {
+    it('should return false for isCertificateOfGoodStanding if categoryType is undefined', () => {
       const { isCertificateOfGoodStanding } = runCompute(
         practitionerDocumentationFormHelper,
         {
