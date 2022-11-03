@@ -14,6 +14,10 @@ const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
+const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
+
+const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
+
 const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 // city, state, optional unique ID (generated automatically in testing files)
@@ -951,19 +955,19 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
-const US_STATES_OTHER = [
-  'AA',
-  'AE',
-  'AP',
-  'AS',
-  'FM',
-  'GU',
-  'MH',
-  'MP',
-  'PR',
-  'PW',
-  'VI',
-];
+const US_STATES_OTHER = {
+  AA: 'Armed Forces Americas',
+  AE: 'Armed Forces Europe',
+  AP: 'Armed Forces Pacific',
+  AS: 'American Samoa',
+  FM: 'Federated States of Micronesia',
+  GU: 'Guam',
+  MH: 'Marshall Islands',
+  MP: 'Norther Mariana Islands',
+  PR: 'Puerto Rico',
+  PW: 'Palau',
+  VI: 'Virgin Islands',
+};
 
 const STATE_NOT_AVAILABLE = 'N/A';
 
@@ -1316,6 +1320,23 @@ const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
 const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
+const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION: 'Application',
+  CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
+  FEE_RECEIPT: 'Fee Receipt',
+  ADMISSIONS_CERTIFICATE: 'Admission Certificate',
+  REFERENCE_INQUIRY: 'Reference Inquiry',
+  RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
+  DISCIPLINARY: 'Disciplinary',
+  CHANGE_OF_NAME: 'Change of Name',
+  EXAM_RELATED: 'Exam-Related',
+  MISCELLANEOUS: 'Miscellaneous',
+};
+
+const PRACTITIONER_DOCUMENT_TYPES = Object.values(
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
+);
+
 module.exports = deepFreeze({
   AMENDED_PETITION_FORM_NAME,
   ADC_SECTION,
@@ -1404,8 +1425,10 @@ module.exports = deepFreeze({
   JURISDICTIONAL_OPTIONS,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
+  MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
+  MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
   MAX_SEARCH_CLIENT_RESULTS: 200,
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MESSAGE_QUEUE_TYPES,
@@ -1430,6 +1453,7 @@ module.exports = deepFreeze({
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  PRACTITIONER_DOCUMENT_TYPES,
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   PROPOSED_STIPULATED_DECISION_EVENT_CODE,
@@ -1470,6 +1494,7 @@ module.exports = deepFreeze({
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
   ALLOWLIST_FEATURE_FLAGS,
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
   US_STATES,
   US_STATES_OTHER,
 });
