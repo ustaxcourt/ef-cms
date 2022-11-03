@@ -28,3 +28,5 @@ export const Loading = connect(
     );
   },
 );
+
+Loading.displayName = 'Loading';
