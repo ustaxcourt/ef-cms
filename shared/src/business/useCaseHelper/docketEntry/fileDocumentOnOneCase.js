@@ -76,7 +76,7 @@ exports.fileDocumentOnOneCase = async ({
     });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+    await exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity,
     });
@@ -131,7 +131,7 @@ const completeWorkItem = async ({
   });
 };
 
-const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
+exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
   applicationContext,
   caseEntity,
 }) => {

@@ -199,7 +199,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
     expect(
       applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
-        .calls[0][0].numberOfPages,
+        .calls[0][0].docketEntryEntity.numberOfPages,
     ).toBe(mockNumberOfPages);
   });
 

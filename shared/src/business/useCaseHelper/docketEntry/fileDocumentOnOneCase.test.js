@@ -13,17 +13,23 @@ const {
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+const {
+  MOCK_CASE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
 const { docketClerkUser, judgeUser } = require('../../../test/mockUsers');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
 describe('fileDocumentOnOneCase', () => {
   let mockCaseEntity;
+  let mockWorkItem;
+  let mockDocketEntry;
 
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
+  const differentDocketNumber = '3875-32';
 
   jest.spyOn(Case.prototype, 'addDocketEntry');
   jest.spyOn(Case.prototype, 'updateDocketEntry');
@@ -42,10 +48,33 @@ describe('fileDocumentOnOneCase', () => {
       .updateCaseAndAssociations.mockImplementation(
         ({ caseToUpdate }) => caseToUpdate,
       );
+
+    mockWorkItem = {
+      docketNumber: differentDocketNumber,
+      section: DOCKET_SECTION,
+      sentBy: docketClerkUser.name,
+      sentByUserId: docketClerkUser.userId,
+      workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+    };
+    mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCaseEntity.docketNumber,
+        documentType: 'Order',
+        eventCode: 'O',
+        judge: judgeUser.name,
+        numberOfPages: 1,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: judgeUser.userId,
+        signedJudgeName: judgeUser.name,
+        workItem: mockWorkItem,
+      },
+      { applicationContext },
+    );
   });
 
   it('should create a new work item for the docketEntry when it does not already have one', async () => {
-    const mockDocketEntry = new DocketEntry(
+    mockDocketEntry = new DocketEntry(
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCaseEntity.docketNumber,
@@ -78,15 +107,14 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should create a new work item for the docketEntry when the docketNumber on the originalSubjectDocketEntry does not match the docketNumber of the case to file the docketEntry on', async () => {
-    const differentDocketNumber = '3875-32';
-    const mockWorkItem = {
+    mockWorkItem = {
       docketNumber: differentDocketNumber,
       section: DOCKET_SECTION,
       sentBy: docketClerkUser.name,
       sentByUserId: docketClerkUser.userId,
       workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
     };
-    const mockDocketEntry = new DocketEntry(
+    mockDocketEntry = new DocketEntry(
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCaseEntity.docketNumber,
@@ -106,7 +134,7 @@ describe('fileDocumentOnOneCase', () => {
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
-      subjectCaseDocketNumber: 
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       user: docketClerkUser,
     });
 
@@ -129,18 +157,8 @@ describe('fileDocumentOnOneCase', () => {
           applicationContext,
         },
       ),
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -159,18 +177,8 @@ describe('fileDocumentOnOneCase', () => {
           applicationContext,
         },
       ),
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -193,18 +201,8 @@ describe('fileDocumentOnOneCase', () => {
           applicationContext,
         },
       ),
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -218,18 +216,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockCaseEntity.docketEntries[0].docketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -240,18 +228,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -262,18 +240,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -284,18 +252,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -308,18 +266,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -329,21 +277,25 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should make a call to close the case and update trial session information when the docketEntry being filed is one of "ENTERED_AND_SERVED_EVENT_CODES"', async () => {
-    await fileDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      form: {
+    const a = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        docketEntryId: mockDocketEntryId,
         documentType: 'Order of Dismissal for Lack of Jurisdiction',
         eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
         judge: judgeUser.name,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
       },
+      { applicationContext },
+    );
+
+    await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: a,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -354,18 +306,8 @@ describe('fileDocumentOnOneCase', () => {
     await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
@@ -378,18 +320,8 @@ describe('fileDocumentOnOneCase', () => {
     const result = await fileDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
-      form: {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      numberOfPages: 1,
-      originalSubjectDocketEntry: {
-        docketEntryId: mockDocketEntryId,
-        judge: judgeUser.name,
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: judgeUser.userId,
-        signedJudgeName: judgeUser.name,
-      },
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
     });
 
