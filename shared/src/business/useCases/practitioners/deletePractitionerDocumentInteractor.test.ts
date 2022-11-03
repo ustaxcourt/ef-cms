@@ -30,13 +30,13 @@ describe('deletePractitionerDocumentInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should delete the practitioner document from s3', async () => {
+  it('should delete the practitioner document from persistence', async () => {
     await deletePractitionerDocumentInteractor(applicationContext, {
       barNumber,
       practitionerDocumentFileId,
     });
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3.mock
+      applicationContext.getPersistenceGateway().deleteDocumentFile.mock
         .calls[0][0],
     ).toMatchObject({
       key: practitionerDocumentFileId,

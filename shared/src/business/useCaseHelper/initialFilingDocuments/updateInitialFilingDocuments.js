@@ -70,7 +70,7 @@ const deleteInitialFilingFromCase = async ({
     docketNumber: caseEntity.docketNumber,
   });
 
-  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+  await applicationContext.getPersistenceGateway().deleteDocumentFile({
     applicationContext,
     key: originalCaseDocument.docketEntryId,
   });
