@@ -81,8 +81,8 @@ services:
     environment:
       DYNAMO_ENDPOINT: 'http://dynamodb-local:8000'
       AWS_REGION: 'us-east-1'
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
+      AWS_ACCESS_KEY_ID: S3RVER
+      AWS_SECRET_ACCESS_KEY: S3RVER
     depends_on:
       - dynamodb-local
 
