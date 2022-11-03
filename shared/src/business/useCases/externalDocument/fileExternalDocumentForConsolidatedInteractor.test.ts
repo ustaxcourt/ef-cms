@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -6,8 +5,9 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { fileExternalDocumentForConsolidatedInteractor } from './fileExternalDocumentForConsolidatedInteractor';
 import { MOCK_CASE } from '../../../test/mockCase.js';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fileExternalDocumentForConsolidatedInteractor } from './fileExternalDocumentForConsolidatedInteractor';
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let caseRecords;
@@ -170,6 +170,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   // eslint-disable-next-line
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-20'],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -177,7 +178,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         filedBy: 'Test Petitioner',
       },
       leadDocketNumber: docketNumber0,
-      docketNumbersForFiling: ['101-20'],
     });
   });
 

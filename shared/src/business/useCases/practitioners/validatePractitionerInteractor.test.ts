@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validatePractitionerInteractor } from './validatePractitionerInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('validatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {

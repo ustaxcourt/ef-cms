@@ -1,9 +1,9 @@
-import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 
 /**
  * associateIrsPractitionerWithCaseInteractor

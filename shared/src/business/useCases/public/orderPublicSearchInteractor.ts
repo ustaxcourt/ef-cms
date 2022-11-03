@@ -1,10 +1,10 @@
+import { DocumentSearch } from '../../entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '../../utilities/DateHandler';
 import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
-import { DocumentSearch } from '../../entities/documents/DocumentSearch';
-import { formatNow, FORMATS } from '../../utilities/DateHandler';
 import { omit } from 'lodash';
 
 /**

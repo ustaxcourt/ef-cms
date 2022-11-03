@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { DOCKET_NUMBER_SUFFIXES, ROLES } from '../../entities/EntityConstants';
-import { generatePrintablePendingReportInteractor } from './generatePrintablePendingReportInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generatePrintablePendingReportInteractor } from './generatePrintablePendingReportInteractor';
 
 describe('generatePrintablePendingReportInteractor', () => {
   let mockUser;

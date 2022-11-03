@@ -1,8 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { setTrialSessionAsSwingSessionInteractor } from './setTrialSessionAsSwingSessionInteractor';
 
 const MOCK_TRIAL_SESSION = {

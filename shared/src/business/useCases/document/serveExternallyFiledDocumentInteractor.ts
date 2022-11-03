@@ -1,21 +1,19 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
-const {
-  isAuthorized,
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { addCoverToPdf } = require('../addCoverToPdf');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { omit } = require('lodash');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { WorkItem } from '../../entities/WorkItem';
+import { addCoverToPdf } from '../addCoverToPdf';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { createISODateString } from '../../utilities/DateHandler';
+import { omit } from 'lodash';
 
 /**
  * serveExternallyFiledDocumentInteractor
