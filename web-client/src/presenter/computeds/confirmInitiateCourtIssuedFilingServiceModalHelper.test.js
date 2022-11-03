@@ -383,6 +383,40 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
+    it('should be false when the docket entry is being served from the document viewer and is not multi docketable', () => {
+      const mockDocketEntryId = '123';
+
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+        {
+          state: {
+            currentPage: 'DocumentViewer',
+            docketEntryId: mockDocketEntryId,
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
+            form: {
+              eventCode: undefined,
+            },
+            formattedCaseDetail: {
+              docketEntries: [
+                {
+                  docketEntryId: mockDocketEntryId,
+                  eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
+                },
+              ],
+              irsPractitioners: [],
+              isLeadCase: true,
+              petitioners: [],
+              privatePractitioners: [],
+            },
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
     it('should be true when the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateCourtIssuedFilingServiceModalHelper,
