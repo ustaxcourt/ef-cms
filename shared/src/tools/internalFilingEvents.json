@@ -256,7 +256,8 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "caseDecision": true
     },
     {
       "documentTitle": "Computation for Entry of Decision",
@@ -267,7 +268,8 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "caseDecision": true
     },
     {
       "documentTitle": "Proposed Stipulated Decision",
@@ -278,7 +280,8 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "caseDecision": true
     },
     {
       "documentTitle": "Proposed Trial Exhibits",
@@ -737,7 +740,8 @@
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": "",
-      "allowStamp": true
+      "allowStamp": true,
+      "caseDecision": true
     },
     {
       "documentTitle": "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)",
@@ -1708,7 +1712,8 @@
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": "",
-      "allowStamp": true
+      "allowStamp": true,
+      "caseDecision": true
     },
     {
       "documentTitle": "Motion to Modify Order",

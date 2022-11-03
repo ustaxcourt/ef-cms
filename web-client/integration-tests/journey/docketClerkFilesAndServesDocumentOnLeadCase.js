@@ -49,7 +49,9 @@ export const docketClerkFilesAndServesDocumentOnLeadCase = (
       );
     }
 
-    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence(
+      'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+    );
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);

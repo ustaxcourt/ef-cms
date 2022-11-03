@@ -16,7 +16,7 @@ describe('setupConsolidatedCasesForAddedDocketNumbersAction', () => {
                 docketNumber: '101-20',
                 docketNumberWithSuffix: '101-20',
                 leadDocketNumber: '101-20',
-                petitioners: [],
+                petitioners: [{ name: 'Ozzy' }, { name: 'Leaf' }],
               },
               {
                 docketNumber: '102-20',
@@ -45,6 +45,7 @@ describe('setupConsolidatedCasesForAddedDocketNumbersAction', () => {
           checkboxDisabled: true,
           checked: true,
           docketNumber: '101-20',
+          formattedPetitioners: 'Ozzy & Leaf',
           leadDocketNumber: '101-20',
         }),
         expect.objectContaining({

@@ -3,6 +3,9 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('./courtIssuedDocument/CourtIssuedDocumentConstants');
 const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
@@ -85,6 +88,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage:
       'Order search has been temporarily disabled. Please try again later.',
     key: 'internal-order-search-enabled',
+  },
+  MULTI_DOCKETABLE_PAPER_FILINGS: {
+    disabledMessage:
+      'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
+    key: 'multi-docketable-paper-filings',
   },
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
@@ -333,6 +341,7 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
 );
 const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -434,6 +443,23 @@ const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => internalEvent.caseDecision)
+  .map(x => x.eventCode);
+
+const NON_MULTI_DOCKETABLE_EVENT_CODES = [
+  ...ENTERED_AND_SERVED_EVENT_CODES,
+  ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+];
+
+const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => !internalEvent.caseDecision)
+  .map(x => x.eventCode);
 
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
@@ -1469,8 +1495,10 @@ module.exports = deepFreeze({
   SESSION_TERMS,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
@@ -1479,6 +1507,7 @@ module.exports = deepFreeze({
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   REVISED_TRANSCRIPT_EVENT_CODE,

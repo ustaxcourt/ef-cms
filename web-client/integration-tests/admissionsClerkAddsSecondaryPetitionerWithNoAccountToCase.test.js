@@ -1,4 +1,8 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   callCognitoTriggerForPendingEmail,
   contactSecondaryFromState,
@@ -9,11 +13,8 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-
 describe('admissions clerk adds secondary petitioner without existing cognito account to case', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
 

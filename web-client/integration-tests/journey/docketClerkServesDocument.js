@@ -26,7 +26,9 @@ export const docketClerkServesDocument = (cerebralTest, docketRecordIndex) => {
       'CourtIssuedDocketEntry',
     );
 
-    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence(
+      'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+    );
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
