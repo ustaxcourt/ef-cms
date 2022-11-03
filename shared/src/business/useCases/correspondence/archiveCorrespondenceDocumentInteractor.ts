@@ -27,7 +27,7 @@ export const archiveCorrespondenceDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+  await applicationContext.getPersistenceGateway().deleteDocumentFile({
     applicationContext,
     key: correspondenceId,
   });

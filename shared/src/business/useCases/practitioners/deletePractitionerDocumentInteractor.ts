@@ -32,7 +32,7 @@ export const deletePractitionerDocumentInteractor = async (
     );
   }
 
-  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+  await applicationContext.getPersistenceGateway().deleteDocumentFile({
     applicationContext,
     key: practitionerDocumentFileId,
   });
