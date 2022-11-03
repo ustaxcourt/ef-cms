@@ -180,6 +180,7 @@ const DOCUMENT_RELATIONSHIPS = {
 };
 
 const DOCUMENT_SERVED_MESSAGES = {
+  ENTRY_ADDED: 'Your entry has been added to the docket record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };

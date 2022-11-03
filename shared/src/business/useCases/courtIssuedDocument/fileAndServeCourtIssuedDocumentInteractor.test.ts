@@ -1,5 +1,6 @@
 import {
   DOCKET_SECTION,
+  DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
@@ -115,17 +116,19 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found on the case', async () => {
+    const mockDocketEntryId2 = '6a10a2ce-4f2b-42f5-8dec-3b54ed40d031';
+
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId: mockClientConnectionId,
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        docketEntryId: mockDocketEntryId2,
         docketNumbers: [caseRecord.docketNumber],
         form: {
           documentType: 'Order',
         },
         subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
-    ).rejects.toThrow('Docket entry not found');
+    ).rejects.toThrow(`Docket entry ${mockDocketEntryId2} was not found`);
   });
 
   it('should throw an error when the docket entry has already been served', async () => {
@@ -382,7 +385,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       message: expect.objectContaining({
         action: 'serve_document_complete',
         alertSuccess: {
-          message: 'Document served.',
+          message: DOCUMENT_SERVED_MESSAGES.GENERIC,
           overwritable: false,
         },
         pdfUrl: mockPdfUrl,
