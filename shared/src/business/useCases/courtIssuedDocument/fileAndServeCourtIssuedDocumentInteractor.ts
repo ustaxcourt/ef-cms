@@ -4,6 +4,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+const {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../../entities/EntityConstants');
+const { DocketEntry } = require('../../entities/DocketEntry');
+const { omit } = require('lodash');
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
@@ -65,7 +70,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   });
 
   if (!originalSubjectDocketEntry) {
-    throw new NotFoundError('Docket entry not found');
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
   if (originalSubjectDocketEntry.servedAt) {
     throw new Error('Docket entry has already been served');
@@ -123,16 +128,43 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     }
 
     caseEntities = await Promise.all(
-      caseEntities.map(caseEntity =>
-        applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
+      caseEntities.map(caseEntity => {
+        const docketEntryEntity = new DocketEntry(
+          {
+            ...omit(originalSubjectDocketEntry, 'filedBy'),
+            attachments: form.attachments,
+            date: form.date,
+            docketNumber: caseEntity.docketNumber,
+            documentTitle: form.generatedDocumentTitle,
+            documentType: form.documentType,
+            editState: JSON.stringify({
+              ...form,
+              docketEntryId: originalSubjectDocketEntry.docketEntryId,
+              docketNumber: caseEntity.docketNumber,
+            }),
+            eventCode: form.eventCode,
+            freeText: form.freeText,
+            isDraft: false,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            judge: form.judge,
+            numberOfPages,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            scenario: form.scenario,
+            serviceStamp: form.serviceStamp,
+            userId: user.userId,
+          },
+          { applicationContext },
+        );
+
+        return applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
           applicationContext,
           caseEntity,
-          form,
-          numberOfPages,
-          originalSubjectDocketEntry,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
           user,
-        }),
-      ),
+        });
+      }),
     );
 
     serviceResults = await applicationContext
