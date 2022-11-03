@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { getCaseInventoryReportInteractor } from './getCaseInventoryReportInteractor';
 
 describe('getCaseInventoryReportInteractor', () => {

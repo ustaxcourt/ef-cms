@@ -1,13 +1,13 @@
-import sanitize from 'sanitize-filename';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { Case } from '../../entities/cases/Case';
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
-import { formatDateString, FORMATS } from '../../utilities/DateHandler';
-import { padStart } from 'lodash';
+import { Case } from '../../entities/cases/Case';
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { padStart } from 'lodash';
+import sanitize from 'sanitize-filename';
 
 /**
  * batchDownloadTrialSessionInteractorHelper

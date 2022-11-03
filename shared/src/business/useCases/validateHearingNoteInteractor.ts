@@ -10,7 +10,7 @@ import { HearingNote } from '../entities/notes/HearingNote';
  */
 export const validateHearingNoteInteractor = (
   applicationContext: IApplicationContext,
-  { note }: {note: string},
+  { note }: { note: string },
 ) => {
   const errors = new HearingNote(
     { note },
