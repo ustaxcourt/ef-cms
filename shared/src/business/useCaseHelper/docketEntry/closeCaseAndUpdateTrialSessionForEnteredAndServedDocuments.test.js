@@ -4,9 +4,6 @@ const {
 const {
   closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
 } = require('./closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments');
-const {
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
@@ -14,25 +11,6 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
-
-  const mockTrialSession = {
-    caseOrder: [],
-    judge: {
-      name: 'Judge Colvin',
-      userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-    },
-    maxCases: 100,
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-    sessionType: 'Regular',
-    startDate: '2019-11-27T05:00:00.000Z',
-    startTime: '10:00',
-    swingSession: true,
-    swingSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
-    term: 'Fall',
-    termYear: '2019',
-    trialLocation: 'Houston, Texas',
-    trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
-  };
 
   jest.spyOn(Case.prototype, 'closeCase');
   jest.spyOn(TrialSession.prototype, 'removeCaseFromCalendar');
@@ -43,12 +21,6 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     mockCaseEntity = new Case(MOCK_CASE, {
       applicationContext,
     });
-
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockImplementation(
-        ({ caseToUpdate }) => caseToUpdate,
-      );
   });
 
   it('should close the case', async () => {
@@ -72,7 +44,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     ).toBe(mockCaseEntity.docketNumber);
   });
 
-  it('should return early when the case does NOT have a trialSessionId set', async () => {
+  it('should return early when the case is NOT assigned to a trial session', async () => {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity: new Case(
@@ -93,7 +65,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...mockTrialSession,
+        ...MOCK_TRIAL_REGULAR,
         isCalendared: true,
       });
 
@@ -115,7 +87,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...mockTrialSession,
+        ...MOCK_TRIAL_REGULAR,
         isCalendared: false,
       });
 
@@ -136,7 +108,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...mockTrialSession,
+        ...MOCK_TRIAL_REGULAR,
         proceedingType: null, // Required on TrialSession entity
       });
 
@@ -159,7 +131,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...mockTrialSession,
+        ...MOCK_TRIAL_REGULAR,
         isCalendared: false,
       });
 
