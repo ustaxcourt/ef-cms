@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -6,8 +5,9 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
 
 describe('updateCourtIssuedOrderInteractor', () => {
   let mockCurrentUser;

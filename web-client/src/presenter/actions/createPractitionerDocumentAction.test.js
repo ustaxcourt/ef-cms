@@ -9,7 +9,7 @@ describe('createPractitionerDocumentAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should try to upload the file on state to s3', async () => {
+  it('should try to upload the file on state to persist the new practitioner document', async () => {
     applicationContext
       .getUseCases()
       .uploadOrderDocumentInteractor.mockResolvedValue('123');

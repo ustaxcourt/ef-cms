@@ -1,12 +1,12 @@
+import { Case } from '../../entities/cases/Case';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { partition } from 'lodash';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
+import { partition } from 'lodash';
 
 /**
  * Removes a manually added case from the trial session

@@ -1,5 +1,3 @@
-jest.mock('uuid');
-import * as uuid from 'uuid';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -16,12 +14,9 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
 
 describe('createCaseFromPaperInteractor', () => {
-  const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
   const DATE = '2018-11-21T20:49:28.192Z';
 
   beforeEach(() => {
-    uuid.v4 = jest.fn().mockReturnValue(MOCK_CASE_ID);
-
     applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
       '00101-00',
     );
