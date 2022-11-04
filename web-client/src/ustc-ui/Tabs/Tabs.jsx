@@ -86,6 +86,7 @@ export function TabsComponent({
   defaultActiveTab,
   headingLevel,
   id,
+  marginBottom = true,
   onSelect,
   simpleSetter,
   value,
@@ -163,6 +164,7 @@ export function TabsComponent({
     asSwitch,
     boxed,
     headingLevel,
+    marginBottom,
     setTab,
   });
 
@@ -171,7 +173,11 @@ export function TabsComponent({
       {hasNav && (
         <nav className={classNames({ 'grid-container padding-x-0': boxed })}>
           <ul
-            className={classNames('ustc-ui-tabs', { 'grid-row': boxed })}
+            className={classNames(
+              'ustc-ui-tabs',
+              { 'grid-row': boxed },
+              !marginBottom && 'margin-bottom-0',
+            )}
             role="tablist"
           >
             {map(children, TabComponent)}
@@ -192,3 +198,5 @@ export const Tabs = connect(
   },
   TabsComponent,
 );
+
+Tabs.displayName = 'Tabs';

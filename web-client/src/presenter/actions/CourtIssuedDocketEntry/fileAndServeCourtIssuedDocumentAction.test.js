@@ -6,6 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('submitCourtIssuedDocketEntryAction', () => {
   presenter.providers.applicationContext = applicationContext;
   const clientConnectionId = 'ABC123';
+  const docketNumbers = ['123-20'];
 
   it('should call the interactor for filing and serving court-issued documents and pass the current clientConnectId', async () => {
     const thisDocketNumber = '123-20';
@@ -13,6 +14,9 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     await runAction(fileAndServeCourtIssuedDocumentAction, {
       modules: {
         presenter,
+      },
+      props: {
+        docketNumbers,
       },
       state: {
         caseDetail: {
@@ -46,152 +50,5 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
         .mock.calls[0][2],
     ).toEqual(clientConnectionId);
-  });
-
-  describe('consolidated cases', () => {
-    const {
-      COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-      ENTERED_AND_SERVED_EVENT_CODES,
-    } = applicationContext.getConstants();
-
-    const eventCodesNotCompatibleWithConsolidation = [
-      ...ENTERED_AND_SERVED_EVENT_CODES,
-      ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    ];
-
-    it('should pass the docket number for each checked case', async () => {
-      const leadDocketNumber = '123-20';
-      const checkedDocketNumber1 = 'DogCow';
-      const checkedDocketNumber2 = 'Moof';
-
-      await runAction(fileAndServeCourtIssuedDocumentAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          caseDetail: {
-            consolidatedCases: [
-              {
-                checked: true,
-                docketNumber: leadDocketNumber,
-              },
-              {
-                checked: true,
-                docketNumber: checkedDocketNumber1,
-              },
-              {
-                checked: false,
-                docketNumber: 'Clarus',
-              },
-              {
-                checked: true,
-                docketNumber: checkedDocketNumber2,
-              },
-            ],
-            docketNumber: leadDocketNumber,
-            leadDocketNumber,
-          },
-          form: {
-            eventCode: 'O',
-          },
-        },
-      });
-
-      expect(
-        applicationContext.getUseCases()
-          .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
-          .docketNumbers,
-      ).toEqual([leadDocketNumber, checkedDocketNumber1, checkedDocketNumber2]);
-    });
-
-    it("should pass only one docket number if this isn't lead case", async () => {
-      const leadDocketNumber = '123-20';
-      const thisDocketNumber = '126-22';
-
-      await runAction(fileAndServeCourtIssuedDocumentAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          caseDetail: {
-            consolidatedCases: [
-              {
-                checked: true,
-                docketNumber: leadDocketNumber,
-              },
-              { checked: true, docketNumber: thisDocketNumber },
-              {
-                checked: true,
-                docketNumber: 'DogCow',
-              },
-              {
-                checked: false,
-                docketNumber: 'Clarus',
-              },
-              {
-                checked: true,
-                docketNumber: 'Moof',
-              },
-            ],
-            docketNumber: thisDocketNumber,
-            leadDocketNumber,
-          },
-          form: {
-            eventCode: 'O',
-          },
-        },
-      });
-
-      expect(
-        applicationContext.getUseCases()
-          .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
-          .docketNumbers,
-      ).toEqual([thisDocketNumber]);
-    });
-
-    eventCodesNotCompatibleWithConsolidation.forEach(notCompatibleEventCode => {
-      it(`should pass only one docket number since the ${notCompatibleEventCode} event code isn't compatible with consolidation`, async () => {
-        const leadDocketNumber = '123-20';
-
-        await runAction(fileAndServeCourtIssuedDocumentAction, {
-          modules: {
-            presenter,
-          },
-          state: {
-            caseDetail: {
-              consolidatedCases: [
-                {
-                  checked: true,
-                  docketNumber: leadDocketNumber,
-                },
-                {
-                  checked: true,
-                  docketNumber: 'DogCow',
-                },
-                {
-                  checked: false,
-                  docketNumber: 'Clarus',
-                },
-                {
-                  checked: true,
-                  docketNumber: 'Moof',
-                },
-              ],
-              docketNumber: leadDocketNumber,
-              leadDocketNumber,
-            },
-            form: {
-              eventCode: notCompatibleEventCode,
-            },
-          },
-        });
-
-        expect(
-          applicationContext.getUseCases()
-            .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
-            .docketNumbers,
-        ).toEqual([leadDocketNumber]);
-      });
-    });
   });
 });
