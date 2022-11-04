@@ -12,7 +12,7 @@ export const MessagesSectionOutbox = connect(
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
-    sortMessagesSequence: sequences.sortMessagesSequence,
+    sortTableSequence: sequences.sortTableSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionOutbox({
@@ -20,7 +20,7 @@ export const MessagesSectionOutbox = connect(
     formattedMessages,
     screenMetadata,
     showSortableHeaders,
-    sortMessagesSequence,
+    sortTableSequence,
     updateScreenMetadataSequence,
   }) {
     return (
@@ -69,7 +69,7 @@ export const MessagesSectionOutbox = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
@@ -87,7 +87,7 @@ export const MessagesSectionOutbox = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Sent"
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
@@ -101,7 +101,7 @@ export const MessagesSectionOutbox = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}

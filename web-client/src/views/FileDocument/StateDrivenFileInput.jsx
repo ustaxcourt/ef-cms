@@ -29,7 +29,7 @@ export const StateDrivenFileInput = connect(
   }) {
     let inputRef;
 
-    const fileOnForm = file || form[fileInputName];
+    const fileOnForm = file || form[fileInputName] || form.existingFileName;
 
     return (
       <React.Fragment>
@@ -75,13 +75,19 @@ export const StateDrivenFileInput = connect(
             <span className="success-message icon-upload margin-right-1">
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
-            <span className="mr-1">{fileOnForm.name}</span>
+            <span className="mr-1">
+              {fileOnForm.name || form.existingFileName}
+            </span>
             <Button
               link
               className="ustc-button--mobile-inline margin-left-1"
               onClick={() => {
                 updateFormValueSequence({
                   key: fileInputName,
+                  value: null,
+                });
+                updateFormValueSequence({
+                  key: 'existingFileName',
                   value: null,
                 });
                 inputRef.value = null;

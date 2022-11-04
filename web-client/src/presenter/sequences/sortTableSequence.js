@@ -1,3 +1,3 @@
 import { setTableSortConfigurationAction } from '../actions/setTableSortConfigurationAction';
 
-export const sortMessagesSequence = [setTableSortConfigurationAction];
+export const sortTableSequence = [setTableSortConfigurationAction];
