@@ -12,7 +12,6 @@ import {
 import { WorkItem } from '../../entities/WorkItem';
 import { addCoverToPdf } from '../addCoverToPdf';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { createISODateString } from '../../utilities/DateHandler';
 import { omit } from 'lodash';
 
 /**
@@ -241,7 +240,7 @@ const fileDocumentOnOneCase = async ({
       ...omit(originalSubjectDocketEntry, 'filedBy'),
       docketNumber: caseEntity.docketNumber,
       draftOrderState: null,
-      filingDate: createISODateString(),
+      filingDate: applicationContext.getUtilities().createISODateString(),
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,

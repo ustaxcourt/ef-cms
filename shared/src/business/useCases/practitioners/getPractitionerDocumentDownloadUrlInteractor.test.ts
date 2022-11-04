@@ -41,7 +41,7 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should not throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
+  it('should not throw an unauthorized error when the user has permission to download the practitioner documentation file', async () => {
     testUser = {
       role: ROLES.admissionsClerk,
       userId: 'admissionsclerk',
