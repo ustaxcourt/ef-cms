@@ -130,13 +130,6 @@ export const serveCourtIssuedDocumentInteractor = async (
       });
   }
 
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode);
-
-  if (eventCodeCanOnlyBeServedOnSubjectCase) {
-    docketNumbers = [subjectCaseDocketNumber];
-  }
-
   courtIssuedDocument.numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
@@ -222,7 +215,7 @@ export const serveCourtIssuedDocumentInteractor = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'serve_court_issued_document_complete',
+      action: 'serve_document_complete',
       alertSuccess: {
         message: successMessage,
         overwritable: false,

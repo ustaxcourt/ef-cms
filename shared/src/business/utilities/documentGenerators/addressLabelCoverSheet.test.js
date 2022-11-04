@@ -39,13 +39,13 @@ describe('documentGenerators', () => {
   });
 
   describe('addressLabelCoverSheet', () => {
-    it('generates an Address Label Cover Sheet document', async () => {
+    it('generates an Address Label Cover Sheet document with a country included', async () => {
       const pdf = await addressLabelCoverSheet({
         applicationContext,
         data: {
           address1: '123 Some Street',
           city: 'Some City',
-          countryName: 'USA',
+          country: 'USA',
           docketNumberWithSuffix: '123-45S',
           name: 'Test Person',
           postalCode: '89890',

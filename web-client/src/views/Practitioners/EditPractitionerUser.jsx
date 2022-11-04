@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { EmailVerificationModal } from './EmailVerificationModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { PractitionerForm } from './PractitionerForm';
+import { PractitionerUserHeader } from './PractitionerUserHeader';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -16,28 +17,13 @@ export const EditPractitionerUser = connect(
       sequences.submitUpdatePractitionerUserSequence,
   },
   function EditPractitionerUser({
-    form,
     navigateBackSequence,
     showModal,
     submitUpdatePractitionerUserSequence,
   }) {
     return (
       <>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <div className="grid-row">
-              <div className="tablet:grid-col-12">
-                <h1 className="captioned" tabIndex="-1">
-                  {form.name}
-                </h1>
-                <span className="usa-tag">{form.admissionsStatus}</span>
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-12">{form.barNumber}</div>
-            </div>
-          </div>
-        </div>
+        <PractitionerUserHeader />
 
         <section className="grid-container">
           <h1 className="margin-bottom-1">Edit Practitioner Details</h1>

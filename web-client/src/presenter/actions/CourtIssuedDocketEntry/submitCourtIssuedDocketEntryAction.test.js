@@ -4,41 +4,56 @@ import { runAction } from 'cerebral/test';
 import { submitCourtIssuedDocketEntryAction } from './submitCourtIssuedDocketEntryAction';
 
 describe('submitCourtIssuedDocketEntryAction', () => {
+  const mockDocketNumber = '123-20';
+  const mockForm = {
+    attachments: false,
+    date: '2019-01-01T00:00:00.000Z',
+    documentTitle: '[Anything]',
+    documentType: 'Order',
+    eventCode: 'O',
+    freeText: 'Testing',
+    generatedDocumentTitle: 'Order F',
+    scenario: 'Type A',
+  };
+  const mockDocketEntryId = 'cf5a5a91-0dff-44d3-aad6-bdae49197bef';
+
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  } = applicationContext.getConstants();
+  const COURT_ISSUED_EVENT_CODES_NO_COVERSHEET =
+    COURT_ISSUED_EVENT_CODES.filter(d => !d.requiresCoversheet).map(
+      d => d.eventCode,
+    );
+
   presenter.providers.applicationContext = applicationContext;
 
-  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
-    applicationContext.getConstants();
-
-  it('should call the interactor for filing a court-issued docket entry', async () => {
+  it('should make a call to file the court-issued docket entry specified in state.form', async () => {
     await runAction(submitCourtIssuedDocketEntryAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          docketNumber: '123-20',
+          docketNumber: mockDocketNumber,
         },
-        docketEntryId: 'abc',
-        form: {
-          attachments: false,
-          date: '2019-01-01T00:00:00.000Z',
-          documentTitle: '[Anything]',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Testing',
-          generatedDocumentTitle: 'Order F',
-          scenario: 'Type A',
-        },
+        docketEntryId: mockDocketEntryId,
+        form: mockForm,
       },
     });
 
     expect(
-      applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumbers: [mockDocketNumber],
+      documentMeta: { ...mockForm, docketEntryId: mockDocketEntryId },
+      subjectDocketNumber: mockDocketNumber,
+    });
   });
 
-  it('should generate a coversheet for court issued documents that require one', async () => {
-    await runAction(submitCourtIssuedDocketEntryAction, {
+  it('should return generateCoversheet true when the eventCode of the docketEntry requires a coversheet', async () => {
+    const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
       modules: {
         presenter,
       },
@@ -48,48 +63,49 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         },
         docketEntryId: 'abc',
         form: {
-          attachments: false,
-          date: '2019-01-01T00:00:00.000Z',
-          documentTitle: '[Anything]',
-          documentType: 'Order',
+          ...mockForm,
           eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
-          freeText: 'Testing',
-          generatedDocumentTitle: 'Order F',
-          scenario: 'Type A',
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalled();
+    expect(output.generateCoversheet).toBe(true);
   });
 
-  it('should not generate a coversheet for court issued documents that do not require one', async () => {
-    await runAction(submitCourtIssuedDocketEntryAction, {
+  it('should return generateCoversheet false when the eventCode of the docketEntry does NOT require a coversheet', async () => {
+    const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          docketNumber: '123-20',
+          docketNumber: mockDocketNumber,
         },
-        docketEntryId: 'abc',
+        docketEntryId: mockDocketEntryId,
         form: {
-          attachments: false,
-          date: '2019-01-01T00:00:00.000Z',
-          documentTitle: '[Anything]',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Testing',
-          generatedDocumentTitle: 'Order F',
-          scenario: 'Type A',
+          ...mockForm,
+          eventCode: COURT_ISSUED_EVENT_CODES_NO_COVERSHEET[0],
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
+    expect(output.generateCoversheet).toBe(false);
+  });
+
+  it('should return docketEntryId to props', async () => {
+    const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        docketEntryId: mockDocketEntryId,
+        form: mockForm,
+      },
+    });
+
+    expect(output.docketEntryId).toBe(mockDocketEntryId);
   });
 });

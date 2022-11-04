@@ -65,13 +65,6 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
-
-  if (eventCodeCanOnlyBeServedOnSubjectCase) {
-    docketNumbers = [subjectCaseDocketNumber];
-  }
-
   const subjectCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -196,7 +189,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'file_and_serve_court_issued_document_complete',
+      action: 'serve_document_complete',
       alertSuccess: {
         message: successMessage,
         overwritable: false,

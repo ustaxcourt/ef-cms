@@ -163,3 +163,5 @@ export const CaseDetail = connect(
     );
   },
 );
+
+CaseDetail.displayName = 'CaseDetail';
