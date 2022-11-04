@@ -112,6 +112,9 @@ const {
   deleteDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
+  deletePractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/deletePractitionerDocumentInteractor');
+const {
   deleteTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor');
 const {
@@ -120,6 +123,9 @@ const {
 const {
   editPaperFilingInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/editPaperFilingInteractor');
+const {
+  editPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/editPractitionerDocumentInteractor');
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
@@ -297,6 +303,9 @@ const {
 const {
   getPractitionerDocumentDownloadUrlInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor');
+const {
+  getPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentInteractor');
 const {
   getPractitionerDocumentsInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
@@ -606,9 +615,11 @@ const useCases = {
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
+  deletePractitionerDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   editPaperFilingInteractor,
+  editPractitionerDocumentInteractor,
   fetchPendingItemsInteractor,
   fileAndServeCourtIssuedDocumentInteractor,
   fileCorrespondenceDocumentInteractor,
@@ -668,6 +679,7 @@ const useCases = {
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
+  getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,

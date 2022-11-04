@@ -1,4 +1,4 @@
-exports.deleteDocumentFromS3 = ({ applicationContext, key }) => {
+exports.deleteDocumentFile = ({ applicationContext, key }) => {
   return applicationContext
     .getStorageClient()
     .deleteObject({
