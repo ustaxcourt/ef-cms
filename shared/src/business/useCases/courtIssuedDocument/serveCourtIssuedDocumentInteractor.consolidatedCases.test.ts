@@ -1,5 +1,6 @@
 import {
   DOCKET_SECTION,
+  DOCUMENT_SERVED_MESSAGES,
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
 import {
@@ -156,7 +157,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       message: expect.objectContaining({
         action: 'serve_document_complete',
         alertSuccess: {
-          message: 'Document served to selected cases in group. ',
+          message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
           overwritable: false,
         },
         pdfUrl: mockPdfUrl,
