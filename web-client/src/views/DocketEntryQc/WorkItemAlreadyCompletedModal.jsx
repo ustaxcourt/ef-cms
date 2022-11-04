@@ -10,11 +10,12 @@ export const WorkItemAlreadyCompletedModal = connect(
         preventCancelOnBlur
         cancelLink={false}
         closeLink={false}
-        confirmLabel="Take Me Back"
+        confirmLabel="Close and Refresh"
         confirmSequence={confirmSequence}
-        title={'ERROR!'}
+        title={'Document Has Already Been Handled'}
       >
-        The docket entry QC has already been completed.
+        Click the button to refresh the data and navigate to your previous page
+        or workflow.
       </ModalDialog>
     );
   },
