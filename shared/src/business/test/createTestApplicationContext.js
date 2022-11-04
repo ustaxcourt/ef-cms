@@ -517,7 +517,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
-    deleteDocumentFromS3: jest.fn(),
+    deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
