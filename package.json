@@ -163,6 +163,7 @@
     "seed:s3:lint": "pushd ./web-api/storage/fixtures && grep documentId seed/*json | ./validate-seed.js && popd",
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed": "run-p seed:db seed:s3",
+    "start:all": "run-p start:api:ci start:client:ci start:public:ci",
     "start:api:ci": "CI=true npm run start:api",
     "start:api:resume": "RESUME=true npm run start:api",
     "start:api": "USTC_ENV=dev ./run-local.sh",
