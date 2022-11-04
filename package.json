@@ -215,7 +215,8 @@
     "verify-private-s3-buckets": "./scripts/verify-private-s3-buckets.sh",
     "verify-cognito-lambda-triggers": "./scripts/verify-cognito-lambda-triggers.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
-    "watch": "nodemon -e yml --exec sls offline start"
+    "watch": "nodemon -e yml --exec sls offline start",
+    "shell": "docker-compose run -it shell /bin/bash"
   },
   "overrides": {
     "ansi-regex": "^5.0.1",
