@@ -58,4 +58,24 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
     });
     expect(routeStub).toHaveBeenCalledWith('/case-detail/101-20');
   });
+
+  it('should redirect to the qc my inbox page when fromPage is qc-my-inbox', async () => {
+    await runAction(confirmWorkItemAlreadyCompleteAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        constants: {
+          FROM_PAGES: {
+            qcMyInbox: 'qc-my-inbox',
+          },
+        },
+        fromPage: 'qc-my-inbox',
+      },
+    });
+    expect(routeStub).toHaveBeenCalledWith('/document-qc/my/inbox');
+  });
 });
