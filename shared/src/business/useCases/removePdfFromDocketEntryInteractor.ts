@@ -38,7 +38,7 @@ export const removePdfFromDocketEntryInteractor = async (
   const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
 
   if (docketEntry && docketEntry.isFileAttached) {
-    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+    await applicationContext.getPersistenceGateway().deleteDocumentFile({
       applicationContext,
       key: docketEntryId,
     });
