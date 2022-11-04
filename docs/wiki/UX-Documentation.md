@@ -1,7 +1,5 @@
 [Return to Directory](./README.md)
 
-This is an experiment!
-
 # UX & UI Design Documentation
 
 ## Index
