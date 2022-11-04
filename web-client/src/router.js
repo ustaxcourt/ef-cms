@@ -350,14 +350,16 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/edit',
+      '/case-detail/*/documents/*/edit..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
+        const { fromPage } = route.query();
         return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
@@ -975,6 +977,17 @@ const router = {
         setPageTitle('Add Practitioner Document');
         return app.getSequence('gotoPractitionerAddDocumentSequence')({
           barNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*/edit-document/*',
+      ifHasAccess({ app }, (barNumber, practitionerDocumentFileId) => {
+        setPageTitle('Edit Practitioner Document');
+        return app.getSequence('gotoPractitionerEditDocumentSequence')({
+          barNumber,
+          practitionerDocumentFileId,
         });
       }),
     );
