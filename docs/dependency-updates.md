@@ -63,6 +63,10 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 - How does the patch run?
     - This runs as part of the `npm postinstall` step.
 
+### pdfjs-dist
+
+`pdfjs-dist` has a major version update to ^3.x,x, but currently has issues in test environment as of 11/04/2022. Skipping updating it this week.
+
 ### Incrementing the Node Cache Key Version
 
 It's rare to need to increment or change the cache key. One reason you may want to do so is if something happens while storing the cache which corrupts it. For example, a few months ago a package failed to install while the cache was being stored. CircleCI had no idea that the installation didn't go according to plan and saved the corrupted cache. In this case, we incremented the cache key version so that CircleCI was forced to reinstall the node dependencies and save them under the new key. The cache key can be updated by searching within config.yml for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
