@@ -13,24 +13,27 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PractitionerAddDocument = connect(
+export const PractitionerAddEditDocument = connect(
   {
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isEditingPractitionerDocument: state.isEditingPractitionerDocument,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
     showModal: state.modal.showModal,
     submitAddPractitionerDocumentSequence:
       sequences.submitAddPractitionerDocumentSequence,
+    submitEditPractitionerDocumentSequence:
+      sequences.submitEditPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     validateAddPractitionerDocumentSequence:
       sequences.validateAddPractitionerDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  function PractitionerAddDocument({
+  function PractitionerAddEditDocument({
     constants,
     documentTypes,
     form,
@@ -38,6 +41,7 @@ export const PractitionerAddDocument = connect(
     practitionerDocumentationFormHelper,
     showModal,
     submitAddPractitionerDocumentSequence,
+    submitEditPractitionerDocumentSequence,
     usStates,
     usStatesOther,
     validateAddPractitionerDocumentSequence,
@@ -50,7 +54,9 @@ export const PractitionerAddDocument = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <h1 className="margin-bottom-1">Add File</h1>
+          <h1 className="margin-bottom-1">
+            {form.isEditingDocument ? 'Edit' : 'Add'} File
+          </h1>
           <div className="grid-row margin-bottom-4">
             <div className="grid-col-12">
               <p>All fields required unless otherwise noted</p>
@@ -184,13 +190,23 @@ export const PractitionerAddDocument = connect(
               </div>
               <div className="grid-row margin-bottom-6 margin-top-5">
                 <div className="grid-col-12">
-                  <Button
-                    onClick={() => {
-                      submitAddPractitionerDocumentSequence();
-                    }}
-                  >
-                    Add File
-                  </Button>
+                  {form.isEditingDocument ? (
+                    <Button
+                      onClick={() => {
+                        submitEditPractitionerDocumentSequence();
+                      }}
+                    >
+                      Update File
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        submitAddPractitionerDocumentSequence();
+                      }}
+                    >
+                      Add File
+                    </Button>
+                  )}
                   <Button
                     link
                     id="cancel-button"
@@ -200,6 +216,7 @@ export const PractitionerAddDocument = connect(
                   >
                     Cancel
                   </Button>
+
                   {showModal === 'FormCancelModalDialog' && (
                     <FormCancelModalDialog onCancelSequence="closeModalAndReturnToPractitionerDocumentsPageSequence" />
                   )}
@@ -213,4 +230,4 @@ export const PractitionerAddDocument = connect(
   },
 );
 
-PractitionerAddDocument.displayName = 'PractitionerAddDocument';
+PractitionerAddEditDocument.displayName = 'PractitionerAddEditDocument';

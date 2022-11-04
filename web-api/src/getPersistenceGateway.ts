@@ -25,7 +25,7 @@ import { decrementJobCounter } from '../../shared/src/persistence/dynamo/trialSe
 import { deleteCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from '../../shared/src/persistence/dynamo/documents/deleteDocketEntry';
-import { deleteDocumentFromS3 } from '../../shared/src/persistence/s3/deleteDocumentFromS3';
+import { deleteDocumentFile } from '../../shared/src/persistence/s3/deleteDocumentFile';
 import {
   deleteKeyCount,
   getLimiterByKey,
@@ -33,6 +33,7 @@ import {
   setExpiresAt,
 } from '../../shared/src/persistence/dynamo/helpers/store';
 import { deleteMessage } from '../../shared/src/persistence/sqs/deleteMessage';
+import { deletePractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/deletePractitionerDocument';
 import { deleteRecord } from '../../shared/src/persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
@@ -40,6 +41,7 @@ import { deleteUserCaseNote } from '../../shared/src/persistence/dynamo/userCase
 import { deleteUserConnection } from '../../shared/src/persistence/dynamo/notifications/deleteUserConnection';
 import { deleteUserFromCase } from '../../shared/src/persistence/dynamo/cases/deleteUserFromCase';
 import { deleteWorkItem } from '../../shared/src/persistence/dynamo/workitems/deleteWorkItem';
+import { editPractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchPendingItems } from '../../shared/src/persistence/elasticsearch/fetchPendingItems';
 import { getAllWebSocketConnections } from '../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from '../../shared/src/persistence/elasticsearch/getBlockedCases';
@@ -220,6 +222,7 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
+    editPractitionerDocument,
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
@@ -293,8 +296,9 @@ const gatewayMethods = {
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
-  deleteDocumentFromS3,
+  deleteDocumentFile,
   deleteMessage,
+  deletePractitionerDocument,
   deleteRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
