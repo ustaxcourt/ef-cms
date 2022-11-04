@@ -1,8 +1,9 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   getFormattedDocketEntriesForTest,
+  waitForCondition,
 } from '../helpers';
 
 export const docketClerkAddsDocketEntryWithoutFile = (
@@ -10,7 +11,6 @@ export const docketClerkAddsDocketEntryWithoutFile = (
   overrides = {},
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Docketclerk adds docket entry data without a file', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -32,49 +32,52 @@ export const docketClerkAddsDocketEntryWithoutFile = (
       filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
-    //primary document
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: overrides.dateReceivedMonth || 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: overrides.dateReceivedDay || 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: overrides.dateReceivedYear || 2018,
-    });
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: `filersMap.${contactPrimary.contactId}`,
+        key: `filersMap.${contactId}`,
         value: true,
       },
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'ADMR',
-    });
+    const administrativeRecord = [
+      {
+        key: 'eventCode',
+        value: 'ADMR',
+      },
+      {
+        key: 'documentType',
+        value: 'Administrative Record',
+      },
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+      {
+        key: 'hasOtherFilingParty',
+        value: true,
+      },
+      {
+        key: 'dateReceivedMonth',
+        value: overrides.dateReceivedMonth || 1,
+      },
+      {
+        key: 'dateReceivedDay',
+        value: overrides.dateReceivedDay || 1,
+      },
+      {
+        key: 'dateReceivedYear',
+        value: overrides.dateReceivedYear || 2018,
+      },
+    ];
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Administrative Record',
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'hasOtherFilingParty',
-      value: true,
-    });
+    for (const item of administrativeRecord) {
+      await cerebralTest.runSequence(
+        'updateDocketEntryFormValueSequence',
+        item,
+      );
+    }
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
@@ -91,6 +94,11 @@ export const docketClerkAddsDocketEntryWithoutFile = (
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

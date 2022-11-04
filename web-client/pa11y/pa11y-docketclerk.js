@@ -54,7 +54,6 @@ module.exports = [
     notes: 'checks a11y of edit docket entry add other filing party',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   },
-  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing',
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/pending-report',
   {
     actions: [
@@ -269,4 +268,16 @@ module.exports = [
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/105-20',
   },
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/maintenance',
+  {
+    actions: [
+      'wait for table.case-detail to be visible',
+      'wait for button[data-test="document-viewer-link-A"] to be visible',
+      'click element button[data-test="document-viewer-link-A"]',
+      'click element button[data-test="serve-paper-filed-document"]',
+      'wait for .modal-dialog to be visible',
+    ],
+    notes:
+      'checks a11y of ConfirmInitiatePaperFilingServiceModal on paper filing for a consolidated group',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19',
+  },
 ];
