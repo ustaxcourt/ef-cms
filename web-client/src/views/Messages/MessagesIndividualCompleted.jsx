@@ -10,13 +10,13 @@ export const MessagesIndividualCompleted = connect(
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     showSortableHeaders: state.showSortableHeaders,
-    sortMessagesSequence: sequences.sortMessagesSequence,
+    sortTableSequence: sequences.sortTableSequence,
   },
   function MessagesIndividualCompleted({
     constants,
     formattedMessages,
     showSortableHeaders,
-    sortMessagesSequence,
+    sortTableSequence,
   }) {
     return (
       <>
@@ -33,7 +33,7 @@ export const MessagesIndividualCompleted = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
@@ -51,7 +51,7 @@ export const MessagesIndividualCompleted = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
                     title="Completed"
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
@@ -65,7 +65,7 @@ export const MessagesIndividualCompleted = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Last Message"
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
