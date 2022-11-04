@@ -25,6 +25,7 @@ URL=http://localhost:9200/ ./wait-until.sh
 npm run build:assets
 
 export ELASTICSEARCH_HOST=localhost
+export ELASTICSEARCH_ENDPOINT=http://localhost:9200
 export DYNAMODB_ENDPOINT=http://localhost:8000
 
 # these exported values expire when script terminates

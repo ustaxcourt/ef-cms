@@ -276,7 +276,9 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const fallbackRegion =
     environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
   const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
-    ? (environment.dynamoDbEndpoint.includes('localhost') ? 'http://localhost:8000' : environment.dynamoDbEndpoint )
+    ? environment.dynamoDbEndpoint.includes('localhost')
+      ? 'http://localhost:8000'
+      : environment.dynamoDbEndpoint
     : `dynamodb.${mainRegion}.amazonaws.com`;
   const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
     'localhost',
