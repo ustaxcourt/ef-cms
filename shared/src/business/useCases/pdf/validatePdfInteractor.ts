@@ -6,7 +6,7 @@ export const removePdf = async ({
   message = 'PDF Error',
 }) => {
   applicationContext.logger.debug(`${message}: Deleting from S3`, key);
-  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+  await applicationContext.getPersistenceGateway().deleteDocumentFile({
     applicationContext,
     key,
   });

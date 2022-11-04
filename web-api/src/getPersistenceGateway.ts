@@ -25,7 +25,7 @@ import { decrementJobCounter } from '../../shared/src/persistence/dynamo/trialSe
 import { deleteCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from '../../shared/src/persistence/dynamo/documents/deleteDocketEntry';
-import { deleteDocumentFromS3 } from '../../shared/src/persistence/s3/deleteDocumentFromS3';
+import { deleteDocumentFile } from '../../shared/src/persistence/s3/deleteDocumentFile';
 import {
   deleteKeyCount,
   getLimiterByKey,
@@ -297,7 +297,7 @@ const gatewayMethods = {
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
-  deleteDocumentFromS3,
+  deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
