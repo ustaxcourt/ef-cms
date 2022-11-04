@@ -5,13 +5,14 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
+  waitForCondition,
 } from './helpers';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import axios from 'axios';
 
-const cerebralTest = setupTest();
-
 describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -36,36 +37,43 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
+    const answer = [
+      {
+        key: 'dateReceivedMonth',
+        value: 1,
+      },
+      {
+        key: 'dateReceivedDay',
+        value: 1,
+      },
+      {
+        key: 'dateReceivedYear',
+        value: 2018,
+      },
+      {
+        key: 'eventCode',
+        value: 'A',
+      },
+    ];
+
+    for (const item of answer) {
+      await cerebralTest.runSequence(
+        'updateDocketEntryFormValueSequence',
+        item,
+      );
+    }
+
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'A',
-    });
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: `filersMap.${contactPrimary.contactId}`,
+        key: `filersMap.${contactId}`,
         value: true,
       },
     );
@@ -74,9 +82,10 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
       isSavingForLater: false,
     });
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     const caseDocument = cerebralTest.getState('caseDetail.docketEntries.0');
     expect(caseDocument).toMatchObject({
@@ -85,6 +94,8 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
       eventCode: 'A',
       isFileAttached: true,
     });
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDetail = cerebralTest.getState('caseDetail');
     expect(caseDetail).toMatchObject({

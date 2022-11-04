@@ -951,7 +951,31 @@ const router = {
       '/practitioner-detail/*',
       ifHasAccess({ app }, barNumber => {
         setPageTitle('Practitioner Detail');
+
         return app.getSequence('gotoPractitionerDetailSequence')({
+          barNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*?..',
+      ifHasAccess({ app }, barNumber => {
+        setPageTitle('Practitioner Detail');
+        const { tab } = route.query();
+
+        return app.getSequence('gotoPractitionerDocumentationSequence')({
+          barNumber,
+          tab,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*/add-document',
+      ifHasAccess({ app }, barNumber => {
+        setPageTitle('Add Practitioner Document');
+        return app.getSequence('gotoPractitionerAddDocumentSequence')({
           barNumber,
         });
       }),

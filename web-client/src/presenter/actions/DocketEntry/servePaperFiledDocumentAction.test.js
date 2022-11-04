@@ -8,6 +8,8 @@ describe('servePaperFiledDocumentAction', () => {
   const docketNumber = '123-45';
   const docketEntryId = '456';
   const pdfUrl = 'www.example.com';
+  const docketNumbers = [docketNumber];
+  const clientConnectionId = '999999999';
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -21,19 +23,19 @@ describe('servePaperFiledDocumentAction', () => {
   it('serves a paper filed document', async () => {
     applicationContext
       .getUseCases()
-      .serveExternallyFiledDocumentInteractor.mockImplementation(() => {
-        return { pdfUrl };
-      });
+      .serveExternallyFiledDocumentInteractor.mockReturnValue({ pdfUrl });
 
     const result = await runAction(servePaperFiledDocumentAction, {
       modules: {
         presenter,
       },
       props: {
+        docketNumbers,
         primaryDocumentFileId: 'document-id-123',
       },
       state: {
         caseDetail,
+        clientConnectionId,
         docketEntryId,
         document: '123-456-789-abc',
         form: {
@@ -41,11 +43,16 @@ describe('servePaperFiledDocumentAction', () => {
         },
       },
     });
-
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][1],
-    ).toMatchObject({ docketEntryId, docketNumber });
+    ).toMatchObject({
+      clientConnectionId,
+      docketEntryId,
+      docketNumbers,
+      subjectCaseDocketNumber: docketNumber,
+    });
+
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: true,
@@ -65,10 +72,12 @@ describe('servePaperFiledDocumentAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         primaryDocumentFileId: 'document-id-123',
       },
       state: {
         caseDetail,
+        clientConnectionId,
         docketEntryId,
         document: '123-456-789-abc',
         form: {
@@ -80,7 +89,13 @@ describe('servePaperFiledDocumentAction', () => {
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][1],
-    ).toMatchObject({ docketEntryId, docketNumber });
+    ).toMatchObject({
+      clientConnectionId,
+      docketEntryId,
+      docketNumbers,
+      subjectCaseDocketNumber: docketNumber,
+    });
+
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: false,
