@@ -1,11 +1,14 @@
 FROM efcms
 
-COPY . /home/app
+COPY package.json /home/app
+COPY package-lock.json /home/app
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
   PUPPETEER_SKIP_DOWNLOAD=true \
   PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 RUN npm ci --legacy-peer-dep
+
+COPY . /home/app
 
 CMD echo "🔥"
