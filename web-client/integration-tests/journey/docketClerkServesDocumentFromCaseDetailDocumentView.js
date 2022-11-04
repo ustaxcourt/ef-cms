@@ -12,7 +12,7 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView =
       );
 
       expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ConfirmInitiateCourtIssuedDocumentServiceModal',
+        'ConfirmInitiateCourtIssuedFilingServiceModal',
       );
 
       await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');

@@ -1,15 +1,14 @@
 import { AUTOMATIC_BLOCKED_REASONS } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
 import { petitionsClerkVerifyEligibleCase } from './journey/petitionsClerkVerifyEligibleCase';
 import { petitionsClerkVerifyNotEligibleCase } from './journey/petitionsClerkVerifyNotEligibleCase';
 
-const cerebralTest = setupTest();
-let caseDetail;
-
 describe('Docket clerk verifies high priority case is not blocked', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -20,22 +19,19 @@ describe('Docket clerk verifies high priority case is not blocked', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    caseDetail = await uploadPetition(cerebralTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       preferredTrialCity: 'Lubbock, Texas',
     });
-    cerebralTest.docketNumber = caseDetail.docketNumber;
     expect(caseDetail.docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
-    cerebralTest,
-    fakeFile,
-    'EVID',
-  );
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, 'EVID');
 
   it('verify that the high-priority case is not automaticBlocked', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

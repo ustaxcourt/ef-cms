@@ -218,7 +218,7 @@ TrialSession.validationRules = {
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),
-      ...US_STATES_OTHER,
+      ...Object.keys(US_STATES_OTHER),
     )
       .allow('')
       .optional(),

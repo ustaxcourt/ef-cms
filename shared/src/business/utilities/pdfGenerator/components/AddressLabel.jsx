@@ -6,7 +6,7 @@ export const AddressLabel = ({
   address2,
   address3,
   city,
-  countryName,
+  country,
   inCareOf,
   name,
   postalCode,
@@ -39,7 +39,7 @@ export const AddressLabel = ({
       <div>
         {city}, {state} {postalCode}
       </div>
-      <div>{countryName}</div>
+      <div>{country}</div>
     </div>
   );
 };
