@@ -6,6 +6,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
+const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
 
 /**
  * serveCourtIssuedDocumentInteractor
@@ -18,8 +19,18 @@ import { createISODateString } from '../../utilities/DateHandler';
  * @param {string} providers.subjectCaseDocketNumber the docket number of the case containing the document to serve
  */
 export const serveCourtIssuedDocumentInteractor = async (
-  applicationContext,
-  { clientConnectionId, docketEntryId, docketNumbers, subjectCaseDocketNumber },
+  applicationContext: IApplicationContext,
+  {
+    clientConnectionId,
+    docketEntryId,
+    docketNumbers,
+    subjectCaseDocketNumber,
+  }: {
+    clientConnectionId: string;
+    docketEntryId: string;
+    docketNumbers: string[];
+    subjectCaseDocketNumber: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -175,8 +186,8 @@ export const serveCourtIssuedDocumentInteractor = async (
 
   const successMessage =
     docketNumbers.length > 1
-      ? 'Document served to selected cases in group. '
-      : 'Document served. ';
+      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+      : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

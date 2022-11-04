@@ -2,6 +2,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
   ROLES,
 } from '../../entities/EntityConstants';
 import { Case, isLeadCase } from '../../entities/cases/Case';
@@ -228,8 +229,8 @@ export const addPaperFilingInteractor = async (
 
   const successMessage =
     consolidatedGroupDocketNumbers.length > 1
-      ? 'Document served to selected cases in group. '
-      : 'Your entry has been added to the docket record.';
+      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
