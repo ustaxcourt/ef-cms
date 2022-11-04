@@ -1,8 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
 import { COUNTRY_TYPES, ROLES } from '../../entities/EntityConstants';
-import { getContactPrimary } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase.js';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
 
 describe('submitCaseAssociationRequest', () => {
   const mockContactId = getContactPrimary(MOCK_CASE).contactId;

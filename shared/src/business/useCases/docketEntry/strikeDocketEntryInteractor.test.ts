@@ -1,5 +1,3 @@
-import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -7,6 +5,8 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;

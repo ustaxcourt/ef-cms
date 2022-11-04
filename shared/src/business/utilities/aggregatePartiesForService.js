@@ -12,7 +12,6 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  */
 const aggregatePartiesForService = caseEntity => {
   const formattedCase = setServiceIndicatorsForCase(caseEntity);
-
   const parties = [
     ...formattedCase.petitioners,
     ...formattedCase.privatePractitioners,

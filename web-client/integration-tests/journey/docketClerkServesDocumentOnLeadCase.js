@@ -14,7 +14,7 @@ export const docketClerkServesDocumentOnLeadCase = cerebralTest => {
     );
 
     expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiateCourtIssuedDocumentServiceModal',
+      'ConfirmInitiateCourtIssuedFilingServiceModal',
     );
 
     const caseDetail = cerebralTest.getState('caseDetail');

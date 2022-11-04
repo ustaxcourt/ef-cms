@@ -5,6 +5,8 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
+    '!src/index.js',
+    '!src/index-public.js',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
     '!src/applicationContext.js',
