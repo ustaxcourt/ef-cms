@@ -982,6 +982,17 @@ const router = {
     );
 
     registerRoute(
+      '/practitioner-detail/*/edit-document/*',
+      ifHasAccess({ app }, (barNumber, practitionerDocumentFileId) => {
+        setPageTitle('Edit Practitioner Document');
+        return app.getSequence('gotoPractitionerEditDocumentSequence')({
+          barNumber,
+          practitionerDocumentFileId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/print-paper-service/*',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);

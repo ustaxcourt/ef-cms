@@ -7,8 +7,8 @@ describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     await expect(
       uploadOrderDocumentInteractor(applicationContext, {
-        docketEntryIdToOverwrite: 123,
         documentFile: '',
+        fileIdToOverwrite: '123',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -20,8 +20,8 @@ describe('uploadOrderDocumentInteractor', () => {
     });
 
     await uploadOrderDocumentInteractor(applicationContext, {
-      docketEntryIdToOverwrite: 123,
       documentFile: 'document file',
+      fileIdToOverwrite: '123',
     });
 
     expect(
@@ -33,7 +33,7 @@ describe('uploadOrderDocumentInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       document: 'document file',
-      key: 123,
+      key: '123',
     });
   });
 });
