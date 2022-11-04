@@ -12,22 +12,23 @@ import {
   uploadPetition,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
-let leadDocketNumber;
-let caseDetail;
-
 describe('Complete QC on lead case docket entry', () => {
+  const cerebralTest = setupTest();
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
+  let leadDocketNumber;
+  let caseDetail;
+
+  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
@@ -44,6 +45,9 @@ describe('Complete QC on lead case docket entry', () => {
       caseDetail.docketNumber;
     leadDocketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
@@ -89,6 +93,9 @@ describe('Complete QC on lead case docket entry', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
   docketClerkOpensCaseConsolidateModal(cerebralTest);
@@ -112,12 +119,14 @@ describe('Complete QC on lead case docket entry', () => {
       'CourtIssuedDocketEntry',
     );
 
-    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence(
+      'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+    );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiateServiceModal',
+      'ConfirmInitiateCourtIssuedFilingServiceModal',
     );
 
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);

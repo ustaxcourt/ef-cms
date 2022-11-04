@@ -2,7 +2,6 @@ import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './j
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
   docketClerkLoadsPendingReportOnChiefJudgeSelection,
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
@@ -15,6 +14,7 @@ import {
   subtractISODates,
 } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -31,13 +31,6 @@ describe('docket clerk interacts with pending items', () => {
 
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => {
-        return new Promise(resolve => {
-          resolve(new Uint8Array(fakeFile));
-        });
-      },
-    };
   });
 
   afterAll(() => {
@@ -47,17 +40,25 @@ describe('docket clerk interacts with pending items', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(cerebralTest);
+
     expect(caseDetail.docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as a docket clerk and check pending items count', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDetail.docketNumber,
     });
+
     const formatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
+
     await docketClerkLoadsPendingReportOnChiefJudgeSelection({
       cerebralTest,
       shouldLoadMore: true,
@@ -163,11 +164,7 @@ describe('docket clerk interacts with pending items', () => {
     );
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
-    cerebralTest,
-    fakeFile,
-    'EVID',
-  );
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, 'EVID');
 
   it('docket clerk views a pending report item and confirms the correct receivedAt date format', async () => {
     await docketClerkLoadsPendingReportOnChiefJudgeSelection({
@@ -198,11 +195,7 @@ describe('docket clerk interacts with pending items', () => {
     expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
-    cerebralTest,
-    fakeFile,
-    'MOTR',
-  );
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, 'MOTR');
 
   it('docket clerk views pending motion to proceed remotely', async () => {
     await docketClerkLoadsPendingReportOnChiefJudgeSelection({

@@ -1,6 +1,6 @@
+import { CaseDeadline } from '../../entities/CaseDeadline';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateCaseDeadlineInteractor } from './validateCaseDeadlineInteractor';
-import { CaseDeadline } from '../../entities/CaseDeadline';
 
 describe('validateCaseDeadlineInteractor', () => {
   it('returns the expected errors object on an empty case deadline', () => {

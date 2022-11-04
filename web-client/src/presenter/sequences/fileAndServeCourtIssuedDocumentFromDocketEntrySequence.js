@@ -5,6 +5,7 @@ import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWith
 import { fileAndServeCourtIssuedDocumentAction } from '../actions/CourtIssuedDocketEntry/fileAndServeCourtIssuedDocumentAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -32,6 +33,7 @@ export const fileAndServeCourtIssuedDocumentFromDocketEntrySequence = [
       computeJudgeNameWithTitleAction,
       getComputedFormDateFactoryAction(null),
       generateCourtIssuedDocumentTitleAction,
+      getDocketNumbersForConsolidatedServiceAction,
       fileAndServeCourtIssuedDocumentAction,
       // don't call unset waiting for response action, waiting for websocket response
     ],

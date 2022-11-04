@@ -115,3 +115,5 @@ export const StartCaseStep1 = connect(
     );
   },
 );
+
+StartCaseStep1.displayName = 'StartCaseStep1';

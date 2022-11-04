@@ -16,6 +16,7 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
   hasPartyWithServiceType,
+  isLeadCase,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -37,6 +38,7 @@ import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
+import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
@@ -195,6 +197,8 @@ import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/mes
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
+import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getPractitionerDocumentDownloadUrlProxy';
+import { getPractitionerDocumentsInteractor } from '../../shared/src/proxies/practitioners/getPractitionerDocumentsProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
@@ -287,6 +291,7 @@ import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFr
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
 import { validateAddPetitionerInteractor } from '../../shared/src/business/useCases/validateAddPetitionerInteractor';
+import { validateAddPractitionerDocumentFormInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerDocumentFormInteractor';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
 import { validateCalendarNoteInteractor } from '../../shared/src/business/useCases/validateCalendarNoteInteractor';
@@ -374,6 +379,7 @@ const allUseCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createJudgeUserInteractor,
   createMessageInteractor,
+  createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   deleteAuthCookieInteractor,
@@ -442,6 +448,8 @@ const allUseCases = {
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerDocumentDownloadUrlInteractor,
+  getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getStatusOfVirusScanInteractor: (applicationContext, args) =>
@@ -528,6 +536,7 @@ const allUseCases = {
   validateAddDeficiencyStatisticsInteractor,
   validateAddIrsPractitionerInteractor,
   validateAddPetitionerInteractor,
+  validateAddPractitionerDocumentFormInteractor,
   validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
   validateCalendarNoteInteractor,
@@ -735,6 +744,7 @@ const applicationContext = {
       hasPartyWithServiceType,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isServed,

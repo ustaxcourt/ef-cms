@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
 import { compact } from 'lodash';
+import AWS from 'aws-sdk';
 
 export const processMessageEntries = async ({
   applicationContext,

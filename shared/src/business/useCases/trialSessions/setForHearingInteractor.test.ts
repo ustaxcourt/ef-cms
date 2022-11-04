@@ -1,11 +1,11 @@
-import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { setForHearingInteractor } from './setForHearingInteractor';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } from '../../../test/mockCase';
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { setForHearingInteractor } from './setForHearingInteractor';
 
 describe('setForHearingInteractor', () => {
   let mockCurrentUser;
@@ -39,9 +39,9 @@ describe('setForHearingInteractor', () => {
 
     await expect(
       setForHearingInteractor(applicationContext, {
+        calendarNotes: 'testing',
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
-        calendarNotes: 'testing',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -53,8 +53,8 @@ describe('setForHearingInteractor', () => {
 
     await expect(
       setForHearingInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
         calendarNotes: 'testing',
+        docketNumber: mockCase.docketNumber,
         trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow('That Hearing is already assigned to the Case');
@@ -70,8 +70,8 @@ describe('setForHearingInteractor', () => {
 
     await expect(
       setForHearingInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
         calendarNotes: 'testing',
+        docketNumber: mockCase.docketNumber,
         trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow('That Hearing is already assigned to the Case');
@@ -84,8 +84,8 @@ describe('setForHearingInteractor', () => {
     };
 
     await setForHearingInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
       calendarNotes: 'testing',
+      docketNumber: mockCase.docketNumber,
       trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
     });
 
@@ -100,8 +100,8 @@ describe('setForHearingInteractor', () => {
     };
 
     await setForHearingInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
       calendarNotes: 'testing',
+      docketNumber: mockCase.docketNumber,
       trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 

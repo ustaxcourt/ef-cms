@@ -1,7 +1,7 @@
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setDocumentTitleFromStampDataInteractor } from './setDocumentTitleFromStampDataInteractor';
-import { formatDateString, FORMATS } from '../../utilities/DateHandler';
-import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 
 describe('setDocumentTitleFromStampDataInteractor', () => {
   const getDateISO = () =>

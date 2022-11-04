@@ -1,9 +1,8 @@
+import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
-import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
-import { ROLES } from '../../entities/EntityConstants';
-import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
 jest.mock('../users/generateChangeOfAddress');
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 

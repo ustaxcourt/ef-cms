@@ -71,7 +71,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     calendaredCase => {
       return (
         !calendaredCase.leadDocketNumber ||
-        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+        applicationContext.getUtilities().isLeadCase(calendaredCase)
       );
     },
   );

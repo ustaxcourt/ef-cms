@@ -120,6 +120,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
+const {
   createPractitionerUserLambda,
 } = require('./practitioners/createPractitionerUserLambda');
 const {
@@ -263,6 +266,12 @@ const {
 const {
   getPractitionerByBarNumberLambda,
 } = require('./practitioners/getPractitionerByBarNumberLambda');
+const {
+  getPractitionerDocumentDownloadUrlLambda,
+} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
 const {
   getPractitionersByNameLambda,
 } = require('./practitioners/getPractitionersByNameLambda');
@@ -600,8 +609,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(saveSignedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve',
-    lambdaWrapper(serveExternallyFiledDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
+    lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/external-document',
@@ -613,7 +622,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(addPaperFilingLambda),
+    lambdaWrapper(addPaperFilingLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',
@@ -910,6 +919,18 @@ app.get(
   app.get(
     '/practitioners/:barNumber',
     lambdaWrapper(getPractitionerByBarNumberLambda),
+  );
+  app.get(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(getPractitionerDocumentsLambda),
+  );
+  app.post(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(createPractitionerDocumentLambda),
+  );
+  app.get(
+    '/practitioner-documents/:barNumber/:practitionerDocumentFileId/document-download-url',
+    lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
   );
   app.put(
     '/async/practitioners/:barNumber',

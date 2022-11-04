@@ -1,9 +1,9 @@
+import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
 import {
   addBatchesForScanning,
   createPDFFromScannedBatches,
   selectScannerSource,
 } from './scanHelpers';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
@@ -12,13 +12,11 @@ import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProg
 import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-
 describe('Create Docket Entry From Scans', () => {
+  const cerebralTest = setupTest();
+
   let scannerSourceIndex = 0;
   let scannerSourceName = 'scanner A';
-
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
   beforeEach(() => {
     jest.setTimeout(30000);
