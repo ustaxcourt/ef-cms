@@ -88,6 +88,9 @@ const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
+  createPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor');
+const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
@@ -109,6 +112,9 @@ const {
   deleteDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
+  deletePractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/deletePractitionerDocumentInteractor');
+const {
   deleteTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor');
 const {
@@ -117,6 +123,9 @@ const {
 const {
   editPaperFilingInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/editPaperFilingInteractor');
+const {
+  editPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/editPractitionerDocumentInteractor');
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
@@ -291,6 +300,15 @@ const {
 const {
   getPractitionerByBarNumberInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
+const {
+  getPractitionerDocumentDownloadUrlInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor');
+const {
+  getPractitionerDocumentInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentInteractor');
+const {
+  getPractitionerDocumentsInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor');
 const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
@@ -589,6 +607,7 @@ const useCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
   createPetitionerAccountInteractor,
+  createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   createUserInteractor,
@@ -596,9 +615,11 @@ const useCases = {
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
+  deletePractitionerDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   editPaperFilingInteractor,
+  editPractitionerDocumentInteractor,
   fetchPendingItemsInteractor,
   fileAndServeCourtIssuedDocumentInteractor,
   fileCorrespondenceDocumentInteractor,
@@ -657,6 +678,9 @@ const useCases = {
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerDocumentDownloadUrlInteractor,
+  getPractitionerDocumentInteractor,
+  getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getPublicCaseInteractor,

@@ -18,13 +18,14 @@ import { createNewPetitionerUser } from '../../shared/src/persistence/dynamo/use
 import { createNewPractitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from '../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createOrUpdateUser } from '../../shared/src/persistence/dynamo/users/createOrUpdateUser';
+import { createPractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { decrementJobCounter } from '../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from '../../shared/src/persistence/dynamo/documents/deleteDocketEntry';
-import { deleteDocumentFromS3 } from '../../shared/src/persistence/s3/deleteDocumentFromS3';
+import { deleteDocumentFile } from '../../shared/src/persistence/s3/deleteDocumentFile';
 import {
   deleteKeyCount,
   getLimiterByKey,
@@ -32,6 +33,7 @@ import {
   setExpiresAt,
 } from '../../shared/src/persistence/dynamo/helpers/store';
 import { deleteMessage } from '../../shared/src/persistence/sqs/deleteMessage';
+import { deletePractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/deletePractitionerDocument';
 import { deleteRecord } from '../../shared/src/persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
@@ -39,6 +41,7 @@ import { deleteUserCaseNote } from '../../shared/src/persistence/dynamo/userCase
 import { deleteUserConnection } from '../../shared/src/persistence/dynamo/notifications/deleteUserConnection';
 import { deleteUserFromCase } from '../../shared/src/persistence/dynamo/cases/deleteUserFromCase';
 import { deleteWorkItem } from '../../shared/src/persistence/dynamo/workitems/deleteWorkItem';
+import { editPractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchPendingItems } from '../../shared/src/persistence/elasticsearch/fetchPendingItems';
 import { getAllWebSocketConnections } from '../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from '../../shared/src/persistence/elasticsearch/getBlockedCases';
@@ -82,6 +85,8 @@ import { getMessageThreadByParentId } from '../../shared/src/persistence/dynamo/
 import { getMessages } from '../../shared/src/persistence/sqs/getMessages';
 import { getMessagesByDocketNumber } from '../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber';
 import { getPractitionerByBarNumber } from '../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber';
+import { getPractitionerDocumentByFileId } from '../../shared/src/persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
+import { getPractitionerDocuments } from '../../shared/src/persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from '../../shared/src/persistence/elasticsearch/getPractitionersByName';
 import { getPublicDownloadPolicyUrl } from '../../shared/src/persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from '../../shared/src/persistence/elasticsearch/getReadyForTrialCases';
@@ -213,13 +218,17 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createOrUpdateUser,
+    createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
     deleteKeyCount,
+    editPractitionerDocument,
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
+    getPractitionerDocumentByFileId,
+    getPractitionerDocuments,
     getSesStatus,
     getTrialSessionJobStatusForCase,
     getTrialSessionProcessingStatus,
@@ -287,8 +296,9 @@ const gatewayMethods = {
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
-  deleteDocumentFromS3,
+  deleteDocumentFile,
   deleteMessage,
+  deletePractitionerDocument,
   deleteRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
