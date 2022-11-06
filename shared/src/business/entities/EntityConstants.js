@@ -100,6 +100,10 @@ const ALLOWLIST_FEATURE_FLAGS = {
   STAMP_DISPOSITION: {
     key: 'stamp-disposition-enabled',
   },
+  UPDATED_TRIAL_STATUS_TYPES: {
+    disabledMessage: 'Currently using legacy trial status types.',
+    key: 'updated-trial-status-types',
+  },
 };
 
 const CONFIGURATION_ITEM_KEYS = {
@@ -1220,7 +1224,7 @@ const SECTIONS = sortBy([
   TRIAL_CLERKS_SECTION,
 ]);
 
-const TRIAL_STATUS_TYPES = [
+const TRIAL_STATUS_TYPES_LEGACY = [
   'Set for Trial',
   'Dismissed',
   'Continued',
@@ -1229,6 +1233,18 @@ const TRIAL_STATUS_TYPES = [
   'Settled',
   'Recall',
   'Taken Under Advisement',
+];
+
+const TRIAL_STATUS_TYPES = [
+  'Probable Settlement',
+  'Probable Trial',
+  'Definite Trial',
+  'Rule 122',
+  'Basis Reached',
+  'Recall',
+  'Motion to Dismiss',
+  'Submitted/CAV',
+  'Continued',
 ];
 
 const SCAN_MODES = {
@@ -1519,6 +1535,7 @@ module.exports = deepFreeze({
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
   TRIAL_STATUS_TYPES,
+  TRIAL_STATUS_TYPES_LEGACY,
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
