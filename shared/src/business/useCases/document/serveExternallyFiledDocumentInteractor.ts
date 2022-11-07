@@ -1,6 +1,5 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
@@ -11,9 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { WorkItem } from '../../entities/WorkItem';
 import { addCoverToPdf } from '../addCoverToPdf';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { omit } from 'lodash';
 
 /**
@@ -136,13 +133,32 @@ export const serveExternallyFiledDocumentInteractor = async (
       try {
         const coversheetLength = 1;
 
-        ({ newCase: caseEntityToUpdate } = await fileDocumentOnOneCase({
-          applicationContext,
-          caseEntity: caseEntityToUpdate,
-          numberOfPages: numberOfPages + coversheetLength,
-          originalSubjectDocketEntry,
-          user,
-        }));
+        const docketEntryEntity = new DocketEntry(
+          {
+            ...originalSubjectDocketEntry,
+            ...omit(originalSubjectDocketEntry, 'filedBy'),
+            docketNumber: caseEntityToUpdate.docketNumber,
+            draftOrderState: null,
+            filingDate: applicationContext.getUtilities().createISODateString(),
+            isDraft: false,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: numberOfPages + coversheetLength,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            userId: user.userId,
+          },
+          { applicationContext },
+        );
+
+        ({ newCase: caseEntityToUpdate } = await applicationContext
+          .getUseCaseHelpers()
+          .fileDocumentOnOneCase({
+            applicationContext,
+            caseEntity: caseEntityToUpdate,
+            docketEntryEntity,
+            subjectCaseDocketNumber,
+            user,
+          }));
       } catch (e) {
         continue;
       }
@@ -215,124 +231,4 @@ export const serveExternallyFiledDocumentInteractor = async (
     },
     userId: user.userId,
   });
-};
-
-const fileDocumentOnOneCase = async ({
-  applicationContext,
-  caseEntity,
-  numberOfPages,
-  originalSubjectDocketEntry,
-  user,
-}) => {
-  const servedParties = aggregatePartiesForService(caseEntity);
-
-  const docketEntryEntity = new DocketEntry(
-    {
-      ...originalSubjectDocketEntry,
-      ...omit(originalSubjectDocketEntry, 'filedBy'),
-      docketNumber: caseEntity.docketNumber,
-      draftOrderState: null,
-      filingDate: applicationContext.getUtilities().createISODateString(),
-      isDraft: false,
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      numberOfPages,
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
-  docketEntryEntity.setAsServed(servedParties.all);
-
-  const isSubjectCase =
-    originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
-
-  if (!docketEntryEntity.workItem || !isSubjectCase) {
-    docketEntryEntity.workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        hideFromPendingMessages: true,
-        inProgress: true,
-        leadDocketNumber: originalSubjectDocketEntry.docketNumber,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      },
-      { applicationContext },
-    );
-  }
-
-  const workItemToUpdate = docketEntryEntity.workItem;
-
-  workItemToUpdate.setAsCompleted({
-    message: 'completed',
-    user,
-  });
-
-  workItemToUpdate.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemForDocketClerkFilingExternalDocument({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-
-  if (
-    caseEntity.docketEntries.some(
-      docketEntry =>
-        docketEntry.docketEntryId === docketEntryEntity.docketEntryId,
-    )
-  ) {
-    caseEntity.updateDocketEntry(docketEntryEntity);
-  } else {
-    caseEntity.addDocketEntry(docketEntryEntity);
-  }
-
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
-    });
-
-  const validRawCaseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity.validate(),
-    });
-
-  return {
-    newCase: new Case(validRawCaseEntity, { applicationContext }),
-  };
 };

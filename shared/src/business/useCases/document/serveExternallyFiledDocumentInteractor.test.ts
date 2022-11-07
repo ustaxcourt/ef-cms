@@ -31,6 +31,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(true);
 
+    //fix this to return the right thing?
+    applicationContext
+      .getUseCaseHelpers()
+      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
+
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
