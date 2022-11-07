@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { CaseListPetitioner } from '../CaseListPetitioner';
+import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FilingFeeOptions } from './FilingFeeOptions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,6 +28,7 @@ export const DashboardPetitioner = connect(
               {dashboardExternalHelper.showCaseList && <CaseListPetitioner />}
             </div>
             <div className="tablet:grid-col-4">
+              {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
