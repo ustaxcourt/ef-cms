@@ -163,7 +163,9 @@
     "seed:s3:lint": "pushd ./web-api/storage/fixtures && grep documentId seed/*json | ./validate-seed.js && popd",
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed": "run-p seed:db seed:s3",
+    "shell": "docker-compose run -it shell /bin/bash",
     "start:all": "run-p start:api:ci start:client:ci start:public:ci",
+    "start:all:docker": "docker build -t efcms -f Dockerfile . && docker-compose up",
     "start:api:ci": "CI=true npm run start:api",
     "start:api:resume": "RESUME=true npm run start:api",
     "start:api": "USTC_ENV=dev ./run-local.sh",
@@ -215,8 +217,7 @@
     "verify-private-s3-buckets": "./scripts/verify-private-s3-buckets.sh",
     "verify-cognito-lambda-triggers": "./scripts/verify-cognito-lambda-triggers.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
-    "watch": "nodemon -e yml --exec sls offline start",
-    "shell": "docker-compose run -it shell /bin/bash"
+    "watch": "nodemon -e yml --exec sls offline start"
   },
   "overrides": {
     "ansi-regex": "^5.0.1",
