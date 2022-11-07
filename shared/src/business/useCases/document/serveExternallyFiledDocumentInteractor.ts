@@ -1,6 +1,7 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
@@ -231,6 +232,8 @@ const fileDocumentOnOneCase = async ({
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
+
+  // diff
   if (servedParties.paper.length > 0) {
     consolidatedGroupHasPaperServiceCase = true;
   }
@@ -246,17 +249,15 @@ const fileDocumentOnOneCase = async ({
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       userId: user.userId,
     },
     { applicationContext },
   );
+  docketEntryEntity.setAsServed(servedParties.all);
 
-  docketEntryEntity.setAsServed(servedParties.all).validate();
-  docketEntryEntity.setAsProcessingStatusAsCompleted();
-
-  const subjectCaseDocketNumber = originalSubjectDocketEntry.docketNumber;
-
-  const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
+  const isSubjectCase =
+    originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
 
   if (!docketEntryEntity.workItem || !isSubjectCase) {
     docketEntryEntity.workItem = new WorkItem(
@@ -274,7 +275,7 @@ const fileDocumentOnOneCase = async ({
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         hideFromPendingMessages: true,
         inProgress: true,
-        leadDocketNumber: subjectCaseDocketNumber,
+        leadDocketNumber: originalSubjectDocketEntry.docketNumber,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
@@ -285,40 +286,38 @@ const fileDocumentOnOneCase = async ({
 
   const workItemToUpdate = docketEntryEntity.workItem;
 
-  if (workItemToUpdate) {
-    workItemToUpdate.setAsCompleted({
-      message: 'completed',
-      user,
-    });
+  workItemToUpdate.setAsCompleted({
+    message: 'completed',
+    user,
+  });
 
-    workItemToUpdate.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
+  workItemToUpdate.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketClerkFilingExternalDocument({
-        applicationContext,
-        workItem: workItemToUpdate.validate().toRawObject(),
-      });
-
-    await applicationContext.getPersistenceGateway().saveWorkItem({
+  await applicationContext
+    .getPersistenceGateway()
+    .saveWorkItemForDocketClerkFilingExternalDocument({
       applicationContext,
       workItem: workItemToUpdate.validate().toRawObject(),
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: user.section,
-      userId: user.userId,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
-  }
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: user.section,
+    userId: user.userId,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
 
   if (
     caseEntity.docketEntries.some(
