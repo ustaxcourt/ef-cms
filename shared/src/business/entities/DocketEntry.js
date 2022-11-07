@@ -462,6 +462,35 @@ const getServedPartiesCode = servedParties => {
   return servedPartiesCode;
 };
 
+/**
+ * Gets the base document title combined with any additional info provided.
+ *
+ * @returns {string} the calculated document title
+ */
+DocketEntry.prototype.getDocumentTitleForDocketRecord = function () {
+  const additionalInfo = this.additionalInfo2
+    ? `${this.additionalInfo} ${this.additionalInfo2}`
+    : this.additionalInfo;
+  if (additionalInfo) {
+    return `${this.documentTitle} ${additionalInfo}`;
+  }
+  return this.documentTitle;
+};
+
+/**
+ * Gets the base document title combined with additionalInfo but not additionalInfo2
+ * for use on cover sheets if addToCoversheet is true or just the base document title
+ * if it is false.
+ *
+ * @returns {string} the calculated document title for cover sheets
+ */
+DocketEntry.prototype.getDocumentTitleForCoverPage = function () {
+  if (this.addToCoversheet && this.additionalInfo) {
+    return `${this.documentTitle} ${this.additionalInfo}`;
+  }
+  return this.documentTitle;
+};
+
 joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {
   filedBy: [
     {
