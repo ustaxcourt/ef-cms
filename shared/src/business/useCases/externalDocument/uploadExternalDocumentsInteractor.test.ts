@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { uploadExternalDocumentsInteractor } from './uploadExternalDocumentsInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('uploadExternalDocumentsInteractor', () => {
   beforeAll(() => {
@@ -68,6 +68,7 @@ describe('uploadExternalDocumentsInteractor', () => {
 
     await expect(
       uploadExternalDocumentsInteractor(applicationContext, {
+        docketNumbersForFiling: ['101-20'],
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -88,7 +89,6 @@ describe('uploadExternalDocumentsInteractor', () => {
           secondary: () => 'something2',
           secondarySupporting0: () => 'something4',
         },
-        docketNumbersForFiling: ['101-20'],
       }),
     ).resolves.not.toThrow();
   });
@@ -101,6 +101,7 @@ describe('uploadExternalDocumentsInteractor', () => {
 
     await expect(
       uploadExternalDocumentsInteractor(applicationContext, {
+        docketNumbersForFiling: ['202-10'],
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -111,7 +112,6 @@ describe('uploadExternalDocumentsInteractor', () => {
           primaryDocumentFile: {},
           secondaryDocument: {},
         },
-        docketNumbersForFiling: ['202-10'],
         progressFunctions: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -124,18 +124,18 @@ describe('uploadExternalDocumentsInteractor', () => {
 
   it('should call fileExternalDocumentForConsolidatedInteractor when a leadDocketNumber is provided', async () => {
     await uploadExternalDocumentsInteractor(applicationContext, {
+      docketNumbersForFiling: ['100-20'],
       documentFiles: {
         primary: 'something',
         primarySupporting0: 'something3',
         secondary: 'something2',
         secondarySupporting0: 'something4',
       },
-      leadDocketNumber: '101-20',
       documentMetadata: {
         primaryDocumentFile: {},
         secondaryDocument: {},
       },
-      docketNumbersForFiling: ['100-20'],
+      leadDocketNumber: '101-20',
       progressFunctions: {
         primary: 'something',
         primarySupporting0: 'something3',

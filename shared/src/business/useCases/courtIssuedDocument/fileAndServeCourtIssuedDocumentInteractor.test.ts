@@ -1,9 +1,5 @@
 /* eslint-disable max-lines */
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -11,12 +7,16 @@ import {
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { Case } from '../../entities/cases/Case';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { MOCK_CASE } from '../../../test/mockCase';
+import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
@@ -205,11 +205,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[0],
       subjectCaseDocketNumber: caseRecord.docketNumber,
-      clientConnectionId: 'testing',
     });
 
     const updatedCase =
@@ -359,11 +359,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords if the order document has an event code that should close the case', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
       subjectCaseDocketNumber: caseRecord.docketNumber,
-      clientConnectionId: 'testing',
     });
 
     expect(
@@ -394,7 +394,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext: expect.anything(),
       clientConnectionId,
       message: expect.objectContaining({
-        action: 'file_and_serve_court_issued_document_complete',
+        action: 'serve_document_complete',
         alertSuccess: {
           message: 'Document served. ',
           overwritable: false,
@@ -464,9 +464,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should delete the draftOrderState from the docketEntry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
       docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
-      clientConnectionId: 'testing',
       form: {
         ...mockDocketEntryWithWorkItem,
         draftOrderState: {
@@ -564,8 +564,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        docketEntryId: docketEntry.docketEntryId,
         clientConnectionId: 'testing',
+        docketEntryId: docketEntry.docketEntryId,
         docketNumbers: [docketEntry.docketNumber],
         form: docketEntry,
         subjectCaseDocketNumber: docketEntry.docketNumber,

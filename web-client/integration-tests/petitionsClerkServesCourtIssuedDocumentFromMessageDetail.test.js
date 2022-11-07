@@ -4,7 +4,7 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petitionsClerk1ServesDocumentFromMessageDetail';
+import { petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail } from './journey/petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
@@ -54,6 +54,6 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   loginAs(cerebralTest, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(cerebralTest);
   petitionsClerk1ViewsMessageDetail(cerebralTest);
-  petitionsClerk1ServesDocumentFromMessageDetail(cerebralTest);
+  petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail(cerebralTest);
   petitionsClerkClicksCaseDetailTabFromMessageDetail(cerebralTest);
 });

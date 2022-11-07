@@ -1,11 +1,11 @@
+import { MOCK_CASE } from '../../../test/mockCase';
+import { US_STATES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   formatCases,
   generateTrialCalendarPdfInteractor,
   getPractitionerName,
 } from './generateTrialCalendarPdfInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { US_STATES } from '../../entities/EntityConstants';
 
 describe('generateTrialCalendarPdfInteractor', () => {
   const mockPdfUrl = { url: 'www.example.com' };

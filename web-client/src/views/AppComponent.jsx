@@ -59,13 +59,16 @@ import { MyAccount } from './MyAccount';
 import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
-import { PractitionerDetail } from './Practitioners/PractitionerDetail';
+import { PractitionerAddEditDocument } from './Practitioners/PractitionerAddEditDocument';
+import { PractitionerInformation } from './Practitioners/PractitionerInformation';
 import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
+import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
@@ -147,13 +150,15 @@ const pages = {
   PaperFiling,
   PendingReport,
   PetitionQc,
-  PractitionerDetail,
+  PractitionerAddEditDocument,
+  PractitionerInformation,
   PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintPaperTrialNotices,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
+  PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
@@ -243,6 +248,9 @@ export const AppComponent = connect(
             {showModal === 'TrialSessionPlanningModal' && (
               <TrialSessionPlanningModal />
             )}
+            {showModal === 'PrintableTrialSessionWorkingCopyModal' && (
+              <PrintableTrialSessionWorkingCopyModal />
+            )}
             {showModal === 'CaseInventoryReportModal' && (
               <CaseInventoryReportModal />
             )}
@@ -258,3 +266,5 @@ export const AppComponent = connect(
     );
   },
 );
+
+AppComponent.displayName = 'AppComponent';

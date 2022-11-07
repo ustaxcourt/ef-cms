@@ -24,7 +24,7 @@ describe('validatePdfInteractor', () => {
       }),
     });
 
-    applicationContext.getPersistenceGateway().deleteDocumentFromS3 = jest.fn();
+    applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
   });
 
   it('validates a clean PDF', async () => {
@@ -51,7 +51,7 @@ describe('validatePdfInteractor', () => {
     ).rejects.toThrow('invalid pdf');
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalledWith({
       applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -80,7 +80,7 @@ describe('validatePdfInteractor', () => {
     ).rejects.toThrow('invalid pdf');
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalledWith({
       applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -107,7 +107,7 @@ describe('validatePdfInteractor', () => {
     ).rejects.toThrow('pdf pages cannot be read');
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalledWith({
       applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -131,7 +131,7 @@ describe('validatePdfInteractor', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+        applicationContext.getPersistenceGateway().deleteDocumentFile,
       ).toHaveBeenCalledWith({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',

@@ -19,6 +19,6 @@
 ./scripts/dynamo/setup-terminal-ip-allowlist.sh
 ./scripts/dynamo/setup-maintenance-mode-flag.sh
 ./scripts/dynamo/setup-section-outbox-retrieval-days.sh
-./scripts/dynamo/setup-consolidated-cases-propagate-docket-entries.sh
 ./scripts/dynamo/enable-stamp-disposition.sh
 ./scripts/dynamo/setup-add-docket-numbers-to-orders-flag.sh
+./scripts/dynamo/setup-multi-docketable-paper-filings-feature-flag.sh

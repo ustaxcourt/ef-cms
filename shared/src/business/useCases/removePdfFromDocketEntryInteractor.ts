@@ -1,8 +1,8 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../authorization/authorizationClientService';
 import { Case } from '../entities/cases/Case';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 
 /**
@@ -38,7 +38,7 @@ export const removePdfFromDocketEntryInteractor = async (
   const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
 
   if (docketEntry && docketEntry.isFileAttached) {
-    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+    await applicationContext.getPersistenceGateway().deleteDocumentFile({
       applicationContext,
       key: docketEntryId,
     });

@@ -1,4 +1,4 @@
-import { ConsolidatedCasesCheckboxes } from './ConfirmInitiateServiceModal';
+import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -7,24 +7,15 @@ import React, { useState } from 'react';
 export const ConfirmInitiateSaveModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
-    consolidatedCaseCheckboxAllChange:
-      sequences.consolidatedCaseCheckboxAllChangeSequence,
     documentTitle: props.documentTitle,
-    formattedCaseDetail: state.formattedCaseDetail,
     submitCourtIssuedDocketEntrySequence:
       sequences.submitCourtIssuedDocketEntrySequence,
-    updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateSaveModal({
     cancelSequence,
-    consolidatedCaseAllCheckbox,
-    consolidatedCaseCheckboxAllChange,
     documentTitle,
-    formattedCaseDetail,
     submitCourtIssuedDocketEntrySequence,
-    updateCaseCheckbox,
   }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     return (
@@ -46,12 +37,7 @@ export const ConfirmInitiateSaveModal = connect(
         <p className="margin-top-0 margin-bottom-2" tabIndex="0">
           <strong>{documentTitle}</strong>
         </p>
-        <ConsolidatedCasesCheckboxes
-          consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
-          consolidatedCaseCheckboxAllChange={consolidatedCaseCheckboxAllChange}
-          formattedCaseDetail={formattedCaseDetail}
-          updateCaseCheckbox={updateCaseCheckbox}
-        />
+        <ConsolidatedCasesCheckboxes />
       </ModalDialog>
     );
   },

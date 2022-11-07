@@ -159,7 +159,7 @@ const practitionerValidation = {
     .description('The optional middle name of the practitioner.'),
   originalBarState: JoiValidationConstants.STRING.valid(
     ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
+    ...Object.keys(US_STATES_OTHER),
     STATE_NOT_AVAILABLE,
   )
     .required()

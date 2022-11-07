@@ -10,32 +10,27 @@ import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServes
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import {
-  loginAs,
-  setConsolidatedCasesPropagateEntriesFlag,
-  setupTest,
-  uploadPetition,
-} from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
 describe('Case Consolidation Journey', () => {
+  const cerebralTest = setupTest();
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+
+  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(async () => {
-    await setConsolidatedCasesPropagateEntriesFlag(true);
     cerebralTest.closeSocket();
   });
 
@@ -197,11 +192,6 @@ describe('Case Consolidation Journey', () => {
       }
     }
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-  });
-
-  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-  it('should set the feature flag to false', async () => {
-    await setConsolidatedCasesPropagateEntriesFlag(false);
   });
 
   docketClerkCreatesAnOrder(cerebralTest, {

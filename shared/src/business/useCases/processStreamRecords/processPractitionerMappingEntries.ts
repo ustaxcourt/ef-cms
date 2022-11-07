@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
 import { flattenDeep } from 'lodash';
+import AWS from 'aws-sdk';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,

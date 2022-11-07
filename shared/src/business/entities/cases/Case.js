@@ -1018,7 +1018,15 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 
     if (updateIndex) {
       docketEntryEntity.index = this.generateNextDocketRecordIndex();
+    } else if (
+      docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode
+    ) {
+      throw new Error('STIN documents should not be on the docket record.');
     }
+  } else if (
+    docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode
+  ) {
+    docketEntryEntity.index = 0;
   }
 
   this.docketEntries = [...this.docketEntries, docketEntryEntity];
@@ -2324,6 +2332,8 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
 
 const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
+const isLeadCase = rawCase => rawCase.docketNumber === rawCase.leadDocketNumber;
+
 const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
@@ -2392,6 +2402,7 @@ module.exports = {
   getPractitionersRepresenting,
   hasPartyWithServiceType,
   isAssociatedUser,
+  isLeadCase,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   shouldGenerateNoticesForCase,

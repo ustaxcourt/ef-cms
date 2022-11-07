@@ -1,3 +1,5 @@
+const { isLeadCase } = require('../../entities/cases/Case');
+
 /**
  * Given a list of cases associated with the current user, creates a map of
  *  consolidated and lead cases.
@@ -15,12 +17,11 @@ exports.processUserAssociatedCases = openUserCases => {
 
   for (const userCaseRecord of openUserCases) {
     const { docketNumber, leadDocketNumber } = userCaseRecord;
-    const caseIsALeadCase = leadDocketNumber === docketNumber;
 
     userCaseRecord.isRequestingUserAssociated = true;
     userAssociatedDocketNumbersMap[docketNumber] = true;
 
-    if (!leadDocketNumber || caseIsALeadCase) {
+    if (!leadDocketNumber || isLeadCase(userCaseRecord)) {
       casesAssociatedWithUserOrLeadCaseMap[docketNumber] = userCaseRecord;
     }
     if (

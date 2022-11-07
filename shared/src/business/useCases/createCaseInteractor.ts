@@ -1,17 +1,19 @@
-import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../authorization/authorizationClientService';
-import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 import { Case } from '../entities/cases/Case';
+import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
 import { DocketEntry } from '../entities/DocketEntry';
-import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
-import { PETITIONS_SECTION } from '../entities/EntityConstants';
-import { ROLES } from '../entities/EntityConstants';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
+  ROLES,
+} from '../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 import { UserCase } from '../entities/UserCase';
 import { WorkItem } from '../entities/WorkItem';
+import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
 const addPetitionDocketEntryToCase = ({
   applicationContext,

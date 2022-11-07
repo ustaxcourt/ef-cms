@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
 import { validUser } from '../../../test/mockUsers';
 
 describe('updateUserPendingEmailInteractor', () => {
