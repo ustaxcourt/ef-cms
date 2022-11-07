@@ -11,7 +11,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { addCoverToPdf } from '../addCoverToPdf';
-import { omit } from 'lodash';
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -136,7 +135,6 @@ export const serveExternallyFiledDocumentInteractor = async (
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
-            ...omit(originalSubjectDocketEntry, 'filedBy'),
             docketNumber: caseEntityToUpdate.docketNumber,
             draftOrderState: null,
             filingDate: applicationContext.getUtilities().createISODateString(),
