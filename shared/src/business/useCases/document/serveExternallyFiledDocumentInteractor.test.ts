@@ -89,10 +89,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
-    //fix this to return the right thing?
     applicationContext
       .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockReturnValue(caseRecord);
+      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
 
     applicationContext
       .getUseCaseHelpers()
@@ -112,28 +111,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         subjectCaseDocketNumber: '',
       }),
     ).rejects.toThrow('Unauthorized');
-  });
-
-  it('should update the document with a servedAt date', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    const updatedCaseDocument = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.docketEntryId === DOCKET_ENTRY_ID,
-      );
-    expect(updatedCaseDocument).toMatchObject({
-      servedAt: expect.anything(),
-      servedParties: expect.anything(),
-    });
   });
 
   it('should add a coversheet to the document with the docket entry index passed in', async () => {

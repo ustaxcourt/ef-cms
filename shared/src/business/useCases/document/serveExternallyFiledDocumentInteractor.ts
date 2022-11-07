@@ -150,7 +150,7 @@ export const serveExternallyFiledDocumentInteractor = async (
           { applicationContext },
         );
 
-        ({ newCase: caseEntityToUpdate } = await applicationContext
+        caseEntityToUpdate = await applicationContext
           .getUseCaseHelpers()
           .fileDocumentOnOneCase({
             applicationContext,
@@ -158,7 +158,9 @@ export const serveExternallyFiledDocumentInteractor = async (
             docketEntryEntity,
             subjectCaseDocketNumber,
             user,
-          }));
+          });
+
+        console.log('newCase***', caseEntityToUpdate);
       } catch (e) {
         continue;
       }
