@@ -162,14 +162,21 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 ## Consolidation Research
 
-### Consolidation Discovery Research (March-July 2022)
-[UX Consolidation Research Plan - Docket Clerks March 2022](https://docs.google.com/document/d/1Kx33vIlerGeTJr7X7RvVeiSDvcMtVa8SCaC5U3NAOXk/edit?usp=sharing)
+### Consolidation Discovery Research (March-November 2022)
 
-[UX Consolidation Research Plan - Judges/CAs July 2022](https://drive.google.com/file/d/1Sa9a7FnZo-ARqqI9MsfmQKpJEweFmVvc/view?usp=sharing)
+[UX Consolidation Research Plan - Docket Clerks March 2022](https://docs.google.com/document/d/1ZWj0TnHDpd02OJja8n2KJf5IqBwQZo4kUMKexr1fkjw/edit?usp=share_link)
 
-[UX Consolidation Findings Report August 2022](https://drive.google.com/file/d/1hEtzBoSJ16mm9Y_mJ-2UtkDh17yyfXkN/view?usp=sharing) 
+[Docket Clerk Process Flow - November 2022 Deliverable](https://drive.google.com/file/d/1hjFeQ6YGXJKyVgeaVPR54zcKnXfKeIZT/view?usp=share_link)
 
-[User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1646751586915?sender=u9a89dc65e6273d6559349431&key=d1201bf3-3904-4e0e-97e0-3d878568cc32)
+[UX Consolidation Research Plan - Judges/CAs/Other Chambers July 2022](https://docs.google.com/document/d/1ImZ1UxoFEUMzQWLr-zs4DyQuAHNzaCzuwJbGxaAqzr4/edit?usp=share_link)
+
+[UX Consolidation Findings Report - Judges/CAs/Other Chambers August 2022](https://drive.google.com/file/d/1hEtzBoSJ16mm9Y_mJ-2UtkDh17yyfXkN/view?usp=share_link)
+
+[UX Consolidation Research Plan - Trial Clerks October 2022](https://docs.google.com/document/d/1TohTBLIzkcvrps8ewo7YVFz_IcqsRkNVIoGGpFbtiII/edit?usp=share_link)
+
+[UX Consolidation Findings Report - Trial Clerk November 2022](https://drive.google.com/file/d/1dhZwHl7K-Ul_9d8T_-UdMr7M-wMlNPDU/view?usp=share_link)
+
+[User Interview Mural Board - All user types](https://app.mural.co/invitation/mural/flexion6734/1646751586915?sender=u9a89dc65e6273d6559349431&key=d1201bf3-3904-4e0e-97e0-3d878568cc32)
 
 # UI Design System
 
