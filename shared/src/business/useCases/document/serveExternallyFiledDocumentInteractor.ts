@@ -1,9 +1,8 @@
+import { Case } from '../../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -61,7 +60,7 @@ export const serveExternallyFiledDocumentInteractor = async (
       docketNumber: subjectCaseDocketNumber,
     });
 
-  let subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
   const originalSubjectDocketEntry = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -75,16 +74,6 @@ export const serveExternallyFiledDocumentInteractor = async (
   }
   if (originalSubjectDocketEntry.isPendingService) {
     throw new Error('Docket entry is already being served');
-  }
-
-  const consolidateCaseDuplicateDocketEntries = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
-
-  if (!consolidateCaseDuplicateDocketEntries) {
-    docketNumbers = [subjectCaseDocketNumber];
   }
 
   const { Body: pdfData } = await applicationContext
@@ -113,11 +102,10 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
-  let paperServicePdfUrl;
-  let pdfWithCoversheet;
+  const coversheetLength = 1;
 
-  try {
-    for (const docketNumber of docketNumbers) {
+  caseEntities = await Promise.all(
+    docketNumbers.map(async docketNumber => {
       const rawCaseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
@@ -125,91 +113,76 @@ export const serveExternallyFiledDocumentInteractor = async (
           docketNumber,
         });
 
-      let caseEntityToUpdate = new Case(rawCaseToUpdate, {
+      const caseEntityToUpdate = new Case(rawCaseToUpdate, {
         applicationContext,
       });
 
-      try {
-        const coversheetLength = 1;
+      const docketEntryEntity = new DocketEntry(
+        {
+          ...originalSubjectDocketEntry,
+          docketNumber: caseEntityToUpdate.docketNumber,
+          draftOrderState: null,
+          filingDate: applicationContext.getUtilities().createISODateString(),
+          isDraft: false,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          numberOfPages: numberOfPages + coversheetLength,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          userId: user.userId,
+        },
+        { applicationContext },
+      );
 
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...originalSubjectDocketEntry,
-            docketNumber: caseEntityToUpdate.docketNumber,
-            draftOrderState: null,
-            filingDate: applicationContext.getUtilities().createISODateString(),
-            isDraft: false,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            numberOfPages: numberOfPages + coversheetLength,
-            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-            userId: user.userId,
-          },
-          { applicationContext },
-        );
-
-        caseEntityToUpdate = await applicationContext
-          .getUseCaseHelpers()
-          .fileDocumentOnOneCase({
-            applicationContext,
-            caseEntity: caseEntityToUpdate,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-          });
-      } catch (e) {
-        continue;
-      }
-      caseEntities.push(caseEntityToUpdate);
-    }
-
-    const updatedSubjectCaseEntity = caseEntities.find(
-      c => c.docketNumber === subjectCaseDocketNumber,
-    );
-    const updatedSubjectDocketEntry =
-      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
-
-    ({ pdfData: pdfWithCoversheet } = await addCoverToPdf({
-      applicationContext,
-      caseEntity: updatedSubjectCaseEntity,
-      docketEntryEntity: updatedSubjectDocketEntry,
-      pdfData,
-    }));
-
-    let paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
+      return applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
         applicationContext,
-        caseEntities,
-        docketEntryId: originalSubjectDocketEntry.docketEntryId,
+        caseEntity: caseEntityToUpdate,
+        docketEntryEntity,
+        subjectCaseDocketNumber,
+        user,
       });
+    }),
+  );
 
-    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-  } finally {
-    for (const caseEntity of caseEntities) {
-      try {
-        await applicationContext
-          .getPersistenceGateway()
-          .updateDocketEntryPendingServiceStatus({
-            applicationContext,
-            docketEntryId: originalSubjectDocketEntry.docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            status: false,
-          });
-      } catch (e) {
-        applicationContext.logger.error(
-          `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,
-          e,
-        );
-      }
-    }
-  }
+  const updatedSubjectCaseEntity = caseEntities.find(
+    c => c.docketNumber === subjectCaseDocketNumber,
+  );
+  const updatedSubjectDocketEntry = updatedSubjectCaseEntity.getDocketEntryById(
+    { docketEntryId },
+  );
+
+  const { pdfData: pdfWithCoversheet } = await addCoverToPdf({
+    applicationContext,
+    caseEntity: updatedSubjectCaseEntity,
+    docketEntryEntity: updatedSubjectDocketEntry,
+    pdfData,
+  });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: pdfWithCoversheet,
     key: originalSubjectDocketEntry.docketEntryId,
   });
+
+  const paperServiceResult = await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities,
+      docketEntryId: originalSubjectDocketEntry.docketEntryId,
+    });
+
+  await Promise.all(
+    caseEntities.map(caseEntity => {
+      return applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
+          applicationContext,
+          docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          status: false,
+        });
+    }),
+  );
 
   const successMessage =
     docketNumbers.length > 1
@@ -225,7 +198,7 @@ export const serveExternallyFiledDocumentInteractor = async (
         message: successMessage,
         overwritable: false,
       },
-      pdfUrl: paperServicePdfUrl,
+      pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
     },
     userId: user.userId,
   });
