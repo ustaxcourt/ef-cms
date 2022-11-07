@@ -151,153 +151,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
   });
 
-  it('should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
-    caseRecord.docketEntries = [
-      ...caseRecord.docketEntries,
-      {
-        docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-        docketNumber: DOCKET_NUMBER,
-        documentType: 'Administrative Record',
-        eventCode: 'ADMR',
-        filedBy: docketClerkUser.name,
-        userId: docketClerkUser.userId,
-        workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-            docketNumber: DOCKET_NUMBER,
-            documentType: 'Administrative Record',
-            entityName: 'DocketEntry',
-            eventCode: 'ADMR',
-            filedBy: docketClerkUser.name,
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: docketClerkUser.name,
-            userId: docketClerkUser.userId,
-          },
-          docketNumber: DOCKET_NUMBER,
-          isInitializeCase: true,
-          section: DOCKET_SECTION,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
-      },
-    ];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        workItem: expect.objectContaining({
-          assigneeId: docketClerkUser.userId,
-          completedAt: expect.stringContaining('T'),
-          completedByUserId: docketClerkUser.userId,
-          completedMessage: 'completed',
-          docketNumber: DOCKET_NUMBER,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        }),
-      }),
-    );
-  });
-
-  it('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
-    const mockMemberCase = MOCK_CASE;
-    const { docketEntryId } = caseRecord.docketEntries[0];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseRecord)
-      .mockReturnValueOnce({
-        ...caseRecord,
-        docketEntries: [],
-        docketNumber: mockMemberCase.docketNumber,
-      });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId,
-      docketNumbers: [DOCKET_NUMBER, mockMemberCase.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    const memberCaseUpdate =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[1][0].caseToUpdate;
-    const memberCaseAddedDocketEntry = memberCaseUpdate.docketEntries.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
-
-    expect(memberCaseAddedDocketEntry).toBeDefined();
-  });
-
-  it('should update the case with the completed work item when the work item exists', async () => {
-    const mockDocketEntryWithWorkItemId =
-      '225d5474-b02b-4137-a78e-2043f7a0f805';
-
-    caseRecord.docketEntries = [
-      ...caseRecord.docketEntries,
-      {
-        docketEntryId: mockDocketEntryWithWorkItemId,
-        docketNumber: DOCKET_NUMBER,
-        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
-        eventCode: 'O',
-        filedBy: docketClerkUser.name,
-        judge: 'someone',
-        signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: docketClerkUser.userId,
-        signedJudgeName: 'someone',
-        userId: docketClerkUser.userId,
-        workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-            docketNumber: DOCKET_NUMBER,
-            documentType: GENERIC_ORDER_DOCUMENT_TYPE,
-            entityName: 'DocketEntry',
-            eventCode: 'O',
-            filedBy: docketClerkUser.name,
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: docketClerkUser.name,
-            userId: docketClerkUser.userId,
-          },
-          docketNumber: DOCKET_NUMBER,
-          isInitializeCase: true,
-          section: DOCKET_SECTION,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
-      },
-    ];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    const updatedWorkItem = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
-      ).workItem;
-    expect(updatedWorkItem.completedAt).toBeDefined();
-  });
-
   it('should throw an error if the document is already pending service', async () => {
     caseRecord.docketEntries[0].isPendingService = true;
 
@@ -414,8 +267,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
-    caseRecord.petitioners[0].serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: undefined,
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId,
@@ -423,6 +279,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       docketNumbers: [caseRecord.docketNumber],
       subjectCaseDocketNumber: DOCKET_NUMBER,
     });
+
+    console.log(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
