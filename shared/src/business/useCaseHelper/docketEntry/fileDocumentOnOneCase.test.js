@@ -303,6 +303,7 @@ describe('fileDocumentOnOneCase', () => {
         {
           ...mockDocketEntry,
           index: undefined,
+          isOnDocketRecord: true,
         },
         { applicationContext },
       ),
