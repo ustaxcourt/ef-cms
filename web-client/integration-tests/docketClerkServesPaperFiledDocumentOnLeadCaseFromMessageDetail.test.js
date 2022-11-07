@@ -210,7 +210,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       'openConfirmServePaperFiledDocumentSequence',
       {
         docketEntryId: cerebralTest.docketEntryId,
-        redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+        redirectUrl: `/messages/${cerebralTest.leadDocketNumber}/message-detail/${cerebralTest.parentMessageId}`,
       },
     );
 
