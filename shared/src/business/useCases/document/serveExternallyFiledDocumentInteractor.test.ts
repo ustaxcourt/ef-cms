@@ -31,11 +31,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(true);
 
-    //fix this to return the right thing?
-    applicationContext
-      .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
-
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
@@ -93,6 +88,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+
+    //fix this to return the right thing?
+    applicationContext
+      .getUseCaseHelpers()
+      .fileDocumentOnOneCase.mockReturnValue(caseRecord);
 
     applicationContext
       .getUseCaseHelpers()
