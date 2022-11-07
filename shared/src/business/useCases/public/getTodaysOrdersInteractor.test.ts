@@ -1,3 +1,7 @@
+import {
+  ORDER_EVENT_CODES,
+  TODAYS_ORDERS_PAGE_SIZE,
+} from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,
@@ -5,10 +9,6 @@ import {
   createStartOfDayISO,
   deconstructDate,
 } from '../../utilities/DateHandler';
-import {
-  ORDER_EVENT_CODES,
-  TODAYS_ORDERS_PAGE_SIZE,
-} from '../../entities/EntityConstants';
 import { getTodaysOrdersInteractor } from './getTodaysOrdersInteractor';
 
 describe('getTodaysOrdersInteractor', () => {

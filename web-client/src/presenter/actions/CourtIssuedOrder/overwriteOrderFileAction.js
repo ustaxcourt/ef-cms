@@ -21,8 +21,8 @@ export const overwriteOrderFileAction = async ({
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadOrderDocumentInteractor(applicationContext, {
-        docketEntryIdToOverwrite: documentToEdit.docketEntryId,
         documentFile: primaryDocumentFile,
+        fileIdToOverwrite: documentToEdit.docketEntryId,
       });
 
     return path.success({

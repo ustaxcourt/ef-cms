@@ -20,6 +20,7 @@ aws.json
 aws/lambdas/*.zip
 aws/lambdas/RotateInfoIndices/dist
 coverage/
+cypress/downloads
 cypress-smoketests/screenshots
 cypress-smoketests/videos
 cypress-integration/screenshots

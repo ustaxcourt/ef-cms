@@ -12,7 +12,7 @@ export const MessagesSectionCompleted = connect(
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
-    sortMessagesSequence: sequences.sortMessagesSequence,
+    sortTableSequence: sequences.sortTableSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionCompleted({
@@ -20,7 +20,7 @@ export const MessagesSectionCompleted = connect(
     formattedMessages,
     screenMetadata,
     showSortableHeaders,
-    sortMessagesSequence,
+    sortTableSequence,
     updateScreenMetadataSequence,
   }) {
     return (
@@ -52,7 +52,7 @@ export const MessagesSectionCompleted = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
@@ -70,7 +70,7 @@ export const MessagesSectionCompleted = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
                     title="Completed"
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}
@@ -84,7 +84,7 @@ export const MessagesSectionCompleted = connect(
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Last Message"
-                    onClickSequence={sortMessagesSequence}
+                    onClickSequence={sortTableSequence}
                   />
                 </th>
               )}

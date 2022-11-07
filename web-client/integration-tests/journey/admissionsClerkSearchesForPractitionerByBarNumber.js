@@ -61,7 +61,7 @@ export const admissionsClerkSearchesForPractitionerByBarNumber =
       );
 
       expect(cerebralTest.getState('currentPage')).toEqual(
-        'PractitionerDetail',
+        'PractitionerInformation',
       );
 
       expect(cerebralTest.getState('practitionerDetail.barNumber')).toEqual(

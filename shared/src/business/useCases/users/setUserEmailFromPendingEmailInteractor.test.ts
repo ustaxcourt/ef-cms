@@ -1,9 +1,9 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
-import { getContactPrimary } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_PRACTITIONER, validUser } from '../../../test/mockUsers';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
 
 describe('setUserEmailFromPendingEmailInteractor', () => {
   let mockPractitioner;

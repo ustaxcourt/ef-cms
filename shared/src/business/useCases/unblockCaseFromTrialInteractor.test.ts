@@ -1,8 +1,7 @@
-import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
 
 describe('unblockCaseFromTrialInteractor', () => {
   it('should set the blocked flag to false and remove the blockedReason', async () => {

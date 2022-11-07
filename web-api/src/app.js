@@ -120,6 +120,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
+  createPractitionerDocumentLambda,
+} = require('./practitioners/createPractitionerDocumentLambda');
+const {
   createPractitionerUserLambda,
 } = require('./practitioners/createPractitionerUserLambda');
 const {
@@ -135,6 +138,9 @@ const {
   deleteDeficiencyStatisticLambda,
 } = require('./cases/deleteDeficiencyStatisticLambda');
 const {
+  deletePractitionerDocumentLambda,
+} = require('./practitioners/deletePractitionerDocumentLambda');
+const {
   deleteTrialSessionLambda,
 } = require('./trialSessions/deleteTrialSessionLambda');
 const {
@@ -143,6 +149,9 @@ const {
 const {
   downloadPolicyUrlLambda,
 } = require('./documents/downloadPolicyUrlLambda');
+const {
+  editPractitionerDocumentLambda,
+} = require('./practitioners/editPractitionerDocumentLambda');
 const {
   fetchPendingItemsLambda,
 } = require('./pendingItems/fetchPendingItemsLambda');
@@ -237,6 +246,9 @@ const {
   getFeatureFlagValueLambda,
 } = require('./featureFlag/getFeatureFlagValueLambda');
 const {
+  getGeneratePrintableTrialSessionCopyReportLambda,
+} = require('./trialSessions/getGeneratePrintableTrialSessionCopyReportLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -260,6 +272,15 @@ const {
 const {
   getPractitionerByBarNumberLambda,
 } = require('./practitioners/getPractitionerByBarNumberLambda');
+const {
+  getPractitionerDocumentDownloadUrlLambda,
+} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
+const {
+  getPractitionerDocumentLambda,
+} = require('./practitioners/getPractitionerDocumentLambda');
+const {
+  getPractitionerDocumentsLambda,
+} = require('./practitioners/getPractitionerDocumentsLambda');
 const {
   getPractitionersByNameLambda,
 } = require('./practitioners/getPractitionersByNameLambda');
@@ -597,8 +618,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(saveSignedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve',
-    lambdaWrapper(serveExternallyFiledDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
+    lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/external-document',
@@ -610,7 +631,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(addPaperFilingLambda),
+    lambdaWrapper(addPaperFilingLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',
@@ -908,6 +929,30 @@ app.get(
     '/practitioners/:barNumber',
     lambdaWrapper(getPractitionerByBarNumberLambda),
   );
+  app.get(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(getPractitionerDocumentsLambda),
+  );
+  app.post(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(createPractitionerDocumentLambda),
+  );
+  app.put(
+    '/practitioners/:barNumber/documents',
+    lambdaWrapper(editPractitionerDocumentLambda),
+  );
+  app.get(
+    '/practitioner-documents/:barNumber/:practitionerDocumentFileId/document-download-url',
+    lambdaWrapper(getPractitionerDocumentDownloadUrlLambda),
+  );
+  app.get(
+    '/practitioner-documents/:barNumber/:practitionerDocumentFileId',
+    lambdaWrapper(getPractitionerDocumentLambda),
+  );
+  app.delete(
+    '/practitioner-documents/:barNumber/documents/:practitionerDocumentFileId',
+    lambdaWrapper(deletePractitionerDocumentLambda),
+  );
   app.put(
     '/async/practitioners/:barNumber',
     lambdaWrapper(updatePractitionerUserLambda, { isAsync: true }),
@@ -1022,6 +1067,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(deleteTrialSessionLambda),
   );
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
+  app.post(
+    '/trial-sessions/:trialSessionId/printable-working-copy',
+    lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
+  );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
   app.put(
     '/async/trial-sessions',
