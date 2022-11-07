@@ -4,7 +4,7 @@ const urls = [
   {
     actions: ['wait for .big-blue-header to be visible'],
     notes: 'verifies that the user can login and the UI is loaded',
-    url: `http://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/log-in?token=${PETITIONS_CLERK_TOKEN}&path=/`,
+    url: `https://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/log-in?token=${PETITIONS_CLERK_TOKEN}&path=/`,
   },
 ];
 
