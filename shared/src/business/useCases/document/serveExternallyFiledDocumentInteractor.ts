@@ -178,13 +178,15 @@ export const serveExternallyFiledDocumentInteractor = async (
       pdfData,
     }));
 
-    ({ pdfUrl: paperServicePdfUrl } = await applicationContext
+    let paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
-      }));
+      });
+
+    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
   } finally {
     for (const caseEntity of caseEntities) {
       try {
