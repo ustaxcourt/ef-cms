@@ -121,8 +121,6 @@ export const serveExternallyFiledDocumentInteractor = async (
   let pdfWithCoversheet;
 
   try {
-    let consolidatedGroupHasPaperServiceCase: boolean;
-
     for (const docketNumber of docketNumbers) {
       const rawCaseToUpdate = await applicationContext
         .getPersistenceGateway()
@@ -138,15 +136,13 @@ export const serveExternallyFiledDocumentInteractor = async (
       try {
         const coversheetLength = 1;
 
-        ({ consolidatedGroupHasPaperServiceCase, newCase: caseEntityToUpdate } =
-          await fileDocumentOnOneCase({
-            applicationContext,
-            caseEntity: caseEntityToUpdate,
-            consolidatedGroupHasPaperServiceCase,
-            numberOfPages: numberOfPages + coversheetLength,
-            originalSubjectDocketEntry,
-            user,
-          }));
+        ({ newCase: caseEntityToUpdate } = await fileDocumentOnOneCase({
+          applicationContext,
+          caseEntity: caseEntityToUpdate,
+          numberOfPages: numberOfPages + coversheetLength,
+          originalSubjectDocketEntry,
+          user,
+        }));
       } catch (e) {
         continue;
       }
@@ -174,9 +170,7 @@ export const serveExternallyFiledDocumentInteractor = async (
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
       });
 
-    if (consolidatedGroupHasPaperServiceCase) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-    }
+    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
   } finally {
     for (const caseEntity of caseEntities) {
       try {
@@ -226,17 +220,11 @@ export const serveExternallyFiledDocumentInteractor = async (
 const fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
-  consolidatedGroupHasPaperServiceCase,
   numberOfPages,
   originalSubjectDocketEntry,
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
-
-  // diff
-  if (servedParties.paper.length > 0) {
-    consolidatedGroupHasPaperServiceCase = true;
-  }
 
   const docketEntryEntity = new DocketEntry(
     {
@@ -345,7 +333,6 @@ const fileDocumentOnOneCase = async ({
     });
 
   return {
-    consolidatedGroupHasPaperServiceCase,
     newCase: new Case(validRawCaseEntity, { applicationContext }),
   };
 };
