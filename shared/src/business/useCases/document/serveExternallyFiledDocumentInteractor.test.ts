@@ -111,20 +111,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  //update an integration test to check for this
-  // it('should add a coversheet to the document with the docket entry index passed in', async () => {
-  //   await serveExternallyFiledDocumentInteractor(applicationContext, {
-  //     clientConnectionId,
-  //     docketEntryId: DOCKET_ENTRY_ID,
-  //     docketNumbers: [DOCKET_NUMBER],
-  //     subjectCaseDocketNumber: DOCKET_NUMBER,
-  //   });
-
-  //   expect(
-  //     (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
-  //   ).toBeDefined();
-  // });
-
   it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
     applicationContext
       .getUseCaseHelpers()
