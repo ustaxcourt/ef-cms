@@ -135,6 +135,7 @@ export const serveExternallyFiledDocumentInteractor = async (
 
         const docketEntryEntity = new DocketEntry(
           {
+            ...originalSubjectDocketEntry,
             ...omit(originalSubjectDocketEntry, 'filedBy'),
             docketNumber: caseEntityToUpdate.docketNumber,
             draftOrderState: null,
@@ -177,15 +178,13 @@ export const serveExternallyFiledDocumentInteractor = async (
       pdfData,
     }));
 
-    let paperServiceResult = await applicationContext
+    ({ pdfUrl: paperServicePdfUrl } = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId: originalSubjectDocketEntry.docketEntryId,
-      });
-
-    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+      }));
   } finally {
     for (const caseEntity of caseEntities) {
       try {
