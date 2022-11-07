@@ -14,6 +14,7 @@ export const dashboardExternalHelper = (get, applicationContext) => {
     showCaseSearch: [
       USER_ROLES.privatePractitioner,
       USER_ROLES.irsPractitioner,
+      USER_ROLES.petitioner,
     ].includes(user.role),
     showWhatToExpect: cases.length === 0,
   };
