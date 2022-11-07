@@ -159,8 +159,6 @@ export const serveExternallyFiledDocumentInteractor = async (
             subjectCaseDocketNumber,
             user,
           });
-
-        console.log('newCase***', caseEntityToUpdate);
       } catch (e) {
         continue;
       }

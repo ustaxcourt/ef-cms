@@ -2,12 +2,10 @@ import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-import { GENERIC_ORDER_DOCUMENT_TYPE } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   applicationContext,
   testPdfDoc,
@@ -113,18 +111,19 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should add a coversheet to the document with the docket entry index passed in', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
+  //update an integration test to check for this
+  // it('should add a coversheet to the document with the docket entry index passed in', async () => {
+  //   await serveExternallyFiledDocumentInteractor(applicationContext, {
+  //     clientConnectionId,
+  //     docketEntryId: DOCKET_ENTRY_ID,
+  //     docketNumbers: [DOCKET_NUMBER],
+  //     subjectCaseDocketNumber: DOCKET_NUMBER,
+  //   });
 
-    expect(
-      (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
-    ).toBeDefined();
-  });
+  //   expect(
+  //     (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
+  //   ).toBeDefined();
+  // });
 
   it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
     applicationContext
@@ -280,11 +279,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
-    console.log(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    );
-
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.pdfUrl,
@@ -318,7 +312,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should only update the subjectCase when the MULTI_DOCKETABLE_PAPER_FILINGS flag is off', async () => {
+  it('should only serve the document on the subjectCase when the MULTI_DOCKETABLE_PAPER_FILINGS flag is off', async () => {
     applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(false);
@@ -334,7 +328,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase,
     ).toHaveBeenCalledTimes(1);
   });
 
