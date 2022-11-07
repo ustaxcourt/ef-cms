@@ -135,7 +135,6 @@ export const serveExternallyFiledDocumentInteractor = async (
 
         const docketEntryEntity = new DocketEntry(
           {
-            ...originalSubjectDocketEntry,
             ...omit(originalSubjectDocketEntry, 'filedBy'),
             docketNumber: caseEntityToUpdate.docketNumber,
             draftOrderState: null,
