@@ -295,6 +295,30 @@ describe('fileDocumentOnOneCase', () => {
     expect(Case.prototype.updateDocketEntry).toHaveBeenCalled();
   });
 
+  it('should add an index to the docketEntry on the caseEntity', async () => {
+    const result = await fileDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: new DocketEntry(
+        {
+          ...mockDocketEntry,
+          index: undefined,
+        },
+        { applicationContext },
+      ),
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    expect(Case.prototype.updateDocketEntry).toHaveBeenCalled();
+    expect(
+      result.docketEntries.find(
+        docketEntry =>
+          docketEntry.docketEntryId === mockDocketEntry.docketEntryId,
+      ).index,
+    ).toBeDefined();
+  });
+
   it('should add the docketEntry on the caseEntity when it did NOT already exist on the case', async () => {
     await fileDocumentOnOneCase({
       applicationContext,
