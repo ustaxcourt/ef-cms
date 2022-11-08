@@ -1,8 +1,9 @@
-import { Case } from '../../entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -101,88 +102,101 @@ export const serveExternallyFiledDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  let paperServiceResult;
   let caseEntities = [];
   const coversheetLength = 1;
 
-  caseEntities = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const rawCaseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-
-      const caseEntityToUpdate = new Case(rawCaseToUpdate, {
-        applicationContext,
-      });
-
-      const docketEntryEntity = new DocketEntry(
-        {
-          ...originalSubjectDocketEntry,
-          docketNumber: caseEntityToUpdate.docketNumber,
-          draftOrderState: null,
-          filingDate: applicationContext.getUtilities().createISODateString(),
-          isDraft: false,
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          numberOfPages: numberOfPages + coversheetLength,
-          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-          userId: user.userId,
-        },
-        { applicationContext },
-      );
-
-      return applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
-        applicationContext,
-        caseEntity: caseEntityToUpdate,
-        docketEntryEntity,
-        subjectCaseDocketNumber,
-        user,
-      });
-    }),
-  );
-
-  const updatedSubjectCaseEntity = caseEntities.find(
-    c => c.docketNumber === subjectCaseDocketNumber,
-  );
-  const updatedSubjectDocketEntry = updatedSubjectCaseEntity.getDocketEntryById(
-    { docketEntryId },
-  );
-
-  const { pdfData: pdfWithCoversheet } = await addCoverToPdf({
-    applicationContext,
-    caseEntity: updatedSubjectCaseEntity,
-    docketEntryEntity: updatedSubjectDocketEntry,
-    pdfData,
-  });
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: pdfWithCoversheet,
-    key: docketEntryId,
-  });
-
-  const paperServiceResult = await applicationContext
-    .getUseCaseHelpers()
-    .serveDocumentAndGetPaperServicePdf({
-      applicationContext,
-      caseEntities,
-      docketEntryId,
+  const consolidateCaseDuplicateDocketEntries = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
     });
 
-  await Promise.all(
-    caseEntities.map(caseEntity => {
-      return applicationContext
-        .getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus({
+  if (!consolidateCaseDuplicateDocketEntries) {
+    docketNumbers = [subjectCaseDocketNumber];
+  }
+
+  try {
+    caseEntities = await Promise.all(
+      docketNumbers.map(async docketNumber => {
+        const rawCaseToUpdate = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber,
+          });
+
+        const caseEntity = new Case(rawCaseToUpdate, {
           applicationContext,
-          docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          status: false,
         });
-    }),
-  );
+
+        const docketEntryEntity = new DocketEntry(
+          {
+            ...originalSubjectDocketEntry,
+            docketNumber: caseEntity.docketNumber,
+            draftOrderState: null,
+            filingDate: applicationContext.getUtilities().createISODateString(),
+            isDraft: false,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: numberOfPages + coversheetLength,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            userId: user.userId,
+          },
+          { applicationContext },
+        );
+
+        return applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
+          applicationContext,
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+        });
+      }),
+    );
+
+    const updatedSubjectCaseEntity = caseEntities.find(
+      c => c.docketNumber === subjectCaseDocketNumber,
+    );
+    const updatedSubjectDocketEntry =
+      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
+
+    const { pdfData: pdfWithCoversheet } = await addCoverToPdf({
+      applicationContext,
+      caseEntity: updatedSubjectCaseEntity,
+      docketEntryEntity: updatedSubjectDocketEntry,
+      pdfData,
+    });
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: pdfWithCoversheet,
+      key: docketEntryId,
+    });
+
+    paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntities,
+        docketEntryId,
+      });
+  } finally {
+    // TODO; why call this for each case???
+    await Promise.all(
+      caseEntities.map(caseEntity => {
+        return applicationContext
+          .getPersistenceGateway()
+          .updateDocketEntryPendingServiceStatus({
+            applicationContext,
+            docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            status: false,
+          });
+      }),
+    );
+  }
 
   const successMessage =
     docketNumbers.length > 1
