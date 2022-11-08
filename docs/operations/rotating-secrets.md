@@ -1,6 +1,6 @@
 # Rotating Secrets
 
-In order to maintain the security of any environment that contains production like data, we are enforcing a credential rotation every quarter. We will rotate the account passwords for any of the test users in any of the environments that contain production-like data. We will also rotate the credentials for IAM users that access these environments. 
+In order to maintain the security of any environment that contains production like data, we are enforcing a credential rotation every quarter. We will rotate the account passwords for any of the test users in any of the environments that contain production-like data. We will also rotate the credentials for IAM users that access these environments.
 
 ## Account Level Users
 
@@ -18,7 +18,7 @@ We have an [admin script to identify any accounts that need to be rotated](../..
 
 #### Manual Credential Rotation
 
-Perform the following steps or give them to another user in order to rotate their `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. 
+Perform the following steps or give them to another user in order to rotate their `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
 
 1. Run the following command to create a new access key:
 
@@ -59,13 +59,25 @@ Perform the following steps or give them to another user in order to rotate thei
 
 ### Circle CI Users
 
-The **CircleCI** user gets updated in a very similar workflow as above. We need to perform this operation in both the Production and Staging AWS Accounts. To help simplify this process, we have made a script that deletes old access keys and outputs new keys to plug into the CircleCI interface.
+The **CircleCI** user gets updated in a very similar workflow as above. We need to perform this operation in both the Production and Staging AWS Accounts. To help simplify this process, we have made a script that deletes old access keys and outputs new keys to enter into the CircleCI interface.
 
 1. Run the [rotate-circleci-secrets.sh](../../shared/admin-tools/user/rotate-circleci-secrets.sh)
 2. The script outputs new keys to copy and paste into the CircleCI web interface.
 
 ## Environment Super Users
 
+Any environment with production like data will have a `USTC_ADMIN_USER` and `USTC_ADMIN_PASS` associated with it that is used to create Test Users and perform admin-level operations. These passwords are stored in AWS Secrets Manager.
+
+To help automate that process, we have another script that rotates the `USTC_ADMIN_PASS`. You need to specify the new password as a command line argument:
+
+```bash
+./shared/admin-tools/user/rotate-ustc-admin-password.sh "new-passw0rd-here"
+```
+
 ## Environment Test Users
 
-Each environment has a number of test users that are created to help aid testing various workflows. The [setup-test-users.sh](../../shared/admin-tools/user/setup-test-users.sh) 
+Each environment has a number of test users that are created to help aid testing various workflows. The [setup-test-users.sh](../../shared/admin-tools/user/setup-test-users.sh) script is currently run on every deploy.
+
+```bash
+./shared/admin-tools/user/rotate-default-account-password.sh "new-passw0rd-here"
+```
