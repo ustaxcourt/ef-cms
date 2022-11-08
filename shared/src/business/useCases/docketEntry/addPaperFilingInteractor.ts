@@ -56,7 +56,8 @@ export const addPaperFilingInteractor = async (
     throw new Error('Did not receive meta data for docket entry');
   }
 
-  const { docketNumber, isFileAttached } = documentMetadata;
+  const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
+    documentMetadata;
 
   const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
@@ -65,7 +66,7 @@ export const addPaperFilingInteractor = async (
     });
 
   if (!isCaseConsolidationFeatureOn) {
-    consolidatedGroupDocketNumbers = [docketNumber];
+    consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   }
 
   const readyForService = documentMetadata.isFileAttached && !isSavingForLater;
@@ -73,31 +74,24 @@ export const addPaperFilingInteractor = async (
   const docketRecordEditState =
     documentMetadata.isFileAttached === false ? documentMetadata : {};
 
-  let caseEntities = [];
-  for (let docketNo of consolidatedGroupDocketNumbers) {
-    const aCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: docketNo,
-      });
-
-    let aCaseEntity = new Case(aCase, { applicationContext });
-    caseEntities.push(aCaseEntity);
-  }
-
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  let caseEntities = [];
   let filedByFromLeadCase;
-  let consolidatedGroupHasPaperServiceCase: boolean;
 
-  for (const caseEntity of caseEntities) {
+  for (const docketNumber of consolidatedGroupDocketNumbers) {
+    const rawCase = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
+
+    const caseEntity = new Case(rawCase, { applicationContext });
+
     const servedParties = aggregatePartiesForService(caseEntity);
-    if (servedParties.paper.length > 0) {
-      consolidatedGroupHasPaperServiceCase = true;
-    }
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -198,10 +192,9 @@ export const addPaperFilingInteractor = async (
   }
 
   let paperServicePdfUrl;
-  let paperServiceResult;
 
   if (readyForService) {
-    paperServiceResult = await applicationContext
+    const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -209,9 +202,7 @@ export const addPaperFilingInteractor = async (
         docketEntryId,
       });
 
-    if (consolidatedGroupHasPaperServiceCase) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-    }
+    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
   }
 
   const successMessage =
