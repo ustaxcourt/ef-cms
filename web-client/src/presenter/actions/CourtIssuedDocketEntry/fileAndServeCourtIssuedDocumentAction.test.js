@@ -44,7 +44,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
 
     expect(
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
-        .mock.calls[0][1].docketNumbers,
-    ).toEqual([thisDocketNumber]);
+        .mock.calls[0][1],
+    ).toMatchObject({ clientConnectionId, docketNumbers: [thisDocketNumber] });
   });
 });
