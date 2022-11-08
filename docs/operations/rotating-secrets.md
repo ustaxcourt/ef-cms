@@ -3,7 +3,7 @@
 In order to maintain the security of any environment that contains production like data, we are enforcing a credential rotation every quarter. We will rotate the account passwords for any of the test users in any of the environments that contain production-like data. We will also rotate the credentials for IAM users that access these environments.
 
 ## Account Level Users
-
+****
 These are users who access the entire AWS account where environments live. We currently support two AWS Accounts. In the production Account, we will need to rotate:
 
 ### Administrators Group Users
@@ -74,6 +74,8 @@ To help automate that process, we have another script that rotates the `USTC_ADM
 ./shared/admin-tools/user/rotate-ustc-admin-password.sh "new-passw0rd-here"
 ```
 
+This updates the password in Cognito, and then it updates the Secrets value with that new password so that subsequent deploys will make use of the new value.
+
 ## Environment Test Users
 
 Each environment has a number of test users that are created to help aid testing various workflows. The [setup-test-users.sh](../../shared/admin-tools/user/setup-test-users.sh) script is currently run on every deploy.
@@ -81,3 +83,5 @@ Each environment has a number of test users that are created to help aid testing
 ```bash
 ./shared/admin-tools/user/rotate-default-account-password.sh "new-passw0rd-here"
 ```
+
+This script updates the secret value for `DEFAULT_ACCOUNT_PASS`, and then it updates the password for all of the test users by calling the `setup-test-users.sh` script directly.
