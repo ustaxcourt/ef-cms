@@ -81,7 +81,7 @@ export const addPaperFilingInteractor = async (
   let caseEntities = [];
   let filedByFromLeadCase;
 
-  caseEntities = await Promise.all(
+  await Promise.all(
     consolidatedGroupDocketNumbers.map(async docketNumber => {
       const rawCase = await applicationContext
         .getPersistenceGateway()
@@ -177,6 +177,8 @@ export const addPaperFilingInteractor = async (
           applicationContext,
           caseEntity,
         });
+
+      caseEntities.push(caseEntity);
 
       return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
