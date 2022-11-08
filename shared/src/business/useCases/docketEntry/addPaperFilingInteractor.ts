@@ -68,7 +68,8 @@ export const addPaperFilingInteractor = async (
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   }
 
-  const readyForService = documentMetadata.isFileAttached && !isSavingForLater;
+  const isReadyForService =
+    documentMetadata.isFileAttached && !isSavingForLater;
 
   const docketRecordEditState =
     documentMetadata.isFileAttached === false ? documentMetadata : {};
@@ -142,24 +143,22 @@ export const addPaperFilingInteractor = async (
         { applicationContext },
       );
 
-      if (readyForService) {
+      if (isReadyForService) {
         workItem.setAsCompleted({
           message: 'completed',
           user,
         });
+
+        docketEntryEntity.setAsServed(servedParties.all);
       }
 
       await saveWorkItem({
         applicationContext,
-        isSavingForLater,
+        isReadyForService,
         workItem,
       });
 
       docketEntryEntity.setWorkItem(workItem);
-
-      if (readyForService) {
-        docketEntryEntity.setAsServed(servedParties.all);
-      }
 
       if (isFileAttached) {
         docketEntryEntity.numberOfPages = await applicationContext
@@ -188,7 +187,7 @@ export const addPaperFilingInteractor = async (
 
   let paperServicePdfUrl;
 
-  if (readyForService) {
+  if (isReadyForService) {
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
@@ -215,7 +214,7 @@ export const addPaperFilingInteractor = async (
         overwritable: false,
       },
       docketEntryId,
-      generateCoversheet: readyForService,
+      generateCoversheet: isReadyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
@@ -232,23 +231,22 @@ export const addPaperFilingInteractor = async (
  */
 const saveWorkItem = async ({
   applicationContext,
-  isSavingForLater,
+  isReadyForService,
   workItem,
 }) => {
   const workItemRaw = workItem.validate().toRawObject();
-  const { isFileAttached } = workItem.docketEntry;
 
-  if (isFileAttached && !isSavingForLater) {
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketClerkFilingExternalDocument({
-        applicationContext,
-        workItem: workItemRaw,
-      });
-  } else {
-    await applicationContext.getPersistenceGateway().saveWorkItem({
+  if (isReadyForService) {
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
+      section: workItem.section,
+      userId: workItem.userId,
       workItem: workItemRaw,
     });
   }
+
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemRaw,
+  });
 };

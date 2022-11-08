@@ -105,8 +105,11 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -211,12 +214,8 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
@@ -279,15 +278,11 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
