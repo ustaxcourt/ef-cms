@@ -108,7 +108,6 @@ export const addPaperFilingInteractor = async (
         { applicationContext, petitioners: caseEntity.petitioners },
       );
 
-      //
       const servedParties = aggregatePartiesForService(caseEntity);
 
       if (isLeadCase(caseEntity)) {
