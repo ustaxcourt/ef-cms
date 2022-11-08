@@ -10,6 +10,8 @@ These are users who access the entire AWS account where environments live. We cu
 
 For every user in this group, we'll need to run a script to check the age of the users credentials. If they are older than the start of the previous quarter, then we will need to rotate them.
 
+Console access is managed for the account via the Account Password Policy. These passwords are set to expire after 92 days.
+
 We can either inform the user and provide them with steps to update their own credentials, or perform that change automatically. Ideally, they can rotate their own credentials.
 
 We have an [admin script to identify any accounts that need to be rotated](../../shared/admin-tools/user/list-users-with-old-credentials.js).
