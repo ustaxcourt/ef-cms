@@ -484,7 +484,7 @@ DocketEntry.prototype.getDocumentTitleForDocketRecord = function () {
  *
  * @returns {string} the calculated document title for cover sheets
  */
-DocketEntry.prototype.getDocumentTitleForCoverPage = function () {
+DocketEntry.prototype.getDocumentTitleForCoversheet = function () {
   if (this.addToCoversheet && this.additionalInfo) {
     return `${this.documentTitle} ${this.additionalInfo}`;
   }
