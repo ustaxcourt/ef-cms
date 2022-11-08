@@ -24,9 +24,10 @@ describe('Petitioner updates and verifies their email', () => {
   });
 
   it('petitioner should be able to change their email', () => {
+    const randomSuffix = parseInt(Math.random() * 100);
     goToMyAccount();
     clickChangeEmail();
-    changeEmailTo('petitioner9+test@example.com');
+    changeEmailTo(`petitioner9+test${randomSuffix}@example.com`);
     clickConfirmModal();
     confirmEmailPendingAlert();
 
