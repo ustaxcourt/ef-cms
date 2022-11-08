@@ -1264,7 +1264,9 @@ const router = {
     registerRoute(
       '/search/no-matches',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        {
+          app,
+        },
         () => {
           setPageTitle('Search results');
           return app.getSequence('gotoCaseSearchNoMatchesSequence')();
@@ -1275,7 +1277,10 @@ const router = {
     registerRoute(
       '/search..',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        {
+          app,
+          permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH,
+        },
         () => {
           const query = route.query();
           setPageTitle('Advanced search');
