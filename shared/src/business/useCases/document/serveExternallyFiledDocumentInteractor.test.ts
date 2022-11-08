@@ -388,28 +388,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(mockPdfWithCoversheet);
   });
 
-  it('should file the subject docket entry with isPendingService true', async () => {
-    const memberCaseDocketNumber = '999-16';
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber, memberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
-        .calls[1][0].docketEntryEntity.isPendingService,
-    ).toBeTruthy();
-  });
-
-  it.only('should file the non subject docket entry with isPendingService falsy', async () => {
+  it('should set isPendingService to truthy when filing the subject docket entry', async () => {
     const memberCaseDocketNumber = '999-16';
 
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce(mockCase)
       .mockReturnValueOnce({
         ...mockCase,
         docketNumber: memberCaseDocketNumber,
@@ -424,7 +409,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
-        .calls[2][0].docketEntryEntity.isPendingService,
+        .calls[0][0].docketEntryEntity.isPendingService,
+    ).toBeTruthy();
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+        .calls[1][0].docketEntryEntity.isPendingService,
     ).toBeFalsy();
   });
 
