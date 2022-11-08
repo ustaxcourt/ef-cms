@@ -49,10 +49,6 @@ export const serveExternallyFiledDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const subjectCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -80,7 +76,7 @@ export const serveExternallyFiledDocumentInteractor = async (
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: originalSubjectDocketEntry.docketEntryId,
+      Key: docketEntryId,
     })
     .promise();
 
@@ -96,10 +92,14 @@ export const serveExternallyFiledDocumentInteractor = async (
     .getPersistenceGateway()
     .updateDocketEntryPendingServiceStatus({
       applicationContext,
-      docketEntryId: originalSubjectDocketEntry.docketEntryId,
+      docketEntryId,
       docketNumber: subjectCaseDocketNumber,
       status: true,
     });
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let caseEntities = [];
   const coversheetLength = 1;
@@ -160,7 +160,7 @@ export const serveExternallyFiledDocumentInteractor = async (
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: pdfWithCoversheet,
-    key: originalSubjectDocketEntry.docketEntryId,
+    key: docketEntryId,
   });
 
   const paperServiceResult = await applicationContext
@@ -168,7 +168,7 @@ export const serveExternallyFiledDocumentInteractor = async (
     .serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntities,
-      docketEntryId: originalSubjectDocketEntry.docketEntryId,
+      docketEntryId,
     });
 
   await Promise.all(
