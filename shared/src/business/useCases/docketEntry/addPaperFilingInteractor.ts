@@ -1,6 +1,5 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
@@ -89,9 +88,7 @@ export const addPaperFilingInteractor = async (
         docketNumber,
       });
 
-    const caseEntity = new Case(rawCase, { applicationContext });
-
-    const servedParties = aggregatePartiesForService(caseEntity);
+    let caseEntity = new Case(rawCase, { applicationContext });
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -109,6 +106,9 @@ export const addPaperFilingInteractor = async (
       { applicationContext, petitioners: caseEntity.petitioners },
     );
 
+    //
+    const servedParties = aggregatePartiesForService(caseEntity);
+
     if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
     }
@@ -119,8 +119,8 @@ export const addPaperFilingInteractor = async (
 
     const workItem = new WorkItem(
       {
-        assigneeId: null,
-        assigneeName: null,
+        assigneeId: user.userId,
+        assigneeName: user.name,
         associatedJudge: caseEntity.associatedJudge,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
@@ -133,23 +133,28 @@ export const addPaperFilingInteractor = async (
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
         leadDocketNumber: caseEntity.leadDocketNumber,
-        section: DOCKET_SECTION,
+        section: user.section,
         sentBy: user.name,
+        sentBySection: user.section,
         sentByUserId: user.userId,
       },
       { applicationContext },
     );
 
-    docketEntryEntity.setWorkItem(workItem);
+    if (readyForService) {
+      workItem.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+    }
 
-    workItem.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
+    await saveWorkItem({
+      applicationContext,
+      isSavingForLater,
+      workItem,
     });
+
+    docketEntryEntity.setWorkItem(workItem);
 
     if (readyForService) {
       docketEntryEntity.setAsServed(servedParties.all);
@@ -165,7 +170,8 @@ export const addPaperFilingInteractor = async (
     }
 
     caseEntity.addDocketEntry(docketEntryEntity);
-    const aCaseEntity = await applicationContext
+
+    caseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
         applicationContext,
@@ -174,20 +180,7 @@ export const addPaperFilingInteractor = async (
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: aCaseEntity.validate().toRawObject(),
-    });
-
-    if (readyForService) {
-      workItem.setAsCompleted({
-        message: 'completed',
-        user,
-      });
-    }
-
-    await saveWorkItem({
-      applicationContext,
-      isSavingForLater,
-      workItem,
+      caseToUpdate: caseEntity.validate().toRawObject(),
     });
   }
 
