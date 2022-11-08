@@ -80,111 +80,111 @@ export const addPaperFilingInteractor = async (
   let caseEntities = [];
   let filedByFromLeadCase;
 
-  for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
-    let caseEntity = new Case(rawCase, { applicationContext });
-
-    caseEntities.push(caseEntity);
-
-    const docketEntryEntity = new DocketEntry(
-      {
-        ...documentMetadata,
-        docketEntryId,
-        documentTitle: documentMetadata.documentTitle,
-        documentType: documentMetadata.documentType,
-        editState: JSON.stringify(docketRecordEditState),
-        filingDate: documentMetadata.receivedAt,
-        isOnDocketRecord: true,
-        mailingDate: documentMetadata.mailingDate,
-        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-        userId: user.userId,
-      },
-      { applicationContext, petitioners: caseEntity.petitioners },
-    );
-
-    //
-    const servedParties = aggregatePartiesForService(caseEntity);
-
-    if (isLeadCase(caseEntity)) {
-      filedByFromLeadCase = docketEntryEntity.filedBy;
-    }
-
-    if (filedByFromLeadCase) {
-      docketEntryEntity.filedBy = filedByFromLeadCase;
-    }
-
-    const workItem = new WorkItem(
-      {
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        associatedJudge: caseEntity.associatedJudge,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        inProgress: isSavingForLater,
-        isRead: user.role !== ROLES.privatePractitioner,
-        leadDocketNumber: caseEntity.leadDocketNumber,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      },
-      { applicationContext },
-    );
-
-    if (readyForService) {
-      workItem.setAsCompleted({
-        message: 'completed',
-        user,
-      });
-    }
-
-    await saveWorkItem({
-      applicationContext,
-      isSavingForLater,
-      workItem,
-    });
-
-    docketEntryEntity.setWorkItem(workItem);
-
-    if (readyForService) {
-      docketEntryEntity.setAsServed(servedParties.all);
-    }
-
-    if (isFileAttached) {
-      docketEntryEntity.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
+  caseEntities = await Promise.all(
+    consolidatedGroupDocketNumbers.map(async docketNumber => {
+      const rawCase = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
           applicationContext,
-          docketEntryId,
+          docketNumber,
         });
-    }
 
-    caseEntity.addDocketEntry(docketEntryEntity);
+      let caseEntity = new Case(rawCase, { applicationContext });
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
+      const docketEntryEntity = new DocketEntry(
+        {
+          ...documentMetadata,
+          docketEntryId,
+          documentTitle: documentMetadata.documentTitle,
+          documentType: documentMetadata.documentType,
+          editState: JSON.stringify(docketRecordEditState),
+          filingDate: documentMetadata.receivedAt,
+          isOnDocketRecord: true,
+          mailingDate: documentMetadata.mailingDate,
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+          userId: user.userId,
+        },
+        { applicationContext, petitioners: caseEntity.petitioners },
+      );
+
+      //
+      const servedParties = aggregatePartiesForService(caseEntity);
+
+      if (isLeadCase(caseEntity)) {
+        filedByFromLeadCase = docketEntryEntity.filedBy;
+      }
+
+      if (filedByFromLeadCase) {
+        docketEntryEntity.filedBy = filedByFromLeadCase;
+      }
+
+      const workItem = new WorkItem(
+        {
+          assigneeId: user.userId,
+          assigneeName: user.name,
+          associatedJudge: caseEntity.associatedJudge,
+          caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+          docketEntry: {
+            ...docketEntryEntity.toRawObject(),
+            createdAt: docketEntryEntity.createdAt,
+          },
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+          inProgress: isSavingForLater,
+          isRead: user.role !== ROLES.privatePractitioner,
+          leadDocketNumber: caseEntity.leadDocketNumber,
+          section: user.section,
+          sentBy: user.name,
+          sentBySection: user.section,
+          sentByUserId: user.userId,
+        },
+        { applicationContext },
+      );
+
+      if (readyForService) {
+        workItem.setAsCompleted({
+          message: 'completed',
+          user,
+        });
+      }
+
+      await saveWorkItem({
         applicationContext,
-        caseEntity,
+        isSavingForLater,
+        workItem,
       });
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-  }
+      docketEntryEntity.setWorkItem(workItem);
+
+      if (readyForService) {
+        docketEntryEntity.setAsServed(servedParties.all);
+      }
+
+      if (isFileAttached) {
+        docketEntryEntity.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            docketEntryId,
+          });
+      }
+
+      caseEntity.addDocketEntry(docketEntryEntity);
+
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({
+          applicationContext,
+          caseEntity,
+        });
+
+      return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      });
+    }),
+  );
 
   let paperServicePdfUrl;
 
