@@ -21,10 +21,10 @@ import { pick } from 'lodash';
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
+ * @param {string} providers.docketEntryId the id of the docket entry to add
  * @param {object} providers.consolidatedGroupDocketNumbers the docket numbers from the consolidated group
  * @param {object} providers.documentMetadata the document metadata
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
- * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
 export const addPaperFilingInteractor = async (
@@ -32,15 +32,15 @@ export const addPaperFilingInteractor = async (
   {
     clientConnectionId,
     consolidatedGroupDocketNumbers,
+    docketEntryId,
     documentMetadata,
     isSavingForLater,
-    primaryDocumentFileId,
   }: {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: any;
     isSavingForLater: boolean;
-    primaryDocumentFileId: string;
+    docketEntryId: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -54,9 +54,6 @@ export const addPaperFilingInteractor = async (
   }
 
   const { docketNumber, isFileAttached } = documentMetadata;
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
@@ -74,8 +71,7 @@ export const addPaperFilingInteractor = async (
     'practitioner',
   ]);
 
-  const [docketEntryId, metadata, relationship] = [
-    primaryDocumentFileId,
+  const [metadata, relationship] = [
     documentMetadata,
     DOCUMENT_RELATIONSHIPS.PRIMARY,
   ];
@@ -83,7 +79,7 @@ export const addPaperFilingInteractor = async (
   const readyForService = metadata.isFileAttached && !isSavingForLater;
 
   if (!docketEntryId) {
-    throw new Error('Did not receive a primaryDocumentFileId');
+    throw new Error('Did not receive a docketEntryId');
   }
 
   const docketRecordEditState =
@@ -101,6 +97,10 @@ export const addPaperFilingInteractor = async (
     let aCaseEntity = new Case(aCase, { applicationContext });
     caseEntities.push(aCaseEntity);
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let filedByFromLeadCase;
   let consolidatedGroupHasPaperServiceCase: boolean;
