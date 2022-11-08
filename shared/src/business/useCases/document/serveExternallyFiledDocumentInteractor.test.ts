@@ -400,12 +400,20 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isPendingService,
+        .calls[1][0].docketEntryEntity.isPendingService,
     ).toBeTruthy();
   });
 
-  it.only('should file the non subject docket entry with isPendingService true', async () => {
+  it.only('should file the non subject docket entry with isPendingService falsy', async () => {
     const memberCaseDocketNumber = '999-16';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketNumber: memberCaseDocketNumber,
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -416,8 +424,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isPendingService,
-    ).toBeTruthy();
+        .calls[2][0].docketEntryEntity.isPendingService,
+    ).toBeFalsy();
   });
 
   it('should call the persistence method to set and unset the pending service status on the subjectCase`s docket entry ONLY', async () => {
