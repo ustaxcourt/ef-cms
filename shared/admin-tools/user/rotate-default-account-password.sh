@@ -2,13 +2,11 @@
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
-  "COGNITO_USER_POOL" \
-  "AWS_ACCESS_KEY_ID" \
-  "USTC_ADMIN_USER"
+  "AWS_ACCESS_KEY_ID" 
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
-  echo "Aborted load-environment-from-secrets.sh"
+  echo "Aborted rotate-default-account-password.sh"
   exit $EXIT_CODE
 fi
 
@@ -23,15 +21,7 @@ REGION=us-east-1
 
 # get current secrets
 content=$(aws secretsmanager get-secret-value --region "${REGION}" --secret-id "${ENV}_deploy" --query "SecretString" --output text)
-old_pasword=$(echo $content | jq -r '.USTC_ADMIN_PASS')
-
-# update password for ustc user
-aws cognito-idp admin-set-user-password \
-  --user-pool-id $COGNITO_USER_POOL \
-  --username "$USTC_ADMIN_USER" \
-  --password "$NEW_PASSWORD" \
-  --permanent 
-
+old_pasword=$(echo $content | jq -r '.DEFAULT_ACCOUNT_PASS')
 new_secret="${content/"${old_pasword}"/${NEW_PASSWORD}}"
 
 # update secrets
@@ -40,4 +30,6 @@ aws secretsmanager put-secret-value \
   --secret-id "${ENV}_deploy" \
   --secret-string "$new_secret"
 
-echo "✅ USTC_ADMIN_USER password updated for $ENV"
+source ./shared/admin-tools/user/setup-test-users.sh $ENV
+
+echo "✅ DEFAULT_ACCOUNT_PASSWORD updated for $ENV."
