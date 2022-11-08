@@ -111,9 +111,9 @@ const completeWorkItem = async ({
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section ? user.section : DOCKET_SECTION,
+    section: user.section,
     sentBy: user.name,
-    sentBySection: user.section ? user.section : DOCKET_SECTION,
+    sentBySection: user.section,
     sentByUserId: user.userId,
   });
 
