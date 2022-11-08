@@ -205,7 +205,7 @@ describe('fileDocumentOnOneCase', () => {
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
       subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      user: { ...docketClerkUser, section: undefined },
+      user: docketClerkUser,
     });
 
     const expectedDocketEntry = applicationContext
