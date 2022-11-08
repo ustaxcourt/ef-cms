@@ -15,6 +15,7 @@ import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFa
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
+import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -69,5 +70,33 @@ export const completeDocketEntryQCSequence = [
       },
     ],
     yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
+  },
+  computeCertificateOfServiceFormDateAction,
+  getComputedFormDateFactoryAction('dateReceived'),
+  setComputeFormDateFactoryAction('dateReceived'),
+  getComputedFormDateFactoryAction('serviceDate'),
+  setComputeFormDateFactoryAction('serviceDate'),
+  setFilersFromFilersMapAction,
+  validateDocketEntryAction,
+  {
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+    ],
+    success: showProgressSequenceDecorator([
+      stopShowValidationAction,
+      refreshExternalDocumentTitleFromEventCodeAction,
+      setPreviousDocumentDocketEntryAction,
+      generateTitleAction,
+      completeDocketEntryQCAction,
+      setPdfPreviewUrlAction,
+      setCaseAction,
+      setAlertSuccessAction,
+      setPaperServicePartiesAction,
+      setSaveAlertsForNavigationAction,
+      navigateToDocumentQCAction,
+      clearErrorAlertsAction,
+    ]),
   },
 ];
