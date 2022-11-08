@@ -14,7 +14,6 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { pick } from 'lodash';
 
 /**
  *
@@ -49,6 +48,10 @@ export const addPaperFilingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (!docketEntryId) {
+    throw new Error('Did not receive a docketEntryId');
+  }
+
   if (!documentMetadata) {
     throw new Error('Did not receive meta data for docket entry');
   }
@@ -65,25 +68,10 @@ export const addPaperFilingInteractor = async (
     consolidatedGroupDocketNumbers = [docketNumber];
   }
 
-  const baseMetadata = pick(documentMetadata, [
-    'filers',
-    'partyIrsPractitioner',
-    'practitioner',
-  ]);
-
-  const [metadata, relationship] = [
-    documentMetadata,
-    DOCUMENT_RELATIONSHIPS.PRIMARY,
-  ];
-
-  const readyForService = metadata.isFileAttached && !isSavingForLater;
-
-  if (!docketEntryId) {
-    throw new Error('Did not receive a docketEntryId');
-  }
+  const readyForService = documentMetadata.isFileAttached && !isSavingForLater;
 
   const docketRecordEditState =
-    metadata.isFileAttached === false ? documentMetadata : {};
+    documentMetadata.isFileAttached === false ? documentMetadata : {};
 
   let caseEntities = [];
   for (let docketNo of consolidatedGroupDocketNumbers) {
@@ -113,16 +101,15 @@ export const addPaperFilingInteractor = async (
 
     const docketEntryEntity = new DocketEntry(
       {
-        ...baseMetadata,
-        ...metadata,
+        ...documentMetadata,
         docketEntryId,
-        documentTitle: metadata.documentTitle,
-        documentType: metadata.documentType,
+        documentTitle: documentMetadata.documentTitle,
+        documentType: documentMetadata.documentType,
         editState: JSON.stringify(docketRecordEditState),
-        filingDate: metadata.receivedAt,
+        filingDate: documentMetadata.receivedAt,
         isOnDocketRecord: true,
-        mailingDate: metadata.mailingDate,
-        relationship,
+        mailingDate: documentMetadata.mailingDate,
+        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
         userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
