@@ -12,6 +12,7 @@ import {
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
+import { mockDocketEntry } from '../../../../../web-client/src/presenter/computeds/formattedDocketEntries.test';
 
 describe('addPaperFilingInteractor', () => {
   const mockClientConnectionId = '987654';
@@ -47,18 +48,6 @@ describe('addPaperFilingInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should throw an error when the document metadata is not provided', async () => {
-    await expect(
-      addPaperFilingInteractor(applicationContext, {
-        clientConnectionId: undefined,
-        consolidatedGroupDocketNumbers: undefined,
-        docketEntryId: undefined,
-        documentMetadata: undefined,
-        isSavingForLater: undefined,
-      }),
-    ).rejects.toThrow('Did not receive meta data for docket entry');
-  });
-
   it('should throw an error when docketEntryId is not provided', async () => {
     await expect(
       addPaperFilingInteractor(applicationContext, {
@@ -69,6 +58,18 @@ describe('addPaperFilingInteractor', () => {
         isSavingForLater: undefined,
       }),
     ).rejects.toThrow('Did not receive a docketEntryId');
+  });
+
+  it('should throw an error when the documentMetadata is not provided', async () => {
+    await expect(
+      addPaperFilingInteractor(applicationContext, {
+        clientConnectionId: undefined,
+        consolidatedGroupDocketNumbers: undefined,
+        docketEntryId: mockDocketEntry.docketEntryId,
+        documentMetadata: undefined,
+        isSavingForLater: undefined,
+      }),
+    ).rejects.toThrow('Did not receive meta data for docket entry');
   });
 
   it('should throw an error if documentMetadata is not provided', async () => {
