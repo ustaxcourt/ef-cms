@@ -388,14 +388,20 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(mockPdfWithCoversheet);
   });
 
-  it('should call the persistence method to set and unset the pending service status on the docket entry', async () => {
+  it('should call the persistence method to set and unset the pending service status on the subjectCase`s docket entry ONLY', async () => {
+    const memberCaseDocketNumber = '999-16';
+
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [mockCase.docketNumber, memberCaseDocketNumber],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,

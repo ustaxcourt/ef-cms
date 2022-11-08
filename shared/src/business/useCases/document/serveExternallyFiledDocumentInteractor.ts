@@ -183,19 +183,14 @@ export const serveExternallyFiledDocumentInteractor = async (
         docketEntryId,
       });
   } finally {
-    // TODO; why call this for each case???
-    await Promise.all(
-      caseEntities.map(caseEntity => {
-        return applicationContext
-          .getPersistenceGateway()
-          .updateDocketEntryPendingServiceStatus({
-            applicationContext,
-            docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            status: false,
-          });
-      }),
-    );
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId,
+        docketNumber: subjectCaseDocketNumber,
+        status: false,
+      });
   }
 
   const successMessage =
