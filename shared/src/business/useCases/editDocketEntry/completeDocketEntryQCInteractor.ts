@@ -86,9 +86,12 @@ export const completeDocketEntryQCInteractor = async (
     record => record.docketEntryId === docketEntryId,
   );
 
-  const currentDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
+  const currentDocketEntry = new DocketEntry(
+    caseEntity.getDocketEntryById({
+      docketEntryId,
+    }),
+    { applicationContext, petitioners: caseToUpdate.petitioners },
+  );
 
   if (currentDocketEntry.workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
@@ -124,7 +127,7 @@ export const completeDocketEntryQCInteractor = async (
 
   const updatedDocketEntry = new DocketEntry(
     {
-      ...currentDocketEntry,
+      ...currentDocketEntry.toRawObject(),
       ...editableFields,
       documentTitle: editableFields.documentTitle,
       editState: '{}',
