@@ -86,9 +86,12 @@ export const completeDocketEntryQCInteractor = async (
     record => record.docketEntryId === docketEntryId,
   );
 
-  const currentDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
+  const currentDocketEntry = new DocketEntry(
+    caseEntity.getDocketEntryById({
+      docketEntryId,
+    }),
+    { applicationContext, petitioners: caseToUpdate.petitioners },
+  );
 
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
@@ -120,7 +123,7 @@ export const completeDocketEntryQCInteractor = async (
 
   const updatedDocketEntry = new DocketEntry(
     {
-      ...currentDocketEntry,
+      ...currentDocketEntry.toRawObject(),
       ...editableFields,
       documentTitle: editableFields.documentTitle,
       editState: '{}',
