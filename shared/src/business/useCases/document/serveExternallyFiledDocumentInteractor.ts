@@ -130,6 +130,9 @@ export const serveExternallyFiledDocumentInteractor = async (
           applicationContext,
         });
 
+        const isSubjectCase =
+          caseEntity.docketNumber === subjectCaseDocketNumber;
+
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
@@ -139,6 +142,7 @@ export const serveExternallyFiledDocumentInteractor = async (
             isDraft: false,
             isFileAttached: true,
             isOnDocketRecord: true,
+            isPendingService: isSubjectCase,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
             userId: user.userId,
