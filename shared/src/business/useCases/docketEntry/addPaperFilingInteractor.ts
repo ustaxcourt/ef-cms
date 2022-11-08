@@ -90,6 +90,8 @@ export const addPaperFilingInteractor = async (
 
     let caseEntity = new Case(rawCase, { applicationContext });
 
+    caseEntities.push(caseEntity);
+
     const docketEntryEntity = new DocketEntry(
       {
         ...documentMetadata,
