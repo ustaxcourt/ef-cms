@@ -55,7 +55,7 @@ describe('document titles', () => {
     });
   });
 
-  describe('getDocumentTitleForCoverPage', () => {
+  describe('getDocumentTitleForCoversheet', () => {
     it('should return only the base document title when no additional info exists', () => {
       const docketEntry = new DocketEntry(
         { ...A_VALID_DOCKET_ENTRY, documentTitle: 'a title' },
@@ -64,7 +64,7 @@ describe('document titles', () => {
         },
       );
 
-      const actual = docketEntry.getDocumentTitleForCoverPage();
+      const actual = docketEntry.getDocumentTitleForCoversheet();
 
       expect(actual).toEqual('a title');
     });
@@ -82,7 +82,7 @@ describe('document titles', () => {
         },
       );
 
-      const actual = docketEntry.getDocumentTitleForCoverPage();
+      const actual = docketEntry.getDocumentTitleForCoversheet();
 
       expect(actual).toEqual('a title');
     });
@@ -100,7 +100,7 @@ describe('document titles', () => {
         },
       );
 
-      const actual = docketEntry.getDocumentTitleForCoverPage();
+      const actual = docketEntry.getDocumentTitleForCoversheet();
 
       expect(actual).toEqual('a title plus additional info');
     });
