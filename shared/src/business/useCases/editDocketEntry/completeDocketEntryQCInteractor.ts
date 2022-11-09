@@ -90,11 +90,6 @@ export const completeDocketEntryQCInteractor = async (
     docketEntryId,
   });
 
-  const currentDocketEntryEntity = new DocketEntry(currentDocketEntry, {
-    applicationContext,
-    petitioners: caseToUpdate.petitioners,
-  });
-
   if (currentDocketEntry.workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
   }
@@ -151,7 +146,7 @@ export const completeDocketEntryQCInteractor = async (
     currentDocketEntry.getDocumentTitleForDocketRecord();
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
-    currentDocketEntry: currentDocketEntryEntity,
+    currentDocketEntry,
     updatedDocketEntry,
   });
 
