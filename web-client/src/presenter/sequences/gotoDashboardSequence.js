@@ -59,7 +59,6 @@ const goToDashboard = [
                     USER_ROLES.clerkOfCourt,
                     USER_ROLES.docketClerk,
                     USER_ROLES.floater,
-                    USER_ROLES.petitioner,
                     USER_ROLES.petitionsClerk,
                     USER_ROLES.reportersOffice,
                     USER_ROLES.trialClerk,

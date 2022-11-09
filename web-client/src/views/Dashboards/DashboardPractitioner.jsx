@@ -26,7 +26,7 @@ export const DashboardPractitioner = connect(
               {dashboardExternalHelper.showCaseList && <CaseListPractitioner />}
             </div>
             <div className="tablet:grid-col-4">
-              {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
+              {<CaseSearchBox />}
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Filing Fee Options</h3>

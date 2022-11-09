@@ -122,9 +122,7 @@ export const CaseListRespondent = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-4">
-                {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
-              </div>
+              <div className="grid-col-4">{<CaseSearchBox />}</div>
             </div>
           </div>
         </NonMobile>

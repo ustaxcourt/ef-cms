@@ -1,9 +1,6 @@
 import { state } from 'cerebral';
 
-export const dashboardExternalHelper = (get, applicationContext) => {
-  const { USER_ROLES } = applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
-
+export const dashboardExternalHelper = get => {
   const openCases = get(state.openCases) || [];
   const closedCases = get(state.closedCases) || [];
 
@@ -11,11 +8,6 @@ export const dashboardExternalHelper = (get, applicationContext) => {
 
   return {
     showCaseList: cases.length > 0,
-    showCaseSearch: [
-      USER_ROLES.privatePractitioner,
-      USER_ROLES.irsPractitioner,
-      USER_ROLES.petitioner,
-    ].includes(user.role),
     showWhatToExpect: cases.length === 0,
   };
 };

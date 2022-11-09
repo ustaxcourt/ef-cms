@@ -28,7 +28,7 @@ export const DashboardPetitioner = connect(
               {dashboardExternalHelper.showCaseList && <CaseListPetitioner />}
             </div>
             <div className="tablet:grid-col-4">
-              {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
+              {<CaseSearchBox />}
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
