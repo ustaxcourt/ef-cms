@@ -124,7 +124,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     {
       associatedJudge: subjectCaseEntity.associatedJudge,
       deadlineDate: form.date,
-      description: '',
+      description: 'Filing Fee Due',
       docketNumber: subjectCaseDocketNumber,
       sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
     },

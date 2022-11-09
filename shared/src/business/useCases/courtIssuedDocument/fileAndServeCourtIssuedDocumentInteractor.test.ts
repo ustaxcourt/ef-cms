@@ -203,8 +203,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
-    const mockOrderFilingFee = {
+  it.only('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+    const mockOrderFilingFeeForm = {
+      date: '2030-01-20T00:00:00.000Z',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
       judge: judgeUser.name,
@@ -214,7 +215,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
-      form: mockOrderFilingFee,
+      form: mockOrderFilingFeeForm,
       subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
