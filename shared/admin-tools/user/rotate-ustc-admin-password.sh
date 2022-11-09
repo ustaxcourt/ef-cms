@@ -8,10 +8,11 @@
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
-  echo "Aborted load-environment-from-secrets.sh"
+  echo "Aborted rotate-ustc-admin-password.sh"
   exit $EXIT_CODE
 fi
 
+# check if there's a special character and exit or replace
 NEW_PASSWORD=$1
 if [ -z "${NEW_PASSWORD}" ]
 then
@@ -25,7 +26,7 @@ REGION=us-east-1
 content=$(aws secretsmanager get-secret-value --region "${REGION}" --secret-id "${ENV}_deploy" --query "SecretString" --output text)
 old_pasword=$(echo $content | jq -r '.USTC_ADMIN_PASS')
 
-# update password for ustc user
+# update password for ustc admin user
 aws cognito-idp admin-set-user-password \
   --user-pool-id $COGNITO_USER_POOL \
   --username "$USTC_ADMIN_USER" \
