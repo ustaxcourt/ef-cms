@@ -465,30 +465,27 @@ const getServedPartiesCode = servedParties => {
 };
 
 /**
- * Gets the base document title combined with any additional info provided.
- *
- * @returns {string} the calculated document title
- */
-DocketEntry.prototype.getDocumentTitleForCertOfService = function () {
-  const additionalInfo = this.additionalInfo || '';
-  const additionalInfo2 = this.additionalInfo2 || '';
-  const certOfServiceDate =
-    formatDateString(this.certificateOfServiceDate, FORMATS.MMDDYY) || '';
-  return `${this.documentTitle} ${additionalInfo} (C/S ${certOfServiceDate}) ${additionalInfo2}`;
-};
-
-/**
- * Gets the base document title combined with any additional info provided.
+ * Gets the base document title combined with any additional info, certificate of service
+ * attachments and additionalInfo2 provided.
  *
  * @returns {string} the calculated document title
  */
 DocketEntry.prototype.getDocumentTitleForDocketRecord = function () {
-  const additionalInfo = this.additionalInfo2
-    ? `${this.additionalInfo} ${this.additionalInfo2}`
-    : this.additionalInfo;
+  const documentTitleArray = [];
+  documentTitleArray.push(this.documentTitle);
 
-  return `${this.documentTitle} ${additionalInfo}`;
-  // account for additionalInfo not been available as well. Render an empty string
+  if (this.additionalInfo) documentTitleArray.push(this.additionalInfo);
+  if (this.certificateOfService && this.certificateOfServiceDate) {
+    const certOfServiceDate = formatDateString(
+      this.certificateOfServiceDate,
+      FORMATS.MMDDYY,
+    );
+    documentTitleArray.push(`(C/S ${certOfServiceDate})`);
+  }
+  if (this.attachments) documentTitleArray.push('(Attachment(s))');
+  if (this.additionalInfo2) documentTitleArray.push(this.additionalInfo2);
+
+  return documentTitleArray.join(' ');
 };
 
 /**
