@@ -14,6 +14,9 @@ import {
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
+import { petitionerSearchesForCase } from './journey/petitionerSearchesForCase';
+import { petitionerSearchesForNonexistentCase } from './journey/petitionerSearchesForNonexistentCase';
+import { petitionerSearchesForUnassociatedSealedCase } from './journey/petitionerSearchesForUnassociatedSealedCase';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
@@ -70,6 +73,7 @@ describe('Practitioner requests access to case', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerSearchesForCase(cerebralTest);
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
@@ -222,6 +226,12 @@ describe('Practitioner requests access to case', () => {
   docketClerkSealsCase(cerebralTest);
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true); // passing flag for isSealed
+
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerSearchesForNonexistentCase(cerebralTest);
+
+  loginAs(cerebralTest, 'petitioner1@example.com');
+  petitionerSearchesForUnassociatedSealedCase(cerebralTest);
 
   loginAs(cerebralTest, 'privatePractitioner3@example.com');
   practitionerSearchesForUnassociatedSealedCase(cerebralTest);
