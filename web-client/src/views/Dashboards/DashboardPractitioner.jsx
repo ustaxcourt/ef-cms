@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseListPractitioner } from '../CaseListPractitioner';
+import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
@@ -23,7 +23,7 @@ export const DashboardPractitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-8">
-              {dashboardExternalHelper.showCaseList && <CaseListPractitioner />}
+              {dashboardExternalHelper.showCaseList && <CaseListTable />}
             </div>
             <div className="tablet:grid-col-4">
               {<CaseSearchBox />}
