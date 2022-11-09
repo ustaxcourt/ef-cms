@@ -7,7 +7,7 @@
   "dependencies": {
     "@18f/us-federal-holidays": "^3.0.1",
     "@aws-crypto/sha256-browser": "^2.0.2",
-    "@aws-sdk/credential-provider-node": "^3.202.0",
+    "@aws-sdk/credential-provider-node": "^3.204.0",
     "@aws-sdk/node-http-handler": "^3.201.0",
     "@aws-sdk/protocol-http": "^3.201.0",
     "@aws-sdk/signature-v4": "^3.201.0",
@@ -226,7 +226,8 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^1.2.1",
     "underscore": "^1.13.1",
-    "terser": "^5.14.2"
+    "terser": "^5.14.2",
+    "loader-utils": "^2.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
