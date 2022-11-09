@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: ./Dockerfile-local
     container_name: shell
+    command: bash -c "tail -f /dev/null"
     volumes:
       - .:/home/app
       - node_modules:/home/app/node_modules
