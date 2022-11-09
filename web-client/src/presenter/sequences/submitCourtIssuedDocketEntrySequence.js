@@ -2,11 +2,12 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { getConstants } from '../../getConstants';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
+import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -42,13 +43,15 @@ export const submitCourtIssuedDocketEntrySequence = [
       {
         getDocketEntryAlertSuccessAction,
         no: [
-          getFeatureFlagValueFactoryAction(
-            getConstants().ALLOWLIST_FEATURE_FLAGS
-              .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
-          ),
+          shouldSaveToConsolidatedGroupAction,
           {
             no: [
               submitCourtIssuedDocketEntryAction,
+              isCoversheetNeededAction,
+              {
+                no: [],
+                yes: [generateCoversheetAction],
+              },
               getDocketEntryAlertSuccessAction,
             ],
             yes: [
@@ -56,10 +59,21 @@ export const submitCourtIssuedDocketEntrySequence = [
               {
                 no: [
                   submitCourtIssuedDocketEntryAction,
+                  isCoversheetNeededAction,
+                  {
+                    no: [],
+                    yes: [generateCoversheetAction],
+                  },
                   getDocketEntryAlertSuccessAction,
                 ],
                 yes: [
+                  getDocketNumbersForConsolidatedServiceAction,
                   submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+                  isCoversheetNeededAction,
+                  {
+                    no: [],
+                    yes: [generateCoversheetAction],
+                  },
                   getDocketEntryAlertSuccessForConsolidatedGroupAction,
                   clearModalAction,
                 ],

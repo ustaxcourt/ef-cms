@@ -122,10 +122,10 @@ export const CaseSearchByName = connect(
                           })}
                         </optgroup>
                         <optgroup label="Other">
-                          {usStatesOther.map(abbrev => {
+                          {Object.keys(usStatesOther).map(abbrev => {
                             return (
                               <option key={abbrev} value={abbrev}>
-                                {abbrev}
+                                {usStatesOther[abbrev]}
                               </option>
                             );
                           })}

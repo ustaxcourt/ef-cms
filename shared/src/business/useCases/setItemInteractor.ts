@@ -1,5 +1,5 @@
 export const setItemInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: any, // any until we refactor the client
   { key, value }: { key: string; value: string },
 ): Promise<void> =>
   applicationContext.getPersistenceGateway().setItem({

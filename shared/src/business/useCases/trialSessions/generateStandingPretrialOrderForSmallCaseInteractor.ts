@@ -1,8 +1,8 @@
 import {
+  FORMATS,
   createISODateString,
   formatDateString,
   formatNow,
-  FORMATS,
 } from '../../utilities/DateHandler';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';

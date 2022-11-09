@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
 
 describe('updateDeficiencyStatisticInteractor', () => {
   let statistic = {

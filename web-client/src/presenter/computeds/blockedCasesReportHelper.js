@@ -43,8 +43,9 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
     blockedCasesFormatted = blockedCases
       .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(blockedCase => {
-        const blockedCaseWithConsolidatedProperties =
-          addConsolidatedProperties(blockedCase);
+        const blockedCaseWithConsolidatedProperties = addConsolidatedProperties(
+          { applicationContext, caseObject: blockedCase },
+        );
         return {
           ...setFormattedBlockDates(blockedCaseWithConsolidatedProperties),
           caseTitle: applicationContext.getCaseTitle(

@@ -23,7 +23,8 @@ import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
-import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
+import { confirmInitiateCourtIssuedFilingServiceModalHelper } from './computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
+import { confirmInitiatePaperFilingServiceModalHelper } from './computeds/confirmInitiatePaperFilingServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
@@ -54,11 +55,11 @@ import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
+import { formattedEligibleCasesHelper } from './computeds/formattedEligibleCasesHelper';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
-import { formattedTrialSessionDetailsForFilteredEligibleCases } from './computeds/formattedTrialSessionDetailsForFilteredEligibleCases';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
@@ -79,6 +80,9 @@ import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
+import { practitionerDocumentationFormHelper } from './computeds/practitionerDocumentationFormHelper';
+import { practitionerDocumentationHelper } from './computeds/practitionerDocumentationHelper';
+import { practitionerInformationHelper } from './computeds/practitionerInformationHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
@@ -141,7 +145,8 @@ const helpers = {
   caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
-  confirmInitiateServiceModalHelper,
+  confirmInitiateCourtIssuedFilingServiceModalHelper,
+  confirmInitiatePaperFilingServiceModalHelper,
   contactsHelper,
   correspondenceViewerHelper,
   createMessageModalHelper,
@@ -169,12 +174,12 @@ const helpers = {
   formattedDashboardTrialSessions,
   formattedDocketEntries,
   formattedDocument,
+  formattedEligibleCasesHelper,
   formattedMessageDetail,
   formattedMessages,
   formattedOpenCases,
   formattedPendingItems,
   formattedTrialSessionDetails,
-  formattedTrialSessionDetailsForFilteredEligibleCases,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
@@ -194,6 +199,9 @@ const helpers = {
   pendingReportListHelper,
   petitionQcHelper,
   practitionerDetailHelper,
+  practitionerDocumentationFormHelper,
+  practitionerDocumentationHelper,
+  practitionerInformationHelper,
   practitionerSearchFormHelper,
   printPaperServiceHelper,
   recentMessagesHelper,

@@ -1,5 +1,5 @@
-import { Case } from '../entities/cases/Case';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
 import { createISODateString } from '../utilities/DateHandler';
 
 /**

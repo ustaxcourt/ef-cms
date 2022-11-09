@@ -10,9 +10,8 @@ const { post } = require('../requests');
  */
 exports.fileCourtIssuedDocketEntryInteractor = (
   applicationContext,
-  { docketNumbers, documentMeta },
+  { docketNumbers, documentMeta, subjectDocketNumber },
 ) => {
-  const subjectDocketNumber = docketNumbers[0];
   return post({
     applicationContext,
     body: {

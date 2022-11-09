@@ -1,8 +1,5 @@
-import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import {
-  getFormattedDocketEntriesForTest,
-  waitForLoadingComponentToHide,
-} from '../helpers';
+import { confirmInitiateCourtIssuedFilingServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
+import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -30,10 +27,14 @@ export const docketClerkServesOrderWithPaperService = (
       'CourtIssuedDocketEntry',
     );
 
-    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence(
+      'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+    );
 
     const modalHelper = runCompute(
-      withAppContextDecorator(confirmInitiateServiceModalHelper),
+      withAppContextDecorator(
+        confirmInitiateCourtIssuedFilingServiceModalHelper,
+      ),
       {
         state: cerebralTest.getState(),
       },
@@ -50,7 +51,10 @@ export const docketClerkServesOrderWithPaperService = (
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
-    await waitForLoadingComponentToHide({ cerebralTest, refreshInterval: 750 });
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'PrintPaperService',
+    });
 
     expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
     expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();

@@ -1,5 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
 export const docketClerkAddsTrackedDocketEntry = (
   cerebralTest,
@@ -83,6 +83,11 @@ export const docketClerkAddsTrackedDocketEntry = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     if (!paperServiceRequested) {
       expect(cerebralTest.getState('alertSuccess').message).toEqual(
