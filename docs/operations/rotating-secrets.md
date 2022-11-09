@@ -41,7 +41,7 @@ Perform the following steps or give them to another user in order to rotate thei
     ```
 
 3. Update your local environment variables to use the new credentials, taking note of your old `AWS_ACCESS_KEY_ID` (you will need this later!):
-   1. Either update the credentials for the profile you use in `~/.git/credentials` or
+   1. Update the credentials for the profile you use in `~/.aws/credentials` and/or
    2. Save them to a file that you source when accessing this AWS Account:
 
         ```bash
