@@ -90,11 +90,6 @@ export const completeDocketEntryQCInteractor = async (
     docketEntryId,
   });
 
-  const currentDocketEntryEntity = new DocketEntry(currentDocketEntry, {
-    applicationContext,
-    petitioners: caseToUpdate.petitioners,
-  });
-
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
     additionalInfo: entryMetadata.additionalInfo,
@@ -147,7 +142,7 @@ export const completeDocketEntryQCInteractor = async (
     currentDocketEntry.getDocumentTitleForDocketRecord();
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
-    currentDocketEntry: currentDocketEntryEntity,
+    currentDocketEntry,
     updatedDocketEntry,
   });
 
