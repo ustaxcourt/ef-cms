@@ -10,6 +10,7 @@ import React from 'react';
 
 const getCaseRow = ({
   formattedCase,
+  get,
   indentMemberCase = false,
   trialSequences,
   trialStatusOptions,
@@ -51,19 +52,93 @@ const getCaseRow = ({
             aria-label="trial status"
             bind={`trialSessionWorkingCopy.caseMetadata.${formattedCase.docketNumber}.trialStatus`}
             id={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
+            // onBlur={() => {
+            //   trialSequences.toggleShowDeprecatedSequence();
+            // }}
             onChange={value => {
+              console.log('1');
               trialSequences.autoSaveTrialSessionWorkingCopySequence({
                 key: `caseMetadata.${formattedCase.docketNumber}.trialStatus`,
                 value,
               });
             }}
+            // onToggle={() => {
+            //   trialSequences.toggleShowDeprecatedSequence();
+            // }}
           >
             <option value="">-Trial Status-</option>
-            {trialStatusOptions.map(({ key, value }) => (
-              <option key={key} value={key}>
-                {value}
-              </option>
-            ))}
+            {Object.keys(trialStatusOptions).map(key => {
+              // if (!allowDeprecated) {
+              //   if (!trialStatusOptions[key].deprecated) {
+              //     return (
+              //       <option key={key} value={key}>
+              //         {trialStatusOptions[key].label}
+              //       </option>
+              //     );
+              //   }
+              // } else {
+              //   return (
+              //     <option key={key} value={key}>
+              //       {trialStatusOptions[key].label}
+              //     </option>
+              //   );
+              // }
+              // {
+              //   console.log(
+              //     // get(state.trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber].trialStatus
+              //     'get(state.trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber].trialStatus',
+              //     get(
+              //       state.trialSessionWorkingCopy.caseMetadata[
+              //         formattedCase.docketNumber
+              //       ].trialStatus,
+              //     ),
+              //   );
+              // }
+              if (
+                get(
+                  state.trialSessionWorkingCopy.caseMetadata[
+                    formattedCase.docketNumber
+                  ].trialStatus,
+                ) &&
+                trialStatusOptions[
+                  get(
+                    state.trialSessionWorkingCopy.caseMetadata[
+                      formattedCase.docketNumber
+                    ].trialStatus,
+                  )
+                ].deprecated
+              ) {
+                console.log(
+                  'get(state.trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber].trialStatus',
+                  get(
+                    state.trialSessionWorkingCopy.caseMetadata[
+                      formattedCase.docketNumber
+                    ].trialStatus,
+                  ),
+                );
+                console.log('trialStatusOptions[key]', trialStatusOptions[key]);
+                if (
+                  !trialStatusOptions[key].deprecated ||
+                  get(
+                    state.trialSessionWorkingCopy.caseMetadata[
+                      formattedCase.docketNumber
+                    ].trialStatus,
+                  ) === key
+                ) {
+                  return (
+                    <option key={key} value={key}>
+                      {trialStatusOptions[key].label}
+                    </option>
+                  );
+                }
+              } else if (!trialStatusOptions[key].deprecated) {
+                return (
+                  <option key={key} value={key}>
+                    {trialStatusOptions[key].label}
+                  </option>
+                );
+              }
+            })}
           </BindedSelect>
         </td>
         <td className="no-wrap">
@@ -151,27 +226,35 @@ const getCaseRow = ({
 
 export const CaseListRowTrialSession = connect(
   {
+    // allowDeprecated: state.allowDeprecated,
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
     openAddEditUserCaseNoteModalFromListSequence:
       sequences.openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
+    toggleShowDeprecatedSequence: sequences.toggleShowDeprecatedSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   ({
+    // allowDeprecated,
     autoSaveTrialSessionWorkingCopySequence,
     formattedCase,
+    get,
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
+    toggleShowDeprecatedSequence,
     trialStatusOptions,
   }) =>
     getCaseRow({
+      // allowDeprecated,
       formattedCase,
+      get,
       trialSequences: {
         autoSaveTrialSessionWorkingCopySequence,
         openAddEditUserCaseNoteModalFromListSequence,
         openDeleteUserCaseNoteConfirmModalSequence,
+        toggleShowDeprecatedSequence,
       },
       trialStatusOptions,
     }),
