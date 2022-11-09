@@ -49,7 +49,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 #### axios
 
-`axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of 10/31/2022. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait until they are ironed out and/or the upgrade guide is published.
+`axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of 11/09/22. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait until they are ironed out and/or the upgrade guide is published.
 
 #### puppeteer / puppeteer-core
 
