@@ -237,7 +237,7 @@ const saveWorkItem = async ({
 }) => {
   const workItemRaw = workItem.validate().toRawObject();
 
-  //
+  // should id be assignee id
   if (isReadyForService) {
     await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
