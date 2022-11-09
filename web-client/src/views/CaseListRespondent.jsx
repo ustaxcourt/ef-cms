@@ -24,7 +24,6 @@ export const CaseListRespondent = connect(
     caseType,
     clearOpenClosedCasesCurrentPageSequence,
     closedTab,
-    dashboardExternalHelper,
     externalUserCasesHelper,
     openTab,
     setCaseTypeToDisplaySequence,
@@ -161,9 +160,7 @@ export const CaseListRespondent = connect(
                   openTab,
                 )}
             </div>
-            <div className="grid-row display-block">
-              {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
-            </div>
+            <div className="grid-row display-block">{<CaseSearchBox />}</div>
           </div>
         </Mobile>
       </>
