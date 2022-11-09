@@ -146,7 +146,6 @@ export const CaseListPetitioner = connect(
             </div>
           </div>
         </NonMobile>
-
         <Mobile>
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
