@@ -6,12 +6,16 @@ const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 export const petitionerSearchesForUnassociatedSealedCase = cerebralTest => {
   return it('petitioner searches for unassociated sealed case', async () => {
-    cerebralTest.setState('caseDetail', {});
+    // cerebralTest.setState('caseDetail', {});
     const sealedSeedCaseDocketNumber = '105-20';
 
     await cerebralTest.runSequence('gotoDashboardSequence');
 
-    cerebralTest.setState('header.searchTerm', sealedSeedCaseDocketNumber);
+    // cerebralTest.setState('header.searchTerm', sealedSeedCaseDocketNumber);
+    await cerebralTest.runSequence('updateSearchTermSequence', {
+      searchTerm: sealedSeedCaseDocketNumber,
+    });
+
     await cerebralTest.runSequence('submitCaseSearchSequence', {});
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');

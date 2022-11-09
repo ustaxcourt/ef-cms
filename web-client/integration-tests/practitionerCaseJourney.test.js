@@ -188,6 +188,7 @@ describe('Practitioner requests access to case', () => {
   docketClerkQCsDocketEntry(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerSearchesForNonexistentCase(cerebralTest);
   it('Create test case #2', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
@@ -226,9 +227,6 @@ describe('Practitioner requests access to case', () => {
   docketClerkSealsCase(cerebralTest);
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true); // passing flag for isSealed
-
-  loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerSearchesForNonexistentCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner1@example.com');
   petitionerSearchesForUnassociatedSealedCase(cerebralTest);

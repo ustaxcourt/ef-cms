@@ -9,7 +9,7 @@ const dashboardExternalHelper = withAppContextDecorator(
   applicationContext,
 );
 
-describe('petitioner dashboard helper', () => {
+describe('dashboardExternalHelper', () => {
   it('shows "what to expect" but not case list when there are no open or closed cases', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,
@@ -22,7 +22,6 @@ describe('petitioner dashboard helper', () => {
     });
     expect(result.showCaseList).toEqual(false);
     expect(result.showWhatToExpect).toEqual(true);
-    expect(result.showCaseSearch).toEqual(true);
   });
 
   it('shows case list but not "what to expect" when there is an open or closed case case', () => {
@@ -37,66 +36,5 @@ describe('petitioner dashboard helper', () => {
     });
     expect(result.showCaseList).toEqual(true);
     expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(true);
-  });
-
-  it('shows case search if defined user has privatePractitioner role', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
-    });
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-      },
-    });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(true);
-  });
-
-  it('shows case search if defined user has irsPractitioner role', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-      },
-    });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(true);
-  });
-
-  it('shows case search if defined user has peititioner role', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-      },
-    });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(true);
-  });
-
-  it('hides case search if defined user does not have privatePractitioner, irsPractitioner role or petitioner role', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitionsClerk,
-    });
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-      },
-    });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(false);
   });
 });
