@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { CaseDeadline } from '../../entities/CaseDeadline';
 import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
@@ -118,6 +119,24 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       docketNumber: subjectCaseDocketNumber,
       status: true,
     });
+
+  const newCaseDeadline = new CaseDeadline(
+    {
+      associatedJudge: subjectCaseEntity.associatedJudge,
+      deadlineDate: form.date,
+      description: '',
+      docketNumber: subjectCaseDocketNumber,
+      sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
+    },
+    {
+      applicationContext,
+    },
+  );
+
+  await applicationContext.getPersistenceGateway().createCaseDeadline({
+    applicationContext,
+    caseDeadline: newCaseDeadline.validate().toRawObject(),
+  });
 
   let caseEntities = [];
   let serviceResults;
