@@ -1,14 +1,16 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
+import {
+  DOCKET_SECTION,
+  UNSERVABLE_EVENT_CODES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
-import { omit } from 'lodash';
-import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
+import { omit } from 'lodash';
 
 /**
  *

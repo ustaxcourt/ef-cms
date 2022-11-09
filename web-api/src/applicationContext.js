@@ -143,6 +143,9 @@ const {
   practitionerCaseList,
 } = require('../../shared/src/business/utilities/documentGenerators/practitionerCaseList');
 const {
+  printableWorkingCopySessionList,
+} = require('../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList');
+const {
   PrivatePractitioner,
 } = require('../../shared/src/business/entities/PrivatePractitioner');
 const {
@@ -217,6 +220,7 @@ const {
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
+
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
@@ -476,6 +480,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       order,
       pendingReport,
       practitionerCaseList,
+      printableWorkingCopySessionList,
       receiptOfFiling,
       standingPretrialOrder,
       standingPretrialOrderForSmallCase,

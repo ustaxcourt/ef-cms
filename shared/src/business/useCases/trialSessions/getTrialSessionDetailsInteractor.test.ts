@@ -1,11 +1,11 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getTrialSessionDetailsInteractor } from './getTrialSessionDetailsInteractor';
 import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { omit } from 'lodash';
 import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getTrialSessionDetailsInteractor } from './getTrialSessionDetailsInteractor';
+import { omit } from 'lodash';
 
 describe('Get trial session details', () => {
   const MOCK_TRIAL_SESSION = {

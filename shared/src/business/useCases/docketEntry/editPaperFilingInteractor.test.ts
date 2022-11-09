@@ -150,19 +150,22 @@ describe('editPaperFilingInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    const result = await editPaperFilingInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'My Document',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filers: [mockPrimaryId],
-        isFileAttached: true,
-      },
-      primaryDocumentFileId: mockDocketEntryId,
-    } as any);
+    const { paperServicePdfUrl } = await editPaperFilingInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filers: [mockPrimaryId],
+          isFileAttached: true,
+        },
+        primaryDocumentFileId: mockDocketEntryId,
+      } as any,
+    );
 
-    expect(result.paperServicePdfUrl).toEqual(mockPdfUrl);
+    expect(paperServicePdfUrl).toEqual(mockPdfUrl);
   });
 
   it('adds documents and workitems but does not try to delete workitem because they all have files attached', async () => {

@@ -1,10 +1,10 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import {
-  isStandaloneRemoteSession,
   TrialSession,
+  isStandaloneRemoteSession,
 } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 

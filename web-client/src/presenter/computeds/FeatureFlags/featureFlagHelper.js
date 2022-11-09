@@ -10,9 +10,9 @@ export const featureFlagHelper = (get, applicationContext) => {
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key],
   );
 
-  const consolidatedCasesPropagateDocketEntries = get(
+  const areMultiDocketablePaperFilingsEnabled = get(
     state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key
+      ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key
     ],
   );
 
@@ -41,7 +41,7 @@ export const featureFlagHelper = (get, applicationContext) => {
   }
 
   return {
-    consolidatedCasesPropagateDocketEntries,
+    areMultiDocketablePaperFilingsEnabled,
     isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
     isPdfJsEnabled,

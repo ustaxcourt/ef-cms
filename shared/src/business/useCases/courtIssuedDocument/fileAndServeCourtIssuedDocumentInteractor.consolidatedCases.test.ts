@@ -1,22 +1,20 @@
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { Case } from '../../entities/cases/Case';
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
 import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { Case } from '../../entities/cases/Case';
-import { cloneDeep } from 'lodash';
-import { docketClerkUser } from '../../../test/mockUsers';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('consolidated cases', () => {
@@ -77,11 +75,6 @@ describe('consolidated cases', () => {
         Body: testPdfDoc,
       }),
     });
-
-    // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(Promise.resolve(true));
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
@@ -164,7 +157,7 @@ describe('consolidated cases', () => {
       applicationContext: expect.anything(),
       clientConnectionId,
       message: expect.objectContaining({
-        action: 'file_and_serve_court_issued_document_complete',
+        action: 'serve_document_complete',
         alertSuccess: {
           message: 'Document served to selected cases in group. ',
           overwritable: false,
@@ -303,52 +296,6 @@ describe('consolidated cases', () => {
     );
   });
 
-  it('should only close and serve the lead case when serving ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    const customLeadCaseDocketEntries = cloneDeep(leadCaseDocketEntries);
-    customLeadCaseDocketEntries[0].eventCode =
-      ENTERED_AND_SERVED_EVENT_CODES[0];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: customLeadCaseDocketEntries,
-        };
-      })
-      .mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: customLeadCaseDocketEntries,
-        };
-      });
-
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: customLeadCaseDocketEntries[0].docketEntryId,
-      docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      form: customLeadCaseDocketEntries[0],
-      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalledTimes(1);
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber);
-
-    expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
-    expect(addDocketEntrySpy).toHaveBeenCalledTimes(0);
-  });
-
   it('should create a work item and add it to the outbox for each case', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
@@ -405,33 +352,5 @@ describe('consolidated cases', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalledTimes(1);
-  });
-
-  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-  it('should only process the subject case when the feature flag is disabled and there are other consolidated cases', async () => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValueOnce(
-        Promise.resolve(false),
-      );
-
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-      docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      form: leadCaseDocketEntries[0],
-      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(1);
-
-    expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
-    expect(addDocketEntrySpy).toHaveBeenCalledTimes(0);
   });
 });
