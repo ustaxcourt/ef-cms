@@ -22,7 +22,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-export const getNeedsNewCoversheet = ({
+export const needsNewCoversheet = ({
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -86,12 +86,14 @@ export const completeDocketEntryQCInteractor = async (
     record => record.docketEntryId === docketEntryId,
   );
 
-  const currentDocketEntry = new DocketEntry(
-    caseEntity.getDocketEntryById({
-      docketEntryId,
-    }),
-    { applicationContext, petitioners: caseToUpdate.petitioners },
-  );
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
+  const currentDocketEntryEntity = new DocketEntry(currentDocketEntry, {
+    applicationContext,
+    petitioners: caseToUpdate.petitioners,
+  });
 
   if (currentDocketEntry.workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
@@ -127,7 +129,7 @@ export const completeDocketEntryQCInteractor = async (
 
   const updatedDocketEntry = new DocketEntry(
     {
-      ...currentDocketEntry.toRawObject(),
+      ...currentDocketEntry,
       ...editableFields,
       documentTitle: editableFields.documentTitle,
       editState: '{}',
@@ -148,8 +150,8 @@ export const completeDocketEntryQCInteractor = async (
   let currentDocumentTitle =
     currentDocketEntry.getDocumentTitleForDocketRecord();
 
-  const needsNewCoversheet = getNeedsNewCoversheet({
-    currentDocketEntry,
+  const isNewCoverSheetNeeded = needsNewCoversheet({
+    currentDocketEntry: currentDocketEntryEntity,
     updatedDocketEntry,
   });
 
@@ -343,7 +345,7 @@ export const completeDocketEntryQCInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  if (needsNewCoversheet) {
+  if (isNewCoverSheetNeeded) {
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {

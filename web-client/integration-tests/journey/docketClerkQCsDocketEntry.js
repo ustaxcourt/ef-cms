@@ -16,7 +16,6 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
     });
 
     await cerebralTest.runSequence('completeDocketEntryQCSequence');
-
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
@@ -25,6 +24,7 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
+    console.log('selectedDocument', selectedDocument);
 
     expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
   });
