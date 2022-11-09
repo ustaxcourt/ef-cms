@@ -120,23 +120,26 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  const newCaseDeadline = new CaseDeadline(
-    {
-      associatedJudge: subjectCaseEntity.associatedJudge,
-      deadlineDate: form.date,
-      description: 'Filing Fee Due',
-      docketNumber: subjectCaseDocketNumber,
-      sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
-    },
-    {
-      applicationContext,
-    },
-  );
+  //do constant thingz
+  if (form.eventCode === 'OF') {
+    const newCaseDeadline = new CaseDeadline(
+      {
+        associatedJudge: subjectCaseEntity.associatedJudge,
+        deadlineDate: form.date,
+        description: 'Filing Fee Due',
+        docketNumber: subjectCaseDocketNumber,
+        sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
+      },
+      {
+        applicationContext,
+      },
+    );
 
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: newCaseDeadline.validate().toRawObject(),
-  });
+    await applicationContext.getPersistenceGateway().createCaseDeadline({
+      applicationContext,
+      caseDeadline: newCaseDeadline.validate().toRawObject(),
+    });
+  }
 
   let caseEntities = [];
   let serviceResults;
