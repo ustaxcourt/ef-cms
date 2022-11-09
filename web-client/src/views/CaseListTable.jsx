@@ -2,26 +2,29 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
 
-export const CaseListPractitioner = connect(
+export const CaseListTable = connect(
   {
     caseType: state.openClosedCases.caseType,
     clearOpenClosedCasesCurrentPageSequence:
       sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
+    dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
-  function CaseListPractitioner({
+  function CaseListTable({
     caseType,
     clearOpenClosedCasesCurrentPageSequence,
     closedTab,
+    dashboardExternalHelper,
     externalUserCasesHelper,
     openTab,
     setCaseTypeToDisplaySequence,
@@ -34,7 +37,25 @@ export const CaseListPractitioner = connect(
       };
     }, []);
 
-    const renderTable = ({
+    const renderStartButton = () => (
+      <Button
+        aria-describedby=""
+        className="margin-top-1 margin-right-0"
+        href={
+          dashboardExternalHelper.showFileACase
+            ? '/file-a-petition/step-1'
+            : '/before-filing-a-petition'
+        }
+        icon="file"
+        id="file-a-petition"
+      >
+        {dashboardExternalHelper.showFileACase
+          ? 'File a Case'
+          : 'Create a Case'}
+      </Button>
+    );
+
+    const renderCaseListTable = ({
       cases,
       showLoadMore,
       showMoreResultsSequence,
@@ -44,59 +65,52 @@ export const CaseListPractitioner = connect(
         <>
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases?.length > 0 && (
-            <table
-              className="usa-table responsive-table dashboard"
-              id="case-list"
-            >
-              <thead>
-                <tr>
-                  <th>
-                    <span className="usa-sr-only">Lead Case Indicator</span>
-                  </th>
-                  <th>Docket number</th>
-                  <th>Case title</th>
-                  <th>Date filed</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cases.map(item => (
-                  <CaseListRowExternal
-                    onlyLinkIfRequestedUserAssociated
-                    formattedCase={item}
-                    key={item.docketNumber}
-                  />
-                ))}
-              </tbody>
-            </table>
-          )}
-          {showLoadMore && (
-            <Button
-              secondary
-              className="margin-bottom-20"
-              onClick={() => {
-                showMoreResultsSequence();
-              }}
-            >
-              Load More
-            </Button>
+            <>
+              <table
+                className="usa-table responsive-table dashboard"
+                id="case-list"
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      <span className="usa-sr-only">Lead Case Indicator</span>
+                    </th>
+                    <th>Docket number</th>
+                    <th>Case title</th>
+                    <th>Date filed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cases.map(item => (
+                    <CaseListRowExternal
+                      onlyLinkIfRequestedUserAssociated
+                      formattedCase={item}
+                      key={item.docketNumber}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              {showLoadMore && (
+                <Button
+                  secondary
+                  className="margin-bottom-20"
+                  margin-direction="bottom"
+                  onClick={() => {
+                    showMoreResultsSequence();
+                  }}
+                >
+                  Load More
+                </Button>
+              )}
+            </>
           )}
         </>
       );
     };
 
-    const renderStartButton = () => (
-      <Button
-        className="margin-top-1 margin-right-0"
-        href="/file-a-petition/step-1"
-        icon="file"
-        id="file-a-petition"
-      >
-        File a Case
-      </Button>
-    );
-
     return (
       <>
+        <WarningNotification />
         <NonMobile>
           <div className="grid-container padding-x-0">
             <div className="grid-row">
@@ -111,7 +125,7 @@ export const CaseListPractitioner = connect(
                     tabName={openTab}
                     title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
                   >
-                    {renderTable({
+                    {renderCaseListTable({
                       cases: externalUserCasesHelper.openCaseResults,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreOpenCases,
@@ -124,12 +138,12 @@ export const CaseListPractitioner = connect(
                     tabName={closedTab}
                     title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
                   >
-                    {renderTable({
+                    {renderCaseListTable({
                       cases: externalUserCasesHelper.closedCaseResults,
                       showLoadMore:
-                        externalUserCasesHelper.showLoadMoreOpenCases,
+                        externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreResultsSequence: showMoreClosedCasesSequence,
-                      tabName: openTab,
+                      tabName: closedTab,
                     })}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
@@ -162,14 +176,14 @@ export const CaseListPractitioner = connect(
             </div>
             <div className="grid-row margin-top-1">
               {caseType === closedTab &&
-                renderTable({
+                renderCaseListTable({
                   cases: externalUserCasesHelper.closedCaseResults,
-                  showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
+                  showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
                   showMoreResultsSequence: showMoreClosedCasesSequence,
-                  tabName: openTab,
+                  tabName: closedTab,
                 })}
               {caseType === openTab &&
-                renderTable({
+                renderCaseListTable({
                   cases: externalUserCasesHelper.openCaseResults,
                   showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
                   showMoreResultsSequence: showMoreOpenCasesSequence,
