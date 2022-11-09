@@ -30,6 +30,9 @@ aws secretsmanager put-secret-value \
   --secret-id "${ENV}_deploy" \
   --secret-string "$new_secret"
 
-source ./shared/admin-tools/user/setup-test-users.sh $ENV
+if [ $ENV != 'prod' ]
+then
+  source ./shared/admin-tools/user/setup-test-users.sh $ENV
+fi
 
 echo "✅ DEFAULT_ACCOUNT_PASSWORD updated for $ENV."
