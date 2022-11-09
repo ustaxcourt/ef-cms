@@ -117,7 +117,7 @@ export const addPaperFilingInteractor = async (
       if (filedByFromLeadCase) {
         docketEntryEntity.filedBy = filedByFromLeadCase;
       }
-
+      console.log('-----------', user.section);
       const workItem = new WorkItem(
         {
           assigneeId: user.userId,
@@ -237,6 +237,7 @@ const saveWorkItem = async ({
 }) => {
   const workItemRaw = workItem.validate().toRawObject();
 
+  //
   if (isReadyForService) {
     await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
