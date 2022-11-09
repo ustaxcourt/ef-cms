@@ -7,11 +7,11 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
@@ -151,20 +151,6 @@ export const completeDocketEntryQCInteractor = async (
     updatedDocketEntry,
   });
 
-  console.log('isNewCoverSheetNeeded', isNewCoverSheetNeeded);
-
-  const updatedCertOfServiceDocumentTitle =
-    updatedDocketEntry.getDocumentTitleForCertOfService();
-  console.log(
-    'updatedCertOfServiceDocumentTitle',
-    updatedCertOfServiceDocumentTitle,
-  );
-  const currentCertOfServiceDocumentTitle =
-    currentDocketEntryEntity.getDocumentTitleForCertOfService();
-  console.log(
-    'currentCertOfServiceDocumentTitle',
-    currentCertOfServiceDocumentTitle,
-  );
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
     updatedDocumentTitle !== currentDocumentTitle;
@@ -184,10 +170,8 @@ export const completeDocketEntryQCInteractor = async (
       before: currentDocketEntry.filedBy,
     },
     filingsAndProceedings: {
-      // after: updatedDocumentTitle,
-      // before: currentDocumentTitle,
-      after: updatedCertOfServiceDocumentTitle,
-      before: currentCertOfServiceDocumentTitle,
+      after: updatedDocumentTitle,
+      before: currentDocumentTitle,
     },
   };
 
