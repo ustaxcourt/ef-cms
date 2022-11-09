@@ -260,7 +260,7 @@ describe('addPaperFilingInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('add documents and workItem to inbox when NOT saving for later if a document is attached', async () => {
+  it('should add workItem to the user outbox when NOT saving for later if a document is attached', async () => {
     await addPaperFilingInteractor(applicationContext, {
       clientConnectionId: undefined,
       consolidatedGroupDocketNumbers: [mockCase.docketNumber],
@@ -278,16 +278,11 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+        .calls[0][0].userId,
+    ).toEqual(docketClerkUser.userId);
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toHaveBeenCalled();
   });
 
