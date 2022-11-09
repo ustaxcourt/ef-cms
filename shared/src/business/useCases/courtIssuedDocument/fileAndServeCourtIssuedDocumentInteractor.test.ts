@@ -203,7 +203,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it.only('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
     const mockOrderFilingFeeForm = {
       date: '2030-01-20T00:00:00.000Z',
       documentType: 'Order for Filing Fee',
@@ -222,6 +222,23 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().createCaseDeadline,
     ).toHaveBeenCalled();
+  });
+
+  it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: {
+        documentType: 'Order',
+        eventCode: 'O',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
