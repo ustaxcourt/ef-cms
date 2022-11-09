@@ -1,4 +1,4 @@
-import { camelCase, partition, pickBy } from 'lodash';
+import { camelCase, omitBy, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -29,16 +29,16 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
         calendaredCase.status !== STATUS_TYPES.closed &&
         calendaredCase.removedFromTrial !== true,
     )
-    .filter(
-      calendaredCase =>
-        (trueFilters.includes('statusUnassigned') &&
-          (!caseMetadata[calendaredCase.docketNumber] ||
-            !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
-        (caseMetadata[calendaredCase.docketNumber] &&
-          trueFilters.includes(
-            caseMetadata[calendaredCase.docketNumber].trialStatus,
-          )),
-    )
+    // .filter(
+    //   calendaredCase =>
+    //     (trueFilters.includes('statusUnassigned') &&
+    //       (!caseMetadata[calendaredCase.docketNumber] ||
+    //         !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
+    //     (caseMetadata[calendaredCase.docketNumber] &&
+    //       trueFilters.includes(
+    //         caseMetadata[calendaredCase.docketNumber].trialStatus,
+    //       )),
+    // )
     .map(caseItem =>
       applicationContext
         .getUtilities()
@@ -113,11 +113,14 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     casesAssociatedWithTrialSession.reverse();
   }
 
-  const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
-    key: camelCase(value),
-    value,
-  }));
+  // const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
+  //   key: camelCase(value),
+  //   value,
+  // }));
 
+  const trialStatusOptions = omitBy(TRIAL_STATUS_TYPES, statusType => {
+    // if (get(state.allowDeprecated)) return statusType.deprecated === true;
+  });
   return {
     casesShownCount: formattedCases.length,
     formattedCases: casesAssociatedWithTrialSession,

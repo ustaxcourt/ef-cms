@@ -107,14 +107,16 @@ export const WorkingCopySessionList = connect(
               <th colSpan="2">Trial Status</th>
             </tr>
           </thead>
-          {trialSessionWorkingCopyHelper.formattedCases.map(item => {
-            return (
-              <CaseListRowTrialSession
-                formattedCase={item}
-                key={item.docketNumber}
-              />
-            );
-          })}
+          <tbody>
+            {trialSessionWorkingCopyHelper.formattedCases.map(item => {
+              return (
+                <CaseListRowTrialSession
+                  formattedCase={item}
+                  key={item.docketNumber}
+                />
+              );
+            })}
+          </tbody>
         </table>
         {casesShownCount === 0 && (
           <p>Please select a trial status to show cases.</p>
