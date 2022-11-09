@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
-export const petitionerSearchesForNonexistentCase = cerebralTest => {
+export const petitionerSearchesForUnassociatedSealedCase = cerebralTest => {
   return it('petitioner searches for unassociated sealed case', async () => {
     cerebralTest.setState('caseDetail', {});
     const sealedSeedCaseDocketNumber = '105-20';
