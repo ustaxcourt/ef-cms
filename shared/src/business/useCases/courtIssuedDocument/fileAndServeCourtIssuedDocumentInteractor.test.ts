@@ -203,6 +203,22 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
+  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+    const mockOrderFilingFee = {
+      eventCode: 'OF',
+    };
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: mockOrderFilingFee,
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    // expect(applicationContext.getUseCaseHelpers().).toBeDefined();
+  });
+
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
