@@ -15,10 +15,10 @@ fi
 content=$(aws iam list-access-keys --user-name CircleCI)
 for row in $(echo "${content}" | jq -r '.AccessKeyMetadata[] | @base64'); do
     _jq() {
-     echo ${row} | base64 --decode | jq -r ${1}
+      echo ${row} | base64 --decode | jq -r ${1}
     }
-   old_access_key_id=$(_jq '.AccessKeyId')
-   aws iam delete-access-key --access-key-id $old_access_key_id --user-name CircleCI
+    old_access_key_id=$(_jq '.AccessKeyId')
+    aws iam delete-access-key --access-key-id $old_access_key_id --user-name CircleCI
 done
 
 # create new access key
