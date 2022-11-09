@@ -1,4 +1,4 @@
-export const practitionerSearchesForNonexistentCase = cerebralTest => {
+export const petitionerSearchesForNonexistentCase = cerebralTest => {
   return it('Practitioner searches for nonexistent case', async () => {
     await cerebralTest.runSequence('updateSearchTermSequence', {
       searchTerm: '999-99',
