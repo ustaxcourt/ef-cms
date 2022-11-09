@@ -15,7 +15,7 @@ import {
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -205,7 +205,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
     const mockOrderFilingFee = {
+      documentType: 'Order for Filing Fee',
       eventCode: 'OF',
+      judge: judgeUser.name,
     };
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
@@ -216,7 +218,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
-    // expect(applicationContext.getUseCaseHelpers().).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).toHaveBeenCalled();
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
