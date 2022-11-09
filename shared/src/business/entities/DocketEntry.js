@@ -13,6 +13,8 @@ const {
 const {
   createISODateAtStartOfDayEST,
   createISODateString,
+  formatDateString,
+  FORMATS,
 } = require('../utilities/DateHandler');
 const {
   DOCKET_ENTRY_VALIDATION_RULES,
@@ -467,14 +469,26 @@ const getServedPartiesCode = servedParties => {
  *
  * @returns {string} the calculated document title
  */
+DocketEntry.prototype.getDocumentTitleForCertOfService = function () {
+  const additionalInfo = this.additionalInfo || '';
+  const additionalInfo2 = this.additionalInfo2 || '';
+  const certOfServiceDate =
+    formatDateString(this.certificateOfServiceDate, FORMATS.MMDDYY) || '';
+  return `${this.documentTitle} ${additionalInfo} (C/S ${certOfServiceDate}) ${additionalInfo2}`;
+};
+
+/**
+ * Gets the base document title combined with any additional info provided.
+ *
+ * @returns {string} the calculated document title
+ */
 DocketEntry.prototype.getDocumentTitleForDocketRecord = function () {
   const additionalInfo = this.additionalInfo2
     ? `${this.additionalInfo} ${this.additionalInfo2}`
     : this.additionalInfo;
-  if (additionalInfo) {
-    return `${this.documentTitle} ${additionalInfo}`;
-  }
-  return this.documentTitle;
+
+  return `${this.documentTitle} ${additionalInfo}`;
+  // account for additionalInfo not been available as well. Render an empty string
 };
 
 /**

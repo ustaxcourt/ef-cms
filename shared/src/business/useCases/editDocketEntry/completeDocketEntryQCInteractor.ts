@@ -7,7 +7,7 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -86,16 +86,14 @@ export const completeDocketEntryQCInteractor = async (
     record => record.docketEntryId === docketEntryId,
   );
 
-  const currentDocketEntry = new DocketEntry(
-    caseEntity.getDocketEntryById({
-      docketEntryId,
-    }),
-    { applicationContext, petitioners: caseToUpdate.petitioners },
-  );
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
 
-  if (currentDocketEntry.workItem.isCompleted()) {
-    throw new InvalidRequest('The work item was already completed');
-  }
+  const currentDocketEntryEntity = new DocketEntry(currentDocketEntry, {
+    applicationContext,
+    petitioners: caseToUpdate.petitioners,
+  });
 
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
@@ -127,7 +125,7 @@ export const completeDocketEntryQCInteractor = async (
 
   const updatedDocketEntry = new DocketEntry(
     {
-      ...currentDocketEntry.toRawObject(),
+      ...currentDocketEntry,
       ...editableFields,
       documentTitle: editableFields.documentTitle,
       editState: '{}',
@@ -149,10 +147,24 @@ export const completeDocketEntryQCInteractor = async (
     currentDocketEntry.getDocumentTitleForDocketRecord();
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
-    currentDocketEntry,
+    currentDocketEntry: currentDocketEntryEntity,
     updatedDocketEntry,
   });
 
+  console.log('isNewCoverSheetNeeded', isNewCoverSheetNeeded);
+
+  const updatedCertOfServiceDocumentTitle =
+    updatedDocketEntry.getDocumentTitleForCertOfService();
+  console.log(
+    'updatedCertOfServiceDocumentTitle',
+    updatedCertOfServiceDocumentTitle,
+  );
+  const currentCertOfServiceDocumentTitle =
+    currentDocketEntryEntity.getDocumentTitleForCertOfService();
+  console.log(
+    'currentCertOfServiceDocumentTitle',
+    currentCertOfServiceDocumentTitle,
+  );
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
     updatedDocumentTitle !== currentDocumentTitle;
@@ -172,8 +184,10 @@ export const completeDocketEntryQCInteractor = async (
       before: currentDocketEntry.filedBy,
     },
     filingsAndProceedings: {
-      after: updatedDocumentTitle,
-      before: currentDocumentTitle,
+      // after: updatedDocumentTitle,
+      // before: currentDocumentTitle,
+      after: updatedCertOfServiceDocumentTitle,
+      before: currentCertOfServiceDocumentTitle,
     },
   };
 
