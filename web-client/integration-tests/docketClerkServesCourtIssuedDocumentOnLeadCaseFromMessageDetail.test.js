@@ -1,4 +1,7 @@
-import { DOCKET_SECTION } from '../../shared/src/business/entities/EntityConstants';
+import {
+  DOCKET_SECTION,
+  DOCUMENT_SERVED_MESSAGES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { confirmInitiateCourtIssuedFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
@@ -228,7 +231,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('alertSuccess')).toEqual({
-      message: 'Document served. ',
+      message: DOCUMENT_SERVED_MESSAGES.GENERIC,
       overwritable: false,
     });
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
