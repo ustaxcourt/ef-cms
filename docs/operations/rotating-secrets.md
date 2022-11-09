@@ -71,12 +71,12 @@ Any environment with production like data will have a `USTC_ADMIN_USER` and `UST
 To help automate that process, we have another script that rotates the `USTC_ADMIN_PASS`. You need to specify the new password as a command line argument:
 
 ```bash
-./shared/admin-tools/user/rotate-ustc-admin-password.sh "new-passw0rd-here"
+node ./shared/admin-tools/user/rotate-ustc-admin-password.js "new-passw0rd-here"
 ```
 
 This updates the password in Cognito, and then it updates the Secrets value with that new password so that subsequent deploys will make use of the new value.
 
-NOTE: The password cannot contain a `?` or `!`.
+NOTE: You'll need to escape any `?` or `!` in the password.
 
 ## Environment Test Users
 
