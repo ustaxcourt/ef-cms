@@ -1224,28 +1224,68 @@ const SECTIONS = sortBy([
   TRIAL_CLERKS_SECTION,
 ]);
 
-const TRIAL_STATUS_TYPES_LEGACY = [
-  'Set for Trial',
-  'Dismissed',
-  'Continued',
-  'Rule 122',
-  'A Basis Reached',
-  'Settled',
-  'Recall',
-  'Taken Under Advisement',
-];
+const TRIAL_STATUS_TYPES = {
+  setForTrial: {
+    label: 'Set for Trial',
+    deprecated: true,
+  },
+  dismissed: {
+    label: 'Dismissed',
+    deprecated: true,
+  },
+  settled: {
+    label: 'Settled',
+    deprecated: true,
+  },
+  probableSettlement: {
+    label: 'Probable Settlement',
+    deprecated: false,
+  },
+  probableTrial: {
+    label: 'Probable Trial',
+    deprecated: false,
+  },
+  definiteTrial: {
+    label: 'Definite Trial',
+    deprecated: false,
+  },
+  rule122: {
+    label: 'Rule 122',
+    deprecated: false,
+  },
+  basisReached: {
+    label: 'Basis Reached',
+    deprecated: false,
+  },
+  recall: {
+    label: 'Recall',
+    deprecated: false,
+  },
+  motionToDismiss: {
+    label: 'Motion to Dismiss',
+    deprecated: false,
+  },
+  submittedCAV: {
+    // legacyTitle:
+    label: 'Submitted/CAV',
+    deprecated: false,
+  },
+  continued: {
+    label: 'Continued',
+    deprecated: false,
+  },
+};
 
-const TRIAL_STATUS_TYPES = [
-  'Probable Settlement',
-  'Probable Trial',
-  'Definite Trial',
-  'Rule 122',
-  'Basis Reached',
-  'Recall',
-  'Motion to Dismiss',
-  'Submitted/CAV',
-  'Continued',
-];
+// const TRIAL_STATUS_TYPES_LEGACY = [
+//   'Set for Trial',
+//   'Dismissed',
+//   'Continued',
+//   'Rule 122',
+//   'A Basis Reached',
+//   'Settled',
+//   'Recall',
+//   'Taken Under Advisement',
+// ];
 
 const SCAN_MODES = {
   DUPLEX: 'duplex',
@@ -1535,7 +1575,7 @@ module.exports = deepFreeze({
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
   TRIAL_STATUS_TYPES,
-  TRIAL_STATUS_TYPES_LEGACY,
+  // TRIAL_STATUS_TYPES_LEGACY,
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
