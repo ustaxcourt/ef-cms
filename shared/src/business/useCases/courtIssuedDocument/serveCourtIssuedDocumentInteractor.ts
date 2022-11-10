@@ -3,6 +3,7 @@ import { CaseDeadline } from '../../entities/CaseDeadline';
 import {
   DOCKET_SECTION,
   FILING_FEE_DEADLINE_DESCRIPTION,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
@@ -134,23 +135,28 @@ export const serveCourtIssuedDocumentInteractor = async (
       });
   }
 
-  const newCaseDeadline = new CaseDeadline(
-    {
-      associatedJudge: subjectCaseEntity.associatedJudge,
-      deadlineDate: courtIssuedDocument.date,
-      description: FILING_FEE_DEADLINE_DESCRIPTION,
-      docketNumber: subjectCaseDocketNumber,
-      sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
-    },
-    {
-      applicationContext,
-    },
-  );
+  if (
+    courtIssuedDocument.eventCode ===
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode
+  ) {
+    const newCaseDeadline = new CaseDeadline(
+      {
+        associatedJudge: subjectCaseEntity.associatedJudge,
+        deadlineDate: courtIssuedDocument.date,
+        description: FILING_FEE_DEADLINE_DESCRIPTION,
+        docketNumber: subjectCaseDocketNumber,
+        sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
+      },
+      {
+        applicationContext,
+      },
+    );
 
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: newCaseDeadline.validate().toRawObject(),
-  });
+    await applicationContext.getPersistenceGateway().createCaseDeadline({
+      applicationContext,
+      caseDeadline: newCaseDeadline.validate().toRawObject(),
+    });
+  }
 
   courtIssuedDocument.numberOfPages = await applicationContext
     .getUseCaseHelpers()
