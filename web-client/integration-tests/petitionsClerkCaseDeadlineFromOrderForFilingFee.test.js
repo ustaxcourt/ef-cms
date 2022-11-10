@@ -4,7 +4,7 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { caseDetailHelper as caseDetailHelperComputed } from '../src/presenter/computeds/caseDetailHelper';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest, waitForCondition } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { runCompute } from 'cerebral/test';
@@ -31,6 +31,7 @@ describe('Petitions Clerk something', () => {
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
     paymentStatus: PAYMENT_STATUS.UNPAID,
   });
+
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     hasIrsNoticeFormatted: 'No',
     ordersAndNoticesInDraft: [
@@ -43,7 +44,7 @@ describe('Petitions Clerk something', () => {
     shouldShowIrsNoticeDate: false,
   });
 
-  it('petitions clerk serves petition', async () => {
+  it('petitions clerk serves paper petition', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -78,6 +79,7 @@ describe('Petitions Clerk something', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
+
   it('should view the draft order and sign it', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -110,20 +112,11 @@ describe('Petitions Clerk something', () => {
     await cerebralTest.runSequence('saveDocumentSigningSequence');
   });
 
-  it('petitions clerk adds a docket entry for order for filing fee and serves it', async () => {
+  it('docket clerk adds a docket entry for order for filing fee and serves it', async () => {
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: cerebralTest.draftDocketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
-    const mockDeadlineDate = '2019-03-01T21:40:46.415Z';
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'date',
-        value: mockDeadlineDate,
-      },
-    );
 
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
@@ -149,29 +142,35 @@ describe('Petitions Clerk something', () => {
       },
     );
 
-    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence(
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
+    );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'PrintPaperService',
+    });
+
+    expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to the docket record.',
+      'Document served. ',
     );
   });
 
-  it('petitions clerk verifies there is a new case deadline with date from previous step and correct description', async () => {
+  it('docket clerk verifies there is a new case deadline with date from previous step and correct description', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
-
-    console.log('***cerebralTest.docketNumber', cerebralTest.docketNumber);
 
     const helper = runCompute(caseDetailHelper, {
       state: cerebralTest.getState(),
     });
 
-    console.log('helper.caseDeadlines', helper.caseDeadlines);
-
-    expect(helper.caseDeadlines[0].date).toEqual(mockDeadlineDate);
+    expect(helper.caseDeadlines[0].deadlineDate).toEqual(
+      '2050-02-02T05:00:00.000Z',
+    );
     expect(helper.caseDeadlines[0].description).toEqual(
       FILING_FEE_DEADLINE_DESCRIPTION,
     );
