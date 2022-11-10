@@ -43,8 +43,41 @@ describe('Petitions Clerk something', () => {
 
   // petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
+  it('petitions clerk serves petition', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
 
+    const petitionDocketEntryId = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(d => d.eventCode === 'P').docketEntryId;
+
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
+
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
+
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PrintPaperPetitionReceipt',
+    );
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('should view the draft order and sign it', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -59,8 +92,11 @@ describe('Petitions Clerk something', () => {
 
     expect(draftOrderForFilingFeeDocketEntry).toBeTruthy();
 
+    cerebralTest.draftDocketEntryId =
+      draftOrderForFilingFeeDocketEntry.docketEntryId;
+
     await cerebralTest.runSequence('gotoSignOrderSequence', {
-      docketEntryId: draftOrderForFilingFeeDocketEntry.docketEntryId,
+      docketEntryId: cerebralTest.draftDocketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
@@ -74,9 +110,29 @@ describe('Petitions Clerk something', () => {
     await cerebralTest.runSequence('saveDocumentSigningSequence');
   });
 
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  it('petitions clerk adds a docket entry for order for filing fee and serves it', async () => {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: cerebralTest.draftDocketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-  //create a new paper case with filing fee not paid
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'date',
+        value: '',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'O',
+      },
+    );
+
+  }); //create a new paper case with filing fee not paid
   //serve the case
   //verify OF in drafts
   //sign OF
