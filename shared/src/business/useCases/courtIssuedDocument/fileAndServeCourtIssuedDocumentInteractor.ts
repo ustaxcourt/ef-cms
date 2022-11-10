@@ -1,4 +1,10 @@
 import { Case } from '../../entities/cases/Case';
+import { CaseDeadline } from '../../entities/CaseDeadline';
+import { DocketEntry } from '../../entities/DocketEntry';
+import {
+  FILING_FEE_DEADLINE_DESCRIPTION,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} from '../../entities/EntityConstants';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -8,7 +14,6 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
 const { omit } = require('lodash');
 
 /**
@@ -112,6 +117,29 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       docketNumber: subjectCaseDocketNumber,
       status: true,
     });
+
+  if (
+    form.eventCode ===
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode
+  ) {
+    const newCaseDeadline = new CaseDeadline(
+      {
+        associatedJudge: subjectCaseEntity.associatedJudge,
+        deadlineDate: form.date,
+        description: FILING_FEE_DEADLINE_DESCRIPTION,
+        docketNumber: subjectCaseDocketNumber,
+        sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await applicationContext.getPersistenceGateway().createCaseDeadline({
+      applicationContext,
+      caseDeadline: newCaseDeadline.validate().toRawObject(),
+    });
+  }
 
   let caseEntities = [];
   let serviceResults;

@@ -1,3 +1,4 @@
+import { FILING_FEE_DEADLINE_DESCRIPTION } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
@@ -5,7 +6,7 @@ import {
   applicationContext,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
@@ -299,5 +300,61 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
       status: false,
     });
+  });
+
+  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+    const mockOrderFilingFee = {
+      date: '2030-01-20T00:00:00.000Z',
+      docketNumber: MOCK_CASE.docketNumber,
+      documentType: 'Order for Filing Fee',
+      eventCode: 'OF',
+      signedAt: '2030-01-20T00:00:00.000Z',
+      signedByUserId: judgeUser.userId,
+      signedJudgeName: judgeUser.name,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        associatedJudge: judgeUser.name,
+        docketEntries: [
+          {
+            ...mockOrderFilingFee,
+            docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
+          },
+        ],
+      });
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
+      docketNumbers: [MOCK_CASE.docketNumber],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline.mock
+        .calls[0][0].caseDeadline,
+    ).toMatchObject({
+      associatedJudge: judgeUser.name,
+      deadlineDate: mockOrderFilingFee.date,
+      description: FILING_FEE_DEADLINE_DESCRIPTION,
+      docketNumber: MOCK_CASE.docketNumber,
+      sortableDocketNumber: 18000101,
+    });
+  });
+
+  it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
+      docketNumbers: [MOCK_CASE.docketNumber],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
   });
 });
