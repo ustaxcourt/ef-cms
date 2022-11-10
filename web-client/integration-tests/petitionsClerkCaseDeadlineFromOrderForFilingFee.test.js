@@ -1,17 +1,19 @@
 import {
+  FILING_FEE_DEADLINE_DESCRIPTION,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { caseDetailHelper as caseDetailHelperComputed } from '../src/presenter/computeds/caseDetailHelper';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Petitions Clerk something', () => {
   const cerebralTest = setupTest();
   cerebralTest.draftOrders = [];
+  const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
   beforeAll(() => {
     jest.setTimeout(40000);
@@ -40,8 +42,6 @@ describe('Petitions Clerk something', () => {
     receivedAtFormatted: '01/01/01',
     shouldShowIrsNoticeDate: false,
   });
-
-  // petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   it('petitions clerk serves petition', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -115,34 +115,69 @@ describe('Petitions Clerk something', () => {
       docketEntryId: cerebralTest.draftDocketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
+    const mockDeadlineDate = '2019-03-01T21:40:46.415Z';
 
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'date',
-        value: '2019-03-01T21:40:46.415Z',
+        value: mockDeadlineDate,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'month',
+        value: '2',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'day',
+        value: '2',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'year',
+        value: '2050',
       },
     );
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to the docket record.',
     );
-    // await cerebralTest.runSequence(
-    //   'updateCourtIssuedDocketEntryFormValueSequence',
-    //   {
-    //     key: 'description',
-    //     value: 'OF',
-    //   },
-    // );
   });
 
   it('petitions clerk verifies there is a new case deadline with date from previous step and correct description', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
-  }); //create a new paper case with filing fee not paid
+
+    console.log('***cerebralTest.docketNumber', cerebralTest.docketNumber);
+
+    const helper = runCompute(caseDetailHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    console.log('helper.caseDeadlines', helper.caseDeadlines);
+
+    expect(helper.caseDeadlines[0].date).toEqual(mockDeadlineDate);
+    expect(helper.caseDeadlines[0].description).toEqual(
+      FILING_FEE_DEADLINE_DESCRIPTION,
+    );
+  });
+
+  //create a new paper case with filing fee not paid
   //serve the case
   //verify OF in drafts
   //sign OF
