@@ -9,7 +9,7 @@ const reviewSavedPetitionHelper = withAppContextDecorator(
 
 export const petitionsClerkReviewsPaperCaseBeforeServing = (
   cerebralTest,
-  { paymentStatus = PAYMENT_STATUS.WAIVED },
+  { paymentStatus = PAYMENT_STATUS.WAIVED } = {},
 ) => {
   const updatedCaseCaption = 'Ada Lovelace is awesome';
 
