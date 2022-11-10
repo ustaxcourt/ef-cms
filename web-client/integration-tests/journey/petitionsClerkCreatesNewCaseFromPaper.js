@@ -13,9 +13,12 @@ const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
-  trialLocation = 'Birmingham, Alabama',
-  procedureType = 'Small',
-  formOrdersAndNotices = {},
+  {
+    trialLocation = 'Birmingham, Alabama',
+    procedureType = 'Small',
+    formOrdersAndNotices = {},
+    paymentStatus = PAYMENT_STATUS.WAIVED,
+  },
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
@@ -130,7 +133,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'petitionPaymentStatus',
-      value: PAYMENT_STATUS.WAIVED,
+      value: paymentStatus,
     },
     {
       key: 'paymentDateWaivedDay',
