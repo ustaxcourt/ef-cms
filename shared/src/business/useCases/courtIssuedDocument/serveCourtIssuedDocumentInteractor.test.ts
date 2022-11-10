@@ -17,7 +17,7 @@ import {
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -291,21 +291,27 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+  it.only('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
     const mockOrderFilingFee = {
       date: '2030-01-20T00:00:00.000Z',
+      docketNumber: mockCases[0].docketNumber,
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
+      signedAt: '2030-01-20T00:00:00.000Z',
+      signedByUserId: judgeUser.userId,
+      signedJudgeName: judgeUser.name,
     };
 
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...mockCases[0],
-        docketEntries: {
-          ...mockOrderFilingFee,
-          docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
-        },
+        docketEntries: [
+          {
+            ...mockOrderFilingFee,
+            docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
+          },
+        ],
       });
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
