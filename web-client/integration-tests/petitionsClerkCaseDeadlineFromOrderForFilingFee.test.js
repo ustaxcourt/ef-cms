@@ -17,17 +17,13 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
 
   beforeAll(() => {
     jest.setTimeout(40000);
-    jest.spyOn(
-      cerebralTest.applicationContext.getUseCases(),
-      'createMessageInteractor',
-    );
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  describe('1st Flow FIX ME', () => {
+  describe('Create and serve docket entry immediately', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
       paymentStatus: PAYMENT_STATUS.UNPAID,
@@ -178,17 +174,9 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
         FILING_FEE_DEADLINE_DESCRIPTION,
       );
     });
-
-    //create a new paper case with filing fee not paid
-    //serve the case
-    //verify OF in drafts
-    //sign OF
-    //add docket entry from OF
-    //serve docket entry
-    //verify there is a new case deadline with date from previous step and correct description
   });
 
-  describe('2nd Flow FIX ME', () => {
+  describe('Create docket entry, save for later, then serve', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
       paymentStatus: PAYMENT_STATUS.UNPAID,
@@ -323,7 +311,28 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
       );
     });
 
-    it('serve the saved order', async () => {});
+    it('serve the saved order', async () => {
+      await cerebralTest.runSequence(
+        'openConfirmServeCourtIssuedDocumentSequence',
+        {
+          docketEntryId: cerebralTest.draftDocketEntryId,
+          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.draftDocketEntryId}`,
+        },
+      );
+
+      expect(cerebralTest.getState('modal.showModal')).toEqual(
+        'ConfirmInitiateCourtIssuedFilingServiceModal',
+      );
+
+      await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
+
+      await waitForCondition({
+        booleanExpressionCondition: () =>
+          cerebralTest.getState('currentPage') === 'PrintPaperService',
+      });
+
+      expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
+    });
 
     it('docket clerk verifies there is a new case deadline with date from previous step and correct description', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -343,11 +352,3 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
     });
   });
 });
-
-//create a new paper case with filing fee not paid
-//serve the case
-//sign OF
-//add docket entry from OF
-//save for later
-//serve docket entry from document viewer
-//verify there is a new case deadline with date from previous step and correct description
