@@ -6,12 +6,13 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Petitions Clerk something', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(40000);
     jest.spyOn(
@@ -29,10 +30,18 @@ describe('Petitions Clerk something', () => {
     paymentStatus: PAYMENT_STATUS.UNPAID,
   });
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
-    paymentStatus: PAYMENT_STATUS.UNPAID,
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: [
+      'Order Designating Place of Trial',
+      'Order for Filing Fee',
+    ],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
   });
 
-  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  // petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 

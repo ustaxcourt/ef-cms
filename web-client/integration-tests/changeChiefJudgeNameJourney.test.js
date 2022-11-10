@@ -1,3 +1,4 @@
+import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import {
   fakeFile,
@@ -9,14 +10,14 @@ import {
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
-const judgeFoleyUserId = '659789b4-acc5-40b7-9318-3354e7eb8604';
-const kerriganFullName = 'Kathleen Kerrigan';
-const foleyFullName = 'Maurice B. Foley';
-
 describe('Chief Judge feature flag configuration', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
+  const judgeFoleyUserId = '659789b4-acc5-40b7-9318-3354e7eb8604';
+  const kerriganFullName = 'Kathleen Kerrigan';
+  const foleyFullName = 'Maurice B. Foley';
+
   beforeAll(async () => {
     jest.setTimeout(30000);
     await setJudgeTitle(judgeFoleyUserId, 'Chief Judge');
@@ -29,7 +30,14 @@ describe('Chief Judge feature flag configuration', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
-  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   loginAs(cerebralTest, 'docketclerk1@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',

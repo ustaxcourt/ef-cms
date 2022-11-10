@@ -1,4 +1,3 @@
-import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -9,7 +8,7 @@ const reviewSavedPetitionHelper = withAppContextDecorator(
 
 export const petitionsClerkReviewsPaperCaseBeforeServing = (
   cerebralTest,
-  { paymentStatus = PAYMENT_STATUS.WAIVED } = {},
+  expectedObject,
 ) => {
   const updatedCaseCaption = 'Ada Lovelace is awesome';
 
@@ -23,23 +22,6 @@ export const petitionsClerkReviewsPaperCaseBeforeServing = (
     const helper = runCompute(reviewSavedPetitionHelper, {
       state: cerebralTest.getState(),
     });
-
-    const expectedPaymentStatus =
-      paymentStatus === PAYMENT_STATUS.UNPAID
-        ? PAYMENT_STATUS.UNPAID
-        : 'Waived 05/05/05';
-
-    let expectedObject = {
-      hasIrsNoticeFormatted: 'No',
-      ordersAndNoticesInDraft: [
-        'Order Designating Place of Trial',
-        'Order for Filing Fee',
-      ],
-      ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: expectedPaymentStatus,
-      receivedAtFormatted: '01/01/01',
-      shouldShowIrsNoticeDate: false,
-    };
 
     expect(helper).toMatchObject(expectedObject);
 

@@ -1,4 +1,7 @@
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  PAYMENT_STATUS,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -13,10 +16,10 @@ import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSub
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Petitioner Service Indicator Journey', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -27,7 +30,14 @@ describe('Petitioner Service Indicator Journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
-  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

@@ -1,3 +1,4 @@
+import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
@@ -25,7 +26,14 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
-  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   createNewMessageOnCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk1@example.com');

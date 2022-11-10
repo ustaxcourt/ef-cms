@@ -1,3 +1,4 @@
+import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkEditsSavedPetition } from './journey/petitionsClerkEditsSavedPetition';
@@ -8,9 +9,9 @@ import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitio
 import { petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving } from './journey/petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk QCs Paper Filed Petition', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });
@@ -21,7 +22,14 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
-  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
   petitionsClerkViewsSectionInProgress(cerebralTest);
   petitionsClerkEditsSavedPetition(cerebralTest);
