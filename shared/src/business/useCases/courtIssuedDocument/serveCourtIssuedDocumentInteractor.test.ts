@@ -5,6 +5,7 @@ import {
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
+  FILING_FEE_DEADLINE_DESCRIPTION,
   PARTY_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -289,6 +290,59 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       }),
     ).rejects.toThrow('Docket entry has already been served');
   });
+
+  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+    const mockOrderFilingFee = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Filing Fee',
+      eventCode: 'OF',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCases[0],
+        docketEntries: {
+          ...mockOrderFilingFee,
+          docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
+        },
+      });
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline.mock
+        .calls[0][0].caseDeadline,
+    ).toMatchObject({
+      associatedJudge: mockCases[0].associatedJudge,
+      deadlineDate: mockOrderFilingFee.date,
+      description: FILING_FEE_DEADLINE_DESCRIPTION,
+      docketNumber: mockCases[0].docketNumber,
+      sortableDocketNumber: mockCases[0].sortableDocketNumber,
+    });
+  });
+
+  // it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
+  //   await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+  //     clientConnectionId: 'testing',
+  //     docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+  //     docketNumbers: [caseRecord.docketNumber],
+  //     form: {
+  //       documentType: 'Order',
+  //       eventCode: 'O',
+  //     },
+  //     subjectCaseDocketNumber: caseRecord.docketNumber,
+  //   });
+
+  //   expect(
+  //     applicationContext.getPersistenceGateway().createCaseDeadline,
+  //   ).not.toHaveBeenCalled();
+  // });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
