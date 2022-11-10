@@ -1,6 +1,10 @@
 import { Case } from '../../entities/cases/Case';
 import { CaseDeadline } from '../../entities/CaseDeadline';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
+import {
+  DOCKET_SECTION,
+  FILING_FEE_DEADLINE_DESCRIPTION,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -120,13 +124,15 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  //do constant thingz
-  if (form.eventCode === 'OF') {
+  if (
+    form.eventCode ===
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode
+  ) {
     const newCaseDeadline = new CaseDeadline(
       {
         associatedJudge: subjectCaseEntity.associatedJudge,
         deadlineDate: form.date,
-        description: 'Filing Fee Due',
+        description: FILING_FEE_DEADLINE_DESCRIPTION,
         docketNumber: subjectCaseDocketNumber,
         sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
       },
