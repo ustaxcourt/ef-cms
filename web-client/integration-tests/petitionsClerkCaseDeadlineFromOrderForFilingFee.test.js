@@ -120,18 +120,28 @@ describe('Petitions Clerk something', () => {
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'date',
-        value: '',
+        value: '2019-03-01T21:40:46.415Z',
       },
     );
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'O',
-      },
-    );
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
+      'Your entry has been added to the docket record.',
+    );
+    // await cerebralTest.runSequence(
+    //   'updateCourtIssuedDocketEntryFormValueSequence',
+    //   {
+    //     key: 'description',
+    //     value: 'OF',
+    //   },
+    // );
+  });
+
+  it('petitions clerk verifies there is a new case deadline with date from previous step and correct description', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
   }); //create a new paper case with filing fee not paid
   //serve the case
   //verify OF in drafts
