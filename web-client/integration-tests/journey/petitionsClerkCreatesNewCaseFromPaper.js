@@ -263,11 +263,16 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       state: cerebralTest.getState(),
     });
 
+    const expectedPaymentStatus =
+      paymentStatus === PAYMENT_STATUS.UNPAID
+        ? PAYMENT_STATUS.UNPAID
+        : 'Waived 05/05/05';
+
     let expectedObject = {
       hasIrsNoticeFormatted: 'No',
-      ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+      ordersAndNoticesInDraft: ['Order Designating Place of Trial'], // UPDATE THIS
       ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: 'Waived 05/05/05',
+      petitionPaymentStatusFormatted: expectedPaymentStatus,
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
     };
