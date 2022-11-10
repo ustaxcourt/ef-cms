@@ -68,6 +68,12 @@ export TF_VAR_statuspage_dns_record=$STATUSPAGE_DNS_RECORD
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 
+if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
+then
+  export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
+fi
+
+
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
 terraform apply -auto-approve
