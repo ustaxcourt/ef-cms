@@ -67,4 +67,34 @@ describe('dashboardExternalHelper', () => {
 
     expect(result.showFileACase).toEqual(true);
   });
+
+  it('should keep the showStartButton flag as false when the user role is not a private practitioner or petitioner', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: ROLES.irsPractitioner,
+    });
+
+    const result = runCompute(dashboardExternalHelper, {
+      state: {
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
+      },
+    });
+
+    expect(result.showStartButton).toEqual(false);
+  });
+
+  it('should set the showStartButton flag as true when the user role is a private practitioner or petitioner', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: ROLES.petitioner,
+    });
+
+    const result = runCompute(dashboardExternalHelper, {
+      state: {
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
+      },
+    });
+
+    expect(result.showStartButton).toEqual(true);
+  });
 });

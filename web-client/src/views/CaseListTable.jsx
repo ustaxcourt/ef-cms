@@ -56,7 +56,7 @@ export const CaseListTable = connect(
     );
 
     const renderCaseListTable = ({
-      cases,
+      cases = [],
       showLoadMore,
       showMoreResultsSequence,
       tabName,
@@ -147,7 +147,8 @@ export const CaseListTable = connect(
                     })}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-                    {renderStartButton()}
+                    {dashboardExternalHelper.showStartButton &&
+                      renderStartButton()}
                   </div>
                 </Tabs>
               </div>
