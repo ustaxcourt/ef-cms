@@ -1,5 +1,6 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -7,11 +8,17 @@ import React from 'react';
 export const SectionWorkQueueOutbox = connect(
   {
     formattedWorkQueue: state.formattedWorkQueue,
+    users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
-  function SectionWorkQueueOutbox({ formattedWorkQueue, workQueueHelper }) {
+  function SectionWorkQueueOutbox({
+    formattedWorkQueue,
+    users,
+    workQueueHelper,
+  }) {
     return (
       <React.Fragment>
+        <WorkQueueAssignments showSendToBar={false} users={users} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
