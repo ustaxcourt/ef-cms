@@ -7,6 +7,7 @@ import {
   setupTest,
 } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
@@ -28,6 +29,7 @@ describe('Chief Judge feature flag configuration', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
   loginAs(cerebralTest, 'docketclerk1@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',

@@ -3,6 +3,7 @@ import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkC
 import { petitionsClerkEditsSavedPetition } from './journey/petitionsClerkEditsSavedPetition';
 import { petitionsClerkRemovesAndReaddsPdfFromPetition } from './journey/petitionsClerkRemovesAndReaddsPdfFromPetition';
 import { petitionsClerkRemovesAndReaddsPetitionFile } from './journey/petitionsClerkRemovesAndReaddsPetitionFile';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitionsClerkReviewsPetitionAndSavesForLater';
 import { petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving } from './journey/petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
@@ -20,6 +21,7 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
   petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
   petitionsClerkViewsSectionInProgress(cerebralTest);
   petitionsClerkEditsSavedPetition(cerebralTest);
