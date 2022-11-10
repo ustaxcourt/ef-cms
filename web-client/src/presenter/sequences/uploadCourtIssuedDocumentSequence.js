@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/UploadCourtIssuedDocument/getUploadCourtIssuedDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -9,11 +8,11 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
+import { setDocumentTitleFromFreeTextAction } from '../actions/UploadCourtIssuedDocument/setDocumentTitleFromFreeTextAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setupUploadMetadataAction } from '../actions/UploadCourtIssuedDocument/setupUploadMetadataAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -37,8 +36,7 @@ export const uploadCourtIssuedDocumentSequence = [
       {
         error: [openFileUploadErrorModal],
         success: [
-          generateCourtIssuedDocumentTitleAction,
-          setupUploadMetadataAction,
+          setDocumentTitleFromFreeTextAction,
           submitCourtIssuedOrderAction,
           setDefaultDraftDocumentIdAction,
           setCaseAction,
