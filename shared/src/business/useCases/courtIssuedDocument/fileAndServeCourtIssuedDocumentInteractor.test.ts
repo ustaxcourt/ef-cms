@@ -113,7 +113,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           userId: docketClerkUser.userId,
         },
       ],
-      sortableDocketNumber: MOCK_CASE.docketNumber,
     };
 
     mockTrialSession = {
@@ -229,7 +228,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       deadlineDate: mockOrderFilingFeeForm.date,
       description: FILING_FEE_DEADLINE_DESCRIPTION,
       docketNumber: caseRecord.docketNumber,
-      sortableDocketNumber: caseRecord.sortableDocketNumber,
+      sortableDocketNumber: 18000101,
     });
   });
 

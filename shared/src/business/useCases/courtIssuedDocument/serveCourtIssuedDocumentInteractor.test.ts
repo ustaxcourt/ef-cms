@@ -60,6 +60,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockCases = [
     {
       ...MOCK_CASE,
+      associatedJudge: judgeUser.name,
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -291,7 +292,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it.only('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
     const mockOrderFilingFee = {
       date: '2030-01-20T00:00:00.000Z',
       docketNumber: mockCases[0].docketNumber,
@@ -329,26 +330,22 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       deadlineDate: mockOrderFilingFee.date,
       description: FILING_FEE_DEADLINE_DESCRIPTION,
       docketNumber: mockCases[0].docketNumber,
-      sortableDocketNumber: mockCases[0].sortableDocketNumber,
+      sortableDocketNumber: 18000101,
     });
   });
 
-  // it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
-  //   await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-  //     clientConnectionId: 'testing',
-  //     docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-  //     docketNumbers: [caseRecord.docketNumber],
-  //     form: {
-  //       documentType: 'Order',
-  //       eventCode: 'O',
-  //     },
-  //     subjectCaseDocketNumber: caseRecord.docketNumber,
-  //   });
+  it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
+    });
 
-  //   expect(
-  //     applicationContext.getPersistenceGateway().createCaseDeadline,
-  //   ).not.toHaveBeenCalled();
-  // });
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
+  });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
