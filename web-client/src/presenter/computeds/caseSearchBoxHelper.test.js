@@ -36,6 +36,19 @@ describe('caseSearchBoxHelper', () => {
     expect(result.showSearchDescription).toBe(false);
   });
 
+  it('should return showSearchDescription false if the user role is petitioner', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: ROLES.petitioner,
+      userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
+    });
+
+    const result = runCompute(caseSearchBoxHelper, {
+      state: {},
+    });
+
+    expect(result.showSearchDescription).toBe(false);
+  });
+
   it('should return showAdvancedSearch true if the user role is not petitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.irsPractitioner,
