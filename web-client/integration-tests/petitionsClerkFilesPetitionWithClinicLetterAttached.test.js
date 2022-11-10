@@ -1,3 +1,4 @@
+import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkVerifiesPetitionReceiptLength } from './journey/docketClerkVerifiesPetitionReceiptLength';
@@ -13,9 +14,9 @@ import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkView
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { userVerifiesLengthOfDocketEntry } from './journey/userVerifiesLengthOfDocketEntry';
 
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk creates a paper case which should have a clinic letter appended to the receipt', () => {
+  const cerebralTest = setupTest();
+
   const overrides = {
     maxCases: 2,
     preferredTrialCity: 'Los Angeles, California',
@@ -36,7 +37,14 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
     trialLocation: 'Los Angeles, California',
   });
-  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   docketClerkVerifiesPetitionReceiptLength(cerebralTest, 1);
 
   // creating pro se petition with prefferredTrialCity and procedureType that DOES have a corresponding clinic letter
