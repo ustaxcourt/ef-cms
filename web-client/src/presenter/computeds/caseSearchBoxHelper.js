@@ -5,7 +5,10 @@ export const caseSearchBoxHelper = (get, applicationContext) => {
   let showSearchDescription = true;
   let showAdvancedSearch = true;
 
-  if (user.role === USER_ROLES.irsSuperuser) {
+  if (
+    user.role === USER_ROLES.irsSuperuser ||
+    user.role === USER_ROLES.petitioner
+  ) {
     showSearchDescription = false;
   }
 
