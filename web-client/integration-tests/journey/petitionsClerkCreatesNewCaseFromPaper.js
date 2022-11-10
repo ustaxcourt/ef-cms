@@ -251,41 +251,4 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(updatedCaseCaption);
   });
-
-  it('should create case and navigate to review screen when case information has been validated', async () => {
-    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
-    expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
-
-    const helper = runCompute(reviewSavedPetitionHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    const expectedPaymentStatus =
-      paymentStatus === PAYMENT_STATUS.UNPAID
-        ? PAYMENT_STATUS.UNPAID
-        : 'Waived 05/05/05';
-
-    let expectedObject = {
-      hasIrsNoticeFormatted: 'No',
-      ordersAndNoticesInDraft: ['Order Designating Place of Trial'], // UPDATE THIS
-      ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: expectedPaymentStatus,
-      receivedAtFormatted: '01/01/01',
-      shouldShowIrsNoticeDate: false,
-    };
-
-    expect(helper).toMatchObject(expectedObject);
-
-    expect(cerebralTest.getState('caseDetail')).toMatchObject({
-      caseCaption: updatedCaseCaption,
-      isPaper: true,
-    });
-
-    cerebralTest.docketNumber = cerebralTest.getState(
-      'caseDetail.docketNumber',
-    );
-  });
 };

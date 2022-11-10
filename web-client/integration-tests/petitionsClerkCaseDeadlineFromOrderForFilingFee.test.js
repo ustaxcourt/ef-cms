@@ -1,9 +1,10 @@
 import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
@@ -24,6 +25,9 @@ describe('Petitions Clerk something', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+    paymentStatus: PAYMENT_STATUS.UNPAID,
+  });
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     paymentStatus: PAYMENT_STATUS.UNPAID,
   });
 
