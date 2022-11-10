@@ -3,6 +3,7 @@ import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
+  FILING_FEE_DEADLINE_DESCRIPTION,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -89,6 +90,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     caseRecord = {
       ...MOCK_CASE,
+      associatedJudge: judgeUser.name,
       docketEntries: [
         mockDocketEntryWithWorkItem,
         {
@@ -111,6 +113,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           userId: docketClerkUser.userId,
         },
       ],
+      sortableDocketNumber: MOCK_CASE.docketNumber,
     };
 
     mockTrialSession = {
@@ -208,7 +211,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       date: '2030-01-20T00:00:00.000Z',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
-      judge: judgeUser.name,
     };
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
@@ -220,8 +222,15 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createCaseDeadline,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().createCaseDeadline.mock
+        .calls[0][0].caseDeadline,
+    ).toMatchObject({
+      associatedJudge: caseRecord.associatedJudge,
+      deadlineDate: mockOrderFilingFeeForm.date,
+      description: FILING_FEE_DEADLINE_DESCRIPTION,
+      docketNumber: caseRecord.docketNumber,
+      sortableDocketNumber: caseRecord.sortableDocketNumber,
+    });
   });
 
   it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
