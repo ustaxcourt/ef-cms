@@ -439,4 +439,69 @@ describe('DocketEntry entity', () => {
       expect(docketEntry.isValid()).toBeTruthy();
     });
   });
+
+  describe('eventCode', () => {
+    it('eventCode should be optional if the document isDraft is true', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: undefined,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('eventCode should be optional if the document isDraft is true', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: null,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('eventCode should be required if isDraft is false', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: null,
+          isDraft: false,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('judge', () => {
+    it('judge should be optional when documentType is undefined', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentType: undefined,
+          eventCode: undefined,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+      docketEntry.validate();
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+  });
 });
