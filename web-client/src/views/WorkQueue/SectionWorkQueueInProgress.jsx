@@ -1,5 +1,6 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
@@ -99,45 +100,14 @@ export const SectionWorkQueueInProgress = connect(
     workQueueHelper: state.workQueueHelper,
   },
   function SectionWorkQueueInProgress({
-    assignSelectedWorkItemsSequence,
     formattedWorkQueue,
-    selectAssigneeSequence,
-    selectedWorkItemsLength,
     selectWorkItemSequence,
     users,
     workQueueHelper,
   }) {
     return (
       <React.Fragment>
-        {workQueueHelper.showSendToBar && (
-          <div className="action-section">
-            <span className="assign-work-item-count">
-              <Icon aria-label="selected work items count" icon="check" />
-              {selectedWorkItemsLength}
-            </span>
-            <select
-              aria-label="select a assignee"
-              className="usa-select"
-              id="options"
-              name="options"
-              onChange={evt => {
-                selectAssigneeSequence({
-                  assigneeId: evt.target.value,
-                  assigneeName:
-                    evt.target.options[evt.target.selectedIndex].text,
-                });
-                assignSelectedWorkItemsSequence();
-              }}
-            >
-              <option value>Assign to...</option>
-              {users.map(user => (
-                <option key={user.userId} value={user.userId}>
-                  {user.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <WorkQueueAssignments users={users} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
