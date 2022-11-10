@@ -4,21 +4,23 @@ In order to maintain the security of any environment that contains production li
 
 ## Account Level Users
 
-These are users who access the entire AWS account where environments live. We currently support two AWS Accounts. In the production Account, we will need to rotate:
+These are users who access the entire AWS account where environments live. We currently support two AWS Accounts, Production and Staging.
 
-### Administrators Group Users
+### IAM Users
 
-For every user in this group, we'll need to run a script to check the age of the users credentials. If they are older than the start of the previous quarter, then we will need to rotate them.
+We will run a script to check the age of the every IAM User's credentials. The script outputs every user that has older than the start of the current quarter. We'll manually reach out to them, and give them [instructions to manually update them](#manual-credential-rotation).
 
-Console access is managed for the account via the Account Password Policy. These passwords are set to expire after 92 days.
+Console access is managed for the account via the Account Password Policy. These passwords are set to expire after 92 days via the [Account Password Policy](https://docs.aws.amazon.com/cli/latest/reference/iam/get-account-password-policy.html).
 
-We can either inform the user and provide them with steps to update their own credentials, or perform that change automatically. Ideally, they can rotate their own credentials.
+To identify any accounts that need to be rotated, run this script:
 
-We have an [admin script to identify any accounts that need to be rotated](../../shared/admin-tools/user/list-users-with-old-credentials.js).
+```bash
+npm run secrets:check
+```
 
 #### Manual Credential Rotation
 
-Perform the following steps or give them to another user in order to rotate their `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+Perform the following steps to rotate your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
 
 1. Run the following command to create a new access key:
 
@@ -59,33 +61,32 @@ Perform the following steps or give them to another user in order to rotate thei
 
 ### Circle CI Users
 
-The **CircleCI** user gets updated in a very similar workflow as above. We need to perform this operation in both the Production and Staging AWS Accounts. To help simplify this process, we have made a script that deletes old access keys and outputs new keys to enter into the CircleCI interface.
+The **CircleCI** user is an IAM user that also needs to be rotated in both the Production and Staging AWS Accounts. To help simplify this process, we have made a script that deletes old access keys and outputs new keys to enter into the CircleCI interface.
 
-1. Run the [rotate-circleci-secrets.sh](../../shared/admin-tools/user/rotate-circleci-secrets.sh)
+1. Run the following script:
+
+    ```bash
+    npm run secrets:rotate-circleci
+    ```
+
 2. The script outputs new keys to copy and paste into the CircleCI web interface.
 
-## Environment Super Users
+## Environment Users
 
 Any environment with production like data will have a `USTC_ADMIN_USER` and `USTC_ADMIN_PASS` associated with it that is used to create Test Users and perform admin-level operations. These passwords are stored in AWS Secrets Manager.
 
-To help automate that process, we have another script that rotates the `USTC_ADMIN_PASS`. You need to specify the new password as a command line argument:
+Additionally, each environment has a number of test users that are created to help aid testing various workflows. The [setup-test-users.sh](../../shared/admin-tools/user/setup-test-users.sh) script runs on every deploy.
+
+To help automate that process, we the following script rotates these secrets:
 
 ```bash
-node ./shared/admin-tools/user/rotate-ustc-admin-password.js "new-passw0rd-here"
+npm run secrets:rotate-environment
 ```
 
-This updates the password in Cognito, and then it updates the Secrets value with that new password so that subsequent deploys will make use of the new value.
+This updates the password in Cognito for the `USTC_ADMIN_USER`, and then it updates the Secrets value with that new `USTC_ADMIN_PASS` and `DEFAULT_ACCOUNT_PASS` so that subsequent deploys will make use of the new value.
 
-NOTE: You'll need to escape any `?` or `!` in the password.
-
-## Environment Test Users
-
-Each environment has a number of test users that are created to help aid testing various workflows. The [setup-test-users.sh](../../shared/admin-tools/user/setup-test-users.sh) script is currently run on every deploy.
+NOTE: You will need to run [setup-test-users.sh](../../shared/admin-tools/user/setup-test-users.sh) script to update the users or wait for the next deploy.
 
 ```bash
-./shared/admin-tools/user/rotate-default-account-password.sh "new-passw0rd-here"
+./shared/admin-tools/user/setup-test-users.sh
 ```
-
-This script updates the secret value for `DEFAULT_ACCOUNT_PASS`, and then it updates the password for all of the test users by calling the `setup-test-users.sh` script directly.
-
-NOTE: The password cannot contain a `?` or `!`.
