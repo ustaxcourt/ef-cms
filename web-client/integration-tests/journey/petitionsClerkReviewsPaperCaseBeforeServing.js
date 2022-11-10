@@ -31,7 +31,10 @@ export const petitionsClerkReviewsPaperCaseBeforeServing = (
 
     let expectedObject = {
       hasIrsNoticeFormatted: 'No',
-      ordersAndNoticesInDraft: ['Order Designating Place of Trial'], // UPDATE THIS
+      ordersAndNoticesInDraft: [
+        'Order Designating Place of Trial',
+        'Order for Filing Fee',
+      ],
       ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
       petitionPaymentStatusFormatted: expectedPaymentStatus,
       receivedAtFormatted: '01/01/01',
