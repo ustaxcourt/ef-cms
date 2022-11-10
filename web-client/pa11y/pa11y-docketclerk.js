@@ -9,6 +9,11 @@ module.exports = [
     notes: 'checks a11y of section queue tab panel',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/document-qc/section/inbox&info=section-queue-tab',
   },
+  {
+    actions: ['wait for .modal-screen to be visible'],
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/320-21/documents/6b2bcbcc-bc95-4103-b5fd-3e999395c2d3/edit',
+    notes: 'verify the work item already completed modal',
+  },
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-19',
   {
     actions: [

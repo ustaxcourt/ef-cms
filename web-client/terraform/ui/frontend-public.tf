@@ -137,7 +137,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   default_root_object = "index.html"
 
   default_cache_behavior {
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = var.viewer_protocol_policy
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
@@ -185,7 +185,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     default_ttl            = 0
     max_ttl                = 0
     compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = var.viewer_protocol_policy
   }
 
   ordered_cache_behavior {
@@ -212,7 +212,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     default_ttl            = 180
     max_ttl                = 180
     compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = var.viewer_protocol_policy
   }
 
   lifecycle {
