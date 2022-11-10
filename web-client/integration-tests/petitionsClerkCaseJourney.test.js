@@ -14,9 +14,9 @@ import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './jo
 import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
 import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petitionsClerkVerifiesPetitionPaymentFeeOptions';
 
-const cerebralTest = setupTest();
-
 describe('Petitions clerk case journey', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });

@@ -1,12 +1,6 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
 
-const reviewSavedPetitionHelper = withAppContextDecorator(
-  reviewSavedPetitionHelperComputed,
-);
 const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
   applicationContext.getConstants();
 
@@ -18,7 +12,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     procedureType = 'Small',
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
-  },
+  } = {},
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',

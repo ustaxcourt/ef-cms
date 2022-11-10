@@ -30,8 +30,6 @@ describe('Petitioner Service Indicator Journey', () => {
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest);
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
-  // verify it is paper
-
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk verifies petitioner service indicator is paper', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
