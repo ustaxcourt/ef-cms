@@ -17,6 +17,24 @@ module.exports.NotFoundError = class NotFoundError extends Error {
 };
 
 /**
+ * Invalid request error
+ *
+ * @type {module.NotFoundError}
+ */
+module.exports.InvalidRequest = class InvalidRequest extends Error {
+  /**
+   * constructor
+   *
+   * @param {string} message the error message
+   */
+  constructor(message) {
+    super(message);
+
+    this.statusCode = 400;
+  }
+};
+
+/**
  * Custom unknown user error handling for middlewares
  *
  * @type {module.UnknownUserError}
