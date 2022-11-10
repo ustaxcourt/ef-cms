@@ -10,13 +10,23 @@ export const dashboardExternalHelper = (get, applicationContext) => {
   const cases = [...openCases, ...closedCases];
 
   let showFileACase = false;
+  let showStartButton = false;
 
   if (user.role === USER_ROLES.privatePractitioner) {
     showFileACase = true;
   }
+
+  if (
+    user.role === USER_ROLES.privatePractitioner ||
+    user.role === USER_ROLES.petitioner
+  ) {
+    showStartButton = true;
+  }
+
   return {
     showCaseList: cases.length > 0,
     showFileACase,
+    showStartButton,
     showWhatToExpect: cases.length === 0,
   };
 };
