@@ -1,5 +1,8 @@
 import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
@@ -24,6 +27,13 @@ describe('Petitions Clerk something', () => {
     paymentStatus: PAYMENT_STATUS.UNPAID,
   });
 
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+
   //create a new paper case with filing fee not paid
   //serve the case
   //verify OF in drafts
@@ -39,6 +49,4 @@ describe('Petitions Clerk something', () => {
   //save for later
   //serve docket entry from document viewer
   //verify there is a new case deadline with date from previous step and correct description
-
-  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 });
