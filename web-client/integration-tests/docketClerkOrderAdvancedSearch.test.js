@@ -1,6 +1,9 @@
 import {
   ADVANCED_SEARCH_TABS,
+  COUNTRY_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
+  DOCKET_NUMBER_SUFFIXES,
+  SERVICE_INDICATOR_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
   FORMATS,
@@ -8,7 +11,6 @@ import {
   createISODateString,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -23,10 +25,9 @@ import {
 } from './helpers';
 
 describe('Docket clerk advanced order search', () => {
-  const cerebralTest = setupTest();
+  let caseDetail;
 
-  const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
   const seedData = {
     caseCaption: 'Hanan Al Hroub, Petitioner',
@@ -51,23 +52,23 @@ describe('Docket clerk advanced order search', () => {
     signedJudgeName: 'Maurice B. Foley',
   };
 
-  let caseDetail;
-
   beforeAll(() => {
     jest.setTimeout(30000);
-    cerebralTest.draftOrders = [];
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   describe('create orders to search for', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
 
-    it('create case', async () => {
+    it('petitioner creates an electronic case', async () => {
       caseDetail = await uploadPetition(cerebralTest);
+
       expect(caseDetail).toBeDefined();
+
       cerebralTest.docketNumber = caseDetail.docketNumber;
     });
 
@@ -78,7 +79,7 @@ describe('Docket clerk advanced order search', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 0);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
     docketClerkServesDocument(cerebralTest, 0);
 
@@ -87,7 +88,7 @@ describe('Docket clerk advanced order search', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(cerebralTest, 1);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
 
     docketClerkCreatesAnOrder(cerebralTest, {
@@ -95,7 +96,7 @@ describe('Docket clerk advanced order search', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(cerebralTest, 2);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 2);
     docketClerkServesDocument(cerebralTest, 2);
 
@@ -104,7 +105,7 @@ describe('Docket clerk advanced order search', () => {
       eventCode: 'O',
       expectedDocumentType: 'Order',
     });
-    docketClerkSignsOrder(cerebralTest, 3);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 3);
     docketClerkServesDocument(cerebralTest, 3);
     docketClerkSealsCase(cerebralTest);
