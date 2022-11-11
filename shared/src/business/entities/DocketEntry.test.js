@@ -441,7 +441,7 @@ describe('DocketEntry entity', () => {
   });
 
   describe('eventCode', () => {
-    it('eventCode should be optional if the document isDraft is true', () => {
+    it('when isDraft is true, the eventCode should be optional (thus allowing undefined)', () => {
       const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
@@ -456,7 +456,7 @@ describe('DocketEntry entity', () => {
       expect(docketEntry.isValid()).toBeTruthy();
     });
 
-    it('eventCode should be optional if the document isDraft is true', () => {
+    it('when isDraft is true, the eventCode should be optional (thus allowing null)', () => {
       const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
@@ -500,7 +500,6 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );
-      docketEntry.validate();
       expect(docketEntry.isValid()).toBeTruthy();
     });
   });
