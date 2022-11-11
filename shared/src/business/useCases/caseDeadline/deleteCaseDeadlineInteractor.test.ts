@@ -103,4 +103,16 @@ describe('deleteCaseDeadlineInteractor', () => {
         .deleteCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
+
+  it('should call updateCaseAutomaticBlock with removingBlock set to true', async () => {
+    await deleteCaseDeadlineInteractor(applicationContext, {
+      caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      docketNumber: '123-20',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
+        .calls[0][0].removingBlock,
+    ).toEqual(true);
+  });
 });

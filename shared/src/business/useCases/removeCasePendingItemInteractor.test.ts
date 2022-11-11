@@ -99,4 +99,16 @@ describe('removeCasePendingItemInteractor', () => {
         .deleteCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
+
+  it('should call updateCaseAutomaticBlock with removingBlock set to true', async () => {
+    await removeCasePendingItemInteractor(applicationContext, {
+      docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // docketEntries[3] from MOCK_CASE
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
+        .calls[0][0].removingBlock,
+    ).toEqual(true);
+  });
 });

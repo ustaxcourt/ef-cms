@@ -69,7 +69,7 @@ describe('updateCaseAutomaticBlock', () => {
     ).toHaveBeenCalled();
   });
 
-  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
+  it('should not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date and the block is NOT being removed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseDeadlinesByDocketNumber.mockReturnValue([
@@ -96,6 +96,29 @@ describe('updateCaseAutomaticBlock', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should not return caseEntity immediately when it already has a trial date and the block is being removed', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        highPriority: false,
+        trialDate: '2021-03-01T21:40:46.415Z',
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+      removingBlock: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseDeadlinesByDocketNumber,
+    ).toHaveBeenCalled();
   });
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
