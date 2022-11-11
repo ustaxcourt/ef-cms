@@ -41,7 +41,7 @@ These various terraform deployment will be explained in detail later in the foll
 │   ├── variables.tf // a definition of all variables of this terraform directory
 ```
 
-The `variables.tf` file is used to defined the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sib ling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
+The `variables.tf` file is used to defined the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
 
 The `outputs.tf` is useful to understand because we often define certain outputs from modules that are pass around throughout the terraform code.  For example, assume the `outputs.tf` contains the following code:
 
