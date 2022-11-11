@@ -47,6 +47,9 @@ export const docketClerkUploadsACourtIssuedDocument = (
       prev.createdAt > current.createdAt ? prev : current,
     );
     expect(newDraftOrder).toBeTruthy();
-    cerebralTest.draftOrders.push(newDraftOrder);
+    cerebralTest.draftOrders = [
+      ...(cerebralTest.draftOrders || []),
+      newDraftOrder,
+    ];
   });
 };
