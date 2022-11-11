@@ -44,6 +44,7 @@ export const deleteCaseDeadlineInteractor = async (
     .updateCaseAutomaticBlock({
       applicationContext,
       caseEntity: updatedCase,
+      removingBlock: true,
     });
 
   const result = await applicationContext

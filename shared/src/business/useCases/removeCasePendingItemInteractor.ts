@@ -41,6 +41,7 @@ export const removeCasePendingItemInteractor = async (
     .updateCaseAutomaticBlock({
       applicationContext,
       caseEntity: updatedCaseEntity,
+      removingBlock: true,
     });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

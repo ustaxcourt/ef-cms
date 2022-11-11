@@ -9,8 +9,9 @@
 exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
+  removingBlock,
 }) => {
-  if (caseEntity.trialDate || caseEntity.highPriority) {
+  if ((caseEntity.trialDate && !removingBlock) || caseEntity.highPriority) {
     return caseEntity;
   }
   const caseDeadlines = await applicationContext
