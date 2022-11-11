@@ -29,6 +29,18 @@ describe('migrateItems', () => {
         trialStatus: 'aBasisReached',
       },
     },
+    filters: {
+      aBasisReached: true,
+      continued: false,
+      dismissed: true,
+      recall: false,
+      rule122: true,
+      setForTrial: false,
+      settled: true,
+      showAll: true,
+      statusUnassigned: false,
+      takenUnderAdvisement: false,
+    },
     pk: `trial-session-working-copy|${uuidv4()}`,
     sk: `user|${uuidv4()}`,
   };
@@ -37,6 +49,18 @@ describe('migrateItems', () => {
       '121-21': {
         trialStatus: 'takenUnderAdvisement',
       },
+    },
+    filters: {
+      aBasisReached: false,
+      continued: true,
+      dismissed: false,
+      recall: false,
+      rule122: true,
+      setForTrial: false,
+      settled: true,
+      showAll: true,
+      statusUnassigned: false,
+      takenUnderAdvisement: false,
     },
     pk: `trial-session-working-copy|${uuidv4()}`,
     sk: `user|${uuidv4()}`,
@@ -67,7 +91,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should return and not modify trial session workingCopies that have no trialStatus change', async () => {
+  it('should return and not modify trial session workingCopy trialStatuses that have no trialStatus change', async () => {
     const results = await migrateItems(
       unchangedTrialSessionWorkingCopies,
       documentClient,
@@ -98,6 +122,55 @@ describe('migrateItems', () => {
         '121-21': {
           trialStatus: 'submittedCAV',
         },
+      },
+    };
+
+    expect(results).toEqual([
+      expectedBasisReached,
+      expectedTakenUnderAdvisement,
+    ]);
+  });
+
+  it('should update trialStatus filters while preserving original values', async () => {
+    const items = [mockBasisReached, mockTakenUnderAdvisement];
+
+    const results = await migrateItems(items, documentClient);
+
+    const expectedBasisReached = {
+      ...mockBasisReached,
+      caseMetadata: {
+        '109-19': {
+          trialStatus: 'basisReached',
+        },
+        '120-20': {
+          trialStatus: 'basisReached',
+        },
+      },
+      filters: {
+        ...mockBasisReached.filters,
+        basisReached: true,
+        definiteTrial: true,
+        motionToDismiss: true,
+        probableSettlement: true,
+        probableTrial: true,
+        submittedCAV: false,
+      },
+    };
+    const expectedTakenUnderAdvisement = {
+      ...mockTakenUnderAdvisement,
+      caseMetadata: {
+        '121-21': {
+          trialStatus: 'submittedCAV',
+        },
+      },
+      filters: {
+        ...mockTakenUnderAdvisement.filters,
+        basisReached: false,
+        definiteTrial: true,
+        motionToDismiss: true,
+        probableSettlement: true,
+        probableTrial: true,
+        submittedCAV: false,
       },
     };
 

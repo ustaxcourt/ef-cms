@@ -5,6 +5,19 @@ const isTrialSessionWorkingCopy = item => {
 const migrateItems = items => {
   for (const item of items) {
     if (isTrialSessionWorkingCopy(item)) {
+      item.filters = {
+        ...item.filters,
+        definiteTrial: true,
+        motionToDismiss: true,
+        probableSettlement: true,
+        probableTrial: true,
+      };
+
+      item.filters.basisReached = item.filters.aBasisReached;
+      item.filters.submittedCAV = item.filters.takenUnderAdvisement;
+      delete item.filters.aBasisReached;
+      delete item.filters.takenUnderAdvisement;
+
       for (const aCase in item.caseMetadata) {
         switch (item.caseMetadata[aCase].trialStatus) {
           case 'aBasisReached':
