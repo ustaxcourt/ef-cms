@@ -1,4 +1,3 @@
-import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
