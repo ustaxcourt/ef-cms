@@ -9,8 +9,8 @@ const dashboardExternalHelper = withAppContextDecorator(
   applicationContext,
 );
 
-describe('petitioner dashboard helper', () => {
-  it('shows "what to expect" but not case list when there are no open or closed cases', () => {
+describe('dashboardExternalHelper', () => {
+  it('should show "what to expect" but not case list when there are no open or closed cases', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,
     });
@@ -22,9 +22,9 @@ describe('petitioner dashboard helper', () => {
     });
     expect(result.showCaseList).toEqual(false);
     expect(result.showWhatToExpect).toEqual(true);
-    expect(result.showCaseSearch).toEqual(false);
   });
-  it('shows case list but not "what to expect" when there is an open or closed case case', () => {
+
+  it('should show case list but not "what to expect" when there is an open or closed case case', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,
     });
@@ -36,50 +36,65 @@ describe('petitioner dashboard helper', () => {
     });
     expect(result.showCaseList).toEqual(true);
     expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(false);
   });
-  it('shows case search if defined user has privatePractitioner role', () => {
+
+  it('should keep the showFileACase flag as false when the user role is not a private practitioner', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: ROLES.petitioner,
+    });
+
+    const result = runCompute(dashboardExternalHelper, {
+      state: {
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
+      },
+    });
+
+    expect(result.showFileACase).toEqual(false);
+  });
+
+  it('should set the showFileACase flag as true when the user role is a private practitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.privatePractitioner,
     });
+
     const result = runCompute(dashboardExternalHelper, {
       state: {
         closedCases: [{ something: true }],
         openCases: [{ something: true }],
       },
     });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(true);
+
+    expect(result.showFileACase).toEqual(true);
   });
 
-  it('shows case search if defined user has irsPractitioner role', () => {
+  it('should keep the showStartButton flag as false when the user role is not a private practitioner or petitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.irsPractitioner,
     });
+
     const result = runCompute(dashboardExternalHelper, {
       state: {
         closedCases: [{ something: true }],
         openCases: [{ something: true }],
       },
     });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(true);
+
+    expect(result.showStartButton).toEqual(false);
   });
 
-  it('hides case search if defined user does not have privatePractitioner or irsPractitioner role', () => {
+  it('should set the showStartButton flag as true when the user role is a private practitioner or petitioner', () => {
     applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitionsClerk,
+      role: ROLES.petitioner,
     });
+
     const result = runCompute(dashboardExternalHelper, {
       state: {
         closedCases: [{ something: true }],
         openCases: [{ something: true }],
       },
     });
-    expect(result.showCaseList).toEqual(true);
-    expect(result.showWhatToExpect).toEqual(false);
-    expect(result.showCaseSearch).toEqual(false);
+
+    expect(result.showStartButton).toEqual(true);
   });
 });
