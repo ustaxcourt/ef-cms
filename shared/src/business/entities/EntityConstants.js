@@ -1233,19 +1233,22 @@ const TRIAL_STATUS_TYPES = {
     label: 'Dismissed',
     deprecated: true,
   },
-  settled: {
-    label: 'Settled',
-    deprecated: true,
+  continued: {
+    label: 'Continued',
+    deprecated: false,
   },
   probableSettlement: {
+    new: true,
     label: 'Probable Settlement',
     deprecated: false,
   },
   probableTrial: {
+    new: true,
     label: 'Probable Trial',
     deprecated: false,
   },
   definiteTrial: {
+    new: true,
     label: 'Definite Trial',
     deprecated: false,
   },
@@ -1254,24 +1257,26 @@ const TRIAL_STATUS_TYPES = {
     deprecated: false,
   },
   basisReached: {
+    legacyLabel: 'A Basis Reached',
     label: 'Basis Reached',
     deprecated: false,
+  },
+  settled: {
+    label: 'Settled',
+    deprecated: true,
   },
   recall: {
     label: 'Recall',
     deprecated: false,
   },
   motionToDismiss: {
+    new: true,
     label: 'Motion to Dismiss',
     deprecated: false,
   },
   submittedCAV: {
-    // legacyTitle:
+    legacyLabel: 'Taken Under Advisement',
     label: 'Submitted/CAV',
-    deprecated: false,
-  },
-  continued: {
-    label: 'Continued',
     deprecated: false,
   },
 };
