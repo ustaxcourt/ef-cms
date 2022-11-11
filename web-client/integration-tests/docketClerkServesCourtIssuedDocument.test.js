@@ -14,25 +14,27 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
+  it('petitioner creates an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest, {
       procedureType: 'Regular',
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
