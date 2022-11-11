@@ -1,5 +1,4 @@
 import {
-  DOCUMENT_SERVED_MESSAGES,
   FILING_FEE_DEADLINE_DESCRIPTION,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -122,7 +121,7 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
 
       expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
       expect(cerebralTest.getState('alertSuccess').message).toEqual(
-        DOCUMENT_SERVED_MESSAGES.GENERIC,
+        'Document served.',
       );
     });
 
