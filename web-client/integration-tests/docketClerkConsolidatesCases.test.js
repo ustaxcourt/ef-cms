@@ -17,10 +17,10 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 describe('Case Consolidation Journey', () => {
   const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,
@@ -35,7 +35,7 @@ describe('Case Consolidation Journey', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('create electronic lead case', async () => {
+  it('petitioner creates electronic lead case', async () => {
     const { docketNumber } = await uploadPetition(cerebralTest, overrides);
 
     expect(docketNumber).toBeDefined();
