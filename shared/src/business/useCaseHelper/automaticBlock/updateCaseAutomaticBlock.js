@@ -9,9 +9,12 @@
 exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
-  removingBlock,
+  removingAutomaticBlock,
 }) => {
-  if ((caseEntity.trialDate && !removingBlock) || caseEntity.highPriority) {
+  if (
+    (caseEntity.trialDate && !removingAutomaticBlock) ||
+    caseEntity.highPriority
+  ) {
     return caseEntity;
   }
   const caseDeadlines = await applicationContext
@@ -30,7 +33,7 @@ exports.updateCaseAutomaticBlock = async ({
         applicationContext,
         docketNumber: caseEntity.docketNumber,
       });
-  } else if (caseEntity.isReadyForTrial()) {
+  } else if (caseEntity.isReadyForTrial() && !removingAutomaticBlock) {
     await applicationContext
       .getPersistenceGateway()
       .createCaseTrialSortMappingRecords({

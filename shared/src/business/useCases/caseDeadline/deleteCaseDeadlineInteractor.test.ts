@@ -104,7 +104,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call updateCaseAutomaticBlock with removingBlock set to true', async () => {
+  it('should call updateCaseAutomaticBlock with removingAutomaticBlock set to true', async () => {
     await deleteCaseDeadlineInteractor(applicationContext, {
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: '123-20',
@@ -112,7 +112,7 @@ describe('deleteCaseDeadlineInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
-        .calls[0][0].removingBlock,
+        .calls[0][0].removingAutomaticBlock,
     ).toEqual(true);
   });
 });

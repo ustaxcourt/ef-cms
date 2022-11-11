@@ -100,7 +100,7 @@ describe('removeCasePendingItemInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call updateCaseAutomaticBlock with removingBlock set to true', async () => {
+  it('should call updateCaseAutomaticBlock with removingAutomaticBlock set to true', async () => {
     await removeCasePendingItemInteractor(applicationContext, {
       docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // docketEntries[3] from MOCK_CASE
       docketNumber: MOCK_CASE.docketNumber,
@@ -108,7 +108,7 @@ describe('removeCasePendingItemInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
-        .calls[0][0].removingBlock,
+        .calls[0][0].removingAutomaticBlock,
     ).toEqual(true);
   });
 });

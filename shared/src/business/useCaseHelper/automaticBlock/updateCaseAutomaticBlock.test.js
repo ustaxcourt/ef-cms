@@ -113,12 +113,37 @@ describe('updateCaseAutomaticBlock', () => {
     await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
-      removingBlock: true,
+      removingAutomaticBlock: true,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseDeadlinesByDocketNumber,
     ).toHaveBeenCalled();
+  });
+
+  it('should not call createCaseTrialSortMappingRecords when it already has a trial date, isReadyForTrial, and the block is being removed', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        highPriority: false,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        trialDate: '2021-03-01T21:40:46.415Z',
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+      removingAutomaticBlock: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
   });
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
