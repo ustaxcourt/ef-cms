@@ -839,6 +839,13 @@ textarea#case-caption {
     float: left;
   }
 
+  .assign-work-item-count-docket {
+    width: 70px;
+    padding: 8px 8px 6px;
+    margin: 4px 0 6px 20px;
+    background-color: color($theme-color-primary-dark);
+  }
+
   .usa-select {
     width: 230px;
     height: 42px;
@@ -856,7 +863,22 @@ textarea#case-caption {
   text-align: center;
 }
 
+.unread,
+.assign-work-item-count-docket {
+  display: inline-block;
+  min-width: 35px;
+  border-radius: 20px;
+  background: color($theme-color-primary);
+  color: $color-white;
+  font-weight: $font-bold;
+  text-align: center;
+}
+
 .assign-work-item-count svg {
+  margin-right: 10px;
+}
+
+.assign-work-item-count-docket svg {
   margin-right: 10px;
 }
 
