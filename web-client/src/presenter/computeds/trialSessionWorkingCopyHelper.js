@@ -1,4 +1,4 @@
-import { camelCase, omitBy, partition, pickBy } from 'lodash';
+import { omitBy, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -11,7 +11,7 @@ const compareCasesByPractitioner = (a, b) => {
 };
 
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
-  const { STATUS_TYPES, TRIAL_STATUS_TYPES } =
+  const { ALLOWLIST_FEATURE_FLAGS, STATUS_TYPES, TRIAL_STATUS_TYPES } =
     applicationContext.getConstants();
 
   const trialSession = get(state.trialSession);
@@ -29,16 +29,16 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
         calendaredCase.status !== STATUS_TYPES.closed &&
         calendaredCase.removedFromTrial !== true,
     )
-    // .filter(
-    //   calendaredCase =>
-    //     (trueFilters.includes('statusUnassigned') &&
-    //       (!caseMetadata[calendaredCase.docketNumber] ||
-    //         !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
-    //     (caseMetadata[calendaredCase.docketNumber] &&
-    //       trueFilters.includes(
-    //         caseMetadata[calendaredCase.docketNumber].trialStatus,
-    //       )),
-    // )
+    .filter(
+      calendaredCase =>
+        (trueFilters.includes('statusUnassigned') &&
+          (!caseMetadata[calendaredCase.docketNumber] ||
+            !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
+        (caseMetadata[calendaredCase.docketNumber] &&
+          trueFilters.includes(
+            caseMetadata[calendaredCase.docketNumber].trialStatus,
+          )),
+    )
     .map(caseItem =>
       applicationContext
         .getUtilities()
@@ -113,18 +113,26 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     casesAssociatedWithTrialSession.reverse();
   }
 
-  // const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
-  //   key: camelCase(value),
-  //   value,
-  // }));
+  const updatedTrialSessionTypesEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key],
+  );
+
+  const unassignedLabel = updatedTrialSessionTypesEnabled
+    ? 'Unassigned'
+    : 'Trial Status';
 
   const trialStatusOptions = omitBy(TRIAL_STATUS_TYPES, statusType => {
-    // if (get(state.allowDeprecated)) return statusType.deprecated === true;
+    if (updatedTrialSessionTypesEnabled !== true) {
+      return statusType.new === true;
+    }
   });
+
   return {
     casesShownCount: formattedCases.length,
     formattedCases: casesAssociatedWithTrialSession,
     showPrintButton: formattedCases.length > 0,
     trialStatusOptions,
+    unassignedLabel,
+    updatedTrialSessionTypesEnabled,
   };
 };

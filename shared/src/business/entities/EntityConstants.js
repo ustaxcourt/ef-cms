@@ -1281,17 +1281,6 @@ const TRIAL_STATUS_TYPES = {
   },
 };
 
-// const TRIAL_STATUS_TYPES_LEGACY = [
-//   'Set for Trial',
-//   'Dismissed',
-//   'Continued',
-//   'Rule 122',
-//   'A Basis Reached',
-//   'Settled',
-//   'Recall',
-//   'Taken Under Advisement',
-// ];
-
 const SCAN_MODES = {
   DUPLEX: 'duplex',
   FEEDER: 'feeder',
