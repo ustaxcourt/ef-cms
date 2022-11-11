@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
 const {
@@ -106,7 +106,7 @@ describe('filterWorkItems', () => {
   let workQueueOutbox;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser = () => ({
+    applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
     });
@@ -201,19 +201,18 @@ describe('filterWorkItems', () => {
   // PETITIONS CLERK
 
   it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', () => {
-    const user = petitionsClerk1;
-    const filtered = workQueueInbox.filter(
-      filterWorkItems({
-        applicationContext,
-        ...SECTION_DOCUMENT_QC_INBOX,
-        user,
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerk1);
+
+    const filtered = filterWorkItems({
+      applicationContext,
+      workItems: workQueueInbox,
+      ...SECTION_DOCUMENT_QC_INBOX,
+    });
     let assigned = null;
     let unassigned = null;
 
     filtered.forEach(item => {
-      if (item.assigneeId === user.userId) {
+      if (item.assigneeId === petitionsClerk1.userId) {
         assigned = item.docketNumber;
       } else {
         unassigned = item.docketNumber;
@@ -230,20 +229,18 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns sent work items for a Petitions Clerk in Section Document QC Outbox', () => {
-    const user = petitionsClerk1;
-    const filtered = workQueueOutbox.filter(
-      filterWorkItems({
-        USER_ROLES: ROLES,
-        applicationContext,
-        ...SECTION_DOCUMENT_QC_OUTBOX,
-        user,
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerk1);
+    const filtered = filterWorkItems({
+      USER_ROLES: ROLES,
+      applicationContext,
+      workItems: workQueueOutbox,
+      ...SECTION_DOCUMENT_QC_OUTBOX,
+    });
     let sentByUser = null;
     let sentByOtherUser = null;
 
     filtered.forEach(item => {
-      if (item.sentByUserId === user.userId) {
+      if (item.sentByUserId === petitionsClerk1.userId) {
         sentByUser = item.docketNumber;
       } else {
         sentByOtherUser = item.docketNumber;
@@ -265,19 +262,17 @@ describe('filterWorkItems', () => {
   // DOCKET CLERK
 
   it('Returns section work items for a Docket Clerk in Section Document QC Inbox', () => {
-    const user = docketClerk1;
-    const filtered = workQueueInbox.filter(
-      filterWorkItems({
-        applicationContext,
-        ...SECTION_DOCUMENT_QC_INBOX,
-        user,
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
+    const filtered = filterWorkItems({
+      applicationContext,
+      workItems: workQueueInbox,
+      ...SECTION_DOCUMENT_QC_INBOX,
+    });
     let assigned = null;
     let unassigned = null;
 
     filtered.forEach(item => {
-      if (item.assigneeId === user.userId) {
+      if (item.assigneeId === docketClerk1.userId) {
         assigned = item.docketNumber;
       } else {
         unassigned = item.docketNumber;
@@ -294,14 +289,12 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns docket section work items for an ADC in Document QC Inbox', () => {
-    const user = adc;
-    const filtered = workQueueInbox.filter(
-      filterWorkItems({
-        applicationContext,
-        ...SECTION_DOCUMENT_QC_INBOX,
-        user,
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValueOnce(adc);
+    const filtered = filterWorkItems({
+      applicationContext,
+      workItems: workQueueInbox,
+      ...SECTION_DOCUMENT_QC_INBOX,
+    });
 
     expect(filtered).toMatchObject([
       workItemDocketMyDocumentQCInbox,
@@ -310,27 +303,23 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns docket section work items for a Docket Clerk in My Document QC In Progress', () => {
-    const user = docketClerk1;
-    const filtered = workQueueInProgress.filter(
-      filterWorkItems({
-        applicationContext,
-        ...MY_DOCUMENT_QC_IN_PROGRESS,
-        user,
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
+    const filtered = filterWorkItems({
+      applicationContext,
+      workItems: workQueueInProgress,
+      ...MY_DOCUMENT_QC_IN_PROGRESS,
+    });
 
     expect(filtered).toEqual([workItemDocketMyDocumentQCInProgress]);
   });
 
   it('Returns docket section work items for a Docket Clerk in Section Document QC In Progress', () => {
-    const user = docketClerk1;
-    const filtered = workQueueInProgress.filter(
-      filterWorkItems({
-        applicationContext,
-        ...SECTION_DOCUMENT_QC_IN_PROGRESS,
-        user,
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
+    const filtered = filterWorkItems({
+      applicationContext,
+      workItems: workQueueInProgress,
+      ...SECTION_DOCUMENT_QC_IN_PROGRESS,
+    });
 
     expect(filtered).toEqual([
       workItemDocketMyDocumentQCInProgress,
