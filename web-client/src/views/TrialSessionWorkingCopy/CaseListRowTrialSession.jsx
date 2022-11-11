@@ -10,10 +10,12 @@ import React from 'react';
 
 const getCaseRow = ({
   formattedCase,
-  get,
   indentMemberCase = false,
   trialSequences,
+  trialSessionWorkingCopyStatus,
   trialStatusOptions,
+  unassignedLabel,
+  updatedTrialSessionTypesEnabled,
 }) => {
   return (
     <React.Fragment className="hoverable" key={formattedCase.docketNumber}>
@@ -52,9 +54,6 @@ const getCaseRow = ({
             aria-label="trial status"
             bind={`trialSessionWorkingCopy.caseMetadata.${formattedCase.docketNumber}.trialStatus`}
             id={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
-            // onBlur={() => {
-            //   trialSequences.toggleShowDeprecatedSequence();
-            // }}
             onChange={value => {
               console.log('1');
               trialSequences.autoSaveTrialSessionWorkingCopySequence({
@@ -62,82 +61,27 @@ const getCaseRow = ({
                 value,
               });
             }}
-            // onToggle={() => {
-            //   trialSequences.toggleShowDeprecatedSequence();
-            // }}
           >
-            <option value="">-Trial Status-</option>
+            <option value="">-{unassignedLabel}-</option>
             {Object.keys(trialStatusOptions).map(key => {
-              // if (!allowDeprecated) {
-              //   if (!trialStatusOptions[key].deprecated) {
-              //     return (
-              //       <option key={key} value={key}>
-              //         {trialStatusOptions[key].label}
-              //       </option>
-              //     );
-              //   }
-              // } else {
-              //   return (
-              //     <option key={key} value={key}>
-              //       {trialStatusOptions[key].label}
-              //     </option>
-              //   );
-              // }
-              // {
-              //   console.log(
-              //     // get(state.trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber].trialStatus
-              //     'get(state.trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber].trialStatus',
-              //     get(
-              //       state.trialSessionWorkingCopy.caseMetadata[
-              //         formattedCase.docketNumber
-              //       ].trialStatus,
-              //     ),
-              //   );
-              // }
-              if (
-                get(
-                  state.trialSessionWorkingCopy.caseMetadata[
-                    formattedCase.docketNumber
-                  ].trialStatus,
-                ) &&
-                trialStatusOptions[
-                  get(
-                    state.trialSessionWorkingCopy.caseMetadata[
-                      formattedCase.docketNumber
-                    ].trialStatus,
-                  )
-                ].deprecated
-              ) {
-                console.log(
-                  'get(state.trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber].trialStatus',
-                  get(
-                    state.trialSessionWorkingCopy.caseMetadata[
-                      formattedCase.docketNumber
-                    ].trialStatus,
-                  ),
-                );
-                console.log('trialStatusOptions[key]', trialStatusOptions[key]);
+              if (updatedTrialSessionTypesEnabled) {
                 if (
                   !trialStatusOptions[key].deprecated ||
-                  get(
-                    state.trialSessionWorkingCopy.caseMetadata[
-                      formattedCase.docketNumber
-                    ].trialStatus,
-                  ) === key
-                ) {
+                  trialSessionWorkingCopyStatus === key
+                )
                   return (
                     <option key={key} value={key}>
                       {trialStatusOptions[key].label}
                     </option>
                   );
-                }
-              } else if (!trialStatusOptions[key].deprecated) {
+              } else
                 return (
                   <option key={key} value={key}>
-                    {trialStatusOptions[key].label}
+                    {trialStatusOptions[key].legacyLabel
+                      ? trialStatusOptions[key].legacyLabel
+                      : trialStatusOptions[key].label}
                   </option>
                 );
-              }
             })}
           </BindedSelect>
         </td>
@@ -235,27 +179,35 @@ export const CaseListRowTrialSession = connect(
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
     toggleShowDeprecatedSequence: sequences.toggleShowDeprecatedSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
+    unassignedLabel: state.trialSessionWorkingCopyHelper.unassignedLabel,
+    updatedTrialSessionTypesEnabled:
+      state.trialSessionWorkingCopyHelper.updatedTrialSessionTypesEnabled,
   },
   ({
-    // allowDeprecated,
     autoSaveTrialSessionWorkingCopySequence,
     formattedCase,
-    get,
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     toggleShowDeprecatedSequence,
+    trialSessionWorkingCopy,
     trialStatusOptions,
-  }) =>
-    getCaseRow({
-      // allowDeprecated,
+    unassignedLabel,
+    updatedTrialSessionTypesEnabled,
+  }) => {
+    return getCaseRow({
       formattedCase,
-      get,
       trialSequences: {
         autoSaveTrialSessionWorkingCopySequence,
         openAddEditUserCaseNoteModalFromListSequence,
         openDeleteUserCaseNoteConfirmModalSequence,
         toggleShowDeprecatedSequence,
       },
+      trialSessionWorkingCopyStatus:
+        trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber]
+          ?.trialStatus,
       trialStatusOptions,
-    }),
+      unassignedLabel,
+      updatedTrialSessionTypesEnabled,
+    });
+  },
 );
