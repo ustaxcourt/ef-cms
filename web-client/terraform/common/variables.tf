@@ -19,3 +19,10 @@ variable "cloudfront_default_ttl" {
 variable "zone_name" {
   type = string
 }
+
+
+
+variable "viewer_protocol_policy" {
+  type = string
+  default = "redirect-to-https"
+}

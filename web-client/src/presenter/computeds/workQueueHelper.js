@@ -47,6 +47,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showAssignedToColumn:
       !showIndividualWorkQueue && (showInbox || showInProgress) && !userIsOther,
     showCaseStatusColumn: isJudge || userIsChambers,
+    showDocketClerkFilter: userIsDocketClerk,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge || userIsChambers,
     showInProgressTab: userIsDocketClerk || userIsPetitionsClerk,
