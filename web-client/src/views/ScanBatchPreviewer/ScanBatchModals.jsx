@@ -33,6 +33,7 @@ export const ConfirmRescanBatchModal = connect(
     );
   },
 );
+
 export const DeleteBatchModal = connect(
   {
     batchIndex: state.scanner.batchIndexToDelete,

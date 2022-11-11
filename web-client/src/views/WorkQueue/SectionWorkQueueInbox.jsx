@@ -1,5 +1,6 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
@@ -7,6 +8,7 @@ import React from 'react';
 
 const SectionWorkQueueTable = connect(
   {
+    FROM_PAGES: state.constants.FROM_PAGES,
     formattedWorkQueue: state.formattedWorkQueue,
     hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
     hideIconColumn: state.workQueueHelper.hideIconColumn,
@@ -16,6 +18,7 @@ const SectionWorkQueueTable = connect(
   },
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
+    FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
     selectWorkItemSequence,
@@ -47,6 +50,7 @@ const SectionWorkQueueTable = connect(
         {formattedWorkQueue.map(formattedWorkItem => {
           return (
             <SectionWorkQueueTable.Row
+              FROM_PAGES={FROM_PAGES}
               hideFiledByColumn={hideFiledByColumn}
               hideIconColumn={hideIconColumn}
               item={formattedWorkItem}
@@ -64,6 +68,7 @@ const SectionWorkQueueTable = connect(
 
 SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
+    FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
     item,
@@ -147,7 +152,10 @@ SectionWorkQueueTable.Row = React.memo(
           )}
           <td className="message-queue-row max-width-25">
             <div className="message-document-title">
-              <a className="case-link" href={item.editLink}>
+              <a
+                className="case-link"
+                href={`${item.editLink}?fromPage=${FROM_PAGES.qcSectionInbox}`}
+              >
                 {item.docketEntry.descriptionDisplay}
               </a>
             </div>
@@ -166,59 +174,15 @@ SectionWorkQueueTable.Row = React.memo(
   workQueueItemsAreEqual,
 );
 
-SectionWorkQueueTable.Actions = connect(
-  {
-    assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    selectAssigneeSequence: sequences.selectAssigneeSequence,
-    selectedWorkItemsLength: state.selectedWorkItems.length,
-    users: state.users,
-  },
-  function SectionWorkQueueActionsComponent({
-    assignSelectedWorkItemsSequence,
-    selectAssigneeSequence,
-    selectedWorkItemsLength,
-    users,
-  }) {
-    return (
-      <div className="action-section">
-        <span className="assign-work-item-count">
-          <Icon aria-label="selected work items count" icon="check" />
-          {selectedWorkItemsLength}
-        </span>
-        <select
-          aria-label="select an assignee"
-          className="usa-select"
-          id="options"
-          name="options"
-          onChange={evt => {
-            selectAssigneeSequence({
-              assigneeId: evt.target.value,
-              assigneeName: evt.target.options[evt.target.selectedIndex].text,
-            });
-            assignSelectedWorkItemsSequence();
-          }}
-        >
-          <option value>Assign to...</option>
-          {users.map(user => (
-            <option key={user.userId} value={user.userId}>
-              {user.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  },
-);
-
 export const SectionWorkQueueInbox = connect(
   {
     formattedWorkQueueLength: state.formattedWorkQueue.length,
-    showSendToBar: state.workQueueHelper.showSendToBar,
+    users: state.users,
   },
-  function SectionWorkQueueInbox({ formattedWorkQueueLength, showSendToBar }) {
+  function SectionWorkQueueInbox({ formattedWorkQueueLength, users }) {
     return (
       <React.Fragment>
-        {showSendToBar && <SectionWorkQueueTable.Actions />}
+        <WorkQueueAssignments users={users} />
         <SectionWorkQueueTable />
         {formattedWorkQueueLength === 0 && <p>There are no documents.</p>}
       </React.Fragment>

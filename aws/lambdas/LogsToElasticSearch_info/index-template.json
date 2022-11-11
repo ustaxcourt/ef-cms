@@ -1,0 +1,150 @@
+{
+  "index_patterns": ["cwl-*"],
+  "mappings": {
+    "properties": {
+      "authorizer": {
+        "properties": {
+          "error": {
+            "type": "text"
+          },
+          "responseTimeMs": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "statusCode": {
+            "type": "integer",
+            "ignore_malformed": true
+          }
+        }
+      },
+      "environment": {
+        "properties": {
+          "color": {
+            "type": "keyword"
+          },
+          "stage": {
+            "type": "keyword"
+          }
+        }
+      },
+      "level": {
+        "type": "keyword"
+      },
+      "logGroup": {
+        "type": "keyword"
+      },
+      "logStream": {
+        "type": "keyword"
+      },
+      "message": {
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword"
+          }
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "dynamic": false,
+        "enabled": false
+      },
+      "context": {
+        "properties": {
+          "docketNumber": {
+            "type": "keyword"
+          },
+          "docketEntryId": {
+            "type": "keyword"
+          },
+          "trialSessionId": {
+            "type": "keyword"
+          }
+        }
+      },
+      "request": {
+        "properties": {
+          "body": {
+            "type": "text",
+            "index": false
+          },
+          "headers": {
+            "dynamic": false,
+            "properties": {
+              "content-length": {
+                "type": "long",
+                "ignore_malformed": true
+              },
+              "user-agent": {
+                "type": "keyword"
+              },
+              "x-forwarded-for": {
+                "type": "keyword"
+              }
+            }
+          },
+          "method": {
+            "type": "keyword"
+          },
+          "url": {
+            "type": "keyword"
+          }
+        }
+      },
+      "requestId": {
+        "properties": {
+          "apiGateway": {
+            "type": "keyword"
+          },
+          "applicationLoadBalancer": {
+            "type": "keyword"
+          },
+          "authorizer": {
+            "type": "keyword"
+          },
+          "connection": {
+            "type": "keyword"
+          },
+          "lambda": {
+            "type": "keyword"
+          }
+        }
+      },
+      "response": {
+        "properties": {
+          "responseLength": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "responseTimeMs": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "statusCode": {
+            "type": "integer",
+            "ignore_malformed": true
+          }
+        }
+      },
+      "timestamp": {
+        "type": "date"
+      },
+      "user": {
+        "properties": {
+          "email": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "text"
+          },
+          "role": {
+            "type": "keyword"
+          },
+          "userId": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
