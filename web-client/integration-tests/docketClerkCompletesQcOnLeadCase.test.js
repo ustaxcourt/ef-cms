@@ -82,6 +82,30 @@ describe('Complete QC on lead case docket entry', () => {
       },
     );
 
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Miscellaneous',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: '[anything]',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type A',
+      },
+    );
+
     await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
