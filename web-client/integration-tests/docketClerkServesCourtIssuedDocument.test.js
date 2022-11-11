@@ -2,6 +2,7 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkGetsDocketEntryByEventCode } from './journey/docketClerkGetsDocketEntryByEventCode';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -14,27 +15,25 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
+describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
-    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('petitioner creates an electronic case', async () => {
-    const { docketNumber } = await uploadPetition(cerebralTest, {
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
       procedureType: 'Regular',
     });
-
-    expect(docketNumber).toBeDefined();
-
-    cerebralTest.docketNumber = docketNumber;
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -61,22 +60,23 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkSignsOrder(cerebralTest, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
-  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
-  docketClerkServesDocument(cerebralTest, 0);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 0);
-  docketClerkServesDocument(cerebralTest, 1);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 1);
+  docketClerkGetsDocketEntryByEventCode(cerebralTest, 'O');
+  // docketClerkSignsOrder(cerebralTest, 0);
+  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  // docketClerkViewsDraftOrder(cerebralTest, 1);
+  // docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
+  // docketClerkViewsDraftOrder(cerebralTest, 1);
+  // docketClerkSignsOrder(cerebralTest, 1);
+  // docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
+  // docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
+  // docketClerkServesDocument(cerebralTest, 0);
+  // docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 0);
+  // docketClerkServesDocument(cerebralTest, 1);
+  // docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 1);
 
-  docketClerkViewsDraftOrder(cerebralTest, 2);
-  docketClerkSignsOrder(cerebralTest, 2);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
-  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
-  docketClerkViewsCaseDetailDocumentView(cerebralTest);
+  // docketClerkViewsDraftOrder(cerebralTest, 2);
+  // docketClerkSignsOrder(cerebralTest, 2);
+  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  // docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
+  // docketClerkViewsCaseDetailDocumentView(cerebralTest);
 });
