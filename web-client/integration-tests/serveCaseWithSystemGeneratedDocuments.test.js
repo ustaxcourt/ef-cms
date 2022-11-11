@@ -9,7 +9,7 @@ import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '
 
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
-import { servePetitionToIRS } from './userFlows/servePetition.test';
+import { servePetitionToIRS } from './userFlows/servePetitionToIRS';
 import { withAppContextDecorator } from '../src/withAppContext';
 const { faker } = require('@faker-js/faker');
 

@@ -8,6 +8,7 @@ import { fakeFile, loginAs, setupTest, waitForCondition } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { runCompute } from 'cerebral/test';
+import { servePetitionToIRS } from './userFlows/servePetitionToIRS';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Autogenerate Deadline when order for filing fee is served', () => {
@@ -41,41 +42,7 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
       shouldShowIrsNoticeDate: false,
     });
 
-    it('petitions clerk serves paper petition', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
-      });
-
-      const petitionDocketEntryId = cerebralTest
-        .getState('caseDetail.docketEntries')
-        .find(d => d.eventCode === 'P').docketEntryId;
-
-      await cerebralTest.runSequence('gotoPetitionQcSequence', {
-        docketNumber: cerebralTest.docketNumber,
-        redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
-      });
-
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'hasVerifiedIrsNotice',
-        value: false,
-      });
-
-      expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
-
-      await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
-
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'ReviewSavedPetition',
-      );
-
-      await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
-
-      await cerebralTest.runSequence('serveCaseToIrsSequence');
-
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'PrintPaperPetitionReceipt',
-      );
-    });
+    servePetitionToIRS(cerebralTest);
 
     loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -194,41 +161,7 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
       shouldShowIrsNoticeDate: false,
     });
 
-    it('petitions clerk serves paper petition', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
-      });
-
-      const petitionDocketEntryId = cerebralTest
-        .getState('caseDetail.docketEntries')
-        .find(d => d.eventCode === 'P').docketEntryId;
-
-      await cerebralTest.runSequence('gotoPetitionQcSequence', {
-        docketNumber: cerebralTest.docketNumber,
-        redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
-      });
-
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'hasVerifiedIrsNotice',
-        value: false,
-      });
-
-      expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
-
-      await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
-
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'ReviewSavedPetition',
-      );
-
-      await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
-
-      await cerebralTest.runSequence('serveCaseToIrsSequence');
-
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'PrintPaperPetitionReceipt',
-      );
-    });
+    servePetitionToIRS(cerebralTest);
 
     loginAs(cerebralTest, 'docketclerk@example.com');
 
