@@ -191,6 +191,11 @@ export const getConstants = () => ({
   EXTERNAL_DOCUMENTS_ARRAY,
   EXTERNAL_USER_DASHBOARD_TABS,
   FILING_TYPES,
+  FROM_PAGES: {
+    caseDetail: 'case-detail',
+    qcMyInbox: 'qc-my-inbox',
+    qcSectionInbox: 'qc-section-inbox',
+  },
   GENERIC_ORDER_EVENT_CODE,
   IDLE_STATUS: { ACTIVE: 'active', IDLE: 'idle' },
   INITIAL_DOCUMENT_TYPES,
