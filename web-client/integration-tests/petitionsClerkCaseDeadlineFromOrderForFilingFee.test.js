@@ -57,7 +57,7 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
 
     it('docket clerk adds a docket entry for order for filing fee and serves it', async () => {
       await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-        docketEntryId: cerebralTest.draftDocketEntryId,
+        docketEntryId: cerebralTest.docketEntryId,
         docketNumber: cerebralTest.docketNumber,
       });
 
@@ -142,41 +142,16 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
 
     loginAs(cerebralTest, 'docketclerk@example.com');
 
-    it('should view the draft order and sign it', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
-      });
+    docketClerkGetsDocketEntryByEventCode(
+      cerebralTest,
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode,
+    );
 
-      const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
-      const draftOrderForFilingFeeDocketEntry = docketEntries.find(
-        doc =>
-          doc.eventCode ===
-          SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode,
-      );
-
-      expect(draftOrderForFilingFeeDocketEntry).toBeTruthy();
-
-      cerebralTest.draftDocketEntryId =
-        draftOrderForFilingFeeDocketEntry.docketEntryId;
-
-      await cerebralTest.runSequence('gotoSignOrderSequence', {
-        docketEntryId: cerebralTest.draftDocketEntryId,
-        docketNumber: cerebralTest.docketNumber,
-      });
-
-      await cerebralTest.runSequence('setPDFSignatureDataSequence', {
-        signatureData: {
-          scale: 1,
-          x: 100,
-          y: 100,
-        },
-      });
-      await cerebralTest.runSequence('saveDocumentSigningSequence');
-    });
+    docketClerkSignsOrder(cerebralTest);
 
     it('docket clerk adds a docket entry for order for filing fee and saves it', async () => {
       await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-        docketEntryId: cerebralTest.draftDocketEntryId,
+        docketEntryId: cerebralTest.docketEntryId,
         docketNumber: cerebralTest.docketNumber,
       });
 
@@ -225,8 +200,8 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
       await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
-          docketEntryId: cerebralTest.draftDocketEntryId,
-          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.draftDocketEntryId}`,
+          docketEntryId: cerebralTest.docketEntryId,
+          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
         },
       );
 
