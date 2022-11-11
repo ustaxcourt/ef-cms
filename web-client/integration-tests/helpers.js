@@ -472,6 +472,7 @@ export const createCourtIssuedDocketEntry = async ({
   cerebralTest,
   docketEntryId,
   docketNumber,
+  documentType,
   eventCode,
   filingDate,
   trialLocation,
@@ -487,6 +488,16 @@ export const createCourtIssuedDocketEntry = async ({
       {
         key: 'eventCode',
         value: eventCode,
+      },
+    );
+  }
+
+  if (documentType) {
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: documentType,
       },
     );
   }
