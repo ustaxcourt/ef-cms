@@ -47,19 +47,14 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(cerebralTest, {
-    documentTitle: 'Order of Dismissal',
-    eventCode: 'OD',
-    expectedDocumentType: 'Order of Dismissal',
-  });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(cerebralTest, 5);
+  petitionsClerkViewsCaseDetail(cerebralTest, 4);
   petitionsClerkViewsDraftOrder(cerebralTest, 0);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkEditsDocketEntryFromOrderTypeA(cerebralTest, 0);
   docketClerkConvertsAnOrderToAnOpinion(cerebralTest, 0);
@@ -69,10 +64,17 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkEditsDocketEntryFromOrderTypeF(cerebralTest, 0);
   docketClerkEditsDocketEntryFromOrderTypeG(cerebralTest, 0);
   docketClerkEditsDocketEntryFromOrderTypeH(cerebralTest, 0);
-  docketClerkViewsDraftOrder(cerebralTest, 1);
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order of Dismissal',
+    eventCode: 'OD',
+    expectedDocumentType: 'Order of Dismissal',
+  });
+
+  docketClerkViewsDraftOrder(cerebralTest);
   docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
   docketClerkCreatesAnOrder(cerebralTest, {
