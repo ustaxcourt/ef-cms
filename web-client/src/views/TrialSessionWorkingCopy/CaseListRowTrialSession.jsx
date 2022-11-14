@@ -55,7 +55,6 @@ const getCaseRow = ({
             bind={`trialSessionWorkingCopy.caseMetadata.${formattedCase.docketNumber}.trialStatus`}
             id={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
             onChange={value => {
-              console.log('1');
               trialSequences.autoSaveTrialSessionWorkingCopySequence({
                 key: `caseMetadata.${formattedCase.docketNumber}.trialStatus`,
                 value,
@@ -170,7 +169,6 @@ const getCaseRow = ({
 
 export const CaseListRowTrialSession = connect(
   {
-    // allowDeprecated: state.allowDeprecated,
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
     openAddEditUserCaseNoteModalFromListSequence:
