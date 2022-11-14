@@ -26,7 +26,7 @@ describe('migrateItems', () => {
         trialStatus: 'aBasisReached',
       },
       '120-20': {
-        trialStatus: 'aBasisReached',
+        trialStatus: 'takenUnderAdvisement',
       },
     },
     filters: {
@@ -112,7 +112,7 @@ describe('migrateItems', () => {
           trialStatus: 'basisReached',
         },
         '120-20': {
-          trialStatus: 'basisReached',
+          trialStatus: 'submittedCAV',
         },
       },
     };
@@ -131,7 +131,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should update trialStatus filters while preserving original values', async () => {
+  it('should update trialStatus filters and reset all to true', async () => {
     const items = [mockBasisReached, mockTakenUnderAdvisement];
 
     const results = await migrateItems(items, documentClient);
@@ -143,17 +143,24 @@ describe('migrateItems', () => {
           trialStatus: 'basisReached',
         },
         '120-20': {
-          trialStatus: 'basisReached',
+          trialStatus: 'submittedCAV',
         },
       },
       filters: {
-        ...mockBasisReached.filters,
         basisReached: true,
+        continued: true,
         definiteTrial: true,
+        dismissed: true,
         motionToDismiss: true,
         probableSettlement: true,
         probableTrial: true,
-        submittedCAV: false,
+        recall: true,
+        rule122: true,
+        setForTrial: true,
+        settled: true,
+        showAll: true,
+        statusUnassigned: true,
+        submittedCAV: true,
       },
     };
     const expectedTakenUnderAdvisement = {
@@ -164,13 +171,7 @@ describe('migrateItems', () => {
         },
       },
       filters: {
-        ...mockTakenUnderAdvisement.filters,
-        basisReached: false,
-        definiteTrial: true,
-        motionToDismiss: true,
-        probableSettlement: true,
-        probableTrial: true,
-        submittedCAV: false,
+        ...expectedBasisReached.filters,
       },
     };
 
