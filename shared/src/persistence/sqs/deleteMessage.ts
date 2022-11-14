@@ -1,4 +1,12 @@
-exports.deleteMessage = ({ applicationContext, message, queueUrl }) =>
+export const deleteMessage = ({
+  applicationContext,
+  message,
+  queueUrl,
+}: {
+  applicationContext: IApplicationContext;
+  message: any;
+  queueUrl: string;
+}) =>
   applicationContext
     .getMessagingClient()
     .deleteMessage({
