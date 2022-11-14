@@ -64,6 +64,11 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       'SHORT_MONTH_DAY_YEAR',
     );
 
+  // chambersPhoneNumber
+  // formattedTrialClerk
+  // formattedCourtReporter
+  // formattedIrsCalendarAdministrator
+
   const formattedTrialSessionDTO = {
     computedStatus: formattedTrialSessionDetails.computedStatus,
     endDateForAdditionalPageHeaders,
