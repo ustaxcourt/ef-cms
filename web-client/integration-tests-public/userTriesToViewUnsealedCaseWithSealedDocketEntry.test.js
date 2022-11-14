@@ -26,19 +26,17 @@ describe('Unauthed user views todays orders', () => {
   const privateTestClient = privateSetupTest();
   const publicTestClient = publicSetupTest();
 
-  privateTestClient.draftOrders = [];
-
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     privateTestClient.closeSocket();
+    privateTestClient.draftOrders = [];
   });
 
   loginAs(privateTestClient, 'petitioner@example.com');
-
-  it('Create case', async () => {
+  it('petitioner creates an electronic case', async () => {
     const caseDetail = await uploadPetition(privateTestClient, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
@@ -61,8 +59,8 @@ describe('Unauthed user views todays orders', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(privateTestClient, 0);
-  docketClerkSignsOrder(privateTestClient, 0);
+  docketClerkViewsDraftOrder(privateTestClient);
+  docketClerkSignsOrder(privateTestClient);
   docketClerkAddsOrderDocketEntryFromOrder(privateTestClient, 0, {
     day: '01',
     month: '01',
