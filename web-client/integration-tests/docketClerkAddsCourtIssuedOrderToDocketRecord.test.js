@@ -83,7 +83,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     expectedDocumentType: 'Order',
   });
   docketClerkSignsOrder(cerebralTest);
-  docketClerkAddsDocketEntryFromOrderWithDate(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrderWithDate(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsDocketEntry(cerebralTest, 1);
