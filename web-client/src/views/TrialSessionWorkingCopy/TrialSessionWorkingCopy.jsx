@@ -12,6 +12,7 @@ import { WorkingCopySessionList } from './WorkingCopySessionList';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialSessionWorkingCopy = connect(
   {
@@ -88,7 +89,68 @@ export const TrialSessionWorkingCopy = connect(
           </div>
           <SuccessNotification />
           <ErrorNotification />
-          <SessionNotes />
+
+          <div className="grid-row">
+            <div className="grid-col-6">
+              <div className="grid-col-6">
+                <div className="card trial-session-card">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">Assignments</h3>
+                    <div className="grid-container padding-x-0">
+                      <div className="grid-row grid-gap">
+                        <div className="grid-col-6">
+                          <p className="label">Judge</p>
+                          <p className="margin-bottom-0">
+                            {formattedTrialSessionDetails.formattedJudge}
+                          </p>
+                          <p>
+                            {formattedTrialSessionDetails.chambersPhoneNumber
+                              ? formattedTrialSessionDetails.chambersPhoneNumber
+                              : 'No phone number'}
+                          </p>
+                        </div>
+                        <div className="grid-col-6">
+                          <p className="label">Trial clerk</p>
+                          <p>
+                            {formattedTrialSessionDetails.formattedTrialClerk}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        className={classNames(
+                          'grid-row grid-gap',
+                          formattedTrialSessionDetails.showSwingSession &&
+                            'margin-bottom-8',
+                        )}
+                      >
+                        <div className="grid-col-6">
+                          <p className="label">Court reporter</p>
+                          <p className="margin-bottom-0">
+                            {
+                              formattedTrialSessionDetails.formattedCourtReporter
+                            }
+                          </p>
+                        </div>
+                        <div className="grid-col-6">
+                          <p className="label">IRS calendar administrator</p>
+                          <p className="margin-bottom-0">
+                            {
+                              formattedTrialSessionDetails.formattedIrsCalendarAdministrator
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid-col-6">
+              <SessionNotes />
+            </div>
+          </div>
+
           <WorkingCopySessionList />
           {showModal === 'DeleteUserCaseNoteConfirmModal' && (
             <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteUserCaseNoteFromWorkingCopySequence" />
