@@ -1,4 +1,4 @@
-const { zipS3Files } = require('./zipS3Files');
+import { zipS3Files } from './zipS3Files';
 
 describe('zipS3Files', () => {
   it('calls the s3 archive returning a promise', () => {
@@ -22,6 +22,9 @@ describe('zipS3Files', () => {
         on: () => null,
       }),
       bucket: 'some-bucket',
+      onEntry: () => {},
+      onError: () => {},
+      onProgress: () => {},
       s3Client: null,
       s3FilesLib: {
         connect: () => ({
