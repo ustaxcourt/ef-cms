@@ -12,7 +12,7 @@ describe('uploadDocument', () => {
     const key = await uploadDocumentFromClient({
       applicationContext,
       document: 'test',
-      key: 'test.pdf',
+      key: KEY,
     });
 
     expect(key).toEqual(KEY);
