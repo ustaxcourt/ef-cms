@@ -1,44 +1,51 @@
+const {
+  UNSERVABLE_EVENT_CODES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+
 const isCase = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
 };
 
-const doesHavePendingItems = item => {
-  // something like
-  // return item.docketEntries.some(docketEntry =>
-  //   DocketEntry.isPending(docketEntry),
-  // );
+const isPending = docketEntry => {
+  return (
+    docketEntry.pending &&
+    (isServed(docketEntry) ||
+      UNSERVABLE_EVENT_CODES.find(
+        unservedCode => unservedCode === docketEntry.eventCode,
+      ))
+  );
 };
 
-const doesHaveCaseDeadlines = item => {
-  // something like
-  // do another check for that item in dynamo?
-  // getRecordsViaMapping({
-  //   applicationContext,
-  //   pk: `case|${docketNumber}`,
-  //   prefix: 'case-deadline',
-  // });
+const isServed = docketEntry => {
+  return !!docketEntry.servedAt || !!docketEntry.isLegacyServed;
 };
 
-const migrateItems = items => {
+const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
-
-  // look for Cases with trialDate and no pending items or deadlines
-  // update automatic blocked
-  // this.automaticBlocked = false;
-  // this.automaticBlockedDate = undefined;
-  // this.automaticBlockedReason = undefined;
-
-  // check if there's local data already structured like this to verify, otherwise add
-  // case 101-20, has trialDate, but no tracked items
   for (const item of items) {
-    if (
-      isCase(item) &&
-      item.trialDate &&
-      (doesHavePendingItems || doesHaveCaseDeadlines)
-    ) {
-      item.automaticBlocked = false;
-      item.automaticBlockedDate = undefined;
-      item.automaticBlockedReason = undefined;
+    if (isCase(item) && item.trialDate) {
+      const caseDeadlines = await documentClient
+        .get({
+          Key: {
+            pk: `case|${item.docketNumber}`,
+            prefix: 'case-deadline',
+          },
+          TableName: process.env.SOURCE_TABLE,
+        })
+        .promise()
+        .then(res => {
+          return res.Item;
+        });
+
+      const pendingItems = item.docketEntries.some(docketEntry =>
+        isPending(docketEntry),
+      );
+
+      if (!caseDeadlines && !pendingItems) {
+        item.automaticBlocked = false;
+        item.automaticBlockedDate = undefined;
+        item.automaticBlockedReason = undefined;
+      }
     }
 
     itemsAfter.push(item);
