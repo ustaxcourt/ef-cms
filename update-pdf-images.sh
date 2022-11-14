@@ -4,6 +4,6 @@
 
 echo "running npm ci... this may take a while"
 
-npm i
+npm ci
 npm run test:pdf-output
 node image-compare-pdfs.js
