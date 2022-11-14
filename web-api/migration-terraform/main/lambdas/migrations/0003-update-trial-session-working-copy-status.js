@@ -3,20 +3,26 @@ const isTrialSessionWorkingCopy = item => {
 };
 
 const migrateItems = items => {
+  const itemsAfter = [];
+
   for (const item of items) {
     if (isTrialSessionWorkingCopy(item)) {
       item.filters = {
-        ...item.filters,
+        basisReached: true,
+        continued: true,
         definiteTrial: true,
+        dismissed: true,
         motionToDismiss: true,
         probableSettlement: true,
         probableTrial: true,
+        recall: true,
+        rule122: true,
+        setForTrial: true,
+        settled: true,
+        showAll: true,
+        statusUnassigned: true,
+        submittedCAV: true,
       };
-
-      item.filters.basisReached = item.filters.aBasisReached;
-      item.filters.submittedCAV = item.filters.takenUnderAdvisement;
-      delete item.filters.aBasisReached;
-      delete item.filters.takenUnderAdvisement;
 
       for (const aCase in item.caseMetadata) {
         switch (item.caseMetadata[aCase].trialStatus) {
@@ -29,8 +35,9 @@ const migrateItems = items => {
         }
       }
     }
+    itemsAfter.push(item);
   }
-  return items;
+  return itemsAfter;
 };
 
 exports.migrateItems = migrateItems;
