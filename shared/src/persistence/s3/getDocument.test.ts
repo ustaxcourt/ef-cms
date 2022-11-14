@@ -1,8 +1,7 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getDocument } = require('./getDocument');
-const { getPdfFromUrl } = require('./getPdfFromUrl');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getDocument } from './getDocument';
+import { getPdfFromUrl } from './getPdfFromUrl';
+
 const BLOB_DATA = 'abc';
 jest.mock('./getPdfFromUrl', () => ({
   getPdfFromUrl: jest.fn().mockReturnValue({
@@ -25,9 +24,11 @@ describe('getDocument', () => {
 
     const result = await getDocument({
       applicationContext,
-    });
+    } as any);
 
-    expect(getPdfFromUrl.mock.calls[0][0]).toMatchObject({ url: mockPdfUrl });
+    expect((getPdfFromUrl as jest.Mock).mock.calls[0][0]).toMatchObject({
+      url: mockPdfUrl,
+    });
     expect(result).toEqual({ name: 'mockfile.pdf' });
   });
 
@@ -39,7 +40,10 @@ describe('getDocument', () => {
     });
     await getDocument({
       applicationContext,
+      docketNumber: '101-29',
+      key: 'abc',
       protocol: 'S3',
+      useTempBucket: false,
     });
 
     expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
@@ -59,6 +63,8 @@ describe('getDocument', () => {
 
     await getDocument({
       applicationContext,
+      docketNumber: '101-29',
+      key: 'abc',
       protocol: 'S3',
       useTempBucket: true,
     });
@@ -78,7 +84,10 @@ describe('getDocument', () => {
 
     await getDocument({
       applicationContext,
+      docketNumber: '101-29',
+      key: 'abc',
       protocol: 'S3',
+      useTempBucket: false,
     });
 
     expect(

@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { saveDocumentFromLambda } = require('./saveDocumentFromLambda');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { saveDocumentFromLambda } from './saveDocumentFromLambda';
 
 describe('saveDocumentFromLambda', () => {
   let putObjectStub = jest.fn().mockReturnValue({
@@ -9,7 +7,7 @@ describe('saveDocumentFromLambda', () => {
   });
 
   const expectedDocketEntryId = 'abc';
-  const expectedArray = new Uint8Array(['a']);
+  const expectedArray = new Uint8Array([123]);
   const defaultBucketName = 'aBucket';
 
   beforeEach(() => {
