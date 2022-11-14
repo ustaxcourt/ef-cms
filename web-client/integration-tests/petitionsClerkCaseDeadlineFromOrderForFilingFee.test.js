@@ -4,8 +4,8 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { caseDetailHelper as caseDetailHelperComputed } from '../src/presenter/computeds/caseDetailHelper';
-import { docketClerkAddsDocketEntryFromOrderWithDate } from './journey/docketClerkAddsDocketEntryFromOrderWithDate';
 import { docketClerkGetsDocketEntryByEventCode } from './journey/docketClerkGetsDocketEntryByEventCode';
+import { docketClerkServesASavedCourtIssuedDocumentFromDocumentView } from './journey/docketClerkServesASavedCourtIssuedDocumentFromDocumentView';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { fakeFile, loginAs, setupTest, waitForCondition } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
@@ -150,77 +150,54 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
 
     docketClerkSignsOrder(cerebralTest);
 
-    // it('docket clerk adds a docket entry for order for filing fee and saves it', async () => {
-    //   await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-    //     docketEntryId: cerebralTest.docketEntryId,
-    //     docketNumber: cerebralTest.docketNumber,
-    //   });
+    it('docket clerk adds a docket entry for order for filing fee and saves it', async () => {
+      await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+        docketEntryId: cerebralTest.docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-    //   await cerebralTest.runSequence(
-    //     'updateCourtIssuedDocketEntryFormValueSequence',
-    //     {
-    //       key: 'month',
-    //       value: '2',
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateCourtIssuedDocketEntryFormValueSequence',
-    //     {
-    //       key: 'day',
-    //       value: '2',
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateCourtIssuedDocketEntryFormValueSequence',
-    //     {
-    //       key: 'year',
-    //       value: '2050',
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
-
-    //   expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    //   await waitForCondition({
-    //     booleanExpressionCondition: () =>
-    //       cerebralTest.getState('currentPage') === 'CaseDetailInternal',
-    //   });
-
-    //   expect(cerebralTest.getState('currentPage')).toEqual(
-    //     'CaseDetailInternal',
-    //   );
-    //   expect(cerebralTest.getState('alertSuccess').message).toEqual(
-    //     'Your entry has been added to the docket record.',
-    //   );
-    // });
-
-    docketClerkAddsDocketEntryFromOrderWithDate(cerebralTest);
-
-    it('serve the saved order', async () => {
       await cerebralTest.runSequence(
-        'openConfirmServeCourtIssuedDocumentSequence',
+        'updateCourtIssuedDocketEntryFormValueSequence',
         {
-          docketEntryId: cerebralTest.docketEntryId,
-          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
+          key: 'month',
+          value: '2',
         },
       );
 
-      expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ConfirmInitiateCourtIssuedFilingServiceModal',
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'day',
+          value: '2',
+        },
       );
 
-      await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'year',
+          value: '2050',
+        },
+      );
+
+      await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
 
       await waitForCondition({
         booleanExpressionCondition: () =>
-          cerebralTest.getState('currentPage') === 'PrintPaperService',
+          cerebralTest.getState('currentPage') === 'CaseDetailInternal',
       });
 
-      expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'CaseDetailInternal',
+      );
+      expect(cerebralTest.getState('alertSuccess').message).toEqual(
+        'Your entry has been added to the docket record.',
+      );
     });
+
+    docketClerkServesASavedCourtIssuedDocumentFromDocumentView(cerebralTest);
 
     it('docket clerk verifies there is a new case deadline with date from previous step and correct description', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
