@@ -71,7 +71,7 @@ describe('getDocument', () => {
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: tempBucketName });
+    ).toHaveBeenCalledWith({ Bucket: tempBucketName, Key: 'abc' });
   });
 
   it('retrieves from the documents bucket by default when S3 protocol is set', async () => {
@@ -92,6 +92,6 @@ describe('getDocument', () => {
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName' });
+    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName', Key: 'abc' });
   });
 });
