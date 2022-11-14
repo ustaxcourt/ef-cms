@@ -1,6 +1,6 @@
-import { validateOpinionAdvancedSearchInteractor } from './validateOpinionAdvancedSearchInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { DATE_RANGE_SEARCH_OPTIONS } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validateOpinionAdvancedSearchInteractor } from './validateOpinionAdvancedSearchInteractor';
 
 describe('validateOpinionAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the opinionSearch', () => {

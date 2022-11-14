@@ -1,11 +1,10 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { capitalize } from 'lodash';
-import { invert } from 'lodash';
 import { TRIAL_CITIES, US_STATES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
+import { capitalize, invert } from 'lodash';
 
 export const getPreviousTerm = (currentTerm, currentYear) => {
   const terms = [

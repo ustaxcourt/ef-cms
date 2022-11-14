@@ -6,8 +6,8 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
-import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 
 describe('removePdfFromDocketEntryInteractor', () => {
   const MOCK_CASE = {
@@ -63,7 +63,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
   };
 
   beforeAll(() => {
-    applicationContext.getPersistenceGateway().deleteDocumentFromS3 = jest.fn();
+    applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
 
     applicationContext
       .getPersistenceGateway()
@@ -114,7 +114,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalled();
 
     expect(
@@ -144,7 +144,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
 
     expect(
@@ -159,7 +159,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
 
     expect(

@@ -350,14 +350,16 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/edit',
+      '/case-detail/*/documents/*/edit..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
+        const { fromPage } = route.query();
         return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
@@ -949,8 +951,43 @@ const router = {
       '/practitioner-detail/*',
       ifHasAccess({ app }, barNumber => {
         setPageTitle('Practitioner Detail');
+
         return app.getSequence('gotoPractitionerDetailSequence')({
           barNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*?..',
+      ifHasAccess({ app }, barNumber => {
+        setPageTitle('Practitioner Detail');
+        const { tab } = route.query();
+
+        return app.getSequence('gotoPractitionerDocumentationSequence')({
+          barNumber,
+          tab,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*/add-document',
+      ifHasAccess({ app }, barNumber => {
+        setPageTitle('Add Practitioner Document');
+        return app.getSequence('gotoPractitionerAddDocumentSequence')({
+          barNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/practitioner-detail/*/edit-document/*',
+      ifHasAccess({ app }, (barNumber, practitionerDocumentFileId) => {
+        setPageTitle('Edit Practitioner Document');
+        return app.getSequence('gotoPractitionerEditDocumentSequence')({
+          barNumber,
+          practitionerDocumentFileId,
         });
       }),
     );

@@ -326,10 +326,11 @@ export const PractitionerForm = connect(
                         })}
                       </optgroup>
                       <optgroup label="Other">
-                        {usStatesOther.map(abbrev => {
+                        {Object.keys(usStatesOther).map(abbrev => {
+                          const fullStateName = usStatesOther[abbrev];
                           return (
-                            <option key={abbrev} value={abbrev}>
-                              {abbrev}
+                            <option key={fullStateName} value={abbrev}>
+                              {fullStateName}
                             </option>
                           );
                         })}

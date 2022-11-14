@@ -1,9 +1,9 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
 
 describe('deleteCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {

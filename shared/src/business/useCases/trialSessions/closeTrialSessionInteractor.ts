@@ -1,11 +1,11 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { isEmpty, isEqual } from 'lodash';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
+import { isEmpty, isEqual } from 'lodash';
 
 /**
  * closeTrialSessionInteractor

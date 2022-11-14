@@ -1,6 +1,6 @@
+import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { filePetitionInteractor } from './filePetitionInteractor';
-import { ROLES } from '../entities/EntityConstants';
 
 beforeAll(() => {
   applicationContext
