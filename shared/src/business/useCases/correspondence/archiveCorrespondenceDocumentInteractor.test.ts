@@ -49,7 +49,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFromS3.mock
+      applicationContext.getPersistenceGateway().deleteDocumentFile.mock
         .calls[0][0],
     ).toMatchObject({
       key: mockCorrespondenceId,

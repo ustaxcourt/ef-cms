@@ -1,10 +1,12 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
-import { AUTOMATIC_BLOCKED_REASONS } from '../../entities/EntityConstants';
+import {
+  AUTOMATIC_BLOCKED_REASONS,
+  ROLES,
+} from '../../entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
 
 describe('deleteCaseDeadlineInteractor', () => {
   let user;

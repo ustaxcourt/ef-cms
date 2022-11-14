@@ -6,29 +6,30 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
-const getRecordByEventCode = async (docketNumber, eventCode) => {
-  await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber,
-  });
-  let caseDetails = cerebralTest.getState('caseDetail');
-  const record = caseDetails.docketEntries.find(
-    docketEntry => docketEntry.eventCode === eventCode,
-  );
-  return record;
-};
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Case Consolidation Coversheets Journey', () => {
   let case2DocketNumber, case3DocketNumber;
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+
+  const cerebralTest = setupTest();
+  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
+  const getRecordByEventCode = async (docketNumber, eventCode) => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber,
+    });
+    let caseDetails = cerebralTest.getState('caseDetail');
+    const record = caseDetails.docketEntries.find(
+      docketEntry => docketEntry.eventCode === eventCode,
+    );
+    return record;
+  };
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -40,22 +41,30 @@ describe('Case Consolidation Coversheets Journey', () => {
   });
 
   it('login as a petitioner and create the lead case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
-      caseDetail.docketNumber;
+    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = cerebralTest.leadDocketNumber = docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
   it('login as a petitioner and create case 2 to consolidate with the lead case', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    case2DocketNumber = caseDetail.docketNumber;
+
+    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
+    case2DocketNumber = docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
@@ -65,11 +74,16 @@ describe('Case Consolidation Coversheets Journey', () => {
 
   it('login as a petitioner and create case 3 to consolidate with the lead case', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    case3DocketNumber = caseDetail.docketNumber;
+
+    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
+    case3DocketNumber = docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);

@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -9,9 +8,10 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
 import { MOCK_USERS } from '../../../test/mockUsers';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
 
 describe('fileExternalDocumentInteractor', () => {
   const mockDocketEntryId = applicationContext.getUniqueId();

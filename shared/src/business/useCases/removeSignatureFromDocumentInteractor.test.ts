@@ -1,6 +1,6 @@
-import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
 
 describe('removeSignatureFromDocumentInteractor', () => {
   let mockCase;

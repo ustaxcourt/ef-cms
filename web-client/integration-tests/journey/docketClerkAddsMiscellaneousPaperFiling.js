@@ -1,14 +1,18 @@
-import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  refreshElasticsearchIndex,
+  waitForCondition,
+} from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
+  const formattedWorkQueue = withAppContextDecorator(
+    formattedWorkQueueComputed,
+  );
 
-export const docketClerkAddsMiscellaneousPaperFiling = (
-  cerebralTest,
-  fakeFile,
-) => {
   return it('DocketClerk adds miscellaneous paper filing', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -48,9 +52,12 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       isSavingForLater: true,
     });
 
-    await refreshElasticsearchIndex();
-
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to the docket record.',
@@ -63,8 +70,12 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'MISC');
 
+    cerebralTest.docketEntryId = miscellaneousDocument.docketEntryId;
+
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
+
+    await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');

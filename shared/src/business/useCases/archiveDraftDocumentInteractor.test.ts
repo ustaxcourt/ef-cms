@@ -1,7 +1,7 @@
-import { archiveDraftDocumentInteractor } from './archiveDraftDocumentInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
 import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { archiveDraftDocumentInteractor } from './archiveDraftDocumentInteractor';
 
 describe('archiveDraftDocumentInteractor', () => {
   it('returns an unauthorized error on non petitionsclerk users', async () => {

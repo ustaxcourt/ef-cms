@@ -1,8 +1,8 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**

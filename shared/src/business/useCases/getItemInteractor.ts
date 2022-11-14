@@ -7,7 +7,7 @@
  * @returns {object} the item
  */
 export const getItemInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: any, // any until we refactor the client
   { key }: { key: string },
 ) => {
   return applicationContext.getPersistenceGateway().getItem({

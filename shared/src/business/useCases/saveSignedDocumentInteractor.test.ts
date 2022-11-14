@@ -3,10 +3,10 @@ import {
   PETITIONS_SECTION,
   SIGNED_DOCUMENT_TYPES,
 } from '../entities/EntityConstants';
-import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;

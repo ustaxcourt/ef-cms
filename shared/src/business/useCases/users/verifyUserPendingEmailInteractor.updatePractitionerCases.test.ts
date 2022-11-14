@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
 import { validUser } from '../../../test/mockUsers';
 
 describe('verifyUserPendingEmailInteractor updatePractitionerCases', () => {

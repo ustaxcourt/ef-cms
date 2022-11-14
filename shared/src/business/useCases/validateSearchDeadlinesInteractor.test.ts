@@ -1,5 +1,5 @@
-import { validateSearchDeadlinesInteractor } from './validateSearchDeadlinesInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { validateSearchDeadlinesInteractor } from './validateSearchDeadlinesInteractor';
 
 describe('validateSearchDeadlinesInteractor', () => {
   it('returns the expected errors object on an empty statistic', () => {
