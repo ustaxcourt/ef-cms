@@ -121,7 +121,7 @@ describe('updateCaseAutomaticBlock', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should not call createCaseTrialSortMappingRecords when it already has a trial date, isReadyForTrial, and the block is being removed', async () => {
+  it('should not call createCaseTrialSortMappingRecords when it already has a trial date and isReadyForTrial', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
