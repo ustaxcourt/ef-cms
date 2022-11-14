@@ -1,9 +1,13 @@
 const {
   AUTOMATIC_BLOCKED_REASONS,
+  UNSERVABLE_EVENT_CODES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
   migrateItems,
 } = require('./0003-remove-automatic-blocked-no-tracked-items');
+const {
+  MOCK_DOCUMENTS,
+} = require('../../../../../shared/src/test/mockDocuments');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
@@ -20,6 +24,14 @@ describe('migrateItems', () => {
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `case|${MOCK_CASE.docketNumber}`,
       trialDate: '2020-03-01T00:00:00.000Z',
+    };
+
+    documentClient = {
+      get: jest.fn().mockReturnValue({
+        promise: async () => ({
+          Item: [],
+        }),
+      }),
     };
   });
 
@@ -56,5 +68,64 @@ describe('migrateItems', () => {
     expect(results[0].automaticBlocked).toBeFalsy();
     expect(results[0].automaticBlockedDate).toBeUndefined();
     expect(results[0].automaticBlockedReason).toBeUndefined();
+  });
+
+  it('should NOT update automaticBlocked fields when the record is a case entity, with a trial date, that has case deadlines', async () => {
+    const items = [mockCaseItem];
+    documentClient = {
+      get: jest.fn().mockReturnValue({
+        promise: async () => ({
+          Item: ['a deadline'],
+        }),
+      }),
+    };
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].automaticBlocked).toBeTruthy();
+    expect(results[0].automaticBlockedDate).toBeDefined();
+    expect(results[0].automaticBlockedReason).toBeDefined();
+  });
+
+  it('should NOT update automaticBlocked fields when the record is a case entity, with a trial date, but has a served pending item', async () => {
+    const items = [
+      {
+        ...mockCaseItem,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            pending: true,
+            servedAt: '2020-03-01T00:00:00.000Z',
+          },
+        ],
+      },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].automaticBlocked).toBeTruthy();
+    expect(results[0].automaticBlockedDate).toBeDefined();
+    expect(results[0].automaticBlockedReason).toBeDefined();
+  });
+
+  it('should NOT update automaticBlocked fields when the record is a case entity, with a trial date, but has an unservable pending item', async () => {
+    const items = [
+      {
+        ...mockCaseItem,
+        docketEntries: [
+          {
+            ...MOCK_DOCUMENTS[0],
+            eventCode: UNSERVABLE_EVENT_CODES[0],
+            pending: true,
+          },
+        ],
+      },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].automaticBlocked).toBeTruthy();
+    expect(results[0].automaticBlockedDate).toBeDefined();
+    expect(results[0].automaticBlockedReason).toBeDefined();
   });
 });

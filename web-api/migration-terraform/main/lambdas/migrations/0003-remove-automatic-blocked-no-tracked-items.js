@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 const {
   UNSERVABLE_EVENT_CODES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
@@ -41,7 +42,7 @@ const migrateItems = async (items, documentClient) => {
         isPending(docketEntry),
       );
 
-      if (!caseDeadlines && !pendingItems) {
+      if (isEmpty(caseDeadlines) && !pendingItems) {
         item.automaticBlocked = false;
         item.automaticBlockedDate = undefined;
         item.automaticBlockedReason = undefined;
