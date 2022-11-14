@@ -76,6 +76,11 @@ table,
     &.medium {
       width: 160px;
     }
+
+    &.select-all-checkbox {
+      padding: 16px 15px 16px 20px;
+      vertical-align: top;
+    }
   }
 
   td {

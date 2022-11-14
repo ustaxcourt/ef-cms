@@ -33,7 +33,24 @@ const SectionWorkQueueTable = connect(
       >
         <thead>
           <tr>
-            {showSelectColumn && <th colSpan="2">&nbsp;</th>}
+            {showSelectColumn && (
+              <>
+                <th aria-hidden="true" />
+                <th className="message-select-control select-all-checkbox">
+                  <input
+                    aria-label="Select work item"
+                    className="usa-checkbox__input"
+                    id="test-checkbox"
+                    type="checkbox"
+                  />
+                  <label
+                    className="padding-top-05 usa-checkbox__label"
+                    htmlFor="test-checkbox"
+                    id="label-test-checkbox"
+                  />
+                </th>
+              </>
+            )}
             <th aria-hidden="true" className="consolidated-case-column"></th>
             <th aria-label="Docket Number">Docket No.</th>
             <th>Filed</th>
