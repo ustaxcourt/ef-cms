@@ -53,6 +53,22 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
   it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
+    const expectedformattedTrialSessionDTO = {
+      chambersPhoneNumber: formattedCaseMock.chambersPhoneNumber,
+      computedStatus: formattedCaseMock.computedStatus,
+      endDateForAdditionalPageHeaders: '',
+      formattedCourtReporter: formattedCaseMock.formattedCourtReporter,
+      formattedEstimatedEndDateFull: '',
+      formattedIrsCalendarAdministrator:
+        formattedCaseMock.formattedIrsCalendarAdministrator,
+      formattedJudge: formattedCaseMock.formattedJudge,
+      formattedStartDateFull: formattedCaseMock.formattedStartDateFull,
+      formattedTerm: formattedCaseMock.formattedTerm,
+      formattedTrialClerk: formattedCaseMock.formattedTrialClerk,
+      startDateForAdditionalPageHeaders: '',
+      trialLocation: formattedCaseMock.trialLocation,
+    };
+
     const result = await runAction(
       generatePrintableTrialSessionCopyReportAction,
       {
@@ -72,6 +88,12 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
       },
     );
+
+    expect(
+      applicationContext.getUseCases()
+        .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
+        .formattedTrialSession,
+    ).toMEqual(expectedformattedTrialSessionDTO);
     expect(result.output.pdfUrl).toEqual(url);
   });
 });
