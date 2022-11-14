@@ -53,19 +53,18 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
   it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
-    const expectedformattedTrialSessionDTO = {
+    //dont use mockcase for these fields
+    const mockFormattedTrialSessionDetails = {
       chambersPhoneNumber: formattedCaseMock.chambersPhoneNumber,
       computedStatus: formattedCaseMock.computedStatus,
-      endDateForAdditionalPageHeaders: '',
+      estimatedEndDate: '2020-11-27T05:00:00.000Z',
       formattedCourtReporter: formattedCaseMock.formattedCourtReporter,
-      formattedEstimatedEndDateFull: '',
       formattedIrsCalendarAdministrator:
         formattedCaseMock.formattedIrsCalendarAdministrator,
       formattedJudge: formattedCaseMock.formattedJudge,
-      formattedStartDateFull: formattedCaseMock.formattedStartDateFull,
       formattedTerm: formattedCaseMock.formattedTerm,
       formattedTrialClerk: formattedCaseMock.formattedTrialClerk,
-      startDateForAdditionalPageHeaders: '',
+      startDate: '2020-11-27T05:00:00.000Z',
       trialLocation: formattedCaseMock.trialLocation,
     };
 
@@ -79,9 +78,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
           formattedCases: [formattedCaseMock],
         },
         state: {
-          formattedTrialSessionDetails: {
-            estimatedEndDate: '12/12/12',
-          },
+          formattedTrialSessionDetails: mockFormattedTrialSessionDetails,
           trialSessionWorkingCopy: {
             caseMetadata: {},
           },
@@ -93,7 +90,11 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       applicationContext.getUseCases()
         .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
         .formattedTrialSession,
-    ).toMEqual(expectedformattedTrialSessionDTO);
+    ).toEqual({
+      endDateForAdditionalPageHeaders: 'Nov 27, 2020',
+      formattedEstimatedEndDateFull: 'November 27, 2020',
+      startDateForAdditionalPageHeaders: 'Nov 27, 2020',
+    });
     expect(result.output.pdfUrl).toEqual(url);
   });
 });
