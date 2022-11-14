@@ -78,7 +78,7 @@ describe('unauthed user searches for case', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(testClient, 1);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
     docketClerkServesDocument(testClient, 1);
   });
@@ -104,7 +104,7 @@ describe('unauthed user searches for case', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(testClient, 3);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsStipulatedDecisionDocketEntryFromOrder(testClient, 3);
     docketClerkServesDocument(testClient, 3);
   });
