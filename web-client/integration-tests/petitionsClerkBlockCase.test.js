@@ -68,6 +68,8 @@ describe('Blocking a Case', () => {
       value: trialLocation,
     });
 
+    console.log('og case that is blocked on report', cerebralTest.docketNumber);
+
     expect(cerebralTest.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,

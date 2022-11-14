@@ -33,7 +33,7 @@ exports.updateCaseAutomaticBlock = async ({
         applicationContext,
         docketNumber: caseEntity.docketNumber,
       });
-  } else if (caseEntity.isReadyForTrial() && !removingAutomaticBlock) {
+  } else if (caseEntity.isReadyForTrial() && !caseEntity.trialDate) {
     await applicationContext
       .getPersistenceGateway()
       .createCaseTrialSortMappingRecords({
