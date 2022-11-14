@@ -76,7 +76,7 @@ All of the scripts needed to run this project should be outlined in our [package
 ### M1 Macs
 
 #### Additional Prerequisites
-[Docker Desktop](https://www.docker.com/products/docker-desktop/). Ask a team member how to obtain a license if you don't already have one. **If you use Docker Desktop, you need to get a license**.
+[Docker Desktop](https://www.docker.com/products/docker-desktop/). Ask a team member how to obtain a license if you don't already have one. **If you use Docker Desktop, you need to get a license**. Within Docker, allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. This will reduce the number of resource-related failures when running the application.
 
 #### Checkout Develop
 
@@ -176,19 +176,6 @@ cohensChambers@example.com
 judge.colvin@example.com
 colvinsChambers@example.com
 ```
-
-## Running via Docker TODO: update this
-
-!> No developer uses this approach, so it may have bugs running the entire app via this docker command.
-
-If needed, you can also try to run the entire project from a single docker container.
-Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it.  No one currently uses this approach when developing on this project since it is often slower and more error prone compared to running Dawson locally.
-
-```sh
-./docker-run.sh
-```
-
-Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
 
 ## Troubleshooting
