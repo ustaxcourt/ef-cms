@@ -40,14 +40,9 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(cerebralTest, {
-    documentTitle: 'Order of Dismissal',
-    eventCode: 'OD',
-    expectedDocumentType: 'Order of Dismissal',
-  });
 
-  docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   createNewMessageOnCase(cerebralTest);
 

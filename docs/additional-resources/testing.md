@@ -74,7 +74,7 @@ At the end of a sprint PR, we'd like to run manual smoke tests over our system i
 - sign the pdf
 - add a docket entry
 - serve
-- verify the petitioner got an email notificaton
+- verify the petitioner got an email notification
 
 #### Verify Web Sockets - Batch Download Case as Judge
 
