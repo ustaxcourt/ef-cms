@@ -54,7 +54,7 @@ describe('Automatic blocked case with associated trial session', () => {
   petitionsClerkDeletesCaseDeadline(cerebralTest);
   removePendingItemFromCase(cerebralTest, 'Docket Clerk');
 
-  it('should remove automatic block when there case has a trial session but no deadlines or pending items', () => {
+  it('should remove automatic block when the case has a trial session but no deadlines or pending items', () => {
     const formattedCase = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
