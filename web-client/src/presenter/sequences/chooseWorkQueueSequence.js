@@ -8,6 +8,7 @@ import { getDocumentQCServedForUserAction } from '../actions/getDocumentQCServed
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { parallel } from 'cerebral/factories';
+import { resetWorkitemSelectAllCheckboxAction } from '../actions/resetWorkitemSelectAllCheckboxAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
@@ -48,8 +49,14 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         documentqcmyinProgress: [getDocumentQCInboxForUserAction],
         documentqcmyinbox: [getDocumentQCInboxForUserAction],
         documentqcmyoutbox: [getDocumentQCServedForUserAction],
-        documentqcsectioninProgress: [getDocumentQCInboxForSectionAction],
-        documentqcsectioninbox: [getDocumentQCInboxForSectionAction],
+        documentqcsectioninProgress: [
+          resetWorkitemSelectAllCheckboxAction,
+          getDocumentQCInboxForSectionAction,
+        ],
+        documentqcsectioninbox: [
+          resetWorkitemSelectAllCheckboxAction,
+          getDocumentQCInboxForSectionAction,
+        ],
         documentqcsectionoutbox: [getDocumentQCServedForSectionAction],
       },
       setWorkItemsAction,

@@ -12,18 +12,23 @@ const SectionWorkQueueTable = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
     hideIconColumn: state.workQueueHelper.hideIconColumn,
+    selectAllWorkItemCheckboxChangeSequence:
+      sequences.selectAllWorkItemCheckboxChangeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
     showSelectColumn: state.workQueueHelper.showSelectColumn,
+    workitemAllCheckbox: state.workitemAllCheckbox,
   },
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
     FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
+    selectAllWorkItemCheckboxChangeSequence,
     selectWorkItemSequence,
     showAssignedToColumn,
     showSelectColumn,
+    workitemAllCheckbox,
   }) {
     return (
       <table
@@ -39,14 +44,18 @@ const SectionWorkQueueTable = connect(
                 <th className="message-select-control select-all-checkbox">
                   <input
                     aria-label="Select work item"
+                    checked={workitemAllCheckbox}
                     className="usa-checkbox__input"
-                    id="test-checkbox"
+                    id="workitem-select-all-checkbox"
+                    name="workitem-select-all-checkbox"
                     type="checkbox"
+                    value="workitem-select-all-checkbox"
+                    onChange={() => selectAllWorkItemCheckboxChangeSequence()}
                   />
                   <label
                     className="padding-top-05 usa-checkbox__label"
-                    htmlFor="test-checkbox"
-                    id="label-test-checkbox"
+                    htmlFor="workitem-select-all-checkbox"
+                    id="label-workitem-select-all-checkbox"
                   />
                 </th>
               </>
