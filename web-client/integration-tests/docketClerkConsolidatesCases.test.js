@@ -18,11 +18,11 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 describe('Case Consolidation Journey', () => {
   const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,
@@ -36,11 +36,13 @@ describe('Case Consolidation Journey', () => {
     cerebralTest.closeSocket();
   });
 
-  it('login as a petitioner and create the lead case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
-      caseDetail.docketNumber;
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('petitioner creates electronic lead case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = cerebralTest.leadDocketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -95,7 +97,7 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkFilesAndServesDocumentOnLeadCase(cerebralTest, 0);
 
   it('should have a success message that mentions serving multiple cases', () => {
@@ -152,7 +154,7 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest);
 
@@ -201,7 +203,7 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0, false);
 
   it('should have a success message that mentions the document was served (and not on multiple cases)', () => {
