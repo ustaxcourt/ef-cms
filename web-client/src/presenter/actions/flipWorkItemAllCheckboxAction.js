@@ -14,7 +14,6 @@ export const flipWorkItemAllCheckboxAction = ({ get, store }) => {
   const allCheckboxPreviousState = get(state.workitemAllCheckbox);
 
   let formattedWorkQueue = get(state.formattedWorkQueue);
-  console.log('workItems before', formattedWorkQueue);
 
   formattedWorkQueue = formattedWorkQueue.map(workItem => {
     return {
@@ -22,8 +21,6 @@ export const flipWorkItemAllCheckboxAction = ({ get, store }) => {
       selected: !allCheckboxPreviousState,
     };
   });
-
-  console.log('workItems after', formattedWorkQueue);
 
   store.set(state.workitemAllCheckbox, !allCheckboxPreviousState);
   store.set(state.formattedWorkQueue, formattedWorkQueue);
