@@ -20,9 +20,7 @@ export const SessionAssignments = connect(
                   {formattedTrialSessionDetails.formattedJudge}
                 </p>
                 <p>
-                  {formattedTrialSessionDetails.chambersPhoneNumber
-                    ? formattedTrialSessionDetails.chambersPhoneNumber
-                    : 'No phone number'}
+                  {formattedTrialSessionDetails.formattedChambersPhoneNumber}
                 </p>
               </div>
               <div className="grid-col-6">
