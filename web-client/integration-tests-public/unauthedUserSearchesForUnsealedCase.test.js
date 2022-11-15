@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
@@ -17,12 +20,12 @@ import { unauthedUserInvalidSearchForOrder } from './journey/unauthedUserInvalid
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForOrderByKeyword } from './journey/unauthedUserSearchesForOrderByKeyword';
 
-const cerebralTest = setupTest();
-const testClient = setupTestClient();
-testClient.draftOrders = [];
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('Unauthed user sees unsealed case', () => {
+  const cerebralTest = setupTest();
+  const testClient = setupTestClient();
+
+  testClient.draftOrders = [];
+
   describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(30000);
@@ -34,8 +37,8 @@ describe('Unauthed user sees unsealed case', () => {
 
     loginAs(testClient, 'petitioner@example.com');
 
-    it('Create case', async () => {
-      const caseDetail = await uploadPetition(testClient, {
+    it('petitioner creates an electronic case', async () => {
+      const { docketNumber } = await uploadPetition(testClient, {
         contactSecondary: {
           address1: '734 Cowley Parkway',
           city: 'Somewhere',
@@ -47,9 +50,11 @@ describe('Unauthed user sees unsealed case', () => {
         },
         partyType: PARTY_TYPES.petitionerSpouse,
       });
-      expect(caseDetail.docketNumber).toBeDefined();
-      cerebralTest.docketNumber = caseDetail.docketNumber;
-      testClient.docketNumber = caseDetail.docketNumber;
+
+      expect(docketNumber).toBeDefined();
+
+      cerebralTest.docketNumber = docketNumber;
+      testClient.docketNumber = docketNumber;
     });
 
     loginAs(testClient, 'petitionsclerk1@example.com');
@@ -68,7 +73,7 @@ describe('Unauthed user sees unsealed case', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(testClient, 0);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrder(testClient, 0);
     docketClerkServesDocument(testClient, 0);
 
@@ -77,7 +82,7 @@ describe('Unauthed user sees unsealed case', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(testClient, 1);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
     docketClerkServesDocument(testClient, 1);
 
@@ -86,7 +91,7 @@ describe('Unauthed user sees unsealed case', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(testClient, 2);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 2);
   });
 

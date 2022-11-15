@@ -46,7 +46,13 @@ export const docketClerkUploadsACourtIssuedDocument = (
     const newDraftOrder = caseDraftDocuments.reduce((prev, current) =>
       prev.createdAt > current.createdAt ? prev : current,
     );
+
+    cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
+
     expect(newDraftOrder).toBeTruthy();
-    cerebralTest.draftOrders.push(newDraftOrder);
+    cerebralTest.draftOrders = [
+      ...(cerebralTest.draftOrders || []),
+      newDraftOrder,
+    ];
   });
 };
