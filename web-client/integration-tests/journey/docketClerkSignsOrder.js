@@ -1,9 +1,7 @@
-export const docketClerkSignsOrder = (cerebralTest, draftOrderIndex) => {
+export const docketClerkSignsOrder = cerebralTest => {
   return it('Docket clerk signs order', async () => {
-    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
-
     await cerebralTest.runSequence('gotoSignOrderSequence', {
-      docketEntryId,
+      docketEntryId: cerebralTest.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
@@ -14,6 +12,7 @@ export const docketClerkSignsOrder = (cerebralTest, draftOrderIndex) => {
         y: 100,
       },
     });
+
     await cerebralTest.runSequence('saveDocumentSigningSequence');
   });
 };
