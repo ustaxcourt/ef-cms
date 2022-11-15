@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 const {
+  CASE_STATUS_TYPES,
   UNSERVABLE_EVENT_CODES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 
@@ -24,7 +25,11 @@ const isServed = docketEntry => {
 const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
-    if (isCase(item) && item.trialDate) {
+    if (
+      isCase(item) &&
+      item.trialDate &&
+      item.status === CASE_STATUS_TYPES.closed
+    ) {
       const caseDeadlines = await documentClient
         .get({
           Key: {

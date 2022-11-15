@@ -1,5 +1,6 @@
 const {
   AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
   UNSERVABLE_EVENT_CODES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
@@ -23,6 +24,7 @@ describe('migrateItems', () => {
       docketEntries: [],
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `case|${MOCK_CASE.docketNumber}`,
+      status: CASE_STATUS_TYPES.closed,
       trialDate: '2020-03-01T00:00:00.000Z',
     };
 
@@ -60,7 +62,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should update automaticBlocked fields when the record is a case entity with a trial date and no pending items or case deadlines', async () => {
+  it('should update automaticBlocked fields when the record is a case entity with a trial date, closed status, and no pending items or case deadlines', async () => {
     const items = [mockCaseItem];
 
     const results = await migrateItems(items, documentClient);
@@ -68,6 +70,16 @@ describe('migrateItems', () => {
     expect(results[0].automaticBlocked).toBeFalsy();
     expect(results[0].automaticBlockedDate).toBeUndefined();
     expect(results[0].automaticBlockedReason).toBeUndefined();
+  });
+
+  it('should NOT update automaticBlocked fields when the record is a case entity, with a trial date, no pending items or case deadlines, but has a status of calendared', async () => {
+    const items = [{ ...mockCaseItem, status: CASE_STATUS_TYPES.calendared }];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].automaticBlocked).toBeTruthy();
+    expect(results[0].automaticBlockedDate).toBeDefined();
+    expect(results[0].automaticBlockedReason).toBeDefined();
   });
 
   it('should NOT update automaticBlocked fields when the record is a case entity, with a trial date, that has case deadlines', async () => {
