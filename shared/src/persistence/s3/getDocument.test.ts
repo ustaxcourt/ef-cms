@@ -10,6 +10,9 @@ jest.mock('./getPdfFromUrl', () => ({
 }));
 
 describe('getDocument', () => {
+  const docketNumber = '101-19';
+  const key = '123';
+
   it('should return a file from the provided url when protocol is not provided', async () => {
     const mockPdfUrl = 'www.example.com';
     applicationContext.getHttpClient.mockImplementation(() => {
@@ -40,8 +43,8 @@ describe('getDocument', () => {
     });
     await getDocument({
       applicationContext,
-      docketNumber: '101-29',
-      key: 'abc',
+      docketNumber,
+      key,
       protocol: 'S3',
       useTempBucket: false,
     });
@@ -63,15 +66,15 @@ describe('getDocument', () => {
 
     await getDocument({
       applicationContext,
-      docketNumber: '101-29',
-      key: 'abc',
+      docketNumber,
+      key,
       protocol: 'S3',
       useTempBucket: true,
     });
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: tempBucketName, Key: 'abc' });
+    ).toHaveBeenCalledWith({ Bucket: tempBucketName, Key: key });
   });
 
   it('retrieves from the documents bucket by default when S3 protocol is set', async () => {
@@ -84,14 +87,14 @@ describe('getDocument', () => {
 
     await getDocument({
       applicationContext,
-      docketNumber: '101-29',
-      key: 'abc',
+      docketNumber,
+      key,
       protocol: 'S3',
       useTempBucket: false,
     });
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName', Key: 'abc' });
+    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName', Key: key });
   });
 });
