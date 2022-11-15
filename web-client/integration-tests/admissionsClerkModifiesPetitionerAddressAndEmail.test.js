@@ -6,6 +6,7 @@ import {
   setupTest,
 } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 
 describe('Admissions Clerk modified petitioner address and email', () => {
@@ -21,6 +22,14 @@ describe('Admissions Clerk modified petitioner address and email', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');

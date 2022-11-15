@@ -4,6 +4,7 @@ import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petiti
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
@@ -24,6 +25,14 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   createNewMessageOnCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk1@example.com');
