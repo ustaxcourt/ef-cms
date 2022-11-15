@@ -53,7 +53,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
   it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
-    //dont use mockcase for these fields
+    //use MOCK_TRIAL
     const mockFormattedTrialSessionDetails = {
       chambersPhoneNumber: formattedCaseMock.chambersPhoneNumber,
       computedStatus: formattedCaseMock.computedStatus,

@@ -65,7 +65,8 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     );
 
   const formattedTrialSessionDTO = {
-    chambersPhoneNumber: formattedTrialSessionDetails.chambersPhoneNumber,
+    chambersPhoneNumber:
+      formattedTrialSessionDetails.formattedChambersPhoneNumber,
     computedStatus: formattedTrialSessionDetails.computedStatus,
     endDateForAdditionalPageHeaders,
     formattedCourtReporter: formattedTrialSessionDetails.formattedCourtReporter,
