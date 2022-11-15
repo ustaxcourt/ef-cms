@@ -1,5 +1,5 @@
-export const servePetitionToIRS = cerebralTest => {
-  return it('Serve petition to IRS', async () => {
+export const petitionsClerkServesPaperCaseToIRS = cerebralTest => {
+  return it('Petitions clerk serves paper petition to IRS', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
