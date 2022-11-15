@@ -16,14 +16,13 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('Docket Record Filter Journey', () => {
   const cerebralTest = setupTest();
 
-  cerebralTest.draftOrders = [];
-
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -45,7 +44,7 @@ describe('Docket Record Filter Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
 
   it('docket clerk views docket record filtered for all document types', async () => {
