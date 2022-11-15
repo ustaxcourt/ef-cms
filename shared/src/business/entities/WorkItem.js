@@ -107,6 +107,10 @@ WorkItem.prototype.setStatus = function (caseStatus) {
   this.caseStatus = caseStatus;
 };
 
+WorkItem.prototype.isCompleted = function () {
+  return !!this.completedAt;
+};
+
 /**
  *
  * @param {object} props the props object

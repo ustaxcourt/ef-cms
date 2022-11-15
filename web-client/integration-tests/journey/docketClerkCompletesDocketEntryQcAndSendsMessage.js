@@ -76,6 +76,16 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage =
         'completeDocketEntryQCAndSendMessageSequence',
       );
 
+      workQueueFormatted = runCompute(formattedWorkQueue, {
+        state: cerebralTest.getState(),
+      });
+
+      const completedWorkItem = workQueueFormatted.find(
+        workItem => workItem.docketNumber === cerebralTest.docketNumber,
+      );
+
+      cerebralTest.completedWorkItem = completedWorkItem;
+
       await refreshElasticsearchIndex();
     });
   };

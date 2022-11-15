@@ -350,14 +350,16 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/edit',
+      '/case-detail/*/documents/*/edit..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
+        const { fromPage } = route.query();
         return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
@@ -1264,7 +1266,9 @@ const router = {
     registerRoute(
       '/search/no-matches',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        {
+          app,
+        },
         () => {
           setPageTitle('Search results');
           return app.getSequence('gotoCaseSearchNoMatchesSequence')();
@@ -1275,7 +1279,10 @@ const router = {
     registerRoute(
       '/search..',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        {
+          app,
+          permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH,
+        },
         () => {
           const query = route.query();
           setPageTitle('Advanced search');

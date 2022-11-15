@@ -2,6 +2,7 @@ import { adcsSignsProposedStipulatedDecisionFromMessage } from './journey/adcsSi
 import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
 import { docketClerkCompletesDocketEntryQcAndSendsMessage } from './journey/docketClerkCompletesDocketEntryQcAndSendsMessage';
 import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './journey/docketClerkCreatesDocketEntryForSignedStipulatedDecision';
+import { docketClerkTriesToCompleteSameEntry } from './journey/docketClerkTriesToCompleteSameEntry';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
@@ -41,6 +42,7 @@ describe('a user signs and serves a stipulated decision', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAssignWorkItemToSelf(cerebralTest);
   docketClerkCompletesDocketEntryQcAndSendsMessage(cerebralTest);
+  docketClerkTriesToCompleteSameEntry(cerebralTest);
 
   loginAs(cerebralTest, 'adc@example.com');
   adcsSignsProposedStipulatedDecisionFromMessage(cerebralTest);
