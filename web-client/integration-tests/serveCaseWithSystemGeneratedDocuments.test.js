@@ -8,8 +8,8 @@ import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionsClerkServesPaperCaseToIRS } from './userFlows/petitionsClerkServesPaperCaseToIRS';
 import { runCompute } from 'cerebral/test';
-import { servePetitionToIRS } from './userFlows/servePetitionToIRS';
 import { withAppContextDecorator } from '../src/withAppContext';
 const { faker } = require('@faker-js/faker');
 
@@ -215,7 +215,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     }
   });
 
-  servePetitionToIRS(cerebralTest);
+  petitionsClerkServesPaperCaseToIRS(cerebralTest);
 
   it('should display the count of draft documents in the drafts tab after petition is served', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

@@ -38,7 +38,7 @@ describe('dashboardExternalHelper', () => {
     expect(result.showWhatToExpect).toEqual(false);
   });
 
-  it('should keep the showFileACase flag as false when the user role is not a private practitioner', () => {
+  it('should keep the showFileACase flag as false when the user role is petitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,
     });
@@ -68,7 +68,7 @@ describe('dashboardExternalHelper', () => {
     expect(result.showFileACase).toEqual(true);
   });
 
-  it('should keep the showStartButton flag as false when the user role is not a private practitioner or petitioner', () => {
+  it('should keep the showStartButton flag as false when the user role is irs practitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.irsPractitioner,
     });
@@ -84,17 +84,21 @@ describe('dashboardExternalHelper', () => {
   });
 
   it('should set the showStartButton flag as true when the user role is a private practitioner or petitioner', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
+    const userRoles = ['petitioner', 'privatePractitioner'];
 
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-      },
-    });
+    userRoles.forEach(userRole => {
+      applicationContext.getCurrentUser = () => ({
+        role: userRole,
+      });
 
-    expect(result.showStartButton).toEqual(true);
+      const result = runCompute(dashboardExternalHelper, {
+        state: {
+          closedCases: [{ something: true }],
+          openCases: [{ something: true }],
+        },
+      });
+
+      expect(result.showStartButton).toEqual(true);
+    });
   });
 });

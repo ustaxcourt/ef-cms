@@ -30,7 +30,6 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 
 describe('Docket Clerk Verifies Docket Record Display', () => {
   const cerebralTest = setupTest();
-  cerebralTest.draftOrders = [];
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -38,6 +37,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -296,8 +296,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   it('verifies the docket record after adding a draft order to the docket record (not served)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
@@ -323,8 +323,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expectedDocumentType: 'Order',
   });
 
-  docketClerkViewsDraftOrder(cerebralTest, 2);
-  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
   docketClerkServesDocument(cerebralTest, 2);
   it('verifies the docket record after adding a draft order to the docket record and serving', async () => {
