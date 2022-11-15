@@ -100,14 +100,18 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when session assignments are empty', () => {
     const result = formattedTrialSessionDetails({
       applicationContext,
-      trialSession: omit(TRIAL_SESSION, [
-        'courtReporter',
-        'irsCalendarAdministrator',
-        'judge',
-        'trialClerk',
-      ]),
+      trialSession: {
+        ...omit(TRIAL_SESSION, [
+          'courtReporter',
+          'irsCalendarAdministrator',
+          'judge',
+          'trialClerk',
+        ]),
+        chambersPhoneNumber: undefined,
+      },
     });
     expect(result).toMatchObject({
+      formattedChambersPhoneNumber: 'No phone number',
       formattedCourtReporter: 'Not assigned',
       formattedIrsCalendarAdministrator: 'Not assigned',
       formattedJudge: 'Not assigned',
