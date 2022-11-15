@@ -7,22 +7,24 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
 
-export const CaseListPetitioner = connect(
+export const CaseListTable = connect(
   {
     caseType: state.openClosedCases.caseType,
     clearOpenClosedCasesCurrentPageSequence:
       sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
+    dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
-  function CaseListPetitioner({
+  function CaseListTable({
     caseType,
     clearOpenClosedCasesCurrentPageSequence,
     closedTab,
+    dashboardExternalHelper,
     externalUserCasesHelper,
     openTab,
     setCaseTypeToDisplaySequence,
@@ -39,16 +41,22 @@ export const CaseListPetitioner = connect(
       <Button
         aria-describedby=""
         className="margin-top-1 margin-right-0"
-        href="/before-filing-a-petition"
+        href={
+          dashboardExternalHelper.showFileACase
+            ? '/file-a-petition/step-1'
+            : '/before-filing-a-petition'
+        }
         icon="file"
         id="file-a-petition"
       >
-        Create a Case
+        {dashboardExternalHelper.showFileACase
+          ? 'File a Case'
+          : 'Create a Case'}
       </Button>
     );
 
     const renderCaseListTable = ({
-      cases,
+      cases = [],
       showLoadMore,
       showMoreResultsSequence,
       tabName,
@@ -139,14 +147,14 @@ export const CaseListPetitioner = connect(
                     })}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-                    {renderStartButton()}
+                    {dashboardExternalHelper.showStartButton &&
+                      renderStartButton()}
                   </div>
                 </Tabs>
               </div>
             </div>
           </div>
         </NonMobile>
-
         <Mobile>
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
