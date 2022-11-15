@@ -198,7 +198,7 @@ describe('updateCaseAutomaticBlock', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('sets the case to not automaticBlocked and calls createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is generalDocketReadyForTrial status', async () => {
+  it('sets the case to not automaticBlocked and calls createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is generalDocketReadyForTrial status without a trialDate', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
