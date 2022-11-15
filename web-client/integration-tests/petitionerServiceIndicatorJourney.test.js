@@ -1,7 +1,4 @@
-import {
-  PAYMENT_STATUS,
-  SERVICE_INDICATOR_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,

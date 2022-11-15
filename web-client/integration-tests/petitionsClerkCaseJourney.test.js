@@ -1,4 +1,3 @@
-import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
