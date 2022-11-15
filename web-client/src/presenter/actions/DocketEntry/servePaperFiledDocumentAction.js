@@ -18,6 +18,7 @@ export const servePaperFiledDocumentAction = async ({
   const docketEntryId = get(state.docketEntryId);
   const clientConnectionId = get(state.clientConnectionId);
   const { docketNumbers } = props;
+  const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   const { pdfUrl } = await applicationContext
     .getUseCases()
@@ -30,7 +31,7 @@ export const servePaperFiledDocumentAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Document served.',
+      message: DOCUMENT_SERVED_MESSAGES.GENERIC,
     },
     hasPaper: !!pdfUrl,
     pdfUrl,

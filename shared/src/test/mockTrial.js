@@ -31,6 +31,7 @@ exports.MOCK_TRIAL_REGULAR = {
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   },
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',
   startDate: '2001-12-01T00:00:00.000Z',
   term: 'Fall',

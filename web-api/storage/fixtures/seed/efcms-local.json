@@ -24140,8 +24140,8 @@
     "petitioners": [
       {
         "isAddressSealed": false,
-        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "city": "Los Angeles",
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "address1": "111 Fast Ln",
         "postalCode": "12355",
         "contactType": "petitioner",

@@ -1,4 +1,7 @@
-import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
+import {
+  PAYMENT_STATUS,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
@@ -261,6 +264,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       cerebralTest,
       docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
+      documentType: 'Hearing before',
       eventCode: 'HEAR',
       filingDate: {
         day: '1',
@@ -543,8 +547,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       pending: true,
     });
   });
-
-  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   docketClerkEditsServiceIndicatorForPetitioner(
     cerebralTest,
