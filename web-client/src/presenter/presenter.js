@@ -310,6 +310,7 @@ import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealAddressSequence } from './sequences/sealAddressSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
+import { selectAllWorkItemCheckboxChangeSequence } from './sequences/selectAllWorkItemCheckboxChangeSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
@@ -833,6 +834,7 @@ export const presenter = {
     sealAddressSequence,
     sealCaseSequence,
     sealDocketEntrySequence,
+    selectAllWorkItemCheckboxChangeSequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
