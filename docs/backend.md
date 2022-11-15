@@ -4,13 +4,13 @@ The backend of our project consists of a REST api used by the private UI, public
 
 ## Project Structure
 
-Before diving into the techincal aspects of the backend, it might be useful just to give an overview of the web api project structure.  The following tree structure is a pruned down version of our web-api directory with comments quickly explaining the purpose of each directory or file.  Some files and directories have been omitted for brevity, but these are some of the most important:
+Before diving into the technical aspects of the backend, it might be useful just to give an overview of the web api project structure.  The following tree structure is a pruned down version of our web-api directory with comments quickly explaining the purpose of each directory or file.  Some files and directories have been omitted for brevity, but these are some of the most important:
 
 ```
 .
 ├── cognito // custom styling for the cognito ui
 ├── elasticsearch // scripts for setting up the elasticsearch cluster
-│   ├── elasticsearch-indexes.js // all of the indexs on the cluster
+│   ├── elasticsearch-indexes.js // all of the indices on the cluster
 │   ├── elasticsearch-settings.js // the main settings
 │   └── ... // other scripts
 ├── migration-cron-terraform
@@ -115,7 +115,7 @@ app.put(
 );
 ```
 
-This will register our lambda with the endpoint provided.  Note, we also wrap all of our lambda functions with a higher order function which wrapps some additional logic around the inputs and outputs of the lambda and also adds console logging.
+This will register our lambda with the endpoint provided.  Note, we also wrap all of our lambda functions with a higher order function which wraps some additional logic around the inputs and outputs of the lambda and also adds console logging.
 
 
 ## Serverless Express

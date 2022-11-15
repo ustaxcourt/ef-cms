@@ -51,3 +51,9 @@ variable "enable_health_checks" {
   type = string
   default = "1"
 }
+
+
+variable "viewer_protocol_policy" {
+  type = string
+  default = "redirect-to-https"
+}
