@@ -1,4 +1,3 @@
-import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import {
   fakeFile,
