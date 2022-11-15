@@ -38,6 +38,14 @@ export const docketClerkAddsDocketEntryForNoticeFromDraft = (
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
+        key: 'documentType',
+        value: 'Notice',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
         key: 'freeText',
         value: 'Notice Not Requiring Signature',
       },
