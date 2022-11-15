@@ -18,7 +18,6 @@ describe('isFileExists', () => {
     const result = await isFileExists({
       applicationContext,
       key: '867-5309',
-      useTempBucket: false,
     });
     expect(result).toEqual(true);
   });
@@ -47,7 +46,6 @@ describe('isFileExists', () => {
       await isFileExists({
         applicationContext,
         key: 'jenny-not-found',
-        useTempBucket: false,
       }),
     ).toBe(false);
   });
