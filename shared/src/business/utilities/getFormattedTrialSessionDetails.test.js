@@ -33,11 +33,18 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when all fields have values', () => {
+    const mockChambersPhoneNumber = '1234567';
+
     const result = formattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        chambersPhoneNumber: mockChambersPhoneNumber,
+      },
     });
+
     expect(result).toMatchObject({
+      formattedChambersPhoneNumber: mockChambersPhoneNumber,
       formattedCityStateZip: 'Hartford, CT 12345',
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
