@@ -1226,57 +1226,69 @@ const SECTIONS = sortBy([
 
 const TRIAL_STATUS_TYPES = {
   setForTrial: {
+    displayOrder: 999,
     label: 'Set for Trial',
     deprecated: true,
   },
   dismissed: {
+    displayOrder: 999,
     label: 'Dismissed',
     deprecated: true,
   },
   continued: {
+    displayOrder: 4,
     label: 'Continued',
     deprecated: false,
   },
-  probableSettlement: {
-    new: true,
-    label: 'Probable Settlement',
-    deprecated: false,
-  },
-  probableTrial: {
-    new: true,
-    label: 'Probable Trial',
-    deprecated: false,
-  },
-  definiteTrial: {
-    new: true,
-    label: 'Definite Trial',
-    deprecated: false,
-  },
   rule122: {
+    displayOrder: 6,
     label: 'Rule 122',
     deprecated: false,
   },
   basisReached: {
+    displayOrder: 1,
     legacyLabel: 'A Basis Reached',
     label: 'Basis Reached',
     deprecated: false,
   },
   settled: {
+    displayOrder: 999,
     label: 'Settled',
     deprecated: true,
   },
   recall: {
+    displayOrder: 2,
     label: 'Recall',
     deprecated: false,
   },
+  submittedCAV: {
+    displayOrder: 8,
+    legacyLabel: 'Taken Under Advisement',
+    label: 'Submitted/CAV',
+    deprecated: false,
+  },
   motionToDismiss: {
+    displayOrder: 9,
     new: true,
     label: 'Motion to Dismiss',
     deprecated: false,
   },
-  submittedCAV: {
-    legacyLabel: 'Taken Under Advisement',
-    label: 'Submitted/CAV',
+  probableSettlement: {
+    displayOrder: 3,
+    new: true,
+    label: 'Probable Settlement',
+    deprecated: false,
+  },
+  probableTrial: {
+    displayOrder: 5,
+    new: true,
+    label: 'Probable Trial',
+    deprecated: false,
+  },
+  definiteTrial: {
+    displayOrder: 7,
+    new: true,
+    label: 'Definite Trial',
     deprecated: false,
   },
 };
