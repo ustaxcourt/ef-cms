@@ -25,7 +25,6 @@ export const DashboardPractitioner = connect(
               <CaseListTable />
             </div>
             <div className="tablet:grid-col-4">
-              <p>what the heck</p>
               {<CaseSearchBox />}
               <div className="card">
                 <div className="content-wrapper gray">
