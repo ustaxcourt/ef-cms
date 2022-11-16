@@ -24,8 +24,11 @@ export const DashboardPetitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap taxpayer-tools">
             <div className="tablet:grid-col-8">
-              {dashboardExternalHelper.showWhatToExpect && <WhatToExpect />}
-              {dashboardExternalHelper.showCaseList && <CaseListTable />}
+              {dashboardExternalHelper.showWhatToExpect ? (
+                <WhatToExpect />
+              ) : (
+                <CaseListTable />
+              )}
             </div>
             <div className="tablet:grid-col-4">
               {<CaseSearchBox />}
@@ -127,7 +130,9 @@ export const DashboardPetitioner = connect(
                 </div>
               )}
 
-              {dashboardExternalHelper.showCaseList && <FilingFeeOptions />}
+              {!dashboardExternalHelper.showWhatToExpect && (
+                <FilingFeeOptions />
+              )}
             </div>
           </div>
         </section>
