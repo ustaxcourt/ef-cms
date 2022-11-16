@@ -175,7 +175,6 @@ export const CaseListRowTrialSession = connect(
       sequences.openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
-    toggleShowDeprecatedSequence: sequences.toggleShowDeprecatedSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
     unassignedLabel: state.trialSessionWorkingCopyHelper.unassignedLabel,
     updatedTrialSessionTypesEnabled:
@@ -186,7 +185,6 @@ export const CaseListRowTrialSession = connect(
     formattedCase,
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
-    toggleShowDeprecatedSequence,
     trialSessionWorkingCopy,
     trialStatusOptions,
     unassignedLabel,
@@ -198,7 +196,6 @@ export const CaseListRowTrialSession = connect(
         autoSaveTrialSessionWorkingCopySequence,
         openAddEditUserCaseNoteModalFromListSequence,
         openDeleteUserCaseNoteConfirmModalSequence,
-        toggleShowDeprecatedSequence,
       },
       trialSessionWorkingCopyStatus:
         trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber]

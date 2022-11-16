@@ -127,10 +127,44 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
+  const trialStatusFilters = Object.keys(trialStatusOptions)
+    .filter(option => {
+      if (updatedTrialSessionTypesEnabled) {
+        return !trialStatusOptions[option].deprecated;
+      }
+      return option;
+    })
+    .sort((a, b) => {
+      if (updatedTrialSessionTypesEnabled) {
+        return (
+          trialStatusOptions[a].displayOrder -
+          trialStatusOptions[b].displayOrder
+        );
+      }
+      return 0;
+    })
+    .map(option => {
+      return {
+        key: option,
+        label:
+          !updatedTrialSessionTypesEnabled &&
+          trialStatusOptions[option].legacyLabel
+            ? trialStatusOptions[option].legacyLabel
+            : trialStatusOptions[option].label,
+      };
+    })
+    .concat({
+      key: 'statusUnassigned',
+      label: updatedTrialSessionTypesEnabled
+        ? 'Unassigned'
+        : 'Status unassigned',
+    });
+
   return {
     casesShownCount: formattedCases.length,
     formattedCases: casesAssociatedWithTrialSession,
     showPrintButton: formattedCases.length > 0,
+    trialStatusFilters,
     trialStatusOptions,
     unassignedLabel,
     updatedTrialSessionTypesEnabled,

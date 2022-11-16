@@ -8,14 +8,13 @@ export const WorkingCopyFilterHeader = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     filters: state.trialSessionWorkingCopy.filters,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
-    updatedTrialSessionTypesEnabled:
-      state.trialSessionWorkingCopyHelper.updatedTrialSessionTypesEnabled,
+    trialStatusFilters: state.trialSessionWorkingCopyHelper.trialStatusFilters,
   },
   function WorkingCopyFilterHeader({
     autoSaveTrialSessionWorkingCopySequence,
     filters = {},
     trialSessionWorkingCopyHelper,
-    updatedTrialSessionTypesEnabled,
+    trialStatusFilters,
   }) {
     return (
       <div className="working-copy-filters">
@@ -57,310 +56,73 @@ export const WorkingCopyFilterHeader = connect(
                 </label>
               </div>
             </div>
-
-            <div className="grid-col-2 grid-offset-1">
-              {updatedTrialSessionTypesEnabled ? (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.probableSettlement}
-                    className="usa-checkbox__input"
-                    id="filters.probableSettlement"
-                    name="filters.probableSettlement"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.probableSettlement"
-                  >
-                    Probable Settlement
-                  </label>
-                </div>
-              ) : (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.setForTrial}
-                    className="usa-checkbox__input"
-                    id="filters.setForTrial"
-                    name="filters.setForTrial"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.setForTrial"
-                  >
-                    Set for Trial
-                  </label>
-                </div>
-              )}
-              {updatedTrialSessionTypesEnabled ? (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.probableTrial}
-                    className="usa-checkbox__input"
-                    id="filters.probableTrial"
-                    name="filters.probableTrial"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.probableTrial"
-                  >
-                    Probable Trial
-                  </label>
-                </div>
-              ) : (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.dismissed}
-                    className="usa-checkbox__input"
-                    id="filters.dismissed"
-                    name="filters.dismissed"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.dismissed"
-                  >
-                    Dismissed
-                  </label>
-                </div>
-              )}
-            </div>
-
-            <div className="grid-col-2">
-              <div className="usa-checkbox">
-                <input
-                  checked={!!filters.continued}
-                  className="usa-checkbox__input"
-                  id="filters.continued"
-                  name="filters.continued"
-                  type="checkbox"
-                  onChange={e => {
-                    autoSaveTrialSessionWorkingCopySequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="filters.continued"
-                >
-                  Continued
-                </label>
-              </div>
-
-              <div className="usa-checkbox">
-                <input
-                  checked={!!filters.rule122}
-                  className="usa-checkbox__input"
-                  id="filters.rule122"
-                  name="filters.rule122"
-                  type="checkbox"
-                  onChange={e => {
-                    autoSaveTrialSessionWorkingCopySequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="filters.rule122"
-                >
-                  Rule 122
-                </label>
-              </div>
-            </div>
-
-            <div className="grid-col-2">
-              <div className="usa-checkbox">
-                <input
-                  checked={!!filters.basisReached}
-                  className="usa-checkbox__input"
-                  id="filters.basisReached"
-                  name="filters.basisReached"
-                  type="checkbox"
-                  onChange={e => {
-                    autoSaveTrialSessionWorkingCopySequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="filters.basisReached"
-                >
-                  {!updatedTrialSessionTypesEnabled ? 'A' : ''} Basis Reached
-                </label>
-              </div>
-
-              {updatedTrialSessionTypesEnabled ? (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.definiteTrial}
-                    className="usa-checkbox__input"
-                    id="filters.definiteTrial"
-                    name="filters.definiteTrial"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.definiteTrial"
-                  >
-                    Definite Trial
-                  </label>
-                </div>
-              ) : (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.settled}
-                    className="usa-checkbox__input"
-                    id="filters.settled"
-                    name="filters.settled"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.settled"
-                  >
-                    Settled
-                  </label>
-                </div>
-              )}
-            </div>
-
-            <div className="grid-col-2">
-              <div className="usa-checkbox">
-                <input
-                  checked={!!filters.recall}
-                  className="usa-checkbox__input"
-                  id="filters.recall"
-                  name="filters.recall"
-                  type="checkbox"
-                  onChange={e => {
-                    autoSaveTrialSessionWorkingCopySequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label className="usa-checkbox__label" htmlFor="filters.recall">
-                  Recall
-                </label>
-              </div>
-
-              <div className="usa-checkbox">
-                <input
-                  checked={!!filters.submittedCAV}
-                  className="usa-checkbox__input"
-                  id="filters.submittedCAV"
-                  name="filters.submittedCAV"
-                  type="checkbox"
-                  onChange={e => {
-                    autoSaveTrialSessionWorkingCopySequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="filters.submittedCAV"
-                >
-                  {updatedTrialSessionTypesEnabled
-                    ? 'Submitted/CAV'
-                    : 'Taken Under Advisement'}
-                </label>
-              </div>
-            </div>
-
-            <div className="grid-col-2">
-              {updatedTrialSessionTypesEnabled && (
-                <div className="usa-checkbox">
-                  <input
-                    checked={!!filters.motionToDismiss}
-                    className="usa-checkbox__input"
-                    id="filters.motionToDismiss"
-                    name="filters.motionToDismiss"
-                    type="checkbox"
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="filters.motionToDismiss"
-                  >
-                    Motion To Dismiss
-                  </label>
-                </div>
-              )}
-              <div className="usa-checkbox">
-                <input
-                  checked={!!filters.statusUnassigned}
-                  className="usa-checkbox__input"
-                  id="filters.statusUnassigned"
-                  name="filters.statusUnassigned"
-                  type="checkbox"
-                  onChange={e => {
-                    autoSaveTrialSessionWorkingCopySequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="filters.statusUnassigned"
-                >
-                  Unassigned
-                </label>
-              </div>
-            </div>
+            {statusFilterComponent(trialStatusFilters, filters)}
           </div>
         </div>
       </div>
     );
+  },
+);
+
+const statusFilterComponent = (trialStatusFilters, filters) => {
+  const filterCheckboxes = [];
+
+  for (let i = 0; i < trialStatusFilters.length; i += 2) {
+    const filterColumn = (
+      <div className={i === 0 ? 'grid-col-2 grid-offset-1' : 'grid-col-2'}>
+        <FilterCheckbox
+          filters={filters}
+          i={i}
+          trialStatusFilters={trialStatusFilters}
+        />
+        <FilterCheckbox
+          filters={filters}
+          i={i + 1}
+          trialStatusFilters={trialStatusFilters}
+        />
+      </div>
+    );
+
+    filterCheckboxes.push(filterColumn);
+  }
+  return filterCheckboxes;
+};
+
+const FilterCheckbox = connect(
+  {
+    autoSaveTrialSessionWorkingCopySequence:
+      sequences.autoSaveTrialSessionWorkingCopySequence,
+  },
+  function filterCheckbox({
+    autoSaveTrialSessionWorkingCopySequence,
+    filters,
+    i,
+    trialStatusFilters,
+  }) {
+    if (trialStatusFilters[i]) {
+      return (
+        <div className="usa-checkbox">
+          <input
+            checked={!!filters[trialStatusFilters[i].key]}
+            className="usa-checkbox__input"
+            id={`filters.${trialStatusFilters[i].key}`}
+            name={`filters.${trialStatusFilters[i].key}`}
+            type="checkbox"
+            onChange={e => {
+              autoSaveTrialSessionWorkingCopySequence({
+                key: e.target.name,
+                value: e.target.checked,
+              });
+            }}
+          />
+          <label
+            className="usa-checkbox__label"
+            htmlFor={`filters.${trialStatusFilters[i].key}`}
+          >
+            {trialStatusFilters[i].label}
+          </label>
+        </div>
+      );
+    }
   },
 );
