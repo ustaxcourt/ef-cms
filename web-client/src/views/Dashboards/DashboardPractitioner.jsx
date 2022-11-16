@@ -11,10 +11,9 @@ import React from 'react';
 
 export const DashboardPractitioner = connect(
   {
-    dashboardExternalHelper: state.dashboardExternalHelper,
     user: state.user,
   },
-  function DashboardPractitioner({ dashboardExternalHelper, user }) {
+  function DashboardPractitioner({ user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />
@@ -23,7 +22,7 @@ export const DashboardPractitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-8">
-              {dashboardExternalHelper.showCaseList && <CaseListTable />}
+              <CaseListTable />
             </div>
             <div className="tablet:grid-col-4">
               {<CaseSearchBox />}
