@@ -24,7 +24,6 @@ export const dashboardExternalHelper = (get, applicationContext) => {
   }
 
   return {
-    showCaseList: cases.length > 0,
     showFileACase,
     showStartButton,
     showWhatToExpect: cases.length === 0,
