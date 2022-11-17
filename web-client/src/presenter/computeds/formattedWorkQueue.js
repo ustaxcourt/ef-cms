@@ -251,19 +251,24 @@ export const filterWorkItems = ({
     .getWorkQueueFilters({ user });
 
   const composedFilter = filters[queue][box];
-
-  const assignmentFilter = workItem => {
-    if (assignmentFilterValue && assignmentFilterValue.userId) {
-      if (assignmentFilterValue.userId === 'UA') {
-        return workItem.assigneeId === null;
-      }
-      return (
-        workItem.assigneeId === assignmentFilterValue.userId ||
-        workItem.completedBy === assignmentFilterValue.name
-      );
-    }
+  let assignmentFilter = workItem => {
     return workItem;
   };
+
+  if (queue === 'section') {
+    assignmentFilter = workItem => {
+      if (assignmentFilterValue && assignmentFilterValue.userId) {
+        if (assignmentFilterValue.userId === 'UA') {
+          return workItem.assigneeId === null;
+        }
+        return (
+          workItem.assigneeId === assignmentFilterValue.userId ||
+          workItem.completedBy === assignmentFilterValue.name
+        );
+      }
+      return workItem;
+    };
+  }
 
   const filteredWorkItems = workItems
     .filter(composedFilter)
