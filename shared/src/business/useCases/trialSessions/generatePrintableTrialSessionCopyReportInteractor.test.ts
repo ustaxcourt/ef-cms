@@ -54,7 +54,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     const interactorProps = {
       filters: {
-        aBasisReached: true,
+        basisReached: true,
         continued: true,
         dismissed: true,
         recall: true,
