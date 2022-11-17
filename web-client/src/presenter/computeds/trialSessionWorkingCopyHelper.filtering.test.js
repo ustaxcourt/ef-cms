@@ -26,7 +26,7 @@ describe('trial session working copy computed', () => {
     trialLocation: 'Hartford, Connecticut',
   };
   describe('filtering', () => {
-    it('should only return cases with "A Basis Reached" status when that filter is the only one selected and every case has a status', () => {
+    it('should only return cases with "Basis Reached" status when that filter is the only one selected and every case has a status', () => {
       const { casesShownCount, formattedCases } = runCompute(
         trialSessionWorkingCopyHelper,
         {
@@ -45,11 +45,11 @@ describe('trial session working copy computed', () => {
             trialSessionWorkingCopy: {
               caseMetadata: {
                 '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
+                '102-19': { trialStatus: 'basisReached' },
                 '500-17': { trialStatus: 'dismissed' },
                 '5000-17': { trialStatus: 'dismissed' },
               },
-              filters: { aBasisReached: true },
+              filters: { basisReached: true },
               sort: 'docket',
               sortOrder: 'asc',
               userNotes: {},
@@ -81,7 +81,7 @@ describe('trial session working copy computed', () => {
             trialSessionWorkingCopy: {
               caseMetadata: {
                 '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
+                '102-19': { trialStatus: 'basisReached' },
                 '500-17': { trialStatus: 'dismissed' },
                 '5000-17': { trialStatus: 'dismissed' },
               },
@@ -121,11 +121,11 @@ describe('trial session working copy computed', () => {
             trialSessionWorkingCopy: {
               caseMetadata: {
                 '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
+                '102-19': { trialStatus: 'basisReached' },
                 '5000-17': { trialStatus: 'recall' },
               },
               filters: {
-                aBasisReached: true,
+                basisReached: true,
                 dismissed: true,
                 recall: false,
                 statusUnassigned: false,
@@ -164,7 +164,7 @@ describe('trial session working copy computed', () => {
             trialSessionWorkingCopy: {
               caseMetadata: {
                 '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
+                '102-19': { trialStatus: 'basisReached' },
               },
               filters: { statusUnassigned: true },
               sort: 'docket',
