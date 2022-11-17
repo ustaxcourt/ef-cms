@@ -225,6 +225,32 @@ describe('formattedWorkQueue', () => {
     expect(result[0].workItemId).toEqual(baseWorkItem.workItemId);
   });
 
+  it("should not apply the assignment filter to 'my' boxes", () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        screenMetadata: {
+          assignmentFilterValue: {
+            userId: petitionsClerkUser.userId,
+          },
+        },
+        workQueue: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-06-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual(baseWorkItem.workItemId);
+  });
+
   it('filters items based on in progress cases for a petitionsclerk', () => {
     const inProgressWorkItemId = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
 

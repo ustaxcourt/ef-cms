@@ -20,7 +20,6 @@ describe('dashboardExternalHelper', () => {
         openCases: [],
       },
     });
-    expect(result.showCaseList).toEqual(false);
     expect(result.showWhatToExpect).toEqual(true);
   });
 
@@ -34,7 +33,6 @@ describe('dashboardExternalHelper', () => {
         openCases: [{ something: true }],
       },
     });
-    expect(result.showCaseList).toEqual(true);
     expect(result.showWhatToExpect).toEqual(false);
   });
 
