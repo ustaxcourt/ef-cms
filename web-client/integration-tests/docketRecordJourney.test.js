@@ -261,6 +261,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       cerebralTest,
       docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
+      documentType: 'Hearing before',
       eventCode: 'HEAR',
       filingDate: {
         day: '1',
