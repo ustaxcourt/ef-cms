@@ -133,8 +133,11 @@
 
       .assignments-row-content {
         width: 3.5in;
-        word-break: break-word;
       }
     }
+  }
+
+  .wrap-text-content {
+    word-break: break-word;
   }
 }
