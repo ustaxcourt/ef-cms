@@ -2,14 +2,14 @@ export const openUrlInNewTab = async getUrlCb => {
   let url;
 
   try {
+    const openFileViewerWindow = window.open();
+    openFileViewerWindow.document.write('Loading your document...');
+
     ({ url } = await getUrlCb());
+    openFileViewerWindow.location.href = url;
   } catch (err) {
     throw new Error(`Unable to get document download url. ${err.message}`);
   }
-
-  const openFileViewerWindow = window.open();
-  openFileViewerWindow.document.write('Loading your document...');
-  openFileViewerWindow.location.href = url;
 };
 
 /**
