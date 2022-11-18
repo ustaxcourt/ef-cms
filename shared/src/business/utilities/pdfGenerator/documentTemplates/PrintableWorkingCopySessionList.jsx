@@ -96,7 +96,7 @@ export const PrintableWorkingCopySessionList = ({
                       />
                       <div>{formattedCase.docketNumberWithSuffix}</div>
                     </td>
-                    <td style={{ wordBreak: 'break-word' }}>
+                    <td className="wrap-text-content">
                       {formattedCase.caseTitle}
                     </td>
                     <td>
