@@ -15,6 +15,6 @@ exports.addPaperFilingInteractor = (applicationContext, data) => {
   return post({
     applicationContext,
     body: data,
-    endpoint: `/case-documents/${docketNumber}/paper-filing`,
+    endpoint: `/async/case-documents/${docketNumber}/paper-filing`,
   });
 };
