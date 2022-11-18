@@ -38,39 +38,42 @@ export const PrintableWorkingCopySessionList = ({
             <h2 className="heading-1">{userHeading}</h2>
           </div>
         </div>
-        {/* assignments begins */}
-        <div className="card content-wrapper trial-session-card">
-          <h3 className="underlined">Assignments</h3>
-          <div className="grid-row grid-gap">
-            <div className="grid-col-6">
-              <p className="label text-bold">Judge</p>
-              <p className="margin-bottom-0">
-                {formattedTrialSession.formattedJudge}
-              </p>
-              <p>{formattedTrialSession.formattedChambersPhoneNumber}</p>
-            </div>
-            <div className="grid-col-6">
-              <p className="label text-bold">Trial clerk</p>
-              <p>{formattedTrialSession.formattedTrialClerk}</p>
-            </div>
-          </div>
 
-          <div className="grid-row grid-gap">
-            <div className="grid-col-6">
-              <p className="label text-bold">Court reporter</p>
-              <p className="margin-bottom-0">
-                {formattedTrialSession.formattedCourtReporter}
-              </p>
+        {/* assignments begins */}
+        <div className="card">
+          <div className="card-header">Assignments</div>
+          <div className="card-content">
+            <div className="grid-row">
+              <div className="grid-col-6">
+                <p className="label text-bold">Judge</p>
+                <p className="margin-bottom-0">
+                  {formattedTrialSession.formattedJudge}
+                </p>
+                <p>{formattedTrialSession.formattedChambersPhoneNumber}</p>
+              </div>
+              <div className="grid-col-6">
+                <p className="label text-bold">Trial clerk</p>
+                <p>{formattedTrialSession.formattedTrialClerk}</p>
+              </div>
             </div>
-            <div className="grid-col-6">
-              <p className="label text-bold">IRS calendar administrator</p>
-              <p className="margin-bottom-0">
-                {formattedTrialSession.formattedIrsCalendarAdministrator}
-              </p>
+            <div className="grid-row ">
+              <div className="grid-col-6">
+                <p className="label text-bold">Court reporter</p>
+                <p className="margin-bottom-0">
+                  {formattedTrialSession.formattedCourtReporter}
+                </p>
+              </div>
+              <div className="grid-col-6">
+                <p className="label text-bold">IRS calendar administrator</p>
+                <p className="margin-bottom-0">
+                  {formattedTrialSession.formattedIrsCalendarAdministrator}
+                </p>
+              </div>
             </div>
           </div>
         </div>
         {/* assignments ends */}
+
         <SessionNotesSection sessionNotes={sessionNotes} />
         <SelectedFiltersSection
           count={formattedCases.length}
