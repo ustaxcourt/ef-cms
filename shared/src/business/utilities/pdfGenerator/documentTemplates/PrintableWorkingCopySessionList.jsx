@@ -45,27 +45,26 @@ export const PrintableWorkingCopySessionList = ({
           <div className="card-content assignments-container">
             <div className="assignments-row">
               <div className="assignments-row-content">
-                <div className="label text-bold">Judge</div>
+                <div className="text-bold">Judge</div>
                 <div>{formattedTrialSession.formattedJudge}</div>
-                <div>{formattedTrialSession.formattedChambersPhoneNumber}</div>
+                <div>+1 (628) 225 9756</div>
+                {/* <div>{formattedTrialSession.formattedChambersPhoneNumber}</div> */}
               </div>
               <div className="assignments-row-content">
-                <div className="label text-bold">Trial clerk</div>
-                <div>{formattedTrialSession.formattedTrialClerk}</div>
+                <div className="text-bold">Trial clerk</div>
+                {/* <div>{formattedTrialSession.formattedTrialClerk}</div> */}
+                <div>formattedTrialSession.formattedTrialClerk</div>
               </div>
             </div>
             <div className="assignments-row">
               <div className="assignments-row-content">
-                <div className="label text-bold">Court reporter</div>
-                <div>{formattedTrialSession.formattedCourtReporter}</div>
+                <div className="text-bold">Court reporter</div>
+                <div>formattedTrialSession.formattedCourtReporter</div>
+                {/* <div>{formattedTrialSession.formattedCourtReporter}</div> */}
               </div>
               <div className="assignments-row-content">
-                <div className="label text-bold">
-                  IRS calendar administrator
-                </div>
-                <div className="margin-bottom-0">
-                  {formattedTrialSession.formattedIrsCalendarAdministrator}
-                </div>
+                <div className="text-bold">IRS calendar administrator</div>
+                <div>formattedTrialSession</div>
               </div>
             </div>
           </div>
