@@ -2,6 +2,7 @@ const React = require('react');
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { SelectedFiltersSection } from '../components/SelectedFiltersSection';
+import { SessionAssignments } from '../../../../../../web-client/src/views/TrialSessionWorkingCopy/SessionAssignments';
 import { SessionNotesSection } from '../components/SessionNotesSection';
 import {
   generateCaseStatus,
@@ -38,6 +39,41 @@ export const PrintableWorkingCopySessionList = ({
             <h2 className="heading-1">{userHeading}</h2>
           </div>
         </div>
+        {/* assignments begins */}
+        <div className="card trial-session-card">
+          <div className="content-wrapper">
+            <h3 className="underlined">Assignments</h3>
+            <div className="grid-container padding-x-0">
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">
+                  <p className="label">Judge</p>
+                  <p className="margin-bottom-0">
+                    {formattedTrialSession.formattedJudge}
+                  </p>
+                  <p>{formattedTrialSession.formattedChambersPhoneNumber}</p>
+                </div>
+                <div className="grid-col-6">
+                  <p className="label">Trial clerk</p>
+                  <p>{formattedTrialSession.formattedTrialClerk}</p>
+                </div>
+              </div>
+
+              <div className="grid-col-6">
+                <p className="label">Court reporter</p>
+                <p className="margin-bottom-0">
+                  {formattedTrialSession.formattedCourtReporter}
+                </p>
+              </div>
+              <div className="grid-col-6">
+                <p className="label">IRS calendar administrator</p>
+                <p className="margin-bottom-0">
+                  {formattedTrialSession.formattedIrsCalendarAdministrator}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* assignments ends */}
         <SessionNotesSection sessionNotes={sessionNotes} />
         <SelectedFiltersSection
           count={formattedCases.length}
