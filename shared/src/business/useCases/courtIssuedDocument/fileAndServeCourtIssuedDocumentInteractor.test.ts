@@ -150,6 +150,25 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
+  it('should throw an error when the document is already pending service', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = true;
+
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId: 'testing',
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumbers: [docketEntry.docketNumber],
+        form: docketEntry,
+        subjectCaseDocketNumber: docketEntry.docketNumber,
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
     const mockOrderFilingFeeForm = {
       date: '2030-01-20T00:00:00.000Z',
@@ -191,25 +210,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().createCaseDeadline,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should throw an error when the document is already pending service', async () => {
-    const docketEntry = caseRecord.docketEntries[0];
-    docketEntry.isPendingService = true;
-
-    await expect(
-      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumbers: [docketEntry.docketNumber],
-        form: docketEntry,
-        subjectCaseDocketNumber: docketEntry.docketNumber,
-      }),
-    ).rejects.toThrow('Docket entry is already being served');
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
   });
 
