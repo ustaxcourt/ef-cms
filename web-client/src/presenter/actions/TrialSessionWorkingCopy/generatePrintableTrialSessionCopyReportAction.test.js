@@ -1,6 +1,8 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableTrialSessionCopyReportAction } from './generatePrintableTrialSessionCopyReportAction';
+import { omit } from 'lodash';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
@@ -52,20 +54,20 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     );
     expect(result.output.pdfUrl).toEqual(url);
   });
+
   it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
-    //use MOCK_TRIAL
     const mockFormattedTrialSessionDetails = {
-      chambersPhoneNumber: formattedCaseMock.chambersPhoneNumber,
-      computedStatus: formattedCaseMock.computedStatus,
+      computedStatus: 'complete',
       estimatedEndDate: '2020-11-27T05:00:00.000Z',
-      formattedCourtReporter: formattedCaseMock.formattedCourtReporter,
-      formattedIrsCalendarAdministrator:
-        formattedCaseMock.formattedIrsCalendarAdministrator,
-      formattedJudge: formattedCaseMock.formattedJudge,
-      formattedTerm: formattedCaseMock.formattedTerm,
-      formattedTrialClerk: formattedCaseMock.formattedTrialClerk,
+      formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,
+      formattedCourtReporter: 'Test Court Reporter',
+      formattedIrsCalendarAdministrator: 'Test Calendar Admin',
+      formattedJudge: MOCK_TRIAL_REGULAR.judge.name,
+      formattedStartDateFull: '2020-11-27T05:00:00.000Z',
+      formattedTerm: MOCK_TRIAL_REGULAR.term,
+      formattedTrialClerk: 'Test Trial Clerk',
       startDate: '2020-11-27T05:00:00.000Z',
-      trialLocation: formattedCaseMock.trialLocation,
+      trialLocation: MOCK_TRIAL_REGULAR.trialLocation,
     };
 
     const result = await runAction(
@@ -91,6 +93,10 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
         .formattedTrialSession,
     ).toEqual({
+      ...omit(mockFormattedTrialSessionDetails, [
+        'startDate',
+        'estimatedEndDate',
+      ]),
       endDateForAdditionalPageHeaders: 'Nov 27, 2020',
       formattedEstimatedEndDateFull: 'November 27, 2020',
       startDateForAdditionalPageHeaders: 'Nov 27, 2020',
