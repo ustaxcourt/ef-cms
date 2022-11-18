@@ -129,10 +129,11 @@
       flex-direction: row;
       align-items: flex-start;
       justify-content: space-between;
+      column-gap: 50%;
 
-      .assignments-row-content {
-        width: auto;
-      }
+      // .assignments-row-content {
+      //  min-width: 50%;
+      // }
     }
   }
 }
