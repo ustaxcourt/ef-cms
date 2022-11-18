@@ -350,14 +350,29 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/edit',
+      '/case-detail/*/documents/*/edit-court-issued',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
+        return app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
+          docketEntryId,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/edit..',
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
+        );
+        const { fromPage } = route.query();
         return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
@@ -382,19 +397,6 @@ const router = {
         return app.getSequence('gotoEditDocketEntryMetaSequence')({
           docketNumber,
           docketRecordIndex: +docketRecordIndex,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/edit-court-issued',
-      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
-        );
-        return app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
-          docketEntryId,
-          docketNumber,
         });
       }),
     );
@@ -980,6 +982,17 @@ const router = {
     );
 
     registerRoute(
+      '/practitioner-detail/*/edit-document/*',
+      ifHasAccess({ app }, (barNumber, practitionerDocumentFileId) => {
+        setPageTitle('Edit Practitioner Document');
+        return app.getSequence('gotoPractitionerEditDocumentSequence')({
+          barNumber,
+          practitionerDocumentFileId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/print-paper-service/*',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
@@ -1253,7 +1266,9 @@ const router = {
     registerRoute(
       '/search/no-matches',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        {
+          app,
+        },
         () => {
           setPageTitle('Search results');
           return app.getSequence('gotoCaseSearchNoMatchesSequence')();
@@ -1264,7 +1279,10 @@ const router = {
     registerRoute(
       '/search..',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        {
+          app,
+          permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH,
+        },
         () => {
           const query = route.query();
           setPageTitle('Advanced search');

@@ -74,11 +74,43 @@ describe('Complete QC on lead case docket entry', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
+    expect(cerebralTest.getState('form.eventCode')).toBeUndefined();
+    expect(cerebralTest.getState('form.documentType')).toBeUndefined();
+
+    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      documentType: 'Select a document type',
+    });
+
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
         value: 'MISC',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Miscellaneous',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: '[anything]',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type A',
       },
     );
 

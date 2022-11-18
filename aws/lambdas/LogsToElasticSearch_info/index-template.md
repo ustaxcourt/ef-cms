@@ -23,88 +23,12 @@ To create or update the `cwl` mapping template, which matches the indexes create
 
 ```
 PUT _template/cwl
-{
-  "index_patterns": ["cwl-*"],
-  "mappings": {
-    "properties": {
-      "metadata": {
-        "type": "object",
-        "dynamic": false,
-        "enabled": false
-      },
-      "environment": {
-        "properties": {
-          "color": { "type": "keyword" },
-          "stage": { "type": "keyword" }
-        }
-      },
-      "level": { "type": "keyword" },
-      "logGroup": { "type": "keyword" },
-      "logStream": { "type": "keyword" },
-      "message": {
-        "type": "text",
-        "fields": {
-          "raw": { "type": "keyword" }
-        }
-      },
-      "requestId": {
-        "properties": {
-          "apiGateway": { "type": "keyword" },
-          "applicationLoadBalancer": { "type": "keyword" },
-          "lambda": { "type": "keyword" },
-          "authorizer": { "type": "keyword" },
-          "connection": { "type": "keyword" }
-        }
-      },
-      "request": {
-        "properties": {
-          "method": { "type": "keyword" },
-          "url": { "type": "keyword" },
-          "headers": {
-            "type": "object",
-            "dynamic": true
-          },
-          "body": {
-            "type": "text",
-            "index": false
-          }
-        }
-      },
-      "user": {
-        "properties": {
-          "email": { "type": "keyword" },
-          "name": { "type": "text" },
-          "role": { "type": "keyword" },
-          "userId": { "type": "keyword" }
-        }
-      },
-      "response": {
-        "properties": {
-          "responseTimeMs": {
-            "type": "integer",
-            "ignore_malformed": true
-          },
-          "statusCode": {
-            "type": "integer",
-            "ignore_malformed": true
-          }
-        }
-      },
-      "authorizer": {
-        "properties": {
-          "error": { "type": "text" },
-          "responseTimeMs": {
-            "type": "integer",
-            "ignore_malformed": true
-          },
-          "statusCode": {
-            "type": "integer",
-            "ignore_malformed": true
-          }
-        }
-      },
-      "timestamp": { "type": "date" }
-    }
-  }
-}
+... contents of index-template.json
 ```
+
+See here for [index template JSON](./index-template.json).
+
+## Future Index Template Considerations
+
+- Figure out how to index the browser instance/tab that a `user` makes an API request (Websocket Session ID or something)
+- Move this configuration to Terraform instead of a manual process. 
