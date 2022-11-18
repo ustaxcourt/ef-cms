@@ -39,7 +39,6 @@ export const PrintableWorkingCopySessionList = ({
           </div>
         </div>
 
-        {/* assignments begins */}
         <div className="card">
           <div className="card-header">Assignments</div>
           <div className="card-content assignments-container">
@@ -47,29 +46,27 @@ export const PrintableWorkingCopySessionList = ({
               <div className="assignments-row-content">
                 <div className="text-bold">Judge</div>
                 <div>{formattedTrialSession.formattedJudge}</div>
-                <div>+1 (628) 225 9756</div>
-                {/* <div>{formattedTrialSession.formattedChambersPhoneNumber}</div> */}
+                <div>{formattedTrialSession.formattedChambersPhoneNumber}</div>
               </div>
               <div className="assignments-row-content">
                 <div className="text-bold">Trial clerk</div>
-                {/* <div>{formattedTrialSession.formattedTrialClerk}</div> */}
-                <div>formattedTrialSession.formattedTrialClerk</div>
+                <div>{formattedTrialSession.formattedTrialClerk}</div>
               </div>
             </div>
             <div className="assignments-row">
               <div className="assignments-row-content">
                 <div className="text-bold">Court reporter</div>
-                <div>formattedTrialSession.formattedCourtReporter</div>
-                {/* <div>{formattedTrialSession.formattedCourtReporter}</div> */}
+                <div>{formattedTrialSession.formattedCourtReporter}</div>
               </div>
               <div className="assignments-row-content">
                 <div className="text-bold">IRS calendar administrator</div>
-                <div>formattedTrialSession</div>
+                <div>
+                  {formattedTrialSession.formattedIrsCalendarAdministrator}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        {/* assignments ends */}
 
         <SessionNotesSection sessionNotes={sessionNotes} />
         <SelectedFiltersSection

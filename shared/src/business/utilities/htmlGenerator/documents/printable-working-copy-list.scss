@@ -132,7 +132,8 @@
       column-gap: 15%;
 
       .assignments-row-content {
-        min-width: 3in;
+        width: 3.5in;
+        word-break: break-word;
       }
     }
   }
