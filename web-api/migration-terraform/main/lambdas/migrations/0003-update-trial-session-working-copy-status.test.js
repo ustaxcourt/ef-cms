@@ -44,6 +44,7 @@ describe('migrateItems', () => {
     pk: `trial-session-working-copy|${uuidv4()}`,
     sk: `user|${uuidv4()}`,
   };
+
   const mockTakenUnderAdvisement = {
     caseMetadata: {
       '121-21': {
