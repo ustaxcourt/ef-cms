@@ -54,7 +54,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 0);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
     docketClerkServesDocument(cerebralTest, 0);
 
@@ -65,7 +65,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 1);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
     docketClerkServesDocument(cerebralTest, 1);
 
@@ -76,7 +76,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 2);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
     docketClerkServesDocument(cerebralTest, 2);
 
@@ -87,7 +87,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 3);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 3);
     docketClerkServesDocument(cerebralTest, 3);
 
@@ -98,7 +98,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 4);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 4);
     docketClerkServesDocument(cerebralTest, 4);
 
@@ -109,7 +109,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 5);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 5);
     docketClerkServesDocument(cerebralTest, 5);
 
@@ -120,7 +120,7 @@ describe('order search journey', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(cerebralTest, 6);
+    docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrder(cerebralTest, 6);
     docketClerkServesDocument(cerebralTest, 6);
   });
