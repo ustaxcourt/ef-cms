@@ -88,22 +88,6 @@ export const serveCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
-
-  const stampedPdf = await applicationContext
-    .getUseCaseHelpers()
-    .stampDocumentForService({
-      applicationContext,
-      documentToStamp: docketEntryToServe,
-      pdfData,
-    });
-
   if (
     docketEntryToServe.eventCode ===
     SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode
@@ -126,6 +110,22 @@ export const serveCourtIssuedDocumentInteractor = async (
       caseDeadline: newCaseDeadline.validate().toRawObject(),
     });
   }
+
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    })
+    .promise();
+
+  const stampedPdf = await applicationContext
+    .getUseCaseHelpers()
+    .stampDocumentForService({
+      applicationContext,
+      documentToStamp: docketEntryToServe,
+      pdfData,
+    });
 
   docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
