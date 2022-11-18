@@ -78,8 +78,20 @@ table,
     }
 
     &.select-all-checkbox {
-      padding: 16px 15px 16px 21px;
-      vertical-align: top;
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-left: 21px;
+
+      input {
+        vertical-align: middle;
+      }
+
+      label {
+        display: inline-block;
+        padding-top: 0;
+        margin: 0;
+        vertical-align: middle;
+      }
     }
   }
 
@@ -636,16 +648,5 @@ table.case-list tbody tr:nth-child(even) td {
 
   tr td .usa-button.ustc-button--unstyled {
     padding-top: 0;
-  }
-}
-
-@media only screen and (min-width: ($custom-screen + 1px)) {
-  .ustc-table {
-    th {
-      &.select-all-checkbox {
-        padding: 5px 15px 16px 21px;
-        vertical-align: top;
-      }
-    }
   }
 }
