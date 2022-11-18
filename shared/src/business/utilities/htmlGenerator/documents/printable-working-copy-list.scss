@@ -109,4 +109,12 @@
     display: flex;
     flex-direction: row;
   }
+
+  .underlined {
+    border-bottom: 1px solid;
+  }
+
+  .trial-session-card {
+    margin-left: 0.5rem;
+  }
 }
