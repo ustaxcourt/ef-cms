@@ -1,16 +1,4 @@
-import {
-  AUTOMATIC_BLOCKED_REASONS,
-  CASE_STATUS_TYPES,
-  CONTACT_TYPES,
-  COUNTRY_TYPES,
-  COURT_ISSUED_EVENT_CODES,
-  DOCKET_SECTION,
-  FILING_FEE_DEADLINE_DESCRIPTION,
-  PARTY_TYPES,
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { FILING_FEE_DEADLINE_DESCRIPTION } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
@@ -18,9 +6,7 @@ import {
   applicationContext,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
-import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
-import { mockDocketEntry } from '../../../../../web-client/src/presenter/computeds/formattedDocketEntries.test';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
