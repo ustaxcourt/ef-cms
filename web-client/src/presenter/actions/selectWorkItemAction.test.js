@@ -53,4 +53,24 @@ describe('selectWorkItemAction', () => {
       },
     ]);
   });
+
+  it('sets the state.workitemAllCheckbox boolean to false when unchecking any selected workitem', async () => {
+    const { state } = await runAction(selectWorkItemAction, {
+      props: {
+        workItem: {
+          workItemId: 1,
+        },
+      },
+      state: {
+        selectedWorkItems: [
+          {
+            workItemId: 1,
+          },
+        ],
+        workitemAllCheckbox: true,
+      },
+    });
+
+    expect(state.workitemAllCheckbox).toBe(false);
+  });
 });

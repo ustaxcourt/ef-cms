@@ -12,7 +12,6 @@ import { state } from 'cerebral';
  */
 export const toggleSelectAllWorkItemsAction = ({ get, store }) => {
   const allCheckboxPreviousState = get(state.workitemAllCheckbox);
-
   const formattedWorkQueue = get(state.formattedWorkQueue);
 
   if (!allCheckboxPreviousState) {
