@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { associatedUserAdvancedSearchForCase } from './journey/associatedUserAdvancedSearchForCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -13,22 +16,21 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { unassociatedUserAdvancedSearchForUnsealedCase } from './journey/unassociatedUserAdvancedSearchForUnsealedCase';
 import { unassociatedUserViewsCaseDetailForUnsealedCase } from './journey/unassociatedUserViewsCaseDetailForUnsealedCase';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('Docket Clerk unseals a case', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
+  it('petitioner create an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -40,8 +42,10 @@ describe('Docket Clerk unseals a case', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -57,7 +61,7 @@ describe('Docket Clerk unseals a case', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
   docketClerkUnsealsCase(cerebralTest);

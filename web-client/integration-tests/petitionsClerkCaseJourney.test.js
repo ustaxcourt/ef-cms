@@ -9,13 +9,14 @@ import { petitionsClerkDeletesOtherStatisticToCase } from './journey/petitionsCl
 import { petitionsClerkEditOtherStatisticToCase } from './journey/petitionsClerkEditOtherStatisticToCase';
 import { petitionsClerkEditsDeficiencyStatistic } from './journey/petitionsClerkEditsDeficiencyStatistic';
 import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsClerkEditsPetitionInQCIRSNotice';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './journey/petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox';
 import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
 import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petitionsClerkVerifiesPetitionPaymentFeeOptions';
 
-const cerebralTest = setupTest();
-
 describe('Petitions clerk case journey', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });
@@ -26,6 +27,14 @@ describe('Petitions clerk case journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   petitionsClerkVerifiesOrderForOdsCheckbox(cerebralTest, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(
     cerebralTest,

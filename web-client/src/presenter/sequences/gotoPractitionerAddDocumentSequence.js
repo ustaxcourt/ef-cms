@@ -13,7 +13,7 @@ export const gotoPractitionerAddDocument = [
   stopShowValidationAction,
   getPractitionerDetailAction,
   setPractitionerDetailAction,
-  setCurrentPageAction('PractitionerAddDocument'),
+  setCurrentPageAction('PractitionerAddEditDocument'),
 ];
 
 export const gotoPractitionerAddDocumentSequence = [

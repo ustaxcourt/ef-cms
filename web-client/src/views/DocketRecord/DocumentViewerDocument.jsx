@@ -3,6 +3,7 @@ import { ConfirmInitiateCourtIssuedFilingServiceModal } from '../ConfirmInitiate
 import { ConfirmInitiatePaperFilingServiceModal } from '../ConfirmInitiatePaperFilingServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
+import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -11,8 +12,12 @@ import classNames from 'classnames';
 export const DocumentViewerDocument = connect(
   {
     caseDetail: state.caseDetail,
+    confirmWorkItemAlreadyCompleteSequence:
+      sequences.confirmWorkItemAlreadyCompleteSequence,
     documentViewerHelper: state.documentViewerHelper,
     documentViewerLinksHelper: state.documentViewerLinksHelper,
+    gotoCompleteDocketEntryQCSequence:
+      sequences.gotoCompleteDocketEntryQCSequence,
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
@@ -30,8 +35,10 @@ export const DocumentViewerDocument = connect(
   },
   function DocumentViewerDocument({
     caseDetail,
+    confirmWorkItemAlreadyCompleteSequence,
     documentViewerHelper,
     documentViewerLinksHelper,
+    gotoCompleteDocketEntryQCSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -149,8 +156,12 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showCompleteQcButton && (
                 <Button
                   link
-                  href={documentViewerLinksHelper.completeQcLink}
                   icon="star"
+                  onClick={() => {
+                    gotoCompleteDocketEntryQCSequence({
+                      docketEntryId: viewerDocumentToDisplay.docketEntryId,
+                    });
+                  }}
                 >
                   Complete QC
                 </Button>
@@ -201,6 +212,11 @@ export const DocumentViewerDocument = connect(
               <ConfirmInitiatePaperFilingServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal === 'WorkItemAlreadyCompletedModal' && (
+              <WorkItemAlreadyCompletedModal
+                confirmSequence={confirmWorkItemAlreadyCompleteSequence}
               />
             )}
           </>
