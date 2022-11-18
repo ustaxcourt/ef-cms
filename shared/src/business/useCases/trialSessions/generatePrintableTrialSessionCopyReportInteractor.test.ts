@@ -54,46 +54,16 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     const interactorProps = {
       filters: [
-        {
-          key: 'basisReached',
-          label: 'Basis Reached',
-        },
-        {
-          key: 'recall',
-          label: 'Recall',
-        },
-        {
-          key: 'probableSettlement',
-          label: 'Probable Settlement',
-        },
-        {
-          key: 'continued',
-          label: 'Continued',
-        },
-        {
-          key: 'probableTrial',
-          label: 'Probable Trial',
-        },
-        {
-          key: 'rule122',
-          label: 'Rule 122',
-        },
-        {
-          key: 'definiteTrial',
-          label: 'Definite Trial',
-        },
-        {
-          key: 'submittedCAV',
-          label: 'Submitted/CAV',
-        },
-        {
-          key: 'motionToDismiss',
-          label: 'Motion to Dismiss',
-        },
-        {
-          key: 'statusUnassigned',
-          label: 'Unassigned',
-        },
+        { key: 'basisReached', label: 'Basis Reached' },
+        { key: 'recall', label: 'Recall' },
+        { key: 'probableSettlement', label: 'Probable Settlement' },
+        { key: 'continued', label: 'Continued' },
+        { key: 'probableTrial', label: 'Probable Trial' },
+        { key: 'rule122', label: 'Rule 122' },
+        { key: 'definiteTrial', label: 'Definite Trial' },
+        { key: 'submittedCAV', label: 'Submitted/CAV' },
+        { key: 'motionToDismiss', label: 'Motion to Dismiss' },
+        { key: 'statusUnassigned', label: 'Unassigned' },
       ],
       formattedCases: [{ someprop: 'value of some prop' }],
       formattedTrialSession: mockTrialSession,
