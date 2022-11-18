@@ -27,6 +27,7 @@ const migrateItems = items => {
       for (const aCase in item.caseMetadata) {
         switch (item.caseMetadata[aCase].trialStatus) {
           case 'aBasisReached':
+          case 'settled':
             item.caseMetadata[aCase].trialStatus = 'basisReached';
             break;
           case 'takenUnderAdvisement':
