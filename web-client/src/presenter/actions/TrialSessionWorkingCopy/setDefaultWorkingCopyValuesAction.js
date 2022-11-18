@@ -22,16 +22,20 @@ export const setDefaultWorkingCopyValuesAction = ({ get, store }) => {
 
   if (!filters) {
     store.set(state.trialSessionWorkingCopy.filters, {
-      aBasisReached: true,
+      basisReached: true,
       continued: true,
+      definiteTrial: true,
       dismissed: true,
+      motionToDismiss: true,
+      probableSettlement: true,
+      probableTrial: true,
       recall: true,
       rule122: true,
       setForTrial: true,
       settled: true,
       showAll: true,
       statusUnassigned: true,
-      takenUnderAdvisement: true,
+      submittedCAV: true,
     });
   }
 };
