@@ -44,18 +44,48 @@ describe('documentGenerators', () => {
       const pdf = await printableWorkingCopySessionList({
         applicationContext,
         data: {
-          filters: {
-            aBasisReached: true,
-            continued: true,
-            dismissed: true,
-            recall: true,
-            rule122: true,
-            setForTrial: true,
-            settled: true,
-            showAll: true,
-            statusUnassigned: true,
-            takenUnderAdvisement: true,
-          },
+          filters: [
+            {
+              key: 'basisReached',
+              label: 'Basis Reached',
+            },
+            {
+              key: 'recall',
+              label: 'Recall',
+            },
+            {
+              key: 'probableSettlement',
+              label: 'Probable Settlement',
+            },
+            {
+              key: 'continued',
+              label: 'Continued',
+            },
+            {
+              key: 'probableTrial',
+              label: 'Probable Trial',
+            },
+            {
+              key: 'rule122',
+              label: 'Rule 122',
+            },
+            {
+              key: 'definiteTrial',
+              label: 'Definite Trial',
+            },
+            {
+              key: 'submittedCAV',
+              label: 'Submitted/CAV',
+            },
+            {
+              key: 'motionToDismiss',
+              label: 'Motion to Dismiss',
+            },
+            {
+              key: 'statusUnassigned',
+              label: 'Unassigned',
+            },
+          ],
           formattedCases: FORMATTED_CASES,
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
           sessionNotes: SESSION_NOTES,
