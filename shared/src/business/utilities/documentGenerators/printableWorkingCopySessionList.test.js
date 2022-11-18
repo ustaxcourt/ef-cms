@@ -45,46 +45,17 @@ describe('documentGenerators', () => {
         applicationContext,
         data: {
           filters: [
-            {
-              key: 'basisReached',
-              label: 'Basis Reached',
-            },
-            {
-              key: 'recall',
-              label: 'Recall',
-            },
-            {
-              key: 'probableSettlement',
-              label: 'Probable Settlement',
-            },
-            {
-              key: 'continued',
-              label: 'Continued',
-            },
-            {
-              key: 'probableTrial',
-              label: 'Probable Trial',
-            },
-            {
-              key: 'rule122',
-              label: 'Rule 122',
-            },
-            {
-              key: 'definiteTrial',
-              label: 'Definite Trial',
-            },
-            {
-              key: 'submittedCAV',
-              label: 'Submitted/CAV',
-            },
-            {
-              key: 'motionToDismiss',
-              label: 'Motion to Dismiss',
-            },
-            {
-              key: 'statusUnassigned',
-              label: 'Unassigned',
-            },
+            { key: 'basisReached', label: 'Basis Reached' },
+            { key: 'recall', label: 'Recall' },
+            { key: 'probableSettlement', label: 'Probable Settlement' },
+            { key: 'continued', label: 'Continued' },
+            { key: 'probableTrial', label: 'Probable Trial' },
+            { key: 'setForTrial', label: 'Set for Trial' },
+            { key: 'rule122', label: 'Rule 122' },
+            { key: 'definiteTrial', label: 'Definite Trial' },
+            { key: 'submittedCAV', label: 'Submitted/CAV' },
+            { key: 'motionToDismiss', label: 'Motion to Dismiss' },
+            { key: 'statusUnassigned', label: 'Unassigned' },
           ],
           formattedCases: FORMATTED_CASES,
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
@@ -117,18 +88,16 @@ describe('documentGenerators', () => {
       const pdf = await printableWorkingCopySessionList({
         applicationContext,
         data: {
-          filters: {
-            aBasisReached: true,
-            continued: false,
-            dismissed: true,
-            recall: true,
-            rule122: false,
-            setForTrial: true,
-            settled: true,
-            showAll: false,
-            statusUnassigned: true,
-            takenUnderAdvisement: false,
-          },
+          filters: [
+            { key: 'basisReached', label: 'Basis Reached' },
+            { key: 'recall', label: 'Recall' },
+            { key: 'rule122', label: 'Rule 122' },
+            { key: 'dismissed', label: 'Dismissed' },
+            { key: 'continued', label: 'Continued' },
+            { key: 'setForTrial', label: 'Set For Trial' },
+            { key: 'settled', label: 'Settled' },
+            { key: 'statusUnassigned', label: 'Unassigned' },
+          ],
           formattedCases: FORMATTED_CASES,
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
           sessionNotes: SESSION_NOTES,
