@@ -41,8 +41,6 @@ export const addPaperFilingInteractor = async (
     docketEntryId: string;
   },
 ) => {
-  console.log(documentMetadata, '****');
-
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
