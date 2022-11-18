@@ -45,7 +45,7 @@ const SectionWorkQueueTable = connect(
                 {showSelectAllCheckbox && (
                   <>
                     <input
-                      aria-label="Select work item"
+                      aria-label="select all work items"
                       checked={workitemAllCheckbox}
                       className="usa-checkbox__input"
                       id="workitem-select-all-checkbox"
