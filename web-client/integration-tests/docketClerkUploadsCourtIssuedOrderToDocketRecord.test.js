@@ -41,7 +41,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   petitionsClerkViewsDraftOrder(cerebralTest, 0);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
   docketClerkEditsAnUploadedCourtIssuedDocument(cerebralTest, fakeFile, 0);
   docketClerkSignsUploadedCourtIssuedDocument(cerebralTest);
   docketClerkEditsSignedUploadedCourtIssuedDocument(cerebralTest, fakeFile);
@@ -54,7 +54,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
-  docketClerkViewsDraftOrder(cerebralTest, 2);
+  docketClerkViewsDraftOrder(cerebralTest);
   docketClerkAddsDocketEntryForNoticeFromDraft(cerebralTest, 2);
 
   loginAs(cerebralTest, 'petitioner@example.com');
