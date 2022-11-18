@@ -10,18 +10,16 @@ import { state } from 'cerebral';
  * @param {object} providers.get the Cerebral get object
  * @param {object} providers.store the Cerebral store object
  */
-export const flipWorkItemAllCheckboxAction = ({ get, store }) => {
+export const toggleSelectAllWorkItemsAction = ({ get, store }) => {
   const allCheckboxPreviousState = get(state.workitemAllCheckbox);
 
-  let formattedWorkQueue = get(state.formattedWorkQueue);
+  const formattedWorkQueue = get(state.formattedWorkQueue);
 
-  formattedWorkQueue = formattedWorkQueue.map(workItem => {
-    return {
-      ...workItem,
-      selected: !allCheckboxPreviousState,
-    };
-  });
+  if (!allCheckboxPreviousState) {
+    store.set(state.selectedWorkItems, [...formattedWorkQueue]);
+  } else {
+    store.set(state.selectedWorkItems, []);
+  }
 
   store.set(state.workitemAllCheckbox, !allCheckboxPreviousState);
-  store.set(state.formattedWorkQueue, formattedWorkQueue);
 };
