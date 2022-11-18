@@ -117,4 +117,22 @@
   .trial-session-card {
     margin-left: 0.5rem;
   }
+
+  .assignments-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 10px 10px;
+    row-gap: 8px;
+
+    .assignments-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      .assignments-row-content {
+        width: auto;
+      }
+    }
+  }
 }
