@@ -13,16 +13,20 @@ describe('setDefaultWorkingCopyValuesAction', () => {
     expect(result.state.trialSessionWorkingCopy.sort).toEqual('docket');
     expect(result.state.trialSessionWorkingCopy.sortOrder).toEqual('asc');
     expect(result.state.trialSessionWorkingCopy.filters).toEqual({
-      aBasisReached: true,
+      basisReached: true,
       continued: true,
+      definiteTrial: true,
       dismissed: true,
+      motionToDismiss: true,
+      probableSettlement: true,
+      probableTrial: true,
       recall: true,
       rule122: true,
       setForTrial: true,
       settled: true,
       showAll: true,
       statusUnassigned: true,
-      takenUnderAdvisement: true,
+      submittedCAV: true,
     });
   });
 
@@ -34,7 +38,7 @@ describe('setDefaultWorkingCopyValuesAction', () => {
       state: {
         trialSessionWorkingCopy: {
           filters: {
-            aBasisReached: false,
+            basisReached: false,
             continued: false,
             dismissed: false,
             recall: false,
@@ -47,7 +51,7 @@ describe('setDefaultWorkingCopyValuesAction', () => {
     expect(result.state.trialSessionWorkingCopy.sort).toEqual('memphis');
     expect(result.state.trialSessionWorkingCopy.sortOrder).toEqual('depay');
     expect(result.state.trialSessionWorkingCopy.filters).toEqual({
-      aBasisReached: false,
+      basisReached: false,
       continued: false,
       dismissed: false,
       recall: false,
