@@ -7,19 +7,15 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openPractitionerDocumentDownloadUrlAction', () => {
-  const closeSpy = jest.fn();
   const writeSpy = jest.fn();
 
   beforeEach(() => {
     window.open = jest.fn().mockReturnValue({
-      close: closeSpy,
       document: {
         write: writeSpy,
       },
       location: { href: '' },
     });
-    delete window.location;
-    window.location = { href: '' };
 
     presenter.providers.applicationContext = applicationContext;
 
@@ -41,6 +37,31 @@ describe('openPractitionerDocumentDownloadUrlAction', () => {
     });
 
     expect(window.open().location.href).toEqual('http://example.com');
+  });
+});
+
+describe('openUrlInNewTab', () => {
+  const closeSpy = jest.fn();
+  const writeSpy = jest.fn();
+
+  beforeEach(() => {
+    window.open = jest.fn().mockReturnValue({
+      close: closeSpy,
+      document: {
+        write: writeSpy,
+      },
+      location: { href: '' },
+    });
+  });
+
+  it('should open a new tab before fetching the url to open', async () => {
+    try {
+      await openUrlInNewTab(() => {
+        throw new Error();
+      });
+    } catch (e) {
+      expect(window.open).toHaveBeenCalled();
+    }
   });
 
   it('should throw an error if url is invalid', async () => {
