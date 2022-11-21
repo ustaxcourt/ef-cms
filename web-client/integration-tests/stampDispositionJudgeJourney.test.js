@@ -8,9 +8,9 @@ import {
   uploadPetition,
   waitForCondition,
 } from './helpers';
-import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
+import { userSendsMessage } from './journey/userSendsMessage';
 
-describe('Stamp disposition journey test', () => {
+describe('Stamp disposition judge journey test', () => {
   const cerebralTest = setupTest();
 
   const judgesChambers = applicationContext
@@ -133,7 +133,7 @@ describe('Stamp disposition journey test', () => {
     cerebralTest.docketEntryId = motionDocketEntry.docketEntryId;
   });
 
-  userSendsMessageToJudge(
+  userSendsMessage(
     cerebralTest,
     messageSubject,
     judgesChambers.COHENS_CHAMBERS_SECTION.section,
