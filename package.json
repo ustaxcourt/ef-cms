@@ -272,7 +272,7 @@
     "enzyme": "^3.11.0",
     "esbuild-plugin-babel-cached": "^0.2.3",
     "esbuild-plugin-clean": "^1.0.1",
-    "esbuild-plugin-copy": "^1.6.0",
+    "esbuild-plugin-copy": "^2.0.1",
     "esbuild-plugin-resolve": "^1.0.3",
     "esbuild-plugin-svg": "^0.1.0",
     "esbuild-serve": "^1.0.1",
