@@ -1,12 +1,12 @@
 import { STAMPED_DOCUMENTS_ALLOWLIST } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
+  adcUser,
   chambersUser,
   clerkOfCourtUser,
   docketClerkUser,
   judgeUser,
-  privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHelperComputed } from './messageDocumentHelper';
 import { runCompute } from 'cerebral/test';
@@ -154,6 +154,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   it('should be true when the selected message document is not a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
+        ...getBaseState(chambersUser),
         caseDetail: {
           docketEntries: [],
         },
@@ -184,6 +185,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
 
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
+        ...getBaseState(adcUser),
         caseDetail: {
           docketEntries: [],
         },
