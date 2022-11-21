@@ -35,11 +35,11 @@ const checkUserAssociationAndProceed = [
     yes: [
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
-      setDefaultWorkingCopyValuesAction,
       getFeatureFlagValueFactoryAction(
         getConstants().ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES,
         true,
       ),
+      setDefaultWorkingCopyValuesAction,
       isTrialSessionCalendaredAction,
       {
         no: [],

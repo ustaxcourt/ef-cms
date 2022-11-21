@@ -7,10 +7,28 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.get the cerebral get function
  */
-export const setDefaultWorkingCopyValuesAction = ({ get, store }) => {
+export const setDefaultWorkingCopyValuesAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const sort = get(state.trialSessionWorkingCopy.sort);
   const sortOrder = get(state.trialSessionWorkingCopy.sortOrder);
   const filters = get(state.trialSessionWorkingCopy.filters);
+  let trialSessionWorkingCopy = get(state.trialSessionWorkingCopy);
+
+  const updatedTrialSessionTypesEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key],
+  );
+
+  if (updatedTrialSessionTypesEnabled) {
+    Object.values(trialSessionWorkingCopy.caseMetadata).forEach(aCase => {
+      if (aCase.trialStatus === 'settled') {
+        aCase.trialStatus = 'basisReached';
+      }
+    });
+  }
 
   if (!sort) {
     store.set(state.trialSessionWorkingCopy.sort, 'docket');

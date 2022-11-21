@@ -26,7 +26,7 @@ describe('migrateItems', () => {
         trialStatus: 'aBasisReached',
       },
       '120-20': {
-        trialStatus: 'settled',
+        trialStatus: 'takenUnderAdvisement',
       },
     },
     filters: {
@@ -101,7 +101,7 @@ describe('migrateItems', () => {
     expect(results).toEqual(unchangedTrialSessionWorkingCopies);
   });
 
-  it('should update trialStatus on trial session working copies with status aBasisReached, settled, or takenUnderAdvisement', async () => {
+  it('should update trialStatus on trial session working copies with status aBasisReached or takenUnderAdvisement', async () => {
     const items = [mockBasisReached, mockTakenUnderAdvisement];
 
     const results = await migrateItems(items, documentClient);
@@ -113,7 +113,7 @@ describe('migrateItems', () => {
           trialStatus: 'basisReached',
         },
         '120-20': {
-          trialStatus: 'basisReached',
+          trialStatus: 'submittedCAV',
         },
       },
     };
@@ -144,7 +144,7 @@ describe('migrateItems', () => {
           trialStatus: 'basisReached',
         },
         '120-20': {
-          trialStatus: 'basisReached',
+          trialStatus: 'submittedCAV',
         },
       },
       filters: {
