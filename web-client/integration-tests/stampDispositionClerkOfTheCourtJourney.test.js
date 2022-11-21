@@ -7,9 +7,9 @@ import {
   uploadPetition,
   waitForCondition,
 } from './helpers';
-import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
+import { userSendsMessage } from './journey/userSendsMessage';
 
-describe('Stamp disposition journey test', () => {
+describe('Stamp disposition clerk of the court journey test', () => {
   const cerebralTest = setupTest();
 
   const clerkOfCourtUserId = '23dd8806-c0c7-4265-81f0-5f264ef78248';
@@ -17,7 +17,7 @@ describe('Stamp disposition journey test', () => {
   const deniedMotionDocketEntryTitle =
     'Motion DENIED as moot without prejudice';
   const grantedMotionDocketEntryTitle = 'Motion GRANTED';
-  const signedJudgeName = 'Mary Ann Cohen';
+  const signedJudgeName = 'Maurice B. Foley';
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -129,7 +129,7 @@ describe('Stamp disposition journey test', () => {
     cerebralTest.docketEntryId = motionDocketEntry.docketEntryId;
   });
 
-  userSendsMessageToJudge(
+  userSendsMessage(
     cerebralTest,
     messageSubject,
     'clerkofcourt',
