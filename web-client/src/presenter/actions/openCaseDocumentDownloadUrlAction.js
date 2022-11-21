@@ -1,4 +1,3 @@
-import { openUrlInNewTab } from './openPractitionerDocumentDownloadUrlAction';
 import { state } from 'cerebral';
 
 /**
@@ -22,7 +21,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
   } = props;
 
   if (!isForIFrame && !useSameTab) {
-    await openUrlInNewTab(() =>
+    await applicationContext.getUtilities().openUrlInNewTab(() =>
       applicationContext
         .getUseCases()
         .getDocumentDownloadUrlInteractor(applicationContext, {
