@@ -1,5 +1,4 @@
 import { MOTION_DISPOSITIONS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -13,10 +12,7 @@ import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
 describe('Stamp disposition journey test', () => {
   const cerebralTest = setupTest();
 
-  const judgesChambers = applicationContext
-    .getPersistenceGateway()
-    .getJudgesChambers();
-  const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
+  const clerkOfCourtUserId = '23dd8806-c0c7-4265-81f0-5f264ef78248';
   const messageSubject = 'Motion to Stamp';
   const deniedMotionDocketEntryTitle =
     'Motion DENIED as moot without prejudice';
@@ -136,11 +132,11 @@ describe('Stamp disposition journey test', () => {
   userSendsMessageToJudge(
     cerebralTest,
     messageSubject,
-    judgesChambers.COHENS_CHAMBERS_SECTION.section,
-    judgeCohenUserId,
+    'clerkofcourt',
+    clerkOfCourtUserId,
   );
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'clerkofcourt@example.com');
   it('apply a stamp disposition on the motion from case detail', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -180,7 +176,10 @@ describe('Stamp disposition journey test', () => {
   });
 
   it('verify the first auto-generated draft stamp order', async () => {
-    expect(cerebralTest.getState('currentPage')).toBe('CaseDetailInternal');
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const draftStampOrder = docketEntries.find(entry => {
