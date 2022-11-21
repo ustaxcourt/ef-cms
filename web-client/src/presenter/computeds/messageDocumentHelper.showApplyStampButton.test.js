@@ -3,6 +3,9 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import {
   chambersUser,
   clerkOfCourtUser,
+  docketClerkUser,
+  judgeUser,
+  privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHelperComputed } from './messageDocumentHelper';
@@ -32,7 +35,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({ role: 'general' });
     applicationContext
       .getUtilities()
       .formatCase.mockReturnValue({ draftDocuments: [] });
@@ -53,6 +55,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   it('should be false when the stamp disposition feature is turned off', () => {
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
+        ...getBaseState(chambersUser),
         caseDetail: {
           docketEntries: [
             {
@@ -74,14 +77,9 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   });
 
   it('should be false when the user does not have the STAMP_MOTION permission', () => {
-    applicationContext
-      .getUtilities()
-      .getAttachmentDocumentById.mockReturnValue({
-        eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
-      });
-
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
+        ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [
             {
@@ -102,7 +100,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
     expect(showApplyStampButton).toBe(false);
   });
 
-  it.only('should be true when the user is a clerk of the court', () => {
+  it('should be true when the user is a clerk of the court', () => {
     const user = clerkOfCourtUser;
 
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
@@ -137,6 +135,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
 
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
+        ...getBaseState(judgeUser),
         caseDetail: {
           docketEntries: [],
         },
