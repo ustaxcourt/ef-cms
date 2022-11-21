@@ -169,7 +169,7 @@ describe('validate', () => {
     },
     {
       description:
-        'should pass validation when isDraft is false and signedJudgeName is undefined for a SPTO',
+        'should pass validation when isDraft is false and signedJudgeName is undefined for an SPTO',
       docketEntry: {
         documentType: 'Standing Pretrial Order',
         eventCode: 'SPTO',
