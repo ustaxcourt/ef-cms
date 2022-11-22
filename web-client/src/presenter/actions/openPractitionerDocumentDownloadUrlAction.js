@@ -11,12 +11,16 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
 }) => {
   const { barNumber, practitionerDocumentFileId } = props;
 
-  await applicationContext.getUtilities().openUrlInNewTab(() =>
-    applicationContext
+  try {
+    const { url } = await applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
         barNumber,
         practitionerDocumentFileId,
-      }),
-  );
+      });
+
+    applicationContext.getUtilities().openUrlInNewTab({ url });
+  } catch (err) {
+    throw new Error(`Unable to open document. ${err.message}`);
+  }
 };

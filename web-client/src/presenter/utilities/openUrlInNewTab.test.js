@@ -1,34 +1,34 @@
 import { openUrlInNewTab } from './openUrlInNewTab';
 
 describe('openUrlInNewTab', () => {
-  const closeSpy = jest.fn();
-  const writeSpy = jest.fn();
+  const mockUrl = 'www.example.com';
 
-  beforeEach(() => {
-    window.open = jest.fn().mockReturnValue({
-      close: closeSpy,
-      document: {
-        write: writeSpy,
-      },
-      location: { href: '' },
-    });
+  const openSpy = jest.fn();
+  window.open = openSpy;
+
+  it('should call window.open after waiting for the timer to expire', () => {
+    jest.useFakeTimers();
+
+    openUrlInNewTab({ url: mockUrl });
+
+    expect(openSpy).not.toHaveBeenCalled();
+
+    jest.runAllTimers();
+
+    expect(openSpy).toHaveBeenCalled();
+
+    jest.useRealTimers();
   });
 
-  it('should open a new tab before fetching the url to open', async () => {
-    try {
-      await openUrlInNewTab(() => {
-        throw new Error();
-      });
-    } catch (e) {
-      expect(window.open).toHaveBeenCalled();
-    }
-  });
+  it('should open the specified url in a new tab', () => {
+    jest.useFakeTimers();
 
-  it('should throw an error if url is invalid', async () => {
-    await expect(
-      openUrlInNewTab(() => {
-        throw new Error();
-      }),
-    ).rejects.toThrow();
+    openUrlInNewTab({ url: mockUrl });
+
+    jest.runAllTimers();
+
+    expect(openSpy).toHaveBeenCalledWith(mockUrl);
+
+    jest.useRealTimers();
   });
 });
