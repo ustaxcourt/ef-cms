@@ -22,22 +22,22 @@ import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearch
 import { unauthedUserSearchesForStrickenOrder } from './journey/unauthedUserSearchesForStrickenOrder';
 import { unauthedUserSeesStrickenDocketEntry } from './journey/unauthedUserSeesStrickenDocketEntry';
 
-const cerebralTest = setupTest();
-const testClient = setupTestClient();
-testClient.draftOrders = [];
-
 describe('unauthed user sees stricken docket entry', () => {
+  const cerebralTest = setupTest();
+  const testClient = setupTestClient();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     testClient.closeSocket();
+    testClient.draftOrders = [];
   });
 
   describe('Petitioner creates a case', () => {
     loginAs(testClient, 'petitioner@example.com');
-    it('Create test case', async () => {
+    it('petitioner creates an electronic case', async () => {
       const caseDetail = await uploadPetition(testClient);
       expect(caseDetail.docketNumber).toBeDefined();
       cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -79,7 +79,7 @@ describe('unauthed user sees stricken docket entry', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(testClient, 0);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrder(testClient, 0);
     docketClerkServesDocument(testClient, 0);
     docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(testClient, 5);

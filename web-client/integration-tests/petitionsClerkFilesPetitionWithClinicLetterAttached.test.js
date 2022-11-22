@@ -6,15 +6,16 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { userVerifiesLengthOfDocketEntry } from './journey/userVerifiesLengthOfDocketEntry';
 
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk creates a paper case which should have a clinic letter appended to the receipt', () => {
+  const cerebralTest = setupTest();
+
   const overrides = {
     maxCases: 2,
     preferredTrialCity: 'Los Angeles, California',
@@ -32,21 +33,32 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  petitionsClerkCreatesNewCaseFromPaper(
-    cerebralTest,
-    fakeFile,
-    'Los Angeles, California',
-    'Small',
-  );
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+    trialLocation: 'Los Angeles, California',
+  });
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   docketClerkVerifiesPetitionReceiptLength(cerebralTest, 1);
 
-  // creating pro se petition with prefferredTrialCity and procedureType that DOES have a corresponding clinic letter
-  petitionsClerkCreatesNewCaseFromPaper(
-    cerebralTest,
-    fakeFile,
-    'Los Angeles, California',
-    'Regular',
-  );
+  // creating pro se petition with preferredTrialCity and procedureType that DOES have a corresponding clinic letter
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+    procedureType: 'Regular',
+    trialLocation: 'Los Angeles, California',
+  });
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   docketClerkVerifiesPetitionReceiptLength(cerebralTest, 2);
 
   describe('Create and sets a trial session with Regular session type for Los Angeles, California', () => {
