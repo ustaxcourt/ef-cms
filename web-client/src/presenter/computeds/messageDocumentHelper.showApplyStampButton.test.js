@@ -23,31 +23,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
         eventCode: 'M006',
       });
   });
-  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
-
-  it('should be false when the stamp disposition feature is turned off', () => {
-    const { showApplyStampButton } = runCompute(messageDocumentHelper, {
-      state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: mockDocketEntryId,
-              eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
-            },
-          ],
-        },
-        featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: false,
-        },
-        messageViewerDocumentToDisplay: {
-          documentId: mockDocketEntryId,
-        },
-        permissions: { STAMP_MOTION: true },
-      },
-    });
-
-    expect(showApplyStampButton).toBe(false);
-  });
 
   it('should be false when the user does not have the STAMP_MOTION permission', () => {
     applicationContext
@@ -65,9 +40,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
               eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
             },
           ],
-        },
-        featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: true,
         },
         messageViewerDocumentToDisplay: {
           documentId: mockDocketEntryId,
@@ -91,9 +63,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
         caseDetail: {
           docketEntries: [],
         },
-        featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: true,
-        },
         messageViewerDocumentToDisplay: {
           documentId: mockDocketEntryId,
         },
@@ -109,9 +78,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       state: {
         caseDetail: {
           docketEntries: [],
-        },
-        featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: true,
         },
         messageViewerDocumentToDisplay: {
           documentId: mockDocketEntryId,
@@ -140,9 +106,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       state: {
         caseDetail: {
           docketEntries: [],
-        },
-        featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: true,
         },
         messageViewerDocumentToDisplay: {
           documentId: mockDocketEntryId,

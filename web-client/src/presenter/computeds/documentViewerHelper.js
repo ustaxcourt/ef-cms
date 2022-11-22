@@ -4,7 +4,6 @@ import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
   const {
-    ALLOWLIST_FEATURE_FLAGS,
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
@@ -91,12 +90,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
 
-  const isStampDispositionEnabled = get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key],
-  );
-
   const showApplyStampButton =
-    isStampDispositionEnabled &&
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
