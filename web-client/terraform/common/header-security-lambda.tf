@@ -14,6 +14,6 @@ resource "aws_lambda_function" "header_security_lambda" {
   source_code_hash = data.archive_file.zip_header_security_lambda.output_base64sha256
   publish          = true
 
-  # Lambda@Edge do not yet support nodejs 14.0
-  runtime = "nodejs12.x"
+  # Lambda@Edge do not yet support nodejs 16.x
+  runtime = "nodejs16.x"
 }
