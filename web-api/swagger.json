@@ -8342,13 +8342,25 @@
             "continued": {
               "type": "boolean"
             },
-            "aBasisReached": {
+            "basisReached": {
               "type": "boolean"
             },
-            "takenUnderAdvisement": {
+            "submittedCAV": {
               "type": "boolean"
             },
             "statusUnassigned": {
+              "type": "boolean"
+            },
+            "definiteTrial": {
+              "type": "boolean"
+            },
+            "motionToDismiss": {
+              "type": "boolean"
+            },
+            "probableSettlement": {
+              "type": "boolean"
+            },
+            "probableTrial": {
               "type": "boolean"
             }
           }
