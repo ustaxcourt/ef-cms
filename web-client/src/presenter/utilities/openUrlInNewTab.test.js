@@ -27,7 +27,7 @@ describe('openUrlInNewTab', () => {
 
     jest.runAllTimers();
 
-    expect(openSpy).toHaveBeenCalledWith(mockUrl);
+    expect(openSpy).toHaveBeenCalledWith(mockUrl, '_blank');
 
     jest.useRealTimers();
   });
