@@ -161,6 +161,8 @@ const getCaseRow = ({
             indentMemberCase: true,
             trialSequences,
             trialStatusOptions,
+            unassignedLabel,
+            updatedTrialSessionTypesEnabled,
           }),
         )}
     </React.Fragment>
