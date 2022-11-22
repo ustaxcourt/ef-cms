@@ -3,8 +3,8 @@ name: Node.js CI - shared
 on:
   pull_request:
   push:
-      branches:
-        - dependency-updates
+    branches:
+      - dependency-updates
 
 jobs:
   Shared:
@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -21,6 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
-        run: npm ci --no-optional && npm rebuild
+        run: npm ci --legacy-peer-dep && npm rebuild
       - name: Shared
         run: npm run test:shared
