@@ -60,6 +60,7 @@ import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getS
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
   getDocQcSectionForUser,
@@ -758,6 +759,7 @@ const applicationContext = {
       isStringISOFormatted,
       isUserIdRepresentedByPrivatePractitioner,
       isValidDateString,
+      openUrlInNewTab,
       prepareDateFromString,
       replaceBracketed,
       setConsolidationFlagsForDisplay,

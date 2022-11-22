@@ -1,4 +1,3 @@
-import { openUrlInNewTab } from './openPractitionerDocumentDownloadUrlAction';
 import { state } from 'cerebral';
 
 /**
@@ -21,25 +20,22 @@ export const openCaseDocumentDownloadUrlAction = async ({
     useSameTab,
   } = props;
 
-  if (!isForIFrame && !useSameTab) {
-    await openUrlInNewTab(() =>
-      applicationContext
-        .getUseCases()
-        .getDocumentDownloadUrlInteractor(applicationContext, {
-          docketNumber,
-          isPublic,
-          key: docketEntryId,
-        }),
-    );
-  } else {
-    const { url } = await applicationContext
+  let url;
+  try {
+    ({ url } = await applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic,
         key: docketEntryId,
-      });
+      }));
+  } catch (err) {
+    throw new Error(`Unable to open document. ${err.message}`);
+  }
 
+  if (!isForIFrame && !useSameTab) {
+    await applicationContext.getUtilities().openUrlInNewTab({ url });
+  } else {
     if (isForIFrame) {
       store.set(state.iframeSrc, url);
     } else if (useSameTab) {
