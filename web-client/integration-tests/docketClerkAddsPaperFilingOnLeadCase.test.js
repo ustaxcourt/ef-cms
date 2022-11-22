@@ -143,6 +143,11 @@ describe('Docket clerk adds paper filing on lead case', () => {
       overwritable: false,
     });
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
+
     expect(
       cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');
