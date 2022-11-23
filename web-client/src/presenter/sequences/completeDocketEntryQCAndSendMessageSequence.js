@@ -8,6 +8,7 @@ import { createMessageAction } from '../actions/CaseDetail/createMessageAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCompleteDocketEntryAlertAction } from '../actions/DocketEntry/setCompleteDocketEntryAlertAction';
@@ -30,6 +31,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
     success: showProgressSequenceDecorator([
       createMessageAction,
       stopShowValidationAction,
+      refreshExternalDocumentTitleFromEventCodeAction,
       setPreviousDocumentDocketEntryAction,
       generateTitleAction,
       completeDocketEntryQCAction,
