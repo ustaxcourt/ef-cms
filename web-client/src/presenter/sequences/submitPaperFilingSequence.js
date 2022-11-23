@@ -4,6 +4,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
@@ -12,9 +13,11 @@ import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
@@ -94,12 +97,22 @@ export const submitPaperFilingSequence = [
               },
             ],
             yes: [
-              isFileAttachedAction,
+              getCaseAction,
+              setCaseAction,
+              isWorkItemAlreadyCompletedAction,
               {
-                no: editPaperFilingNotMultiDocketableFlow,
-                yes: docketEntryFileUploadSequenceDecorator([
-                  editPaperFilingNotMultiDocketableFlow,
-                ]),
+                no: [
+                  isFileAttachedAction,
+                  {
+                    no: editPaperFilingNotMultiDocketableFlow,
+                    yes: docketEntryFileUploadSequenceDecorator([
+                      editPaperFilingNotMultiDocketableFlow,
+                    ]),
+                  },
+                ],
+                yes: [
+                  setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
+                ],
               },
             ],
           },

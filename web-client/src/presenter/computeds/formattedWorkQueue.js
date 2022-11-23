@@ -177,7 +177,7 @@ const getDocketEntryEditLink = ({
   ) {
     editLink = `/edit-court-issued?fromPage=${fromPage}`;
   } else if (isInProgress) {
-    editLink = '/complete';
+    editLink = `/complete?fromPage=${fromPage}`;
   } else if (
     !result.isCourtIssuedDocument &&
     !result.isOrder &&

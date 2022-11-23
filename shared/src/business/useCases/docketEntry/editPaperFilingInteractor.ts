@@ -4,11 +4,11 @@ import {
   DOCUMENT_RELATIONSHIPS,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
 /**
@@ -55,6 +55,16 @@ export const editPaperFilingInteractor = async (
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: primaryDocumentFileId,
   });
+
+  let error;
+  if (!currentDocketEntry) {
+    error = new NotFoundError('Docket entry not found');
+  } else if (currentDocketEntry.servedAt) {
+    error = new Error('Docket entry has already been served');
+  }
+  if (error) {
+    throw error;
+  }
 
   if (!isSavingForLater) {
     if (currentDocketEntry.isPendingService) {
