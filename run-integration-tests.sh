@@ -2,10 +2,6 @@
 
 # this should only be ran from inside a container built from our `Dockerfile-integration`
 
-echo "running npm ci... this may take a while"
-
-npm ci
-
 mkdir /tmp/web-client/
 
 CI=true \
