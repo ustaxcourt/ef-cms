@@ -1,5 +1,4 @@
 #!/bin/zsh
-# shellcheck disable=SC1071
 
 {
   echo "REGION='${DEFAULT_REGION}'"
@@ -51,7 +50,6 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE}'"
 } >> .env
 
-# alphabetize .env
 sort -o .env .env
 set -o allexport
 source .env
