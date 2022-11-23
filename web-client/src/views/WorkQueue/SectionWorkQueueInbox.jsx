@@ -68,7 +68,6 @@ const SectionWorkQueueTable = connect(
 
 SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
-    FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
     item,
@@ -152,10 +151,7 @@ SectionWorkQueueTable.Row = React.memo(
           )}
           <td className="message-queue-row max-width-25">
             <div className="message-document-title">
-              <a
-                className="case-link"
-                href={`${item.editLink}?fromPage=${FROM_PAGES.qcSectionInbox}`}
-              >
+              <a className="case-link" href={item.editLink}>
                 {item.docketEntry.descriptionDisplay}
               </a>
             </div>

@@ -10,11 +10,7 @@ export const IndividualWorkQueueInbox = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  function IndividualWorkQueueInbox({
-    formattedWorkQueue,
-    FROM_PAGES,
-    workQueueHelper,
-  }) {
+  function IndividualWorkQueueInbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
         <table
@@ -99,7 +95,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={`${item.editLink}?fromPage=${FROM_PAGES.qcMyInbox}`}
+                        href={item.editLink}
                       >
                         {item.docketEntry.descriptionDisplay ||
                           item.docketEntry.documentType}
