@@ -5,6 +5,7 @@ const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const order = async ({ applicationContext, data }) => {
   const {
+    addedDocketNumbers,
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
@@ -17,6 +18,7 @@ const order = async ({ applicationContext, data }) => {
     componentName: 'Order',
     data: {
       options: {
+        addedDocketNumbers,
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,

@@ -2,16 +2,15 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
-import { createISODateString } from '../../utilities/DateHandler';
 import { DocketEntry, isServed } from '../../entities/DocketEntry';
-import { NotFoundError } from '../../../errors/errors';
-import { UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { createISODateString } from '../../utilities/DateHandler';
+import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
 
 export const shouldGenerateCoversheetForDocketEntry = ({
   certificateOfServiceUpdated,

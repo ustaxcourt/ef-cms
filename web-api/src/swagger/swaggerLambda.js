@@ -16,7 +16,8 @@ exports.swaggerLambda = () => {
       <script>
         SwaggerUIBundle({
           dom_id: '#swagger',
-          url: '/api/swagger.json'
+          url: '/api/swagger.json',
+          supportedSubmitMethods: []
         });
       </script>
     </body>

@@ -7,15 +7,15 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v23-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v23-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v24-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
-              npm ci
+              npm ci --legacy-peer-dep
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
@@ -32,23 +32,23 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v23-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v23-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v24-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v23-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
-              npm ci
+              npm ci --legacy-peer-dep
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
@@ -56,14 +56,14 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v23-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
 jobs:
   build-client-integration:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -113,7 +113,7 @@ jobs:
 
   verify-pdfs:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -127,9 +127,25 @@ jobs:
             npm run test:pdf-output
             node image-compare-pdfs.js
 
+  build-ts-api:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Build Typescript Api
+          command: |
+            npm run build:assets
+            npm run build:lambda:api
+
   e2e-pa11y:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -162,7 +178,7 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
+            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
             URL=http://localhost:1234 ./wait-until.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             URL=http://localhost:8000/shell ./wait-until.sh
@@ -179,7 +195,7 @@ jobs:
 
   e2e-pa11y-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -212,7 +228,7 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
@@ -224,7 +240,7 @@ jobs:
 
   e2e-pa11y-public-search:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -257,7 +273,7 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
@@ -269,7 +285,7 @@ jobs:
 
   e2e-cypress:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -302,7 +318,7 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            npm run start:all >> /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
@@ -314,7 +330,7 @@ jobs:
 
   e2e-cypress-smoketests-local:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -351,7 +367,7 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx --no-install run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npm run start:all >> /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
@@ -363,7 +379,7 @@ jobs:
 
   e2e-cypress-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -401,7 +417,7 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx --no-install run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            npm run start:all >> /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
@@ -413,11 +429,11 @@ jobs:
 
   deploy:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge # this should be temporary until we improve memory usage of 'Deploy - Web Client - S3'
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -556,7 +572,7 @@ jobs:
 
   reindex:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -592,7 +608,7 @@ jobs:
 
   migrate:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -658,7 +674,7 @@ jobs:
 
   disable-reindex-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -679,7 +695,7 @@ jobs:
 
   smoketests:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -710,7 +726,7 @@ jobs:
 
   smoketests-readonly:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -749,9 +765,49 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress-readonly/videos/
 
+  deploy-switch-colors-cron:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Deploy Switch Colors Cron
+          command: |
+            npm run deploy:switch-colors-cron -- $ENV
+
+  disable-switch-colors-cron:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Disable Switch Colors Cron
+          command: |
+            npm run destroy:switch-colors-cron -- $ENV
+
   switch-colors:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -773,7 +829,7 @@ jobs:
 
   backup-source-dynamo-table:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -797,7 +853,7 @@ jobs:
 
   delete-api-mappings:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -818,7 +874,7 @@ jobs:
 
   cleanup:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.5.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -905,6 +961,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
+      - build-ts-api:
+          <<: *build-and-deploy-defaults
       - verify-pdfs:
           <<: *build-and-deploy-defaults
       - deploy:
@@ -916,6 +974,7 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
+            - build-ts-api
             - verify-pdfs
           filters:
             branches:
@@ -1037,6 +1096,8 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
+      - build-ts-api:
+          <<: *build-and-deploy-with-context-defaults
       - verify-pdfs:
           <<: *build-and-deploy-with-context-defaults
       - deploy:
@@ -1049,6 +1110,7 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
+            - build-ts-api
             - verify-pdfs
       - reindex:
           <<: *build-and-deploy-with-context-defaults
@@ -1071,10 +1133,23 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - disable-reindex-cron
-      - switch-colors:
+      - deploy-switch-colors-cron:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
+      - wait-for-switch:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - deploy-switch-colors-cron
+      - disable-switch-colors-cron:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-switch
+      - switch-colors:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - disable-switch-colors-cron
       - backup-source-dynamo-table:
           <<: *build-and-deploy-with-context-defaults
           requires:

@@ -69,8 +69,7 @@ export const formatWorkItem = ({
   const result = cloneDeep(workItem);
 
   const inConsolidatedGroup = !!result.leadDocketNumber;
-  const inLeadCase =
-    inConsolidatedGroup && result.leadDocketNumber === result.docketNumber;
+  const inLeadCase = applicationContext.getUtilities().isLeadCase(result);
 
   let consolidatedIconTooltipText;
 
@@ -240,9 +239,11 @@ export const getWorkItemDocumentLink = ({
 
 export const filterWorkItems = ({
   applicationContext,
-  user,
+  assignmentFilterValue,
+  workItems,
   workQueueToDisplay,
 }) => {
+  const user = applicationContext.getCurrentUser();
   const { box, queue } = workQueueToDisplay;
 
   const filters = applicationContext
@@ -250,7 +251,30 @@ export const filterWorkItems = ({
     .getWorkQueueFilters({ user });
 
   const composedFilter = filters[queue][box];
-  return composedFilter;
+  let assignmentFilter = workItem => {
+    return workItem;
+  };
+
+  if (queue === 'section') {
+    assignmentFilter = workItem => {
+      if (assignmentFilterValue && assignmentFilterValue.userId) {
+        if (assignmentFilterValue.userId === 'UA') {
+          return workItem.assigneeId === null;
+        }
+        return (
+          workItem.assigneeId === assignmentFilterValue.userId ||
+          workItem.completedBy === assignmentFilterValue.name
+        );
+      }
+      return workItem;
+    };
+  }
+
+  const filteredWorkItems = workItems
+    .filter(composedFilter)
+    .filter(assignmentFilter);
+
+  return filteredWorkItems;
 };
 
 const memoizedFormatItemWithLink = memoize(
@@ -279,30 +303,34 @@ const memoizedFormatItemWithLink = memoize(
 );
 
 export const formattedWorkQueue = (get, applicationContext) => {
-  const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
+  let { assignmentFilterValue } = get(state.screenMetadata);
+  const users = get(state.users);
 
-  let workQueue = workItems
-    .filter(
-      filterWorkItems({
-        applicationContext,
-        user,
-        workQueueToDisplay,
-      }),
-    )
-    .map(workItem => {
-      return memoizedFormatItemWithLink({
-        applicationContext,
-        isSelected: selectedWorkItemIds.includes(workItem.workItemId),
-        permissions,
-        workItem,
-        workQueueToDisplay,
-      });
+  if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
+    assignmentFilterValue = users.find(
+      user => user.userId === assignmentFilterValue.userId,
+    );
+  }
+
+  let workQueue = filterWorkItems({
+    applicationContext,
+    assignmentFilterValue,
+    workItems,
+    workQueueToDisplay,
+  }).map(workItem => {
+    return memoizedFormatItemWithLink({
+      applicationContext,
+      isSelected: selectedWorkItemIds.includes(workItem.workItemId),
+      permissions,
+      workItem,
+      workQueueToDisplay,
     });
+  });
 
   const sortFields = {
     my: {

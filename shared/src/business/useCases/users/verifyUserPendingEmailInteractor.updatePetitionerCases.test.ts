@@ -1,4 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -9,6 +8,7 @@ import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { updatePetitionerCases } from './verifyUserPendingEmailInteractor';
 import { validUser } from '../../../test/mockUsers';
 

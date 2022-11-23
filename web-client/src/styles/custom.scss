@@ -362,8 +362,8 @@ select[disabled] {
     left: 0;
     width: 30px;
     height: 30px;
-    background: color($theme-color-primary-dark);
     border-radius: 30px;
+    background: color($theme-color-primary-dark);
     color: $color-white;
     font-size: 20px;
     font-weight: $font-semibold;
@@ -564,9 +564,9 @@ select[disabled] {
 
 .usa-label-uploading {
   padding: 0.3rem 0.7rem;
+  border-radius: 2px;
   margin-right: 0.5rem;
   background-color: color($theme-color-base);
-  border-radius: 2px;
   color: $color-white;
   font-size: 1.3rem;
   text-transform: uppercase;
@@ -615,8 +615,8 @@ select[disabled] {
     width: 75px;
     height: 75px;
     padding: 20px;
-    background-color: color($theme-color-primary);
     border-radius: 55px;
+    background-color: color($theme-color-primary);
 
     svg,
     .svg-wrapper {
@@ -661,9 +661,9 @@ select[disabled] {
     width: 40px;
     height: 40px;
     padding: 10px;
+    border-radius: 55px;
     margin-right: 10px;
     background-color: color($theme-color-primary);
-    border-radius: 55px;
 
     svg,
     .svg-wrapper {
@@ -839,6 +839,13 @@ textarea#case-caption {
     float: left;
   }
 
+  .assign-work-item-count-docket {
+    width: 70px;
+    padding: 8px 8px 6px;
+    margin: 4px 0 6px 20px;
+    background-color: color($theme-color-primary-dark);
+  }
+
   .usa-select {
     width: 230px;
     height: 42px;
@@ -849,14 +856,29 @@ textarea#case-caption {
 .assign-work-item-count {
   display: inline-block;
   min-width: 35px;
-  background: color($theme-color-primary);
   border-radius: 20px;
+  background: color($theme-color-primary);
+  color: $color-white;
+  font-weight: $font-bold;
+  text-align: center;
+}
+
+.unread,
+.assign-work-item-count-docket {
+  display: inline-block;
+  min-width: 35px;
+  border-radius: 20px;
+  background: color($theme-color-primary);
   color: $color-white;
   font-weight: $font-bold;
   text-align: center;
 }
 
 .assign-work-item-count svg {
+  margin-right: 10px;
+}
+
+.assign-work-item-count-docket svg {
   margin-right: 10px;
 }
 
@@ -892,8 +914,8 @@ header.usa-header {
       background: none;
 
       :hover {
-        background-color: color($theme-color-primary);
         border-radius: 0;
+        background-color: color($theme-color-primary);
         color: $color-white;
       }
     }
@@ -1938,8 +1960,8 @@ button.change-scanner-button {
   width: 100px;
   height: 95px;
   border: 7px solid color($theme-color-warning);
-  margin: 0 auto;
   border-radius: 50%;
+  margin: 0 auto;
 }
 
 .text-middle-margin {
@@ -2009,7 +2031,7 @@ button.change-scanner-button {
 
 .usa-select.filter-selected {
   background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxkZXNjPkNyZWF0ZWQgd2l0aCBGYWJyaWMuanMgMS43LjIyPC9kZXNjPgo8ZGVmcz4KPC9kZWZzPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjggMTI4KSBzY2FsZSgwLjcyIDAuNzIpIiBzdHlsZT0iIj4KCTxnIHN0eWxlPSJzdHJva2U6IG5vbmU7IHN0cm9rZS13aWR0aDogMDsgc3Ryb2tlLWRhc2hhcnJheTogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1taXRlcmxpbWl0OiAxMDsgZmlsbDogbm9uZTsgZmlsbC1ydWxlOiBub256ZXJvOyBvcGFjaXR5OiAxOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTE3NS4wNSAtMTc1LjA1MDAwMDAwMDAwMDA0KSBzY2FsZSgzLjg5IDMuODkpIiA+Cgk8cGF0aCBkPSJNIDggOTAgYyAtMi4wNDcgMCAtNC4wOTUgLTAuNzgxIC01LjY1NyAtMi4zNDMgYyAtMy4xMjUgLTMuMTI1IC0zLjEyNSAtOC4xODkgMCAtMTEuMzE0IGwgNzQgLTc0IGMgMy4xMjUgLTMuMTI0IDguMTg5IC0zLjEyNCAxMS4zMTQgMCBjIDMuMTI0IDMuMTI0IDMuMTI0IDguMTg5IDAgMTEuMzEzIGwgLTc0IDc0IEMgMTIuMDk1IDg5LjIxOSAxMC4wNDcgOTAgOCA5MCB6IiBzdHlsZT0ic3Ryb2tlOiBub25lOyBzdHJva2Utd2lkdGg6IDE7IHN0cm9rZS1kYXNoYXJyYXk6IG5vbmU7IHN0cm9rZS1saW5lY2FwOiBidXR0OyBzdHJva2UtbGluZWpvaW46IG1pdGVyOyBzdHJva2UtbWl0ZXJsaW1pdDogMTA7IGZpbGw6IHJnYigwLDAsMCk7IGZpbGwtcnVsZTogbm9uemVybzsgb3BhY2l0eTogMTsiIHRyYW5zZm9ybT0iIG1hdHJpeCgxIDAgMCAxIDAgMCkgIiBzdHJva2UtbGluZWNhcD0icm91bmQiIC8+Cgk8cGF0aCBkPSJNIDgyIDkwIGMgLTIuMDQ4IDAgLTQuMDk1IC0wLjc4MSAtNS42NTcgLTIuMzQzIGwgLTc0IC03NCBjIC0zLjEyNSAtMy4xMjQgLTMuMTI1IC04LjE4OSAwIC0xMS4zMTMgYyAzLjEyNCAtMy4xMjQgOC4xODkgLTMuMTI0IDExLjMxMyAwIGwgNzQgNzQgYyAzLjEyNCAzLjEyNSAzLjEyNCA4LjE4OSAwIDExLjMxNCBDIDg2LjA5NSA4OS4yMTkgODQuMDQ4IDkwIDgyIDkwIHoiIHN0eWxlPSJzdHJva2U6IG5vbmU7IHN0cm9rZS13aWR0aDogMTsgc3Ryb2tlLWRhc2hhcnJheTogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1taXRlcmxpbWl0OiAxMDsgZmlsbDogcmdiKDAsMCwwKTsgZmlsbC1ydWxlOiBub256ZXJvOyBvcGFjaXR5OiAxOyIgdHJhbnNmb3JtPSIgbWF0cml4KDEgMCAwIDEgMCAwKSAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgLz4KPC9nPgo8L2c+Cjwvc3ZnPg==');
-  background-position: 155px;
+  background-position: 133px;
   background-size: 30% 30%;
   outline: 3px solid #005ea2;
 }
@@ -2018,4 +2040,12 @@ button.change-scanner-button {
   position: absolute;
   right: 0;
   width: 20px;
+}
+
+.width-180 {
+  width: 180px;
+}
+
+.align-items-baseline {
+  align-items: baseline;
 }

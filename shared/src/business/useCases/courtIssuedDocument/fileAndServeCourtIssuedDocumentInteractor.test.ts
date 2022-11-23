@@ -1,22 +1,23 @@
 /* eslint-disable max-lines */
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
+  FILING_FEE_DEADLINE_DESCRIPTION,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { Case } from '../../entities/cases/Case';
-import { createISODateString } from '../../utilities/DateHandler';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
+import { createISODateString } from '../../utilities/DateHandler';
+import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
@@ -89,6 +90,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     caseRecord = {
       ...MOCK_CASE,
+      associatedJudge: judgeUser.name,
       docketEntries: [
         mockDocketEntryWithWorkItem,
         {
@@ -203,13 +205,57 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
+  it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+    const mockOrderFilingFeeForm = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Filing Fee',
+      eventCode: 'OF',
+    };
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: mockOrderFilingFeeForm,
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline.mock
+        .calls[0][0].caseDeadline,
+    ).toMatchObject({
+      associatedJudge: caseRecord.associatedJudge,
+      deadlineDate: mockOrderFilingFeeForm.date,
+      description: FILING_FEE_DEADLINE_DESCRIPTION,
+      docketNumber: caseRecord.docketNumber,
+      sortableDocketNumber: 18000101,
+    });
+  });
+
+  it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: {
+        documentType: 'Order',
+        eventCode: 'O',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[0],
       subjectCaseDocketNumber: caseRecord.docketNumber,
-      clientConnectionId: 'testing',
     });
 
     const updatedCase =
@@ -359,11 +405,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords if the order document has an event code that should close the case', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
       subjectCaseDocketNumber: caseRecord.docketNumber,
-      clientConnectionId: 'testing',
     });
 
     expect(
@@ -394,7 +440,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext: expect.anything(),
       clientConnectionId,
       message: expect.objectContaining({
-        action: 'file_and_serve_court_issued_document_complete',
+        action: 'serve_document_complete',
         alertSuccess: {
           message: 'Document served. ',
           overwritable: false,
@@ -464,9 +510,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should delete the draftOrderState from the docketEntry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
       docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
-      clientConnectionId: 'testing',
       form: {
         ...mockDocketEntryWithWorkItem,
         draftOrderState: {
@@ -564,8 +610,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        docketEntryId: docketEntry.docketEntryId,
         clientConnectionId: 'testing',
+        docketEntryId: docketEntry.docketEntryId,
         docketNumbers: [docketEntry.docketNumber],
         form: docketEntry,
         subjectCaseDocketNumber: docketEntry.docketNumber,

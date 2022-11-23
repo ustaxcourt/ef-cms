@@ -1,7 +1,6 @@
-import { applicationContext } from '../test/createTestApplicationContext';
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 
 describe('unprioritizeCaseInteractor', () => {

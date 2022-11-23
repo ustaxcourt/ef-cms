@@ -1,13 +1,13 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   MAX_SEARCH_RESULTS,
   PARTY_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { casePublicSearchInteractor } from './casePublicSearchInteractor';
 import { getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {

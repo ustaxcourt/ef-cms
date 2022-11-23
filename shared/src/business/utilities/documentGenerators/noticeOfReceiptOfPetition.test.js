@@ -39,14 +39,14 @@ describe('documentGenerators', () => {
   });
 
   describe('noticeOfReceiptOfPetition', () => {
-    it('generates a Notice of Receipt of Petition document', async () => {
+    it('generates a Notice of Receipt of Petition document with a country included', async () => {
       const pdf = await noticeOfReceiptOfPetition({
         applicationContext,
         data: {
           address: {
             address1: '123 Some St.',
             city: 'Somecity',
-            countryName: '',
+            country: '',
             name: 'Test Petitioner',
             postalCode: '80008',
             state: 'ZZ',

@@ -1,5 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
@@ -8,6 +6,8 @@ import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
 
 describe('saveCalendarNotes', () => {
   let mockCurrentUser;
@@ -55,9 +55,9 @@ describe('saveCalendarNotes', () => {
 
     await expect(
       saveCalendarNoteInteractor(applicationContext, {
+        calendarNote: 'testing',
         docketNumber: mockCase.docketNumber,
         trialSessionId: mockTrialSessionId,
-        calendarNote: 'testing',
       }),
     ).rejects.toThrow('Unauthorized');
   });

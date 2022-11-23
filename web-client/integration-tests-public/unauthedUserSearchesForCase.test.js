@@ -17,6 +17,7 @@ import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigat
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
+import { unauthedUserViewsFilteredDocketRecord } from './journey/unauthedUserViewsFilteredDocketRecord';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
 const cerebralTest = setupTest();
@@ -77,7 +78,7 @@ describe('unauthed user searches for case', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(testClient, 1);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
     docketClerkServesDocument(testClient, 1);
   });
@@ -103,7 +104,7 @@ describe('unauthed user searches for case', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkSignsOrder(testClient, 3);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsStipulatedDecisionDocketEntryFromOrder(testClient, 3);
     docketClerkServesDocument(testClient, 3);
   });
@@ -114,5 +115,6 @@ describe('Unauthed user searches for a case and views a case detail page', () =>
   unauthedUserSearchesByMeta(cerebralTest);
   unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
   unauthedUserViewsCaseDetail(cerebralTest);
+  unauthedUserViewsFilteredDocketRecord(cerebralTest);
   unauthedUserViewsPrintableDocketRecord(cerebralTest);
 });

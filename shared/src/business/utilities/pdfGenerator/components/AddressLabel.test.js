@@ -8,7 +8,6 @@ describe('AddressLabel', () => {
       <AddressLabel
         address1="123 Some Street"
         city="Some City"
-        countryName="USA"
         name="Test Person"
         postalCode="89890"
         state="ZZ"
@@ -17,10 +16,23 @@ describe('AddressLabel', () => {
 
     expect(wrapper.text()).toContain('123 Some Street');
     expect(wrapper.text()).toContain('Some City');
-    expect(wrapper.text()).toContain('USA');
     expect(wrapper.text()).toContain('Test Person');
     expect(wrapper.text()).toContain('89890');
     expect(wrapper.text()).toContain('ZZ');
+  });
+
+  it('should render the international country on the coversheet by passing in "country" as a prop', () => {
+    const wrapper = shallow(
+      <AddressLabel
+        address1="123 Some Street"
+        city="Some City"
+        country="Chad"
+        postalCode="89890"
+        title="Test Title"
+      />,
+    );
+
+    expect(wrapper.text()).toContain('Chad');
   });
 
   it('renders optional address information if present', () => {

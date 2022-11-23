@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { validateStampInteractor } from '../stampMotion/validateStampInteractor';
 import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 import { Stamp } from '../../entities/Stamp';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateStampInteractor } from '../stampMotion/validateStampInteractor';
 
 describe('validateStampInteractor', () => {
   it('returns the errors for required fields on an empty stamp form', () => {

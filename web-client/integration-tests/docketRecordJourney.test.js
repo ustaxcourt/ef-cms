@@ -1,3 +1,4 @@
+import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
@@ -7,6 +8,7 @@ import {
   loginAs,
   setupTest,
   uploadPetition,
+  waitForCondition,
 } from './helpers';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
@@ -23,17 +25,16 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const { PAYMENT_STATUS } = applicationContext.getConstants();
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Verifies Docket Record Display', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -187,6 +188,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       isSavingForLater: true,
     });
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
+
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
@@ -255,6 +261,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       cerebralTest,
       docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
+      documentType: 'Hearing before',
       eventCode: 'HEAR',
       filingDate: {
         day: '1',
@@ -286,8 +293,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   it('verifies the docket record after adding a draft order to the docket record (not served)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
@@ -313,8 +320,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expectedDocumentType: 'Order',
   });
 
-  docketClerkViewsDraftOrder(cerebralTest, 2);
-  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
   docketClerkServesDocument(cerebralTest, 2);
   it('verifies the docket record after adding a draft order to the docket record and serving', async () => {
@@ -385,6 +392,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       isSavingForLater: true,
     });
 
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
+
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
@@ -407,14 +419,21 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence(
-      'openConfirmServePaperFiledDocumentSequence',
-      {
-        docketEntryId: cerebralTest.docketEntryId,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    await cerebralTest.runSequence('servePaperFiledDocumentSequence');
+    expect(cerebralTest.getState('currentPage')).toBe('PaperFiling');
+
+    await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
+
+    await cerebralTest.runSequence('submitPaperFilingSequence');
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);

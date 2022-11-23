@@ -1,4 +1,3 @@
-import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -6,8 +5,9 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
+import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('addPetitionerToCaseInteractor', () => {
   let mockContact;

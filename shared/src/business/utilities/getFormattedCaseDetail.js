@@ -366,12 +366,10 @@ const formatCase = (applicationContext, caseDetail) => {
 
   formatTrialSessionScheduling({ applicationContext, formattedCase: result });
 
-  result.isConsolidatedSubCase = !!(
-    result.leadDocketNumber && result.leadDocketNumber !== result.docketNumber
-  );
+  result.isLeadCase = applicationContext.getUtilities().isLeadCase(result);
 
-  result.isLeadCase = !!(
-    result.leadDocketNumber && result.leadDocketNumber === result.docketNumber
+  result.isConsolidatedSubCase = !!(
+    result.leadDocketNumber && !result.isLeadCase
   );
 
   let paymentDate = '';
