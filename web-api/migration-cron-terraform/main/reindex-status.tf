@@ -13,7 +13,7 @@ resource "aws_lambda_function" "reindex_status_lambda" {
   handler          = "reindex-status.handler"
   source_code_hash = data.archive_file.reindex_status_zip.output_base64sha256
 
-  runtime     = "nodejs14.x"
+  runtime     = "nodejs16.x"
   timeout     = "900"
   memory_size = "768"
 
