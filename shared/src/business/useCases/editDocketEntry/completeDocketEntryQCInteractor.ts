@@ -20,11 +20,9 @@ import {
 } from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getDocumentTitle } from '../../utilities/getDocumentTitle';
-import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-export const getNeedsNewCoversheet = ({
+export const needsNewCoversheet = ({
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -37,8 +35,8 @@ export const getNeedsNewCoversheet = ({
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
   const documentTitleUpdated =
-    getDocumentTitleWithAdditionalInfo({ docketEntry: currentDocketEntry }) !==
-    getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
+    currentDocketEntry.getDocumentTitleForCoversheet() !==
+    updatedDocketEntry.getDocumentTitleForCoversheet();
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
@@ -141,17 +139,13 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitle({
-    applicationContext,
-    docketEntry: updatedDocketEntry,
-  });
+  let updatedDocumentTitle =
+    updatedDocketEntry.getDocumentTitleForDocketRecord();
 
-  let currentDocumentTitle = getDocumentTitle({
-    applicationContext,
-    docketEntry: currentDocketEntry,
-  });
+  let currentDocumentTitle =
+    currentDocketEntry.getDocumentTitleForDocketRecord();
 
-  const needsNewCoversheet = getNeedsNewCoversheet({
+  const isNewCoverSheetNeeded = needsNewCoversheet({
     currentDocketEntry,
     updatedDocketEntry,
   });
@@ -346,7 +340,7 @@ export const completeDocketEntryQCInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  if (needsNewCoversheet) {
+  if (isNewCoverSheetNeeded) {
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
