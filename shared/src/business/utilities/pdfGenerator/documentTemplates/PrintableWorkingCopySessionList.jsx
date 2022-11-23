@@ -2,6 +2,7 @@ const React = require('react');
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { SelectedFiltersSection } from '../components/SelectedFiltersSection';
+import { SessionAssignmentsSection } from '../components/SessionAssignmentsSection';
 import { SessionNotesSection } from '../components/SessionNotesSection';
 import {
   generateCaseStatus,
@@ -31,16 +32,21 @@ export const PrintableWorkingCopySessionList = ({
         title={formattedTrialSession.trialLocation}
       />
       <section className="usa-section grid-container">
-        <div className="grid-row">
+        <div className="grid-row grid-gap">
           <div className="grid-col-9">
             <h2 className="heading-1">{userHeading}</h2>
           </div>
         </div>
+
+        <SessionAssignmentsSection
+          formattedTrialSession={formattedTrialSession}
+        />
         <SessionNotesSection sessionNotes={sessionNotes} />
         <SelectedFiltersSection
           count={formattedCases.length}
           selectedFilters={filters}
         />
+
         <table>
           <thead>
             <tr>
@@ -88,7 +94,7 @@ export const PrintableWorkingCopySessionList = ({
                       />
                       <div>{formattedCase.docketNumberWithSuffix}</div>
                     </td>
-                    <td style={{ wordBreak: 'break-word' }}>
+                    <td className="wrap-text-content">
                       {formattedCase.caseTitle}
                     </td>
                     <td>
