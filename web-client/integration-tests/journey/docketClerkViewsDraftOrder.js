@@ -2,7 +2,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkViewsDraftOrder = (cerebralTest, draftOrderIndex) => {
+export const docketClerkViewsDraftOrder = cerebralTest => {
   return it('Docket Clerk views draft order', () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -11,11 +11,10 @@ export const docketClerkViewsDraftOrder = (cerebralTest, draftOrderIndex) => {
       },
     );
 
-    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
-
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
+      doc => doc.docketEntryId === cerebralTest.docketEntryId,
     );
-    expect(draftOrderDocument).toBeTruthy();
+
+    expect(draftOrderDocument).toBeDefined();
   });
 };
