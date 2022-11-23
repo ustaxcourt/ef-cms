@@ -1,5 +1,4 @@
 #!/bin/zsh
-# shellcheck disable=SC1071
 
 # unset everything in .env
 ENV_KEYS=$(awk -F'=' '{print $1}' .env)

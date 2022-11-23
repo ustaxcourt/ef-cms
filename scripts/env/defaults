@@ -1,5 +1,4 @@
 #!/bin/zsh
-# shellcheck disable=SC1071
 
 export DEFAULT_ENV='local'
 export DEFAULT_ORG='ustc'

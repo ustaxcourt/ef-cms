@@ -1,7 +1,6 @@
 #!/bin/zsh
-# shellcheck disable=SC1071
 
-source "./scripts/env/unset-env.sh"
+source "./scripts/env/unset-env.zsh"
 source "./scripts/env/defaults"
 
 env="${1:-$DEFAULT_ENV}"
