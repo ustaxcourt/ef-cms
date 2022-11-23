@@ -19,6 +19,12 @@ export const confirmWorkItemAlreadyCompleteAction = async ({ get, router }) => {
     case FROM_PAGES.qcMyInbox:
       await router.route('/document-qc/my/inbox');
       break;
+    case FROM_PAGES.qcMyInProgress:
+      await router.route('/document-qc/my/inProgress');
+      break;
+    case FROM_PAGES.qcSectionInProgress:
+      await router.route('/document-qc/section/inProgress');
+      break;
     default:
       await router.route(`/case-detail/${caseDetail.docketNumber}`);
       break;

@@ -88,6 +88,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'serve_document_complete_error':
+        await app.getSequence('serveDocumentErrorSequence')({
+          ...message,
+        });
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);

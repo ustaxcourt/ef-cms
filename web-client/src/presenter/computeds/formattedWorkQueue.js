@@ -161,7 +161,11 @@ const getDocketEntryEditLink = ({
 
   const fromPage =
     workQueueToDisplay.queue === 'section'
-      ? FROM_PAGES.qcSectionInbox
+      ? workQueueToDisplay.box === 'inProgress'
+        ? FROM_PAGES.qcSectionInProgress
+        : FROM_PAGES.qcSectionInbox
+      : workQueueToDisplay.box === 'inProgress'
+      ? FROM_PAGES.qcMyInProgress
       : FROM_PAGES.qcMyInbox;
 
   let editLink;
@@ -171,7 +175,7 @@ const getDocketEntryEditLink = ({
     !applicationContext.getUtilities().isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {
-    editLink = '/edit-court-issued';
+    editLink = `/edit-court-issued?fromPage=${fromPage}`;
   } else if (isInProgress) {
     editLink = '/complete';
   } else if (

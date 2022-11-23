@@ -83,14 +83,26 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     docketEntryId,
   });
 
+  let error;
   if (!originalSubjectDocketEntry) {
-    throw new NotFoundError('Docket entry not found');
+    error = new NotFoundError('Docket entry not found');
+  } else if (originalSubjectDocketEntry.servedAt) {
+    error = new Error('Docket entry has already been served');
+  } else if (originalSubjectDocketEntry.isPendingService) {
+    error = new Error('Docket entry is already being served');
   }
-  if (originalSubjectDocketEntry.servedAt) {
-    throw new Error('Docket entry has already been served');
-  }
-  if (originalSubjectDocketEntry.isPendingService) {
-    throw new Error('Docket entry is already being served');
+  if (error) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete_error',
+        error: error.message,
+      },
+      userId: user.userId,
+    });
+
+    throw error;
   }
 
   const { Body: pdfData } = await applicationContext
