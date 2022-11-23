@@ -191,7 +191,9 @@ export const getConstants = () => ({
   FILING_TYPES,
   FROM_PAGES: {
     caseDetail: 'case-detail',
+    qcMyInProgress: 'qc-my-in-progress',
     qcMyInbox: 'qc-my-inbox',
+    qcSectionInProgress: 'qc-section-in-progress',
     qcSectionInbox: 'qc-section-inbox',
   },
   GENERIC_ORDER_EVENT_CODE,
