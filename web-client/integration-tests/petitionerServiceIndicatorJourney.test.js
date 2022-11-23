@@ -8,14 +8,15 @@ import {
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Petitioner Service Indicator Journey', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -26,9 +27,15 @@ describe('Petitioner Service Indicator Journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
+    hasIrsNoticeFormatted: 'No',
+    ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+    ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
+    petitionPaymentStatusFormatted: 'Waived 05/05/05',
+    receivedAtFormatted: '01/01/01',
+    shouldShowIrsNoticeDate: false,
+  });
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
-
-  // verify it is paper
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk verifies petitioner service indicator is paper', async () => {

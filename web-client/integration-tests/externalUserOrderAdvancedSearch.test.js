@@ -25,7 +25,6 @@ import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('external users perform an advanced search for orders', () => {
   const cerebralTest = setupTest();
-  cerebralTest.draftOrders = [];
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -33,13 +32,16 @@ describe('external users perform an advanced search for orders', () => {
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('Create test case #1', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+  it('petitioner creates an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -55,12 +57,11 @@ describe('external users perform an advanced search for orders', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
-
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
