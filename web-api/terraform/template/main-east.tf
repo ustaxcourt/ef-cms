@@ -26,7 +26,10 @@ data "archive_file" "zip_api" {
     "cognito-triggers.js",
     "cognito-authorizer.js",
     "public-api-authorizer.js",
-  "report.html"]
+    "handle-bounced-service-email.js",
+    "seal-in-lower-environment.js",
+    "report.html"
+  ]
 }
 
 data "archive_file" "zip_triggers" {
@@ -40,10 +43,12 @@ data "archive_file" "zip_triggers" {
     "maintenance-notify.js",
     "trial-session.js",
     "send-emails.js",
+    "seal-in-lower-environment.js",
     "cron.js",
     "streams.js",
     "cognito-authorizer.js",
     "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
     "report.html"
   ]
 }
