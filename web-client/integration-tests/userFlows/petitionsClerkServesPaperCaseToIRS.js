@@ -1,5 +1,5 @@
-export const servePetitionToIRS = cerebralTest => {
-  return it('Serve petition to IRS', async () => {
+export const petitionsClerkServesPaperCaseToIRS = cerebralTest => {
+  return it('Petitions clerk serves paper petition to IRS', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -18,8 +18,18 @@ export const servePetitionToIRS = cerebralTest => {
       value: false,
     });
 
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
+
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+
     await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PrintPaperPetitionReceipt',
+    );
   });
 };

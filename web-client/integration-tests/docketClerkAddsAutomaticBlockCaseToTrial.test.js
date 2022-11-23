@@ -56,7 +56,8 @@ describe('Adds automatic block case to trial', () => {
       state: cerebralTest.getState(),
     });
 
-    expect(headerHelper.showBlockedTag).toBeTruthy();
+    // blocked tag doesn't display when the case has a trial date
+    expect(headerHelper.showBlockedTag).toBeFalsy();
     expect(formattedCase.automaticBlocked).toBeTruthy();
   });
 });

@@ -221,7 +221,10 @@ const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 
-const { Case } = require('../../shared/src/business/entities/cases/Case');
+const {
+  Case,
+  isLeadCase,
+} = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
@@ -275,8 +278,10 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const mainRegion = environment.region;
   const fallbackRegion =
     environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('localhost')
-    ? 'http://localhost:8000'
+  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
+    ? environment.dynamoDbEndpoint.includes('localhost')
+      ? 'http://localhost:8000'
+      : environment.dynamoDbEndpoint
     : `dynamodb.${mainRegion}.amazonaws.com`;
   const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
     'localhost',
@@ -699,6 +704,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getFormattedCaseDetail,
         getStampBoxCoordinates,
         getWorkQueueFilters,
+        isLeadCase,
         isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
