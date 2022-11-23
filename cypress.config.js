@@ -26,7 +26,7 @@ module.exports = defineConfig({
   requestTimeout: 12000,
   retries: 3,
   screenshotsFolder: 'cypress-integration/screenshots',
-  video: false,
+  video: true,
   videosFolder: 'cypress-integration/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
