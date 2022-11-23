@@ -17,7 +17,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { Case, isLeadCase } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { isServed } = require('../entities/DocketEntry');
 
@@ -366,12 +366,11 @@ const formatCase = (applicationContext, caseDetail) => {
 
   formatTrialSessionScheduling({ applicationContext, formattedCase: result });
 
-  result.isConsolidatedSubCase = !!(
-    result.leadDocketNumber &&
-    !applicationContext.getUtilities().isLeadCase(result)
-  );
+  result.isLeadCase = applicationContext.getUtilities().isLeadCase(result);
 
-  result.isLeadCase = isLeadCase(result);
+  result.isConsolidatedSubCase = !!(
+    result.leadDocketNumber && !result.isLeadCase
+  );
 
   let paymentDate = '';
   let paymentMethod = '';

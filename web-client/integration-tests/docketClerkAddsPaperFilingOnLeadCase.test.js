@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
@@ -16,6 +17,7 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 
 describe('Docket clerk adds paper filing on lead case', () => {
   const cerebralTest = setupTest();
+  const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
@@ -139,13 +141,16 @@ describe('Docket clerk adds paper filing on lead case', () => {
     await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('alertSuccess')).toEqual({
-      message: 'Document served to selected cases in group. ',
+      message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
       overwritable: false,
     });
 
-    expect(
-      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
-    ).toEqual('documentView');
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState(
+          'currentViewMetadata.caseDetail.docketRecordTab',
+        ) === 'documentView',
+    });
   });
 
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {

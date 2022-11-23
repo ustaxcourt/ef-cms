@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
@@ -17,10 +18,11 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 describe('Case Consolidation Journey', () => {
   const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,
@@ -30,15 +32,17 @@ describe('Case Consolidation Journey', () => {
     jest.setTimeout(30000);
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  it('login as a petitioner and create the lead case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
-      caseDetail.docketNumber;
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('petitioner creates electronic lead case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = cerebralTest.leadDocketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -93,14 +97,14 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkFilesAndServesDocumentOnLeadCase(cerebralTest, 0);
 
   it('should have a success message that mentions serving multiple cases', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
     expect(alertSuccess.message).toEqual(
-      'Document served to selected cases in group. ',
+      DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
     );
     expect(alertSuccess.overwritable).toEqual(false);
   });
@@ -150,7 +154,7 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest);
 
@@ -199,13 +203,13 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0, false);
 
-  it('should have a success message that mentions the document was served (and not on multiple cases)', async () => {
+  it('should have a success message that mentions the document was served (and not on multiple cases)', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
-    expect(alertSuccess.message).toEqual('Document served. ');
+    expect(alertSuccess.message).toEqual(DOCUMENT_SERVED_MESSAGES.GENERIC);
     expect(alertSuccess.overwritable).toEqual(false);
   });
 
