@@ -86,6 +86,7 @@ exports.addDocketEntryForOrderAndServePaper = () => {
 exports.addDocketEntryForUploadedPdfAndServe = () => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('div#document-type').type('Miscellaneous{enter}');
   cy.get('#serve-to-parties-btn').click();
   cy.get('.modal-button-confirm').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
@@ -97,6 +98,7 @@ exports.addDocketEntryForUploadedPdfAndServe = () => {
 exports.addDocketEntryForUploadedPdfAndServePaper = () => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('div#document-type').type('Miscellaneous{enter}');
   cy.get('#serve-to-parties-btn').click();
   cy.get('.modal-button-confirm').click();
   cy.get('.modal-dialog', { timeout: 60000 }).should('not.exist');

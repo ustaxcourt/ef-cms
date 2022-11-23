@@ -10,40 +10,37 @@ import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServes
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import {
-  loginAs,
-  setConsolidatedCasesPropagateEntriesFlag,
-  setupTest,
-  uploadPetition,
-} from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
 describe('Case Consolidation Journey', () => {
+  const cerebralTest = setupTest();
+
+  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
-  afterAll(async () => {
-    await setConsolidatedCasesPropagateEntriesFlag(true);
+  afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  it('login as a petitioner and create the lead case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
-      caseDetail.docketNumber;
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('petitioner creates electronic lead case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = cerebralTest.leadDocketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -98,7 +95,7 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkFilesAndServesDocumentOnLeadCase(cerebralTest, 0);
 
   it('should have a success message that mentions serving multiple cases', () => {
@@ -155,7 +152,7 @@ describe('Case Consolidation Journey', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest);
 
@@ -199,17 +196,12 @@ describe('Case Consolidation Journey', () => {
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
   });
 
-  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-  it('should set the feature flag to false', async () => {
-    await setConsolidatedCasesPropagateEntriesFlag(false);
-  });
-
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something only on the lead case',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0, false);
 
   it('should have a success message that mentions the document was served (and not on multiple cases)', async () => {

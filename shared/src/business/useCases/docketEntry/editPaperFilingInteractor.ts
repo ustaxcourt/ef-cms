@@ -1,15 +1,15 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { Case } from '../../entities/cases/Case';
 import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
 } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
 /**
  *
@@ -247,12 +247,10 @@ export const editPaperFilingInteractor = async (
 
     caseEntity.updateDocketEntry(docketEntryEntity);
 
-    const result = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: caseEntity,
-      });
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
     if (!isSavingForLater) {
       await applicationContext
@@ -266,9 +264,6 @@ export const editPaperFilingInteractor = async (
     }
 
     return {
-      caseDetail: new Case(result, { applicationContext })
-        .validate()
-        .toRawObject(),
       paperServicePdfUrl,
     };
   } catch (e) {

@@ -4,7 +4,6 @@ const {
 const {
   batchDelete,
   batchGet,
-  delete: deleteObj,
   describeDeployTable,
   describeTable,
   get,
@@ -12,6 +11,7 @@ const {
   put,
   query,
   queryFull,
+  remove: deleteObj,
   scan,
   update,
   updateConsistent,
@@ -152,12 +152,12 @@ describe('dynamodbClientService', function () {
   });
 
   describe('update', () => {
-    it('should return the same Item property passed in in the params', async () => {
+    it('should return undefined after the update was successful', async () => {
       const result = await update({
         Item: MOCK_ITEM,
         applicationContext,
       });
-      expect(result).toEqual(MOCK_ITEM);
+      expect(result).toBeUndefined();
     });
   });
 

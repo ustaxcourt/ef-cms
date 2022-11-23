@@ -42,7 +42,6 @@ exports.MOCK_CASE = {
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
 };
-
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
 exports.MOCK_CASE_WITHOUT_PENDING = {
   caseCaption: 'Test Petitioner, Petitioner',

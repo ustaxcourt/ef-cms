@@ -25,6 +25,7 @@ const {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  isLeadCase,
   isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
@@ -367,6 +368,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getSealedDocketEntryTooltip),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getSortableDocketNumber: jest
+      .fn()
+      .mockImplementation(Case.getSortableDocketNumber),
     getStampBoxCoordinates: jest
       .fn()
       .mockImplementation(getStampBoxCoordinates),
@@ -374,6 +378,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
+    isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
@@ -478,6 +483,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
+    printableWorkingCopySessionList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrderForSmallCase: jest
@@ -511,7 +517,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
-    deleteDocumentFromS3: jest.fn(),
+    deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
@@ -553,6 +559,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
+    getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getTrialSessionJobStatusForCase: jest.fn(),

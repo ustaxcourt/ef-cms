@@ -9,6 +9,7 @@ import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
 import { SuccessNotification } from './SuccessNotification';
+import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -16,6 +17,8 @@ import React from 'react';
 export const DocketEntryQc = connect(
   {
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
+    confirmWorkItemAlreadyCompleteSequence:
+      sequences.confirmWorkItemAlreadyCompleteSequence,
     docketEntryQcHelper: state.docketEntryQcHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence:
@@ -24,6 +27,7 @@ export const DocketEntryQc = connect(
   },
   function DocketEntryQc({
     completeDocketEntryQCSequence,
+    confirmWorkItemAlreadyCompleteSequence,
     docketEntryQcHelper,
     formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence,
@@ -120,7 +124,14 @@ export const DocketEntryQc = connect(
             confirmSequence={completeDocketEntryQCSequence}
           />
         )}
+        {showModal === 'WorkItemAlreadyCompletedModal' && (
+          <WorkItemAlreadyCompletedModal
+            confirmSequence={confirmWorkItemAlreadyCompleteSequence}
+          />
+        )}
       </>
     );
   },
 );
+
+DocketEntryQc.displayName = 'DocketEntryQc';

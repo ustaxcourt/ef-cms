@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,
   createISODateString,

@@ -1,6 +1,10 @@
-name: Node.js CI
+name: Node.js CI - api
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
 
 jobs:
   API:
@@ -8,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -17,6 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
-        run: npm ci --no-optional && npm rebuild
+        run: npm ci --legacy-peer-dep && npm rebuild
       - name: API
         run: npm run test:api

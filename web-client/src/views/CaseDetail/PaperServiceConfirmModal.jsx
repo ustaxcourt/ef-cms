@@ -6,11 +6,12 @@ import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
   {
-    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
+    confirmInitiatePaperFilingServiceModalHelper:
+      state.confirmInitiatePaperFilingServiceModalHelper,
     documentTitle: state.form.documentTitle,
   },
   function PaperServiceConfirmModal({
-    confirmInitiateServiceModalHelper,
+    confirmInitiatePaperFilingServiceModalHelper,
     documentTitle,
   }) {
     return (
@@ -30,7 +31,7 @@ export const PaperServiceConfirmModal = connect(
           <div className="margin-bottom-1">
             This case has parties receiving paper service:
           </div>
-          {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+          {confirmInitiatePaperFilingServiceModalHelper.contactsNeedingPaperService.map(
             contact => (
               <div className="margin-bottom-1" key={contact.name}>
                 {contact.name}

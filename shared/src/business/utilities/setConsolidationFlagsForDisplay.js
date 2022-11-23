@@ -1,14 +1,29 @@
-exports.setConsolidationFlagsForDisplay = caseItem => {
-  caseItem.inConsolidatedGroup = caseItem.leadCase = false;
+const { isLeadCase } = require('../entities/cases/Case');
 
-  if (caseItem.leadDocketNumber) {
-    caseItem.inConsolidatedGroup = true;
-    caseItem.consolidatedIconTooltipText = 'Consolidated case';
-    if (caseItem.leadDocketNumber === caseItem.docketNumber) {
-      caseItem.leadCase = true;
-      caseItem.consolidatedIconTooltipText = 'Lead case';
+exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
+  const newCaseItem = { ...caseItem };
+
+  newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
+
+  if (newCaseItem.leadDocketNumber) {
+    newCaseItem.inConsolidatedGroup = true;
+    newCaseItem.consolidatedIconTooltipText = 'Consolidated case';
+
+    if (isLeadCase(caseItem)) {
+      newCaseItem.leadCase = true;
+      newCaseItem.consolidatedIconTooltipText = 'Lead case';
+    } else {
+      const leadCase = theCases.find(
+        theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
+      );
+
+      if (leadCase) {
+        newCaseItem.shouldIndent = true;
+      } else {
+        delete newCaseItem.shouldIndent;
+      }
     }
   }
 
-  return caseItem;
+  return newCaseItem;
 };

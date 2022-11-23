@@ -51,3 +51,5 @@ export const ErrorNotification = connect(
     );
   },
 );
+
+ErrorNotification.displayName = 'ErrorNotification';

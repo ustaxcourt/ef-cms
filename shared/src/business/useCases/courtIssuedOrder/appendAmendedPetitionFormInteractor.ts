@@ -1,9 +1,9 @@
 import { AMENDED_PETITION_FORM_NAME } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 
 /**
  *

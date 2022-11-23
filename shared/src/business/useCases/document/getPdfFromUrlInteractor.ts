@@ -7,7 +7,7 @@
  * @returns {object} the pdf file
  */
 export const getPdfFromUrlInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: any,
   { pdfUrl }: { pdfUrl: string },
 ) => {
   const pdfFile = await applicationContext

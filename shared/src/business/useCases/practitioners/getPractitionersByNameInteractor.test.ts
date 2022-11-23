@@ -1,6 +1,6 @@
+import { MAX_SEARCH_RESULTS, ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
-import { MAX_SEARCH_RESULTS, ROLES } from '../../entities/EntityConstants';
 
 describe('getPractitionersByNameInteractor', () => {
   beforeEach(() => {

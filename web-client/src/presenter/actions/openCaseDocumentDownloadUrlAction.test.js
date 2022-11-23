@@ -110,8 +110,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       }),
     ).rejects.toThrow();
 
-    expect(closeSpy).toHaveBeenCalled();
-    expect(window.open().close).toHaveBeenCalled();
+    expect(window.open().close).not.toHaveBeenCalled();
   });
 
   it('should not try to close openedPdfWindow if it does not exist when getDocumentDownloadUrlInteractor fails', async () => {
