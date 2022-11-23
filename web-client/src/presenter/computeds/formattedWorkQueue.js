@@ -154,8 +154,15 @@ const getDocketEntryEditLink = ({
   isInProgress,
   qcWorkItemsUntouched,
   result,
+  workQueueToDisplay,
 }) => {
-  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+  const { FROM_PAGES, UNSERVABLE_EVENT_CODES } =
+    applicationContext.getConstants();
+
+  const fromPage =
+    workQueueToDisplay.queue === 'section'
+      ? FROM_PAGES.qcSectionInbox
+      : FROM_PAGES.qcMyInbox;
 
   let editLink;
   if (
@@ -166,14 +173,14 @@ const getDocketEntryEditLink = ({
   ) {
     editLink = '/edit-court-issued';
   } else if (isInProgress) {
-    editLink = '/complete';
+    editLink = `/complete?fromPage=${fromPage}`;
   } else if (
     !result.isCourtIssuedDocument &&
     !result.isOrder &&
     !formattedDocument.isPetition &&
     qcWorkItemsUntouched
   ) {
-    editLink = '/edit';
+    editLink = `/edit?fromPage=${fromPage}`;
   }
   return editLink;
 };
@@ -182,6 +189,7 @@ export const getWorkItemDocumentLink = ({
   applicationContext,
   permissions,
   workItem,
+  workQueueToDisplay,
 }) => {
   const result = cloneDeep(workItem);
 
@@ -218,6 +226,7 @@ export const getWorkItemDocumentLink = ({
         isInProgress,
         qcWorkItemsUntouched,
         result,
+        workQueueToDisplay,
       });
       if (editLinkExtension) {
         editLink = `${baseDocumentLink}${editLinkExtension}`;
