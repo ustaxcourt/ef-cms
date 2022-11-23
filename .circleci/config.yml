@@ -324,7 +324,7 @@ jobs:
             sleep 5
             npm run cypress:integration
       - store_artifacts:
-          path: /root/project/cypress/videos/
+          path: /root/project/cypress-integration/videos/
       - store_artifacts:
           path: /tmp/cypress
 

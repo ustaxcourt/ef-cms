@@ -27,6 +27,8 @@ module.exports = defineConfig({
   retries: 3,
   screenshotsFolder: 'cypress-integration/screenshots',
   video: true,
+  videoCompression: 10,
+  videoUploadOnPasses: false,
   videosFolder: 'cypress-integration/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
