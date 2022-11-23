@@ -3,7 +3,9 @@ import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/complet
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -15,6 +17,7 @@ import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesA
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -23,42 +26,50 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const completeDocketEntryQCSequence = [
-  startShowValidationAction,
-  getComputedFormDateFactoryAction(null),
-  formHasSecondaryDocumentAction,
+  getCaseAction,
+  setCaseAction,
+  isWorkItemAlreadyCompletedAction,
   {
-    no: [],
-    yes: [
-      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
-      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+    no: [
+      startShowValidationAction,
+      getComputedFormDateFactoryAction(null),
+      formHasSecondaryDocumentAction,
+      {
+        no: [],
+        yes: [
+          getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
+          setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+        ],
+      },
+      computeCertificateOfServiceFormDateAction,
+      getComputedFormDateFactoryAction('dateReceived'),
+      setComputeFormDateFactoryAction('dateReceived'),
+      getComputedFormDateFactoryAction('serviceDate'),
+      setComputeFormDateFactoryAction('serviceDate'),
+      setFilersFromFilersMapAction,
+      validateDocketEntryAction,
+      {
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
+        success: showProgressSequenceDecorator([
+          stopShowValidationAction,
+          refreshExternalDocumentTitleFromEventCodeAction,
+          setPreviousDocumentDocketEntryAction,
+          generateTitleAction,
+          completeDocketEntryQCAction,
+          setPdfPreviewUrlAction,
+          setCaseAction,
+          setAlertSuccessAction,
+          setPaperServicePartiesAction,
+          setSaveAlertsForNavigationAction,
+          navigateToDocumentQCAction,
+          clearErrorAlertsAction,
+        ]),
+      },
     ],
-  },
-  computeCertificateOfServiceFormDateAction,
-  getComputedFormDateFactoryAction('dateReceived'),
-  setComputeFormDateFactoryAction('dateReceived'),
-  getComputedFormDateFactoryAction('serviceDate'),
-  setComputeFormDateFactoryAction('serviceDate'),
-  setFilersFromFilersMapAction,
-  validateDocketEntryAction,
-  {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
-    ],
-    success: showProgressSequenceDecorator([
-      stopShowValidationAction,
-      refreshExternalDocumentTitleFromEventCodeAction,
-      setPreviousDocumentDocketEntryAction,
-      generateTitleAction,
-      completeDocketEntryQCAction,
-      setPdfPreviewUrlAction,
-      setCaseAction,
-      setAlertSuccessAction,
-      setPaperServicePartiesAction,
-      setSaveAlertsForNavigationAction,
-      navigateToDocumentQCAction,
-      clearErrorAlertsAction,
-    ]),
+    yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
   },
 ];

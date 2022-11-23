@@ -7,7 +7,7 @@ terraform {
   }
 
   required_providers {
-    aws = "3.70.0"
+    aws = "3.75.2"
   }
 }
 
@@ -19,6 +19,7 @@ module "environment" {
   dns_domain             = var.dns_domain
   cloudfront_default_ttl = var.cloudfront_default_ttl
   cloudfront_max_ttl     = var.cloudfront_max_ttl
+  viewer_protocol_policy = var.viewer_protocol_policy
 
   providers = {
     aws.us-east-1 = aws.us-east-1

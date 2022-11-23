@@ -16,7 +16,7 @@ After installing git, be sure to clone the project locally:
 `git clone git@github.com:flexion/ef-cms.git`
 
 
-### Node v14.19.0
+### Node v16.17.1
 
 All of our application code is built using Javascript: 
 
@@ -24,10 +24,10 @@ All of our application code is built using Javascript:
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v14.19.0
-    - npm v6.14.16
+    - Node v16.17.1
+    - npm v8.15.0
 
-As of 03/17/22, AWS Lambda only supports up to [`nodejs14.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+As of May 2022, AWS Lambda only supports up to [`nodejs16.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
 ### Java 11+ 
 
@@ -69,28 +69,61 @@ Since we use circle ci in our CI/CD process, we using a husky pre-commit to vali
 brew install circleci
 ```
 
-## Getting Running
+## Getting Running 
 
-All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I'd recommend at least reading through some of these scripts because you will be using a lot of them as you advanced through learning this application.  But, so as not to overwhelm you, let's just talk about the most important ones.
+All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I recommend looking through this list of scripts because you will be using a lot of them as you advance through learning this application.  But for now, let's just talk about the most important ones.
 
-### Checkout Develop
+### M1 Macs
 
-You'd want to make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
+#### Additional Prerequisites
+[Docker Desktop](https://www.docker.com/products/docker-desktop/). Ask a team member how to obtain a license if you don't already have one. **If you use Docker Desktop, you need to get a license**. Within Docker, allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. This will reduce the number of resource-related failures when running the application.
 
+#### Checkout Develop
 
-### Install the NPM Depedencies
+Make sure you are on the `ustaxcourt/staging` branch before you try to start the services.
 
-All of the applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
-
-`npm install`
-
-### 💻 MacOS Monterey+ 
+#### 💻 MacOS Monterey+ 
 
 There is a conflict on `port 5000` with the public API and AirPlay Receiver. 
 
 Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
 
-### 🏃 Starting the Services
+#### Starting the Services
+
+You don't need to install any NPM dependencies before running the script:
+
+`npm run start:all:docker`. This script handles NPM dependency installation and starting the API, the client UI, and the public UI. 
+
+Once you've started your services locally, you should be able to access them here:
+
+- [http://localhost:1234](http://localhost:1234) (private UI)
+- [http://localhost:5678](http://localhost:5678) (public UI)
+
+Use one of the mock logins documented below to log in to the private UI.
+
+![Mock Login Page](./images/mock-login.png)
+
+If you have unexpected errors with running in Docker, try allocating 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap.
+
+### Non-M1 Macs
+
+#### Checkout Develop
+
+Make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
+
+#### Install the NPM Depedencies
+
+All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
+
+`npm install`
+
+#### 💻 MacOS Monterey+ 
+
+There is a conflict on `port 5000` with the public API and AirPlay Receiver. 
+
+Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
+
+#### 🏃 Starting the Services
 
 Once you've installed the dependencies, you should be able to run the npm scripts to start up the API, private UI, and public UI.  We recommend you have three separate terminals open and run each of the following commands in a separate terminal:
 
@@ -103,17 +136,17 @@ Once you've started your services locally, you should be able to access them her
 - [http://localhost:1234](http://localhost:1234) (private UI)
 - [http://localhost:5678](http://localhost:5678) (public UI)
 
-If everything is working fine, you should see the private UI hosted on [http://localhost:1234](http://localhost:1234).  Use one of the mock logins documented below to login.
+Use one of the mock logins documented below to log in to the private UI.
 
 ![Mock Login Page](./images/mock-login.png)
 
 ## How to Login Locally
 
-Now that you have your application running locally, we recommend that you try to login with some of the mock user accounts we have set up locally.  All of these users are defined in the [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json) file, and also in our [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) file which contains all of our dynamodb seed data.
+Now that your application is running locally, try to log in with some of the local mock user accounts.  All of these users are defined in [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json), and also in [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) which contains all of our dynamodb seed data.
 
 Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 
-?> There is no password required for logins during local development
+?> There is no password required for logins during local development.
 
 
 ```txt
@@ -143,19 +176,6 @@ cohensChambers@example.com
 judge.colvin@example.com
 colvinsChambers@example.com
 ```
-
-## Running via Docker
-
-!> no developer uses this approach, so it may have bugs running the entire app via this docker command.
-
-If needed, you can also try to run the entire project from a single docker container.
-Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it.  No one currently uses this approach when developing on this project since it is often slower and more error prone compared to running Dawson locally.
-
-```sh
-./docker-run.sh
-```
-
-Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
 
 ## Troubleshooting

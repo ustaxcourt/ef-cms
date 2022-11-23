@@ -12,7 +12,7 @@ resource "aws_lambda_function" "switch_colors_status_lambda" {
   handler          = "switch-colors-status.handler"
   source_code_hash = data.archive_file.switch_colors_status_zip.output_base64sha256
 
-  runtime     = "nodejs14.x"
+  runtime     = "nodejs16.x"
   timeout     = "900"
   memory_size = "768"
 
@@ -29,7 +29,7 @@ resource "aws_lambda_function" "switch_colors_status_lambda" {
 
 resource "aws_cloudwatch_event_rule" "check_switch_colors_status_cron_rule-sunday" {
   name                = "check_switch_colors_status_cron_${var.environment}"
-  schedule_expression = "cron(* 4,5 ? * SUN *)"
+  schedule_expression = "cron(* 5,6 ? * SUN *)"
   is_enabled          = "true"
 }
 

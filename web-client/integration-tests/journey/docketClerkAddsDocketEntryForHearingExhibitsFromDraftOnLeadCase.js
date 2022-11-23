@@ -38,6 +38,14 @@ export const docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase = (
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
+        key: 'documentType',
+        value: 'Hearing Exhibits',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
         key: 'filingDateDay',
         value: '01',
       },
