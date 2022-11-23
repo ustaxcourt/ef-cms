@@ -1,0 +1,58 @@
+#!/bin/zsh
+# shellcheck disable=SC1071
+
+{
+  echo "REGION='${DEFAULT_REGION}'"
+  echo "DYNAMODB_ENDPOINT='dynamodb.${DEFAULT_REGION}.amazonaws.com'"
+} >> .env
+
+# export all values that have been written to .env so far so they can be used if necessary
+set -o allexport
+source .env
+set +o allexport
+
+# set values that are inherited from or comprised of values already defined
+{
+  echo "AWS_REGION='${REGION}'"
+  echo "BOUNCE_ALERT_TEMPLATE='bounce_alert_${ENV}'"
+  echo "DAWSON_ENV='${ENV}'"
+  echo "DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-documents-${ENV}-${REGION}'"
+  echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
+  echo "EMAIL_DOCUMENT_SERVED_TEMPLATE='document_served_${ENV}'"
+  echo "EMAIL_SERVED_PETITION_TEMPLATE='petition_served_${ENV}'"
+  echo "EMAIL_SOURCE='noreply@${EFCMS_DOMAIN}'"
+  echo "ENVIRONMENT='${ENV}'"
+  echo "MASTER_DYNAMODB_ENDPOINT='${DYNAMODB_ENDPOINT}'"
+  echo "MASTER_REGION='${REGION}'"
+  echo "QUARANTINE_BUCKET_NAME='${EFCMS_DOMAIN}-quarantine-${ENV}-${REGION}'"
+  echo "S3_ENDPOINT='s3.${REGION}.amazonaws.com'"
+  echo "STAGE='${ENV}'"
+  echo "TEMP_DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-temp-documents-${ENV}-${REGION}'"
+  echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
+} >> .env
+
+# determine current color and database version from the deploy table
+CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
+SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}" | sed -e "s/efcms-${ENV}-//")
+
+# determine Elasticsearch endpoint (region hard-coded; all ES domains are in us-east-1)
+ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+  --domain-name "efcms-search-${ENV}-${SOURCE_TABLE}" \
+  --region "us-east-1" \
+  --query 'DomainStatus.Endpoint' \
+  --output text)
+
+{
+  echo "COLOR='${CURRENT_COLOR}'"
+  echo "CURRENT_COLOR='${CURRENT_COLOR}'"
+  echo "DYNAMODB_TABLE_NAME='efcms-${ENV}-${SOURCE_TABLE}'"
+  echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
+  echo "SOURCE_TABLE='${SOURCE_TABLE}'"
+  echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE}'"
+} >> .env
+
+# alphabetize .env
+sort -o .env .env
+set -o allexport
+source .env
+set +o allexport
