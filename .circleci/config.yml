@@ -77,7 +77,7 @@ jobs:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
-    parallelism: 16
+    parallelism: 8
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -324,7 +324,7 @@ jobs:
             sleep 5
             npm run cypress:integration
       - store_artifacts:
-          path: /root/project/cypress-integration/videos/
+          path: /root/project/cypress/videos/
       - store_artifacts:
           path: /tmp/cypress
 
@@ -947,138 +947,138 @@ workflows:
 
   build-and-deploy:
     jobs:
-      # - build-client-integration:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public-search:
-      #     <<: *build-and-deploy-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
           <<: *build-and-deploy-defaults
-      # - e2e-cypress-smoketests-local:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-public:
-      #     <<: *build-and-deploy-defaults
-      # - build-ts-api:
-      #     <<: *build-and-deploy-defaults
-      # - verify-pdfs:
-      #     <<: *build-and-deploy-defaults
-      # - deploy:
-      #     requires:
-      #       - build-client-integration
-      #       - e2e-pa11y
-      #       - e2e-pa11y-public
-      #       - e2e-pa11y-public-search
-      #       - e2e-cypress
-      #       - e2e-cypress-smoketests-local
-      #       - e2e-cypress-public
-      #       - build-ts-api
-      #       - verify-pdfs
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - reindex:
-      #     requires:
-      #       - deploy
-      # - migrate:
-      #     requires:
-      #       - reindex
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - wait-for-reindex:
-      #     type: approval
-      #     requires:
-      #       - migrate
-      # - disable-reindex-cron:
-      #     requires:
-      #       - wait-for-reindex
-      # - smoketests:
-      #     requires:
-      #       - disable-reindex-cron
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - smoketests-readonly:
-      #     requires:
-      #       - smoketests
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - switch-colors:
-      #     requires:
-      #       - smoketests-readonly
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - cleanup:
-      #     requires:
-      #       - switch-colors
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
+      - build-ts-api:
+          <<: *build-and-deploy-defaults
+      - verify-pdfs:
+          <<: *build-and-deploy-defaults
+      - deploy:
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-pa11y-public-search
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
+            - build-ts-api
+            - verify-pdfs
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - reindex:
+          requires:
+            - deploy
+      - migrate:
+          requires:
+            - reindex
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          requires:
+            - wait-for-reindex
+      - smoketests:
+          requires:
+            - disable-reindex-cron
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - smoketests-readonly:
+          requires:
+            - smoketests
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - switch-colors:
+          requires:
+            - smoketests-readonly
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - cleanup:
+          requires:
+            - switch-colors
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
 
   build-and-deploy-with-context:
     jobs:
