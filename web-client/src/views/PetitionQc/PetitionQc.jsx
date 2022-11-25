@@ -28,3 +28,5 @@ export const PetitionQc = connect(function PetitionQc() {
     </>
   );
 });
+
+PetitionQc.displayName = 'PetitionQc';

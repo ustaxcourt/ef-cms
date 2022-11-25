@@ -93,3 +93,6 @@ export const PractitionerLoginServiceEmailForm = connect(
     );
   },
 );
+
+PractitionerLoginServiceEmailForm.displayName =
+  'PractitionerLoginServiceEmailForm';
