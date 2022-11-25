@@ -10,7 +10,7 @@ resource "aws_lambda_function" "zip_streams" {
   timeout          = "60"
   memory_size      = "768"
 
-  runtime = "nodejs14.x"
+  runtime = "nodejs16.x"
 
 
   environment {
