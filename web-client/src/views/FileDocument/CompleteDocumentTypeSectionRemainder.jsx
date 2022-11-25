@@ -117,3 +117,6 @@ export const CompleteDocumentTypeSectionRemainder = connect(
     );
   },
 );
+
+CompleteDocumentTypeSectionRemainder.displayName =
+  'CompleteDocumentTypeSectionRemainder';
