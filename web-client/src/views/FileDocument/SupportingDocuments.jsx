@@ -55,3 +55,5 @@ export const SupportingDocuments = connect(
     );
   },
 );
+
+SupportingDocuments.displayName = 'SupportingDocuments';
