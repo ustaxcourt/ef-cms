@@ -1,5 +1,6 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import React from 'react';
+
 /**
  * UnsealDocketEntryModal
  *
@@ -18,3 +19,5 @@ export function UnsealDocketEntryModal() {
     </ConfirmModal>
   );
 }
+
+UnsealDocketEntryModal.displayName = 'UnsealDocketEntryModal';

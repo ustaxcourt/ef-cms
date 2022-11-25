@@ -65,3 +65,6 @@ export const EditDocketEntryMetaFormNoDocument = connect(
     );
   },
 );
+
+EditDocketEntryMetaFormNoDocument.displayName =
+  'EditDocketEntryMetaFormNoDocument';
