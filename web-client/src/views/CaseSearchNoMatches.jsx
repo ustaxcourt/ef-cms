@@ -31,3 +31,5 @@ export const CaseSearchNoMatches = connect(
     );
   },
 );
+
+CaseSearchNoMatches.displayName = 'CaseSearchNoMatches';

@@ -534,3 +534,5 @@ export const PetitionQcScanBatchPreviewer = connect(
     );
   },
 );
+
+PetitionQcScanBatchPreviewer.displayName = 'PetitionQcScanBatchPreviewer';
