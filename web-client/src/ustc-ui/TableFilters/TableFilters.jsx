@@ -79,3 +79,5 @@ export const TableFilters = ({ filters, onSelect }) => {
     </div>
   );
 };
+
+TableFilters.displayName = 'TableFilters';

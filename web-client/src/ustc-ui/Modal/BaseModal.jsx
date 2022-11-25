@@ -99,3 +99,5 @@ export const BaseModal = connect(
     return ReactDOM.createPortal(renderModalContent(), getEl());
   },
 );
+
+BaseModal.displayName = 'BaseModal';

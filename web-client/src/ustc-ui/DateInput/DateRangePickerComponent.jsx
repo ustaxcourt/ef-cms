@@ -166,3 +166,5 @@ export const DateRangePickerComponent = ({
     </FormGroup>
   );
 };
+
+DateRangePickerComponent.displayName = 'DateRangePickerComponent';
