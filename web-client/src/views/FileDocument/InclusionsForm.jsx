@@ -150,3 +150,5 @@ export const InclusionsForm = connect(
     );
   },
 );
+
+InclusionsForm.displayName = 'InclusionsForm';
