@@ -87,3 +87,5 @@ export const CaseDeadlinesInternal = connect(
     );
   },
 );
+
+CaseDeadlinesInternal.displayName = 'CaseDeadlinesInternal';

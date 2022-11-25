@@ -163,3 +163,5 @@ export const CaseNotes = connect(
     );
   },
 );
+
+CaseNotes.displayName = 'CaseNotes';
