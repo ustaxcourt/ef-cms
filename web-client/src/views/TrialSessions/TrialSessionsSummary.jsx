@@ -100,3 +100,5 @@ export const TrialSessionsSummary = connect(
     );
   },
 );
+
+TrialSessionsSummary.displayName = 'TrialSessionsSummary';

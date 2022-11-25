@@ -77,3 +77,5 @@ export const SessionNotes = connect(
     );
   },
 );
+
+SessionNotes.displayName = 'SessionNotes';
