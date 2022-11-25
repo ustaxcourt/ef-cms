@@ -123,6 +123,8 @@ export const MessagesSectionOutbox = connect(
   },
 );
 
+MessagesSectionOutbox.displayName = 'MessagesSectionOutbox';
+
 const MessageOutboxRow = React.memo(function MessageOutboxRow({ message }) {
   return (
     <tbody>

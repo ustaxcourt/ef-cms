@@ -128,3 +128,5 @@ export const MessageModalAttachments = connect(
     );
   },
 );
+
+MessageModalAttachments.displayName = 'MessageModalAttachments';
