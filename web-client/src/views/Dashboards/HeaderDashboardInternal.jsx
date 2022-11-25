@@ -61,3 +61,5 @@ export const HeaderDashboardInternal = connect(
     );
   },
 );
+
+HeaderDashboardInternal.displayName = 'HeaderDashboardInternal';
