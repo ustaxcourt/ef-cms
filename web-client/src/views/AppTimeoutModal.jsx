@@ -31,3 +31,5 @@ export const AppTimeoutModal = connect(
     );
   },
 );
+
+AppTimeoutModal.displayName = 'AppTimeoutModal';

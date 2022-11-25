@@ -25,3 +25,5 @@ export const DeleteTrialSessionModal = connect(
     );
   },
 );
+
+DeleteTrialSessionModal.displayName = 'DeleteTrialSessionModal';
