@@ -55,3 +55,5 @@ export const OtherStatisticsForm = connect(
     );
   },
 );
+
+OtherStatisticsForm.displayName = 'OtherStatisticsForm';
