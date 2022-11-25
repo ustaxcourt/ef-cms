@@ -239,3 +239,5 @@ export const ContactPrimary = connect(
     );
   },
 );
+
+ContactPrimary.displayName = 'ContactPrimary';
