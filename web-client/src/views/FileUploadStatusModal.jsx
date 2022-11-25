@@ -58,3 +58,5 @@ export const FileUploadStatusModal = connect(
     );
   },
 );
+
+FileUploadStatusModal.displayName = 'FileUploadStatusModal';

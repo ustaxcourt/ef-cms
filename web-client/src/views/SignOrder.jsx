@@ -243,3 +243,5 @@ export const SignOrder = connect(
     );
   },
 );
+
+SignOrder.displayName = 'SignOrder';
