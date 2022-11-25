@@ -90,3 +90,5 @@ export const TodaysOpinions = connect(
     );
   },
 );
+
+TodaysOpinions.displayName = 'TodaysOpinions';

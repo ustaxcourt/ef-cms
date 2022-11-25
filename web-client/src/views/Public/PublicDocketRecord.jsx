@@ -99,3 +99,5 @@ export const PublicDocketRecord = connect(
     );
   },
 );
+
+PublicDocketRecord.displayName = 'PublicDocketRecord';

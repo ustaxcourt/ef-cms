@@ -16,3 +16,5 @@ export const StyleGuide = () => (
     <Tabs />
   </>
 );
+
+StyleGuide.displayName = 'StyleGuide';

@@ -55,3 +55,5 @@ export const ProcedureType = connect(
     );
   },
 );
+
+ProcedureType.displayName = 'ProcedureType';

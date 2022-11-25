@@ -46,3 +46,5 @@ export const StateSelect = ({
     </select>
   );
 };
+
+StateSelect.displayName = 'StateSelect';

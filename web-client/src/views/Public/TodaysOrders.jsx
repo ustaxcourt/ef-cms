@@ -186,3 +186,5 @@ export const TodaysOrders = connect(
     );
   },
 );
+
+TodaysOrders.displayName = 'TodaysOrders';
