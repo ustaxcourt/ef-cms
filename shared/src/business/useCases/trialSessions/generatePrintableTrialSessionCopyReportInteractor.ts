@@ -29,7 +29,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sort,
     userHeading,
   }: {
-    filters?: TPrintableTableFilter;
+    filters?: TPrintableTableFilters;
     formattedCases?: TCase[];
     formattedTrialSession?: TTrialSessionData;
     sessionNotes?: string;

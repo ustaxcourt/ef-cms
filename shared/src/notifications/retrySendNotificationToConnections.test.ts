@@ -28,10 +28,6 @@ const mockConnections = [
   },
 ];
 
-interface NotificationError extends Error {
-  statusCode?: number;
-}
-
 const mockMessageStringified = JSON.stringify('hello, computer');
 
 const notificationError: NotificationError = new Error(
