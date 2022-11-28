@@ -16,6 +16,7 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
     });
 
     await cerebralTest.runSequence('completeDocketEntryQCSequence');
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =

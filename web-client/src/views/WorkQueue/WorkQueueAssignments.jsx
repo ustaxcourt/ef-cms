@@ -7,7 +7,6 @@ import React from 'react';
 export const WorkQueueAssignments = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    clearSelectedWorkItemsSequence: sequences.clearSelectedWorkItemsSequence,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItemsLength: state.selectedWorkItems.length,
@@ -15,7 +14,6 @@ export const WorkQueueAssignments = connect(
   },
   function WorkQueueAssignments({
     assignSelectedWorkItemsSequence,
-    clearSelectedWorkItemsSequence,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItemsLength,
@@ -40,9 +38,6 @@ export const WorkQueueAssignments = connect(
                 className="select-left inline-select margin-left-1pt5rem"
                 id="assignmentFilter"
                 name="assignment"
-                onChange={() => {
-                  clearSelectedWorkItemsSequence();
-                }}
               >
                 <option value="">-Assignment-</option>
                 <option value="UA">Unassigned</option>

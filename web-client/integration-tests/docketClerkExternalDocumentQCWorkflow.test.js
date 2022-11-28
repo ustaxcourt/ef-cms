@@ -240,7 +240,13 @@ describe('Create a work item', () => {
       toUserId: 'Select a recipient',
     });
 
+    const updatedDocumentTitle = 'Motion in Limine';
     const messageBody = 'This is a message in a bottle';
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'documentTitle',
+      value: updatedDocumentTitle,
+    });
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'message',
@@ -270,7 +276,7 @@ describe('Create a work item', () => {
     expect(errors).toEqual({});
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
-      message: 'Answer QC completed and message sent.',
+      message: 'Motion in Limine QC completed and message sent.',
     });
 
     expect(cerebralTest.getState('currentPage')).toBe('WorkQueue');
@@ -280,7 +286,7 @@ describe('Create a work item', () => {
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
 
-    expect(qcDocumentTitleMyOutbox).toBe('Answer');
+    expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 
     const formattedCaseMessages = await getCaseMessagesForCase(cerebralTest);
     const qcDocumentMessage =

@@ -10,7 +10,6 @@ describe('servePaperFiledDocumentAction', () => {
   const pdfUrl = 'www.example.com';
   const docketNumbers = [docketNumber];
   const clientConnectionId = '999999999';
-  const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -55,7 +54,7 @@ describe('servePaperFiledDocumentAction', () => {
     });
 
     expect(result.output).toEqual({
-      alertSuccess: { message: DOCUMENT_SERVED_MESSAGES.GENERIC },
+      alertSuccess: { message: 'Document served.' },
       hasPaper: true,
       pdfUrl,
     });
@@ -98,7 +97,7 @@ describe('servePaperFiledDocumentAction', () => {
     });
 
     expect(result.output).toEqual({
-      alertSuccess: { message: DOCUMENT_SERVED_MESSAGES.GENERIC },
+      alertSuccess: { message: 'Document served.' },
       hasPaper: false,
       pdfUrl: undefined,
     });

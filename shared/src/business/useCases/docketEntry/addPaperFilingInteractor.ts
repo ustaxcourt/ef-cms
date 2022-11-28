@@ -1,7 +1,7 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-  DOCUMENT_SERVED_MESSAGES,
   ROLES,
 } from '../../entities/EntityConstants';
 import { Case, isLeadCase } from '../../entities/cases/Case';
@@ -13,16 +13,17 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { pick } from 'lodash';
 
 /**
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
- * @param {string} providers.docketEntryId the id of the docket entry to add
  * @param {object} providers.consolidatedGroupDocketNumbers the docket numbers from the consolidated group
  * @param {object} providers.documentMetadata the document metadata
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
+ * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
 export const addPaperFilingInteractor = async (
@@ -30,15 +31,15 @@ export const addPaperFilingInteractor = async (
   {
     clientConnectionId,
     consolidatedGroupDocketNumbers,
-    docketEntryId,
     documentMetadata,
     isSavingForLater,
+    primaryDocumentFileId,
   }: {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: any;
     isSavingForLater: boolean;
-    docketEntryId: string;
+    primaryDocumentFileId: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -47,16 +48,14 @@ export const addPaperFilingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (!docketEntryId) {
-    throw new Error('Did not receive a docketEntryId');
-  }
-
   if (!documentMetadata) {
     throw new Error('Did not receive meta data for docket entry');
   }
 
-  const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
-    documentMetadata;
+  const { docketNumber, isFileAttached } = documentMetadata;
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
@@ -65,49 +64,68 @@ export const addPaperFilingInteractor = async (
     });
 
   if (!isCaseConsolidationFeatureOn) {
-    consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
+    consolidatedGroupDocketNumbers = [docketNumber];
   }
 
-  const isReadyForService =
-    documentMetadata.isFileAttached && !isSavingForLater;
+  const baseMetadata = pick(documentMetadata, [
+    'filers',
+    'partyIrsPractitioner',
+    'practitioner',
+  ]);
+
+  const [docketEntryId, metadata, relationship] = [
+    primaryDocumentFileId,
+    documentMetadata,
+    DOCUMENT_RELATIONSHIPS.PRIMARY,
+  ];
+
+  const readyForService = metadata.isFileAttached && !isSavingForLater;
+
+  if (!docketEntryId) {
+    throw new Error('Did not receive a primaryDocumentFileId');
+  }
 
   const docketRecordEditState =
-    documentMetadata.isFileAttached === false ? documentMetadata : {};
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+    metadata.isFileAttached === false ? documentMetadata : {};
 
   let caseEntities = [];
-  let filedByFromLeadCase;
-
-  for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
+  for (let docketNo of consolidatedGroupDocketNumbers) {
+    const aCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
-        docketNumber,
+        docketNumber: docketNo,
       });
 
-    let caseEntity = new Case(rawCase, { applicationContext });
+    let aCaseEntity = new Case(aCase, { applicationContext });
+    caseEntities.push(aCaseEntity);
+  }
+
+  let filedByFromLeadCase;
+  let consolidatedGroupHasPaperServiceCase: boolean;
+
+  for (const caseEntity of caseEntities) {
+    const servedParties = aggregatePartiesForService(caseEntity);
+    if (servedParties.paper.length > 0) {
+      consolidatedGroupHasPaperServiceCase = true;
+    }
 
     const docketEntryEntity = new DocketEntry(
       {
-        ...documentMetadata,
+        ...baseMetadata,
+        ...metadata,
         docketEntryId,
-        documentTitle: documentMetadata.documentTitle,
-        documentType: documentMetadata.documentType,
+        documentTitle: metadata.documentTitle,
+        documentType: metadata.documentType,
         editState: JSON.stringify(docketRecordEditState),
-        filingDate: documentMetadata.receivedAt,
+        filingDate: metadata.receivedAt,
         isOnDocketRecord: true,
-        mailingDate: documentMetadata.mailingDate,
-        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+        mailingDate: metadata.mailingDate,
+        relationship,
         userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
-
-    const servedParties = aggregatePartiesForService(caseEntity);
 
     if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
@@ -119,8 +137,8 @@ export const addPaperFilingInteractor = async (
 
     const workItem = new WorkItem(
       {
-        assigneeId: user.userId,
-        assigneeName: user.name,
+        assigneeId: null,
+        assigneeName: null,
         associatedJudge: caseEntity.associatedJudge,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
@@ -133,30 +151,27 @@ export const addPaperFilingInteractor = async (
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
         leadDocketNumber: caseEntity.leadDocketNumber,
-        section: user.section,
+        section: DOCKET_SECTION,
         sentBy: user.name,
-        sentBySection: user.section,
         sentByUserId: user.userId,
       },
       { applicationContext },
     );
 
-    if (isReadyForService) {
-      workItem.setAsCompleted({
-        message: 'completed',
-        user,
-      });
+    docketEntryEntity.setWorkItem(workItem);
 
-      docketEntryEntity.setAsServed(servedParties.all);
-    }
-
-    await saveWorkItem({
-      applicationContext,
-      isReadyForService,
-      workItem,
+    workItem.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
     });
 
-    docketEntryEntity.setWorkItem(workItem);
+    if (readyForService) {
+      docketEntryEntity.setAsServed(servedParties.all);
+    }
 
     if (isFileAttached) {
       docketEntryEntity.numberOfPages = await applicationContext
@@ -168,26 +183,37 @@ export const addPaperFilingInteractor = async (
     }
 
     caseEntity.addDocketEntry(docketEntryEntity);
-
-    caseEntity = await applicationContext
+    const aCaseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
         applicationContext,
         caseEntity,
       });
 
-    caseEntities.push(caseEntity);
-
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: aCaseEntity.validate().toRawObject(),
+    });
+
+    if (readyForService) {
+      workItem.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+    }
+
+    await saveWorkItem({
+      applicationContext,
+      isSavingForLater,
+      workItem,
     });
   }
 
   let paperServicePdfUrl;
+  let paperServiceResult;
 
-  if (isReadyForService) {
-    const paperServiceResult = await applicationContext
+  if (readyForService) {
+    paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -195,13 +221,15 @@ export const addPaperFilingInteractor = async (
         docketEntryId,
       });
 
-    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    if (consolidatedGroupHasPaperServiceCase) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
   }
 
   const successMessage =
     consolidatedGroupDocketNumbers.length > 1
-      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+      ? 'Document served to selected cases in group. '
+      : 'Your entry has been added to the docket record.';
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
@@ -213,7 +241,7 @@ export const addPaperFilingInteractor = async (
         overwritable: false,
       },
       docketEntryId,
-      generateCoversheet: isReadyForService,
+      generateCoversheet: readyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
@@ -230,22 +258,23 @@ export const addPaperFilingInteractor = async (
  */
 const saveWorkItem = async ({
   applicationContext,
-  isReadyForService,
+  isSavingForLater,
   workItem,
 }) => {
   const workItemRaw = workItem.validate().toRawObject();
+  const { isFileAttached } = workItem.docketEntry;
 
-  if (isReadyForService) {
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+  if (isFileAttached && !isSavingForLater) {
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemForDocketClerkFilingExternalDocument({
+        applicationContext,
+        workItem: workItemRaw,
+      });
+  } else {
+    await applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
-      section: workItem.section,
-      userId: workItem.assigneeId,
       workItem: workItemRaw,
     });
   }
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemRaw,
-  });
 };

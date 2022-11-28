@@ -88,7 +88,7 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
       expect(cerebralTest.getState('validationErrors')).toEqual({});
       expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
       expect(cerebralTest.getState('alertSuccess').message).toEqual(
-        'Document served.',
+        'Document served. ',
       );
     });
 

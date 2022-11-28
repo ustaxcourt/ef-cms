@@ -18,12 +18,13 @@ export const serveCourtIssuedDocumentAction = async ({
   const caseDetail = get(state.caseDetail);
   const { docketNumbers } = props;
 
-  await applicationContext
-    .getUseCases()
-    .serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
+  await applicationContext.getUseCases().serveCourtIssuedDocumentInteractor(
+    applicationContext,
+    {
       docketEntryId,
       docketNumbers,
       subjectCaseDocketNumber: caseDetail.docketNumber,
-    });
+    },
+    clientConnectionId,
+  );
 };

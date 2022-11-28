@@ -8,9 +8,6 @@ const outputPath = './shared/test-output/document-generation';
 
 const pdfs = [
   { fileName: 'Address_Label_Cover_Sheet.pdf', pageNumber: 1 },
-  { fileName: 'Bounced_Email_Alert.pdf', pageNumber: 1 },
-  { fileName: 'Document_Service_Email.pdf', pageNumber: 1 },
-  { fileName: 'Petition_Service_Email.pdf', pageNumber: 1 },
   { fileName: 'Case_Inventory_Report.pdf', pageNumber: 1 },
   { fileName: 'Change_Of_Address.pdf', pageNumber: 1 },
   { fileName: 'CourtIssuedDocumentCoverSheet.pdf', pageNumber: 1 },

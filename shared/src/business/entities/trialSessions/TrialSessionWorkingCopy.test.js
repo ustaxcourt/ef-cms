@@ -46,7 +46,7 @@ describe('TrialSessionWorkingCopy entity', () => {
           },
         },
         filters: {
-          basisReached: true,
+          aBasisReached: true,
           showAll: true,
         },
       });

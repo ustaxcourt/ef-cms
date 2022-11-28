@@ -1,3 +1,17 @@
+export const openUrlInNewTab = async getUrlCb => {
+  let url;
+
+  try {
+    ({ url } = await getUrlCb());
+  } catch (err) {
+    throw new Error(`Unable to get document download url. ${err.message}`);
+  }
+
+  const openFileViewerWindow = window.open();
+  openFileViewerWindow.document.write('Loading your document...');
+  openFileViewerWindow.location.href = url;
+};
+
 /**
  * opens the practitioner document in a new tab
  *
@@ -11,16 +25,12 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
 }) => {
   const { barNumber, practitionerDocumentFileId } = props;
 
-  try {
-    const { url } = await applicationContext
+  await openUrlInNewTab(() =>
+    applicationContext
       .getUseCases()
       .getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
         barNumber,
         practitionerDocumentFileId,
-      });
-
-    applicationContext.getUtilities().openUrlInNewTab({ url });
-  } catch (err) {
-    throw new Error(`Unable to open document. ${err.message}`);
-  }
+      }),
+  );
 };

@@ -4,68 +4,93 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openCaseDocumentDownloadUrlAction', () => {
-  const mockDocketNumber = '123-20';
-  const mockDocketEntryId = 'df5d81cc-d67b-418d-9626-8ad92c939d83';
-  const mockDocumentDownloadUrl = 'http://example.com';
-
-  presenter.providers.applicationContext = applicationContext;
+  const closeSpy = jest.fn();
+  const writeSpy = jest.fn();
 
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: undefined,
+    window.open = jest.fn().mockReturnValue({
+      close: closeSpy,
+      document: {
+        write: writeSpy,
       },
+      location: { href: '' },
     });
+    delete window.location;
+    window.location = { href: '' };
+
+    presenter.providers.applicationContext = applicationContext;
 
     applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor.mockResolvedValue({
-        url: mockDocumentDownloadUrl,
+        url: 'http://example.com',
       });
   });
 
-  it('should set state.iframeSrc to the document download url when props.useSameTab is false props.isForIFrame is true', async () => {
-    const { state } = await runAction(openCaseDocumentDownloadUrlAction, {
+  it('should set iframeSrc with the url when props.isForIFrame is true', async () => {
+    const result = await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: mockDocketNumber,
+        docketEntryId: 'docket-entry-id-123',
+        docketNumber: '123-20',
         isForIFrame: true,
-        useSameTab: false,
       },
     });
 
-    expect(state.iframeSrc).toBe(mockDocumentDownloadUrl);
+    expect(
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-20',
+      key: 'docket-entry-id-123',
+    });
+    expect(result.state).toMatchObject({
+      iframeSrc: 'http://example.com',
+    });
   });
 
-  it('should set window.location.href to the document download url when props.useSameTab is true and props.isForIFrame is false', async () => {
+  it('should set window.location.href when props.useSameTab is true and props.isForIFrame is false', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: mockDocketNumber,
-        isForIFrame: false,
+        docketEntryId: 'docket-entry-id-123',
+        docketNumber: '123-20',
         useSameTab: true,
       },
     });
 
-    expect(window.location.href).toBe(mockDocumentDownloadUrl);
+    expect(
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-20',
+      key: 'docket-entry-id-123',
+    });
+    expect(window.location.href).toEqual('http://example.com');
   });
 
   it('should open in a new tab when props.useSameTab and props.isForIFrame are false', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: mockDocketNumber,
+        docketEntryId: 'docket-entry-id-123',
+        docketNumber: '123-20',
         isForIFrame: false,
         useSameTab: false,
       },
     });
 
+    expect(window.open).toHaveBeenCalled();
+    expect(writeSpy).toHaveBeenCalled();
+
     expect(
-      await applicationContext.getUtilities().openUrlInNewTab,
-    ).toHaveBeenCalledWith({ url: mockDocumentDownloadUrl });
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-20',
+      key: 'docket-entry-id-123',
+    });
+    expect(window.open().location.href).toEqual('http://example.com');
   });
 
   it('should throw an error when getDocumentDownloadUrlInteractor fails', async () => {
@@ -77,12 +102,36 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       runAction(openCaseDocumentDownloadUrlAction, {
         modules: { presenter },
         props: {
-          docketEntryId: mockDocketEntryId,
-          docketNumber: mockDocketNumber,
+          docketEntryId: 'docket-entry-id-123',
+          docketNumber: '123-20',
           isForIFrame: false,
           useSameTab: false,
         },
       }),
     ).rejects.toThrow();
+
+    expect(window.open().close).not.toHaveBeenCalled();
+  });
+
+  it('should not try to close openedPdfWindow if it does not exist when getDocumentDownloadUrlInteractor fails', async () => {
+    window.open = jest.fn().mockReturnValue(null);
+
+    applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor.mockRejectedValueOnce(new Error());
+
+    await expect(
+      runAction(openCaseDocumentDownloadUrlAction, {
+        modules: { presenter },
+        props: {
+          docketEntryId: 'docket-entry-id-123',
+          docketNumber: '123-20',
+          isForIFrame: false,
+          useSameTab: false,
+        },
+      }),
+    ).rejects.toThrow();
+
+    expect(closeSpy).not.toHaveBeenCalled();
   });
 });

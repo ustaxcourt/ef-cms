@@ -21,15 +21,13 @@ function ReconciliationReportEntry() {
 }
 
 const REPORT_PROPERTIES = [
-  'caseCaption',
-  'docketEntryId',
   'docketNumber',
   'documentTitle',
+  'docketEntryId',
   'eventCode',
-  'isFileAttached',
   'filedBy',
   'filingDate',
-  'index',
+  'caseCaption',
   'servedAt',
   'servedPartiesCode',
 ];

@@ -3,6 +3,7 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+
 import {
   embedWithLegalIpsumText,
   loginAs,
@@ -12,10 +13,10 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-describe('order search journey', () => {
-  const cerebralTest = setupTest();
-  cerebralTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
+describe('order search journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {

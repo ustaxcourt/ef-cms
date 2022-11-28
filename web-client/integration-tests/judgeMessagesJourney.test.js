@@ -1,7 +1,7 @@
 import { judgeViewsCaseDetail } from './journey/judgeViewsCaseDetail';
 import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessages';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { userSendsMessage } from './journey/userSendsMessage';
+import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
 
 const cerebralTest = setupTest();
 
@@ -25,10 +25,10 @@ describe('Judge messages journey', () => {
   const message2Subject = `message 2 ${Date.now()}`;
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  userSendsMessage(cerebralTest, message1Subject);
+  userSendsMessageToJudge(cerebralTest, message1Subject);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  userSendsMessage(cerebralTest, message2Subject);
+  userSendsMessageToJudge(cerebralTest, message2Subject);
 
   loginAs(cerebralTest, 'judgeColvin@example.com');
   judgeViewsDashboardMessages(cerebralTest, [message1Subject, message2Subject]);

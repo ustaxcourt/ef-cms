@@ -17,7 +17,7 @@ export const deleteDocketEntry = async ({
   docketEntryId: string;
   docketNumber: string;
 }) =>
-  await remove({
+  remove({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,

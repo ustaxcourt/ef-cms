@@ -4707,11 +4707,6 @@
     "current": true
   },
   {
-    "pk": "updated-trial-status-types",
-    "sk": "updated-trial-status-types",
-    "current": true
-  },
-  {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "pk": "irsPractitioner|MS8888"
   },
@@ -24145,8 +24140,8 @@
     "petitioners": [
       {
         "isAddressSealed": false,
-        "city": "Los Angeles",
         "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "city": "Los Angeles",
         "address1": "111 Fast Ln",
         "postalCode": "12355",
         "contactType": "petitioner",

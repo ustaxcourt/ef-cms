@@ -21,7 +21,7 @@
     "documentTitle": "Standing Pretrial Order for Small Case",
     "scenario": "Type A",
     "isOrder": true,
-    "requiresSignature": false
+    "requiresSignature": true
   },
   {
     "eventCode": "SPTO",
@@ -29,7 +29,7 @@
     "documentTitle": "Standing Pretrial Order",
     "scenario": "Type A",
     "isOrder": true,
-    "requiresSignature": false
+    "requiresSignature": true
   },
   {
     "eventCode": "SPTN",

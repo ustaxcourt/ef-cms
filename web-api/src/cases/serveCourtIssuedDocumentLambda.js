@@ -13,6 +13,7 @@ exports.serveCourtIssuedDocumentLambda = event =>
       return await applicationContext
         .getUseCases()
         .serveCourtIssuedDocumentInteractor(applicationContext, {
+          ...event.pathParameters,
           ...JSON.parse(event.body),
         });
     },

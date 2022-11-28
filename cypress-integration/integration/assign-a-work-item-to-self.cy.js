@@ -23,19 +23,4 @@ describe('Assign a work item', () => {
       .contains('td.to', 'Test Petitionsclerk')
       .should('exist');
   });
-
-  it('views the docket section qc inbox', () => {
-    navigateToDashboard('docketclerk');
-    viewDocumentQCSectionInbox();
-    cy.get('#label-workitem-select-all-checkbox').click();
-    cy.get('.message-select-control input:checked').then(elm => {
-      cy.get('.assign-work-item-count-docket').should(
-        'contain',
-        elm.length - 1,
-      );
-    });
-    cy.get('#assignmentFilter').select('Unassigned');
-
-    cy.get('.message-select-control input:checked').should('have.length', 0);
-  });
 });

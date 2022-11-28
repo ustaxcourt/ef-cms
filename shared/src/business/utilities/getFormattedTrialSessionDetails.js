@@ -120,7 +120,6 @@ const compareCasesByDocketNumber = (a, b) => {
 
 exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
-exports.getSortableDocketNumber = getSortableDocketNumber;
 
 exports.formattedTrialSessionDetails = ({
   applicationContext,
@@ -212,8 +211,6 @@ exports.formattedTrialSessionDetails = ({
     trialSession.courtReporter || 'Not assigned';
   trialSession.formattedIrsCalendarAdministrator =
     trialSession.irsCalendarAdministrator || 'Not assigned';
-  trialSession.formattedChambersPhoneNumber =
-    trialSession.chambersPhoneNumber || 'No phone number';
 
   trialSession.formattedCity = undefined;
   if (trialSession.city) trialSession.formattedCity = `${trialSession.city},`;

@@ -320,7 +320,7 @@ All of the expected output images are found in the `./shared/test-pdf-expected-i
 ```
 docker build -t efcms -f Dockerfile . && \
 docker build -t efcms-local -f Dockerfile-local . && \
-docker run -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "./update-pdf-images.sh" && \
+docker run -it --rm -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output efcms-local sh -c "./update-pdf-images.sh" && \
 cp -r shared/test-output/*.png shared/test-pdf-expected-images/
 ```
 

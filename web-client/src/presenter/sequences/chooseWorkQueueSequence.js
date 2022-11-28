@@ -1,5 +1,4 @@
 import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
-import { clearSelectAllWorkItemsCheckboxAction } from '../actions/clearSelectAllWorkItemsCheckboxAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
 import { getConstants } from '../../getConstants';
 import { getDocumentQCInboxForSectionAction } from '../actions/getDocumentQCInboxForSectionAction';
@@ -49,14 +48,8 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         documentqcmyinProgress: [getDocumentQCInboxForUserAction],
         documentqcmyinbox: [getDocumentQCInboxForUserAction],
         documentqcmyoutbox: [getDocumentQCServedForUserAction],
-        documentqcsectioninProgress: [
-          clearSelectAllWorkItemsCheckboxAction,
-          getDocumentQCInboxForSectionAction,
-        ],
-        documentqcsectioninbox: [
-          clearSelectAllWorkItemsCheckboxAction,
-          getDocumentQCInboxForSectionAction,
-        ],
+        documentqcsectioninProgress: [getDocumentQCInboxForSectionAction],
+        documentqcsectioninbox: [getDocumentQCInboxForSectionAction],
         documentqcsectionoutbox: [getDocumentQCServedForSectionAction],
       },
       setWorkItemsAction,

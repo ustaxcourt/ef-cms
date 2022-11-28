@@ -10,7 +10,5 @@ exports.addPaperFilingLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .addPaperFilingInteractor(applicationContext, {
-        ...JSON.parse(event.body),
-      });
+      .addPaperFilingInteractor(applicationContext, JSON.parse(event.body));
   });

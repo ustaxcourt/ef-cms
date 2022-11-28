@@ -5,7 +5,6 @@ import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
 import { DeleteUserCaseNoteConfirmModal } from './DeleteUserCaseNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SessionAssignments } from './SessionAssignments';
 import { SessionNotes } from './SessionNotes';
 import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
@@ -89,16 +88,7 @@ export const TrialSessionWorkingCopy = connect(
           </div>
           <SuccessNotification />
           <ErrorNotification />
-
-          <div className="grid-row  grid-gap">
-            <div className="grid-col-6">
-              <SessionAssignments />
-            </div>
-            <div className="grid-col-6">
-              <SessionNotes />
-            </div>
-          </div>
-
+          <SessionNotes />
           <WorkingCopySessionList />
           {showModal === 'DeleteUserCaseNoteConfirmModal' && (
             <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteUserCaseNoteFromWorkingCopySequence" />

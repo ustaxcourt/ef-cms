@@ -8,9 +8,12 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.serveExternallyFiledDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const { clientConnectionId, docketNumbers } = JSON.parse(event.body);
     return await applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor(applicationContext, {
-        ...JSON.parse(event.body),
+        clientConnectionId,
+        docketNumbers,
+        ...event.pathParameters,
       });
   });

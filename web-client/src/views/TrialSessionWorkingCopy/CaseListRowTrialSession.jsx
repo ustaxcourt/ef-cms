@@ -12,10 +12,7 @@ const getCaseRow = ({
   formattedCase,
   indentMemberCase = false,
   trialSequences,
-  trialSessionWorkingCopyStatus,
   trialStatusOptions,
-  unassignedLabel,
-  updatedTrialSessionTypesEnabled,
 }) => {
   return (
     <React.Fragment className="hoverable" key={formattedCase.docketNumber}>
@@ -61,27 +58,12 @@ const getCaseRow = ({
               });
             }}
           >
-            <option value="">-{unassignedLabel}-</option>
-            {Object.keys(trialStatusOptions).map(key => {
-              if (updatedTrialSessionTypesEnabled) {
-                if (
-                  !trialStatusOptions[key].deprecated ||
-                  trialSessionWorkingCopyStatus === key
-                )
-                  return (
-                    <option key={key} value={key}>
-                      {trialStatusOptions[key].label}
-                    </option>
-                  );
-              } else
-                return (
-                  <option key={key} value={key}>
-                    {trialStatusOptions[key].legacyLabel
-                      ? trialStatusOptions[key].legacyLabel
-                      : trialStatusOptions[key].label}
-                  </option>
-                );
-            })}
+            <option value="">-Trial Status-</option>
+            {trialStatusOptions.map(({ key, value }) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
+            ))}
           </BindedSelect>
         </td>
         <td className="no-wrap">
@@ -161,8 +143,6 @@ const getCaseRow = ({
             indentMemberCase: true,
             trialSequences,
             trialStatusOptions,
-            unassignedLabel,
-            updatedTrialSessionTypesEnabled,
           }),
         )}
     </React.Fragment>
@@ -178,33 +158,21 @@ export const CaseListRowTrialSession = connect(
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
-    unassignedLabel: state.trialSessionWorkingCopyHelper.unassignedLabel,
-    updatedTrialSessionTypesEnabled:
-      state.trialSessionWorkingCopyHelper.updatedTrialSessionTypesEnabled,
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
     formattedCase,
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
-    trialSessionWorkingCopy,
     trialStatusOptions,
-    unassignedLabel,
-    updatedTrialSessionTypesEnabled,
-  }) => {
-    return getCaseRow({
+  }) =>
+    getCaseRow({
       formattedCase,
       trialSequences: {
         autoSaveTrialSessionWorkingCopySequence,
         openAddEditUserCaseNoteModalFromListSequence,
         openDeleteUserCaseNoteConfirmModalSequence,
       },
-      trialSessionWorkingCopyStatus:
-        trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber]
-          ?.trialStatus,
       trialStatusOptions,
-      unassignedLabel,
-      updatedTrialSessionTypesEnabled,
-    });
-  },
+    }),
 );

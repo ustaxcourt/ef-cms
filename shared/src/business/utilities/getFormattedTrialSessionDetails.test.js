@@ -33,18 +33,11 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when all fields have values', () => {
-    const mockChambersPhoneNumber = '1234567';
-
     const result = formattedTrialSessionDetails({
       applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        chambersPhoneNumber: mockChambersPhoneNumber,
-      },
+      trialSession: TRIAL_SESSION,
     });
-
     expect(result).toMatchObject({
-      formattedChambersPhoneNumber: mockChambersPhoneNumber,
       formattedCityStateZip: 'Hartford, CT 12345',
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
@@ -107,18 +100,14 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when session assignments are empty', () => {
     const result = formattedTrialSessionDetails({
       applicationContext,
-      trialSession: {
-        ...omit(TRIAL_SESSION, [
-          'courtReporter',
-          'irsCalendarAdministrator',
-          'judge',
-          'trialClerk',
-        ]),
-        chambersPhoneNumber: undefined,
-      },
+      trialSession: omit(TRIAL_SESSION, [
+        'courtReporter',
+        'irsCalendarAdministrator',
+        'judge',
+        'trialClerk',
+      ]),
     });
     expect(result).toMatchObject({
-      formattedChambersPhoneNumber: 'No phone number',
       formattedCourtReporter: 'Not assigned',
       formattedIrsCalendarAdministrator: 'Not assigned',
       formattedJudge: 'Not assigned',

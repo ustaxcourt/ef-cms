@@ -22,7 +22,11 @@ export const IndividualWorkQueueInProgress = connect(
         >
           <thead>
             <tr>
-              <th aria-hidden="true" className="consolidated-case-column"></th>
+              <th
+                aria-hidden="true"
+                className="consolidated-case-column"
+                colSpan="2"
+              ></th>
               <th aria-label="Docket Number">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
@@ -38,6 +42,7 @@ export const IndividualWorkQueueInProgress = connect(
             return (
               <tbody key={item.workItemId}>
                 <tr>
+                  <td aria-hidden="true" />
                   <td className="consolidated-case-column">
                     {item.inConsolidatedGroup && (
                       <span

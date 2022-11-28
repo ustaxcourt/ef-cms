@@ -84,7 +84,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ isHybridSession: true });
   });
 
-  it('should be false for disableHybridFilter when there is at least one case in eligibleCases', () => {
+  it('should be false for disableHybridFilter when there is at least one case in formattedEligibleCases', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
       eligibleCases: [
@@ -115,7 +115,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ disableHybridFilter: false });
   });
 
-  it('should be true for disableHybridFilter when there are no cases in eligibleCases', () => {
+  it('should be true for disableHybridFilter when there are no cases in formattedEligibleCases', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
       sessionType: HYBRID_SESSION_TYPE,

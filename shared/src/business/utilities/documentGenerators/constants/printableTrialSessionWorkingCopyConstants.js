@@ -282,7 +282,7 @@ const FORMATTED_CASES = [
         userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     ],
-    trialStatus: 'basisReached',
+    trialStatus: 'aBasisReached',
     userNotes:
       'Bacon ipsum dolor amet ad enim leberkas dolor id venison laboris deserunt ut jerky frankfurter voluptate strip steak cupim ipsum. Voluptate consectetur aliqua venison buffalo fugiat landjaeger. Et turkey corned beef fatback, ut pork cupidatat shoulder boudin in anim elit laborum ground round. Consequat tail irure duis.',
   },
@@ -444,14 +444,10 @@ const FORMATTED_CASES = [
 const FORMATTED_TRIAL_SESSION = {
   computedStatus: 'Open',
   endDateForAdditionalPageHeaders: 'Feb 10, 2023',
-  formattedChambersPhoneNumber: '1234567',
-  formattedCourtReporter: 'Test court report',
   formattedEstimatedEndDateFull: 'February 10, 2023',
-  formattedIrsCalendarAdministrator: 'Test Irs Calendar Administrator',
   formattedJudge: 'Gustafson',
   formattedStartDateFull: 'January 26, 2023',
   formattedTerm: 'Winter 23',
-  formattedTrialClerk: 'Test trial clerk',
   startDateForAdditionalPageHeaders: 'Jan 26, 2023',
   trialLocation: 'Washington, District of Columbia',
 };

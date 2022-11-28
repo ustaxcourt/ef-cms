@@ -78,10 +78,10 @@ joiValidationDecorator(WorkItem, WORK_ITEM_VALIDATION_RULES);
  * @param {object} props the props object
  * @param {string} props.assigneeId the user id of the user to assign the work item to
  * @param {string} props.assigneeName the name of the user to assign the work item to
- * @param {string} props.section the section of the user to assign the work item to
+ * @param {string} props.role the role of the user to assign the work item to
  * @param {string} props.sentBy the name of the user who sent the work item
- * @param {string} props.sentBySection the section of the user who sent the work item
  * @param {string} props.sentByUserId the user id of the user who sent the work item
+ * @param {string} props.sentByUserRole the role of the user who sent the work item
  * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.assignToUser = function ({

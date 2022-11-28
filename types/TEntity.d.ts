@@ -228,20 +228,16 @@ type TTrialSessionData = {
 type TTrialSessionWorkingCopyData = {
   caseMetadata: any;
   filters: {
-    basisReached: boolean;
+    aBasisReached: boolean;
     continued: boolean;
-    definiteTrial: boolean;
     dismissed: boolean;
-    motionToDismiss: boolean;
-    probableSettlement: boolean;
-    probableTrial: boolean;
     recall: boolean;
     rule122: boolean;
     setForTrial: boolean;
     settled: boolean;
     showAll: boolean;
     statusUnassigned: boolean;
-    submittedCAV: boolean;
+    takenUnderAdvisement: boolean;
   };
   sessionNotes: string;
   sort: string;

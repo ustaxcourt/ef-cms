@@ -23,12 +23,6 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     state.trialSessionWorkingCopy,
   );
 
-  const { trialStatusFilters } = get(state.trialSessionWorkingCopyHelper);
-
-  const selectedFilters = trialStatusFilters.filter(filter => {
-    return filters[filter.key];
-  });
-
   const formattedCasesDTO = formattedCases.map(formattedCase => {
     const trialStatus =
       caseMetadata[formattedCase.docketNumber]?.trialStatus ||
@@ -71,18 +65,12 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     );
 
   const formattedTrialSessionDTO = {
-    chambersPhoneNumber:
-      formattedTrialSessionDetails.formattedChambersPhoneNumber,
     computedStatus: formattedTrialSessionDetails.computedStatus,
     endDateForAdditionalPageHeaders,
-    formattedCourtReporter: formattedTrialSessionDetails.formattedCourtReporter,
     formattedEstimatedEndDateFull,
-    formattedIrsCalendarAdministrator:
-      formattedTrialSessionDetails.formattedIrsCalendarAdministrator,
     formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
-    formattedTrialClerk: formattedTrialSessionDetails.formattedTrialClerk,
     startDateForAdditionalPageHeaders,
     trialLocation: formattedTrialSessionDetails.trialLocation,
   };
@@ -90,7 +78,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-      filters: selectedFilters,
+      filters,
       formattedCases: formattedCasesDTO,
       formattedTrialSession: formattedTrialSessionDTO,
       sessionNotes,

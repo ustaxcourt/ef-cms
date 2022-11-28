@@ -17,7 +17,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
         state: {
           trialSessionWorkingCopy: {
             filters: {
-              basisReached: false,
+              aBasisReached: false,
               continued: false,
               dismissed: false,
               recall: false,
@@ -28,20 +28,16 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
       },
     );
     expect(result.state.trialSessionWorkingCopy.filters).toEqual({
-      basisReached: true,
+      aBasisReached: true,
       continued: true,
-      definiteTrial: true,
       dismissed: true,
-      motionToDismiss: true,
-      probableSettlement: true,
-      probableTrial: true,
       recall: true,
       rule122: true,
       setForTrial: true,
       settled: true,
       showAll: true,
       statusUnassigned: true,
-      submittedCAV: true,
+      takenUnderAdvisement: true,
     });
   });
 
@@ -59,7 +55,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
         state: {
           trialSessionWorkingCopy: {
             filters: {
-              basisReached: false,
+              aBasisReached: false,
               continued: false,
               dismissed: false,
               recall: false,
@@ -70,20 +66,16 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
       },
     );
     expect(result.state.trialSessionWorkingCopy.filters).toEqual({
-      basisReached: false,
+      aBasisReached: false,
       continued: false,
-      definiteTrial: false,
       dismissed: false,
-      motionToDismiss: false,
-      probableSettlement: false,
-      probableTrial: false,
       recall: false,
       rule122: false,
       setForTrial: false,
       settled: false,
       showAll: false,
       statusUnassigned: false,
-      submittedCAV: false,
+      takenUnderAdvisement: false,
     });
   });
 
@@ -98,7 +90,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
         state: {
           trialSessionWorkingCopy: {
             filters: {
-              basisReached: false,
+              aBasisReached: false,
               continued: false,
               dismissed: false,
               recall: false,
@@ -109,7 +101,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
       },
     );
     expect(result.state.trialSessionWorkingCopy.filters).toEqual({
-      basisReached: false,
+      aBasisReached: false,
       continued: false,
       dismissed: false,
       recall: false,
@@ -125,13 +117,13 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
           presenter,
         },
         props: {
-          key: 'filters.basisReached',
+          key: 'filters.aBasisReached',
           value: false,
         },
         state: {
           trialSessionWorkingCopy: {
             filters: {
-              basisReached: false,
+              aBasisReached: false,
               continued: true,
               dismissed: true,
               recall: true,
@@ -140,7 +132,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
               settled: true,
               showAll: true,
               statusUnassigned: true,
-              submittedCAV: true,
+              takenUnderAdvisement: true,
             },
           },
         },
@@ -157,13 +149,13 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
           presenter,
         },
         props: {
-          key: 'filters.basisReached',
+          key: 'filters.aBasisReached',
           value: true,
         },
         state: {
           trialSessionWorkingCopy: {
             filters: {
-              basisReached: true,
+              aBasisReached: true,
               continued: true,
               dismissed: true,
               recall: true,
@@ -172,7 +164,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
               settled: true,
               showAll: true,
               statusUnassigned: true,
-              submittedCAV: true,
+              takenUnderAdvisement: true,
             },
           },
         },
@@ -195,7 +187,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
         state: {
           trialSessionWorkingCopy: {
             filters: {
-              basisReached: true,
+              aBasisReached: true,
               continued: false,
               dismissed: false,
               recall: false,
@@ -206,7 +198,7 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
       },
     );
     expect(result.state.trialSessionWorkingCopy.filters).toEqual({
-      basisReached: true,
+      aBasisReached: true,
       continued: false,
       dismissed: false,
       recall: false,

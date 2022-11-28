@@ -7,6 +7,7 @@ import React from 'react';
 
 export const ConfirmInitiatePaperFilingServiceModal = connect(
   {
+    areMultiDocketablePaperFilingsEnabledFlag: state.featureFlagHelper,
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiatePaperFilingServiceModalHelper:
       state.confirmInitiatePaperFilingServiceModalHelper,

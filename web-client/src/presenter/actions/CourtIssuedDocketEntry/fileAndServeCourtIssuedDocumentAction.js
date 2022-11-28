@@ -23,11 +23,14 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   await applicationContext
     .getUseCases()
-    .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+    .fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId,
+        docketNumbers,
+        form,
+        subjectCaseDocketNumber: caseDetail.docketNumber,
+      },
       clientConnectionId,
-      docketEntryId,
-      docketNumbers,
-      form,
-      subjectCaseDocketNumber: caseDetail.docketNumber,
-    });
+    );
 };

@@ -51,10 +51,11 @@ describe('submitAddPaperFilingAction', () => {
       },
     });
 
-    const { docketEntryId } =
+    const { primaryDocumentFileId } =
       applicationContext.getUseCases().addPaperFilingInteractor.mock
         .calls[0][1];
-    expect(docketEntryId).toBe(mockDocketEntryId);
+
+    expect(primaryDocumentFileId).toBe(mockDocketEntryId);
     expect(applicationContext.getUniqueId).not.toHaveBeenCalled();
   });
 
@@ -90,7 +91,6 @@ describe('submitAddPaperFilingAction', () => {
     ).toMatchObject({
       clientConnectionId: mockClientConnectionId,
       consolidatedGroupDocketNumbers: mockConsolidatedGroupDocketNumbers,
-      docketEntryId: mockDocketEntryId,
       documentMetadata: {
         createdAt: mockFormData.dateReceived,
         docketNumber: mockCaseDetail.docketNumber,
@@ -99,6 +99,7 @@ describe('submitAddPaperFilingAction', () => {
         receivedAt: mockFormData.dateReceived,
       },
       isSavingForLater: mockIsSavingForLater,
+      primaryDocumentFileId: mockDocketEntryId,
     });
   });
 });

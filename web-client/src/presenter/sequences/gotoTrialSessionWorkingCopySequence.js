@@ -2,7 +2,6 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { extractUserNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractUserNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
@@ -35,10 +34,6 @@ const checkUserAssociationAndProceed = [
     yes: [
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
-      getFeatureFlagValueFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES,
-        true,
-      ),
       setDefaultWorkingCopyValuesAction,
       isTrialSessionCalendaredAction,
       {

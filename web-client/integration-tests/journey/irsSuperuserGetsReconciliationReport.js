@@ -27,16 +27,7 @@ export const irsSuperuserGetsReconciliationReport = cerebralTest => {
     expect(response).toMatchObject({
       docketEntries: expect.arrayContaining([
         expect.objectContaining({
-          caseCaption: expect.any(String),
           docketEntryId: cerebralTest.updatedDocketEntryId,
-          docketNumber: cerebralTest.docketNumber,
-          documentTitle: expect.any(String),
-          eventCode: expect.any(String),
-          filedBy: expect.any(String),
-          filingDate: expect.any(String),
-          index: expect.any(Number),
-          isFileAttached: expect.any(Boolean),
-          servedAt: expect.any(String),
         }),
       ]),
       reconciliationDate: expect.anything(),

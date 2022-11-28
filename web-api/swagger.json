@@ -412,6 +412,25 @@
       }
     },
     "/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "Retrieve open and closed cases for the currently authenticated user",
+        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "post": {
         "tags": ["cases"],
         "summary": "create a case",
@@ -1147,50 +1166,6 @@
             "description": "422 response",
             "schema": {
               "$ref": "#/definitions/unprocessableEntityError"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cases": {
-      "get": {
-        "tags": ["cases"],
-        "summary": "Retrieve open and closed cases for the currently authenticated user",
-        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
             }
           }
         },
@@ -4986,38 +4961,7 @@
           "name": "trial session working copy info",
           "description": "the trial session info needed to print a working copy",
           "schema": {
-            "type": "object",
-            "properties": {
-              "showCaseNotes": {
-                "type": "boolean"
-              },
-              "filters": {
-                "type": "object"
-              },
-              "formattedCases": {
-                "type": "array"
-              },
-              "formattedTrialSession": {
-                "type": "object"
-              },
-              "sessionNotes": {
-                "type": "string"
-              },
-              "sort": {
-                "type": "string"
-              },
-              "userHeading": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "showCaseNotes",
-              "filters",
-              "formattedCases",
-              "formattedTrialSession",
-              "sort",
-              "userHeading"
-            ]
+            "$ref": "#/definitions/printableWorkingCopyData"
           }
         }
       ],
@@ -7160,7 +7104,18 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "documentId": {
+                      "type": "string"
+                    },
+                    "documentTitle": {
+                      "type": "string"
+                    }
+                  }
+                }
               },
               "docketNumber": {
                 "type": "string"
@@ -7240,7 +7195,18 @@
             "type": "object",
             "properties": {
               "attachments": {
-                "type": "array"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "documentId": {
+                      "type": "string"
+                    },
+                    "documentTitle": {
+                      "type": "string"
+                    }
+                  }
+                }
               },
               "docketNumber": {
                 "type": "string"
@@ -8070,6 +8036,17 @@
       "properties": {
         "attachments": {
           "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string"
+              },
+              "documentTitle": {
+                "type": "string"
+              }
+            }
+          },
           "description": "array of document metadata objects attached to the message"
         },
         "caseStatus": {
@@ -8342,25 +8319,13 @@
             "continued": {
               "type": "boolean"
             },
-            "basisReached": {
+            "aBasisReached": {
               "type": "boolean"
             },
-            "submittedCAV": {
+            "takenUnderAdvisement": {
               "type": "boolean"
             },
             "statusUnassigned": {
-              "type": "boolean"
-            },
-            "definiteTrial": {
-              "type": "boolean"
-            },
-            "motionToDismiss": {
-              "type": "boolean"
-            },
-            "probableSettlement": {
-              "type": "boolean"
-            },
-            "probableTrial": {
               "type": "boolean"
             }
           }

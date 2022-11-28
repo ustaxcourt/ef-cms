@@ -23,7 +23,6 @@ export const selectWorkItemAction = ({ get, props, store }) => {
         workItem => workItem.workItemId !== props.workItem.workItemId,
       ),
     );
-    store.set(state.workitemAllCheckbox, false);
   } else {
     store.set(state.selectedWorkItems, [...selectedWorkItems, props.workItem]);
   }

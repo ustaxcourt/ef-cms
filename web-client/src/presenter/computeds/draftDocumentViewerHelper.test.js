@@ -172,6 +172,8 @@ describe('draftDocumentViewerHelper', () => {
     });
 
     it('should return true for signed document', () => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
       const result = runCompute(draftDocumentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -190,6 +192,8 @@ describe('draftDocumentViewerHelper', () => {
     });
 
     it('should return false for unsigned document that requires signature', () => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
       const result = runCompute(draftDocumentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -204,6 +208,8 @@ describe('draftDocumentViewerHelper', () => {
   });
 
   it('should return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -255,22 +261,6 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton false and showRemoveSignatureButton false for an external user', () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [baseDraftDocketEntry],
-        },
-      },
-    });
-
-    expect(result.showApplySignatureButton).toEqual(false);
-    expect(result.showRemoveSignatureButton).toEqual(false);
-  });
-
   it('should return showRemoveSignatureButton false for NOT document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
@@ -298,7 +288,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
+  it('should return showRemoveSignatureButton false for NTD document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -394,6 +384,8 @@ describe('draftDocumentViewerHelper', () => {
   });
 
   it('should return showEditButtonNotSigned true for an internal user and a document that is not signed', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -443,6 +435,7 @@ describe('draftDocumentViewerHelper', () => {
 
   it('should return showEditButtonNotSigned true and showEditButtonSigned false for a Notice document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -465,6 +458,8 @@ describe('draftDocumentViewerHelper', () => {
   });
 
   it('should return showEditButtonNotSigned false and showEditButtonSigned false for a Stipulated Decision document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),

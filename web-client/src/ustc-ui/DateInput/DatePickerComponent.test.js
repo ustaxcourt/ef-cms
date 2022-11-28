@@ -1,17 +1,52 @@
-import { getComputedInputValue } from './DatePickerComponentHelper';
+import { Container } from '@cerebral/react';
+import { DatePickerComponent } from './DatePickerComponent';
+import { mount } from 'enzyme';
+import App from 'cerebral';
+import React from 'react';
 
 describe('DatePickerComponent', () => {
-  beforeEach(() => {
-    global.window = {};
-  });
+  it('should reset the input value to an empty string if day, month, or year is null', () => {
+    const app = App({});
 
-  it('should output the correct string if provided a valid month, day, and year', () => {
-    expect(
-      getComputedInputValue({ day: '04', month: '05', year: '2001' }),
-    ).toEqual('05/04/2001');
-  });
+    const wrapper = mount(
+      <Container app={app}>
+        <DatePickerComponent
+          name="test"
+          names={{
+            day: 'day',
+            month: 'month',
+            year: 'year',
+          }}
+          values={{
+            day: '04',
+            month: '05',
+            year: '2001',
+          }}
+        ></DatePickerComponent>
+      </Container>,
+    );
+    expect(wrapper.find('input').instance().value).toEqual('05/04/2001');
 
-  it('should output the empty string if not provided a valid year', () => {
-    expect(getComputedInputValue({ day: '', month: '', year: '' })).toEqual('');
+    wrapper.setProps({
+      children: (
+        <Container app={app}>
+          <DatePickerComponent
+            name="test"
+            names={{
+              day: 'day',
+              month: 'month',
+              year: 'year',
+            }}
+            values={{
+              day: '',
+              month: '',
+              year: '',
+            }}
+          ></DatePickerComponent>
+        </Container>
+      ),
+    });
+
+    expect(wrapper.find('input').instance().value).toEqual('');
   });
 });
