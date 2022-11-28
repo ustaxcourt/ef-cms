@@ -1,11 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePrintableTrialSessionCopyReportInteractor,
-} = require('./generatePrintableTrialSessionCopyReportInteractor');
-const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { ROLES } = require('../../entities/EntityConstants');
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
 
 describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockUser;
@@ -65,7 +62,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
         statusUnassigned: true,
         takenUnderAdvisement: true,
       },
-      formattedCases: [{ someprop: 'value of some prop' }],
+      formattedCases: [MOCK_CASE],
       formattedTrialSession: mockTrialSession,
       sessionNotes: 'session notes',
       showCaseNotes: true,
