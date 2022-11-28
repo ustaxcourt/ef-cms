@@ -423,7 +423,7 @@ type TContact = {
 
 type TError = TContact;
 
-type TPrintableTableFilter = {
+type TPrintableTableFilters = {
   aBasisReached: boolean;
   continued: boolean;
   dismissed: boolean;
