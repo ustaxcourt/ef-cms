@@ -57,14 +57,10 @@ describe('serveCourtIssuedDocumentAction', () => {
       applicationContext.getUseCases().serveCourtIssuedDocumentInteractor.mock
         .calls[0][1],
     ).toEqual({
+      clientConnectionId,
       docketEntryId,
       docketNumbers: ['101-20'],
       subjectCaseDocketNumber: '101-20',
     });
-
-    expect(
-      applicationContext.getUseCases().serveCourtIssuedDocumentInteractor.mock
-        .calls[0][2],
-    ).toEqual(clientConnectionId);
   });
 });
