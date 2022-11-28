@@ -54,8 +54,8 @@ nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ign
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
-  pkill -P $DYNAMO_PID
-  pkill -P $ESEARCH_PID
+  pkill -P "${DYNAMO_PID}"
+  pkill -P "${ESEARCH_PID}"
 fi
 
 pkill -P $S3RVER_PID
