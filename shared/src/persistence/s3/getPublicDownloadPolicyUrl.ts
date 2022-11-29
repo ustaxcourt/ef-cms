@@ -5,7 +5,13 @@
  * @param {string} providers.key the key of the document to get
  * @returns {Promise<any>} the promise of the call to the storage client
  */
-exports.getPublicDownloadPolicyUrl = ({ applicationContext, key }) => {
+export const getPublicDownloadPolicyUrl = ({
+  applicationContext,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  key: string;
+}) => {
   return new Promise((resolve, reject) => {
     applicationContext.getStorageClient().getSignedUrl(
       'getObject',
