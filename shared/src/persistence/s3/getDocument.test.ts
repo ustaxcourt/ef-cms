@@ -1,8 +1,7 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getDocument } = require('./getDocument');
-const { getPdfFromUrl } = require('./getPdfFromUrl');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getDocument } from './getDocument';
+import { getPdfFromUrl } from './getPdfFromUrl';
+
 const BLOB_DATA = 'abc';
 jest.mock('./getPdfFromUrl', () => ({
   getPdfFromUrl: jest.fn().mockReturnValue({
@@ -11,6 +10,9 @@ jest.mock('./getPdfFromUrl', () => ({
 }));
 
 describe('getDocument', () => {
+  const docketNumber = '101-19';
+  const key = '123';
+
   it('should return a file from the provided url when protocol is not provided', async () => {
     const mockPdfUrl = 'www.example.com';
     applicationContext.getHttpClient.mockImplementation(() => {
@@ -25,9 +27,11 @@ describe('getDocument', () => {
 
     const result = await getDocument({
       applicationContext,
-    });
+    } as any);
 
-    expect(getPdfFromUrl.mock.calls[0][0]).toMatchObject({ url: mockPdfUrl });
+    expect((getPdfFromUrl as jest.Mock).mock.calls[0][0]).toMatchObject({
+      url: mockPdfUrl,
+    });
     expect(result).toEqual({ name: 'mockfile.pdf' });
   });
 
@@ -39,7 +43,10 @@ describe('getDocument', () => {
     });
     await getDocument({
       applicationContext,
+      docketNumber,
+      key,
       protocol: 'S3',
+      useTempBucket: false,
     });
 
     expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
@@ -59,13 +66,15 @@ describe('getDocument', () => {
 
     await getDocument({
       applicationContext,
+      docketNumber,
+      key,
       protocol: 'S3',
       useTempBucket: true,
     });
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: tempBucketName });
+    ).toHaveBeenCalledWith({ Bucket: tempBucketName, Key: key });
   });
 
   it('retrieves from the documents bucket by default when S3 protocol is set', async () => {
@@ -78,11 +87,14 @@ describe('getDocument', () => {
 
     await getDocument({
       applicationContext,
+      docketNumber,
+      key,
       protocol: 'S3',
+      useTempBucket: false,
     });
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName' });
+    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName', Key: key });
   });
 });

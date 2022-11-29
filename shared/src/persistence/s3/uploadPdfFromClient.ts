@@ -8,12 +8,18 @@
  * @param {object} providers.policy the upload policy
  * @returns {string} the document id
  */
-exports.uploadPdfFromClient = async ({
+export const uploadPdfFromClient = async ({
   applicationContext,
   file,
   key,
   onUploadProgress,
   policy,
+}: {
+  applicationContext: IApplicationContext;
+  file: any;
+  key: string;
+  onUploadProgress: ({ isDone }: { isDone: boolean }) => void;
+  policy: any;
 }) => {
   const docId = key;
   const formData = new FormData();
@@ -34,7 +40,9 @@ exports.uploadPdfFromClient = async ({
     .post(policy.url, formData, {
       headers: {
         /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
-        'content-type': `multipart/form-data; boundary=${formData._boundary}`,
+        'content-type': `multipart/form-data; boundary=${
+          (formData as any)._boundary
+        }`,
       },
       onUploadProgress,
     })
