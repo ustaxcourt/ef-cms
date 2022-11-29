@@ -1,6 +1,14 @@
-const { getPdfFromUrl } = require('./getPdfFromUrl');
+import { getPdfFromUrl } from './getPdfFromUrl';
 
-const getDownloadPolicy = async ({ applicationContext, docketNumber, key }) => {
+const getDownloadPolicy = async ({
+  applicationContext,
+  docketNumber,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  key: string;
+}) => {
   const {
     data: { url },
   } = await applicationContext
@@ -16,12 +24,18 @@ const getDownloadPolicy = async ({ applicationContext, docketNumber, key }) => {
   return url;
 };
 
-exports.getDocument = async ({
+export const getDocument = async ({
   applicationContext,
   docketNumber,
   key,
   protocol,
-  useTempBucket,
+  useTempBucket = false,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber?: string;
+  key: string;
+  protocol?: string;
+  useTempBucket?: boolean;
 }) => {
   if (protocol === 'S3') {
     const S3 = applicationContext.getStorageClient();
