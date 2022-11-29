@@ -13,6 +13,8 @@ const {
 const {
   createISODateAtStartOfDayEST,
   createISODateString,
+  formatDateString,
+  FORMATS,
 } = require('../utilities/DateHandler');
 const {
   DOCKET_ENTRY_VALIDATION_RULES,
@@ -460,6 +462,44 @@ const getServedPartiesCode = servedParties => {
     }
   }
   return servedPartiesCode;
+};
+
+/**
+ * Gets the base document title combined with any additional info, certificate of service
+ * attachments and additionalInfo2 provided.
+ *
+ * @returns {string} the calculated document title
+ */
+DocketEntry.prototype.getDocumentTitleForDocketRecord = function () {
+  const documentTitleArray = [];
+  documentTitleArray.push(this.documentTitle);
+
+  if (this.additionalInfo) documentTitleArray.push(this.additionalInfo);
+  if (this.certificateOfService && this.certificateOfServiceDate) {
+    const certOfServiceDate = formatDateString(
+      this.certificateOfServiceDate,
+      FORMATS.MMDDYY,
+    );
+    documentTitleArray.push(`(C/S ${certOfServiceDate})`);
+  }
+  if (this.attachments) documentTitleArray.push('(Attachment(s))');
+  if (this.additionalInfo2) documentTitleArray.push(this.additionalInfo2);
+
+  return documentTitleArray.join(' ');
+};
+
+/**
+ * Gets the base document title combined with additionalInfo but not additionalInfo2
+ * for use on cover sheets if addToCoversheet is true or just the base document title
+ * if it is false.
+ *
+ * @returns {string} the calculated document title for cover sheets
+ */
+DocketEntry.prototype.getDocumentTitleForCoversheet = function () {
+  if (this.addToCoversheet && this.additionalInfo) {
+    return `${this.documentTitle} ${this.additionalInfo}`;
+  }
+  return this.documentTitle;
 };
 
 joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {

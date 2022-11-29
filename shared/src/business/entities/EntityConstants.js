@@ -100,6 +100,10 @@ const ALLOWLIST_FEATURE_FLAGS = {
   STAMP_DISPOSITION: {
     key: 'stamp-disposition-enabled',
   },
+  UPDATED_TRIAL_STATUS_TYPES: {
+    disabledMessage: 'Currently using legacy trial status types.',
+    key: 'updated-trial-status-types',
+  },
 };
 
 const CONFIGURATION_ITEM_KEYS = {
@@ -181,6 +185,12 @@ const DOCUMENT_RELATIONSHIPS = {
   SECONDARY: 'secondaryDocument',
   SECONDARY_SUPPORTING: 'secondarySupportingDocument',
   SUPPORTING: 'supportingDocument',
+};
+
+const DOCUMENT_SERVED_MESSAGES = {
+  ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  GENERIC: 'Document served.',
+  SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
 const DOCUMENT_SEARCH_SORT = {
@@ -1222,16 +1232,74 @@ const SECTIONS = sortBy([
   TRIAL_CLERKS_SECTION,
 ]);
 
-const TRIAL_STATUS_TYPES = [
-  'Set for Trial',
-  'Dismissed',
-  'Continued',
-  'Rule 122',
-  'A Basis Reached',
-  'Settled',
-  'Recall',
-  'Taken Under Advisement',
-];
+const TRIAL_STATUS_TYPES = {
+  setForTrial: {
+    deprecated: true,
+    displayOrder: 999,
+    label: 'Set for Trial',
+  },
+  dismissed: {
+    deprecated: true,
+    displayOrder: 999,
+    label: 'Dismissed',
+  },
+  continued: {
+    deprecated: false,
+    displayOrder: 4,
+    label: 'Continued',
+  },
+  rule122: {
+    deprecated: false,
+    displayOrder: 6,
+    label: 'Rule 122',
+  },
+  basisReached: {
+    deprecated: false,
+    displayOrder: 1,
+    legacyLabel: 'A Basis Reached',
+    label: 'Basis Reached',
+  },
+  settled: {
+    deprecated: true,
+    displayOrder: 999,
+    label: 'Settled',
+  },
+  recall: {
+    deprecated: false,
+    displayOrder: 2,
+    label: 'Recall',
+  },
+  submittedCAV: {
+    deprecated: false,
+    displayOrder: 8,
+    legacyLabel: 'Taken Under Advisement',
+    label: 'Submitted/CAV',
+  },
+  motionToDismiss: {
+    deprecated: false,
+    displayOrder: 9,
+    new: true,
+    label: 'Motion to Dismiss',
+  },
+  probableSettlement: {
+    deprecated: false,
+    displayOrder: 3,
+    new: true,
+    label: 'Probable Settlement',
+  },
+  probableTrial: {
+    deprecated: false,
+    displayOrder: 5,
+    new: true,
+    label: 'Probable Trial',
+  },
+  definiteTrial: {
+    deprecated: false,
+    displayOrder: 7,
+    new: true,
+    label: 'Definite Trial',
+  },
+};
 
 const SCAN_MODES = {
   DUPLEX: 'duplex',
@@ -1432,6 +1500,7 @@ module.exports = deepFreeze({
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
   DOCUMENT_SEARCH_SORT,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
