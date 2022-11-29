@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getDownloadPolicyUrl } = require('./getDownloadPolicyUrl');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getDownloadPolicyUrl } from './getDownloadPolicyUrl';
 
 describe('getDownloadPolicyUrl', () => {
   const getSignedUrlErrorMock = jest.fn((method, options, cb) =>
@@ -24,6 +22,9 @@ describe('getDownloadPolicyUrl', () => {
   it('returns a signed URL from the storage client (s3)', async () => {
     const result = await getDownloadPolicyUrl({
       applicationContext,
+      filename: 'file.pdf',
+      key: '123',
+      useTempBucket: false,
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
@@ -33,6 +34,8 @@ describe('getDownloadPolicyUrl', () => {
   it('returns a signed URL from the storage client using the temp bucket when the useTempBucket param is true', async () => {
     const result = await getDownloadPolicyUrl({
       applicationContext,
+      filename: 'test.pdf',
+      key: '123',
       useTempBucket: true,
     });
 
@@ -48,6 +51,9 @@ describe('getDownloadPolicyUrl', () => {
     await expect(
       getDownloadPolicyUrl({
         applicationContext,
+        filename: 'test.pdf',
+        key: '123',
+        useTempBucket: false,
       }),
     ).rejects.toThrow('error');
   });
