@@ -24,3 +24,5 @@ export const DeployedDate = connect(
     );
   },
 );
+
+DeployedDate.displayName = 'DeployedDate';

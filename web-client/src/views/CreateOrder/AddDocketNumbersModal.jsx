@@ -37,3 +37,5 @@ export const AddDocketNumbersModal = connect(
     );
   },
 );
+
+AddDocketNumbersModal.displayName = 'AddDocketNumbersModal';

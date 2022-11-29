@@ -38,3 +38,5 @@ export const CaseTitleOrNameSearchField = connect(
     );
   },
 );
+
+CaseTitleOrNameSearchField.displayName = 'CaseTitleOrNameSearchField';
