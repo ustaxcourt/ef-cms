@@ -9,11 +9,16 @@ const getUploadPolicy = async ({ applicationContext, key }) => {
   return response.data;
 };
 
-exports.uploadDocumentFromClient = async ({
+export const uploadDocumentFromClient = async ({
   applicationContext,
   document,
   key,
   onUploadProgress = () => {},
+}: {
+  applicationContext;
+  document: any;
+  key: string;
+  onUploadProgress?: () => void;
 }) => {
   const docId = key || applicationContext.getUniqueId();
   const policy = await getUploadPolicy({

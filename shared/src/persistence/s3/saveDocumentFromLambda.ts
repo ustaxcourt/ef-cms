@@ -1,9 +1,15 @@
-exports.saveDocumentFromLambda = async ({
+export const saveDocumentFromLambda = async ({
   applicationContext,
   contentType: ContentType = 'application/pdf',
   document: body,
   key,
-  useTempBucket,
+  useTempBucket = false,
+}: {
+  applicationContext: IApplicationContext;
+  contentType?: string;
+  document: any;
+  key: string;
+  useTempBucket?: boolean;
 }) => {
   let Bucket = applicationContext.getDocumentsBucketName();
   if (useTempBucket) {

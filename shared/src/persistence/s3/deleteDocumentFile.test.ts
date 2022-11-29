@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { deleteDocumentFile } = require('./deleteDocumentFile');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { deleteDocumentFile } from './deleteDocumentFile';
 
 describe('deleteDocumentFile', () => {
   beforeAll(() => {
