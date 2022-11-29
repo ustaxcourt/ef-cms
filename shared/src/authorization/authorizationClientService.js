@@ -176,7 +176,11 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY,
     ROLE_PERMISSIONS.STAMP_MOTION,
   ],
-  clerkofcourt: [...docketClerkPermissions, ...petitionsClerkPermissions],
+  clerkofcourt: [
+    ...docketClerkPermissions,
+    ...petitionsClerkPermissions,
+    ROLE_PERMISSIONS.STAMP_MOTION,
+  ],
   docketclerk: docketClerkPermissions,
   floater: allInternalUserPermissions,
   general: allInternalUserPermissions
