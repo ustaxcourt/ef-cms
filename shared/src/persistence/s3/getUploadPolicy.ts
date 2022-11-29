@@ -1,6 +1,4 @@
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../business/entities/EntityConstants');
+import { MAX_FILE_SIZE_BYTES } from '../../business/entities/EntityConstants';
 
 /**
  * getUploadPolicy
@@ -9,7 +7,13 @@ const {
  * @param {object} providers.applicationContext the application context
  * @returns {Promise} the promise of the call to the storage client
  */
-exports.getUploadPolicy = ({ applicationContext, key }) =>
+export const getUploadPolicy = ({
+  applicationContext,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  key: string;
+}) =>
   new Promise((resolve, reject) => {
     applicationContext.getStorageClient().createPresignedPost(
       {

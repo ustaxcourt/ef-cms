@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { uploadDocumentFromClient } = require('./uploadDocumentFromClient');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { uploadDocumentFromClient } from './uploadDocumentFromClient';
 
 describe('uploadDocument', () => {
   it('returns the expected key after the upload was successful', async () => {
@@ -13,6 +11,8 @@ describe('uploadDocument', () => {
 
     const key = await uploadDocumentFromClient({
       applicationContext,
+      document: 'test',
+      key: KEY,
     });
 
     expect(key).toEqual(KEY);
