@@ -45,3 +45,5 @@ export const ViewPetitionerCounselModal = connect(
     );
   },
 );
+
+ViewPetitionerCounselModal.displayName = 'ViewPetitionerCounselModal';

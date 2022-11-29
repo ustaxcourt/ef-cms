@@ -8,7 +8,7 @@ export const OpenPrintableDocketRecordModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function ConfirmEditModal({ cancelSequence, pdfPreviewUrl }) {
+  function OpenPrintableDocketRecordModal({ cancelSequence, pdfPreviewUrl }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -23,3 +23,5 @@ export const OpenPrintableDocketRecordModal = connect(
     );
   },
 );
+
+OpenPrintableDocketRecordModal.displayName = 'OpenPrintableDocketRecordModal';

@@ -53,3 +53,5 @@ export const EditPractitionerUser = connect(
     );
   },
 );
+
+EditPractitionerUser.displayName = 'EditPractitionerUser';

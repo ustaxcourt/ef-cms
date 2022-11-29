@@ -131,3 +131,5 @@ export const StartCaseInternal = connect(
     );
   },
 );
+
+StartCaseInternal.displayName = 'StartCaseInternal';

@@ -30,3 +30,5 @@ export const PublicPrintableDocketRecord = connect(
     );
   },
 );
+
+PublicPrintableDocketRecord.displayName = 'PublicPrintableDocketRecord';

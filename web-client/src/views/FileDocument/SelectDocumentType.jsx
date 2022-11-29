@@ -66,3 +66,5 @@ export const SelectDocumentType = connect(
     );
   },
 );
+
+SelectDocumentType.displayName = 'SelectDocumentType';

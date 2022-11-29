@@ -38,3 +38,5 @@ export const UserContactEditProgress = connect(
     );
   },
 );
+
+UserContactEditProgress.displayName = 'UserContactEditProgress';
