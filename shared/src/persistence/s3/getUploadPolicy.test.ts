@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getUploadPolicy } = require('./getUploadPolicy');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getUploadPolicy } from './getUploadPolicy';
 
 describe('getUploadPolicy', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {
@@ -13,6 +11,7 @@ describe('getUploadPolicy', () => {
 
     const result = await getUploadPolicy({
       applicationContext,
+      key: 'test',
     });
     expect(result).toEqual('http://localhost');
   });
@@ -27,6 +26,7 @@ describe('getUploadPolicy', () => {
     try {
       await getUploadPolicy({
         applicationContext,
+        key: 'test',
       });
     } catch (err) {
       error = err;
