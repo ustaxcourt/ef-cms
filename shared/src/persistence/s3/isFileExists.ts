@@ -6,10 +6,14 @@
  * @param {object} providers.key the key to check
  * @returns {Promise} promise of true or false depending on if the file exists or not
  */
-exports.isFileExists = async ({
+export const isFileExists = async ({
   applicationContext,
   key,
   useTempBucket = false,
+}: {
+  applicationContext: IApplicationContext;
+  key: string;
+  useTempBucket?: boolean;
 }) => {
   try {
     await applicationContext

@@ -1,4 +1,8 @@
-exports.getSesStatus = async ({ applicationContext }) => {
+export const getSesStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}) => {
   const SES = applicationContext.getEmailClient();
   const HOURS_TO_MONITOR = 24;
   const { SendDataPoints } = await SES.getSendStatistics({}).promise();
