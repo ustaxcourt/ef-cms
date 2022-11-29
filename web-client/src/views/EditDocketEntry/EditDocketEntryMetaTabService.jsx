@@ -108,3 +108,5 @@ export const EditDocketEntryMetaTabService = connect(
     );
   },
 );
+
+EditDocketEntryMetaTabService.displayName = 'EditDocketEntryMetaTabService';

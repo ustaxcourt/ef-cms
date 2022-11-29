@@ -25,3 +25,5 @@ export const PublicCaseDetailSubnavTabs = connect(
     );
   },
 );
+
+PublicCaseDetailSubnavTabs.displayName = 'PublicCaseDetailSubnavTabs';

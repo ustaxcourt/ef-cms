@@ -46,3 +46,5 @@ export const AppMaintenanceModal = connect(
     );
   },
 );
+
+AppMaintenanceModal.displayName = 'AppMaintenanceModal';
