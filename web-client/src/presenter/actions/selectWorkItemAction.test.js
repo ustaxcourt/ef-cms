@@ -10,6 +10,14 @@ describe('selectWorkItemAction', () => {
         },
       },
       state: {
+        formattedWorkQueue: [
+          {
+            workItemId: 1,
+          },
+          {
+            workItemId: 2,
+          },
+        ],
         selectedWorkItems: [
           {
             workItemId: 1,
@@ -36,6 +44,14 @@ describe('selectWorkItemAction', () => {
         },
       },
       state: {
+        formattedWorkQueue: [
+          {
+            workItemId: 1,
+          },
+          {
+            workItemId: 2,
+          },
+        ],
         selectedWorkItems: [
           {
             workItemId: 2,
@@ -62,6 +78,11 @@ describe('selectWorkItemAction', () => {
         },
       },
       state: {
+        formattedWorkQueue: [
+          {
+            workItemId: 1,
+          },
+        ],
         selectedWorkItems: [
           {
             workItemId: 1,
@@ -72,5 +93,26 @@ describe('selectWorkItemAction', () => {
     });
 
     expect(state.workitemAllCheckbox).toBe(false);
+  });
+
+  it('sets workitemAllCheckbox to true if all checkboxes are selected', async () => {
+    const { state } = await runAction(selectWorkItemAction, {
+      props: {
+        workItem: {
+          workItemId: 1,
+        },
+      },
+      state: {
+        formattedWorkQueue: [
+          {
+            workItemId: 1,
+          },
+        ],
+        selectedWorkItems: [],
+        workitemAllCheckbox: false,
+      },
+    });
+
+    expect(state.workitemAllCheckbox).toBe(true);
   });
 });
