@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getPublicDownloadPolicyUrl } = require('./getPublicDownloadPolicyUrl');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getPublicDownloadPolicyUrl } from './getPublicDownloadPolicyUrl';
 
 describe('getPublicDownloadPolicyUrl', () => {
   it('calls the s3 getSignedUrl method with the given key returning a URL', async () => {

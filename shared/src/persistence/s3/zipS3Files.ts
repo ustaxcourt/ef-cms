@@ -2,13 +2,13 @@
 
 const noop = () => {};
 
-exports.zipS3Files = ({
+export const zipS3Files = ({
   archiver,
   s3FilesLib,
   bucket,
   debug = false,
   onEntry = noop,
-  onError = noop,
+  onError = () => {},
   onProgress = noop,
   s3Client,
   additionalFiles = [],
@@ -16,6 +16,20 @@ exports.zipS3Files = ({
   s3Keys,
   s3KeysFileNames,
   folder = '',
+}: {
+  archiver: any;
+  s3FilesLib: any;
+  bucket: string;
+  debug?: boolean;
+  onEntry: (entryData: any) => void;
+  onError: (err: any) => void;
+  onProgress: (progressData: any) => void;
+  s3Client: any;
+  additionalFiles: string[];
+  additionalFileNames: string[];
+  s3Keys: string[];
+  s3KeysFileNames: string[];
+  folder?: string;
 }) => {
   const client = s3FilesLib.connect({
     bucket,
