@@ -1,7 +1,7 @@
-const archiver = require('archiver');
-const s3FilesLib = require('s3-files');
-const stream = require('stream');
-const { zipS3Files } = require('./zipS3Files');
+import { zipS3Files } from './zipS3Files';
+import archiver from 'archiver';
+import s3FilesLib from 's3-files';
+import stream from 'stream';
 
 /**
  * zipDocuments
@@ -13,7 +13,7 @@ const { zipS3Files } = require('./zipS3Files');
  * @param {string} providers.zipName the name of the generated zip file
  * @returns {Promise} the created zip
  */
-exports.zipDocuments = ({
+export const zipDocuments = ({
   applicationContext,
   extraFileNames,
   extraFiles,
@@ -24,6 +24,17 @@ exports.zipDocuments = ({
   onUploadStart,
   s3Ids,
   zipName,
+}: {
+  applicationContext: IApplicationContext;
+  extraFileNames: string[];
+  extraFiles: any[];
+  fileNames: string[];
+  onEntry: (entryData: any) => void;
+  onError: (error: any) => void;
+  onProgress: (data: any) => void;
+  onUploadStart: () => void;
+  s3Ids: string[];
+  zipName: string;
 }) => {
   return new Promise((resolve, reject) => {
     const { documentsBucketName, tempDocumentsBucketName } =
@@ -41,7 +52,7 @@ exports.zipDocuments = ({
         Bucket: tempDocumentsBucketName,
         Key: zipName,
       },
-      () => resolve(),
+      () => resolve(undefined),
     );
 
     passThrough.on('error', reject);

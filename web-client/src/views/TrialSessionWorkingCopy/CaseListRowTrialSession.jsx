@@ -208,3 +208,5 @@ export const CaseListRowTrialSession = connect(
     });
   },
 );
+
+CaseListRowTrialSession.displayName = 'CaseListRowTrialSession';

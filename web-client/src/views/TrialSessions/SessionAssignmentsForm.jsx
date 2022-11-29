@@ -174,3 +174,5 @@ export const SessionAssignmentsForm = connect(
     );
   },
 );
+
+SessionAssignmentsForm.displayName = 'SessionAssignmentsForm';

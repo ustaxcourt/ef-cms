@@ -284,3 +284,5 @@ export const MessageDetail = connect(
     );
   },
 );
+
+MessageDetail.displayName = 'MessageDetail';

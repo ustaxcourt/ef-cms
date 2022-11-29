@@ -78,3 +78,6 @@ export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
     );
   },
 );
+
+ConfirmInitiateCourtIssuedFilingServiceModal.displayName =
+  'ConfirmInitiateCourtIssuedFilingServiceModal';

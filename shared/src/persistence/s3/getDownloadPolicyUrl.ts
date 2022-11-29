@@ -5,12 +5,17 @@
  * @param {string} providers.key the key of the document to get
  * @returns {Promise<any>} the promise of the call to the storage client
  */
-exports.getDownloadPolicyUrl = ({
+export const getDownloadPolicyUrl = ({
   applicationContext,
   filename,
   key,
-  useTempBucket,
-}) => {
+  useTempBucket = false,
+}: {
+  applicationContext: IApplicationContext;
+  filename?: string;
+  key: string;
+  useTempBucket?: boolean;
+}): Promise<{ url: string }> => {
   const bucketName = useTempBucket
     ? applicationContext.getTempDocumentsBucketName()
     : applicationContext.getDocumentsBucketName();

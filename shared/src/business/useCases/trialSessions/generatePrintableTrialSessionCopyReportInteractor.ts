@@ -37,7 +37,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sort: string;
     userHeading: string;
   },
-): Promise<void> => {
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)

@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getPdfFromUrl } = require('./getPdfFromUrl');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getPdfFromUrl } from './getPdfFromUrl';
 
 describe('getPdfFromUrl', () => {
   it('should return the file from the provided url in persistence', async () => {
@@ -20,6 +18,7 @@ describe('getPdfFromUrl', () => {
 
     const result = await getPdfFromUrl({
       applicationContext,
+      url: 'testing.com',
     });
 
     expect(result).toEqual(new Blob([BLOB_DATA], { type: 'application/pdf' }));

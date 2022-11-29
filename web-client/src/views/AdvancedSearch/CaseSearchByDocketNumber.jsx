@@ -103,3 +103,5 @@ export const CaseSearchByDocketNumber = connect(
     );
   },
 );
+
+CaseSearchByDocketNumber.displayName = 'CaseSearchByDocketNumber';
