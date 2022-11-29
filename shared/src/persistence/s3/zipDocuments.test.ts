@@ -1,12 +1,10 @@
 /**
  * @jest-environment node
  */
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { zipDocuments } = require('./zipDocuments');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { zipDocuments } from './zipDocuments';
+import fs from 'fs';
+import path from 'path';
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
 describe('zipDocuments', () => {
@@ -29,10 +27,9 @@ describe('zipDocuments', () => {
       extraFileNames: ['Test File Non - S3'],
       extraFiles: [testAsset('sample.pdf')],
       fileNames: ['Test File 1', 'Test File 2'],
-      returnBuffer: true,
-      s3Ids: [123, 456],
+      s3Ids: ['123', '456'],
       zipName: 'TestZip.zip',
-    });
+    } as any);
 
     expect(zipProcess instanceof Promise).toBeTruthy();
   });
