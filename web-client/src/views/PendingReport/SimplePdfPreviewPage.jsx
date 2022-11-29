@@ -34,3 +34,5 @@ export const SimplePdfPreviewPage = connect(
     );
   },
 );
+
+SimplePdfPreviewPage.displayName = 'SimplePdfPreviewPage';

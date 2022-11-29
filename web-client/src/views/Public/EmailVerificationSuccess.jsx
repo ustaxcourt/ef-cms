@@ -22,3 +22,5 @@ export const EmailVerificationSuccess = connect(
     );
   },
 );
+
+EmailVerificationSuccess.displayName = 'EmailVerificationSuccess';

@@ -231,3 +231,5 @@ export const AccessibilityStatement = () => (
     </section>
   </>
 );
+
+AccessibilityStatement.displayName = 'AccessibilityStatement';

@@ -63,3 +63,5 @@ export const PartiesRepresenting = connect(
     );
   },
 );
+
+PartiesRepresenting.displayName = 'PartiesRepresenting';
