@@ -78,3 +78,6 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
     );
   },
 );
+
+ConfirmInitiatePaperFilingServiceModal.displayName =
+  'ConfirmInitiatePaperFilingServiceModal';

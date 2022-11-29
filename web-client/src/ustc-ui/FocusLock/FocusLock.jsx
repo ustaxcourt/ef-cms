@@ -66,3 +66,5 @@ export const FocusLock = ({ children }) => {
     </div>
   );
 };
+
+FocusLock.displayName = 'FocusLock';

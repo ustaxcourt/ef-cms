@@ -245,3 +245,5 @@ export const TrialSessionInformation = connect(
     );
   },
 );
+
+TrialSessionInformation.displayName = 'TrialSessionInformation';

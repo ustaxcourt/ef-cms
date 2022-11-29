@@ -113,3 +113,5 @@ export const Correspondence = connect(
     );
   },
 );
+
+Correspondence.displayName = 'Correspondence';

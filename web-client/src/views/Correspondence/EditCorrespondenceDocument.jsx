@@ -155,3 +155,5 @@ export const EditCorrespondenceDocument = connect(
     );
   },
 );
+
+EditCorrespondenceDocument.displayName = 'EditCorrespondenceDocument';

@@ -101,3 +101,5 @@ export const TrialSessionPlanningModal = connect(
     );
   },
 );
+
+TrialSessionPlanningModal.displayName = 'TrialSessionPlanningModal';

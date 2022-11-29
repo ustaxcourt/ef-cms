@@ -60,3 +60,5 @@ export const RespondentExistsModal = connect(
     );
   },
 );
+
+RespondentExistsModal.displayName = 'RespondentExistsModal';

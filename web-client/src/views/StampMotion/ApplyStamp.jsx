@@ -496,3 +496,5 @@ export const ApplyStamp = connect(
     );
   },
 );
+
+ApplyStamp.displayName = 'ApplyStamp';

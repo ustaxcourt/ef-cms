@@ -49,3 +49,5 @@ export const DraftDocuments = connect(
     );
   },
 );
+
+DraftDocuments.displayName = 'DraftDocuments';

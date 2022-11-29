@@ -198,3 +198,5 @@ export const EditUploadCourtIssuedDocument = connect(
     );
   },
 );
+
+EditUploadCourtIssuedDocument.displayName = 'EditUploadCourtIssuedDocument';

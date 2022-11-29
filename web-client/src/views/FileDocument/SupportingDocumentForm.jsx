@@ -211,3 +211,5 @@ export const SupportingDocumentForm = connect(
     );
   },
 );
+
+SupportingDocumentForm.displayName = 'SupportingDocumentForm';

@@ -77,3 +77,5 @@ export const EditOtherStatistics = connect(
     );
   },
 );
+
+EditOtherStatistics.displayName = 'EditOtherStatistics';

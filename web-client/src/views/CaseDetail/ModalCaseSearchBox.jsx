@@ -51,3 +51,5 @@ export const ModalCaseSearchBox = connect(
     );
   },
 );
+
+ModalCaseSearchBox.displayName = 'ModalCaseSearchBox';

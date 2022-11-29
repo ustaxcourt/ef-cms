@@ -245,3 +245,5 @@ export const CaseDetailHeader = connect(
     );
   },
 );
+
+CaseDetailHeader.displayName = 'CaseDetailHeader';
