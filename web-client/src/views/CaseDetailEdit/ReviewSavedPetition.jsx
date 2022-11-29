@@ -407,3 +407,5 @@ export const ReviewSavedPetition = connect(
     );
   },
 );
+
+ReviewSavedPetition.displayName = 'ReviewSavedPetition';

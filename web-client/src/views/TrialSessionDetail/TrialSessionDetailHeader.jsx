@@ -35,3 +35,5 @@ export const TrialSessionDetailHeader = connect(
     );
   },
 );
+
+TrialSessionDetailHeader.displayName = 'TrialSessionDetailHeader';

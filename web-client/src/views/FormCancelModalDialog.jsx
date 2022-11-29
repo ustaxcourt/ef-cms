@@ -27,3 +27,5 @@ export const FormCancelModalDialog = connect(
     );
   },
 );
+
+FormCancelModalDialog.displayName = 'FormCancelModalDialog';

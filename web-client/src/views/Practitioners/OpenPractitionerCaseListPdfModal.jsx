@@ -24,3 +24,6 @@ export const OpenPractitionerCaseListPdfModal = connect(
     );
   },
 );
+
+OpenPractitionerCaseListPdfModal.displayName =
+  'OpenPractitionerCaseListPdfModal';

@@ -17,3 +17,5 @@ export const PdfPreview = connect(
     return <PdfViewer className="pdf-preview-viewer" src={pdfPreviewUrl} />;
   },
 );
+
+PdfPreview.displayName = 'PdfPreview';

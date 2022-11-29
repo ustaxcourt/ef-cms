@@ -45,3 +45,5 @@ export const AppMaintenance = connect(function AppMaintenance() {
     </>
   );
 });
+
+AppMaintenance.displayName = 'AppMaintenance';
