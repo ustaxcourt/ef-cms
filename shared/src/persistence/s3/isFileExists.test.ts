@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { isFileExists } = require('./isFileExists');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { isFileExists } from './isFileExists';
 
 describe('isFileExists', () => {
   applicationContext

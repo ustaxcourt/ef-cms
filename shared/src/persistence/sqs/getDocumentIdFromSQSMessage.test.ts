@@ -1,6 +1,4 @@
-const {
-  getDocumentIdFromSQSMessage,
-} = require('./getDocumentIdFromSQSMessage');
+import { getDocumentIdFromSQSMessage } from './getDocumentIdFromSQSMessage';
 
 describe('getDocumentIdFromSQSMessage', () => {
   it('should retrieve s3 object key from message', () => {
