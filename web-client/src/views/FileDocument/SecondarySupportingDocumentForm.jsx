@@ -220,3 +220,5 @@ export const SecondarySupportingDocumentForm = connect(
     );
   },
 );
+
+SecondarySupportingDocumentForm.displayName = 'SecondarySupportingDocumentForm';

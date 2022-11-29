@@ -16,6 +16,7 @@ export const EmptyHopperModal = connect({}, function EmptyHopperModal() {
     </ConfirmModal>
   );
 });
+EmptyHopperModal.displayName = 'EmptyHopperModal';
 
 export const ConfirmRescanBatchModal = connect(
   { batchIndex: state.scanner.batchIndexToRescan },
@@ -33,6 +34,7 @@ export const ConfirmRescanBatchModal = connect(
     );
   },
 );
+ConfirmRescanBatchModal.displayName = 'ConfirmRescanBatchModal';
 
 export const DeleteBatchModal = connect(
   {
@@ -54,6 +56,7 @@ export const DeleteBatchModal = connect(
     );
   },
 );
+DeleteBatchModal.displayName = 'DeleteBatchModal';
 
 export const ScanErrorModal = connect({}, function ScanErrorModal() {
   return (
@@ -68,6 +71,8 @@ export const ScanErrorModal = connect({}, function ScanErrorModal() {
     </ConfirmModal>
   );
 });
+ScanErrorModal.displayName = 'ScanErrorModal';
+
 export const UnfinishedScansModal = connect(
   {},
   function UnfinishedScansModal() {
@@ -85,3 +90,4 @@ export const UnfinishedScansModal = connect(
     );
   },
 );
+UnfinishedScansModal.displayName = 'UnfinishedScansModal';

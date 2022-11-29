@@ -49,3 +49,5 @@ export const AddOtherStatistics = connect(
     );
   },
 );
+
+AddOtherStatistics.displayName = 'AddOtherStatistics';

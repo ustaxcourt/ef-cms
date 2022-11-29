@@ -34,3 +34,5 @@ export const MyContactInformation = connect(
     );
   },
 );
+
+MyContactInformation.displayName = 'MyContactInformation';

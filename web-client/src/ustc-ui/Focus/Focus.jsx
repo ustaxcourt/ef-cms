@@ -28,3 +28,5 @@ export const Focus = ({ children, className }) => {
   );
   return child;
 };
+
+Focus.displayName = 'Focus';

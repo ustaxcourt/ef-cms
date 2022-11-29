@@ -123,3 +123,5 @@ export const WorkQueueAssignments = connect(
     );
   },
 );
+
+WorkQueueAssignments.displayName = 'WorkQueueAssignments';
