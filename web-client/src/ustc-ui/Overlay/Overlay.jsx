@@ -116,3 +116,5 @@ function OverlayWithRef() {
 }
 
 export const Overlay = OverlayWithRef();
+
+Overlay.displayName = 'Overlay';

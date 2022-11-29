@@ -265,3 +265,5 @@ export const WorkingCopyFilterHeader = connect(
     );
   },
 );
+
+WorkingCopyFilterHeader.displayName = 'WorkingCopyFilterHeader';

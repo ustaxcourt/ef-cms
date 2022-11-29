@@ -360,3 +360,6 @@ export const EditPetitionerInformationInternal = connect(
     );
   },
 );
+
+EditPetitionerInformationInternal.displayName =
+  'EditPetitionerInformationInternal';

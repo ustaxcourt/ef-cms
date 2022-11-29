@@ -26,3 +26,6 @@ export const EditDocketEntryMetaDocketEntryPreview = connect(
     );
   },
 );
+
+EditDocketEntryMetaDocketEntryPreview.displayName =
+  'EditDocketEntryMetaDocketEntryPreview';

@@ -188,3 +188,4 @@ export const StartCaseStep2 = connect(
     );
   },
 );
+StartCaseStep2.displayName = 'StartCaseStep2';

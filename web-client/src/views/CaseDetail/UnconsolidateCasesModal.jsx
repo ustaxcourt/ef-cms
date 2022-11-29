@@ -66,3 +66,5 @@ export const UnconsolidateCasesModal = connect(
     );
   },
 );
+
+UnconsolidateCasesModal.displayName = 'UnconsolidateCasesModal';

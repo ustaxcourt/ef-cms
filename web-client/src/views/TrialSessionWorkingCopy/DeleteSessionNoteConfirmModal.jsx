@@ -14,3 +14,5 @@ export const DeleteSessionNoteConfirmModal = () => (
     <p>This action cannot be undone.</p>
   </ConfirmModal>
 );
+
+DeleteSessionNoteConfirmModal.displayName = 'DeleteSessionNoteConfirmModal';

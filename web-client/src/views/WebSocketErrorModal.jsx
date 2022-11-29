@@ -20,3 +20,5 @@ export const WebSocketErrorModal = connect({}, function WebSocketErrorModal() {
     </ConfirmModal>
   );
 });
+
+WebSocketErrorModal.displayName = 'WebSocketErrorModal';

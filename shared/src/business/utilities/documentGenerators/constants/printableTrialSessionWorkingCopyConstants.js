@@ -444,10 +444,14 @@ const FORMATTED_CASES = [
 const FORMATTED_TRIAL_SESSION = {
   computedStatus: 'Open',
   endDateForAdditionalPageHeaders: 'Feb 10, 2023',
+  formattedChambersPhoneNumber: '1234567',
+  formattedCourtReporter: 'Test court report',
   formattedEstimatedEndDateFull: 'February 10, 2023',
+  formattedIrsCalendarAdministrator: 'Test Irs Calendar Administrator',
   formattedJudge: 'Gustafson',
   formattedStartDateFull: 'January 26, 2023',
   formattedTerm: 'Winter 23',
+  formattedTrialClerk: 'Test trial clerk',
   startDateForAdditionalPageHeaders: 'Jan 26, 2023',
   trialLocation: 'Washington, District of Columbia',
 };

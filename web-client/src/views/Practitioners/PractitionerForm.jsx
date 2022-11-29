@@ -426,3 +426,5 @@ export const PractitionerForm = connect(
     );
   },
 );
+
+PractitionerForm.displayName = 'PractitionerForm';

@@ -171,3 +171,5 @@ export const CaseDeadlines = connect(
     );
   },
 );
+
+CaseDeadlines.displayName = 'CaseDeadlines';

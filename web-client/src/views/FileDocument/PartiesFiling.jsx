@@ -86,3 +86,5 @@ export const PartiesFiling = connect(
     );
   },
 );
+
+PartiesFiling.displayName = 'PartiesFiling';
