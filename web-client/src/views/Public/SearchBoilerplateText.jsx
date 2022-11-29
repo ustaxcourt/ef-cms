@@ -38,3 +38,5 @@ export const SearchBoilerplateText = connect(
     );
   },
 );
+
+SearchBoilerplateText.displayName = 'SearchBoilerplateText';

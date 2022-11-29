@@ -24,3 +24,5 @@ export const DashboardChambers = connect(
     );
   },
 );
+
+DashboardChambers.displayName = 'DashboardChambers';

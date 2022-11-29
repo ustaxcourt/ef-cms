@@ -157,3 +157,5 @@ export const DocketRecordHeader = connect(
     );
   },
 );
+
+DocketRecordHeader.displayName = 'DocketRecordHeader';

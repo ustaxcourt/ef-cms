@@ -29,3 +29,5 @@ export const DashboardRespondent = connect(
     );
   },
 );
+
+DashboardRespondent.displayName = 'DashboardRespondent';

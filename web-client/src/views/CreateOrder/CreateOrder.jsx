@@ -129,3 +129,5 @@ export const CreateOrder = connect(
     );
   },
 );
+
+CreateOrder.displayName = 'CreateOrder';

@@ -217,3 +217,5 @@ export const SectionWorkQueueInbox = connect(
     );
   },
 );
+
+SectionWorkQueueInbox.displayName = 'SectionWorkQueueInbox';
