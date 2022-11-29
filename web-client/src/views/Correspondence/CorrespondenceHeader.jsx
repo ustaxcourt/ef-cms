@@ -52,3 +52,5 @@ export const CorrespondenceHeader = connect(
     );
   },
 );
+
+CorrespondenceHeader.displayName = 'CorrespondenceHeader';

@@ -309,3 +309,5 @@ export const CourtIssuedDocketEntry = connect(
     );
   },
 );
+
+CourtIssuedDocketEntry.displayName = 'CourtIssuedDocketEntry';

@@ -97,3 +97,5 @@ export const AddTrialSession = connect(
     );
   },
 );
+
+AddTrialSession.displayName = 'AddTrialSession';

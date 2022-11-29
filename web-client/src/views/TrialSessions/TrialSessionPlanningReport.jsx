@@ -25,3 +25,5 @@ export const TrialSessionPlanningReport = connect(
     );
   },
 );
+
+TrialSessionPlanningReport.displayName = 'TrialSessionPlanningReport';

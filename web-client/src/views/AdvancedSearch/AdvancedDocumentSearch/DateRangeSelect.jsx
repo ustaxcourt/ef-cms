@@ -42,3 +42,5 @@ export const DateRangeSelect = connect(
     );
   },
 );
+
+DateRangeSelect.displayName = 'DateRangeSelect';

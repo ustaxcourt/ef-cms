@@ -139,3 +139,5 @@ export const AddressDisplay = connect(
     );
   },
 );
+
+AddressDisplay.displayName = 'AddressDisplay';

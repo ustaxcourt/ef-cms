@@ -167,3 +167,5 @@ export const ModalDialog = ({
 
   return ReactDOM.createPortal(renderModalContent(), getEl());
 };
+
+ModalDialog.displayName = 'ModalDialog';

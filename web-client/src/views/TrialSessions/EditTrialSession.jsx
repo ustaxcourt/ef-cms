@@ -96,3 +96,5 @@ export const EditTrialSession = connect(
     );
   },
 );
+
+EditTrialSession.displayName = 'EditTrialSession';

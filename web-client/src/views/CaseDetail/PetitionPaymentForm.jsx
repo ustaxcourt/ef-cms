@@ -170,3 +170,5 @@ export const PetitionPaymentForm = connect(
     );
   },
 );
+
+PetitionPaymentForm.displayName = 'PetitionPaymentForm';

@@ -76,3 +76,5 @@ export const ReplyToMessageModalDialog = connect(
     );
   },
 );
+
+ReplyToMessageModalDialog.displayName = 'ReplyToMessageModalDialog';

@@ -520,3 +520,5 @@ export const ScanBatchPreviewer = connect(
     );
   },
 );
+
+ScanBatchPreviewer.displayName = 'ScanBatchPreviewer';

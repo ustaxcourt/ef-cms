@@ -88,3 +88,5 @@ export const RespondentCounsel = connect(
     );
   },
 );
+
+RespondentCounsel.displayName = 'RespondentCounsel';

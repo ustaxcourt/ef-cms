@@ -38,3 +38,5 @@ export const KeywordSearchField = connect(
     );
   },
 );
+
+KeywordSearchField.displayName = 'KeywordSearchField';
