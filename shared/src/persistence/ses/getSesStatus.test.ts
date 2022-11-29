@@ -1,8 +1,8 @@
-const { getSesStatus } = require('./getSesStatus');
+import { getSesStatus } from './getSesStatus';
 
 describe('getSesStatus', () => {
   it('should pass when no rejects have occurred', async () => {
-    const applicationContext = {
+    const applicationContext: any = {
       getEmailClient: () => ({
         getSendStatistics: () => ({
           promise: () =>
@@ -25,7 +25,7 @@ describe('getSesStatus', () => {
   });
 
   it('should fail when a reject has occurred', async () => {
-    const applicationContext = {
+    const applicationContext: any = {
       getEmailClient: () => ({
         getSendStatistics: () => ({
           promise: () =>

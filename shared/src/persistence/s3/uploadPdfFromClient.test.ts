@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { uploadPdfFromClient } = require('./uploadPdfFromClient');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { uploadPdfFromClient } from './uploadPdfFromClient';
 
 describe('uploadPdfFromClient', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {

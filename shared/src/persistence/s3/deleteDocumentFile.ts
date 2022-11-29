@@ -1,4 +1,10 @@
-exports.deleteDocumentFile = ({ applicationContext, key }) => {
+export const deleteDocumentFile = ({
+  applicationContext,
+  key,
+}: {
+  applicationContext: IApplicationContext;
+  key: string;
+}) => {
   return applicationContext
     .getStorageClient()
     .deleteObject({
