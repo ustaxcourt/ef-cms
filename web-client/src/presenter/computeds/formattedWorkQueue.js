@@ -311,6 +311,9 @@ export const formattedWorkQueue = (get, applicationContext) => {
   let { assignmentFilterValue } = get(state.screenMetadata);
   const users = get(state.users);
 
+  console.log('workItems', workItems);
+  console.log('workQueueToDisplay', workQueueToDisplay);
+
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
     assignmentFilterValue = users.find(
       user => user.userId === assignmentFilterValue.userId,
