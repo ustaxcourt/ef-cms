@@ -35,10 +35,10 @@ jobs:
     needs: ecr_login
     runs-on: ubuntu-latest
     container:
-      image: ${{ needs.ecr_login.outputs.ecr_password }}
+      image: ${{ needs.ecr_login.outputs.ecr_image_url }}
       credentials:
         username: AWS
-        password: ${{ needs.ecr_login.outputs.ecr_image_url }}
+        password: ${{ needs.ecr_login.outputs.ecr_password }}
     steps:
       - uses: actions/checkout@v2
       - name: NPM Install
