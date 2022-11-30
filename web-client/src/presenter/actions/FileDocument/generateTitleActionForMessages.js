@@ -1,14 +1,5 @@
 import { state } from 'cerebral';
 
-const getDocumentTitleWithAdditionalInfo = documentMetaData => {
-  const {
-    additionalInfo: additionalInfoOfNewDoc,
-    previousDocument: { additionalInfo, documentTitle },
-  } = documentMetaData;
-  const originalDocumentInfo = `${documentTitle} ${additionalInfo}`;
-  return `${originalDocumentInfo} ${additionalInfoOfNewDoc}`;
-};
-
 /**
  * Gets document title based on documentTitle and additionalInfo fields
  *
@@ -16,8 +7,15 @@ const getDocumentTitleWithAdditionalInfo = documentMetaData => {
  * @param {object} docketEntry the docketEntry
  * @returns {object} the document title
  */
-export const generateTitleActionForMessages = ({ get, store }) => {
+export const generateTitleActionForMessages = ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const documentMetadata = get(state.form);
-  const documentTitle = getDocumentTitleWithAdditionalInfo(documentMetadata);
+  const documentTitle = applicationContext
+    .getUtilities()
+    .getModifiedDocumentTitleWithAdditionalInfo(documentMetadata);
+
   store.set(state.form.documentTitle, documentTitle);
 };
