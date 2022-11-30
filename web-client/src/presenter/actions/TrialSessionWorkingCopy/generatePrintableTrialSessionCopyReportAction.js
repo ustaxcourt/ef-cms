@@ -65,12 +65,18 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     );
 
   const formattedTrialSessionDTO = {
+    chambersPhoneNumber:
+      formattedTrialSessionDetails.formattedChambersPhoneNumber,
     computedStatus: formattedTrialSessionDetails.computedStatus,
     endDateForAdditionalPageHeaders,
+    formattedCourtReporter: formattedTrialSessionDetails.formattedCourtReporter,
     formattedEstimatedEndDateFull,
+    formattedIrsCalendarAdministrator:
+      formattedTrialSessionDetails.formattedIrsCalendarAdministrator,
     formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
+    formattedTrialClerk: formattedTrialSessionDetails.formattedTrialClerk,
     startDateForAdditionalPageHeaders,
     trialLocation: formattedTrialSessionDetails.trialLocation,
   };

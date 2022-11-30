@@ -147,10 +147,12 @@ describe('Docket clerk adds paper filing on lead case', () => {
 
     await waitForCondition({
       booleanExpressionCondition: () =>
-        cerebralTest.getState(
-          'currentViewMetadata.caseDetail.docketRecordTab',
-        ) === 'documentView',
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
+
+    expect(
+      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+    ).toEqual('documentView');
   });
 
   it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {

@@ -84,3 +84,5 @@ export const UserContactEditForm = connect(
     );
   },
 );
+
+UserContactEditForm.displayName = 'UserContactEditForm';

@@ -93,3 +93,5 @@ export const EditOrderTitleModal = connect(
     );
   },
 );
+
+EditOrderTitleModal.displayName = 'EditOrderTitleModal';

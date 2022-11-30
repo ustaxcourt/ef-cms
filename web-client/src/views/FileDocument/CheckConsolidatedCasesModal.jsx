@@ -78,3 +78,5 @@ export const CheckConsolidatedCasesModal = connect(
     );
   },
 );
+
+CheckConsolidatedCasesModal.displayName = 'CheckConsolidatedCasesModal';

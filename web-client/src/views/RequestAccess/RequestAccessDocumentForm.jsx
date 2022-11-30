@@ -217,3 +217,5 @@ export const RequestAccessDocumentForm = connect(
     );
   },
 );
+
+RequestAccessDocumentForm.displayName = 'RequestAccessDocumentForm';

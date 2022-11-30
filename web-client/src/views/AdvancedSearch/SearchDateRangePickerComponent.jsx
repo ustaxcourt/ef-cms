@@ -169,3 +169,5 @@ export const SearchDateRangePickerComponent = connect(
     );
   },
 );
+
+SearchDateRangePickerComponent.displayName = 'SearchDateRangePickerComponent';

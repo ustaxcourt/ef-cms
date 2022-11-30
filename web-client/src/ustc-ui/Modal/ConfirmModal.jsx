@@ -149,3 +149,5 @@ export const ConfirmModal = connect(
     );
   },
 );
+
+ConfirmModal.displayName = 'ConfirmModal';

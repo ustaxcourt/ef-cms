@@ -32,3 +32,5 @@ export const DeleteCaseDeadlineModalDialog = connect(
     );
   },
 );
+
+DeleteCaseDeadlineModalDialog.displayName = 'DeleteCaseDeadlineModalDialog';
