@@ -34,3 +34,5 @@ export const LoginAndServiceEmailAddress = connect(
     );
   },
 );
+
+LoginAndServiceEmailAddress.displayName = 'LoginAndServiceEmailAddress';

@@ -177,3 +177,5 @@ export const WhatToExpect = () => (
     </Button>
   </>
 );
+
+WhatToExpect.displayName = 'WhatToExpect';

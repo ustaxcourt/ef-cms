@@ -29,3 +29,5 @@ export const ConfirmDeletePDFModal = connect(
     );
   },
 );
+
+ConfirmDeletePDFModal.displayName = 'ConfirmDeletePDFModal';

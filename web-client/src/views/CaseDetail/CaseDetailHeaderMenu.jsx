@@ -313,3 +313,5 @@ export const CaseDetailHeaderMenu = connect(
     );
   },
 );
+
+CaseDetailHeaderMenu.displayName = 'CaseDetailHeaderMenu';

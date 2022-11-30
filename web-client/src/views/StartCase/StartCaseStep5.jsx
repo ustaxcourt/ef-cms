@@ -300,3 +300,5 @@ export const StartCaseStep5 = connect(
     );
   },
 );
+
+StartCaseStep5.displayName = 'StartCaseStep5';

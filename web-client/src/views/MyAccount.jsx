@@ -48,3 +48,5 @@ export const MyAccount = connect(
     );
   },
 );
+
+MyAccount.displayName = 'MyAccount';

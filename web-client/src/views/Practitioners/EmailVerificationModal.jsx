@@ -35,3 +35,5 @@ export const EmailVerificationModal = connect(
     );
   },
 );
+
+EmailVerificationModal.displayName = 'EmailVerificationModal';

@@ -237,3 +237,5 @@ export const AdvancedSearch = connect(
     );
   },
 );
+
+AdvancedSearch.displayName = 'AdvancedSearch';

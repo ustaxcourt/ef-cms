@@ -34,3 +34,5 @@ export const CaseLink = props => {
     </a>
   );
 };
+
+CaseLink.displayName = 'CaseLink';
