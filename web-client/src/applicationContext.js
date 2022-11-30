@@ -56,6 +56,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/ut
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
+import { getModifiedDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getModifiedDocumentTitleWithAdditionalInfo';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
@@ -735,6 +736,7 @@ const applicationContext = {
       getFormattedCaseDetail,
       getFormattedPartiesNameAndTitle,
       getJudgeLastName,
+      getModifiedDocumentTitleWithAdditionalInfo,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,
