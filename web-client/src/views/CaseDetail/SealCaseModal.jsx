@@ -30,3 +30,5 @@ export const SealCaseModal = connect(
     );
   },
 );
+
+SealCaseModal.displayName = 'SealCaseModal';

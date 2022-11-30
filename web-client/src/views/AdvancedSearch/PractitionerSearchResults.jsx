@@ -71,3 +71,5 @@ export const PractitionerSearchResults = connect(
     );
   },
 );
+
+PractitionerSearchResults.displayName = 'PractitionerSearchResults';

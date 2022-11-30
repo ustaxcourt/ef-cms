@@ -67,3 +67,5 @@ export const CaseTypeSelect = connect(
     );
   },
 );
+
+CaseTypeSelect.displayName = 'CaseTypeSelect';

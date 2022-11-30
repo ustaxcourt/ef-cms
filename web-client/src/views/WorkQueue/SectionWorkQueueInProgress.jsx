@@ -144,3 +144,5 @@ export const SectionWorkQueueInProgress = connect(
     );
   },
 );
+
+SectionWorkQueueInProgress.displayName = 'SectionWorkQueueInProgress';
