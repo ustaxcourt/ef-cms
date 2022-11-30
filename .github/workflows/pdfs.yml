@@ -7,44 +7,11 @@ on:
       - dependency-updates
 
 jobs:
-  ecr_login:
-    runs-on: ubuntu-latest
-    outputs:
-      ecr_password: ${{ steps.retrieve_password.outputs.ecr_password }}
-      ecr_image_url: ${{ steps.ecr_image_url.outputs.ecr_image_url }}
-    steps:
-      - name: Set up AWS CLI
-        uses: chrislennon/action-aws-cli@1.1
-      - id: retrieve_password
-        name: Retrieve ECR password and store as secret
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
-        run: |
-          echo "ecr_password=$(aws ecr get-login-password)" >> $GITHUB_OUTPUT
-          echo "ecr_password=$(aws ecr get-login-password)"
-
-      - id: ecr_image_url
-        name: setup ERC image url
-        env:
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
-        run: |
-          echo "${{ secrets.AWS_ACCOUNT_ID }}"
-          echo "ecr_image_url=$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0" >> $GITHUB_OUTPUT
-          echo "ecr_image_url=$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0"
-
   test_pdfs:
     needs: ecr_login
     runs-on: ubuntu-latest
     container:
-      image: ${{ needs.ecr_login.outputs.ecr_image_url }}
-      credentials:
-        username: AWS
-        password: ${{ needs.ecr_login.outputs.ecr_password }}
+      image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public:b3.0.0
     steps:
       - uses: actions/checkout@v2
       - name: NPM Install
