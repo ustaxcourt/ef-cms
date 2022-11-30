@@ -1,4 +1,4 @@
-name: Node.js CI - client
+name: verify pdfs
 
 on:
   pull_request:
