@@ -13,8 +13,11 @@ jobs:
       image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public:b3.0.0
     steps:
       - uses: actions/checkout@v2
+      - name: setup
+        run: |
+          mkdir .husky
       - name: NPM Install
-        run: npm ci --legacy-peer-dep && npm rebuild
+        run: npm ci --legacy-peer-deps && npm rebuild
       - name: Generate PDFs
         run: npm run test:pdf-output
       - name: Compare Images
