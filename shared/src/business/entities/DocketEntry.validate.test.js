@@ -169,6 +169,28 @@ describe('validate', () => {
     },
     {
       description:
+        'should pass validation when isDraft is false and signedJudgeName is undefined for an SPTO',
+      docketEntry: {
+        documentType: 'Standing Pretrial Order',
+        eventCode: 'SPTO',
+        isDraft: false,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
+        'should pass validation when isDraft is false and signedJudgeName is undefined for an SPOS',
+      docketEntry: {
+        documentType: 'Standing Pretrial Order for Small Case',
+        eventCode: 'SPOS',
+        isDraft: false,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
         'should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature',
       docketEntry: {
         documentType: 'Order',

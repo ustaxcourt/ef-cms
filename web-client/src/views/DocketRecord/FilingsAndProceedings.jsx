@@ -146,3 +146,5 @@ export const FilingsAndProceedings = connect(
     );
   },
 );
+
+FilingsAndProceedings.displayName = 'FilingsAndProceedings';

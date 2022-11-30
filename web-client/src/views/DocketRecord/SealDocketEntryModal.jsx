@@ -86,3 +86,5 @@ export const SealDocketEntryModal = connect(
     );
   },
 );
+
+SealDocketEntryModal.displayName = 'SealDocketEntryModal';

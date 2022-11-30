@@ -58,3 +58,5 @@ export const MessagesCompleted = connect(
     );
   },
 );
+
+MessagesCompleted.displayName = 'MessagesCompleted';

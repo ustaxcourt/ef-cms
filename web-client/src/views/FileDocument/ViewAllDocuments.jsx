@@ -9,3 +9,5 @@ export const ViewAllDocuments = connect({}, function ViewAllDocuments() {
     </React.Fragment>
   );
 });
+
+ViewAllDocuments.displayName = 'ViewAllDocuments';

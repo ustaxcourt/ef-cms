@@ -47,3 +47,5 @@ export const Contacts = connect(
     );
   },
 );
+
+Contacts.displayName = 'Contacts';

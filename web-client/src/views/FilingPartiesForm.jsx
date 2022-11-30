@@ -159,3 +159,5 @@ export const FilingPartiesForm = connect(
     );
   },
 );
+
+FilingPartiesForm.displayName = 'FilingPartiesForm';

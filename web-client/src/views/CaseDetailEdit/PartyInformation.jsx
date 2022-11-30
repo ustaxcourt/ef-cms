@@ -91,3 +91,5 @@ export const PartyInformation = connect(
     );
   },
 );
+
+PartyInformation.displayName = 'PartyInformation';

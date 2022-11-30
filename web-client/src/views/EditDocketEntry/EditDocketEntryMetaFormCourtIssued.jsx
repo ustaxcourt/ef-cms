@@ -146,3 +146,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     );
   },
 );
+
+EditDocketEntryMetaFormCourtIssued.displayName =
+  'EditDocketEntryMetaFormCourtIssued';

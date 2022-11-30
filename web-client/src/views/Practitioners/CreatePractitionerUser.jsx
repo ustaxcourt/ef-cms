@@ -48,3 +48,5 @@ export const CreatePractitionerUser = connect(
     );
   },
 );
+
+CreatePractitionerUser.displayName = 'CreatePractitionerUser';

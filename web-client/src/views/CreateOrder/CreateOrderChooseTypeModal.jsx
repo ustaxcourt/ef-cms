@@ -88,3 +88,5 @@ export const CreateOrderChooseTypeModal = connect(
     );
   },
 );
+
+CreateOrderChooseTypeModal.displayName = 'CreateOrderChooseTypeModal';

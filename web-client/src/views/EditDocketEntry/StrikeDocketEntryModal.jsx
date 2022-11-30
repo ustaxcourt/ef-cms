@@ -21,3 +21,5 @@ export const StrikeDocketEntryModal = connect(
     );
   },
 );
+
+StrikeDocketEntryModal.displayName = 'StrikeDocketEntryModal';

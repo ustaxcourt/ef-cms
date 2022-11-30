@@ -62,3 +62,5 @@ export const StartCaseWizard = connect(
     );
   },
 );
+
+StartCaseWizard.displayName = 'StartCaseWizard';

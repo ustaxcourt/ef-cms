@@ -139,3 +139,5 @@ export const PaperFiling = connect(
     );
   },
 );
+
+PaperFiling.displayName = 'PaperFiling';

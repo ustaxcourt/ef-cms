@@ -90,3 +90,5 @@ export const SelectScannerSourceModal = connect(
     );
   },
 );
+
+SelectScannerSourceModal.displayName = 'SelectScannerSourceModal';

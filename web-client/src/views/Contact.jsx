@@ -65,3 +65,5 @@ export const Contact = connect(
     );
   },
 );
+
+Contact.displayName = 'Contact';
