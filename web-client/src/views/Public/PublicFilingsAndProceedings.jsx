@@ -56,3 +56,5 @@ export const PublicFilingsAndProceedings = connect(
     );
   },
 );
+
+PublicFilingsAndProceedings.displayName = 'PublicFilingsAndProceedings';

@@ -124,3 +124,5 @@ export const WhatCanIIncludeModalOverlay = connect(
     );
   },
 );
+
+WhatCanIIncludeModalOverlay.displayName = 'WhatCanIIncludeModalOverlay';

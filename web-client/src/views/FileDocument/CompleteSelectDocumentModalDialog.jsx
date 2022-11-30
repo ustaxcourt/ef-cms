@@ -26,3 +26,6 @@ export const CompleteSelectDocumentModalDialog = connect(
     );
   },
 );
+
+CompleteSelectDocumentModalDialog.displayName =
+  'CompleteSelectDocumentModalDialog';

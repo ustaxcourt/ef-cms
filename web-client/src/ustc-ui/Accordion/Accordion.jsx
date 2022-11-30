@@ -144,3 +144,5 @@ export const Accordion = connect(
     );
   },
 );
+
+Accordion.displayName = 'Accordion';
