@@ -67,7 +67,7 @@ web-client/integration-tests/test-output/
 bulk-import-log.txt
 **/.env
 **/*.env
-!**/example.env
+!**/*example.env
 metadata.json
 metadata-public.json
 stats.html
