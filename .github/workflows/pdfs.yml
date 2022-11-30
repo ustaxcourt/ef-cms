@@ -21,7 +21,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
-        run: echo "ecr_password=$(aws ecr get-login-password)" >> $GITHUB_OUTPUT
+        run: |
+          echo "ecr_password=$(aws ecr get-login-password)" >> $GITHUB_OUTPUT
+          echo "ecr_password=$(aws ecr get-login-password)"
 
       - id: ecr_image_url
         name: setup ERC image url
@@ -29,7 +31,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
-        run: echo "ecr_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0" >> $GITHUB_OUTPUT
+        run: |
+          echo "ecr_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0" >> $GITHUB_OUTPUT
+          echo "ecr_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0"
 
   test_pdfs:
     needs: ecr_login
