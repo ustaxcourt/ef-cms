@@ -16,3 +16,5 @@ export const RecentMessages = () => {
     </div>
   );
 };
+
+RecentMessages.displayName = 'RecentMessages';

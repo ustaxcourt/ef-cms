@@ -197,3 +197,5 @@ export const CaseListTable = connect(
     );
   },
 );
+
+CaseListTable.displayName = 'CaseListTable';

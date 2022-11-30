@@ -123,3 +123,5 @@ export const SearchResults = connect(
     );
   },
 );
+
+SearchResults.displayName = 'SearchResults';

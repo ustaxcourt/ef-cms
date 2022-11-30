@@ -117,3 +117,5 @@ export const TrialSessionWorkingCopy = connect(
     );
   },
 );
+
+TrialSessionWorkingCopy.displayName = 'TrialSessionWorkingCopy';

@@ -28,3 +28,5 @@ export const SelectDocumentWizardOverlay = () => {
     </Overlay>
   );
 };
+
+SelectDocumentWizardOverlay.displayName = 'SelectDocumentWizardOverlay';

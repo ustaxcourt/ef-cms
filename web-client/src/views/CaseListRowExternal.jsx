@@ -64,3 +64,5 @@ export const CaseListRowExternal = ({
       onlyLinkIfRequestedUserAssociated &&
       formattedCase.isRequestingUserAssociated === false,
   });
+
+CaseListRowExternal.displayName = 'CaseListRowExternal';

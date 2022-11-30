@@ -110,3 +110,5 @@ export const PublicSearch = connect(
     );
   },
 );
+
+PublicSearch.displayName = 'PublicSearch';

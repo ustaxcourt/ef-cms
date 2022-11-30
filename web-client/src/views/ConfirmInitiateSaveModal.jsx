@@ -42,3 +42,5 @@ export const ConfirmInitiateSaveModal = connect(
     );
   },
 );
+
+ConfirmInitiateSaveModal.displayName = 'ConfirmInitiateSaveModal';

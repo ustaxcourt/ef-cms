@@ -101,3 +101,5 @@ export const IndividualWorkQueueOutbox = connect(
     );
   },
 );
+
+IndividualWorkQueueOutbox.displayName = 'IndividualWorkQueueOutbox';

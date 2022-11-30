@@ -21,3 +21,5 @@ export const ConfirmRemoveSignatureModal = connect(
     );
   },
 );
+
+ConfirmRemoveSignatureModal.displayName = 'ConfirmRemoveSignatureModal';

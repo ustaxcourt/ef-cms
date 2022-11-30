@@ -167,3 +167,5 @@ export const PractitionerDocumentation = connect(
     );
   },
 );
+
+PractitionerDocumentation.displayName = 'PractitionerDocumentation';

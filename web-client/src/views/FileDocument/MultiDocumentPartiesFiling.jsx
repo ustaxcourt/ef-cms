@@ -143,3 +143,5 @@ export const MultiDocumentPartiesFiling = connect(
     );
   },
 );
+
+MultiDocumentPartiesFiling.displayName = 'MultiDocumentPartiesFiling';

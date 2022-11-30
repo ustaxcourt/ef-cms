@@ -87,3 +87,5 @@ export const RespondentSearch = connect(
     );
   },
 );
+
+RespondentSearch.displayName = 'RespondentSearch';
