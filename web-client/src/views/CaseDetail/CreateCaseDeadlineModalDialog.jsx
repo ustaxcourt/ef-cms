@@ -64,3 +64,5 @@ export const CreateCaseDeadlineModalDialog = connect(
     );
   },
 );
+
+CreateCaseDeadlineModalDialog.displayName = 'CreateCaseDeadlineModalDialog';

@@ -156,3 +156,5 @@ export const MessagesIndividualOutbox = connect(
     );
   },
 );
+
+MessagesIndividualOutbox.displayName = 'MessagesIndividualOutbox';

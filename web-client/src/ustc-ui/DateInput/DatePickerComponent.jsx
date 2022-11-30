@@ -157,3 +157,5 @@ export const DatePickerComponent = ({
     </FormGroup>
   );
 };
+
+DatePickerComponent.displayName = 'DatePickerComponent';

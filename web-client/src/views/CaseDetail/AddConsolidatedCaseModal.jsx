@@ -80,3 +80,5 @@ export const AddConsolidatedCaseModal = connect(
     );
   },
 );
+
+AddConsolidatedCaseModal.displayName = 'AddConsolidatedCaseModal';

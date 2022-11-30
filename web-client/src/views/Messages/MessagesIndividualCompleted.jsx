@@ -119,3 +119,5 @@ export const MessagesIndividualCompleted = connect(
     );
   },
 );
+
+MessagesIndividualCompleted.displayName = 'MessagesIndividualCompleted';

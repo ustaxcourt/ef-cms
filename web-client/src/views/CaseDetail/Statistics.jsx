@@ -144,3 +144,5 @@ export const Statistics = connect(
     );
   },
 );
+
+Statistics.displayName = 'Statistics';

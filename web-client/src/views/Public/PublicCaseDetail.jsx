@@ -35,3 +35,5 @@ export const PublicCaseDetail = connect(
     );
   },
 );
+
+PublicCaseDetail.displayName = 'PublicCaseDetail';

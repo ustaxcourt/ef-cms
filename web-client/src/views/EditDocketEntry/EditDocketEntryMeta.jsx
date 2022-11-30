@@ -104,3 +104,5 @@ export const EditDocketEntryMeta = connect(
     );
   },
 );
+
+EditDocketEntryMeta.displayName = 'EditDocketEntryMeta';

@@ -68,3 +68,5 @@ export const SelectCriteria = connect(
     );
   },
 );
+
+SelectCriteria.displayName = 'SelectCriteria';

@@ -100,3 +100,5 @@ export const IndividualWorkQueueInProgress = connect(
     );
   },
 );
+
+IndividualWorkQueueInProgress.displayName = 'IndividualWorkQueueInProgress';

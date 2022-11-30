@@ -68,3 +68,5 @@ export const FilingFeeOptions = function () {
     </div>
   );
 };
+
+FilingFeeOptions.displayName = 'FilingFeeOptions';

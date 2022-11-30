@@ -34,3 +34,5 @@ export const TrialCityOptions = connect(
     );
   },
 );
+
+TrialCityOptions.displayName = 'TrialCityOptions';

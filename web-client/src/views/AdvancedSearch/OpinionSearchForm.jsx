@@ -319,3 +319,5 @@ export const OpinionSearchForm = connect(
     );
   },
 );
+
+OpinionSearchForm.displayName = 'OpinionSearchForm';

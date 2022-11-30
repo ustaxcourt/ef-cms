@@ -105,3 +105,5 @@ export const WarningNotification = connect(
     }
   },
 );
+
+WarningNotification.displayName = 'WarningNotification';

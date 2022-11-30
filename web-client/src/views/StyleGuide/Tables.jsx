@@ -152,3 +152,5 @@ export const Tables = () => (
     </table>
   </section>
 );
+
+Tables.displayName = 'Tables';
