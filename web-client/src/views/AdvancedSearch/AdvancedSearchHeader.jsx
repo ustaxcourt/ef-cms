@@ -30,3 +30,5 @@ export const AdvancedSearchHeader = connect(
     );
   },
 );
+
+AdvancedSearchHeader.displayName = 'AdvancedSearchHeader';

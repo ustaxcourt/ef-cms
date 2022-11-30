@@ -126,3 +126,5 @@ export const CaseDifferenceExplained = () => {
     </div>
   );
 };
+
+CaseDifferenceExplained.displayName = 'CaseDifferenceExplained';

@@ -88,3 +88,5 @@ export const DashboardPractitioner = connect(
     );
   },
 );
+
+DashboardPractitioner.displayName = 'DashboardPractitioner';

@@ -71,3 +71,5 @@ export const Interstitial = connect(
     );
   },
 );
+
+Interstitial.displayName = 'Interstitial';

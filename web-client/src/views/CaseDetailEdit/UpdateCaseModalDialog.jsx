@@ -131,3 +131,5 @@ export const UpdateCaseModalDialog = connect(
     );
   },
 );
+
+UpdateCaseModalDialog.displayName = 'UpdateCaseModalDialog';

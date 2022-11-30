@@ -23,3 +23,5 @@ export const PDFPreviewErrorModal = connect(
     );
   },
 );
+
+PDFPreviewErrorModal.displayName = 'PDFPreviewErrorModal';

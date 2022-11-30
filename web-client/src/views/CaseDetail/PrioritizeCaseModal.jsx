@@ -63,3 +63,5 @@ export const PrioritizeCaseModal = connect(
     );
   },
 );
+
+PrioritizeCaseModal.displayName = 'PrioritizeCaseModal';
