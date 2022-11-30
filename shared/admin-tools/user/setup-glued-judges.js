@@ -14,10 +14,62 @@ const createApplicationContext = require('../../../web-api/src/applicationContex
 const {
   MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../src/business/entities/EntityConstants');
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
 const { DynamoDB } = require('aws-sdk');
 const { getVersion } = require('../util');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
+
+/**
+ * Creates a cognito user
+ *
+ * @param {object} applicationContext the application context
+ * @param {string} email              the cognito user's email address
+ * @param {string} name               the cognito user's name
+ * @param {string} role               the cognito user's role
+ * @param {string} userId             the cognito user's userId
+ * @returns {Promise<void>}
+ */
+const createCognitoUser = async ({
+  applicationContext,
+  email,
+  name,
+  role,
+  userId,
+}) => {
+  try {
+    await applicationContext
+      .getCognito()
+      .adminCreateUser({
+        UserAttributes: [
+          {
+            Name: 'email_verified',
+            Value: 'True',
+          },
+          {
+            Name: 'email',
+            Value: email,
+          },
+          {
+            Name: 'custom:role',
+            Value: role,
+          },
+          {
+            Name: 'name',
+            Value: name,
+          },
+          {
+            Name: 'custom:userId',
+            Value: userId,
+          },
+        ],
+        UserPoolId: process.env.COGNITO_USER_POOL,
+        Username: email,
+      })
+      .promise();
+    console.log(`Enabled login for ${name}`);
+  } catch (err) {
+    console.error(`ERROR creating cognito user for ${name}:`, err);
+  }
+};
 
 /**
  * Deletes a judge user and chambers section mapping
@@ -124,7 +176,9 @@ const getJudgeUsers = async ({ applicationContext }) => {
   for (const judge of results) {
     const emailDomain = judge.email.split('@')[1];
     if (!(judge.name in judgeUsers)) {
-      judgeUsers[judge.name] = {};
+      judgeUsers[judge.name] = {
+        name: `${judge.judgeTitle} ${judge.name}`,
+      };
     }
     judgeUsers[judge.name][emailDomain] = judge.userId;
   }
@@ -134,31 +188,32 @@ const getJudgeUsers = async ({ applicationContext }) => {
 /**
  * Updates the userId of a cognito user created via bulk import
  *
+ * @param {object} applicationContext the application context
  * @param {string} bulkImportedUserId bulk imported user id
- * @param {object} cognito            Cognito object
  * @param {string} gluedUserId        glued user id
  * @param {string} judge              Judge name
  * @returns {Promise<void>}
  */
 const updateImportedCognitoUsersUserIdAttribute = async ({
+  applicationContext,
   bulkImportedUserId,
-  cognito,
   gluedUserId,
   judge,
 }) => {
-  const params = {
-    UserAttributes: [
-      {
-        Name: 'custom:userId',
-        Value: gluedUserId,
-      },
-    ],
-    UserPoolId: process.env.COGNITO_USER_POOL,
-    Username: bulkImportedUserId,
-  };
-
   try {
-    await cognito.adminUpdateUserAttributes(params);
+    await applicationContext
+      .getCognito()
+      .adminUpdateUserAttributes({
+        UserAttributes: [
+          {
+            Name: 'custom:userId',
+            Value: gluedUserId,
+          },
+        ],
+        UserPoolId: process.env.COGNITO_USER_POOL,
+        Username: bulkImportedUserId,
+      })
+      .promise();
     console.log(`Enabled login for Judge ${judge}`);
   } catch (err) {
     console.error(`ERROR updating custom:userId for Judge ${judge}:`, err);
@@ -169,9 +224,6 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
   const applicationContext = createApplicationContext({});
   const version = await getVersion();
   const dynamo = new DynamoDB({ region: process.env.REGION });
-  const cognito = new CognitoIdentityServiceProvider({
-    region: 'us-east-1', // intentionally hard-coded; cognito user pools are only in us-east-1
-  });
 
   const judgeUsers = await getJudgeUsers({ applicationContext });
   for (const judge in judgeUsers) {
@@ -183,7 +235,8 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
       const bulkImportedUserId = judgeUsers[judge]['example.com'];
       const gluedUserId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
 
-      // delete the bulk imported judge user and chambers section mapping (removes duplicates from judge drop-downs)
+      // delete the bulk imported judge user and chambers section mapping
+      //    this removes duplicates from judge drop-downs
       await deleteDuplicateImportedJudgeUser({
         bulkImportedUserId,
         dynamo,
@@ -194,14 +247,25 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
       // change the @example.com cognito user's custom:userId attribute to the glued user's id
       //    this enables login using the judge.name@example.com cognito user created by the bulk import
       await updateImportedCognitoUsersUserIdAttribute({
+        applicationContext,
         bulkImportedUserId,
-        cognito,
         gluedUserId,
         judge,
       });
     } else if ('ef-cms.ustaxcourt.gov' in judgeUsers[judge]) {
       // this judge was brought over via glue job but not bulk imported
-      // TODO: create cognito user with email `judge.${judge.toLowerCase()}@example.com` and custom:userId gluedUserId
+      const email = `judge.${judge.toLowerCase()}@example.com`;
+      const { name } = judgeUsers[judge];
+      const userId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
+
+      // create a cognito user for this judge with the email address judge.name@example.com
+      await createCognitoUser({
+        applicationContext,
+        email,
+        name,
+        role: 'judge',
+        userId,
+      });
     }
   }
 })();
