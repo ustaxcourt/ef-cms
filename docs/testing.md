@@ -318,8 +318,9 @@ If you are adding/creating a new PDF you must add the PDF name to the `pdfs` arr
 All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  In order to update these, you will need to run the following command:
 
 ```
-docker build -t "ef-cms-us-east-1:pdf-compare" -f Dockerfile-pdf-testing .
-docker run -it --rm -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output ef-cms-us-east-1:pdf-compare sh -c "cd efcms && ./update-pdf-images.sh"
+docker build -t efcms -f Dockerfile . && \
+docker build -t efcms-local -f Dockerfile-local . && \
+docker run -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "./update-pdf-images.sh" && \
 cp -r shared/test-output/*.png shared/test-pdf-expected-images/
 ```
 
@@ -327,6 +328,7 @@ cp -r shared/test-output/*.png shared/test-pdf-expected-images/
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.
 
 ```
-docker build -t "ef-cms-us-east-1:integration-tests" -f Dockerfile-integration .
-docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output ef-cms-us-east-1:integration-tests sh -c "cd efcms && ./run-integration-tests.sh"
+docker build -t efcms -f Dockerfile . && \
+docker build -t efcms-local -f Dockerfile-local . && \
+docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output efcms-local sh -c "./run-integration-tests.sh"
 ```

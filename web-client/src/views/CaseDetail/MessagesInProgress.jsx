@@ -60,3 +60,5 @@ export const MessagesInProgress = connect(
     );
   },
 );
+
+MessagesInProgress.displayName = 'MessagesInProgress';

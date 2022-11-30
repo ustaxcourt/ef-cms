@@ -350,6 +350,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/edit-court-issued',
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
+        );
+        return app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
+          docketEntryId,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*/edit..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
@@ -384,19 +397,6 @@ const router = {
         return app.getSequence('gotoEditDocketEntryMetaSequence')({
           docketNumber,
           docketRecordIndex: +docketRecordIndex,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/edit-court-issued',
-      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
-        );
-        return app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
-          docketEntryId,
-          docketNumber,
         });
       }),
     );

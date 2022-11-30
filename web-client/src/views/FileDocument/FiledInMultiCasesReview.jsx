@@ -24,3 +24,5 @@ export const FiledInMultiCasesReview = connect(
     );
   },
 );
+
+FiledInMultiCasesReview.displayName = 'FiledInMultiCasesReview';

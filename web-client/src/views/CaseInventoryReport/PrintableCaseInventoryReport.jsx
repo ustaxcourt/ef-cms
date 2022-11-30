@@ -31,3 +31,5 @@ export const PrintableCaseInventoryReport = connect(
     );
   },
 );
+
+PrintableCaseInventoryReport.displayName = 'PrintableCaseInventoryReport';

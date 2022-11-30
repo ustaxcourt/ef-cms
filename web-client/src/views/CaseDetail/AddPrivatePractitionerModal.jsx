@@ -167,3 +167,5 @@ export const AddPrivatePractitionerModal = connect(
     );
   },
 );
+
+AddPrivatePractitionerModal.displayName = 'AddPrivatePractitionerModal';

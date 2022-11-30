@@ -68,3 +68,5 @@ export const SectionWorkQueue = connect(
     );
   },
 );
+
+SectionWorkQueue.displayName = 'SectionWorkQueue';

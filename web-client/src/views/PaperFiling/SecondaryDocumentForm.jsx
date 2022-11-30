@@ -24,3 +24,5 @@ export const SecondaryDocumentForm = connect(
     );
   },
 );
+
+SecondaryDocumentForm.displayName = 'SecondaryDocumentForm';

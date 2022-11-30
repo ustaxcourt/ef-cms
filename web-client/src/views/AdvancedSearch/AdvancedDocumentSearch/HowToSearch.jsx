@@ -55,3 +55,5 @@ export const HowToSearch = connect({}, function HowToSearch() {
     </>
   );
 });
+
+HowToSearch.displayName = 'HowToSearch';

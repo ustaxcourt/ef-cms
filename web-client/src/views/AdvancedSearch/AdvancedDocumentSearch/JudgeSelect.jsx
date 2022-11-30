@@ -32,3 +32,5 @@ export const JudgeSelect = connect(
     );
   },
 );
+
+JudgeSelect.displayName = 'JudgeSelect';

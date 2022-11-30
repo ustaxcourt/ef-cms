@@ -20,3 +20,5 @@ export const WorkItemAlreadyCompletedModal = connect(
     );
   },
 );
+
+WorkItemAlreadyCompletedModal.displayName = 'WorkItemAlreadyCompletedModal';

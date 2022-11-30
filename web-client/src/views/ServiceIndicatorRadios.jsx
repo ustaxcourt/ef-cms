@@ -129,3 +129,5 @@ export const ServiceIndicatorRadios = connect(
     );
   },
 );
+
+ServiceIndicatorRadios.displayName = 'ServiceIndicatorRadios';

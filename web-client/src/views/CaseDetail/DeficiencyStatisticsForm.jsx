@@ -242,3 +242,5 @@ export const DeficiencyStatisticsForm = connect(
     );
   },
 );
+
+DeficiencyStatisticsForm.displayName = 'DeficiencyStatisticsForm';

@@ -72,3 +72,5 @@ export const IndividualWorkQueue = connect(
     );
   },
 );
+
+IndividualWorkQueue.displayName = 'IndividualWorkQueue';

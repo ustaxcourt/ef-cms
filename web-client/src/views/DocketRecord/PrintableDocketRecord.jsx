@@ -31,3 +31,5 @@ export const PrintableDocketRecord = connect(
     );
   },
 );
+
+PrintableDocketRecord.displayName = 'PrintableDocketRecord';

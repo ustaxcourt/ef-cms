@@ -21,3 +21,5 @@ export const SetCalendarModalDialog = connect(
     );
   },
 );
+
+SetCalendarModalDialog.displayName = 'SetCalendarModalDialog';

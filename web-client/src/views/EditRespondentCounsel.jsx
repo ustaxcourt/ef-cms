@@ -114,3 +114,5 @@ export const EditRespondentCounsel = connect(
     );
   },
 );
+
+EditRespondentCounsel.displayName = 'EditRespondentCounsel';

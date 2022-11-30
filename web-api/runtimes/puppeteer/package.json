@@ -4,7 +4,6 @@
   "description": "Layer Only Packaging",
   "main": "index.js",
   "scripts": {
-    "preinstall": "npx npm-force-resolutions"
   },
   "keywords": [
     "Lambda",
@@ -13,12 +12,11 @@
   "license": "CC0-1.0",
   "dependencies": {
     "@sparticuz/chrome-aws-lambda": "14.1.0",
-    "npm-force-resolutions": "0.0.10",
     "pug": "^3.0.2",
     "puppeteer-core": "^14.1.0",
     "sass": "^1.49.7"
   },
-  "resolutions": {
+  "overrides": {
     "bl": "^4.0.3",
     "lodash": "^4.17.21",
     "minimist": "^1.2.5",

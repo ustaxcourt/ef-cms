@@ -80,3 +80,5 @@ export const AccountMenu = connect(
     );
   },
 );
+
+AccountMenu.displayName = 'AccountMenu';

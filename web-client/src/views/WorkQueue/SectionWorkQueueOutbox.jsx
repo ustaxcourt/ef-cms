@@ -103,3 +103,5 @@ export const SectionWorkQueueOutbox = connect(
     );
   },
 );
+
+SectionWorkQueueOutbox.displayName = 'SectionWorkQueueOutbox';
