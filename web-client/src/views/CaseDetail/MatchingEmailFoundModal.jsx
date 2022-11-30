@@ -34,3 +34,5 @@ export const MatchingEmailFoundModal = connect(
     );
   },
 );
+
+MatchingEmailFoundModal.displayName = 'MatchingEmailFoundModal';

@@ -96,3 +96,5 @@ export const AppComponentPublic = connect(
     );
   },
 );
+
+AppComponentPublic.displayName = 'AppComponentPublic';

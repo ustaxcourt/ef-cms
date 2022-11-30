@@ -254,3 +254,5 @@ export const MessageDocument = connect(
     );
   },
 );
+
+MessageDocument.displayName = 'MessageDocument';

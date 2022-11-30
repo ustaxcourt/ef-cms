@@ -26,3 +26,5 @@ export const WorkQueue = connect(
     );
   },
 );
+
+WorkQueue.displayName = 'WorkQueue';

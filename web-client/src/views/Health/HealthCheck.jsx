@@ -356,3 +356,5 @@ export const HealthCheck = connect(
     );
   },
 );
+
+HealthCheck.displayName = 'HealthCheck';

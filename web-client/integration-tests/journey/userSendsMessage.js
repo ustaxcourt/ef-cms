@@ -9,7 +9,7 @@ const JUDGES_CHAMBERS = applicationContext
   .getPersistenceGateway()
   .getJudgesChambers();
 
-export const userSendsMessageToJudge = (
+export const userSendsMessage = (
   cerebralTest,
   subject,
   judgesChambersSection,
