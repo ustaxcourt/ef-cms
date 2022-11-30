@@ -55,6 +55,7 @@ import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenCl
 import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
@@ -402,6 +403,7 @@ import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModal
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
+import { toggleAllWorkItemCheckboxChangeSequence } from './sequences/toggleAllWorkItemCheckboxChangeSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
@@ -579,6 +581,7 @@ export const presenter = {
     clearOptionalFieldsStampFormSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
+    clearSelectedWorkItemsSequence,
     clearViewerDocumentToDisplaySequence,
     closeModalAndNavigateBackSequence,
     closeModalAndNavigateSequence,
@@ -923,6 +926,7 @@ export const presenter = {
     submitUpdatePetitionerInformationFromModalSequence,
     submitUpdatePractitionerUserSequence,
     submitUpdateUserContactInformationSequence,
+    toggleAllWorkItemCheckboxChangeSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
     toggleMenuSequence,
