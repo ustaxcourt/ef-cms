@@ -8,7 +8,6 @@ on:
 
 jobs:
   test_pdfs:
-    needs: ecr_login
     runs-on: ubuntu-latest
     container:
       image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public:b3.0.0
