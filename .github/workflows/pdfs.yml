@@ -10,7 +10,7 @@ jobs:
   test_pdfs:
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public:b3.0.0
+      image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
       options: --user 1001
     steps:
       - uses: actions/checkout@v2
