@@ -75,11 +75,28 @@ cd web-api/terraform/main
 
 ## (Optional) Quality of Life Improvements
 
-### Aliases
+### Wrapper in `bin`
 
-To create an alias for the `set-env.zsh` script, define this in your `.zshrc` or aliases file:
+To invoke the environment switcher more quickly, create a wrapper in your private `bin` directory, which for ZSH is usually `$HOME/.local/bin`.
+
+First, add this to your `.zshrc`:
 ```
-alias dawson_env='cd "$HOME/path/to/ef-cms" && source scripts/env/set-env.zsh'
+if [ -d "$HOME/.local/bin" ]; then
+        path+=("$HOME/.local/bin")
+fi
+```
+Then create the directory, if necessary:
+```
+mkdir -p "$HOME/.local/bin"
+```
+Then create an executable `$HOME/.local/bin/dawson_env` file and populate it with the following:
+```
+#!/bin/zsh
+
+cd "$HOME/path/to/ef-cms"
+source ./scripts/env/defaults
+env="${1:-$DEFAULT_ENV}"
+source ./scripts/env/set-env.zsh "$env"
 ```
 Then to use the alias, simply run:
 ```
@@ -91,16 +108,23 @@ Then to use the alias, simply run:
 First, define this function in your `.zshrc` or aliases file:
 ```
 function renew_aws_session_token() {
+    account=${1-"myaccount"}
     cd "$HOME/path/to/ef-cms"
-    source scripts/env/aws-accounts/myaccount.env
-    if [[ ! -z "$AWS_ACCOUNT_ID" ]] && [[ ! -z "$AWS_SECRET_ACCESS_KEY" ]]; then
-        AWS_SESSION_TOKEN=$(aws sts get-session-token --duration-seconds 86400 --output json | jq -r ".Credentials.SessionToken")
-        sed -i '' "/AWS_SESSION_TOKEN/s/.*/export AWS_SESSION_TOKEN='$AWS_SESSION_TOKEN'/" scripts/env/aws-accounts/myaccount.env
-        export AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
+    if [[ -f "./scripts/env/aws-accounts/${account}.env" ]]; then
+        source "./scripts/env/aws-accounts/${account}.env"
+        if [[ ! -z "$AWS_ACCOUNT_ID" ]] && [[ ! -z "$AWS_SECRET_ACCESS_KEY" ]]; then
+            AWS_SESSION_TOKEN=$(aws sts get-session-token --duration-seconds 86400 --output json | jq -r ".Credentials.SessionToken")
+            sed -i '' "/AWS_SESSION_TOKEN/s/.*/export AWS_SESSION_TOKEN='$AWS_SESSION_TOKEN'/" "scripts/env/aws-accounts/${account}.env"
+            export AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
+        fi
     fi
 }
 ```
 Then to use the function, simply run:
 ```
 renew_aws_session_token
+```
+or:
+```
+renew_aws_session_token myotheraccount
 ```
