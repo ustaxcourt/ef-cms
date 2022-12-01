@@ -91,6 +91,7 @@ export const socketRouter = (app, onMessageCallbackFn) => {
       case 'serve_document_error':
         await app.getSequence('serveDocumentErrorSequence')({
           ...message,
+          showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
     }
