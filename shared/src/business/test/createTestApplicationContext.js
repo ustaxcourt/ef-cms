@@ -130,6 +130,9 @@ const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
 const {
+  getModifiedDocumentTitleWithAdditionalInfo,
+} = require('../utilities/getModifiedDocumentTitleWithAdditionalInfo');
+const {
   getSealedDocketEntryTooltip,
 } = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
 const {
@@ -288,6 +291,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+
     computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
     copyPagesAndAppendToTargetPdf: jest
       .fn()
@@ -353,6 +357,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getModifiedDocumentTitleWithAdditionalInfo: jest
+      .fn()
+      .mockImplementation(getModifiedDocumentTitleWithAdditionalInfo),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
