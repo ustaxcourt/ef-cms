@@ -6,9 +6,6 @@ on:
 jobs:
   e2e_pa11y:
     runs-on: ubuntu-latest
-    # container:
-    #   image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
-    #   options: --user 1001
     env:
       CI: true
       SKIP_CACHE_INVALIDATION: true
@@ -49,14 +46,14 @@ jobs:
           URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
           sleep 10
           npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-          # npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-          # npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-          # npm run test:pa11y:4 --node-flags --max-old-space-size=1024
+          npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+          npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+          npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - name: store screenshots artifacts
         uses: actions/upload-artifact@v3
         with:
           name: screen-shots
-          path: $GITHUB_WORKSPACE/web-client/pa11y/pa11y-screenshots
+          path: ${{ github.workspace }}/web-client/pa11y/pa11y-screenshots
       - name: store server logs
         uses: actions/upload-artifact@v3
         with:
