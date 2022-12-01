@@ -1,4 +1,4 @@
-name: build ts api
+name: Build API Typescript
 
 on:
   pull_request:
