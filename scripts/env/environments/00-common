@@ -27,7 +27,6 @@ set +o allexport
   echo "S3_ENDPOINT='s3.${REGION}.amazonaws.com'"
   echo "STAGE='${ENV}'"
   echo "TEMP_DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-temp-documents-${ENV}-${REGION}'"
-  echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
 } >> .env
 
 # determine current color and database version from the deploy table
@@ -41,13 +40,48 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --query 'DomainStatus.Endpoint' \
   --output text)
 
+# determine Cognito user pool id (region hard-coded; all Cognito user pools are in us-east-1)
+COGNITO_USER_POOL=$(aws cognito-idp list-user-pools \
+  --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" \
+  --max-results 30 \
+  --region "us-east-1" \
+  --output text)
+
+# determine Cognito client id for the user pool (region hard-coded; all Cognito user pools are in us-east-1)
+CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
+  --user-pool-id "${COGNITO_USER_POOL}" \
+  --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" \
+  --max-results 30 \
+  --region "us-east-1" \
+  --output text)
+
+# determine Cognito IRS user pool id (region hard-coded; all Cognito user pools are in us-east-1)
+COGNITO_IRS_USER_POOL=$(aws cognito-idp list-user-pools \
+  --query "UserPools[?Name == 'efcms-irs-${ENV}'].Id | [0]" \
+  --max-results 30 \
+  --region "us-east-1" \
+  --output text)
+
+# determine Cognito client id for the IRS user pool (region hard-coded; all Cognito user pools are in us-east-1)
+IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
+  --user-pool-id "${COGNITO_IRS_USER_POOL}" \
+  --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" \
+  --max-results 30 \
+  --region "us-east-1" \
+  --output text)
+
 {
+  echo "CLIENT_ID='${CLIENT_ID}'"
+  echo "COGNITO_IRS_USER_POOL='${COGNITO_IRS_USER_POOL}'"
+  echo "COGNITO_USER_POOL='${COGNITO_USER_POOL}'"
   echo "COLOR='${CURRENT_COLOR}'"
   echo "CURRENT_COLOR='${CURRENT_COLOR}'"
   echo "DYNAMODB_TABLE_NAME='efcms-${ENV}-${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
+  echo "IRS_CLIENT_ID='${IRS_CLIENT_ID}'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE}'"
+  echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
 } >> .env
 
 sort -o .env .env
