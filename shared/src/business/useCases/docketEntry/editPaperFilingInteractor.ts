@@ -56,14 +56,10 @@ export const editPaperFilingInteractor = async (
     docketEntryId: primaryDocumentFileId,
   });
 
-  let error;
   if (!currentDocketEntry) {
-    error = new NotFoundError('Docket entry not found');
+    throw new NotFoundError('Docket entry not found');
   } else if (currentDocketEntry.servedAt) {
-    error = new Error('Docket entry has already been served');
-  }
-  if (error) {
-    throw error;
+    throw new Error('Docket entry has already been served');
   }
 
   if (!isSavingForLater) {
