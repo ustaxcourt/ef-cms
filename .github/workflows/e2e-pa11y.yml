@@ -24,10 +24,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Configure sysctl limits
         run: |
-          swapoff -a
-          sysctl -w vm.swappiness=1
-          sysctl -w fs.file-max=262144
-          sysctl -w vm.max_map_count=262144
+          apt-get install -y sudo
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
