@@ -63,7 +63,7 @@ commands:
 jobs:
   build-client-integration:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
@@ -110,7 +110,7 @@ jobs:
 
   e2e-pa11y-public:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
@@ -152,7 +152,7 @@ jobs:
 
   e2e-pa11y-public-search:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
@@ -194,7 +194,7 @@ jobs:
 
   e2e-cypress:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
@@ -236,7 +236,7 @@ jobs:
 
   e2e-cypress-smoketests-local:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
@@ -282,7 +282,7 @@ jobs:
 
   e2e-cypress-public:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
@@ -329,7 +329,7 @@ jobs:
 
   deploy:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -469,7 +469,7 @@ jobs:
 
   reindex:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -502,7 +502,7 @@ jobs:
 
   migrate:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -565,7 +565,7 @@ jobs:
 
   disable-reindex-cron:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -583,7 +583,7 @@ jobs:
 
   smoketests:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -611,7 +611,7 @@ jobs:
 
   smoketests-readonly:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -649,7 +649,7 @@ jobs:
 
   deploy-switch-colors-cron:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -667,7 +667,7 @@ jobs:
 
   disable-switch-colors-cron:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -683,7 +683,7 @@ jobs:
 
   switch-colors:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -702,7 +702,7 @@ jobs:
 
   backup-source-dynamo-table:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: small
     steps:
       - git-shallow-clone/checkout
@@ -723,7 +723,7 @@ jobs:
 
   delete-api-mappings:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: small
     steps:
       - git-shallow-clone/checkout
@@ -741,7 +741,7 @@ jobs:
 
   cleanup:
     docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
+      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
     resource_class: medium
     steps:
       - git-shallow-clone/checkout
