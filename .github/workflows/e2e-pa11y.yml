@@ -1,4 +1,4 @@
-name: e2e pa11y
+name: E2E Pa11y
 
 on:
   pull_request:
@@ -35,7 +35,7 @@ jobs:
         with:
           port: 8000
           cors: '*'
-      - name: run e2e pa11y
+      - name: Run E2E Pa11y
         run: |
           npm ci --legacy-peer-deps
           mkdir -p /tmp/pa11y/
@@ -49,12 +49,12 @@ jobs:
           npm run test:pa11y:2 --node-flags --max-old-space-size=1024
           npm run test:pa11y:3 --node-flags --max-old-space-size=1024
           npm run test:pa11y:4 --node-flags --max-old-space-size=1024
-      - name: store screenshots artifacts
+      - name: Store Screenshots Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: screen-shots
           path: ${{ github.workspace }}/web-client/pa11y/pa11y-screenshots
-      - name: store server logs
+      - name: Store Server Logs
         uses: actions/upload-artifact@v3
         with:
           name: server-logs
