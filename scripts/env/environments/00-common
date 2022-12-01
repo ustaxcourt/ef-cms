@@ -65,7 +65,7 @@ COGNITO_IRS_USER_POOL=$(aws cognito-idp list-user-pools \
 # determine Cognito client id for the IRS user pool (region hard-coded; all Cognito user pools are in us-east-1)
 IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   --user-pool-id "${COGNITO_IRS_USER_POOL}" \
-  --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" \
+  --query "UserPoolClients[?ClientName == 'irs_client'].ClientId | [0]" \
   --max-results 30 \
   --region "us-east-1" \
   --output text)
