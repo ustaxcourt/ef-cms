@@ -22,13 +22,13 @@ jobs:
       CIRCLECI: true
     steps:
       - uses: actions/checkout@v2
-      - name: Configure sysctl limits
-        run: |
-          whoami
-          swapoff -a
-          sysctl -w vm.swappiness=1
-          sysctl -w fs.file-max=262144
-          sysctl -w vm.max_map_count=262144
+      # - name: Configure sysctl limits
+      #   run: |
+      #     whoami
+      #     swapoff -a
+      #     sysctl -w vm.swappiness=1
+      #     sysctl -w fs.file-max=262144
+      #     sysctl -w vm.max_map_count=262144
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
