@@ -14,8 +14,9 @@ jobs:
     #   options: --user 1001
     steps:
       - uses: actions/checkout@v2
-      - name: setup
+      - name: Setup
         run: |
+          sudo apt-get update
           sudo apt-get install -y graphicsmagick ghostscript
           npm ci --legacy-peer-deps && npm rebuild
       - name: Generate PDFs
