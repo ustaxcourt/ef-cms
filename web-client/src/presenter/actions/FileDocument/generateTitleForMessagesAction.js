@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} docketEntry the docketEntry
  * @returns {object} the document title
  */
-export const generateTitleActionForMessages = ({
+export const generateTitleForMessagesAction = ({
   applicationContext,
   get,
   store,
