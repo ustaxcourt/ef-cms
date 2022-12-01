@@ -9,11 +9,27 @@
 const getModifiedDocumentTitleWithAdditionalInfo = documentMetaData => {
   if (documentMetaData.previousDocument) {
     const {
-      additionalInfo: additionalInfoOfNewDoc,
+      additionalInfo: additionalInfoOfNewDocket,
       previousDocument: { additionalInfo, documentTitle },
     } = documentMetaData;
+
     const originalDocumentInfo = `${documentTitle} ${additionalInfo}`;
-    return `${originalDocumentInfo} ${additionalInfoOfNewDoc || ''}`.trim();
+    return `${originalDocumentInfo} ${additionalInfoOfNewDocket || ''}`.trim();
+  } else if (documentMetaData.freeText) {
+    const {
+      additionalInfo,
+      documentTitle: documentTitleOfCurrentDocketEntry,
+      freeText,
+    } = documentMetaData;
+
+    const placeholder = '[anything]';
+
+    const docTitle = documentTitleOfCurrentDocketEntry.includes(placeholder)
+      ? documentTitleOfCurrentDocketEntry.replace(placeholder, freeText || '')
+      : documentTitleOfCurrentDocketEntry;
+
+    return `${docTitle} ${additionalInfo || ''}
+    }`.trim();
   }
   return documentMetaData.documentTitle;
 };
