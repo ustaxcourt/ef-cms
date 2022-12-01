@@ -6,9 +6,9 @@ on:
 jobs:
   e2e_pa11y:
     runs-on: ubuntu-latest
-    container:
-      image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
-      options: --user 1001
+    # container:
+    #   image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
+    #   options: --user 1001
     env:
       CI: true
       SKIP_CACHE_INVALIDATION: true
@@ -22,13 +22,12 @@ jobs:
       CIRCLECI: true
     steps:
       - uses: actions/checkout@v2
-      # - name: Configure sysctl limits
-      #   run: |
-      #     whoami
-      #     swapoff -a
-      #     sysctl -w vm.swappiness=1
-      #     sysctl -w fs.file-max=262144
-      #     sysctl -w vm.max_map_count=262144
+      - name: Configure sysctl limits
+        run: |
+          swapoff -a
+          sysctl -w vm.swappiness=1
+          sysctl -w fs.file-max=262144
+          sysctl -w vm.max_map_count=262144
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
