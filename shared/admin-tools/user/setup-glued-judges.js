@@ -1,5 +1,4 @@
 if (
-  !process.env.COGNITO_USER_POOL ||
   !process.env.ELASTICSEARCH_ENDPOINT ||
   !process.env.ENV ||
   !process.env.REGION
@@ -309,16 +308,18 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
           role: 'judge',
           userId,
         });
-
-        await cognito
-          .adminSetUserPassword({
-            Password: process.env.USTC_ADMIN_PASS,
-            Permanent: true,
-            UserPoolId,
-            Username: email,
-          })
-          .promise();
       }
+      //set password
+      //is this the right spot, and the right password?
+      const { email } = judgeUsers[judge];
+      await cognito
+        .adminSetUserPassword({
+          Password: process.env.DEFAULT_ACCOUNT_PASS,
+          Permanent: true,
+          UserPoolId,
+          Username: email,
+        })
+        .promise();
     }
   }
 })();
