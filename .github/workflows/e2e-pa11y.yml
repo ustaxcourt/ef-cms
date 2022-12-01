@@ -24,6 +24,7 @@ jobs:
       - name: run e2e pa11y
         run: |
           npm ci --legacy-peer-deps
+          mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
           URL=http://localhost:1234 ./wait-until.sh
           URL=http://localhost:4000/api/swagger ./wait-until.sh
