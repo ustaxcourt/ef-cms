@@ -24,6 +24,7 @@ RUN apt-get install -y -t \
   graphicsmagick=1.4+really1.3.36+hg16481-2 \
   ghostscript=9.53.3~dfsg-7+deb11u2 \
   chromium \
+  sudo \
   -V
 
 
