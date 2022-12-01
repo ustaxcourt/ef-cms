@@ -9,13 +9,15 @@ on:
 jobs:
   test_pdfs:
     runs-on: ubuntu-latest
-    container:
-      image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
-      options: --user 1001
+    # container:
+    #   image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
+    #   options: --user 1001
     steps:
       - uses: actions/checkout@v2
-      - name: NPM Install
-        run: npm ci --legacy-peer-deps && npm rebuild
+      - name: setup
+        run: |
+          sudo apt-get install -y graphicsmagick ghostscript
+          npm ci --legacy-peer-deps && npm rebuild
       - name: Generate PDFs
         run: npm run test:pdf-output
       - name: Compare Images
