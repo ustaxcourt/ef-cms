@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.1
-      options: --user 1001
+      # options: --user 1001
     env:
       CI: true
       SKIP_CACHE_INVALIDATION: true
