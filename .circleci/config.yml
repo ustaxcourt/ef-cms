@@ -513,6 +513,14 @@ jobs:
               echo "skipping…"
             fi
       - run:
+          name: Judge Users Setup Lower Envs
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "dev" ] || [ "${CIRCLE_BRANCH}" == "stg" ] || [ "${CIRCLE_BRANCH}" == "test" ]; then
+             node ./shared/admin-tools/user/setup-glued-judges.js
+            else
+              echo "skipping…"
+            fi
+      - run:
           name: 'Deploy - Web Client - S3'
           command: |
             ./web-client/deploy-ui.sh
