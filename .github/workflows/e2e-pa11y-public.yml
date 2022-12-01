@@ -37,6 +37,8 @@ jobs:
           cors: '*'
       - name: run e2e pa11y public
         run: |
+          npm ci --legacy-peer-deps
+          mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
           ./wait-until-services.sh
           URL=http://localhost:5000/ ./wait-until.sh
