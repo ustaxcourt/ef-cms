@@ -35,40 +35,63 @@ const createCognitoUser = async ({
   role,
   userId,
 }) => {
+  let userExists = false;
   try {
-    await applicationContext
-      .getCognito()
-      .adminCreateUser({
-        UserAttributes: [
-          {
-            Name: 'email_verified',
-            Value: 'True',
-          },
-          {
-            Name: 'email',
-            Value: email,
-          },
-          {
-            Name: 'custom:role',
-            Value: role,
-          },
-          {
-            Name: 'name',
-            Value: name,
-          },
-          {
-            Name: 'custom:userId',
-            Value: userId,
-          },
-        ],
-        UserPoolId: process.env.COGNITO_USER_POOL,
-        Username: email,
-      })
-      .promise();
-    console.log(`Enabled login for ${name}`);
+    await applicationContext.getCognito().getUser({
+      UserPoolId: process.env.COGNITO_USER_POOL,
+      Username: email,
+    });
+    userExists = true;
   } catch (err) {
-    console.error(`ERROR creating cognito user for ${name}:`, err);
+    if (err.code !== 'UserNotFoundException') {
+      console.error(`ERROR checking for cognito user for ${name}:`, err);
+      return;
+    }
   }
+  if (!userExists) {
+    try {
+      await applicationContext
+        .getCognito()
+        .adminCreateUser({
+          UserAttributes: [
+            {
+              Name: 'email_verified',
+              Value: 'True',
+            },
+            {
+              Name: 'email',
+              Value: email,
+            },
+            {
+              Name: 'custom:role',
+              Value: role,
+            },
+            {
+              Name: 'name',
+              Value: name,
+            },
+            {
+              Name: 'custom:userId',
+              Value: userId,
+            },
+          ],
+          UserPoolId: process.env.COGNITO_USER_POOL,
+          Username: email,
+        })
+        .promise();
+    } catch (err) {
+      console.error(`ERROR creating cognito user for ${name}:`, err);
+    }
+  } else {
+    // update existing userId
+    await updateImportedCognitoUsersUserIdAttribute({
+      applicationContext,
+      bulkImportedUserId: email,
+      gluedUserId: userId,
+      judge: name,
+    });
+  }
+  console.log(`Enabled login for ${name}`);
 };
 
 /**
@@ -78,6 +101,7 @@ const createCognitoUser = async ({
  * @param {string} bulkImportedUserId bulk imported user id
  * @param {object} dynamo             DynamoDB object
  * @param {string} judge              Judge name
+ * @param {string} section            Judge's chambers section
  * @param {string} version            database version
  * @returns {Promise<void>}
  */
@@ -85,24 +109,27 @@ const deleteDuplicateImportedJudgeUser = async ({
   bulkImportedUserId,
   dynamo,
   judge,
+  section,
   version,
 }) => {
-  const section = `${judge.toLowerCase()}sChambers`; // TODO: is there a helper for this?
   const TableName = `efcms-${process.env.ENV}-${version}`;
 
+  const sectionMappingKey = {
+    pk: `section|${section}`,
+    sk: `user|${bulkImportedUserId}`,
+  };
   try {
-    await deleteSectionMapping({
-      TableName,
-      dynamo,
-      section,
-      userId: bulkImportedUserId,
-    });
+    await dynamo
+      .deleteItem({
+        Key: sectionMappingKey,
+        TableName,
+      })
+      .promise();
   } catch (err) {
     console.error(
       `ERROR deleting duplicate chambers section mapping for Judge ${judge}:`,
       err,
     );
-    return;
   }
 
   const userKey = {
@@ -120,28 +147,6 @@ const deleteDuplicateImportedJudgeUser = async ({
     console.error(`ERROR deleting duplicate Judge ${judge}:`, err);
   }
   console.log(`Deleted duplicate Judge ${judge}`);
-};
-
-/**
- * Deletes a user's section mapping
- *
- * @param {string} section   section name
- * @param {object} dynamo    DynamoDB object
- * @param {string} userId    user id
- * @param {string} TableName dynamo table name
- * @returns {Promise<void>}
- */
-const deleteSectionMapping = async ({ dynamo, section, TableName, userId }) => {
-  const Key = {
-    pk: `section|${section}`,
-    sk: `user|${userId}`,
-  };
-  await dynamo
-    .deleteItem({
-      Key,
-      TableName,
-    })
-    .promise();
 };
 
 /**
@@ -177,10 +182,23 @@ const getJudgeUsers = async ({ applicationContext }) => {
     const emailDomain = judge.email.split('@')[1];
     if (!(judge.name in judgeUsers)) {
       judgeUsers[judge.name] = {
+        email: `${
+          judge.judgeTitle.indexOf('Special Trial') !== -1 ? 'st' : ''
+        }judge.${judge.name.toLowerCase()}@example.com`,
         name: `${judge.judgeTitle} ${judge.name}`,
+        section: judge.section,
       };
     }
-    judgeUsers[judge.name][emailDomain] = judge.userId;
+    let sourceOfUser = emailDomain;
+    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+      sourceOfUser = 'gluedUserId';
+    } else if (
+      emailDomain === 'example.com' ||
+      emailDomain === 'dawson.ustaxcourt.gov'
+    ) {
+      sourceOfUser = 'bulkImportedUserId';
+    }
+    judgeUsers[judge.name][sourceOfUser] = judge.userId;
   }
   return judgeUsers;
 };
@@ -227,45 +245,44 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
 
   const judgeUsers = await getJudgeUsers({ applicationContext });
   for (const judge in judgeUsers) {
-    if (
-      'example.com' in judgeUsers[judge] &&
-      'ef-cms.ustaxcourt.gov' in judgeUsers[judge]
-    ) {
-      // this judge was brought over via glue job and was ALSO bulk imported
-      const bulkImportedUserId = judgeUsers[judge]['example.com'];
-      const gluedUserId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
+    if ('gluedUserId' in judgeUsers[judge]) {
+      if ('bulkImportedUserId' in judgeUsers[judge]) {
+        // this judge was brought over via glue job and was ALSO bulk imported
+        const { bulkImportedUserId, gluedUserId, section } = judgeUsers[judge];
 
-      // delete the bulk imported judge user and chambers section mapping
-      //    this removes duplicates from judge drop-downs
-      await deleteDuplicateImportedJudgeUser({
-        bulkImportedUserId,
-        dynamo,
-        judge,
-        version,
-      });
+        // delete the bulk imported judge user and chambers section mapping
+        //    this removes duplicates from judge drop-downs
+        await deleteDuplicateImportedJudgeUser({
+          bulkImportedUserId,
+          dynamo,
+          judge,
+          section,
+          version,
+        });
 
-      // change the @example.com cognito user's custom:userId attribute to the glued user's id
-      //    this enables login using the judge.name@example.com cognito user created by the bulk import
-      await updateImportedCognitoUsersUserIdAttribute({
-        applicationContext,
-        bulkImportedUserId,
-        gluedUserId,
-        judge,
-      });
-    } else if ('ef-cms.ustaxcourt.gov' in judgeUsers[judge]) {
-      // this judge was brought over via glue job but not bulk imported
-      const email = `judge.${judge.toLowerCase()}@example.com`;
-      const { name } = judgeUsers[judge];
-      const userId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
+        // change the @example.com cognito user's custom:userId attribute to the glued user's id
+        //    this enables login using the judge.name@example.com cognito user created by the bulk import
+        await updateImportedCognitoUsersUserIdAttribute({
+          applicationContext,
+          bulkImportedUserId,
+          gluedUserId,
+          judge,
+        });
+      } else {
+        // this judge was brought over via glue job but not bulk imported
+        const { email, name } = judgeUsers[judge];
+        const userId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
 
-      // create a cognito user for this judge with the email address judge.name@example.com
-      await createCognitoUser({
-        applicationContext,
-        email,
-        name,
-        role: 'judge',
-        userId,
-      });
+        // create a cognito user for this judge with the email address judge.name@example.com
+        await createCognitoUser({
+          applicationContext,
+          email,
+          name,
+          role: 'judge',
+          userId,
+        });
+      }
+      // TODO: set password
     }
   }
 })();
