@@ -1,7 +1,7 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
-import { generateTitleActionForMessages } from '../actions/FileDocument/generateTitleActionForMessages';
+import { generateTitleForMessagesAction } from '../actions/FileDocument/generateTitleForMessagesAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
@@ -48,7 +48,7 @@ export const openCompleteAndSendMessageModalSequence = [
           clearModalStateAction,
           refreshExternalDocumentTitleFromEventCodeAction,
           setPreviousDocumentDocketEntryAction,
-          generateTitleActionForMessages,
+          generateTitleForMessagesAction,
           updateMessageModalAfterQCAction,
           setShowModalFactoryAction('CreateMessageModalDialog'),
         ],
