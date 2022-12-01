@@ -217,9 +217,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers()
-        .fileAndServeDocumentOnOneCasenOneCase.mock.calls[0][0]
-        .docketEntryEntity.isDraft,
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.isDraft,
     ).toBe(false);
   });
 
