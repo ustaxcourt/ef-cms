@@ -98,7 +98,7 @@ source ./scripts/env/defaults
 env="${1:-$DEFAULT_ENV}"
 source ./scripts/env/set-env.zsh "$env"
 ```
-Then to use the alias, simply run:
+Then to use the wrapper, simply run:
 ```
 . dawson_env myenv
 ```
