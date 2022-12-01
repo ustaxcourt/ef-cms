@@ -11,6 +11,9 @@ const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
+  fileAndServeDocumentOnOneCase,
+} = require('./fileAndServeDocumentOnOneCase');
+const {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } = require('../../../test/mockCase');
@@ -18,11 +21,10 @@ const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser, judgeUser } = require('../../../test/mockUsers');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { fileDocumentOnOneCase } = require('./fileDocumentOnOneCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { WorkItem } = require('../../entities/WorkItem');
 
-describe('fileDocumentOnOneCase', () => {
+describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
   let mockWorkItem;
   let mockDocketEntry;
@@ -116,7 +118,7 @@ describe('fileDocumentOnOneCase', () => {
       { applicationContext },
     );
 
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -132,7 +134,7 @@ describe('fileDocumentOnOneCase', () => {
       applicationContext,
     });
 
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: docketEntryOnCase,
@@ -160,7 +162,7 @@ describe('fileDocumentOnOneCase', () => {
       { applicationContext },
     );
 
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -200,7 +202,7 @@ describe('fileDocumentOnOneCase', () => {
       { applicationContext },
     );
 
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -220,7 +222,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should set docketEntry.workItem.leadDocketNumber from caseEntity.leadDocketNumber', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber },
@@ -240,7 +242,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should assign the docketEntry`s work item to the provided user', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber },
@@ -264,7 +266,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should set the docketEntry`s work item as completed by the provided user', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber },
@@ -284,7 +286,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should update the docketEntry on the caseEntity when it already existed on the case', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -296,7 +298,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should add an index to the docketEntry on the caseEntity', async () => {
-    const result = await fileDocumentOnOneCase({
+    const result = await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: new DocketEntry(
@@ -321,7 +323,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should add the docketEntry on the caseEntity when it did NOT already exist on the case', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -333,7 +335,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should validate the docketEntry`s work item', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -345,7 +347,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should make a call to save the docketEntry`s work item', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -359,7 +361,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should make a call to put the docketEntry`s work item in the user`s outbox', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -387,7 +389,7 @@ describe('fileDocumentOnOneCase', () => {
       { applicationContext },
     );
 
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: a,
@@ -402,7 +404,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should make a call save the case', async () => {
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -416,7 +418,7 @@ describe('fileDocumentOnOneCase', () => {
   });
 
   it('should return the updated case entity', async () => {
-    const result = await fileDocumentOnOneCase({
+    const result = await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntry,
@@ -447,7 +449,7 @@ describe('fileDocumentOnOneCase', () => {
         docketEntries: [mockDocketEntryPending],
       });
 
-    await fileDocumentOnOneCase({
+    await fileAndServeDocumentOnOneCase({
       applicationContext,
       caseEntity: mockCaseEntity,
       docketEntryEntity: mockDocketEntryPending,
@@ -477,7 +479,7 @@ describe('fileDocumentOnOneCase', () => {
           docketEntries: [docketEntry],
         });
 
-      await fileDocumentOnOneCase({
+      await fileAndServeDocumentOnOneCase({
         applicationContext,
         caseEntity: mockCaseEntity,
         docketEntryEntity: docketEntry,

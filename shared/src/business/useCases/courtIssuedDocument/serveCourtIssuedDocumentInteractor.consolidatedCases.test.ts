@@ -99,7 +99,9 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockReturnValue(MOCK_LEAD_CASE_WITH_PAPER_SERVICE);
+      .fileAndServeDocumentOnOneCase.mockReturnValue(
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      );
 
     consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
       return {
@@ -179,7 +181,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockImplementationOnce(() => {})
+      .fileAndServeDocumentOnOneCase.mockImplementationOnce(() => {})
       .mockImplementationOnce(() => {})
       .mockRejectedValueOnce(new Error(expectedErrorString));
 

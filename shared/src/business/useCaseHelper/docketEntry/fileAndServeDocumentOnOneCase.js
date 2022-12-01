@@ -8,7 +8,7 @@ const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
-exports.fileDocumentOnOneCase = async ({
+exports.fileAndServeDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,

@@ -31,7 +31,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
+      .fileAndServeDocumentOnOneCase.mockImplementation(
+        ({ caseEntity }) => caseEntity,
+      );
 
     applicationContext
       .getPersistenceGateway()
@@ -166,7 +168,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     const servedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(servedDocketEntry.numberOfPages).toBe(mockNumberOfPages);
   });
@@ -263,7 +265,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase,
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
     ).toHaveBeenCalledTimes(3);
   });
 
@@ -289,7 +291,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.filingDate).toBeDefined();
   });
