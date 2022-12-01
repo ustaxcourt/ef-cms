@@ -88,7 +88,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       applicationContext,
       clientConnectionId,
       message: {
-        action: 'serve_document_complete_error',
+        action: 'serve_document_error',
         error: error.message,
       },
       userId: user.userId,
