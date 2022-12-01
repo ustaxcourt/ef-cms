@@ -93,7 +93,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
+      .fileAndServeDocumentOnOneCase.mockImplementation(
+        ({ caseEntity }) => caseEntity,
+      );
 
     applicationContext
       .getUseCaseHelpers()
@@ -248,7 +250,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
     });
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.numberOfPages,
     ).toBe(mockNumberOfPages);
   });
@@ -274,7 +276,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry).toMatchObject({
       attachments: mockForm.attachments,
@@ -311,7 +313,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.filedBy).not.toBe(mockFiledBy);
   });
@@ -337,7 +339,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.isOnDocketRecord).toBe(true);
   });
@@ -363,7 +365,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.isDraft).toBe(false);
   });

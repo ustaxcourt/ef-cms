@@ -52,7 +52,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .fileDocumentOnOneCase.mockImplementation(({ caseEntity }) => caseEntity);
+      .fileAndServeDocumentOnOneCase.mockImplementation(
+        ({ caseEntity }) => caseEntity,
+      );
 
     applicationContext
       .getUseCaseHelpers()
@@ -158,7 +160,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.draftOrderState,
     ).toBeNull();
   });
@@ -189,7 +191,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.filingDate,
     ).toBe(mockToday);
   });
@@ -215,8 +217,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isDraft,
+      applicationContext.getUseCaseHelpers()
+        .fileAndServeDocumentOnOneCasenOneCase.mock.calls[0][0]
+        .docketEntryEntity.isDraft,
     ).toBe(false);
   });
 
@@ -241,7 +244,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.isFileAttached,
     ).toBe(true);
   });
@@ -267,7 +270,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.isOnDocketRecord,
     ).toBe(true);
   });
@@ -281,7 +284,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.numberOfPages,
     ).toBe(mockNumberOfPages + 1);
   });
@@ -307,7 +310,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.processingStatus,
     ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
   });
@@ -326,10 +329,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase,
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
     ).toHaveBeenCalledTimes(1);
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].caseEntity.docketNumber,
     ).toBe(mockCase.docketNumber);
   });
@@ -349,7 +352,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase,
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
     ).toHaveBeenCalledTimes(2);
   });
 
@@ -408,12 +411,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.isPendingService,
     ).toBeTruthy();
 
     expect(
-      applicationContext.getUseCaseHelpers().fileDocumentOnOneCase.mock
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[1][0].docketEntryEntity.isPendingService,
     ).toBeFalsy();
   });
