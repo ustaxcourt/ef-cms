@@ -9,12 +9,12 @@
 1. Open the new file and populate it with values that make sense for you.
 1. Create a configuration file for the AWS account to which this deployed environment belongs:
     ```
-    cp scripts/env/aws-accounts/example.env scripts/env/aws-accounts/my-account.env
+    cp scripts/env/aws-accounts/example.env scripts/env/aws-accounts/myaccount.env
     ```
 1. Open the new file and populate your AWS account details and credentials.
 1. Create a configuration file for the DAWSON environment:
     ```
-    cp scripts/env/environments/example.env scripts/env/environment/my-env.env
+    cp scripts/env/environments/example.env scripts/env/environment/myenv.env
     ```
 1. Open the new file and populate your DAWSON environment name and AWS account configuration filename.
 1. (Optional) Define any additional values used for local testing.
@@ -28,7 +28,7 @@
 
 To switch to a deployed environment:
 ```
-source scripts/env/set-env.zsh my-env
+source scripts/env/set-env.zsh myenv
 ```
 
 To unset all environment variables set by `set-env.sh`:
@@ -38,18 +38,18 @@ source scripts/env/unset-env.zsh
 
 ## Examples
 
-### Run cypress tests against `my-env`
+### Run cypress tests against `myenv`
 
 ```
-source scripts/env/set-env.zsh my-env
+source scripts/env/set-env.zsh myenv
 npm run cypress:smoketests:open
 ```
 
-### Impersonate a different user in `my-env`
+### Impersonate a different user in `myenv`
 
-First configure your user's `$COGNITO_USER_ID` and `$COGNITO_USER_EMAIL` in your `my-env.env` file, then run:
+First configure your user's `$COGNITO_USER_ID` and `$COGNITO_USER_EMAIL` in your `myenv.env` file, then run:
 ```
-source scripts/env/set-env.zsh my-env
+source scripts/env/set-env.zsh myenv
 npm run admin:lookup-user -- admissionsClerk "John Doe"
 npm run admin:become-user 00000000-aaaa-bbbb-cccc-999999999999
 ```
@@ -61,14 +61,46 @@ npm run admin:become-user "$COGNITO_USER_ID"
 ### Re-serve documents to the IRS superuser
 
 ```
-source scripts/env/set-env.zsh my-env
+source scripts/env/set-env.zsh myenv
 node shared/admin-tools/email/resend-service-email-to-irs-superuser.js "2022-09-07T14:18:00.000Z" "2022-09-07T15:04:00.000Z"
 ```
 
 ### Run environment-level terraform deployment
 
 ```
-source scripts/env/set-env.zsh my-env
+source scripts/env/set-env.zsh myenv
 cd web-api/terraform/main
 ../bin/deploy-app.sh
+```
+
+## (Optional) Quality of Life Improvements
+
+### Aliases
+
+To create an alias for the `set-env.zsh` script, define this in your `.zshrc` or aliases file:
+```
+alias dawson_env='cd "$HOME/path/to/ef-cms" && source scripts/env/set-env.zsh'
+```
+Then to use the alias, simply run:
+```
+. dawson_env myenv
+```
+
+### Retrieve a new AWS session token and populate it in `myaccount.env` automatically
+
+First, define this function in your `.zshrc` or aliases file:
+```
+function renew_aws_session_token() {
+    cd "$HOME/path/to/ef-cms"
+    source scripts/env/aws-accounts/myaccount.env
+    if [[ ! -z "$AWS_ACCOUNT_ID" ]] && [[ ! -z "$AWS_SECRET_ACCESS_KEY" ]]; then
+        AWS_SESSION_TOKEN=$(aws sts get-session-token --duration-seconds 86400 --output json | jq -r ".Credentials.SessionToken")
+        sed -i '' "/AWS_SESSION_TOKEN/s/.*/export AWS_SESSION_TOKEN='$AWS_SESSION_TOKEN'/" scripts/env/aws-accounts/myaccount.env
+        export AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
+    fi
+}
+```
+Then to use the function, simply run:
+```
+renew_aws_session_token
 ```
