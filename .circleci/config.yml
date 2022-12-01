@@ -108,79 +108,6 @@ jobs:
             - project/web-client
             - project/web-client/coverage-integration-*
 
-  verify-pdfs:
-    docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Verify PDFs
-          command: |
-            npm run test:pdf-output
-            node image-compare-pdfs.js
-
-  build-ts-api:
-    docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Build Typescript Api
-          command: |
-            npm run build:assets
-            npm run build:lambda:api
-
-  e2e-pa11y:
-    docker:
-      - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
-        environment:
-          discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.10.2
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Create Pa11y Artifacts Directory
-          command: mkdir /tmp/pa11y
-      - run:
-          name: Pa11y
-          environment:
-            CI: true
-            SKIP_CACHE_INVALIDATION: true
-            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
-            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-            S3_ENDPOINT: http://localhost:9000
-            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-            AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER
-          command: |
-            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
-            URL=http://localhost:1234 ./wait-until.sh
-            URL=http://localhost:4000/api/swagger ./wait-until.sh
-            URL=http://localhost:8000/shell ./wait-until.sh
-            URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
-            sleep 10
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:4 --node-flags --max-old-space-size=1024
-      - store_artifacts:
-          path: /root/project/web-client/pa11y/pa11y-screenshots
-      - store_artifacts:
-          path: /tmp/pa11y
-
   e2e-pa11y-public:
     docker:
       - image: public.ecr.aws/x1k7v5e2/ef-cms-us-east-1-public-images:b3.0.0
@@ -886,8 +813,6 @@ workflows:
     jobs:
       - build-client-integration:
           <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
       - e2e-pa11y-public:
           <<: *build-and-deploy-defaults
       - e2e-pa11y-public-search:
@@ -898,21 +823,14 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
-      - build-ts-api:
-          <<: *build-and-deploy-defaults
-      - verify-pdfs:
-          <<: *build-and-deploy-defaults
       - deploy:
           requires:
             - build-client-integration
-            - e2e-pa11y
             - e2e-pa11y-public
             - e2e-pa11y-public-search
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
-            - build-ts-api
-            - verify-pdfs
           filters:
             branches:
               only:
@@ -1021,8 +939,6 @@ workflows:
     jobs:
       - build-client-integration:
           <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y-public:
           <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y-public-search:
@@ -1033,22 +949,15 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
-      - build-ts-api:
-          <<: *build-and-deploy-with-context-defaults
-      - verify-pdfs:
-          <<: *build-and-deploy-with-context-defaults
       - deploy:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - build-client-integration
-            - e2e-pa11y
             - e2e-pa11y-public
             - e2e-pa11y-public-search
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
-            - build-ts-api
-            - verify-pdfs
       - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
