@@ -4,7 +4,7 @@ if (
   !process.env.REGION
 ) {
   console.error(
-    'Required environment variables: COGNITO_USER_POOL, ELASTICSEARCH_ENDPOINT, ENV, REGION',
+    'Required environment variables: ELASTICSEARCH_ENDPOINT, ENV, REGION',
   );
   process.exit();
 }
