@@ -2,7 +2,7 @@ import { ExternalDocumentFactory } from '../../entities/externalDocument/Externa
 import { cloneDeep } from 'lodash';
 
 /**
- * generateDocumentTitleInteractor
+ * generateExternalDocumentTitle
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

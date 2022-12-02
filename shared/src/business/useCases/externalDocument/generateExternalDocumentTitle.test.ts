@@ -1,9 +1,9 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { generateDocumentTitleInteractor } from './generateExternalDocumentTitle';
+import { generateExternalDocumentTitle } from './generateExternalDocumentTitle';
 
-describe('generateDocumentTitleInteractor', () => {
+describe('generateExternalDocumentTitle', () => {
   it('generates a document title from passed metadata', async () => {
-    const title = await generateDocumentTitleInteractor(applicationContext, {
+    const title = await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
         documentTitle: 'abc',
         previousDocument: {
@@ -17,7 +17,7 @@ describe('generateDocumentTitleInteractor', () => {
   });
 
   it('generates a document title if previous document is undefined', async () => {
-    const title = await generateDocumentTitleInteractor(applicationContext, {
+    const title = await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
         documentTitle: 'abc',
         previousDocument: undefined,
@@ -29,7 +29,7 @@ describe('generateDocumentTitleInteractor', () => {
   });
 
   it('generate the full document title for the previousDocument when documentMetadata.previousDocument exists', async () => {
-    const title = await generateDocumentTitleInteractor(applicationContext, {
+    const title = await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
         documentTitle: 'abc [Document Name]',
         previousDocument: {
@@ -48,7 +48,7 @@ describe('generateDocumentTitleInteractor', () => {
   });
 
   it('should NOT generate a document title for the previousDocument when one does not exist on the document', async () => {
-    await generateDocumentTitleInteractor(applicationContext, {
+    await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
         documentTitle: 'abc [pizza]',
         scenario: 'nonstandard a',
@@ -73,7 +73,7 @@ describe('generateDocumentTitleInteractor', () => {
       },
     };
 
-    const title = await generateDocumentTitleInteractor(
+    const title = await generateExternalDocumentTitle(
       applicationContext,
       metadata,
     );
