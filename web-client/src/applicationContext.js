@@ -150,7 +150,7 @@ import {
 import { formatPhoneNumber } from '../../shared/src/business/utilities/formatPhoneNumber';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
-import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
+import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
@@ -407,7 +407,6 @@ const allUseCases = {
   filePetitionInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
-  generateCourtIssuedDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
   generateDocumentTitleInteractor,
   generateDraftStampOrderInteractor,
@@ -724,6 +723,7 @@ const applicationContext = {
       formatNow,
       formatPhoneNumber,
       formattedTrialSessionDetails,
+      generateCourtIssuedDocumentTitle,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getClinicLetterKey,
