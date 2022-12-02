@@ -28,8 +28,7 @@ const getModifiedDocumentTitleWithAdditionalInfo = documentMetaData => {
       ? documentTitleOfCurrentDocketEntry.replace(placeholder, freeText || '')
       : documentTitleOfCurrentDocketEntry;
 
-    return `${docTitle} ${additionalInfo || ''}
-    }`.trim();
+    return `${docTitle} ${additionalInfo || ''}`.trim();
   }
   return documentMetaData.documentTitle;
 };

@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * Gets document title based on documentTitle and additionalInfo fields
+ * Gets document title based on documentTitle, additionalInfo, and/or freeText fields
  *
  * @param {object} applicationContext the applicationContext
- * @param {object} docketEntry the docketEntry
- * @returns {object} the document title
+ * @param {object} providers.get the cerebral store used for getting state.form
+ * @param {object} providers.store the cerebral store used for setting state.form.documentTitle
  */
 export const generateTitleForMessagesAction = ({
   applicationContext,
