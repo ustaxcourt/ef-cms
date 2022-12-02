@@ -19,6 +19,10 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
+
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(false);
   });
 
   beforeEach(() => {
@@ -70,6 +74,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       sessionNotes: 'session notes',
       showCaseNotes: true,
       sort: 'docket',
+      updatedTrialSessionTypes: false,
       userHeading: 'Yggdrasil - Session Copy',
     };
     await generatePrintableTrialSessionCopyReportInteractor(
