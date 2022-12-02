@@ -152,8 +152,8 @@ import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forw
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
-import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
+import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
@@ -408,7 +408,6 @@ const allUseCases = {
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
-  generateDocumentTitleInteractor,
   generateDraftStampOrderInteractor,
   generatePDFFromJPGDataInteractor,
   generatePractitionerCaseListPdfInteractor,
@@ -724,6 +723,7 @@ const applicationContext = {
       formatPhoneNumber,
       formattedTrialSessionDetails,
       generateCourtIssuedDocumentTitle,
+      generateExternalDocumentTitle,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getClinicLetterKey,
