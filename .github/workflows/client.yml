@@ -22,5 +22,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
         run: npm ci --legacy-peer-dep && npm rebuild
-      - name: API
+      - name: Test Client Unit
         run: npm run test:client:unit
