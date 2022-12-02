@@ -116,3 +116,5 @@ export const TextEditor = ({
     </>
   );
 };
+
+TextEditor.displayName = 'TextEditor';

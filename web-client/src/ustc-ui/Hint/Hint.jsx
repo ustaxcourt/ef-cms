@@ -35,3 +35,5 @@ export const Hint = connect(function Hint(props) {
     </div>
   );
 });
+
+Hint.displayName = 'Hint';

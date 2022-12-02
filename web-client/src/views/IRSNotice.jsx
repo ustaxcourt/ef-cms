@@ -144,3 +144,5 @@ export const IRSNotice = connect(
     );
   },
 );
+
+IRSNotice.displayName = 'IRSNotice';

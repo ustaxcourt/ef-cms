@@ -47,3 +47,5 @@ export const PrintPaperService = connect(
     );
   },
 );
+
+PrintPaperService.displayName = 'PrintPaperService';

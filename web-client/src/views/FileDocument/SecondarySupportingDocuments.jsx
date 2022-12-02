@@ -55,3 +55,5 @@ export const SecondarySupportingDocuments = connect(
     );
   },
 );
+
+SecondarySupportingDocuments.displayName = 'SecondarySupportingDocuments';

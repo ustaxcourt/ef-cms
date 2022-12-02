@@ -1,13 +1,7 @@
 import {
-  CASE_TYPES_MAP,
-  CONTACT_TYPES,
-  COUNTRY_TYPES,
-  DOCKET_SECTION,
-  PARTY_TYPES,
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
-import { GENERIC_ORDER_DOCUMENT_TYPE } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   applicationContext,
   testPdfDoc,
@@ -19,18 +13,14 @@ import { addCoverToPdf } from '../addCoverToPdf';
 import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
-  let caseRecord;
-  const DOCKET_NUMBER = '101-20';
-  const DOCKET_ENTRY_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
-  const mockNumberOfPages = 999;
-  const clientConnectionId = '987654';
+  let mockCase;
+
+  const mockClientConnectionId = '987654';
+  const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f806';
+  const mockNumberOfPages = 939;
   const mockPdfUrl = 'ayo.seankingston.com';
 
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
-
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
@@ -41,53 +31,30 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   beforeEach(() => {
-    caseRecord = {
-      caseCaption: 'Caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      createdAt: '',
-      docketEntries: [
-        {
-          docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f806',
-          docketNumber: DOCKET_NUMBER,
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          isOnDocketRecord: true,
-          userId: docketClerkUser.userId,
-        },
-      ],
-      docketNumber: DOCKET_NUMBER,
-      filingType: 'Myself',
-      partyType: PARTY_TYPES.petitioner,
-      petitioners: [
-        {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          contactType: CONTACT_TYPES.primary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'fieri@example.com',
-          name: 'Guy Fieri',
-          phone: '1234567890',
-          postalCode: '12345',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          state: 'CA',
-        },
-      ],
-      preferredTrialCity: 'Fresno, California',
-      procedureType: 'Regular',
-      role: ROLES.petitioner,
-      userId: docketClerkUser.userId,
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [{ docketEntryId: mockDocketEntryId }],
     };
 
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getUserById.mockReturnValue(docketClerkUser);
+
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(true);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .fileAndServeDocumentOnOneCase.mockImplementation(
+        ({ caseEntity }) => caseEntity,
+      );
 
     applicationContext
       .getUseCaseHelpers()
@@ -96,12 +63,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       });
   });
 
-  it('should throw an error if not authorized', async () => {
+  it('should throw an error when the user is not authorized to serve externally filed documents', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
+        clientConnectionId: mockClientConnectionId,
         docketEntryId: '',
         docketNumbers: [''],
         subjectCaseDocketNumber: '',
@@ -109,222 +76,61 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should update the document with a servedAt date', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    const updatedCaseDocument = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.docketEntryId === DOCKET_ENTRY_ID,
-      );
-    expect(updatedCaseDocument).toMatchObject({
-      servedAt: expect.anything(),
-      servedParties: expect.anything(),
-    });
-  });
-
-  it('should add a coversheet to the document with the docket entry index passed in', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      (addCoverToPdf as jest.Mock).mock.calls[0][0].docketEntryEntity.index,
-    ).toBeDefined();
-  });
-
-  it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
-        pdfUrl: 'localhost:123',
-      });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
-        .mock.calls[0][0],
-    ).toMatchObject({
-      docketEntryId: DOCKET_ENTRY_ID,
-    });
-  });
-
-  it('should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
-    caseRecord.docketEntries = [
-      ...caseRecord.docketEntries,
-      {
-        docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-        docketNumber: DOCKET_NUMBER,
-        documentType: 'Administrative Record',
-        eventCode: 'ADMR',
-        filedBy: docketClerkUser.name,
-        userId: docketClerkUser.userId,
-        workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-            docketNumber: DOCKET_NUMBER,
-            documentType: 'Administrative Record',
-            entityName: 'DocketEntry',
-            eventCode: 'ADMR',
-            filedBy: docketClerkUser.name,
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: docketClerkUser.name,
-            userId: docketClerkUser.userId,
-          },
-          docketNumber: DOCKET_NUMBER,
-          isInitializeCase: true,
-          section: DOCKET_SECTION,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
-      },
-    ];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        workItem: expect.objectContaining({
-          assigneeId: docketClerkUser.userId,
-          completedAt: expect.stringContaining('T'),
-          completedByUserId: docketClerkUser.userId,
-          completedMessage: 'completed',
-          docketNumber: DOCKET_NUMBER,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        }),
-      }),
-    );
-  });
-
-  it('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
-    const mockMemberCase = MOCK_CASE;
-    const { docketEntryId } = caseRecord.docketEntries[0];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseRecord)
-      .mockReturnValueOnce({
-        ...caseRecord,
-        docketEntries: [],
-        docketNumber: mockMemberCase.docketNumber,
-      });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId,
-      docketNumbers: [DOCKET_NUMBER, mockMemberCase.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    const memberCaseUpdate =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[1][0].caseToUpdate;
-    const memberCaseAddedDocketEntry = memberCaseUpdate.docketEntries.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
-
-    expect(memberCaseAddedDocketEntry).toBeDefined();
-  });
-
-  it('should update the case with the completed work item when the work item exists', async () => {
-    const mockDocketEntryWithWorkItemId =
-      '225d5474-b02b-4137-a78e-2043f7a0f805';
-
-    caseRecord.docketEntries = [
-      ...caseRecord.docketEntries,
-      {
-        docketEntryId: mockDocketEntryWithWorkItemId,
-        docketNumber: DOCKET_NUMBER,
-        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
-        eventCode: 'O',
-        filedBy: docketClerkUser.name,
-        judge: 'someone',
-        signedAt: '2019-03-11T21:56:01.625Z',
-        signedByUserId: docketClerkUser.userId,
-        signedJudgeName: 'someone',
-        userId: docketClerkUser.userId,
-        workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-            docketNumber: DOCKET_NUMBER,
-            documentType: GENERIC_ORDER_DOCUMENT_TYPE,
-            entityName: 'DocketEntry',
-            eventCode: 'O',
-            filedBy: docketClerkUser.name,
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: docketClerkUser.name,
-            userId: docketClerkUser.userId,
-          },
-          docketNumber: DOCKET_NUMBER,
-          isInitializeCase: true,
-          section: DOCKET_SECTION,
-          sentBy: docketClerkUser.name,
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
-      },
-    ];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumbers: [DOCKET_NUMBER],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    const updatedWorkItem = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
-      ).workItem;
-    expect(updatedWorkItem.completedAt).toBeDefined();
-  });
-
-  it('should throw an error if the document is already pending service', async () => {
-    caseRecord.docketEntries[0].isPendingService = true;
+  it('should throw an error when the docket entry is not found on the subject case', async () => {
+    const mockNonExistentDocketEntryId = 'd9f645b1-c0b6-4782-a798-091760343573';
 
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
+        clientConnectionId: '',
+        docketEntryId: mockNonExistentDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: '',
+      }),
+    ).rejects.toThrow('Docket entry not found');
+  });
+
+  it('should throw an error when the docket entry has already been served', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            servedAt: '2018-03-01T05:00:00.000Z',
+          },
+        ],
+      });
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: '',
+      }),
+    ).rejects.toThrow('Docket entry has already been served');
+  });
+
+  it('should throw an error when the docket entry is already pending service', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            isPendingService: true,
+          },
+        ],
+      });
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [''],
+        subjectCaseDocketNumber: '',
       }),
     ).rejects.toThrow('Docket entry is already being served');
 
@@ -333,187 +139,457 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call the persistence method to set and unset the pending service status on the document', async () => {
-    const { docketEntryId } = caseRecord.docketEntries[0];
+  it('should set the docket entry`s draftOrderState to null', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            draftOrderState: 'abc',
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.draftOrderState,
+    ).toBeNull();
+  });
+
+  it('should set the docket entry`s filing date to today', async () => {
+    const mockToday = '2018-03-01T05:00:00.000Z';
+    applicationContext
+      .getUtilities()
+      .createISODateString.mockReturnValue(mockToday);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            filingDate: 'abc',
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.filingDate,
+    ).toBe(mockToday);
+  });
+
+  it('should mark the docket entry as NOT a draft', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            isDraft: true,
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.isDraft,
+    ).toBe(false);
+  });
+
+  it('should set isFileAttached to true on the docket entry', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            isFileAttached: false,
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.isFileAttached,
+    ).toBe(true);
+  });
+
+  it('should mark the docket entry as on the docket record', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            isOnDocketRecord: false,
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.isOnDocketRecord,
+    ).toBe(true);
+  });
+
+  it('should set the number of pages in the docket entry as the length of the document plus the coversheet', async () => {
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.numberOfPages,
+    ).toBe(mockNumberOfPages + 1);
+  });
+
+  it('should set the docket entry`s processing status as completed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            processingStatus: 'abc',
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.processingStatus,
+    ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+  });
+
+  it('should only serve the docket entry on the subjectCase when the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is disabled', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(false);
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber, mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
+  it('should serve the docket entry on each case provided in the docketNumbers list when the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is enabled', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber, mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should add a coversheet to the docket entry', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(addCoverToPdf).toHaveBeenCalled();
+  });
+
+  it('should save the pdf with coversheet attached to persistence', async () => {
+    const mockPdfWithCoversheet = { abc: '123' };
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      pdfData: mockPdfWithCoversheet,
+    });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].document,
+    ).toBe(mockPdfWithCoversheet);
+  });
+
+  it('should set isPendingService to truthy when filing the subject docket entry', async () => {
+    const memberCaseDocketNumber = '999-16';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce(mockCase)
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketNumber: memberCaseDocketNumber,
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber, memberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.isPendingService,
+    ).toBeTruthy();
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[1][0].docketEntryEntity.isPendingService,
+    ).toBeFalsy();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the subjectCase`s docket entry ONLY', async () => {
+    const memberCaseDocketNumber = '999-16';
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber, memberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
     ).toHaveBeenCalledWith({
       applicationContext,
-      docketEntryId,
-      docketNumber: caseRecord.docketNumber,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCase.docketNumber,
       status: true,
     });
-
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,
     ).toHaveBeenCalledWith({
       applicationContext,
-      docketEntryId,
-      docketNumber: caseRecord.docketNumber,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCase.docketNumber,
       status: false,
     });
   });
 
-  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
-    const { docketEntryId } = caseRecord.docketEntries[0];
-
+  it('should reset the docketEntry pending service status to false when an error occurs while serving', async () => {
+    const mockErrorText = 'whoops, that is an error!';
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
-        new Error('whoops, that is an error!'),
+        new Error(mockErrorText),
       );
 
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [mockCase.docketNumber],
+        subjectCaseDocketNumber: mockCase.docketNumber,
       }),
-    ).rejects.toThrow('whoops, that is an error!');
+    ).rejects.toThrow(mockErrorText);
 
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseRecord.docketNumber,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus.mock.calls[0][0],
+    ).toMatchObject({
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCase.docketNumber,
       status: true,
     });
-
     expect(
       applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseRecord.docketNumber,
+        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+    ).toMatchObject({
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCase.docketNumber,
       status: false,
     });
   });
 
-  it('should send a serve_document_complete notification with a success message and paper service pdf url', async () => {
-    const { docketEntryId } = caseRecord.docketEntries[0];
-
+  it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
+        .mock.calls[0][0],
+    ).toMatchObject({
+      docketEntryId: mockDocketEntryId,
+    });
+  });
+
+  it('should send a serve_document_complete notification to the user', async () => {
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0],
-    ).toEqual({
-      applicationContext: expect.anything(),
-      clientConnectionId,
-      message: expect.objectContaining({
-        action: 'serve_document_complete',
-        alertSuccess: {
-          message: 'Your entry has been added to the docket record.',
-          overwritable: false,
-        },
-        pdfUrl: mockPdfUrl,
-      }),
-      userId: docketClerkUser.userId,
+        .calls[0][0].clientConnectionId,
+    ).toBe(mockClientConnectionId);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toBe('serve_document_complete');
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].userId,
+    ).toBe(docketClerkUser.userId);
+  });
+
+  it('should send a notification including the DOCUMENT_SERVED_MESSAGES.SELECTED_CASES message when the docket entry was served on more than one case', async () => {
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber, ''],
+      subjectCaseDocketNumber: mockCase.docketNumber,
     });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.alertSuccess.message,
+    ).toBe(DOCUMENT_SERVED_MESSAGES.SELECTED_CASES);
+  });
+
+  it('should send a notification including the DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED message when the docket entry was served on exactly one case', async () => {
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.alertSuccess.message,
+    ).toBe(DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED);
+  });
+
+  it('should send a notification with a paper service url when at least one of the served cases has paper service parties', async () => {
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.pdfUrl,
+    ).toBe(mockPdfUrl);
   });
 
   it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
-    caseRecord.petitioners[0].serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: undefined,
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockCase.docketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.pdfUrl,
     ).toBeUndefined();
-  });
-
-  it('throws an error when the docket entry does not exist on the subject case', async () => {
-    const mockNonExistentDocketEntryId = 'd9f645b1-c0b6-4782-a798-091760343573';
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId: mockNonExistentDocketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
-      }),
-    ).rejects.toThrow('Docket entry not found');
-  });
-
-  it('throws an error when the docket entry has already been served', async () => {
-    const { docketEntryId } = caseRecord.docketEntries[0];
-    caseRecord.docketEntries[0].servedAt = '2018-03-01T05:00:00.000Z';
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
-      }),
-    ).rejects.toThrow('Docket entry has already been served');
-  });
-
-  it('should only update the subjectCase when the MULTI_DOCKETABLE_PAPER_FILINGS flag is off', async () => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
-
-    const mockMemberCase = MOCK_CASE;
-    const { docketEntryId } = caseRecord.docketEntries[0];
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId,
-      docketNumbers: [DOCKET_NUMBER, mockMemberCase.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(1);
-  });
-
-  it('should log and NOT throw an error when the docket entry pending service status cannot be updated', async () => {
-    const { docketEntryId } = caseRecord.docketEntries[0];
-    const mockError = 'Something went wrong';
-
-    applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockReturnValueOnce('')
-      .mockRejectedValue(mockError);
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      subjectCaseDocketNumber: DOCKET_NUMBER,
-    });
-
-    expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      `Encountered an exception trying to reset isPendingService on Docket Number ${caseRecord.docketNumber}.`,
-      mockError,
-    );
   });
 });

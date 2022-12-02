@@ -109,3 +109,5 @@ export const LocationInformationForm = connect(
     );
   },
 );
+
+LocationInformationForm.displayName = 'LocationInformationForm';

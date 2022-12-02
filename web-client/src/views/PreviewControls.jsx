@@ -87,3 +87,5 @@ export const PreviewControls = connect(
     );
   },
 );
+
+PreviewControls.displayName = 'PreviewControls';
