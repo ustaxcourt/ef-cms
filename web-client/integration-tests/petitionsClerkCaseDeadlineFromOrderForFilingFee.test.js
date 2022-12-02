@@ -1,4 +1,5 @@
 import {
+  DOCUMENT_SERVED_MESSAGES,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -88,7 +89,7 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
       expect(cerebralTest.getState('validationErrors')).toEqual({});
       expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
       expect(cerebralTest.getState('alertSuccess').message).toEqual(
-        'Document served.',
+        DOCUMENT_SERVED_MESSAGES.GENERIC,
       );
     });
 
