@@ -1,4 +1,4 @@
-import { generateCourtIssuedDocumentTitleInteractor } from './generateCourtIssuedDocumentTitleInteractor';
+import { generateCourtIssuedDocumentTitleInteractor } from './generateCourtIssuedDocumentTitle';
 
 describe('generateCourtIssuedDocumentTitleInteractor', () => {
   it('generates a document title from passed metadata', async () => {
