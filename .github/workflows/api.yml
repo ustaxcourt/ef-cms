@@ -1,4 +1,4 @@
-name: Node.js CI - api
+name: Node.js CI - Api
 
 on:
   pull_request:

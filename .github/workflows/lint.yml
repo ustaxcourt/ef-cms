@@ -1,4 +1,4 @@
-name: Node.js CI - lint
+name: Node.js CI - Lint
 
 on:
   pull_request:
