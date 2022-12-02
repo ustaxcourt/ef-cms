@@ -5,18 +5,15 @@ const { post } = require('./requests');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case
- * @param {object} providers.docketEntryId the id of the docket entry
+ * @param {object} providers.data the data being forwarded to the API call
  * @returns {Promise<*>} the promise of the api call
  */
-exports.serveCourtIssuedDocumentInteractor = (
-  applicationContext,
-  { docketEntryId, docketNumbers, subjectCaseDocketNumber },
-  clientConnectionId,
-) => {
+exports.serveCourtIssuedDocumentInteractor = (applicationContext, data) => {
+  const { docketEntryId, subjectCaseDocketNumber } = data;
+
   return post({
     applicationContext,
-    body: { clientConnectionId, docketNumbers },
+    body: data,
     endpoint: `/case-documents/${subjectCaseDocketNumber}/${docketEntryId}/serve-court-issued`,
   });
 };
