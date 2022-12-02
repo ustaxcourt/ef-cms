@@ -1,5 +1,5 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { generateDocumentTitleInteractor } from './generateDocumentTitleInteractor';
+import { generateDocumentTitleInteractor } from './generateExternalDocumentTitle';
 
 describe('generateDocumentTitleInteractor', () => {
   it('generates a document title from passed metadata', async () => {

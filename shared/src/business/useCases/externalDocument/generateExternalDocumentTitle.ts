@@ -9,7 +9,7 @@ import { cloneDeep } from 'lodash';
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-export const generateDocumentTitleInteractor = (
+export const generateExternalDocumentTitle = (
   applicationContext: IApplicationContext,
   { documentMetadata },
 ) => {
