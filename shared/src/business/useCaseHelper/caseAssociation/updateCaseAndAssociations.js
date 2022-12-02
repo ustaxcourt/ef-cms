@@ -47,6 +47,11 @@ const updateCaseDocketEntries = ({
     { applicationContext, petitioners: caseToUpdate.petitioners },
   );
 
+  applicationContext.logger.info(
+    `updateCaseAndAssociations with this case ${caseToUpdate.docketNumber}`,
+    { validDocketEntries },
+  );
+
   return validDocketEntries.map(
     doc =>
       function updateCaseDocketEntries_cb() {

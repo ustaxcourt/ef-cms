@@ -10,6 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+// import { sleep } from '../../../tools/helpers';
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -68,6 +69,12 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       applicationContext,
       docketNumber: subjectCaseDocketNumber,
     });
+
+  applicationContext.logger.info(
+    `starting fileAndServeCourtIssuedDocumentInteractor with this case ${subjectCaseDocketNumber}`,
+    { subjectCase },
+  );
+  // await sleep(1 * 1000);
 
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 

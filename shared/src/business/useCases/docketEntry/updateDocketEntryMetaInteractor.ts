@@ -11,6 +11,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import { sleep } from '../../../tools/helpers';
 
 export const shouldGenerateCoversheetForDocketEntry = ({
   certificateOfServiceUpdated,
@@ -65,6 +66,12 @@ export const updateDocketEntryMetaInteractor = async (
   }
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  applicationContext.logger.info(
+    `updateDocketEntryMetaInteractor starting with this case ${docketNumber}`,
+    { caseEntity },
+  );
+  await sleep(10 * 1000);
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
@@ -206,6 +213,11 @@ export const updateDocketEntryMetaInteractor = async (
       });
     caseEntity.updateDocketEntry(updatedDocketEntry);
   }
+
+  applicationContext.logger.info(
+    `updateDocketEntryMetaInteractor saving case with this case ${docketNumber}`,
+    { caseEntity },
+  );
 
   const result = await applicationContext
     .getUseCaseHelpers()

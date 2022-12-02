@@ -83,6 +83,11 @@ exports.fileAndServeDocumentOnOneCase = async ({
       });
   }
 
+  applicationContext.logger.info(
+    `fileAndServeDocumentOnOneCase saving case ${subjectCaseDocketNumber}`,
+    { caseEntity },
+  );
+
   const validRawCaseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
