@@ -1,6 +1,5 @@
 resource "aws_ecr_repository" "image_repository" {
   name = "ef-cms-us-east-1"
-
 }
 
 # keep the last 10 images
@@ -26,8 +25,4 @@ resource "aws_ecr_lifecycle_policy" "repo_policy" {
     ]
 }
 EOF
-}
-
-resource "aws_ecrpublic_repository" "public_image_repository" {
-  repository_name = "ef-cms-us-east-1-public-images"
 }

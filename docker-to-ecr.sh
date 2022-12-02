@@ -2,13 +2,21 @@
 
 ./check-env-variables.sh \
   "DESTINATION_TAG" \
-  "PUBLIC_ECR_ID" \
   "AWS_ACCOUNT_ID" \
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
+IMAGE_TAG=$(git rev-parse --short HEAD)
+MANIFEST=$(aws ecr batch-get-image --repository-name ef-cms-us-east-1 --image-ids imageTag="${DESTINATION_TAG}" --region us-east-1 --query 'images[].imageManifest' --output text)
+
+if [[ -n $MANIFEST ]]; then
+  aws ecr batch-delete-image --repository-name ef-cms-us-east-1 --image-ids imageTag="${DESTINATION_TAG}" --region us-east-1
+  aws ecr put-image --repository-name ef-cms-us-east-1 --image-tag "SNAPSHOT-${DESTINATION_TAG}-${IMAGE_TAG}" --image-manifest "${MANIFEST}" --region us-east-1
+fi
+
 # shellcheck disable=SC2091
-aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin "public.ecr.aws/${PUBLIC_ECR_ID}/ef-cms-us-east-1-public-images"
-docker build -t "ef-cms-us-east-1-public-images:${DESTINATION_TAG}" -f Dockerfile .
-docker tag "ef-cms-us-east-1-public-images:${DESTINATION_TAG}" "public.ecr.aws/${PUBLIC_ECR_ID}/ef-cms-us-east-1-public-images:${DESTINATION_TAG}"
-docker push "public.ecr.aws/${PUBLIC_ECR_ID}/ef-cms-us-east-1-public-images:${DESTINATION_TAG}"
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+
+docker build --no-cache -t "ef-cms-us-east-1:${DESTINATION_TAG}" -f Dockerfile .
+docker tag "ef-cms-us-east-1:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
+docker push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
