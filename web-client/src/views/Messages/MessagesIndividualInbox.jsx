@@ -172,3 +172,5 @@ export const MessagesIndividualInbox = connect(
     );
   },
 );
+
+MessagesIndividualInbox.displayName = 'MessagesIndividualInbox';

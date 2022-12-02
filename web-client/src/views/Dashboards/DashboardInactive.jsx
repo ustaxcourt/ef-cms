@@ -10,3 +10,5 @@ export const DashboardInactive = connect({}, function DashboardInactive() {
     </React.Fragment>
   );
 });
+
+DashboardInactive.displayName = 'DashboardInactive';

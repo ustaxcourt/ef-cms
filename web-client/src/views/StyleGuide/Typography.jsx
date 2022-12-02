@@ -41,3 +41,5 @@ export const Typography = () => (
     </div>
   </section>
 );
+
+Typography.displayName = 'Typography';

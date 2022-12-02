@@ -162,3 +162,5 @@ export const EditPetitionerCounsel = connect(
     );
   },
 );
+
+EditPetitionerCounsel.displayName = 'EditPetitionerCounsel';

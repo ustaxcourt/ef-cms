@@ -107,3 +107,5 @@ export const PractitionerContactForm = connect(
     );
   },
 );
+
+PractitionerContactForm.displayName = 'PractitionerContactForm';

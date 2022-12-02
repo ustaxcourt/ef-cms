@@ -89,3 +89,5 @@ export const ViewAllDocumentsMobile = connect(
     );
   },
 );
+
+ViewAllDocumentsMobile.displayName = 'ViewAllDocumentsMobile';

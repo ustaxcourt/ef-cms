@@ -36,3 +36,5 @@ export const RequestAccessWizard = connect(
     );
   },
 );
+
+RequestAccessWizard.displayName = 'RequestAccessWizard';

@@ -83,3 +83,5 @@ export const Country = connect(
     );
   },
 );
+
+Country.displayName = 'Country';
