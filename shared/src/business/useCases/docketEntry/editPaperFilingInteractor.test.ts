@@ -101,13 +101,13 @@ describe('editPaperFilingInteractor', () => {
   });
 
   it('should throw an error if docket entry is not found', async () => {
-    const invalidId = 'this is not an ID';
+    const notFoundDocketEntryId = 'this is not an ID';
     await expect(
       editPaperFilingInteractor(applicationContext, {
         documentMetadata: {},
-        primaryDocumentFileId: invalidId,
+        primaryDocumentFileId: notFoundDocketEntryId,
       } as any),
-    ).rejects.toThrow(`Docket entry ${invalidId} not found.`);
+    ).rejects.toThrow(`Docket entry ${notFoundDocketEntryId} was not found.`);
   });
 
   it('should throw an error if the docket entry has already been served', async () => {

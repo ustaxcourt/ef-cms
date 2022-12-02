@@ -131,7 +131,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         form: {},
         subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
-    ).rejects.toThrow('Docket entry not found');
+    ).rejects.toThrow(`Docket entry ${notFoundDocketEntryId} was not found.`);
   });
 
   it('should throw an error when the docket entry has already been served', async () => {
