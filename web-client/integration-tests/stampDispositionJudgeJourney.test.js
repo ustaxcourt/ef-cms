@@ -179,7 +179,7 @@ describe('Stamp disposition judge journey test', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
-  it('verify the first auto-generated draft stamp order', async () => {
+  it('verify the first auto-generated draft stamp order', () => {
     expect(cerebralTest.getState('currentPage')).toBe('CaseDetailInternal');
 
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
@@ -243,7 +243,7 @@ describe('Stamp disposition judge journey test', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
-  it('verify the second auto-generated draft stamp order', async () => {
+  it('verify the second auto-generated draft stamp order', () => {
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
 
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');

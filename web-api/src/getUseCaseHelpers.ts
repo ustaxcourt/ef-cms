@@ -4,12 +4,14 @@ import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/busine
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from '../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from '../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
+import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from '../../shared/src/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { createAndServeNoticeDocketEntry } from '../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
 import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
 import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber';
+import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatAndSortConsolidatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
@@ -36,6 +38,7 @@ import { setNoticeOfChangeOfTrialJudge } from '../../shared/src/business/useCase
 import { setNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/setPdfFormFields';
+import { stampDocumentForService } from '../../shared/src/business/useCaseHelper/stampDocumentForService';
 import { updateAssociatedJudgeOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
@@ -51,12 +54,14 @@ const useCaseHelpers = {
   addExistingUserToCase,
   addServedStampToDocument,
   appendPaperServiceAddressPageToPdf,
+  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
   countPagesInDocument,
   createAndServeNoticeDocketEntry,
   createCaseAndAssociations,
   createTrialSessionAndWorkingCopy,
   createUserForContact,
   fetchPendingItemsByDocketNumber,
+  fileAndServeDocumentOnOneCase,
   formatAndSortConsolidatedCases,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
@@ -83,6 +88,7 @@ const useCaseHelpers = {
   setNoticeOfChangeToInPersonProceeding,
   setNoticeOfChangeToRemoteProceeding,
   setPdfFormFields,
+  stampDocumentForService,
   updateAssociatedJudgeOnWorkItems,
   updateCaseAndAssociations,
   updateCaseAutomaticBlock,
