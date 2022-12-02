@@ -20,28 +20,36 @@ describe('generateCaseStatus', () => {
     { key: 'rule122', label: 'Rule 122' },
     { key: 'definiteTrial', label: 'Definite Trial' },
     { key: 'submittedCAV', label: 'Submitted/CAV' },
-    { key: 'motionToDismiss', label: 'Motion to Dismiss' },
-    { key: 'statusUnassigned', label: 'Unassigned' },
+    { key: 'motionToDismiss', label: 'Motion' },
   ];
 
   it('should return "Unassigned" if trial status has not been selected', () => {
     const trialStatus = undefined;
-    const result = generateCaseStatus(trialStatus, statusLabelsPostUPDATE);
+    const updatedTrialSessionTypes = false;
+    const result = generateCaseStatus(trialStatus, updatedTrialSessionTypes);
     expect(result).toEqual('Unassigned');
   });
 
   for (let index = 0; index < statusLabelsPreUPDATE.length; index++) {
+    const updatedTrialSessionTypes = false;
     const caseFilter = statusLabelsPreUPDATE[index];
     it(`should return the correct status label for filter code: ${caseFilter.key} prior to the UPDATED_TRIAL_STATUS_TYPES being turned on`, () => {
-      const result = generateCaseStatus(caseFilter.key, statusLabelsPreUPDATE);
+      const result = generateCaseStatus(
+        caseFilter.key,
+        updatedTrialSessionTypes,
+      );
       expect(result).toEqual(caseFilter.label);
     });
   }
 
   for (let index = 0; index < statusLabelsPostUPDATE.length; index++) {
+    const updatedTrialSessionTypes = true;
     const caseFilter = statusLabelsPostUPDATE[index];
     it(`should return the correct status label for filter code: ${caseFilter.key} after the UPDATED_TRIAL_STATUS_TYPES is turned on`, () => {
-      const result = generateCaseStatus(caseFilter.key, statusLabelsPostUPDATE);
+      const result = generateCaseStatus(
+        caseFilter.key,
+        updatedTrialSessionTypes,
+      );
       expect(result).toEqual(caseFilter.label);
     });
   }

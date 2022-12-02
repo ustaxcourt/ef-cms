@@ -18,7 +18,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     { key: 'rule122', label: 'Rule 122' },
     { key: 'definiteTrial', label: 'Definite Trial' },
     { key: 'submittedCAV', label: 'Submitted/CAV' },
-    { key: 'motionToDismiss', label: 'Motion to Dismiss' },
+    { key: 'motionToDismiss', label: 'Motion' },
     { key: 'statusUnassigned', label: 'Unassigned' },
   ];
   const formattedCaseMock = {
@@ -228,7 +228,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       { key: 'probableTrial', label: 'Probable Trial' },
       { key: 'rule122', label: 'Rule 122' },
       { key: 'definiteTrial', label: 'Definite Trial' },
-      { key: 'motionToDismiss', label: 'Motion to Dismiss' },
+      { key: 'motionToDismiss', label: 'Motion' },
       { key: 'statusUnassigned', label: 'Unassigned' },
     ];
     expect(

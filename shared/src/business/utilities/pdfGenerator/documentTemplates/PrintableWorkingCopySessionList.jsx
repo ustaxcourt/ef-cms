@@ -17,6 +17,7 @@ export const PrintableWorkingCopySessionList = ({
   sessionNotes,
   showCaseNotes,
   sort,
+  updatedTrialSessionTypes,
   userHeading,
 }) => {
   const trialSessionDateRange =
@@ -109,7 +110,10 @@ export const PrintableWorkingCopySessionList = ({
                     </td>
                     <td>{formattedCase.filingPartiesCode}</td>
                     <td>
-                      {generateCaseStatus(formattedCase.trialStatus, filters)}
+                      {generateCaseStatus(
+                        formattedCase.trialStatus,
+                        updatedTrialSessionTypes,
+                      )}
                     </td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
