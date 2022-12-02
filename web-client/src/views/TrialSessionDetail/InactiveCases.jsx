@@ -65,3 +65,5 @@ export const InactiveCases = connect(
     );
   },
 );
+
+InactiveCases.displayName = 'InactiveCases';

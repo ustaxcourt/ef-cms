@@ -64,3 +64,5 @@ export const PDFPreviewButton = connect(
     );
   },
 );
+
+PDFPreviewButton.displayName = 'PDFPreviewButton';

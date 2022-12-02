@@ -96,3 +96,5 @@ export const Parties = connect(
     );
   },
 );
+
+Parties.displayName = 'Parties';

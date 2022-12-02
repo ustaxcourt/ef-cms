@@ -66,3 +66,5 @@ export const AddDeficiencyStatistics = connect(
     );
   },
 );
+
+AddDeficiencyStatistics.displayName = 'AddDeficiencyStatistics';

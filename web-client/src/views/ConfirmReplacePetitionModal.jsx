@@ -22,3 +22,5 @@ export const ConfirmReplacePetitionModal = connect(
     );
   },
 );
+
+ConfirmReplacePetitionModal.displayName = 'ConfirmReplacePetitionModal';

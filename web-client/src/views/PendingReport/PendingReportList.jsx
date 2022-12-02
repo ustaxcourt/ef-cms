@@ -123,3 +123,5 @@ export const PendingReportList = connect(
     );
   },
 );
+
+PendingReportList.displayName = 'PendingReportList';

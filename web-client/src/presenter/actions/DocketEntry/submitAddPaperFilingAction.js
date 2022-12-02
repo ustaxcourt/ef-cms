@@ -48,8 +48,8 @@ export const submitAddPaperFilingAction = async ({
     .addPaperFilingInteractor(applicationContext, {
       clientConnectionId,
       consolidatedGroupDocketNumbers: docketNumbers,
+      docketEntryId,
       documentMetadata,
       isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
     });
 };

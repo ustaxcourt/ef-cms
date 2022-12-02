@@ -362,3 +362,5 @@ export const PrimaryDocumentForm = connect(
     );
   },
 );
+
+PrimaryDocumentForm.displayName = 'PrimaryDocumentForm';

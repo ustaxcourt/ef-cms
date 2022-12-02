@@ -7,7 +7,6 @@ import React from 'react';
 
 export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
   {
-    areMultiDocketablePaperFilingsEnabledFlag: state.featureFlagHelper,
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateCourtIssuedFilingServiceModalHelper:
       state.confirmInitiateCourtIssuedFilingServiceModalHelper,
@@ -79,3 +78,6 @@ export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
     );
   },
 );
+
+ConfirmInitiateCourtIssuedFilingServiceModal.displayName =
+  'ConfirmInitiateCourtIssuedFilingServiceModal';

@@ -140,3 +140,5 @@ export const DashboardPetitioner = connect(
     );
   },
 );
+
+DashboardPetitioner.displayName = 'DashboardPetitioner';

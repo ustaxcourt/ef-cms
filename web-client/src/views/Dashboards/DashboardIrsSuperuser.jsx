@@ -23,3 +23,5 @@ export const DashboardIrsSuperuser = connect(
     );
   },
 );
+
+DashboardIrsSuperuser.displayName = 'DashboardIrsSuperuser';

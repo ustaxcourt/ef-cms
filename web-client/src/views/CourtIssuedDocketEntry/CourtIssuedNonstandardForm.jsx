@@ -217,3 +217,5 @@ export const CourtIssuedNonstandardForm = connect(
     );
   },
 );
+
+CourtIssuedNonstandardForm.displayName = 'CourtIssuedNonstandardForm';

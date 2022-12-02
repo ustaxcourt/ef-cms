@@ -91,3 +91,5 @@ export const RecentMessagesInbox = connect(
     );
   },
 );
+
+RecentMessagesInbox.displayName = 'RecentMessagesInbox';

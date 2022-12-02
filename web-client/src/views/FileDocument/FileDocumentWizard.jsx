@@ -52,3 +52,5 @@ export const FileDocumentWizard = connect(
     );
   },
 );
+
+FileDocumentWizard.displayName = 'FileDocumentWizard';

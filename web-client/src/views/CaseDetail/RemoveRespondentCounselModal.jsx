@@ -30,3 +30,5 @@ export const RemoveRespondentCounselModal = connect(
     );
   },
 );
+
+RemoveRespondentCounselModal.displayName = 'RemoveRespondentCounselModal';

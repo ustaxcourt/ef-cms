@@ -27,6 +27,8 @@ export const PdfViewer = connect(
   },
 );
 
+PdfViewer.displayName = 'PdfViewer';
+
 const loadDocument = ({ src, viewer }) => {
   const { UI } = viewer;
   UI.loadDocument(src, { extension: 'pdf' });

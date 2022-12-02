@@ -17,3 +17,5 @@ export const If = connect(function If(props) {
 
   return null;
 });
+
+If.displayName = 'If';

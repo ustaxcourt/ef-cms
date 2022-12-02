@@ -40,3 +40,6 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
     );
   },
 );
+
+PrintableTrialSessionWorkingCopyPreviewPage.displayName =
+  'PrintableTrialSessionWorkingCopyPreviewPage';

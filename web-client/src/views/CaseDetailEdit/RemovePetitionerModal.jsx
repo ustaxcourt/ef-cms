@@ -75,3 +75,5 @@ export const RemovePetitionerModal = connect(
     );
   },
 );
+
+RemovePetitionerModal.displayName = 'RemovePetitionerModal';

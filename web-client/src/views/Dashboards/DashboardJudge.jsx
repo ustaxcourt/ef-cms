@@ -23,3 +23,5 @@ export const DashboardJudge = connect(
     );
   },
 );
+
+DashboardJudge.displayName = 'DashboardJudge';

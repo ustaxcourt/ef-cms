@@ -40,3 +40,5 @@ export const AddEditHearingNoteModal = connect(
     );
   },
 );
+
+AddEditHearingNoteModal.displayName = 'AddEditHearingNoteModal';

@@ -254,3 +254,5 @@ export const RequestAccessReview = connect(
     );
   },
 );
+
+RequestAccessReview.displayName = 'RequestAccessReview';
