@@ -1271,7 +1271,7 @@ const TRIAL_STATUS_TYPES = {
     deprecated: false,
     displayOrder: 9,
     new: true,
-    label: 'Motion to Dismiss',
+    label: 'Motion',
   },
   probableSettlement: {
     deprecated: false,

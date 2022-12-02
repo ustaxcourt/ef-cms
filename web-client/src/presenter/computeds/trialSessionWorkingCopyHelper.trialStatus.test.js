@@ -138,7 +138,7 @@ describe('trial session working copy computed', () => {
       },
       {
         key: 'motionToDismiss',
-        label: 'Motion to Dismiss',
+        label: 'Motion',
       },
       {
         key: 'statusUnassigned',

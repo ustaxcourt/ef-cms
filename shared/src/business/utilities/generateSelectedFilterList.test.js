@@ -20,7 +20,7 @@ describe('generateCaseStatus', () => {
     { key: 'rule122', label: 'Rule 122' },
     { key: 'definiteTrial', label: 'Definite Trial' },
     { key: 'submittedCAV', label: 'Submitted/CAV' },
-    { key: 'motionToDismiss', label: 'Motion to Dismiss' },
+    { key: 'motionToDismiss', label: 'Motion' },
     { key: 'statusUnassigned', label: 'Unassigned' },
   ];
 
