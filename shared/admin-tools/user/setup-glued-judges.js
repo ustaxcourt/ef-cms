@@ -192,14 +192,10 @@ const getJudgeUsers = async () => {
   const judgeUsersFromElasticsearch = results.hits.hits.map(hit => {
     return {
       email: hit['_source']['email'].S,
-      entityName: hit['_source']['entityName'].S,
-      judgeFullName: hit['_source']['judgeFullName'].S,
       judgeTitle: hit['_source']['judgeTitle'].S,
       name: hit['_source']['name'].S,
-      pk: hit['_source']['pk'].S,
       role: hit['_source']['role'].S,
       section: hit['_source']['section'].S,
-      sk: hit['_source']['sk'].S,
       userId: hit['_source']['userId'].S,
     };
   });
