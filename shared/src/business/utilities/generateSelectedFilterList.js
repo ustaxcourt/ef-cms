@@ -1,11 +1,20 @@
-const generateCaseStatus = (trialStatus, filters) => {
+const { TRIAL_STATUS_TYPES } = require('../entities/EntityConstants');
+
+const generateCaseStatus = (trialStatus, updatedTrialSessionTypes) => {
   if (!trialStatus) return 'Unassigned';
 
-  const foundTrialStatusFromMap = filters.find(filter => {
-    return filter.key === trialStatus;
+  let foundTrialStatusFromConstant;
+
+  Object.keys(TRIAL_STATUS_TYPES).forEach(key => {
+    if (key === trialStatus) {
+      foundTrialStatusFromConstant =
+        !updatedTrialSessionTypes && TRIAL_STATUS_TYPES[trialStatus].legacyLabel
+          ? TRIAL_STATUS_TYPES[trialStatus].legacyLabel
+          : TRIAL_STATUS_TYPES[trialStatus].label;
+    }
   });
 
-  return foundTrialStatusFromMap.label;
+  return foundTrialStatusFromConstant;
 };
 
 const isMemberCase = formattedCase => {
