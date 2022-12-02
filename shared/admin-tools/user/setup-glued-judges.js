@@ -40,6 +40,7 @@ const createCognitoUser = async ({ email, name, role, userId }) => {
       UserPoolId,
       Username: email,
     });
+
     userExists = true;
   } catch (err) {
     if (err.code !== 'UserNotFoundException') {
@@ -82,7 +83,7 @@ const createCognitoUser = async ({ email, name, role, userId }) => {
     }
   } else {
     // update existing userId
-    await updateImportedCognitoUsersUserIdAttribute({
+    await updateCognitoUserId({
       bulkImportedUserId: email,
       cognito,
       gluedUserId: userId,
@@ -238,7 +239,7 @@ const getJudgeUsers = async () => {
  * @param {string} judge              Judge name
  * @returns {Promise<void>}
  */
-const updateImportedCognitoUsersUserIdAttribute = async ({
+const updateCognitoUserId = async ({
   bulkImportedUserId,
   cognito,
   gluedUserId,
@@ -265,20 +266,19 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
 };
 
 (async () => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const version = await getVersion();
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const dynamo = new DynamoDB({ region: process.env.REGION });
   const UserPoolId = await getUserPoolId();
 
   const judgeUsers = await getJudgeUsers();
+
   for (const judge in judgeUsers) {
+    const { email, name } = judgeUsers[judge];
     if ('gluedUserId' in judgeUsers[judge]) {
       if ('bulkImportedUserId' in judgeUsers[judge]) {
-        // this judge was brought over via glue job and was ALSO bulk imported
         const { bulkImportedUserId, gluedUserId, section } = judgeUsers[judge];
 
-        // delete the bulk imported judge user and chambers section mapping
-        //    this removes duplicates from judge drop-downs
         await deleteDuplicateImportedJudgeUser({
           bulkImportedUserId,
           dynamo,
@@ -287,20 +287,15 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
           version,
         });
 
-        // change the @example.com cognito user's custom:userId attribute to the glued user's id
-        //    this enables login using the judge.name@example.com cognito user created by the bulk import
-        await updateImportedCognitoUsersUserIdAttribute({
+        await updateCognitoUserId({
           bulkImportedUserId,
           cognito,
           gluedUserId,
           judge,
         });
       } else {
-        // this judge was brought over via glue job but not bulk imported
-        const { email, name } = judgeUsers[judge];
         const userId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
 
-        // create a cognito user for this judge with the email address judge.name@example.com
         await createCognitoUser({
           email,
           name,
@@ -308,9 +303,7 @@ const updateImportedCognitoUsersUserIdAttribute = async ({
           userId,
         });
       }
-      //set password
-      //is this the right spot, and the right password?
-      const { email } = judgeUsers[judge];
+
       await cognito
         .adminSetUserPassword({
           Password: process.env.DEFAULT_ACCOUNT_PASS,
