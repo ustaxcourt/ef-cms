@@ -266,3 +266,5 @@ export const CaseInformationInternal = connect(
     );
   },
 );
+
+CaseInformationInternal.displayName = 'CaseInformationInternal';

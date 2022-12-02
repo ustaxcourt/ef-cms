@@ -152,3 +152,5 @@ export const AddToTrialModal = connect(
     );
   },
 );
+
+AddToTrialModal.displayName = 'AddToTrialModal';

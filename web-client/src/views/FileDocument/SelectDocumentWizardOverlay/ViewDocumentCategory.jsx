@@ -108,3 +108,5 @@ export const ViewDocumentCategory = connect(
     );
   },
 );
+
+ViewDocumentCategory.displayName = 'ViewDocumentCategory';

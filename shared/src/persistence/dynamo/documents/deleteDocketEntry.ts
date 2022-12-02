@@ -7,8 +7,9 @@ import { remove } from '../../dynamodbClientService';
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the record to delete from
  * @param {object} providers.docketEntryId the docketEntryId of the record to delete
+ * @returns {Promise} returns a promise
  */
-export const deleteDocketEntry = async ({
+export const deleteDocketEntry = ({
   applicationContext,
   docketEntryId,
   docketNumber,

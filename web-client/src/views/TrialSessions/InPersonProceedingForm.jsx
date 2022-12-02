@@ -170,3 +170,5 @@ export const InPersonProceedingForm = connect(
     );
   },
 );
+
+InPersonProceedingForm.displayName = 'InPersonProceedingForm';

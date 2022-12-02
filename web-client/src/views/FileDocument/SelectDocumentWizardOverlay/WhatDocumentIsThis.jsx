@@ -124,3 +124,5 @@ export const WhatDocumentIsThis = connect(
     );
   },
 );
+
+WhatDocumentIsThis.displayName = 'WhatDocumentIsThis';

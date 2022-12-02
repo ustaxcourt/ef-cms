@@ -207,3 +207,5 @@ export const StatisticsForm = connect(
     );
   },
 );
+
+StatisticsForm.displayName = 'StatisticsForm';

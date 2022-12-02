@@ -153,3 +153,5 @@ export const DocketRecordOverlay = connect(
     return ReactDOM.createPortal(renderModalContent(), getEl());
   },
 );
+
+DocketRecordOverlay.displayName = 'DocketRecordOverlay';

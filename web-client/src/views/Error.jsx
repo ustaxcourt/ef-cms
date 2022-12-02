@@ -37,3 +37,5 @@ export const ErrorView = connect(
     );
   },
 );
+
+ErrorView.displayName = 'ErrorView';

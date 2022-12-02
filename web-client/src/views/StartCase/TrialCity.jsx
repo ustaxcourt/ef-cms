@@ -71,3 +71,5 @@ export const TrialCity = connect(
     );
   },
 );
+
+TrialCity.displayName = 'TrialCity';
