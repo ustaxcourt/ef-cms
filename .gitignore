@@ -39,6 +39,7 @@ proxy-request-times.json
 puppeteer_lambda_layer.tar.gz
 puppeteer_lambda_layer.zip
 reports/test-reporter.xml
+scripts/env/defaults
 shared/coverage
 shared/pdf-tests/*.html
 terraform-cache/
@@ -65,6 +66,8 @@ web-client/tests_output/
 web-client/integration-tests/test-output/
 bulk-import-log.txt
 **/.env
+**/*.env
+!**/*example.env
 metadata.json
 metadata-public.json
 stats.html
