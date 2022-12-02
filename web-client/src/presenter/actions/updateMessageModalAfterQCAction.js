@@ -7,26 +7,19 @@ import { state } from 'cerebral';
  * @param {object} providers.get the get function to retrieve values from state
  * @param {object} providers.store the cerebral store object
  */
-export const updateMessageModalAfterQCAction = ({
-  applicationContext,
-  get,
-  store,
-}) => {
+export const updateMessageModalAfterQCAction = ({ get, store }) => {
   store.set(state.modal.validationErrors, {});
 
-  const docketEntry = get(state.form);
   const docketEntryId = get(state.docketEntryId);
 
-  const generatedDocumentTitle = applicationContext
-    .getUtilities()
-    .getDocumentTitleWithAdditionalInfo({ docketEntry });
+  const documentTitle = get(state.form.documentTitle);
 
-  store.set(state.modal.form.subject, generatedDocumentTitle);
+  store.set(state.modal.form.subject, documentTitle);
 
   store.set(state.modal.form.attachments, [
     {
       documentId: docketEntryId,
-      documentTitle: generatedDocumentTitle,
+      documentTitle,
     },
   ]);
 };
