@@ -47,3 +47,5 @@ export const SealedCaseDetail = connect(
     );
   },
 );
+
+SealedCaseDetail.displayName = 'SealedCaseDetail';

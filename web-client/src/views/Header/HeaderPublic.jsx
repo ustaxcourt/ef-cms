@@ -90,3 +90,5 @@ export const HeaderPublic = connect(
     );
   },
 );
+
+HeaderPublic.displayName = 'HeaderPublic';

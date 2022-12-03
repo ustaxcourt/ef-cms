@@ -26,3 +26,5 @@ export const SpousePermissionConfirmModal = connect(
     );
   },
 );
+
+SpousePermissionConfirmModal.displayName = 'SpousePermissionConfirmModal';

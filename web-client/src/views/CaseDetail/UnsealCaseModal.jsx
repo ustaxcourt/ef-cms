@@ -30,3 +30,5 @@ export const UnsealCaseModal = connect(
     );
   },
 );
+
+UnsealCaseModal.displayName = 'UnsealCaseModal';

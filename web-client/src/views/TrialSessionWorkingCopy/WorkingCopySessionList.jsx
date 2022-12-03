@@ -123,3 +123,5 @@ export const WorkingCopySessionList = connect(
     );
   },
 );
+
+WorkingCopySessionList.displayName = 'WorkingCopySessionList';

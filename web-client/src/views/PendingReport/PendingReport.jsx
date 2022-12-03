@@ -49,3 +49,5 @@ export const PendingReport = connect(
     );
   },
 );
+
+PendingReport.displayName = 'PendingReport';

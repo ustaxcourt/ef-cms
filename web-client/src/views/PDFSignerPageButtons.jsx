@@ -68,3 +68,5 @@ export const PDFSignerPageButtons = connect(
     );
   },
 );
+
+PDFSignerPageButtons.displayName = 'PDFSignerPageButtons';

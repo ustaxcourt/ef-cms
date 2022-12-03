@@ -47,3 +47,5 @@ export const AddEditSessionNoteModal = connect(
     );
   },
 );
+
+AddEditSessionNoteModal.displayName = 'AddEditSessionNoteModal';

@@ -62,3 +62,5 @@ export const Privacy = connect(
     );
   },
 );
+
+Privacy.displayName = 'Privacy';

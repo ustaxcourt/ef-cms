@@ -35,3 +35,5 @@ export const ArchiveDraftDocumentModal = connect(
     );
   },
 );
+
+ArchiveDraftDocumentModal.displayName = 'ArchiveDraftDocumentModal';

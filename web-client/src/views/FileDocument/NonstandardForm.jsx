@@ -210,3 +210,5 @@ export const NonstandardForm = connect(
     );
   },
 );
+
+NonstandardForm.displayName = 'NonstandardForm';

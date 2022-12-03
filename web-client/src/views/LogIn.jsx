@@ -56,3 +56,5 @@ export const LogIn = connect(
     );
   },
 );
+
+LogIn.displayName = 'LogIn';

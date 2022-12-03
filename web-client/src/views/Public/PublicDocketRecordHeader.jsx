@@ -92,3 +92,5 @@ export const PublicDocketRecordHeader = connect(
     );
   },
 );
+
+PublicDocketRecordHeader.displayName = 'PublicDocketRecordHeader';

@@ -62,3 +62,5 @@ export const BlockFromTrialModal = connect(
     );
   },
 );
+
+BlockFromTrialModal.displayName = 'BlockFromTrialModal';

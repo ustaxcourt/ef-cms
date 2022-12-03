@@ -41,3 +41,5 @@ export const PrintPaperTrialNotices = connect(
     );
   },
 );
+
+PrintPaperTrialNotices.displayName = 'PrintPaperTrialNotices';

@@ -200,3 +200,5 @@ export const ContactSecondary = connect(
     );
   },
 );
+
+ContactSecondary.displayName = 'ContactSecondary';

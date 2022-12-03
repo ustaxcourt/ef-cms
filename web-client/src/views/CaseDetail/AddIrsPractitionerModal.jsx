@@ -130,3 +130,5 @@ export const AddIrsPractitionerModal = connect(
     );
   },
 );
+
+AddIrsPractitionerModal.displayName = 'AddIrsPractitionerModal';

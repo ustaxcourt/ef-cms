@@ -80,3 +80,5 @@ export const AllCases = connect(
     );
   },
 );
+
+AllCases.displayName = 'AllCases';

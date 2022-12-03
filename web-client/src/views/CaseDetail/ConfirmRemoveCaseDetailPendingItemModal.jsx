@@ -22,3 +22,6 @@ export const ConfirmRemoveCaseDetailPendingItemModal = connect(
     );
   },
 );
+
+ConfirmRemoveCaseDetailPendingItemModal.displayName =
+  'ConfirmRemoveCaseDetailPendingItemModal';

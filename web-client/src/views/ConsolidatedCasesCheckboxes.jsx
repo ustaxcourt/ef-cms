@@ -71,3 +71,5 @@ export const ConsolidatedCasesCheckboxes = connect(
     );
   },
 );
+
+ConsolidatedCasesCheckboxes.displayName = 'ConsolidatedCasesCheckboxes';

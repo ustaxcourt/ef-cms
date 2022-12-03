@@ -124,3 +124,6 @@ export const SupportingDocumentInclusionsForm = connect(
     );
   },
 );
+
+SupportingDocumentInclusionsForm.displayName =
+  'SupportingDocumentInclusionsForm';

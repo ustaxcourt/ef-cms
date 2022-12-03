@@ -36,3 +36,5 @@ export const CompleteMessageModalDialog = connect(
     );
   },
 );
+
+CompleteMessageModalDialog.displayName = 'CompleteMessageModalDialog';
