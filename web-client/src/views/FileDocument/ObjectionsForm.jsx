@@ -67,3 +67,5 @@ export const ObjectionsForm = connect(
     );
   },
 );
+
+ObjectionsForm.displayName = 'ObjectionsForm';

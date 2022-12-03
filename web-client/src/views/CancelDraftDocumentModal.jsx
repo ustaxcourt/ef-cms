@@ -21,3 +21,5 @@ export const CancelDraftDocumentModal = connect(
     );
   },
 );
+
+CancelDraftDocumentModal.displayName = 'CancelDraftDocumentModal';

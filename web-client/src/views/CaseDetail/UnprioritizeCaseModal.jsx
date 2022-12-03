@@ -26,3 +26,5 @@ export const UnprioritizeCaseModal = connect(
     );
   },
 );
+
+UnprioritizeCaseModal.displayName = 'UnprioritizeCaseModal';

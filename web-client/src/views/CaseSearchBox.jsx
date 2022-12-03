@@ -95,3 +95,5 @@ export const CaseSearchBox = connect(
     );
   },
 );
+
+CaseSearchBox.displayName = 'CaseSearchBox';

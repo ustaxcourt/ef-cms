@@ -156,3 +156,5 @@ export const EligibleCases = connect(
     );
   },
 );
+
+EligibleCases.displayName = 'EligibleCases';
