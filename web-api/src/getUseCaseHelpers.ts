@@ -11,7 +11,7 @@ import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelp
 import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
 import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber';
-import { fileDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileDocumentOnOneCase';
+import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatAndSortConsolidatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
@@ -61,7 +61,7 @@ const useCaseHelpers = {
   createTrialSessionAndWorkingCopy,
   createUserForContact,
   fetchPendingItemsByDocketNumber,
-  fileDocumentOnOneCase,
+  fileAndServeDocumentOnOneCase,
   formatAndSortConsolidatedCases,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,

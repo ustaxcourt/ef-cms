@@ -197,13 +197,15 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
           { applicationContext },
         );
 
-        return applicationContext.getUseCaseHelpers().fileDocumentOnOneCase({
-          applicationContext,
-          caseEntity,
-          docketEntryEntity,
-          subjectCaseDocketNumber,
-          user,
-        });
+        return applicationContext
+          .getUseCaseHelpers()
+          .fileAndServeDocumentOnOneCase({
+            applicationContext,
+            caseEntity,
+            docketEntryEntity,
+            subjectCaseDocketNumber,
+            user,
+          });
       }),
     );
 
