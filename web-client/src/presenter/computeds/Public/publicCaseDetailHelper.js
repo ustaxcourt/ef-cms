@@ -57,6 +57,7 @@ export const formatDocketEntryOnDocketRecord = (
       .getSealedDocketEntryTooltip(applicationContext, record);
   }
 
+  // TODO: REFACTOR (NEW HELPER FOR PUBLIC CASES)
   if (entry.eventCode === 'OCS' && record.freeText) {
     record.descriptionDisplay = `${record.freeText} - ${record.descriptionDisplay}`;
   } else {
