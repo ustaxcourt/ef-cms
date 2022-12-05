@@ -2,6 +2,10 @@ name: E2E Pa11y Pubic
 
 on:
   pull_request:
+  push:
+    branches:
+      - dependency-updates
+      - test
 
 jobs:
   e2e_pa11y_public:

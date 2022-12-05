@@ -2,6 +2,10 @@ name: E2E Cypress Public
 
 on:
   pull_request:
+  push:
+    branches:
+      - dependency-updates
+      - test
 
 jobs:
   e2e_cypress_public:

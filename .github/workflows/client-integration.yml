@@ -2,6 +2,10 @@ name: Client Integration
 
 on:
   pull_request:
+  push:
+    branches:
+      - dependency-updates
+      - test
 
 jobs:
   client_integration:
