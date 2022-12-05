@@ -515,7 +515,7 @@ jobs:
       - run:
           name: Judge Users Setup Lower Envs
           command: |
-            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "dev" ] || [ "${CIRCLE_BRANCH}" == "stg" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
              node ./shared/admin-tools/user/setup-glued-judges.js
             else
               echo "skipping…"
