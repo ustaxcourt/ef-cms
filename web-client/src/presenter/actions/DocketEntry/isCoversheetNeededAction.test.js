@@ -11,7 +11,7 @@ describe('isCoversheetNeededAction', () => {
     yes: yesStub,
   };
 
-  it('should return yes path when props.generateCoversheet is true', async () => {
+  it('should return yes path when props.generateCoversheet is true', () => {
     runAction(isCoversheetNeededAction, {
       modules: {
         presenter,
@@ -25,7 +25,7 @@ describe('isCoversheetNeededAction', () => {
     expect(yesStub).toHaveBeenCalled();
   });
 
-  it('should return no path when props.generateCoversheet is false', async () => {
+  it('should return no path when props.generateCoversheet is false', () => {
     runAction(isCoversheetNeededAction, {
       modules: {
         presenter,
