@@ -16,3 +16,5 @@ export const CharactersRemainingHint = ({
     </span>
   );
 };
+
+CharactersRemainingHint.displayName = 'CharactersRemainingHint';

@@ -166,3 +166,5 @@ export const DraftDocumentViewerDocument = connect(
     );
   },
 );
+
+DraftDocumentViewerDocument.displayName = 'DraftDocumentViewerDocument';

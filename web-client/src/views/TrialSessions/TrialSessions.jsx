@@ -71,3 +71,5 @@ export const TrialSessions = connect(
     );
   },
 );
+
+TrialSessions.displayName = 'TrialSessions';

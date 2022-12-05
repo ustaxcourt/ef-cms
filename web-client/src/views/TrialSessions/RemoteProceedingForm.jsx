@@ -101,3 +101,5 @@ export const RemoteProceedingForm = connect(
     );
   },
 );
+
+RemoteProceedingForm.displayName = 'RemoteProceedingForm';

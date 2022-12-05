@@ -4,21 +4,18 @@ const { post } = require('../requests');
  * fileAndServeCourtIssuedDocumentInteractor
  *
  * @param {object} applicationContext the application context
- * @param {object} documentMeta the data being forwarded to the API call
+ * @param {object} providers the providers object
+ * @param {object} providers.data the data being forwarded to the API call
  * @returns {Promise<*>} the promise of the API call
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = (
   applicationContext,
-  documentMeta,
-  clientConnectionId,
+  data,
 ) => {
-  const { subjectCaseDocketNumber } = documentMeta;
+  const { subjectCaseDocketNumber } = data;
   return post({
     applicationContext,
-    body: {
-      clientConnectionId,
-      ...documentMeta,
-    },
+    body: data,
     endpoint: `/async/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
   });
 };

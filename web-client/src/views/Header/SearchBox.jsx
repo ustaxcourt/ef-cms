@@ -60,3 +60,5 @@ export const SearchBox = connect(
     );
   },
 );
+
+SearchBox.displayName = 'SearchBox';

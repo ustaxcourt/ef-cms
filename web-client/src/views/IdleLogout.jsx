@@ -24,3 +24,5 @@ export const IdleLogout = connect(
     );
   },
 );
+
+IdleLogout.displayName = 'IdleLogout';
