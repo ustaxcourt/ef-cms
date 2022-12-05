@@ -332,3 +332,5 @@ docker build -t efcms -f Dockerfile . && \
 docker build -t efcms-local -f Dockerfile-local . && \
 docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output efcms-local sh -c "./run-integration-tests.sh"
 ```
+
+This will be undone shortly.
