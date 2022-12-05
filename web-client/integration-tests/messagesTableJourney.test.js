@@ -7,7 +7,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { petitionsClerk1VerifiesCaseStatusOnMessage } from './journey/petitionsClerk1VerifiesCaseStatusOnMessage';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
@@ -78,12 +77,12 @@ describe('messages table journey', () => {
     );
 
     //add checks for trial info
-    expect(foundMessage).toEqual({});
+    expect(foundMessage).toMatchObject({
+      caseStatus: CASE_STATUS_TYPES.calendared,
+      trialDate: '',
+      trialLocation: '',
+    });
   });
 
   petitionsClerkViewsSentMessagesBox(cerebralTest);
-  petitionsClerk1VerifiesCaseStatusOnMessage(
-    cerebralTest,
-    CASE_STATUS_TYPES.new,
-  );
 });
