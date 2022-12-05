@@ -28,6 +28,7 @@ export const generateTitlePreviewAction = ({
     .getUtilities()
     .formatDocketEntry(applicationContext, documentMetadata);
 
+  // TODO: REFACTOR
   let updatedDocumentTitle = applicationContext
     .getUtilities()
     .generateExternalDocumentTitle(applicationContext, {

@@ -26,6 +26,7 @@ export const updateMessageModalAttachmentsAction = ({
         documentId,
       });
 
+    // TODO: REFACTOR
     const generatedDocumentTitle = applicationContext
       .getUtilities()
       .getDocumentTitleWithAdditionalInfo({ docketEntry: document });

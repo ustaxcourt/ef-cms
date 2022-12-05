@@ -135,7 +135,7 @@ export const formatWorkItem = ({
   );
 
   let descriptionDisplay = result.docketEntry.documentType;
-
+  // TODO: REFACTOR
   if (result.docketEntry.documentTitle) {
     descriptionDisplay = result.docketEntry.documentTitle;
     if (result.docketEntry.additionalInfo) {

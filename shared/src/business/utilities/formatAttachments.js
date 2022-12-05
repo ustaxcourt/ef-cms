@@ -17,7 +17,7 @@ export const formatAttachments = ({
       documentId,
       useArchived: true,
     });
-
+    // TODO: REFACTOR
     if (doc) {
       const generatedDocumentTitle = applicationContext
         .getUtilities()

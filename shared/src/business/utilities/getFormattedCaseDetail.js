@@ -149,10 +149,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.filingsAndProceedings =
     getFilingsAndProceedings(formattedEntry);
 
+  // TODO: REFACTOR
   if (!formattedEntry.descriptionDisplay) {
     formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
   }
-
+  // TODO: REFACTOR
   if (formattedEntry.additionalInfo) {
     if (formattedEntry.addToCoversheet) {
       formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
