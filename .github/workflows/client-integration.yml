@@ -57,5 +57,5 @@ jobs:
       - name: Store Video Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: cypress-videos
+          name: server log output
           path: /tmp/web-client/server-output.txt
