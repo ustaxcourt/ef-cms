@@ -55,7 +55,7 @@ jobs:
           URL=http://localhost:9200 ./wait-until.sh
           URL=http://localhost:9000/ ./wait-until.sh
           URL=http://localhost:8000/shell ./wait-until.sh
-          sleep 20 # figure out why we need to sleep here since we wait above ^
+          sleep 40 # figure out why we need to sleep here since we wait above ^
           export TESTFILES=$(node split-tests.js)
           npm run test:client:integration:ci
       - name: Store Video Artifacts
