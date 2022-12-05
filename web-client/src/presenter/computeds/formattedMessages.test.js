@@ -1,15 +1,12 @@
 /* eslint-disable max-lines */
-import { runCompute } from 'cerebral/test';
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { withAppContextDecorator } from '../../withAppContext';
 import { formattedMessages as formattedMessagesComputed } from './formattedMessages';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedMessages', () => {
-  const formattedMessages = withAppContextDecorator(
-    formattedMessagesComputed,
-    applicationContext,
-  );
+  const { STATUS_TYPES } = applicationContext.getConstants();
+  const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
   it('returns filtered messages sorted oldest to newest and completedMessages from state.messages when messageBoxToDisplay.box is inbox', () => {
     const result = runCompute(formattedMessages, {
@@ -494,14 +491,13 @@ describe('formattedMessages', () => {
     expect(result.messages.length).toEqual(2);
   });
 
-  //add app context to run compute
-  it.only('should set showTrialInformation to true when status is calendared', () => {
+  it('should set showTrialInformation to true when caseStatus is calendared', () => {
     const mockCalendaredMessage = {
+      caseStatus: STATUS_TYPES.calendared,
       completedAt: '2019-01-02T16:29:13.122Z',
       createdAt: '2019-01-01T16:29:13.122Z',
       docketNumber: '101-20',
       message: 'This is a test message',
-      status: CASE_STATUS_TYPES.calendared,
       trialDate: '2025-01-01T16:29:13.122Z',
       trialLocation: 'Austin, TX',
     };
@@ -519,5 +515,30 @@ describe('formattedMessages', () => {
     });
 
     expect(result.messages[0].showTrialInformation).toBeTruthy();
+  });
+
+  it('should set showTrialInformation to false when caseStatus is NOT calendared', () => {
+    const mockCalendaredMessage = {
+      caseStatus: STATUS_TYPES.new,
+      completedAt: '2019-01-02T16:29:13.122Z',
+      createdAt: '2019-01-01T16:29:13.122Z',
+      docketNumber: '101-20',
+      message: 'This is a test message',
+    };
+
+    const result = runCompute(formattedMessages, {
+      state: {
+        messageBoxToDisplay: {
+          box: 'outbox',
+        },
+        messages: [mockCalendaredMessage],
+        screenMetadata: {},
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(result.messages[0].showTrialInformation).toBeFalsy();
   });
 });

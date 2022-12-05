@@ -6,7 +6,7 @@ import {
 import { state } from 'cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
-  const { CASE_STATUS_TYPES } = applicationContext.getConstants();
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   const tableSort = get(state.tableSort);
 
@@ -18,9 +18,8 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   messages.forEach(message => {
-    if (message.status === CASE_STATUS_TYPES.calendared) {
-      message.showTrialInformation = true;
-    }
+    message.showTrialInformation =
+      message.caseStatus === STATUS_TYPES.calendared;
   });
 
   const { box } = get(state.messageBoxToDisplay);
