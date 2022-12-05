@@ -2,6 +2,7 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkGetsDocketEntryByEventCode } from './journey/docketClerkGetsDocketEntryByEventCode';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -59,12 +60,15 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkGetsDocketEntryByEventCode(cerebralTest, 'O');
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
-  docketClerkViewsDraftOrder(cerebralTest, 1);
+
+  docketClerkGetsDocketEntryByEventCode(cerebralTest, 'OD');
+  docketClerkViewsDraftOrder(cerebralTest);
   docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
   docketClerkServesDocument(cerebralTest, 0);
@@ -72,8 +76,9 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkServesDocument(cerebralTest, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 1);
 
-  docketClerkViewsDraftOrder(cerebralTest, 2);
-  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkGetsDocketEntryByEventCode(cerebralTest, 'OSC');
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
   docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
   docketClerkViewsCaseDetailDocumentView(cerebralTest);

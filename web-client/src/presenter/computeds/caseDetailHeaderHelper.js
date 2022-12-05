@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export const caseDetailHeaderHelper = (get, applicationContext) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
 
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
@@ -65,8 +65,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showBlockedTag =
     caseDetail.blocked ||
-    (caseDetail.automaticBlocked &&
-      caseDetail.status !== STATUS_TYPES.calendared);
+    (caseDetail.automaticBlocked && !caseDetail.trialDate);
 
   return {
     hidePublicCaseInformation: !isExternalUser,

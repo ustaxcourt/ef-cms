@@ -67,6 +67,14 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
+        key: 'documentType',
+        value: 'Corrected Transcript',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
         key: 'freeText',
         value: 'for test',
       },

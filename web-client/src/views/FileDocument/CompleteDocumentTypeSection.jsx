@@ -1,6 +1,6 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay/';
+import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
@@ -89,3 +89,5 @@ export const CompleteDocumentTypeSection = connect(
     );
   },
 );
+
+CompleteDocumentTypeSection.displayName = 'CompleteDocumentTypeSection';

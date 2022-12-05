@@ -1,3 +1,5 @@
+import { waitForExpectedItem } from '../helpers';
+
 export const docketClerkEditsSignedUploadedCourtIssuedDocument = (
   cerebralTest,
   fakeFile,
@@ -10,9 +12,11 @@ export const docketClerkEditsSignedUploadedCourtIssuedDocument = (
 
     await cerebralTest.runSequence('navigateToEditOrderSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual(
-      'EditUploadCourtIssuedDocument',
-    );
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'currentPage',
+      expectedItem: 'EditUploadCourtIssuedDocument',
+    });
 
     await cerebralTest.runSequence('clearExistingDocumentSequence');
 

@@ -109,3 +109,5 @@ export const ReportsMenu = connect(
     );
   },
 );
+
+ReportsMenu.displayName = 'ReportsMenu';

@@ -19,11 +19,7 @@ export const IndividualWorkQueueOutbox = connect(
         >
           <thead>
             <tr>
-              <th
-                aria-hidden="true"
-                className="consolidated-case-column"
-                colSpan="2"
-              ></th>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
@@ -42,7 +38,6 @@ export const IndividualWorkQueueOutbox = connect(
           {formattedWorkQueue.map(item => (
             <tbody key={item.workItemId}>
               <tr>
-                <td aria-hidden="true" />
                 <td className="consolidated-case-column">
                   {item.inConsolidatedGroup && (
                     <span
@@ -101,3 +96,5 @@ export const IndividualWorkQueueOutbox = connect(
     );
   },
 );
+
+IndividualWorkQueueOutbox.displayName = 'IndividualWorkQueueOutbox';

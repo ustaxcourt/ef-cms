@@ -82,7 +82,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showBlockedTag).toBeTruthy();
     });
 
-    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+    it('should be false when blocked is false, automaticBlocked is true, and the case has a trial date', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -90,15 +90,15 @@ describe('caseDetailHeaderHelper', () => {
             ...getBaseState(docketClerkUser).caseDetail,
             automaticBlocked: true,
             blocked: false,
-            status: CASE_STATUS_TYPES.new,
+            trialDate: '2020-03-01T00:00:00.000Z',
           },
         },
       });
 
-      expect(result.showBlockedTag).toBeTruthy();
+      expect(result.showBlockedTag).toBeFalsy();
     });
 
-    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+    it('should be true when blocked is false, automaticBlocked is true, and the case has no trial date', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -111,7 +111,7 @@ describe('caseDetailHeaderHelper', () => {
         },
       });
 
-      expect(result.showBlockedTag).toBeFalsy();
+      expect(result.showBlockedTag).toBeTruthy();
     });
   });
 

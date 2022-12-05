@@ -15,24 +15,27 @@ import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from 
 import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
 import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-console.error = () => null;
-
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
+  const cerebralTest = setupTest();
+
+  console.error = () => null;
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+  it('petitioner creates an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -58,7 +61,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
   docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(cerebralTest, 5);

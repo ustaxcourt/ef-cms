@@ -20,3 +20,5 @@ export const ProgressBar = props => {
     </progress>
   );
 };
+
+ProgressBar.displayName = 'ProgressBar';

@@ -7,7 +7,6 @@ import React from 'react';
 
 export const ConfirmInitiatePaperFilingServiceModal = connect(
   {
-    areMultiDocketablePaperFilingsEnabledFlag: state.featureFlagHelper,
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiatePaperFilingServiceModalHelper:
       state.confirmInitiatePaperFilingServiceModalHelper,
@@ -78,3 +77,6 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
     );
   },
 );
+
+ConfirmInitiatePaperFilingServiceModal.displayName =
+  'ConfirmInitiatePaperFilingServiceModal';

@@ -59,7 +59,7 @@ describe(`Create and serve a case with an order with exact keyword (${documentTi
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkSignsOrder(testClient, 0);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrder(testClient, 0);
     docketClerkServesDocument(testClient, 0);
   });
@@ -75,7 +75,7 @@ describe(`Create and serve a case with an order with exact keyword (${documentTi
       signedAtFormatted: '01/02/2020',
     });
 
-    docketClerkSignsOrder(testClient, 1);
+    docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrder(testClient, 1);
     docketClerkServesDocument(testClient, 1);
   });

@@ -361,3 +361,5 @@ export const SessionInformationForm = connect(
     );
   },
 );
+
+SessionInformationForm.displayName = 'SessionInformationForm';

@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { STIPULATED_DECISION_EVENT_CODE } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsStipulatedDecisionDocketEntryFromOrder } from './journey/docketClerkAddsStipulatedDecisionDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
@@ -11,11 +11,10 @@ import {
   uploadPetition,
 } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
-  const { STIPULATED_DECISION_EVENT_CODE } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
+
+  cerebralTest.draftOrders = [];
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -26,12 +25,12 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
+  it('Create electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest);
 
-  it('Create case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -40,8 +39,8 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsStipulatedDecisionDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
 
@@ -53,6 +52,7 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
       formattedDocketEntriesOnDocketRecord.find(
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
       );
+
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
@@ -64,6 +64,7 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
       formattedDocketEntriesOnDocketRecord.find(
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
       );
+
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(false);
   });
 });

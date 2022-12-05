@@ -79,9 +79,16 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
     'The title of this document.',
   ),
-  documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
-    .required()
-    .description('The type of this document.'),
+  documentType: joi.when('isDraft', {
+    is: true,
+    otherwise: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+      .required()
+      .description('The type of this document.'),
+    then: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+      .optional()
+      .allow(null)
+      .description('The type of this document.'),
+  }),
   draftOrderState: joi.object().allow(null).optional(),
   editState: JoiValidationConstants.STRING.max(4000)
     .allow(null)
@@ -89,7 +96,15 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .meta({ tags: ['Restricted'] })
     .description('JSON representation of the in-progress edit of this item.'),
   entityName: JoiValidationConstants.STRING.valid('DocketEntry').required(),
-  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).required(),
+  eventCode: joi.when('isDraft', {
+    is: true,
+    otherwise: JoiValidationConstants.STRING.valid(
+      ...ALL_EVENT_CODES,
+    ).required(),
+    then: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
+      .optional()
+      .allow(null),
+  }),
   filedBy: JoiValidationConstants.STRING.max(500)
     .when('documentType', {
       is: JoiValidationConstants.STRING.valid(
@@ -194,7 +209,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .when('documentType', {
       is: JoiValidationConstants.STRING.valid(
         ...OPINION_DOCUMENT_TYPES.map(t => t.documentType),
-      ),
+      ).required(),
       otherwise: joi.optional(),
       then: joi.required(),
     }),

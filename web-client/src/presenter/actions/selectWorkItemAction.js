@@ -12,6 +12,8 @@ import { state } from 'cerebral';
  */
 export const selectWorkItemAction = ({ get, props, store }) => {
   const selectedWorkItems = get(state.selectedWorkItems);
+  const formattedWorkQueue = get(state.formattedWorkQueue);
+
   if (
     selectedWorkItems.find(
       workItem => workItem.workItemId === props.workItem.workItemId,
@@ -23,7 +25,13 @@ export const selectWorkItemAction = ({ get, props, store }) => {
         workItem => workItem.workItemId !== props.workItem.workItemId,
       ),
     );
+    store.set(state.workitemAllCheckbox, false);
   } else {
-    store.set(state.selectedWorkItems, [...selectedWorkItems, props.workItem]);
+    selectedWorkItems.push(props.workItem);
+    store.set(state.selectedWorkItems, selectedWorkItems);
+
+    if (formattedWorkQueue.length === selectedWorkItems.length) {
+      store.set(state.workitemAllCheckbox, true);
+    }
   }
 };

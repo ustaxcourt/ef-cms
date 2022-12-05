@@ -104,6 +104,8 @@ export const MessagesSectionCompleted = connect(
   },
 );
 
+MessagesSectionCompleted.displayName = 'MessagesSectionCompleted';
+
 const CompletedMessageRow = React.memo(function CompletedMessageRow({
   message,
 }) {

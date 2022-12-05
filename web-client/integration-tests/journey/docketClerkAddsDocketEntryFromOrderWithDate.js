@@ -2,11 +2,8 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkAddsDocketEntryFromOrderWithDate = (
-  cerebralTest,
-  draftOrderIndex,
-) => {
-  return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex} including a nonstandard type with date`, async () => {
+export const docketClerkAddsDocketEntryFromOrderWithDate = cerebralTest => {
+  return it('Docket Clerk adds a docket entry from the given draft order including a nonstandard type with date', async () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
@@ -14,7 +11,7 @@ export const docketClerkAddsDocketEntryFromOrderWithDate = (
       },
     );
 
-    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,

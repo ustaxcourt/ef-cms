@@ -69,7 +69,6 @@ exports.addDocketEntryAndServeOpinion = testData => {
   cy.get('div.document-viewer--documents-list:last-child').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  cy.get('.select-react-element__clear-indicator').click();
   cy.get('div#document-type').type('Memorandum Opinion{enter}');
 
   cy.get('#judge').select('Foley');

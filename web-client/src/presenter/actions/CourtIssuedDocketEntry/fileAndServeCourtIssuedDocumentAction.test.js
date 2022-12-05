@@ -8,7 +8,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
   const clientConnectionId = 'ABC123';
   const docketNumbers = ['123-20'];
 
-  it('should call the interactor for filing and serving court-issued documents and pass the current clientConnectId', async () => {
+  it('should call the interactor for filing and serving court-issued documents and pass the current clientConnectionId', async () => {
     const thisDocketNumber = '123-20';
 
     await runAction(fileAndServeCourtIssuedDocumentAction, {
@@ -44,11 +44,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
 
     expect(
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
-        .mock.calls[0][1].docketNumbers,
-    ).toEqual([thisDocketNumber]);
-    expect(
-      applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
-        .mock.calls[0][2],
-    ).toEqual(clientConnectionId);
+        .mock.calls[0][1],
+    ).toMatchObject({ clientConnectionId, docketNumbers: [thisDocketNumber] });
   });
 });

@@ -95,3 +95,5 @@ export const UserContactEdit = connect(
     );
   },
 );
+
+UserContactEdit.displayName = 'UserContactEdit';

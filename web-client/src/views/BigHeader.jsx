@@ -16,3 +16,5 @@ export const BigHeader = connect(
     );
   },
 );
+
+BigHeader.displayName = 'BigHeader';

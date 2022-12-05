@@ -37,3 +37,5 @@ export const VerifyNewEmailModal = connect(
     );
   },
 );
+
+VerifyNewEmailModal.displayName = 'VerifyNewEmailModal';

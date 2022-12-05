@@ -138,3 +138,5 @@ export const ParticipantsAndCounsel = connect(
     );
   },
 );
+
+ParticipantsAndCounsel.displayName = 'ParticipantsAndCounsel';

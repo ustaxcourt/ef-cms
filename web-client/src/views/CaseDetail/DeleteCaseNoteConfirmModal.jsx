@@ -20,3 +20,5 @@ export const DeleteCaseNoteConfirmModal = connect(
     );
   },
 );
+
+DeleteCaseNoteConfirmModal.displayName = 'DeleteCaseNoteConfirmModal';

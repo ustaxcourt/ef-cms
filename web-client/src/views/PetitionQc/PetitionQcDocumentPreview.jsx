@@ -24,3 +24,5 @@ export const PetitionQcDocumentPreview = connect(
     );
   },
 );
+
+PetitionQcDocumentPreview.displayName = 'PetitionQcDocumentPreview';

@@ -21,6 +21,7 @@ import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
+import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateCourtIssuedFilingServiceModalHelper } from './computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
@@ -143,6 +144,7 @@ const helpers = {
   caseInformationHelper,
   caseInventoryReportHelper,
   caseSearchBoxHelper,
+  caseSearchNoMatchesHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateCourtIssuedFilingServiceModalHelper,

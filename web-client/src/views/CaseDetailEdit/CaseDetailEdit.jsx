@@ -62,3 +62,5 @@ export const CaseDetailEdit = connect(
     );
   },
 );
+
+CaseDetailEdit.displayName = 'CaseDetailEdit';

@@ -293,3 +293,5 @@ export const AddPetitionerToCase = connect(
     );
   },
 );
+
+AddPetitionerToCase.displayName = 'AddPetitionerToCase';

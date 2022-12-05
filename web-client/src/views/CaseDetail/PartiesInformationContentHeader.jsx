@@ -96,3 +96,5 @@ export const PartiesInformationContentHeader = connect(
     );
   },
 );
+
+PartiesInformationContentHeader.displayName = 'PartiesInformationContentHeader';

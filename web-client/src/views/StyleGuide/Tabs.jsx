@@ -57,3 +57,5 @@ export const TabsSection = () => (
     </Tabs>
   </section>
 );
+
+TabsSection.displayName = 'TabsSection';

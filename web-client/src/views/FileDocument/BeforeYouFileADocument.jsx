@@ -133,3 +133,5 @@ export const BeforeYouFileADocument = connect(
     );
   },
 );
+
+BeforeYouFileADocument.displayName = 'BeforeYouFileADocument';

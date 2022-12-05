@@ -37,7 +37,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
   // old transcript that should be available to the user
   docketClerkAddsTranscriptDocketEntryFromOrder(cerebralTest, 0, {
     day: '01',
@@ -49,7 +49,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest);
   // new transcript that should NOT be available to the user
   const today = applicationContext.getUtilities().getMonthDayYearInETObj();
   docketClerkAddsTranscriptDocketEntryFromOrder(cerebralTest, 1, {

@@ -48,3 +48,5 @@ export const FilePetitionSuccess = connect(
     );
   },
 );
+
+FilePetitionSuccess.displayName = 'FilePetitionSuccess';

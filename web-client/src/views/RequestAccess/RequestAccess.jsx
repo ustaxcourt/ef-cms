@@ -128,3 +128,5 @@ export const RequestAccess = connect(
     );
   },
 );
+
+RequestAccess.displayName = 'RequestAccess';

@@ -125,3 +125,5 @@ export const PartiesInformation = connect(
     );
   },
 );
+
+PartiesInformation.displayName = 'PartiesInformation';

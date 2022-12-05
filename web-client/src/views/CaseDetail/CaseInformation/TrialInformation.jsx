@@ -322,3 +322,5 @@ export const TrialInformation = connect(
     );
   },
 );
+
+TrialInformation.displayName = 'TrialInformation';

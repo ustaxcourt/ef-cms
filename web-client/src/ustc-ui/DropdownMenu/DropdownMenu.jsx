@@ -107,3 +107,5 @@ export const DropdownMenu = connect(
     );
   },
 );
+
+DropdownMenu.displayName = 'DropdownMenu';
