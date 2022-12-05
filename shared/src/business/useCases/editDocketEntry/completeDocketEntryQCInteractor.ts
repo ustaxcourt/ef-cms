@@ -20,7 +20,6 @@ import {
 } from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export const needsNewCoversheet = ({
@@ -140,15 +139,11 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
-    docketEntry: updatedDocketEntry,
-  });
+  let updatedDocumentTitle =
+    updatedDocketEntry.getDocumentTitleForDocketRecord();
 
-  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
-    docketEntry: currentDocketEntry,
-  });
+  let currentDocumentTitle =
+    currentDocketEntry.getDocumentTitleForDocketRecord();
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
     currentDocketEntry,
