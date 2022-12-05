@@ -247,7 +247,6 @@
     "@faker-js/faker": "^7.6.0",
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
     "@types/jest": "^29.2.4",
-    "@types/joi": "^17.2.3",
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.11.11",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
