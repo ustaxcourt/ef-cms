@@ -15,6 +15,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Shared
         run: |
-          node --version
           npm ci --legacy-peer-deps
           npm run test:shared
