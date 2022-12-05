@@ -25,3 +25,5 @@ export const WorkQueueActionButtons = connect(
     );
   },
 );
+
+WorkQueueActionButtons.displayName = 'WorkQueueActionButtons';

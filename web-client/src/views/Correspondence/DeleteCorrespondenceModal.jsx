@@ -26,3 +26,5 @@ export const DeleteCorrespondenceModal = connect(
     );
   },
 );
+
+DeleteCorrespondenceModal.displayName = 'DeleteCorrespondenceModal';

@@ -49,3 +49,5 @@ export const PractitionerSearchForm = connect(
     );
   },
 );
+
+PractitionerSearchForm.displayName = 'PractitionerSearchForm';

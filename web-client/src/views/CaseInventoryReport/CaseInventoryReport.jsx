@@ -156,3 +156,5 @@ export const CaseInventoryReport = connect(
     );
   },
 );
+
+CaseInventoryReport.displayName = 'CaseInventoryReport';

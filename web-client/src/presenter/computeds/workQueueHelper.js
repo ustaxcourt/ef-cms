@@ -60,6 +60,7 @@ export const workQueueHelper = (get, applicationContext) => {
       (userIsPetitionsClerk && showInProgress),
     showSectionSentTab: userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showSelectAllCheckbox: permissions.ASSIGN_ALL_WORK_ITEMS,
     showSelectColumn: permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
     showStartPetitionButton,

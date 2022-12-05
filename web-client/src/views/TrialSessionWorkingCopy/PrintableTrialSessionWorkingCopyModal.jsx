@@ -91,3 +91,6 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
     );
   },
 );
+
+PrintableTrialSessionWorkingCopyModal.displayName =
+  'PrintableTrialSessionWorkingCopyModal';

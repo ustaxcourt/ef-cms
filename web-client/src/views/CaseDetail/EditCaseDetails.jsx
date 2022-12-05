@@ -110,3 +110,5 @@ export const EditCaseDetails = connect(
     );
   },
 );
+
+EditCaseDetails.displayName = 'EditCaseDetails';

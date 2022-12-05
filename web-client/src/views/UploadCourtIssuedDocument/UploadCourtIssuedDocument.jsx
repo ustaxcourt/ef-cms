@@ -154,3 +154,5 @@ export const UploadCourtIssuedDocument = connect(
     );
   },
 );
+
+UploadCourtIssuedDocument.displayName = 'UploadCourtIssuedDocument';

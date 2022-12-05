@@ -103,3 +103,5 @@ export const Messages = connect(
     );
   },
 );
+
+Messages.displayName = 'Messages';

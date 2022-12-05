@@ -25,3 +25,5 @@ export const Email = connect(
     );
   },
 );
+
+Email.displayName = 'Email';

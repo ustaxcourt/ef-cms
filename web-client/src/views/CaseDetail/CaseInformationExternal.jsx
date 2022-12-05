@@ -193,3 +193,5 @@ export const CaseInformationExternal = connect(
     );
   },
 );
+
+CaseInformationExternal.displayName = 'CaseInformationExternal';

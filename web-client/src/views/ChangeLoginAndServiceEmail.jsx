@@ -124,3 +124,5 @@ export const ChangeLoginAndServiceEmail = connect(
     );
   },
 );
+
+ChangeLoginAndServiceEmail.displayName = 'ChangeLoginAndServiceEmail';

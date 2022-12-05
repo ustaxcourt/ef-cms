@@ -38,3 +38,5 @@ export const CaseDifferenceModalOverlay = connect(
     );
   },
 );
+
+CaseDifferenceModalOverlay.displayName = 'CaseDifferenceModalOverlay';

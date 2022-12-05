@@ -17,3 +17,5 @@ export const TextView = connect(function TextView(props) {
 
   return <span className={className}>{text}</span>;
 });
+
+TextView.displayName = 'TextView';

@@ -183,6 +183,12 @@ const DOCUMENT_RELATIONSHIPS = {
   SUPPORTING: 'supportingDocument',
 };
 
+const DOCUMENT_SERVED_MESSAGES = {
+  ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  GENERIC: 'Document served.',
+  SELECTED_CASES: 'Document served to selected cases in group.',
+};
+
 const DOCUMENT_SEARCH_SORT = {
   FILING_DATE_ASC: 'FILING_DATE_ASC',
   FILING_DATE_DESC: 'FILING_DATE_DESC',
@@ -1432,6 +1438,7 @@ module.exports = deepFreeze({
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
   DOCUMENT_SEARCH_SORT,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,

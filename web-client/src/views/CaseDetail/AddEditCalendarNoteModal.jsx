@@ -45,3 +45,5 @@ export const AddEditCalendarNoteModal = connect(
     );
   },
 );
+
+AddEditCalendarNoteModal.displayName = 'AddEditCalendarNoteModal';

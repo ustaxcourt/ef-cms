@@ -106,3 +106,6 @@ export const CorrespondenceViewerCorrespondence = connect(
     );
   },
 );
+
+CorrespondenceViewerCorrespondence.displayName =
+  'CorrespondenceViewerCorrespondence';
