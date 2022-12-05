@@ -18,6 +18,9 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   messages.forEach(message => {
+    message.trialDate = applicationContext
+      .getUtilities()
+      .formatDateString(message.trialDate, 'MMDDYY');
     message.showTrialInformation =
       message.caseStatus === STATUS_TYPES.calendared;
   });
