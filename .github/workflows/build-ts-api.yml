@@ -2,6 +2,10 @@ name: Build API Typescript
 
 on:
   pull_request:
+  push:
+    branches:
+      - dependency-updates
+      - test
 
 jobs:
   build_ts_api:
