@@ -43,3 +43,5 @@ export const PaperServiceConfirmModal = connect(
     );
   },
 );
+
+PaperServiceConfirmModal.displayName = 'PaperServiceConfirmModal';

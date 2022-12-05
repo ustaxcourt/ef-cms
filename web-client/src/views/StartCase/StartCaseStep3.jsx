@@ -446,3 +446,5 @@ export const StartCaseStep3 = connect(
     );
   },
 );
+
+StartCaseStep3.displayName = 'StartCaseStep3';

@@ -406,3 +406,5 @@ export const Forms = () => (
     </form>
   </section>
 );
+
+Forms.displayName = 'Forms';

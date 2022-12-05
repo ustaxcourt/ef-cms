@@ -327,3 +327,5 @@ export const EditDocketEntryMetaFormDocument = connect(
     );
   },
 );
+
+EditDocketEntryMetaFormDocument.displayName = 'EditDocketEntryMetaFormDocument';

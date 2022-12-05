@@ -31,3 +31,5 @@ export const VerifyEmailWarningNotification = connect(
     );
   },
 );
+
+VerifyEmailWarningNotification.displayName = 'VerifyEmailWarningNotification';
