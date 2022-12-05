@@ -34,12 +34,19 @@ describe('messages table journey', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.documentId = caseDetail.docketEntries[0].docketEntryId;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
+  //as docketclerk
+  // docketClerkUpdatesCaseStatusToReadyForTrial
+
+  // /as petitionsclerk
+  //go to trial session detail, mark qc complete
+
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
+
   it('petitions clerk manually adds a case to a calendared trial session', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -62,6 +69,7 @@ describe('messages table journey', () => {
 
     expect(cerebralTest.getState('caseDetail.trialDate')).toBeDefined();
   });
+
   createNewMessageOnCase(cerebralTest);
 
   it('petitions clerk views case trial information on sent messages view', async () => {
@@ -73,7 +81,7 @@ describe('messages table journey', () => {
     const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === cerebralTest.testMessageSubject,
+      message => message.docketNumber === cerebralTest.docketNumber,
     );
 
     //add checks for trial info
@@ -83,6 +91,4 @@ describe('messages table journey', () => {
       trialLocation: '',
     });
   });
-
-  petitionsClerkViewsSentMessagesBox(cerebralTest);
 });

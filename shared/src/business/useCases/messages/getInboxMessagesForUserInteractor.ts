@@ -1,4 +1,4 @@
-import { Message } from '../../entities/Message';
+import { MessageResult } from '../../entities/MessageResult';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -30,7 +30,9 @@ export const getInboxMessagesForUserInteractor = async (
       userId,
     });
 
-  return Message.validateRawCollection(messages, {
+  const result = MessageResult.validateRawCollection(messages, {
     applicationContext,
   });
+
+  console.log('------result', result);
 };
