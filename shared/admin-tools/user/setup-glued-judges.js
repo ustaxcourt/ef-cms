@@ -163,12 +163,12 @@ const getJudgeUsers = async () => {
   const getSearchClient = new elasticsearch.Client({
     amazonES: {
       credentials: new EnvironmentCredentials('AWS'),
-      region: process.env.region,
+      region: process.env.REGION,
     },
     apiVersion: '7.7',
     awsConfig: new Config({ region: 'us-east-1' }),
     connectionClass,
-    host: process.ENV.ELASTICSEARCH_ENDPOINT,
+    host: process.env.ELASTICSEARCH_ENDPOINT,
     log: 'warning',
     port: 443,
     protocol: 'https',
