@@ -217,4 +217,7 @@ Message.prototype.addAttachment = function (attachmentToAdd) {
   return this;
 };
 
-exports.Message = validEntityDecorator(Message);
+module.exports = {
+  Message: validEntityDecorator(Message),
+  messageDecorator,
+};
