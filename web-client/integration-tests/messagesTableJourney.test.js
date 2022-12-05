@@ -23,6 +23,11 @@ describe('messages table journey', () => {
     docketNumber: calendaredCaseDocketNumber,
   });
 
+  // need to check that the properties trialLocation and trialDate are messages in:
+  // My Inbox
+  // Section Inbox
+  // My Outbox
+  // Section Outbox
   it('petitions clerk views case trial information on sent messages view', async () => {
     await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'outbox',
@@ -30,17 +35,18 @@ describe('messages table journey', () => {
     });
 
     const messages = cerebralTest.getState('messages');
+    console.log('***messages', messages);
 
     const foundMessage = messages.find(
-      message => message.docketNumber === cerebralTest.docketNumber,
+      message => message.docketNumber === calendaredCaseDocketNumber,
     );
 
     //add checks for trial info
     expect(foundMessage).toMatchObject({
       caseStatus: CASE_STATUS_TYPES.calendared,
       docketNumber: calendaredCaseDocketNumber,
-      trialDate: '',
-      trialLocation: '',
+      trialDate: '2020-11-27T05:00:00.000Z',
+      trialLocation: 'Houston, Texas',
     });
   });
 });
