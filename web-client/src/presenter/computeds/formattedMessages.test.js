@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { formattedMessages as formattedMessagesComputed } from './formattedMessages';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -487,5 +488,40 @@ describe('formattedMessages', () => {
     });
 
     expect(result.messages.length).toEqual(2);
+  });
+
+  it('should add trialDate and trilaLocation to status when status is calendared', () => {
+    const mockCalendaredMessage = {};
+    const result = runCompute(formattedMessages, {
+      state: {
+        messageBoxToDisplay: {
+          box: 'outbox',
+        },
+        messages: [
+          {
+            completedAt: '2019-01-02T16:29:13.122Z',
+            createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
+            message: 'This is a test message',
+            status: CASE_STATUS_TYPES.calendared,
+          },
+        ],
+        screenMetadata: {},
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      messages: [
+        {
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
+          message: 'This is a test message',
+          status: `Calendared - ${mockCalendaredMessage.trialDate} ${mockCalendaredMessage.trialLocation}`,
+        },
+      ],
+    });
   });
 });
