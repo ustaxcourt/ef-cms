@@ -20,7 +20,6 @@ const {
   MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../src/business/entities/EntityConstants');
 const { getUserPoolId, getVersion } = require('../util');
-const { v4: uuidv4 } = require('uuid');
 
 /**
  * Creates a cognito user
@@ -88,7 +87,6 @@ const createCognitoUser = async ({
       console.error(`ERROR creating cognito user for ${name}:`, err);
     }
   } else {
-    // update existing userId
     await updateCognitoUserId({
       bulkImportedUserId: email,
       cognito,
@@ -153,102 +151,6 @@ const deleteDuplicateImportedJudgeUser = async ({
     console.error(`ERROR deleting duplicate Judge ${judge}:`, err);
   }
   console.log(`Deleted duplicate Judge ${judge}`);
-};
-
-const getUniqueId = () => {
-  return uuidv4();
-};
-
-/**
- * Deletes a judge user and chambers section mapping
- *   - intended to be used only if a judge has both an imported user and a glued user
- *
- * @param {string} bulkImportedUserId bulk imported user id
- * @param {object} dynamo             DynamoDB object
- * @param {string} judge              Judge name
- * @param {string} section            Judge's chambers section
- * @param {string} version            database version
- */
-const addMissingJudgeUsers = async ({
-  cognito,
-  dynamo,
-  judgeUsers,
-  userPoolId,
-}) => {
-  const judges = [
-    {
-      email: 'judge.buch@example.com',
-      entityName: 'User',
-      judgeFullName: 'Ronald L. Buch',
-      judgeTitle: 'Judge',
-      name: 'Buch',
-      role: 'judge',
-      section: 'buchsChambers',
-    },
-    {
-      email: 'judge.ashford@example.com',
-      entityName: 'User',
-      judgeFullName: 'Tamara W. Ashford',
-      judgeTitle: 'Judge',
-      name: 'Ashford',
-      role: 'judge',
-      section: 'ashfordsChambers',
-    },
-    {
-      email: 'judge.cohen@example.com',
-      entityName: 'User',
-      judgeFullName: 'Mary Ann Cohen',
-      judgeTitle: 'Judge',
-      name: 'Cohen',
-      role: 'judge',
-      section: 'cohensChambers',
-    },
-    {
-      email: 'judge.kerrigan@example.com',
-      entityName: 'User',
-      judgeFullName: 'Kathleen Kerrigan',
-      judgeTitle: 'Judge',
-      name: 'Kerrigan',
-      role: 'judge',
-      section: 'kerrigansChambers',
-    },
-  ];
-
-  for (const judgeToAdd of judges) {
-    const judgeExistsInEnv = judgeUsers.find(
-      judgeUser => judgeUser.name === judgeToAdd.name,
-    );
-
-    if (!judgeExistsInEnv) {
-      const userId = getUniqueId();
-
-      await dynamo.put({
-        Item: {
-          ...judgeToAdd,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
-          userId,
-        },
-        TableName: process.env.SOURCE_TABLE,
-      });
-
-      await createCognitoUser({
-        cognito,
-        email: judgeToAdd.email,
-        name: judgeToAdd.name,
-        role: judgeToAdd.role,
-        userId,
-        userPoolId,
-      });
-
-      await cognito.adminSetUserPassword({
-        Password: process.env.DEFAULT_ACCOUNT_PASS,
-        Permanent: true,
-        UserPoolId: userPoolId,
-        Username: judgeToAdd.email,
-      });
-    }
-  }
 };
 
 /**
@@ -412,11 +314,4 @@ const updateCognitoUserId = async ({
       });
     }
   }
-
-  await addMissingJudgeUsers({
-    cognito,
-    dynamo,
-    judgeUsers,
-    userPoolId,
-  });
 })();
