@@ -30,9 +30,7 @@ export const getInboxMessagesForUserInteractor = async (
       userId,
     });
 
-  const result = MessageResult.validateRawCollection(messages, {
+  MessageResult.validateRawCollection(messages, {
     applicationContext,
   });
-
-  console.log('------result', result);
 };
