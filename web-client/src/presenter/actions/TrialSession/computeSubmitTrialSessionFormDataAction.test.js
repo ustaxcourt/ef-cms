@@ -18,10 +18,11 @@ describe('computeSubmitTrialSessionDataAction', () => {
     );
   });
 
-  it('should call computeTermAndUpdateState', async () => {
+  it('should call computeTermAndUpdateState', () => {
     runAction(computeSubmitTrialSessionDataAction, {
       state: { form },
     });
+
     expect(spyCompute24HrTimeAndUpdateState).toHaveBeenCalled();
     expect(spyComputeTermAndUpdateState).toHaveBeenCalled();
   });
