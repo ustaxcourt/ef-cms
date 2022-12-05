@@ -20,6 +20,8 @@ MessageResult.prototype.init = function init(
   { applicationContext },
 ) {
   messageDecorator(this, rawMessage, { applicationContext });
+  this.trialDate = rawMessage.trialDate;
+  this.trialLocation = rawMessage.trialLocation;
 };
 
 MessageResult.VALIDATION_ERROR_MESSAGES = {};
