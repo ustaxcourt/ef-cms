@@ -1,3 +1,4 @@
+import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
@@ -102,7 +103,7 @@ describe('Case Consolidation Journey', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
     expect(alertSuccess.message).toEqual(
-      'Document served to selected cases in group. ',
+      DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
     );
     expect(alertSuccess.overwritable).toEqual(false);
   });
@@ -207,7 +208,7 @@ describe('Case Consolidation Journey', () => {
   it('should have a success message that mentions the document was served (and not on multiple cases)', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
-    expect(alertSuccess.message).toEqual('Document served. ');
+    expect(alertSuccess.message).toEqual(DOCUMENT_SERVED_MESSAGES.GENERIC);
     expect(alertSuccess.overwritable).toEqual(false);
   });
 
