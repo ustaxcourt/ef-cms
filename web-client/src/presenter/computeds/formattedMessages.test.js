@@ -1,11 +1,15 @@
 /* eslint-disable max-lines */
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { formattedMessages as formattedMessagesComputed } from './formattedMessages';
 import { runCompute } from 'cerebral/test';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { withAppContextDecorator } from '../../withAppContext';
+import { formattedMessages as formattedMessagesComputed } from './formattedMessages';
 
 describe('formattedMessages', () => {
-  const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+  const formattedMessages = withAppContextDecorator(
+    formattedMessagesComputed,
+    applicationContext,
+  );
 
   it('returns filtered messages sorted oldest to newest and completedMessages from state.messages when messageBoxToDisplay.box is inbox', () => {
     const result = runCompute(formattedMessages, {
