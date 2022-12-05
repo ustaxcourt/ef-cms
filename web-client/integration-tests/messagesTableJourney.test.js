@@ -1,18 +1,12 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
-import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
-import {
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-  uploadPetition,
-} from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
 describe('messages table journey', () => {
   const cerebralTest = setupTest();
+  // const calendaredCaseDocketNumber = '103-20';
 
   beforeAll(() => {
     jest.setTimeout(40000);
@@ -24,16 +18,6 @@ describe('messages table journey', () => {
 
   afterAll(() => {
     cerebralTest.closeSocket();
-  });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(cerebralTest);
-
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('Create test case to send messages', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
