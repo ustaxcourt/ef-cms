@@ -6,6 +6,8 @@ import {
 import { state } from 'cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
+  const { CASE_STATUS_TYPES } = applicationContext.getConstants();
+
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({
@@ -13,6 +15,12 @@ export const formattedMessages = (get, applicationContext) => {
     cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
     tableSort,
+  });
+
+  messages.forEach(message => {
+    if (message.status === CASE_STATUS_TYPES.calendared) {
+      message.showTrialInformation = true;
+    }
   });
 
   const { box } = get(state.messageBoxToDisplay);
