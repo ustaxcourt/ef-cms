@@ -1,31 +1,16 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
-import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAddsDocketEntryFromMessage';
-import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
-import { docketClerkCompletesMessageThread } from './journey/docketClerkCompletesMessageThread';
-import { docketClerkEditsOrderFromMessage } from './journey/docketClerkEditsOrderFromMessage';
-import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRemovesSignatureFromMessage';
-import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
-import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
-import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerk1VerifiesCaseStatusOnMessage } from './journey/petitionsClerk1VerifiesCaseStatusOnMessage';
-import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
-import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
-import { petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments';
-import { petitionsClerkCreatesNewMessageOnCaseWithNoAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithNoAttachments';
-import { petitionsClerkCreatesOrderFromMessage } from './journey/petitionsClerkCreatesOrderFromMessage';
-import { petitionsClerkForwardsMessageToDocketClerk } from './journey/petitionsClerkForwardsMessageToDocketClerk';
-import { petitionsClerkForwardsMessageWithAttachment } from './journey/petitionsClerkForwardsMessageWithAttachment';
-import { petitionsClerkVerifiesCompletedMessageNotInInbox } from './journey/petitionsClerkVerifiesCompletedMessageNotInInbox';
-import { petitionsClerkVerifiesCompletedMessageNotInSection } from './journey/petitionsClerkVerifiesCompletedMessageNotInSection';
-import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/petitionsClerkViewsInProgressMessagesOnCaseDetail';
-import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/petitionsClerkViewsRepliesAndCompletesMessageInInbox';
-import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
-const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages table journey', () => {
   const cerebralTest = setupTest();
@@ -42,6 +27,9 @@ describe('messages table journey', () => {
     cerebralTest.closeSocket();
   });
 
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest);
+
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
     const caseDetail = await uploadPetition(cerebralTest);
@@ -51,6 +39,30 @@ describe('messages table journey', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  it('petitions clerk manually adds a case to a calendared trial session', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('openAddToTrialModalSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'showAllLocations',
+      value: true,
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'trialSessionId',
+      value: cerebralTest.trialSessionId,
+    });
+
+    await cerebralTest.runSequence('addCaseToTrialSessionSequence');
+    await refreshElasticsearchIndex();
+
+    expect(cerebralTest.getState('caseDetail.trialDate')).toBeDefined();
+  });
   createNewMessageOnCase(cerebralTest);
 
   it('petitions clerk views case trial information on sent messages view', async () => {
@@ -64,10 +76,14 @@ describe('messages table journey', () => {
     const foundMessage = messages.find(
       message => message.subject === cerebralTest.testMessageSubject,
     );
+
     //add checks for trial info
-    expect(foundMessage).toBeDefined();
+    expect(foundMessage).toEqual({});
   });
 
   petitionsClerkViewsSentMessagesBox(cerebralTest);
-  petitionsClerk1VerifiesCaseStatusOnMessage(cerebralTest, STATUS_TYPES.new);
+  petitionsClerk1VerifiesCaseStatusOnMessage(
+    cerebralTest,
+    CASE_STATUS_TYPES.new,
+  );
 });
