@@ -70,3 +70,5 @@ export const DisplayHearings = connect(
     ));
   },
 );
+
+DisplayHearings.displayName = 'DisplayHearings';

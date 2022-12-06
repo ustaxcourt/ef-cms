@@ -109,4 +109,35 @@
     display: flex;
     flex-direction: row;
   }
+
+  .underlined {
+    border-bottom: 1px solid;
+  }
+
+  .trial-session-card {
+    margin-left: 0.5rem;
+  }
+
+  .assignments-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 10px 10px;
+    row-gap: 10px;
+
+    .assignments-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      column-gap: 15%;
+
+      .assignments-row-content {
+        width: 3.5in;
+      }
+    }
+  }
+
+  .wrap-text-content {
+    word-break: break-word;
+  }
 }

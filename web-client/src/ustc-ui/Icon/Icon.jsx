@@ -20,3 +20,5 @@ export const Icon = props => {
 
   return <FontAwesomeIcon {...iconProps} />;
 };
+
+Icon.displayName = 'Icon';

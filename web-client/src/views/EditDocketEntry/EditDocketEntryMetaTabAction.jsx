@@ -82,3 +82,5 @@ export const EditDocketEntryMetaTabAction = connect(
     );
   },
 );
+
+EditDocketEntryMetaTabAction.displayName = 'EditDocketEntryMetaTabAction';

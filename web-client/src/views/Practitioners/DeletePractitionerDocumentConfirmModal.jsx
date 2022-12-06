@@ -15,3 +15,6 @@ export const DeletePractitionerDocumentConfirmModal = ({
     <p>This action cannot be undone.</p>
   </ConfirmModal>
 );
+
+DeletePractitionerDocumentConfirmModal.displayName =
+  'DeletePractitionerDocumentConfirmModal';

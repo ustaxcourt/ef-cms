@@ -97,3 +97,5 @@ export const CaseDetailPendingReportList = connect(
     );
   },
 );
+
+CaseDetailPendingReportList.displayName = 'CaseDetailPendingReportList';

@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
-import { CaseListPetitioner } from '../CaseListPetitioner';
+import { CaseListTable } from '../CaseListTable';
+import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FilingFeeOptions } from './FilingFeeOptions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,10 +24,14 @@ export const DashboardPetitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap taxpayer-tools">
             <div className="tablet:grid-col-8">
-              {dashboardExternalHelper.showWhatToExpect && <WhatToExpect />}
-              {dashboardExternalHelper.showCaseList && <CaseListPetitioner />}
+              {dashboardExternalHelper.showWhatToExpect ? (
+                <WhatToExpect />
+              ) : (
+                <CaseListTable />
+              )}
             </div>
             <div className="tablet:grid-col-4">
+              {<CaseSearchBox />}
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
@@ -125,7 +130,9 @@ export const DashboardPetitioner = connect(
                 </div>
               )}
 
-              {dashboardExternalHelper.showCaseList && <FilingFeeOptions />}
+              {!dashboardExternalHelper.showWhatToExpect && (
+                <FilingFeeOptions />
+              )}
             </div>
           </div>
         </section>
@@ -133,3 +140,5 @@ export const DashboardPetitioner = connect(
     );
   },
 );
+
+DashboardPetitioner.displayName = 'DashboardPetitioner';
