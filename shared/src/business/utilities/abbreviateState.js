@@ -1,5 +1,5 @@
-import { US_STATES } from '../entities/EntityConstants';
 import { invert } from 'lodash';
+import { US_STATES } from '../entities/EntityConstants';
 
 /**
  * abbreviates the state given a string with a comma separated city and state
