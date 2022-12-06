@@ -1,14 +1,9 @@
-import { DOCKET_SECTION } from '../../shared/src/business/entities/EntityConstants';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { formattedMessageDetail as formattedMessageDetailComputed } from '../src/presenter/computeds/formattedMessageDetail';
-import {
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-  waitForCondition,
-} from './helpers';
+import { loginAs, setupTest, waitForCondition } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
+
+let formattedCaseDetail = withAppContextDecorator(formattedCaseDetailComputed);
 
 describe('Docket clerk serves order from message journey', () => {
   const cerebralTest = setupTest();
@@ -26,98 +21,24 @@ describe('Docket clerk serves order from message journey', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
-  it('send message to docketClerk with draft order as attachment', async () => {
+  it('docket clerk adds docket entry from draft', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('openCreateMessageModalSequence');
-
-    await cerebralTest.runSequence(
-      'updateSectionInCreateMessageModalSequence',
-      {
-        key: 'toSection',
-        value: DOCKET_SECTION,
-      },
-    );
-
-    await cerebralTest.runSequence('updateModalFormValueSequence', {
-      key: 'toUserId',
-      value: '1805d1ab-18d0-43ec-bafb-654e83405416', // docketClerk
-    });
-
-    await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
-      documentId: 'd4a9662b-ca30-4bf4-b7fd-a3c976a84fb7',
-    });
-
-    cerebralTest.testMessageSubject = `Please serve this document (${Date.now()})`;
-
-    await cerebralTest.runSequence('updateModalFormValueSequence', {
-      key: 'subject',
-      value: cerebralTest.testMessageSubject,
-    });
-
-    await cerebralTest.runSequence('updateModalFormValueSequence', {
-      key: 'message',
-      value:
-        'Verify that the Date column value matches the Served column value in the Docket Record.',
-    });
-
-    await cerebralTest.runSequence('createMessageSequence');
-
-    await cerebralTest.applicationContext
-      .getUseCases()
-      .createMessageInteractor.mock.results[0].value.then(message => {
-        cerebralTest.lastCreatedMessage = message;
-      });
-
-    expect(cerebralTest.getState('modal.form')).toBeDefined();
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    await refreshElasticsearchIndex();
-  });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-
-  it('docket clerk views the forwarded message they were sent in their inbox', async () => {
-    await cerebralTest.runSequence('gotoMessagesSequence', {
-      box: 'inbox',
-      queue: 'my',
-    });
-
-    const messages = cerebralTest.getState('messages');
-
-    const foundMessage = messages.find(
-      message => message.subject === cerebralTest.testMessageSubject,
-    );
-
-    expect(foundMessage).toBeDefined();
-    expect(foundMessage.from).toEqual('Test Petitionsclerk');
-  });
-
-  it('docket clerk adds docket entry for order from a message', async () => {
-    await cerebralTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-      parentMessageId: cerebralTest.lastCreatedMessage.messageId,
-    });
-
-    const formattedMessageDetail = withAppContextDecorator(
-      formattedMessageDetailComputed,
-    );
-
-    let messageDetailFormatted = runCompute(formattedMessageDetail, {
+    const formattedCase = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
 
-    const orderDocument = messageDetailFormatted.attachments[0];
-    expect(orderDocument.documentTitle).toEqual('Order that is a draft');
+    const draftOrderToServe = formattedCase.draftDocuments.find(
+      doc => doc.documentTitle === 'Order that is a draft',
+    );
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.documentId,
+      docketEntryId: draftOrderToServe.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
-      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.lastCreatedMessage.messageId}?documentId=${orderDocument.documentId}`,
     });
 
     await cerebralTest.runSequence(
@@ -140,12 +61,10 @@ describe('Docket clerk serves order from message journey', () => {
 
     await waitForCondition({
       booleanExpressionCondition: () =>
-        cerebralTest.getState('currentPage') === 'MessageDetail',
+        cerebralTest.getState('currentPage') === 'CaseDetail',
     });
 
-    const formattedCaseDetail = withAppContextDecorator(
-      formattedCaseDetailComputed,
-    );
+    formattedCaseDetail = withAppContextDecorator(formattedCaseDetailComputed);
 
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
@@ -153,7 +72,7 @@ describe('Docket clerk serves order from message journey', () => {
 
     const caseOrderDocketEntry =
       caseDetailFormatted.formattedDocketEntries.find(
-        d => d.docketEntryId === orderDocument.documentId,
+        d => d.docketEntryId === draftOrderToServe.docketEntryId,
       );
 
     expect(caseOrderDocketEntry).toBeDefined();
