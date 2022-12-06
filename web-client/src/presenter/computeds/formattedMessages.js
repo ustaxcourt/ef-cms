@@ -18,8 +18,9 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   messages.forEach(message => {
-    //call utility method here
-    // message.formattedTrialLocation = formattedTrialLocation;
+    message.formattedTrialLocation = applicationContext
+      .getUtilities()
+      .abbreviateState(message.trialLocation);
 
     message.formattedTrialDate = applicationContext
       .getUtilities()
