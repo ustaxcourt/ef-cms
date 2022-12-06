@@ -1,12 +1,12 @@
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import classNames from 'classnames';
+import React from 'react';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
-import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
-import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   {
@@ -157,7 +157,15 @@ export const MessagesIndividualInbox = connect(
                   <td className="message-queue-row max-width-25">
                     {message.caseTitle}
                   </td>
-                  <td className="message-queue-row">{message.caseStatus}</td>
+                  {!message.showTrialInformation && (
+                    <td className="message-queue-row">{message.caseStatus}</td>
+                  )}
+                  {message.showTrialInformation && (
+                    <td className="message-queue-row">
+                      {message.caseStatus} - {message.formattedTrialDate}{' '}
+                      {message.formattedTrialLocation}
+                    </td>
+                  )}
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
                     {message.fromSection}
