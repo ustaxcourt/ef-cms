@@ -3,11 +3,10 @@ import {
   applyFiltersToMessages,
   getFormattedMessages,
 } from '../utilities/processFormattedMessages';
-import { invert } from 'lodash';
 import { state } from 'cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
-  const { STATUS_TYPES, US_STATES } = applicationContext.getConstants();
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   const tableSort = get(state.tableSort);
 
@@ -19,10 +18,8 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   messages.forEach(message => {
-    const cityAndState = message.trialLocation.split(', ');
-    const stateAbbreviation = invert(US_STATES)[cityAndState[1]];
-    const formattedTrialLocation = `${cityAndState[0]}, ${stateAbbreviation}`;
-    message.formattedTrialLocation = formattedTrialLocation;
+    //call utility method here
+    // message.formattedTrialLocation = formattedTrialLocation;
 
     message.formattedTrialDate = applicationContext
       .getUtilities()
