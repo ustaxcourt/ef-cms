@@ -1,12 +1,18 @@
-if (
-  !process.env.DEFAULT_ACCOUNT_PASS ||
-  !process.env.ELASTICSEARCH_ENDPOINT ||
-  !process.env.ENV ||
-  !process.env.REGION
-) {
-  console.error(
-    'Required environment variables: DEFAULT_ACCOUNT_PASS, ELASTICSEARCH_ENDPOINT, ENV, REGION',
-  );
+const requiredEnvVars = [
+  'DEFAULT_ACCOUNT_PASS',
+  'ELASTICSEARCH_ENDPOINT',
+  'ENV',
+  'REGION',
+];
+const envVars = Object.keys(process.env);
+let missing = '';
+for (const key of requiredEnvVars) {
+  if (!envVars.includes(key)) {
+    missing += `${missing.length > 0 ? ', ' : ''}${key}`;
+  }
+}
+if (missing) {
+  console.error(`Missing environment variable(s): ${missing}`);
   process.exit();
 }
 const connectionClass = require('http-aws-es');
