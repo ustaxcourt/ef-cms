@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 
 let formattedCaseDetail = withAppContextDecorator(formattedCaseDetailComputed);
 
-describe('Docket clerk serves order from message journey', () => {
+describe('Docket clerk serves a draft order which has a filing date in the past', () => {
   const cerebralTest = setupTest();
 
   beforeAll(() => {
