@@ -153,7 +153,6 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     .getUtilities()
     .getDescriptionDisplay(formattedEntry);
 
-  // TODO: REFACTOR
   if (formattedEntry.additionalInfo && !formattedEntry.addToCoversheet) {
     formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
   }

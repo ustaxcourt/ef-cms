@@ -169,7 +169,6 @@ export const getFormattedDocketEntry = ({
       .getSealedDocketEntryTooltip(applicationContext, entry);
   }
 
-  // TODO: REFACTOR
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext
       .getUtilities()
