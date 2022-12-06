@@ -7,7 +7,6 @@ import {
   setupTest,
   waitForCondition,
 } from './helpers';
-import { messageModalHelper as messageModalHelperComputed } from '../src/presenter/computeds/messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -35,16 +34,6 @@ describe('Docket clerk serves order from message journey', () => {
     });
 
     await cerebralTest.runSequence('openCreateMessageModalSequence');
-
-    const messageModalHelper = withAppContextDecorator(
-      messageModalHelperComputed,
-    );
-
-    const getHelper = () => {
-      return runCompute(messageModalHelper, {
-        state: cerebralTest.getState(),
-      });
-    };
 
     await cerebralTest.runSequence(
       'updateSectionInCreateMessageModalSequence',
@@ -153,8 +142,6 @@ describe('Docket clerk serves order from message journey', () => {
       booleanExpressionCondition: () =>
         cerebralTest.getState('currentPage') === 'MessageDetail',
     });
-
-    expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
     const formattedCaseDetail = withAppContextDecorator(
       formattedCaseDetailComputed,
