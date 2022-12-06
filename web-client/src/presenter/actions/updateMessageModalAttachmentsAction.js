@@ -27,6 +27,7 @@ export const updateMessageModalAttachmentsAction = ({
       });
 
     // TODO: REFACTOR
+    // decide if we are using descriptionToDisplay vs documentTitle
     const generatedDocumentTitle = applicationContext
       .getUtilities()
       .getDocumentTitleWithAdditionalInfo({ docketEntry: document });

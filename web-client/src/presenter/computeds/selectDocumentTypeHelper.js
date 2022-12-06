@@ -125,6 +125,7 @@ export const getOptionsForCategory = ({
 
 export const MAX_TITLE_LENGTH = 100;
 
+// TODO: REFACTOR (may not need to)
 export const getPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,

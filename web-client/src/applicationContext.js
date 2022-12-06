@@ -52,11 +52,11 @@ import { generatePrintablePendingReportInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
+import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
-import { getModifiedDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getModifiedDocumentTitleWithAdditionalInfo';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
@@ -730,13 +730,13 @@ const applicationContext = {
       getContactPrimary,
       getContactSecondary,
       getCropBox,
+      getDescriptionDisplay,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getFormattedPartiesNameAndTitle,
       getJudgeLastName,
-      getModifiedDocumentTitleWithAdditionalInfo,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,

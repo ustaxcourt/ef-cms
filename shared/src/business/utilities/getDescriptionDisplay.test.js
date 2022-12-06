@@ -1,15 +1,13 @@
-const {
-  getModifiedDocumentTitleWithAdditionalInfo,
-} = require('./getModifiedDocumentTitleWithAdditionalInfo');
+const { getDescriptionDisplay } = require('./getDescriptionDisplay');
 
-describe('getModifiedDocumentTitleWithAdditionalInfo', () => {
+describe('getDescriptionDisplay', () => {
   const documentTitle = 'doc title';
   let documentMetaData = {
     documentTitle,
   };
 
   it('returns the document title with no added information if there is no previous document available', () => {
-    const result = getModifiedDocumentTitleWithAdditionalInfo(documentMetaData);
+    const result = getDescriptionDisplay(documentMetaData);
 
     expect(result).toEqual(result);
   });
@@ -23,7 +21,7 @@ describe('getModifiedDocumentTitleWithAdditionalInfo', () => {
       },
     };
 
-    const result = getModifiedDocumentTitleWithAdditionalInfo(documentMetaData);
+    const result = getDescriptionDisplay(documentMetaData);
     const expected = 'Motion for Summary Judgement superfulous text';
     expect(result).toEqual(expected);
   });
@@ -38,7 +36,7 @@ describe('getModifiedDocumentTitleWithAdditionalInfo', () => {
       },
     };
 
-    const result = getModifiedDocumentTitleWithAdditionalInfo(documentMetaData);
+    const result = getDescriptionDisplay(documentMetaData);
     const expected =
       'Motion for Summary Judgement superfulous text newly added info';
     expect(result).toEqual(expected);
