@@ -104,7 +104,7 @@ const createCognitoUser = async ({
  *
  * @param {string} bulkImportedUserId bulk imported user id
  * @param {object} dynamo             DynamoDB object
- * @param {string} judge              Judge name
+ * @param {string} name               Judge name
  * @param {string} section            Judge's chambers section
  * @param {string} version            database version
  * @returns {Promise<void>}
@@ -112,7 +112,7 @@ const createCognitoUser = async ({
 const deleteDuplicateImportedJudgeUser = async ({
   bulkImportedUserId,
   dynamo,
-  judge,
+  name,
   section,
   version,
 }) => {
@@ -131,7 +131,7 @@ const deleteDuplicateImportedJudgeUser = async ({
       .promise();
   } catch (err) {
     console.error(
-      `ERROR deleting duplicate chambers section mapping for Judge ${judge}:`,
+      `ERROR deleting duplicate chambers section mapping for ${name}:`,
       err,
     );
   }
@@ -148,9 +148,9 @@ const deleteDuplicateImportedJudgeUser = async ({
       })
       .promise();
   } catch (err) {
-    console.error(`ERROR deleting duplicate Judge ${judge}:`, err);
+    console.error(`ERROR deleting duplicate ${name}:`, err);
   }
-  console.log(`Deleted duplicate Judge ${judge}`);
+  console.log(`Deleted duplicate ${name}`);
 };
 
 /**
@@ -236,14 +236,14 @@ const getJudgeUsers = async () => {
  * @param {object} applicationContext the application context
  * @param {string} bulkImportedUserId bulk imported user id
  * @param {string} gluedUserId        glued user id
- * @param {string} judge              Judge name
+ * @param {string} name               Judge name
  * @returns {Promise<void>}
  */
 const updateCognitoUserId = async ({
   bulkImportedUserId,
   cognito,
   gluedUserId,
-  judge,
+  name,
   userPoolId,
 }) => {
   try {
@@ -259,9 +259,9 @@ const updateCognitoUserId = async ({
         Username: bulkImportedUserId,
       })
       .promise();
-    console.log(`Enabled login for Judge ${judge}`);
+    console.log(`Enabled login for ${name}`);
   } catch (err) {
-    console.error(`ERROR updating custom:userId for Judge ${judge}:`, err);
+    console.error(`ERROR updating custom:userId for ${name}:`, err);
   }
 };
 
@@ -275,13 +275,13 @@ const updateCognitoUserId = async ({
 
   for (const judge in judgeUsers) {
     if ('gluedUserId' in judgeUsers[judge]) {
-      const { email, gluedUserId } = judgeUsers[judge];
+      const { email, gluedUserId, name } = judgeUsers[judge];
       if ('bulkImportedUserId' in judgeUsers[judge]) {
         const { bulkImportedUserId, section } = judgeUsers[judge];
         await deleteDuplicateImportedJudgeUser({
           bulkImportedUserId,
           dynamo,
-          judge,
+          name,
           section,
           version,
         });
@@ -290,10 +290,10 @@ const updateCognitoUserId = async ({
           bulkImportedUserId,
           cognito,
           gluedUserId,
-          judge,
+          name,
+          userPoolId,
         });
       } else {
-        const { name } = judgeUsers[judge];
         await createCognitoUser({
           cognito,
           email,
