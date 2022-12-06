@@ -1,10 +1,11 @@
 if (
+  !process.env.DEFAULT_ACCOUNT_PASS ||
   !process.env.ELASTICSEARCH_ENDPOINT ||
   !process.env.ENV ||
   !process.env.REGION
 ) {
   console.error(
-    'Required environment variables: ELASTICSEARCH_ENDPOINT, ENV, REGION',
+    'Required environment variables: DEFAULT_ACCOUNT_PASS, ELASTICSEARCH_ENDPOINT, ENV, REGION',
   );
   process.exit();
 }
