@@ -1,12 +1,12 @@
-import { omit } from 'lodash';
-import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getInboxMessagesForUserInteractor } from './getInboxMessagesForUserInteractor';
+import { omit } from 'lodash';
 
 describe('getInboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
