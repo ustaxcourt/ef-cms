@@ -18,16 +18,18 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   messages.forEach(message => {
-    message.formattedTrialLocation = applicationContext
-      .getUtilities()
-      .abbreviateState(message.trialLocation);
-
-    message.formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(message.trialDate, 'MMDDYY');
-
     message.showTrialInformation =
       message.caseStatus === STATUS_TYPES.calendared;
+
+    if (message.showTrialInformation) {
+      message.formattedTrialLocation = applicationContext
+        .getUtilities()
+        .abbreviateState(message.trialLocation);
+
+      message.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(message.trialDate, 'MMDDYY');
+    }
   });
 
   const { box } = get(state.messageBoxToDisplay);

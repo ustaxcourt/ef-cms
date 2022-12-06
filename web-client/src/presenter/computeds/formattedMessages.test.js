@@ -541,4 +541,34 @@ describe('formattedMessages', () => {
 
     expect(result.messages[0].showTrialInformation).toBeFalsy();
   });
+
+  it('should format the trialDate and trialLocation on the message when caseStatus is Calendared', () => {
+    const mockCalendaredMessage = {
+      caseStatus: STATUS_TYPES.calendared,
+      completedAt: '2019-01-02T16:29:13.122Z',
+      createdAt: '2019-01-01T16:29:13.122Z',
+      docketNumber: '101-20',
+      message: 'This is a test message',
+      trialDate: '2019-01-01T16:29:13.122Z',
+      trialLocation: 'Houston, Texas',
+    };
+
+    const result = runCompute(formattedMessages, {
+      state: {
+        messageBoxToDisplay: {
+          box: 'outbox',
+        },
+        messages: [mockCalendaredMessage],
+        screenMetadata: {},
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(result.messages[0]).toMatchObject({
+      formattedTrialDate: '01/01/19',
+      formattedTrialLocation: 'Houston, TX',
+    });
+  });
 });
