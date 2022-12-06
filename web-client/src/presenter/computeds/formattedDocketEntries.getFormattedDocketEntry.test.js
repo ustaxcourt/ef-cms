@@ -152,26 +152,42 @@ describe('getFormattedDocketEntry', () => {
   });
 
   describe('descriptionDisplay', () => {
-    it('should call getDocumentTitleWithAdditionalInfo if entry.documentTitle is set and return its result as descriptionDisplay', () => {
-      const mockDescriptionDisplay = 'Answer With Extra Things';
-      applicationContext
-        .getUtilities()
-        .getDocumentTitleWithAdditionalInfo.mockReturnValue(
-          mockDescriptionDisplay,
-        );
-
+    // TODO: account for returning only documentType and documentDescritption
+    it('should call getDescriptionDisplay and return only documentTitle with no other information', () => {
+      const expectedDescriptionDisplay = 'Answer';
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: {
           ...simpleDocketEntry,
+          additionalInfo: undefined,
           documentTitle: 'Answer',
         },
       });
 
       expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+        applicationContext.getUtilities().getDescriptionDisplay,
       ).toHaveBeenCalled();
-      expect(result.descriptionDisplay).toEqual(mockDescriptionDisplay);
+      expect(result.descriptionDisplay).toEqual(expectedDescriptionDisplay);
+    });
+
+    it('should call getDescriptionDisplay if entry.documentTitle is set and return its result using document title and additional info', () => {
+      const expectedDescriptionDisplay = 'Answer With Extra Things';
+      const additionalInfo = 'With Extra Things';
+
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: {
+          ...simpleDocketEntry,
+          addToCoversheet: true,
+          additionalInfo,
+          documentTitle: 'Answer',
+        },
+      });
+
+      expect(
+        applicationContext.getUtilities().getDescriptionDisplay,
+      ).toHaveBeenCalled();
+      expect(result.descriptionDisplay).toEqual(expectedDescriptionDisplay);
     });
 
     it('should not call getDocumentTitleWithAdditionalInfo or set descriptionDisplay on result if entry.documentTitle is undefined', () => {

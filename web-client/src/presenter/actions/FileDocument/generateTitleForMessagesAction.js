@@ -15,7 +15,7 @@ export const generateTitleForMessagesAction = ({
   const documentMetadata = get(state.form);
   const documentTitle = applicationContext
     .getUtilities()
-    .getModifiedDocumentTitleWithAdditionalInfo(documentMetadata);
+    .getDescriptionDisplay(documentMetadata);
 
   store.set(state.form.documentTitle, documentTitle);
 };

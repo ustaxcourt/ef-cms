@@ -136,6 +136,7 @@ export const formatWorkItem = ({
 
   let descriptionDisplay = result.docketEntry.documentType;
   // TODO: REFACTOR
+  // may need to rename descriptionDisplay (differentiate the context of docket entry vs work queue descriptionDisplay)
   if (result.docketEntry.documentTitle) {
     descriptionDisplay = result.docketEntry.documentTitle;
     if (result.docketEntry.additionalInfo) {

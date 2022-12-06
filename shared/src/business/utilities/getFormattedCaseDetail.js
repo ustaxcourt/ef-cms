@@ -149,17 +149,13 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.filingsAndProceedings =
     getFilingsAndProceedings(formattedEntry);
 
+  formattedEntry.descriptionDisplay = applicationContext
+    .getUtilities()
+    .getDescriptionDisplay(formattedEntry);
+
   // TODO: REFACTOR
-  if (!formattedEntry.descriptionDisplay) {
-    formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
-  }
-  // TODO: REFACTOR
-  if (formattedEntry.additionalInfo) {
-    if (formattedEntry.addToCoversheet) {
-      formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
-    } else {
-      formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
-    }
+  if (formattedEntry.additionalInfo && !formattedEntry.addToCoversheet) {
+    formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
   }
 
   if (formattedEntry.lodged) {

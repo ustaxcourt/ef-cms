@@ -173,12 +173,7 @@ export const getFormattedDocketEntry = ({
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext
       .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: entry });
-
-    // TODO: REFACTOR
-    if (entry.eventCode === 'OCS' && formattedResult.freeText) {
-      formattedResult.descriptionDisplay = `${formattedResult.freeText} - ${formattedResult.descriptionDisplay}`;
-    }
+      .getDescriptionDisplay(entry);
   }
 
   formattedResult.showDocumentProcessing =
@@ -326,7 +321,6 @@ export const formattedDocketEntries = (get, applicationContext) => {
   result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
     return {
       ...draftDocument,
-      // TODO: REFACTOR
       descriptionDisplay: draftDocument.documentTitle,
       showDocumentViewerLink: permissions.UPDATE_CASE,
     };
