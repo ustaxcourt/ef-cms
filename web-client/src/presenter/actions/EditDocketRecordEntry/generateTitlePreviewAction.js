@@ -28,8 +28,6 @@ export const generateTitlePreviewAction = ({
     .getUtilities()
     .formatDocketEntry(applicationContext, documentMetadata);
 
-  // TODO: REFACTOR
-  // decide if we are using descriptionToDisplay vs documentTitle
   let updatedDocumentTitle = applicationContext
     .getUtilities()
     .generateExternalDocumentTitle(applicationContext, {
