@@ -7,7 +7,7 @@ const requiredEnvVars = [
 const envVars = Object.keys(process.env);
 let missing = '';
 for (const key of requiredEnvVars) {
-  if (!envVars.includes(key)) {
+  if (!envVars.includes(key) || !process.env[key]) {
     missing += `${missing.length > 0 ? ', ' : ''}${key}`;
   }
 }
