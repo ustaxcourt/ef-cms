@@ -26,13 +26,9 @@ export const updateMessageModalAttachmentsAction = ({
         documentId,
       });
 
-    // TODO: REFACTOR
-    // decide if we are using descriptionToDisplay vs documentTitle
-    const generatedDocumentTitle = applicationContext
+    const documentTitle = applicationContext
       .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: document });
-
-    const documentTitle = generatedDocumentTitle || document.documentType;
+      .getDescriptionDisplay(document);
 
     if (attachments.length === 0) {
       // This is the first attachment, so we should update the subject

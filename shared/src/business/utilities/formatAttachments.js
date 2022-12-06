@@ -17,8 +17,7 @@ export const formatAttachments = ({
       documentId,
       useArchived: true,
     });
-    // TODO: REFACTOR
-    // decide if we are using descriptionToDisplay vs documentTitle
+
     if (doc) {
       const descriptionDisplay = applicationContext
         .getUtilities()
