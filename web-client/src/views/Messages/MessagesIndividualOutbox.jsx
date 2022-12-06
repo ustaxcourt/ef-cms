@@ -146,8 +146,8 @@ export const MessagesIndividualOutbox = connect(
                   )}
                   {message.showTrialInformation && (
                     <td className="message-queue-row">
-                      {message.caseStatus} - {message.trialDate}{' '}
-                      {message.trialLocation}
+                      {message.caseStatus} - {message.formattedTrialDate}{' '}
+                      {message.formattedTrialLocation}
                     </td>
                   )}
                   <td className="message-queue-row to">{message.to}</td>
