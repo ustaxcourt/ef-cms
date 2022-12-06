@@ -6,7 +6,7 @@
  * @param {object} providers.props the cerebral props object
  * @returns {*} returns the next action in the sequence's path
  */
-export const isCoversheetNeededAction = async ({ path, props }) => {
+export const isCoversheetNeededAction = ({ path, props }) => {
   const { generateCoversheet } = props;
 
   if (generateCoversheet) {

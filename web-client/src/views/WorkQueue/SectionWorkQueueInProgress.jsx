@@ -18,28 +18,25 @@ const SectionWorkQueueInProgressRow = React.memo(
       <tbody>
         <tr>
           {showSelectColumn && (
-            <>
-              <td aria-hidden="true" />
-              <td className="message-select-control">
-                <input
-                  aria-label="Select work item"
-                  checked={item.selected}
-                  className="usa-checkbox__input"
-                  id={item.workItemId}
-                  type="checkbox"
-                  onChange={() => {
-                    selectWorkItemSequence({
-                      workItem: item,
-                    });
-                  }}
-                />
-                <label
-                  className="padding-top-05 usa-checkbox__label"
-                  htmlFor={item.workItemId}
-                  id={`label-${item.workItemId}`}
-                />
-              </td>
-            </>
+            <td className="message-select-control">
+              <input
+                aria-label="Select work item"
+                checked={item.selected}
+                className="usa-checkbox__input"
+                id={item.workItemId}
+                type="checkbox"
+                onChange={() => {
+                  selectWorkItemSequence({
+                    workItem: item,
+                  });
+                }}
+              />
+              <label
+                className="padding-top-05 usa-checkbox__label"
+                htmlFor={item.workItemId}
+                id={`label-${item.workItemId}`}
+              />
+            </td>
           )}
           <td className="consolidated-case-column">
             {item.inConsolidatedGroup && (
@@ -96,13 +93,22 @@ export const SectionWorkQueueInProgress = connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItemsLength: state.selectedWorkItems.length,
+    showSelectAllCheckbox: state.workQueueHelper.showSelectAllCheckbox,
+    showSelectColumn: state.workQueueHelper.showSelectColumn,
+    toggleAllWorkItemCheckboxChangeSequence:
+      sequences.toggleAllWorkItemCheckboxChangeSequence,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
+    workitemAllCheckbox: state.workitemAllCheckbox,
   },
   function SectionWorkQueueInProgress({
     formattedWorkQueue,
     selectWorkItemSequence,
+    showSelectAllCheckbox,
+    showSelectColumn,
+    toggleAllWorkItemCheckboxChangeSequence,
     users,
+    workitemAllCheckbox,
     workQueueHelper,
   }) {
     return (
@@ -115,15 +121,45 @@ export const SectionWorkQueueInProgress = connect(
         >
           <thead>
             <tr>
-              {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
+              {showSelectColumn && (
+                <>
+                  <th className="message-select-control select-all-checkbox">
+                    {showSelectAllCheckbox && (
+                      <>
+                        <input
+                          aria-label="select all work items"
+                          checked={workitemAllCheckbox}
+                          className="usa-checkbox__input"
+                          id="workitem-select-all-checkbox"
+                          name="workitem-select-all-checkbox"
+                          type="checkbox"
+                          value="workitem-select-all-checkbox"
+                          onChange={() =>
+                            toggleAllWorkItemCheckboxChangeSequence()
+                          }
+                        />
+                        <label
+                          className="padding-top-05 usa-checkbox__label"
+                          htmlFor="workitem-select-all-checkbox"
+                          id="label-workitem-select-all-checkbox"
+                        />
+                      </>
+                    )}
+                  </th>
+                </>
+              )}
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number">Docket No.</th>
+              <th aria-label="Docket Number" className="no-wrap">
+                Docket No.
+              </th>
               <th>Filed</th>
               <th>Case Title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
-              {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
+              {workQueueHelper.showAssignedToColumn && (
+                <th className="no-wrap">Assigned To</th>
+              )}
             </tr>
           </thead>
           {formattedWorkQueue.map(item => {
