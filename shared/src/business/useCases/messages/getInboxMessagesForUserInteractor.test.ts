@@ -1,12 +1,12 @@
+import { omit } from 'lodash';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getInboxMessagesForUserInteractor } from './getInboxMessagesForUserInteractor';
-import { omit } from 'lodash';
 
 describe('getInboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -30,7 +30,7 @@ describe('getInboxMessagesForUserInteractor', () => {
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
-      entityName: 'Message',
+      entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
@@ -44,6 +44,8 @@ describe('getInboxMessagesForUserInteractor', () => {
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
+      trialDate: '2028-03-01T21:40:46.415Z',
+      trialLocation: 'El Paso, TX',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,

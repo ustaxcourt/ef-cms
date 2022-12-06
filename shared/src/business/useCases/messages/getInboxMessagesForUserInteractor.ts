@@ -1,9 +1,9 @@
-import { MessageResult } from '../../entities/MessageResult';
 import {
-  ROLE_PERMISSIONS,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { MessageResult } from '../../entities/MessageResult';
 
 /**
  * getInboxMessagesForUserInteractor

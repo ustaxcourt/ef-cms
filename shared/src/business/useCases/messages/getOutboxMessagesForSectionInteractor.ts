@@ -1,9 +1,9 @@
-import { Message } from '../../entities/Message';
 import {
-  ROLE_PERMISSIONS,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { MessageResult } from '../../entities/MessageResult';
 
 /**
  * getOutboxMessagesForSectionInteractor
@@ -30,7 +30,7 @@ export const getOutboxMessagesForSectionInteractor = async (
       section,
     });
 
-  return Message.validateRawCollection(messages, {
+  return MessageResult.validateRawCollection(messages, {
     applicationContext,
   });
 };
