@@ -21,9 +21,18 @@ export const docketEntryQcHelper = (get, applicationContext) => {
     }
   }
 
+  console.log(
+    'app context in docket entry qc helper',
+    applicationContext.getUtilities(),
+  );
   const formattedDocketEntry = applicationContext
     .getUtilities()
     .formatDocketEntry(applicationContext, currentDocument);
+
+  console.log(
+    'formattedDocketEntry.descriptionDisplay docket entry qc helper',
+    formattedDocketEntry.descriptionDisplay,
+  );
 
   return { formattedDocketEntry, showPaperServiceWarning };
 };
