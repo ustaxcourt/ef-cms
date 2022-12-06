@@ -516,6 +516,7 @@ jobs:
           name: Judge Users Setup Lower Envs
           command: |
             if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+             . ./scripts/load-environment-from-secrets.sh
              node ./shared/admin-tools/user/setup-glued-judges.js
             else
               echo "skipping…"
