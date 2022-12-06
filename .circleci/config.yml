@@ -517,10 +517,9 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               . ./scripts/load-environment-from-secrets.sh
+              export REGION='us-east-1'
               SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}" | sed -e "s/efcms-${ENV}-//")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE}" --region "us-east-1" --query 'DomainStatus.Endpoint' --output text)
-              echo "export ELASTICSEARCH_ENDPOINT='$ELASTICSEARCH_ENDPOINT'" >> $BASH_ENV
-              source $BASH_ENV
+              export ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE}" --region "${REGION}" --query 'DomainStatus.Endpoint' --output text)
               node ./shared/admin-tools/user/setup-glued-judges.js
             else
               echo "skipping…"
