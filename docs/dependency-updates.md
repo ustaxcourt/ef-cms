@@ -47,10 +47,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-#### axios
-
-`axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of 11/09/22. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait until they are ironed out and/or the upgrade guide is published.
-
 #### puppeteer / puppeteer-core
 
 `puppeteer` and `puppeteer-core` have a major version update to ^19.x.x, but they need to stay at the same major version as `chrome-aws-lambda` (17.1.3). If we upgrade `puppeteer`, we see a ` cannot read property 'prototype' of undefined` error. 
