@@ -274,11 +274,10 @@ const updateCognitoUserId = async ({
   const judgeUsers = await getJudgeUsers();
 
   for (const judge in judgeUsers) {
-    const { email, name } = judgeUsers[judge];
     if ('gluedUserId' in judgeUsers[judge]) {
+      const { email, gluedUserId } = judgeUsers[judge];
       if ('bulkImportedUserId' in judgeUsers[judge]) {
-        const { bulkImportedUserId, gluedUserId, section } = judgeUsers[judge];
-
+        const { bulkImportedUserId, section } = judgeUsers[judge];
         await deleteDuplicateImportedJudgeUser({
           bulkImportedUserId,
           dynamo,
@@ -294,14 +293,13 @@ const updateCognitoUserId = async ({
           judge,
         });
       } else {
-        const userId = judgeUsers[judge]['ef-cms.ustaxcourt.gov'];
-
+        const { name } = judgeUsers[judge];
         await createCognitoUser({
           cognito,
           email,
           name,
           role: 'judge',
-          userId,
+          userId: gluedUserId,
           userPoolId,
         });
       }
