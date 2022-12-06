@@ -119,8 +119,8 @@ const deleteDuplicateImportedJudgeUser = async ({
   const TableName = `efcms-${process.env.ENV}-${version}`;
 
   const sectionMappingKey = {
-    pk: `section|${section}`,
-    sk: `user|${bulkImportedUserId}`,
+    pk: { S: `section|${section}` },
+    sk: { S: `user|${bulkImportedUserId}` },
   };
   try {
     await dynamo
@@ -137,8 +137,8 @@ const deleteDuplicateImportedJudgeUser = async ({
   }
 
   const userKey = {
-    pk: `user|${bulkImportedUserId}`,
-    sk: `user|${bulkImportedUserId}`,
+    pk: { S: `user|${bulkImportedUserId}` },
+    sk: { S: `user|${bulkImportedUserId}` },
   };
   try {
     await dynamo
