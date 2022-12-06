@@ -68,7 +68,7 @@ describe('order search journey for docket number', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
   updateACaseType(cerebralTest, CASE_TYPES_MAP.whistleblower);
@@ -99,7 +99,7 @@ describe('order search journey for docket number', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   docketClerkServesDocument(cerebralTest, 1);
   updateACaseType(cerebralTest, CASE_TYPES_MAP.cdp);
@@ -130,7 +130,7 @@ describe('order search journey for docket number', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
   docketClerkServesDocument(cerebralTest, 2);
   updateACaseType(cerebralTest, CASE_TYPES_MAP.cdp);

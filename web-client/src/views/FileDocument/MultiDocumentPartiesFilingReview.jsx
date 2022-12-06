@@ -29,3 +29,6 @@ export const MultiDocumentPartiesFilingReview = connect(
     ));
   },
 );
+
+MultiDocumentPartiesFilingReview.displayName =
+  'MultiDocumentPartiesFilingReview';

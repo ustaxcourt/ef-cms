@@ -42,3 +42,5 @@ export const ConsolidatedCases = connect(
     );
   },
 );
+
+ConsolidatedCases.displayName = 'ConsolidatedCases';

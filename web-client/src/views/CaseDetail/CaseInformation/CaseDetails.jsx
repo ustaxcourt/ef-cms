@@ -85,3 +85,5 @@ export const CaseDetails = connect(
     );
   },
 );
+
+CaseDetails.displayName = 'CaseDetails';

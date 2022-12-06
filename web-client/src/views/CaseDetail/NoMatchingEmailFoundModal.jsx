@@ -41,3 +41,5 @@ export const NoMatchingEmailFoundModal = connect(
     );
   },
 );
+
+NoMatchingEmailFoundModal.displayName = 'NoMatchingEmailFoundModal';

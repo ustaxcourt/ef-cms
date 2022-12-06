@@ -30,8 +30,8 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesOrderWithPaperService(cerebralTest, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(

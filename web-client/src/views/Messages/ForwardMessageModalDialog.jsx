@@ -167,3 +167,5 @@ export const ForwardMessageModalDialog = connect(
     );
   },
 );
+
+ForwardMessageModalDialog.displayName = 'ForwardMessageModalDialog';

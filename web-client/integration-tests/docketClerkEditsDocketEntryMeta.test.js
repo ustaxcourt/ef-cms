@@ -24,10 +24,9 @@ import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocum
 import { petitionerFilesApplicationToTakeDeposition } from './journey/petitionerFilesApplicationToTakeDeposition';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -37,10 +36,12 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+  it('petitioner creates electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -73,7 +74,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 5);
@@ -87,7 +88,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
   docketClerkServesDocument(cerebralTest, 1);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 6);

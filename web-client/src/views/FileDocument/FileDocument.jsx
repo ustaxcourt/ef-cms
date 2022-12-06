@@ -88,3 +88,5 @@ export const FileDocument = connect(
     );
   },
 );
+
+FileDocument.displayName = 'FileDocument';

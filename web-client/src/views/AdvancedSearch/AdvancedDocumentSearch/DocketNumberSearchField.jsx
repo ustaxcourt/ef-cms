@@ -36,3 +36,5 @@ export const DocketNumberSearchField = connect(
     );
   },
 );
+
+DocketNumberSearchField.displayName = 'DocketNumberSearchField';

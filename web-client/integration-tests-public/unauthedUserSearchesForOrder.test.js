@@ -69,7 +69,7 @@ describe('Docket clerk creates orders to search for', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(testClient, 0);
+  docketClerkSignsOrder(testClient);
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
@@ -78,7 +78,7 @@ describe('Docket clerk creates orders to search for', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkSignsOrder(testClient, 1);
+  docketClerkSignsOrder(testClient);
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
@@ -87,7 +87,7 @@ describe('Docket clerk creates orders to search for', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkSignsOrder(testClient, 2);
+  docketClerkSignsOrder(testClient);
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 2);
 });
 

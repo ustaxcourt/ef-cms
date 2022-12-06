@@ -1,4 +1,7 @@
-import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
+import {
+  PAYMENT_STATUS,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
@@ -27,7 +30,6 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 
 describe('Docket Clerk Verifies Docket Record Display', () => {
   const cerebralTest = setupTest();
-  cerebralTest.draftOrders = [];
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -35,6 +37,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -261,6 +264,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       cerebralTest,
       docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
+      documentType: 'Hearing before',
       eventCode: 'HEAR',
       filingDate: {
         day: '1',
@@ -292,8 +296,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 1);
-  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   it('verifies the docket record after adding a draft order to the docket record (not served)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
@@ -319,8 +323,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expectedDocumentType: 'Order',
   });
 
-  docketClerkViewsDraftOrder(cerebralTest, 2);
-  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
   docketClerkServesDocument(cerebralTest, 2);
   it('verifies the docket record after adding a draft order to the docket record and serving', async () => {
@@ -543,8 +547,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       pending: true,
     });
   });
-
-  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   docketClerkEditsServiceIndicatorForPetitioner(
     cerebralTest,

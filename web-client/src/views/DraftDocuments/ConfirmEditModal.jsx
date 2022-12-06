@@ -21,3 +21,5 @@ export const ConfirmEditModal = connect(
     );
   },
 );
+
+ConfirmEditModal.displayName = 'ConfirmEditModal';

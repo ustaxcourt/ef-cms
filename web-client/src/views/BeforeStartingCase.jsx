@@ -261,3 +261,5 @@ export const BeforeStartingCase = connect(
     );
   },
 );
+
+BeforeStartingCase.displayName = 'BeforeStartingCase';

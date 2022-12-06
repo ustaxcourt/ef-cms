@@ -119,3 +119,5 @@ export const AddCorrespondenceDocument = connect(
     );
   },
 );
+
+AddCorrespondenceDocument.displayName = 'AddCorrespondenceDocument';

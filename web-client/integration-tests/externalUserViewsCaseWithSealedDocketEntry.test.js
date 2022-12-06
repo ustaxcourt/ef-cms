@@ -19,20 +19,18 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 describe('External user views case with sealed docket entry', () => {
   const testClient = privateSetupTest();
 
-  testClient.draftOrders = [];
-
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
     testClient.closeSocket();
+    testClient.draftOrders = [];
   });
 
   loginAs(testClient, 'petitioner@example.com');
-
-  it('Create case', async () => {
-    const caseDetail = await uploadPetition(testClient, {
+  it('petitioner creates an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(testClient, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -44,8 +42,10 @@ describe('External user views case with sealed docket entry', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    testClient.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    testClient.docketNumber = docketNumber;
   });
 
   loginAs(testClient, 'docketclerk@example.com');
@@ -54,7 +54,7 @@ describe('External user views case with sealed docket entry', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(testClient, 0);
+  docketClerkSignsOrder(testClient);
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
   docketClerkSealsDocketEntry(testClient, 0);

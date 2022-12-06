@@ -92,3 +92,5 @@ export const Inclusions = connect(
     );
   },
 );
+
+Inclusions.displayName = 'Inclusions';

@@ -394,3 +394,5 @@ export const FileDocumentReview = connect(
     );
   },
 );
+
+FileDocumentReview.displayName = 'FileDocumentReview';

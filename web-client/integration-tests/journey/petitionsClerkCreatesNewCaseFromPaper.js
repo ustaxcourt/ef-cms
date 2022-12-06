@@ -1,21 +1,18 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
 
-const reviewSavedPetitionHelper = withAppContextDecorator(
-  reviewSavedPetitionHelperComputed,
-);
 const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
   applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
-  trialLocation = 'Birmingham, Alabama',
-  procedureType = 'Small',
-  formOrdersAndNotices = {},
+  {
+    trialLocation = 'Birmingham, Alabama',
+    procedureType = 'Small',
+    formOrdersAndNotices = {},
+    paymentStatus = PAYMENT_STATUS.WAIVED,
+  } = {},
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
@@ -130,7 +127,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'petitionPaymentStatus',
-      value: PAYMENT_STATUS.WAIVED,
+      value: paymentStatus,
     },
     {
       key: 'paymentDateWaivedDay',
@@ -247,37 +244,5 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     });
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(updatedCaseCaption);
-  });
-
-  it('should create case and navigate to review screen when case information has been validated', async () => {
-    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
-    expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
-
-    const helper = runCompute(reviewSavedPetitionHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    let expectedObject = {
-      hasIrsNoticeFormatted: 'No',
-      ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
-      ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: 'Waived 05/05/05',
-      receivedAtFormatted: '01/01/01',
-      shouldShowIrsNoticeDate: false,
-    };
-
-    expect(helper).toMatchObject(expectedObject);
-
-    expect(cerebralTest.getState('caseDetail')).toMatchObject({
-      caseCaption: updatedCaseCaption,
-      isPaper: true,
-    });
-
-    cerebralTest.docketNumber = cerebralTest.getState(
-      'caseDetail.docketNumber',
-    );
   });
 };

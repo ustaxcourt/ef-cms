@@ -32,3 +32,5 @@ export const Buttons = () => (
     </Button>
   </section>
 );
+
+Buttons.displayName = 'Buttons';

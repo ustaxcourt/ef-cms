@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkEditsPetitionerInformation } from './journey/docketClerkEditsPetitionerInformation';
@@ -12,23 +15,20 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
+    cerebralTest.draftOrders = [];
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-
-  it('login as a petitioner and create a case', async () => {
+  it('petitioner creates an electronic case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
@@ -65,7 +65,7 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesOrderOnPaperParties(cerebralTest, 0);
 });

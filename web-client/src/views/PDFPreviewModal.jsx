@@ -69,3 +69,5 @@ export const PDFPreviewModal = connect(
     );
   },
 );
+
+PDFPreviewModal.displayName = 'PDFPreviewModal';

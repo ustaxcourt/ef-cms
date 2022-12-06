@@ -60,3 +60,5 @@ export const CaseSearchForm = connect(
     );
   },
 );
+
+CaseSearchForm.displayName = 'CaseSearchForm';

@@ -13,12 +13,10 @@ import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOrders } from '../integration-tests-public/journey/unauthedUserViewsTodaysOrders';
 import { unauthedUserViewsTodaysOrdersOnSealedCase } from '../integration-tests-public/journey/unauthedUserViewsTodaysOrdersOnSealedCase';
 
-const cerebralTest = setupTest();
-const testClient = setupTestClient();
-
-testClient.draftOrders = [];
-
 describe('Unauthed user views todays orders', () => {
+  const cerebralTest = setupTest();
+  const testClient = setupTestClient();
+
   beforeAll(() => {
     jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
@@ -26,13 +24,16 @@ describe('Unauthed user views todays orders', () => {
 
   afterAll(() => {
     testClient.closeSocket();
+    testClient.draftOrders = [];
   });
 
   loginAs(testClient, 'petitioner@example.com');
   it('Create test case to add an opinion to', async () => {
-    const caseDetail = await uploadPetition(testClient);
-    expect(caseDetail.docketNumber).toBeDefined();
-    testClient.docketNumber = caseDetail.docketNumber;
+    const { docketNumber } = await uploadPetition(testClient);
+
+    expect(docketNumber).toBeDefined();
+
+    testClient.docketNumber = docketNumber;
   });
 
   loginAs(testClient, 'docketclerk@example.com');
@@ -44,8 +45,8 @@ describe('Unauthed user views todays orders', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(testClient, 0);
-  docketClerkSignsOrder(testClient, 0);
+  docketClerkViewsDraftOrder(testClient);
+  docketClerkSignsOrder(testClient);
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
@@ -57,8 +58,8 @@ describe('Unauthed user views todays orders', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(testClient, 1);
-  docketClerkSignsOrder(testClient, 1);
+  docketClerkViewsDraftOrder(testClient);
+  docketClerkSignsOrder(testClient);
   docketClerkAddsDocketEntryFromOrder(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 

@@ -49,7 +49,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 #### axios
 
-`axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of 10/31/2022. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait until they are ironed out and/or the upgrade guide is published.
+`axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of 11/09/22. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait until they are ironed out and/or the upgrade guide is published.
 
 #### puppeteer / puppeteer-core
 
@@ -65,7 +65,7 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 
 ### pdfjs-dist
 
-`pdfjs-dist` has a major version update to ^3.x,x, but currently has issues in test environment as of 11/04/2022. Skipping updating it this week.
+`pdfjs-dist` has a major version update to ^3.x,x, but currently has issues in test environment as of 11/11/2022. Skipping updating it this week.
 
 ### Incrementing the Node Cache Key Version
 

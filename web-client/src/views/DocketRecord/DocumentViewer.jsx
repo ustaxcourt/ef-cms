@@ -110,3 +110,5 @@ export const DocumentViewer = connect(
     );
   },
 );
+
+DocumentViewer.displayName = 'DocumentViewer';

@@ -137,3 +137,5 @@ export const DocumentSearchResults = connect(
     );
   },
 );
+
+DocumentSearchResults.displayName = 'DocumentSearchResults';

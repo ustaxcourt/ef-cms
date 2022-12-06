@@ -52,3 +52,5 @@ export const PublicCaseDetailHeader = connect(
     );
   },
 );
+
+PublicCaseDetailHeader.displayName = 'PublicCaseDetailHeader';

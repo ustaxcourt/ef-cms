@@ -439,4 +439,115 @@ describe('DocketEntry entity', () => {
       expect(docketEntry.isValid()).toBeTruthy();
     });
   });
+
+  describe('eventCode', () => {
+    it('when isDraft is true, the eventCode should be optional (thus allowing undefined)', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: undefined,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('when isDraft is true, the eventCode should be optional (thus allowing null)', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: null,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('eventCode should be required if isDraft is false', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: null,
+          isDraft: false,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('documentType', () => {
+    it('when isDraft is true, the documentType should be optional (thus allowing undefined)', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentType: undefined,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('when isDraft is true, the documentType should be optional (thus allowing null)', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentType: null,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('documentType should be required if isDraft is false', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentType: null,
+          isDraft: false,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('judge', () => {
+    it('judge should be optional when documentType is undefined', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentType: undefined,
+          eventCode: undefined,
+          isDraft: true,
+          judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+  });
 });

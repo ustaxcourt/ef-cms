@@ -89,3 +89,5 @@ export const OpenCases = connect(
     );
   },
 );
+
+OpenCases.displayName = 'OpenCases';

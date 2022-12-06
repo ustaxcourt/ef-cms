@@ -13,6 +13,7 @@ export const DocketRecordHeader = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     gotoPrintableDocketRecordSequence:
       sequences.gotoPrintableDocketRecordSequence,
+    sessionMetadata: state.sessionMetadata,
     showModal: state.modal.showModal,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
@@ -22,6 +23,7 @@ export const DocketRecordHeader = connect(
     docketRecordHelper,
     formattedCaseDetail,
     gotoPrintableDocketRecordSequence,
+    sessionMetadata,
     showModal,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
@@ -35,7 +37,11 @@ export const DocketRecordHeader = connect(
                 aria-label="docket record"
                 className="usa-select margin-top-0 sort"
                 name={`docketRecordSort.${formattedCaseDetail.docketNumber}`}
-                value={formattedCaseDetail.docketRecordSort}
+                value={
+                  sessionMetadata.docketRecordSort[
+                    formattedCaseDetail.docketNumber
+                  ]
+                }
                 onChange={e => {
                   updateSessionMetadataSequence({
                     key: e.target.name,
@@ -151,3 +157,5 @@ export const DocketRecordHeader = connect(
     );
   },
 );
+
+DocketRecordHeader.displayName = 'DocketRecordHeader';

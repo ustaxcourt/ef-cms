@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition } from './journey/docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -6,12 +9,8 @@ import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-
 describe('Docket Clerk serves a Order of Amended Petition', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
-  cerebralTest.draftOrders = [];
+  const cerebralTest = setupTest();
 
   beforeEach(() => {
     jest.setTimeout(30000);
@@ -19,11 +18,12 @@ describe('Docket Clerk serves a Order of Amended Petition', () => {
 
   afterAll(() => {
     cerebralTest.closeSocket();
+    cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
+  it('petitioner creates an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -35,8 +35,10 @@ describe('Docket Clerk serves a Order of Amended Petition', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -45,8 +47,8 @@ describe('Docket Clerk serves a Order of Amended Petition', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(cerebralTest, 0);
-  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
   docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition(
     cerebralTest,
     0,
