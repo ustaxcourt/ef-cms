@@ -58,9 +58,7 @@ describe('formatAttachments', () => {
 
     applicationContext
       .getUtilities()
-      .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(
-        firstGeneratedTitle,
-      )
+      .getDescriptionDisplay.mockReturnValueOnce(firstGeneratedTitle)
       .mockReturnValueOnce(secondGeneratedTitle)
       .mockReturnValueOnce(thirdGeneratedTitle)
       .mockReturnValueOnce(fourthGeneratedTitle);

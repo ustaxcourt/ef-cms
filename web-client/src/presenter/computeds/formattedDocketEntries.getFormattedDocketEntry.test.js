@@ -152,7 +152,6 @@ describe('getFormattedDocketEntry', () => {
   });
 
   describe('descriptionDisplay', () => {
-    // TODO: account for returning only documentType and documentDescritption
     it('should call getDescriptionDisplay and return only documentTitle with no other information', () => {
       const expectedDescriptionDisplay = 'Answer';
       const result = getFormattedDocketEntry({
@@ -190,7 +189,7 @@ describe('getFormattedDocketEntry', () => {
       expect(result.descriptionDisplay).toEqual(expectedDescriptionDisplay);
     });
 
-    it('should not call getDocumentTitleWithAdditionalInfo or set descriptionDisplay on result if entry.documentTitle is undefined', () => {
+    it('should not call getDescriptionDisplay or set descriptionDisplay on result if entry.documentTitle is undefined', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: {
@@ -200,7 +199,7 @@ describe('getFormattedDocketEntry', () => {
       });
 
       expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+        applicationContext.getUtilities().getDescriptionDisplay,
       ).not.toHaveBeenCalled();
       expect(result.descriptionDisplay).toBeUndefined();
     });
