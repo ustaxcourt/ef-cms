@@ -17,7 +17,7 @@ const client = new AWS.DynamoDB.DocumentClient({
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
   },
-  endpoint: process.env.DYNAMODB_ENDPOINT,
+  endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
   region: 'us-east-1',
 });
 

@@ -70,19 +70,30 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     });
 
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
-
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
+  let error;
   if (!docketEntryToServe) {
-    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+    error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  } else if (docketEntryToServe.servedAt) {
+    error = new Error('Docket entry has already been served');
+  } else if (docketEntryToServe.isPendingService) {
+    error = new Error('Docket entry is already being served');
   }
-  if (docketEntryToServe.servedAt) {
-    throw new Error('Docket entry has already been served');
-  }
-  if (docketEntryToServe.isPendingService) {
-    throw new Error('Docket entry is already being served');
+  if (error) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_error',
+        error: error.message,
+      },
+      userId: user.userId,
+    });
+
+    throw error;
   }
 
   const { Body: pdfData } = await applicationContext
