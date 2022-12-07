@@ -45,7 +45,7 @@ describe('getOutboxMessagesForSectionInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
       trialDate: '2028-03-01T21:40:46.415Z',
-      trialLocation: 'El Paso, TX',
+      trialLocation: 'El Paso, Texas',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
