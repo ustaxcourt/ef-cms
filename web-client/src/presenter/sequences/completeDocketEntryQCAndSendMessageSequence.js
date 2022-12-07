@@ -32,7 +32,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
-      setCompleteDocketEntryAlertAction,
+      // setCompleteDocketEntryAlertAction, // TODO: delete since alerMessage object is created in completeDocketEntryQCAction
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,

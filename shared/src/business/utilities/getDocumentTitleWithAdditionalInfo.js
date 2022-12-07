@@ -1,6 +1,3 @@
-// TODO: make final check to see when getDocumentTitleWithAdditionalInfo is used
-// and possible replace with getDescriptionDisplay
-
 /**
  * Gets document title with additionalInfo if addToCoversheet is true
  *

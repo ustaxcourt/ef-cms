@@ -124,8 +124,6 @@ export const getOptionsForCategory = ({
 };
 
 export const MAX_TITLE_LENGTH = 100;
-
-// TODO: REFACTOR (may not need to if we refactor getDescriptionDisplay to be getDocumentTitleWithAdditionalInfo)
 export const getPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,
