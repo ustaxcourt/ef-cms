@@ -203,6 +203,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getCropBox } = require('../../../src/business/utilities/getCropBox');
+const { getDescriptionDisplay } = require('../utilities/getDescriptionDisplay');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
@@ -288,6 +289,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+
     computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
     copyPagesAndAppendToTargetPdf: jest
       .fn()
@@ -336,6 +338,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
+    getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),

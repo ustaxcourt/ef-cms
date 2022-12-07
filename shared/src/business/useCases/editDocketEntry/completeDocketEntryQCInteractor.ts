@@ -20,9 +20,11 @@ import {
 } from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export const needsNewCoversheet = ({
+  // applicationContext,
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -34,9 +36,22 @@ export const needsNewCoversheet = ({
   const certificateOfServiceUpdated =
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
+
+  // TODO: make decision to use getDescriptionDisplay
   const documentTitleUpdated =
     currentDocketEntry.getDocumentTitleForCoversheet() !==
     updatedDocketEntry.getDocumentTitleForCoversheet();
+
+  // const currentDocketEntryDescription = applicationContext
+  //   .getUtilities()
+  //   .getDescriptionDisplay(currentDocketEntry);
+
+  // const updatedDocketEntryDescription = applicationContext
+  //   .getUtilities()
+  //   .getDescriptionDisplay(updatedDocketEntry);
+
+  // const documentTitleUpdated =
+  //   currentDocketEntryDescription !== updatedDocketEntryDescription;
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
@@ -139,13 +154,18 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle =
-    updatedDocketEntry.getDocumentTitleForDocketRecord();
+  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+    applicationContext,
+    docketEntry: updatedDocketEntry,
+  });
 
-  let currentDocumentTitle =
-    currentDocketEntry.getDocumentTitleForDocketRecord();
+  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+    applicationContext,
+    docketEntry: currentDocketEntry,
+  });
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
+    // applicationContext,
     currentDocketEntry,
     updatedDocketEntry,
   });
