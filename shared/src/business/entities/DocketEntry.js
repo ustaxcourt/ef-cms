@@ -464,6 +464,8 @@ const getServedPartiesCode = servedParties => {
   return servedPartiesCode;
 };
 
+// TODO: DECIDE NEED FOR PROTOTYPE METHODS
+
 /**
  * Gets the base document title combined with any additional info, certificate of service
  * attachments and additionalInfo2 provided.

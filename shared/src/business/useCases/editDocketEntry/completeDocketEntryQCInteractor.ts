@@ -24,6 +24,7 @@ import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTi
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export const needsNewCoversheet = ({
+  // applicationContext,
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -35,9 +36,22 @@ export const needsNewCoversheet = ({
   const certificateOfServiceUpdated =
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
+
+  // TODO: make decision to use getDescriptionDisplay
   const documentTitleUpdated =
     currentDocketEntry.getDocumentTitleForCoversheet() !==
     updatedDocketEntry.getDocumentTitleForCoversheet();
+
+  // const currentDocketEntryDescription = applicationContext
+  //   .getUtilities()
+  //   .getDescriptionDisplay(currentDocketEntry);
+
+  // const updatedDocketEntryDescription = applicationContext
+  //   .getUtilities()
+  //   .getDescriptionDisplay(updatedDocketEntry);
+
+  // const documentTitleUpdated =
+  //   currentDocketEntryDescription !== updatedDocketEntryDescription;
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
@@ -151,6 +165,7 @@ export const completeDocketEntryQCInteractor = async (
   });
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
+    // applicationContext,
     currentDocketEntry,
     updatedDocketEntry,
   });
