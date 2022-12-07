@@ -36,17 +36,13 @@ export const needsNewCoversheet = ({
   const certificateOfServiceUpdated =
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
-
-  const currentDocketEntryDescription = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(currentDocketEntry, true);
-
-  const updatedDocketEntryDescription = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(updatedDocketEntry, true);
-
   const documentTitleUpdated =
-    currentDocketEntryDescription !== updatedDocketEntryDescription;
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: currentDocketEntry,
+    }) !==
+    applicationContext
+      .getUtilities()
+      .getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
