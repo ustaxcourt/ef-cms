@@ -18,7 +18,7 @@ export const completeDocketEntryQCAction = async ({
 }) => {
   const { docketNumber, leadDocketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const { completionFromMessageFlag, overridePaperServiceAddress } = props;
+  const { overridePaperServiceAddress, qcCompletionAndMessageFlag } = props;
 
   let entryMetadata = omit(
     {
@@ -56,7 +56,7 @@ export const completeDocketEntryQCAction = async ({
     .getUtilities()
     .getDescriptionDisplay(updatedDocument, true);
 
-  const messageAddition = completionFromMessageFlag
+  const messageAddition = qcCompletionAndMessageFlag
     ? ' and message sent.'
     : '.';
 

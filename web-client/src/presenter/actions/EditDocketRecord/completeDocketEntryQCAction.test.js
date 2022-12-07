@@ -78,4 +78,32 @@ describe('completeDocketEntryQCAction', () => {
       "bob's burgers More title information has been completed.",
     );
   });
+
+  it('should return the full document title with the addition of "and message sent" as a part of props.alertSuccess.message', async () => {
+    caseDetail.docketEntries[0] = {
+      ...caseDetail.docketEntries[0],
+      addToCoversheet: true,
+      additionalInfo: 'More title information',
+    };
+
+    const { output } = await runAction(completeDocketEntryQCAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        qcCompletionAndMessageFlag: true,
+      },
+      state: {
+        caseDetail,
+        docketEntryId: mockDocketEntryId,
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(output.alertSuccess.message).toEqual(
+      "bob's burgers More title information has been completed and message sent.",
+    );
+  });
 });
