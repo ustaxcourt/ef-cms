@@ -33,6 +33,7 @@ const {
 const {
   caseInventoryReport,
 } = require('../../shared/src/business/utilities/documentGenerators/caseInventoryReport');
+
 const {
   changeOfAddress,
 } = require('../../shared/src/business/utilities/documentGenerators/changeOfAddress');
@@ -94,6 +95,9 @@ const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
+const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo');
 const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
@@ -704,6 +708,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCropBox,
         getDescriptionDisplay,
         getDocQcSectionForUser,
+        getDocumentTitleWithAdditionalInfo,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getStampBoxCoordinates,

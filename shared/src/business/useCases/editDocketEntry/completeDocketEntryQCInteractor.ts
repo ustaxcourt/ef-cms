@@ -40,9 +40,9 @@ export const needsNewCoversheet = ({
     applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
       docketEntry: currentDocketEntry,
     }) !==
-    applicationContext
-      .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: updatedDocketEntry,
+    });
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
