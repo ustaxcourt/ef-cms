@@ -22,13 +22,10 @@ export const formattedMessages = (get, applicationContext) => {
       message.caseStatus === STATUS_TYPES.calendared;
 
     if (message.showTrialInformation) {
-      message.formattedTrialLocation = applicationContext
-        .getUtilities()
-        .abbreviateState(message.trialLocation);
-
-      message.formattedTrialDate = applicationContext
-        .getUtilities()
-        .formatDateString(message.trialDate, 'MMDDYY');
+      setTrialInformationForCalendaredCase({
+        applicationContext,
+        message,
+      });
     }
   });
 
@@ -72,4 +69,23 @@ export const formattedMessages = (get, applicationContext) => {
   }
 
   return sharedComputedResult;
+};
+
+const setTrialInformationForCalendaredCase = ({
+  applicationContext,
+  message,
+}) => {
+  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
+
+  if (message.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+    message.formattedTrialLocation = applicationContext
+      .getUtilities()
+      .abbreviateState(message.trialLocation);
+  } else {
+    message.formattedTrialLocation = message.trialLocation;
+  }
+
+  message.formattedTrialDate = applicationContext
+    .getUtilities()
+    .formatDateString(message.trialDate, 'MMDDYY');
 };
