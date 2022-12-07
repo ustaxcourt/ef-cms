@@ -22,7 +22,7 @@ export const formattedMessages = (get, applicationContext) => {
       message.caseStatus === STATUS_TYPES.calendared;
 
     if (message.showTrialInformation) {
-      setTrialInformationForCalendaredCase({
+      setTrialInformationOnMessage({
         applicationContext,
         message,
       });
@@ -71,10 +71,7 @@ export const formattedMessages = (get, applicationContext) => {
   return sharedComputedResult;
 };
 
-const setTrialInformationForCalendaredCase = ({
-  applicationContext,
-  message,
-}) => {
+const setTrialInformationOnMessage = ({ applicationContext, message }) => {
   const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
 
   if (message.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
