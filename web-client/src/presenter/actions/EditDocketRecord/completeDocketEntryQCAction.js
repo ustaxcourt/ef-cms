@@ -37,6 +37,7 @@ export const completeDocketEntryQCAction = async ({
     receivedAt: entryMetadata.dateReceived,
   };
 
+  // TODO: wrap completion in try/catch and log error if completion failed
   const {
     caseDetail,
     paperServiceDocumentTitle,
@@ -57,13 +58,8 @@ export const completeDocketEntryQCAction = async ({
     .getDescriptionDisplay(updatedDocument, true);
 
   return {
-    alertSuccess: {
-      // TODO: Decide implementation.
-      // message: `${descriptionDisplay} has been completed.`,
-      // title: 'QC Completed',
-      message: `${descriptionDisplay} QC completed and message sent.`,
-    },
     caseDetail,
+    descriptionDisplayForSuccessMessage: descriptionDisplay,
     docketNumber,
     paperServiceDocumentTitle,
     paperServiceParties,

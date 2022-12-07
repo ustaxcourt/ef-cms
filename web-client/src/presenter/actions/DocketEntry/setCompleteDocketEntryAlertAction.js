@@ -8,7 +8,7 @@
 export const setCompleteDocketEntryAlertAction = ({ props }) => {
   return {
     alertSuccess: {
-      message: `${props.updatedDocument.documentTitle} QC completed and message sent.`,
+      message: `${props.descriptionDisplayForAlertMessage} QC completed and message sent.`,
     },
   };
 };

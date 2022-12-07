@@ -32,7 +32,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
-      // setCompleteDocketEntryAlertAction,  // TODO: remove action and implementation (and test). this is the only usage
+      setCompleteDocketEntryAlertAction,
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
