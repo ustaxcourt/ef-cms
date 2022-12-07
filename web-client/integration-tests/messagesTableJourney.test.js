@@ -5,6 +5,12 @@ import { loginAs, setupTest } from './helpers';
 describe('messages table journey', () => {
   const cerebralTest = setupTest();
   const calendaredCaseDocketNumber = '103-20';
+  const expectedMessageResult = {
+    caseStatus: CASE_STATUS_TYPES.calendared,
+    docketNumber: calendaredCaseDocketNumber,
+    trialDate: '2020-11-27T05:00:00.000Z',
+    trialLocation: 'Houston, Texas',
+  };
 
   beforeAll(() => {
     jest.setTimeout(40000);
@@ -23,30 +29,64 @@ describe('messages table journey', () => {
     docketNumber: calendaredCaseDocketNumber,
   });
 
-  // need to check that the properties trialLocation and trialDate are messages in:
-  // My Inbox
-  // Section Inbox
-  // My Outbox
-  // Section Outbox
-  it('petitions clerk views case trial information on sent messages view', async () => {
+  it('petitions clerk views case trial information from section sent messages view', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'outbox',
+      queue: 'section',
+    });
+
+    const messages = cerebralTest.getState('messages');
+
+    const foundMessage = messages.find(
+      message => message.docketNumber === calendaredCaseDocketNumber,
+    );
+
+    expect(foundMessage).toMatchObject(expectedMessageResult);
+  });
+
+  it('petitions clerk views case trial information from individual sent messages view', async () => {
     await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'outbox',
       queue: 'my',
     });
 
     const messages = cerebralTest.getState('messages');
-    console.log('***messages', messages);
 
     const foundMessage = messages.find(
       message => message.docketNumber === calendaredCaseDocketNumber,
     );
 
-    //add checks for trial info
-    expect(foundMessage).toMatchObject({
-      caseStatus: CASE_STATUS_TYPES.calendared,
-      docketNumber: calendaredCaseDocketNumber,
-      trialDate: '2020-11-27T05:00:00.000Z',
-      trialLocation: 'Houston, Texas',
+    expect(foundMessage).toMatchObject(expectedMessageResult);
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  it('petitions clerk 1 views case trial information from messages individual inbox view', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'inbox',
+      queue: 'my',
     });
+
+    const messages = cerebralTest.getState('messages');
+
+    const foundMessage = messages.find(
+      message => message.docketNumber === calendaredCaseDocketNumber,
+    );
+
+    expect(foundMessage).toMatchObject(expectedMessageResult);
+  });
+
+  it('petitions clerk 1 views case trial information from messages section inbox view', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'inbox',
+      queue: 'section',
+    });
+
+    const messages = cerebralTest.getState('messages');
+
+    const foundMessage = messages.find(
+      message => message.docketNumber === calendaredCaseDocketNumber,
+    );
+
+    expect(foundMessage).toMatchObject(expectedMessageResult);
   });
 });
