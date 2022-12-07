@@ -19,14 +19,14 @@ export const formatAttachments = ({
     });
 
     if (doc) {
-      const descriptionDisplay = applicationContext
+      const generatedDocumentTitle = applicationContext
         .getUtilities()
-        .getDescriptionDisplay(doc);
+        .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
 
       return {
         archived: !!doc.archived,
         documentId,
-        documentTitle: descriptionDisplay,
+        documentTitle: generatedDocumentTitle || doc.documentType,
       };
     } else {
       return {
