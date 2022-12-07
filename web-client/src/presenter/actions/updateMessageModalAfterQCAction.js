@@ -18,7 +18,7 @@ export const updateMessageModalAfterQCAction = ({
   const documentMetadata = get(state.form);
   const documentTitle = applicationContext
     .getUtilities()
-    .getDescriptionDisplay(documentMetadata);
+    .getDescriptionDisplay(documentMetadata, true);
 
   store.set(state.modal.form.subject, documentTitle);
 

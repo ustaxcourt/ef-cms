@@ -52,9 +52,13 @@ export const completeDocketEntryQCAction = async ({
     doc => doc.docketEntryId === docketEntryId,
   )[0];
 
+  const discriptionToDisplay = applicationContext
+    .getUtilities()
+    .getDescriptionDisplay(updatedDocument, true);
+
   return {
     alertSuccess: {
-      message: `${updatedDocument.documentTitle} has been completed.`,
+      message: `${discriptionToDisplay} has been completed.`,
       title: 'QC Completed',
     },
     caseDetail,
