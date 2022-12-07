@@ -50,3 +50,5 @@ export const AddEditCaseNoteModal = connect(
     );
   },
 );
+
+AddEditCaseNoteModal.displayName = 'AddEditCaseNoteModal';

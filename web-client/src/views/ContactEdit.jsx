@@ -141,3 +141,5 @@ export const ContactEdit = connect(
     );
   },
 );
+
+ContactEdit.displayName = 'ContactEdit';

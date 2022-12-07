@@ -41,3 +41,5 @@ export const PrintPaperPetitionReceipt = connect(
     );
   },
 );
+
+PrintPaperPetitionReceipt.displayName = 'PrintPaperPetitionReceipt';

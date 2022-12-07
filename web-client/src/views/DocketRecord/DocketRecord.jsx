@@ -163,3 +163,5 @@ export const DocketRecord = connect(
     );
   },
 );
+
+DocketRecord.displayName = 'DocketRecord';

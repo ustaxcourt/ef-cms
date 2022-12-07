@@ -14,3 +14,5 @@ export const DollarsInput = props => {
     />
   );
 };
+
+DollarsInput.displayName = 'DollarsInput';

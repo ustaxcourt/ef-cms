@@ -22,3 +22,5 @@ export const SealAddressModal = connect(
     );
   },
 );
+
+SealAddressModal.displayName = 'SealAddressModal';
