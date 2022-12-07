@@ -5,7 +5,8 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedMessages', () => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
+  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
   const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
   it('returns filtered messages sorted oldest to newest and completedMessages from state.messages when messageBoxToDisplay.box is inbox', () => {
@@ -569,6 +570,38 @@ describe('formattedMessages', () => {
     expect(result.messages[0]).toMatchObject({
       formattedTrialDate: '01/01/19',
       formattedTrialLocation: 'Houston, TX',
+    });
+  });
+
+  it(`should not abbreviate trialLocation when it is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+    const mockCalendaredMessage = {
+      caseStatus: STATUS_TYPES.calendared,
+      completedAt: '2019-01-02T16:29:13.122Z',
+      createdAt: '2019-01-01T16:29:13.122Z',
+      docketNumber: '101-20',
+      message: 'This is a test message',
+      trialDate: '2019-01-01T16:29:13.122Z',
+      trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    };
+
+    const result = runCompute(formattedMessages, {
+      state: {
+        messageBoxToDisplay: {
+          box: 'outbox',
+        },
+        messages: [mockCalendaredMessage],
+        screenMetadata: {},
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().abbreviateState,
+    ).not.toHaveBeenCalled();
+    expect(result.messages[0]).toMatchObject({
+      formattedTrialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     });
   });
 });

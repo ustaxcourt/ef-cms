@@ -33,4 +33,15 @@ describe('MessageResult', () => {
 
     expect(messageResult.isValid()).toBeTruthy();
   });
+
+  it('should fail validation when trialLocation is not one of TRIAL_CITY_STRINGS or StandaloneRemote', () => {
+    const messageResult = new MessageResult(
+      { ...mockRawMessageResult, trialLocation: 'New Delhi, India' },
+      {
+        applicationContext,
+      },
+    );
+
+    expect(messageResult.isValid()).toBeFalsy();
+  });
 });
