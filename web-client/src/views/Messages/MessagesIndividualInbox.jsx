@@ -1,12 +1,12 @@
-import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import classNames from 'classnames';
-import React from 'react';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
+import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   {
