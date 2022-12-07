@@ -30,6 +30,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
     updatedDocketEntry.receivedAt = '2020-08-26T05:00:00.000Z';
 
     const actual = needsNewCoversheet({
+      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -42,6 +43,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
     updatedDocketEntry.receivedAt = '2019-08-25T05:00:00.000Z';
 
     const actual = needsNewCoversheet({
+      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -53,6 +55,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
     updatedDocketEntry.certificateOfService = true;
 
     const actual = needsNewCoversheet({
+      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -64,6 +67,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
     updatedDocketEntry.filedBy = 'petitioner.smith';
 
     const actual = needsNewCoversheet({
+      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -75,6 +79,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
     updatedDocketEntry.documentTitle = 'fake title 2';
 
     const actual = needsNewCoversheet({
+      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
