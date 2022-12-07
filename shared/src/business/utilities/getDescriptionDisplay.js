@@ -6,14 +6,17 @@
  * @returns {string} document title after modification
  */
 
-const getDescriptionDisplay = docketEntry => {
+const getDescriptionDisplay = (
+  docketEntry,
+  addAdditionalInfoOverride = false,
+) => {
   let descriptionDisplay =
     docketEntry.documentTitle ||
     docketEntry.description ||
     docketEntry.documentType;
 
   if (docketEntry.additionalInfo) {
-    if (docketEntry.addToCoversheet) {
+    if (addAdditionalInfoOverride || docketEntry.addToCoversheet) {
       descriptionDisplay += ` ${docketEntry.additionalInfo}`;
     }
   }
@@ -21,8 +24,6 @@ const getDescriptionDisplay = docketEntry => {
   if (docketEntry.eventCode === 'OCS' && docketEntry.freeText) {
     descriptionDisplay = `${docketEntry.freeText} - ${descriptionDisplay}`;
   }
-
-  // POTENTIAL USE CASE: ACCOUNT FOR FILINGS AND PROCEEDINGS as part of title
 
   return descriptionDisplay;
 };
