@@ -67,6 +67,7 @@ import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPu
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
+import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
@@ -195,6 +196,7 @@ const applicationContextPublic = {
       getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      openUrlInNewTab,
       sortDocketEntries,
     };
   },
