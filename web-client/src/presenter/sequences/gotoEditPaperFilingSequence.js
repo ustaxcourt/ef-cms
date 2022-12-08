@@ -11,6 +11,7 @@ import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setFromPageAction } from '../actions/setFromPageAction';
 import { setPdfPreviewUrlForEditPaperFilingAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForEditPaperFilingAction';
 import { setupEditPaperFilingAction } from '../actions/setupEditPaperFilingAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -19,6 +20,7 @@ import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/update
 
 export const gotoEditPaperFiling = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
+  setFromPageAction,
   stopShowValidationAction,
   clearScansAction,
   clearFormAction,
