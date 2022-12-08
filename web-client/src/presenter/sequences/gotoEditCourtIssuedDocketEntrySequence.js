@@ -11,6 +11,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setFromPageAction } from '../actions/setFromPageAction';
 import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -19,6 +20,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 export const gotoEditCourtIssuedDocketEntry =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
+    setFromPageAction,
     stopShowValidationAction,
     clearFormAction,
     clearScreenMetadataAction,
