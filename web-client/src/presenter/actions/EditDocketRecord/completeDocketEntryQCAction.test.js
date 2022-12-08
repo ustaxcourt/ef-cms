@@ -103,7 +103,7 @@ describe('completeDocketEntryQCAction', () => {
     });
 
     expect(output.alertSuccess.message).toEqual(
-      "bob's burgers More title information has been completed and message sent.",
+      "bob's burgers More title information QC completed and message sent.",
     );
   });
 });
