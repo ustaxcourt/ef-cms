@@ -11,9 +11,9 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
-    "@sparticuz/chrome-aws-lambda": "14.1.0",
+    "@sparticuz/chromium": "^107.0.0",
     "pug": "^3.0.2",
-    "puppeteer-core": "^14.1.0",
+    "puppeteer-core": "^18.1.0",
     "sass": "^1.49.7"
   },
   "overrides": {
