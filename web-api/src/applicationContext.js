@@ -33,7 +33,6 @@ const {
 const {
   caseInventoryReport,
 } = require('../../shared/src/business/utilities/documentGenerators/caseInventoryReport');
-
 const {
   changeOfAddress,
 } = require('../../shared/src/business/utilities/documentGenerators/changeOfAddress');
