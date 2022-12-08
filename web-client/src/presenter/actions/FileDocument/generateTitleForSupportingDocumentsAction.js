@@ -21,7 +21,7 @@ export const generateTitleForSupportingDocumentsAction = ({
     for (let i = 0; i < supportingDocuments.length; i++) {
       if (!isEmpty(supportingDocuments[i])) {
         documentTitle = applicationContext
-          .getUtilities()
+          .getUseCases()
           .generateExternalDocumentTitle(applicationContext, {
             documentMetadata: supportingDocuments[i],
           });
@@ -38,7 +38,7 @@ export const generateTitleForSupportingDocumentsAction = ({
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       if (!isEmpty(secondarySupportingDocuments[i])) {
         documentTitle = applicationContext
-          .getUtilities()
+          .getUseCases()
           .generateExternalDocumentTitle(applicationContext, {
             documentMetadata: secondarySupportingDocuments[i],
           });
