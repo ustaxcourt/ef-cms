@@ -4,7 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateTitleForSupportingDocumentsAction', () => {
-  const { generateExternalDocumentTitle } = applicationContext.getUseCases();
+  const { generateExternalDocumentTitle } = applicationContext.getUtilities();
 
   presenter.providers.applicationContext = applicationContext;
 
