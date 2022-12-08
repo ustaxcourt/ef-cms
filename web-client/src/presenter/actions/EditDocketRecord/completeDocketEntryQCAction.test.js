@@ -54,7 +54,7 @@ describe('completeDocketEntryQCAction', () => {
     });
   });
 
-  it('should return the full document title with additional info as a part of props.alertSuccess.message', async () => {
+  it('should return the full document title with additional info as a part of props.alertSuccess.message without appending additional text when props.qcCompletionAndMessageFlag is falsy', async () => {
     caseDetail.docketEntries[0] = {
       ...caseDetail.docketEntries[0],
       addToCoversheet: true,
@@ -79,7 +79,7 @@ describe('completeDocketEntryQCAction', () => {
     );
   });
 
-  it('should return the full document title with the addition of "and message sent" as a part of props.alertSuccess.message', async () => {
+  it('should return the full document title with the addition of "and message sent" as a part of props.alertSuccess.message when props.qcCompletionAndMessageFlag is true', async () => {
     caseDetail.docketEntries[0] = {
       ...caseDetail.docketEntries[0],
       addToCoversheet: true,
