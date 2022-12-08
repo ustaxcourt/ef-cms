@@ -56,13 +56,15 @@ export const completeDocketEntryQCAction = async ({
     .getUtilities()
     .getDescriptionDisplay(updatedDocument, true);
 
-  const messageAddition = qcCompletionAndMessageFlag
-    ? ' and message sent.'
-    : '.';
+  const qcCompletedAndSentMessage = `${descriptionDisplay} QC completed and message sent.`;
+  const completedMessage = `${descriptionDisplay} has been completed.`;
+  const message = qcCompletionAndMessageFlag
+    ? qcCompletedAndSentMessage
+    : completedMessage;
 
   return {
     alertSuccess: {
-      message: `${descriptionDisplay} has been completed${messageAddition}`,
+      message,
       title: 'QC Completed',
     },
     caseDetail,
