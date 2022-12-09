@@ -54,7 +54,7 @@ export const completeDocketEntryQCAction = async ({
 
   const descriptionDisplay = applicationContext
     .getUtilities()
-    .getDescriptionDisplay(updatedDocument, true);
+    .getDescriptionDisplay(updatedDocument);
 
   const qcCompletedAndSentMessage = `${descriptionDisplay} QC completed and message sent.`;
   const completedMessage = `${descriptionDisplay} has been completed.`;
