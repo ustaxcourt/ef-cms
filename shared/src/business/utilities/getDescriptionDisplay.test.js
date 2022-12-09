@@ -54,24 +54,6 @@ describe('getDescriptionDisplay', () => {
     expect(result).toEqual(expected);
   });
 
-  it('returns descriptionDisplay as document title plus additionalInfo if addAdditionalInfoOverride is true', () => {
-    const expected = 'doc title superfulous text';
-    documentMetaData = {
-      ...documentMetaData,
-      addToCoversheet: undefined,
-      additionalInfo: 'superfulous text',
-      documentTitle,
-    };
-
-    const addAdditionalInfoOverride = true;
-    const result = getDescriptionDisplay(
-      documentMetaData,
-      addAdditionalInfoOverride,
-    );
-
-    expect(result).toEqual(expected);
-  });
-
   it('returns descriptionDisplay as document title with no additionalInfo if addToCoversheet is false', () => {
     const expected = 'doc title';
     documentMetaData = {

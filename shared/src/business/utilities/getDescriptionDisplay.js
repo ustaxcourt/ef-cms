@@ -6,19 +6,14 @@
  * @returns {string} document title after modification
  */
 
-const getDescriptionDisplay = (
-  docketEntry,
-  addAdditionalInfoOverride = false,
-) => {
+const getDescriptionDisplay = docketEntry => {
   let descriptionDisplay =
     docketEntry.documentTitle ||
     docketEntry.description ||
     docketEntry.documentType;
 
-  if (docketEntry.additionalInfo) {
-    if (addAdditionalInfoOverride || docketEntry.addToCoversheet) {
-      descriptionDisplay += ` ${docketEntry.additionalInfo}`;
-    }
+  if (docketEntry.additionalInfo && docketEntry.addToCoversheet) {
+    descriptionDisplay += ` ${docketEntry.additionalInfo}`;
   }
 
   if (docketEntry.eventCode === 'OCS' && docketEntry.freeText) {
