@@ -515,7 +515,7 @@ describe('formattedMessages', () => {
       },
     });
 
-    expect(result.messages[0].showTrialInformation).toBeTruthy();
+    expect(result.messages[0].showTrialInformation).toBe(true);
   });
 
   it('should set showTrialInformation to false when caseStatus is NOT calendared', () => {
@@ -540,7 +540,7 @@ describe('formattedMessages', () => {
       },
     });
 
-    expect(result.messages[0].showTrialInformation).toBeFalsy();
+    expect(result.messages[0].showTrialInformation).toBe(false);
   });
 
   it('should format the trialDate and trialLocation on the message when caseStatus is Calendared', () => {
