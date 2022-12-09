@@ -117,3 +117,5 @@ export const BlockedCasesReport = connect(
     );
   },
 );
+
+BlockedCasesReport.displayName = 'BlockedCasesReport';

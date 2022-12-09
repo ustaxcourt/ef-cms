@@ -30,3 +30,5 @@ export const RemovePetitionerCounselModal = connect(
     );
   },
 );
+
+RemovePetitionerCounselModal.displayName = 'RemovePetitionerCounselModal';

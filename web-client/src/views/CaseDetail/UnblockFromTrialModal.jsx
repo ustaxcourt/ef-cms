@@ -43,3 +43,5 @@ export const UnblockFromTrialModal = connect(
     );
   },
 );
+
+UnblockFromTrialModal.displayName = 'UnblockFromTrialModal';

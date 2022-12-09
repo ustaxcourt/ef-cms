@@ -10,12 +10,15 @@ import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
+import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PaperFiling = connect(
   {
+    confirmWorkItemAlreadyCompleteSequence:
+      sequences.confirmWorkItemAlreadyCompleteSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isEditingDocketEntry: state.isEditingDocketEntry,
@@ -26,6 +29,7 @@ export const PaperFiling = connect(
     submitPaperFilingSequence: sequences.submitPaperFilingSequence,
   },
   function PaperFiling({
+    confirmWorkItemAlreadyCompleteSequence,
     form,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
@@ -135,7 +139,14 @@ export const PaperFiling = connect(
             documentTitle={form.documentTitle}
           />
         )}
+        {showModal === 'WorkItemAlreadyCompletedModal' && (
+          <WorkItemAlreadyCompletedModal
+            confirmSequence={confirmWorkItemAlreadyCompleteSequence}
+          />
+        )}
       </>
     );
   },
 );
+
+PaperFiling.displayName = 'PaperFiling';

@@ -99,3 +99,5 @@ export const EditDeficiencyStatistic = connect(
     );
   },
 );
+
+EditDeficiencyStatistic.displayName = 'EditDeficiencyStatistic';

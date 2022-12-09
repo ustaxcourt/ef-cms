@@ -92,3 +92,5 @@ export const OrdersNeededSummary = connect(
     );
   },
 );
+
+OrdersNeededSummary.displayName = 'OrdersNeededSummary';

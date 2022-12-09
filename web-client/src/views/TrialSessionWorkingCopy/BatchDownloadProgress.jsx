@@ -51,3 +51,5 @@ export const BatchDownloadProgress = connect(
     );
   },
 );
+
+BatchDownloadProgress.displayName = 'BatchDownloadProgress';

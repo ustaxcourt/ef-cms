@@ -43,3 +43,5 @@ export const FileCompressionErrorModal = connect(
     );
   },
 );
+
+FileCompressionErrorModal.displayName = 'FileCompressionErrorModal';

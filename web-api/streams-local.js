@@ -6,7 +6,7 @@ const config = {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
   },
-  endpoint: 'http://localhost:8000',
+  endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
   region: 'us-east-1',
 };
 const dynamodbClient = new AWS.DynamoDB(config);

@@ -63,3 +63,5 @@ export const PrintableTrialCalendar = connect(
     );
   },
 );
+
+PrintableTrialCalendar.displayName = 'PrintableTrialCalendar';

@@ -94,3 +94,5 @@ export const PractitionerSearchByName = connect(
     );
   },
 );
+
+PractitionerSearchByName.displayName = 'PractitionerSearchByName';

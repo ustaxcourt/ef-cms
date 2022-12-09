@@ -169,3 +169,5 @@ export const TrialSessionsTable = connect(
     );
   },
 );
+
+TrialSessionsTable.displayName = 'TrialSessionsTable';

@@ -110,3 +110,5 @@ export const ViewAllDocumentsDesktop = connect(
     );
   },
 );
+
+ViewAllDocumentsDesktop.displayName = 'ViewAllDocumentsDesktop';

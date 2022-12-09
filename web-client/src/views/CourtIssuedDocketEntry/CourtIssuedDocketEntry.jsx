@@ -12,6 +12,7 @@ import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
+import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
@@ -24,6 +25,8 @@ import React from 'react';
 export const CourtIssuedDocketEntry = connect(
   {
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
+    confirmWorkItemAlreadyCompleteSequence:
+      sequences.confirmWorkItemAlreadyCompleteSequence,
     constants: state.constants,
     form: state.form,
     isEditingDocketEntry: state.isEditingDocketEntry,
@@ -42,6 +45,7 @@ export const CourtIssuedDocketEntry = connect(
   },
   function CourtIssuedDocketEntry({
     addCourtIssuedDocketEntryHelper,
+    confirmWorkItemAlreadyCompleteSequence,
     constants,
     form,
     isEditingDocketEntry,
@@ -295,7 +299,15 @@ export const CourtIssuedDocketEntry = connect(
         {showModal === 'CancelDraftDocumentModal' && (
           <CancelDraftDocumentModal />
         )}
+
+        {showModal === 'WorkItemAlreadyCompletedModal' && (
+          <WorkItemAlreadyCompletedModal
+            confirmSequence={confirmWorkItemAlreadyCompleteSequence}
+          />
+        )}
       </>
     );
   },
 );
+
+CourtIssuedDocketEntry.displayName = 'CourtIssuedDocketEntry';

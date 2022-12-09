@@ -349,3 +349,5 @@ export const CaseInfo = connect(
     );
   },
 );
+
+CaseInfo.displayName = 'CaseInfo';

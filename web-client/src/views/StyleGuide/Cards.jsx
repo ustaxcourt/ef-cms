@@ -16,3 +16,5 @@ export const Cards = () => (
     </div>
   </section>
 );
+
+Cards.displayName = 'Cards';
