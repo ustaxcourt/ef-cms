@@ -23,7 +23,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/base/tags?page=1&name=16.) if an update is available for the current node version the project is using.
 
    To publish a new ECR docker image:
 
