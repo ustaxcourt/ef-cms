@@ -97,9 +97,6 @@ const ALLOWLIST_FEATURE_FLAGS = {
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
   },
-  STAMP_DISPOSITION: {
-    key: 'stamp-disposition-enabled',
-  },
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
