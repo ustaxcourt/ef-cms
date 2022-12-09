@@ -45,6 +45,23 @@ describe('editPaperFilingInteractor', () => {
           userId: mockDocketEntryId,
           workItem,
         },
+        {
+          docketEntryId: '08ecbf7e-b316-46bb-9a66-b7474823d202',
+          docketNumber: '45678-18',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          servedAt: '2019-08-25T05:00:00.000Z',
+          servedParties: [
+            {
+              email: 'test@example.com',
+              name: 'guy',
+              role: 'privatePractitioner',
+            },
+          ],
+          userId: mockDocketEntryId,
+          workItem,
+        },
       ],
     };
 
@@ -81,6 +98,32 @@ describe('editPaperFilingInteractor', () => {
         primaryDocumentFileId: mockDocketEntryId,
       } as any),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw an error if docket entry is not found', async () => {
+    const notFoundDocketEntryId = 'this is not an ID';
+    await expect(
+      editPaperFilingInteractor(applicationContext, {
+        documentMetadata: {},
+        primaryDocumentFileId: notFoundDocketEntryId,
+      } as any),
+    ).rejects.toThrow(`Docket entry ${notFoundDocketEntryId} was not found.`);
+  });
+
+  it('should throw an error if the docket entry has already been served', async () => {
+    await expect(
+      editPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filers: [mockPrimaryId],
+          isFileAttached: false,
+        },
+        primaryDocumentFileId: '08ecbf7e-b316-46bb-9a66-b7474823d202',
+      } as any),
+    ).rejects.toThrow('Docket entry has already been served');
   });
 
   it('updates the workitem without updating the document if no file is attached', async () => {
