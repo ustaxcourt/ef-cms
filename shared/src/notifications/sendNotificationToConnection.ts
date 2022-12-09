@@ -13,7 +13,6 @@ export const sendNotificationToConnection = async ({
 }: {
   applicationContext: IApplicationContext;
   connection: TConnection;
-  deleteGoneConnections?: boolean;
   messageStringified: string;
 }) => {
   const { connectionId, endpoint } = connection;
