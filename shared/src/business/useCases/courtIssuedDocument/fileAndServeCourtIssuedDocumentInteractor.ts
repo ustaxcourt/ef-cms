@@ -10,7 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-// import { sleep } from '../../../tools/helpers';
+import { createISODateString } from '../../utilities/DateHandler';
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -74,7 +74,6 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     `starting fileAndServeCourtIssuedDocumentInteractor with this case ${subjectCaseDocketNumber}`,
     { subjectCase },
   );
-  // await sleep(1 * 1000);
 
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
@@ -82,14 +81,26 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     docketEntryId,
   });
 
+  let error;
   if (!docketEntryToServe) {
-    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+    error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  } else if (docketEntryToServe.servedAt) {
+    error = new Error('Docket entry has already been served');
+  } else if (docketEntryToServe.isPendingService) {
+    error = new Error('Docket entry is already being served');
   }
-  if (docketEntryToServe.servedAt) {
-    throw new Error('Docket entry has already been served');
-  }
-  if (docketEntryToServe.isPendingService) {
-    throw new Error('Docket entry is already being served');
+  if (error) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_error',
+        error: error.message,
+      },
+      userId: user.userId,
+    });
+
+    throw error;
   }
 
   const { Body: pdfData } = await applicationContext
@@ -179,6 +190,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
               docketNumber: caseEntity.docketNumber,
             }),
             eventCode: form.eventCode,
+            filingDate: createISODateString(),
             freeText: form.freeText,
             isDraft: false,
             isFileAttached: true,
