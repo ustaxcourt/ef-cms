@@ -233,3 +233,5 @@ export const CaseSearchByName = connect(
     );
   },
 );
+
+CaseSearchByName.displayName = 'CaseSearchByName';

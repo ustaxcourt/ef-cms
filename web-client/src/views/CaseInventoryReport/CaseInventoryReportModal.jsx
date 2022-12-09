@@ -104,3 +104,5 @@ export const CaseInventoryReportModal = connect(
     );
   },
 );
+
+CaseInventoryReportModal.displayName = 'CaseInventoryReportModal';

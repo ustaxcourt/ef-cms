@@ -10,11 +10,7 @@ export const IndividualWorkQueueInbox = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  function IndividualWorkQueueInbox({
-    formattedWorkQueue,
-    FROM_PAGES,
-    workQueueHelper,
-  }) {
+  function IndividualWorkQueueInbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
         <table
@@ -24,11 +20,7 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th
-                aria-hidden="true"
-                className="consolidated-case-column"
-                colSpan="2"
-              ></th>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
@@ -46,7 +38,6 @@ export const IndividualWorkQueueInbox = connect(
             return (
               <tbody key={item.workItemId}>
                 <tr>
-                  <td aria-hidden="true" />
                   <td className="consolidated-case-column">
                     {item.inConsolidatedGroup && (
                       <span
@@ -99,7 +90,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={`${item.editLink}?fromPage=${FROM_PAGES.qcMyInbox}`}
+                        href={item.editLink}
                       >
                         {item.docketEntry.descriptionDisplay ||
                           item.docketEntry.documentType}
@@ -122,3 +113,5 @@ export const IndividualWorkQueueInbox = connect(
     );
   },
 );
+
+IndividualWorkQueueInbox.displayName = 'IndividualWorkQueueInbox';

@@ -41,3 +41,5 @@ export const DocumentDisplayIframe = connect(
     );
   },
 );
+
+DocumentDisplayIframe.displayName = 'DocumentDisplayIframe';

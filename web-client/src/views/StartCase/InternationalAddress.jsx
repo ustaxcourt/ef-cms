@@ -156,3 +156,5 @@ export const InternationalAddress = connect(
     );
   },
 );
+
+InternationalAddress.displayName = 'InternationalAddress';

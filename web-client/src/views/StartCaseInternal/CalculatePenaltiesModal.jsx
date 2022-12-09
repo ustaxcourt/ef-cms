@@ -73,3 +73,5 @@ export const CalculatePenaltiesModal = connect(
     );
   },
 );
+
+CalculatePenaltiesModal.displayName = 'CalculatePenaltiesModal';

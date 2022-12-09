@@ -63,3 +63,5 @@ export const PractitionerExistsModal = connect(
     );
   },
 );
+
+PractitionerExistsModal.displayName = 'PractitionerExistsModal';

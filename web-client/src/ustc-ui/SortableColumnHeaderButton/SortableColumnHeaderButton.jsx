@@ -79,6 +79,8 @@ export const SortableColumnHeaderButton = connect(
   },
 );
 
+SortableColumnHeaderButton.displayName = 'SortableColumnHeaderButton';
+
 const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
   let fontAwesomeIcon =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';

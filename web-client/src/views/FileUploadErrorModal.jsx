@@ -27,3 +27,5 @@ export const FileUploadErrorModal = connect(
     );
   },
 );
+
+FileUploadErrorModal.displayName = 'FileUploadErrorModal';

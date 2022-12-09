@@ -230,3 +230,5 @@ export const OrderSearchForm = connect(
     );
   },
 );
+
+OrderSearchForm.displayName = 'OrderSearchForm';

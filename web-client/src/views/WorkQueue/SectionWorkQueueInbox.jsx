@@ -14,7 +14,11 @@ const SectionWorkQueueTable = connect(
     hideIconColumn: state.workQueueHelper.hideIconColumn,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
+    showSelectAllCheckbox: state.workQueueHelper.showSelectAllCheckbox,
     showSelectColumn: state.workQueueHelper.showSelectColumn,
+    toggleAllWorkItemCheckboxChangeSequence:
+      sequences.toggleAllWorkItemCheckboxChangeSequence,
+    workitemAllCheckbox: state.workitemAllCheckbox,
   },
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
@@ -23,7 +27,10 @@ const SectionWorkQueueTable = connect(
     hideIconColumn,
     selectWorkItemSequence,
     showAssignedToColumn,
+    showSelectAllCheckbox,
     showSelectColumn,
+    toggleAllWorkItemCheckboxChangeSequence,
+    workitemAllCheckbox,
   }) {
     return (
       <table
@@ -33,9 +40,33 @@ const SectionWorkQueueTable = connect(
       >
         <thead>
           <tr>
-            {showSelectColumn && <th colSpan="2">&nbsp;</th>}
+            {showSelectColumn && (
+              <th className="message-select-control select-all-checkbox">
+                {showSelectAllCheckbox && (
+                  <>
+                    <input
+                      aria-label="select all work items"
+                      checked={workitemAllCheckbox}
+                      className="usa-checkbox__input"
+                      id="workitem-select-all-checkbox"
+                      name="workitem-select-all-checkbox"
+                      type="checkbox"
+                      value="workitem-select-all-checkbox"
+                      onChange={() => toggleAllWorkItemCheckboxChangeSequence()}
+                    />
+                    <label
+                      className="padding-top-05 usa-checkbox__label"
+                      htmlFor="workitem-select-all-checkbox"
+                      id="label-workitem-select-all-checkbox"
+                    />
+                  </>
+                )}
+              </th>
+            )}
             <th aria-hidden="true" className="consolidated-case-column"></th>
-            <th aria-label="Docket Number">Docket No.</th>
+            <th aria-label="Docket Number" className="no-wrap">
+              Docket No.
+            </th>
             <th>Filed</th>
             <th>Case Title</th>
             {!hideIconColumn && (
@@ -44,7 +75,7 @@ const SectionWorkQueueTable = connect(
             <th>Document</th>
             {!hideFiledByColumn && <th>Filed By</th>}
             <th>Case Status</th>
-            {showAssignedToColumn && <th>Assigned To</th>}
+            {showAssignedToColumn && <th className="no-wrap">Assigned To</th>}
           </tr>
         </thead>
         {formattedWorkQueue.map(formattedWorkItem => {
@@ -68,7 +99,6 @@ const SectionWorkQueueTable = connect(
 
 SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
-    FROM_PAGES,
     hideFiledByColumn,
     hideIconColumn,
     item,
@@ -80,28 +110,25 @@ SectionWorkQueueTable.Row = React.memo(
       <tbody>
         <tr>
           {showSelectColumn && (
-            <>
-              <td aria-hidden="true" />
-              <td className="message-select-control">
-                <input
-                  aria-label="Select work item"
-                  checked={item.selected}
-                  className="usa-checkbox__input"
-                  id={item.workItemId}
-                  type="checkbox"
-                  onChange={() => {
-                    selectWorkItemSequence({
-                      workItem: item,
-                    });
-                  }}
-                />
-                <label
-                  className="padding-top-05 usa-checkbox__label"
-                  htmlFor={item.workItemId}
-                  id={`label-${item.workItemId}`}
-                />
-              </td>
-            </>
+            <td className="message-select-control">
+              <input
+                aria-label="Select work item"
+                checked={item.selected}
+                className="usa-checkbox__input"
+                id={item.workItemId}
+                type="checkbox"
+                onChange={() => {
+                  selectWorkItemSequence({
+                    workItem: item,
+                  });
+                }}
+              />
+              <label
+                className="padding-top-05 usa-checkbox__label"
+                htmlFor={item.workItemId}
+                id={`label-${item.workItemId}`}
+              />
+            </td>
           )}
           <td className="consolidated-case-column">
             {item.inConsolidatedGroup && (
@@ -152,10 +179,7 @@ SectionWorkQueueTable.Row = React.memo(
           )}
           <td className="message-queue-row max-width-25">
             <div className="message-document-title">
-              <a
-                className="case-link"
-                href={`${item.editLink}?fromPage=${FROM_PAGES.qcSectionInbox}`}
-              >
+              <a className="case-link" href={item.editLink}>
                 {item.docketEntry.descriptionDisplay}
               </a>
             </div>
@@ -189,3 +213,5 @@ export const SectionWorkQueueInbox = connect(
     );
   },
 );
+
+SectionWorkQueueInbox.displayName = 'SectionWorkQueueInbox';

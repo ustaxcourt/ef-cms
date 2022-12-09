@@ -65,3 +65,5 @@ export const EditCaseDeadlineModalDialog = connect(
     );
   },
 );
+
+EditCaseDeadlineModalDialog.displayName = 'EditCaseDeadlineModalDialog';

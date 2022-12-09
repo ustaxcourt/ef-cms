@@ -107,3 +107,5 @@ export const CaseDetailSubnavTabs = connect(
     );
   },
 );
+
+CaseDetailSubnavTabs.displayName = 'CaseDetailSubnavTabs';

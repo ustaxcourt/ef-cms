@@ -139,3 +139,5 @@ export const RemoveFromTrialSessionModal = connect(
     );
   },
 );
+
+RemoveFromTrialSessionModal.displayName = 'RemoveFromTrialSessionModal';

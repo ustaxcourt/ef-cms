@@ -173,3 +173,5 @@ export const CreateMessageModalDialog = connect(
     );
   },
 );
+
+CreateMessageModalDialog.displayName = 'CreateMessageModalDialog';

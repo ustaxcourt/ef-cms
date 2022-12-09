@@ -25,3 +25,5 @@ export const SetForHearingModal = connect(
     );
   },
 );
+
+SetForHearingModal.displayName = 'SetForHearingModal';

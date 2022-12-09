@@ -176,3 +176,5 @@ export const CaseListRowTrialSession = connect(
       trialStatusOptions,
     }),
 );
+
+CaseListRowTrialSession.displayName = 'CaseListRowTrialSession';

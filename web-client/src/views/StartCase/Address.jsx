@@ -249,3 +249,5 @@ export const Address = connect(
     );
   },
 );
+
+Address.displayName = 'Address';

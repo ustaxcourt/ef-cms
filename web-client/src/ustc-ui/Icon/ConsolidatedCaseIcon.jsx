@@ -26,3 +26,5 @@ export const ConsolidatedCaseIcon = ({ caseItem }) => {
     )
   );
 };
+
+ConsolidatedCaseIcon.displayName = 'ConsolidatedCaseIcon';

@@ -302,3 +302,5 @@ export const CaseInformation = connect(
     );
   },
 );
+
+CaseInformation.displayName = 'CaseInformation';
