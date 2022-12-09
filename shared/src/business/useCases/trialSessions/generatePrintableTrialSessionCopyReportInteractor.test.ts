@@ -8,6 +8,27 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockUser;
   let mockTrialSession;
 
+  const interactorProps = {
+    filters: {
+      aBasisReached: true,
+      continued: true,
+      dismissed: true,
+      recall: true,
+      rule122: true,
+      setForTrial: true,
+      settled: true,
+      showAll: true,
+      statusUnassigned: true,
+      takenUnderAdvisement: true,
+    },
+    formattedCases: [MOCK_CASE],
+    formattedTrialSession: mockTrialSession,
+    sessionNotes: 'session notes',
+    showCaseNotes: true,
+    sort: 'docket',
+    userHeading: 'Yggdrasil - Session Copy',
+  };
+
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
       upload: jest.fn((params, callback) => callback()),
@@ -42,33 +63,14 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     };
 
     await expect(
-      generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-        formattedTrialSession: mockTrialSession,
-      }),
+      generatePrintableTrialSessionCopyReportInteractor(
+        applicationContext,
+        interactorProps,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
-    const interactorProps = {
-      filters: {
-        aBasisReached: true,
-        continued: true,
-        dismissed: true,
-        recall: true,
-        rule122: true,
-        setForTrial: true,
-        settled: true,
-        showAll: true,
-        statusUnassigned: true,
-        takenUnderAdvisement: true,
-      },
-      formattedCases: [MOCK_CASE],
-      formattedTrialSession: mockTrialSession,
-      sessionNotes: 'session notes',
-      showCaseNotes: true,
-      sort: 'docket',
-      userHeading: 'Yggdrasil - Session Copy',
-    };
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       interactorProps,
@@ -86,9 +88,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   it('uploads the Trial Session Working Copy PDF to s3', async () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      {
-        formattedTrialSession: mockTrialSession,
-      },
+      interactorProps,
     );
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
@@ -98,9 +98,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   it('should return the Trial Session Working Copy PDF url', async () => {
     const results = await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      {
-        formattedTrialSession: mockTrialSession,
-      },
+      interactorProps,
     );
 
     expect(
@@ -115,9 +113,10 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     });
 
     await expect(
-      generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-        formattedTrialSession: mockTrialSession,
-      }),
+      generatePrintableTrialSessionCopyReportInteractor(
+        applicationContext,
+        interactorProps,
+      ),
     ).rejects.toEqual('error');
     expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
