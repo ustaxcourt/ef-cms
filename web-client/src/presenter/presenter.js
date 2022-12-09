@@ -320,6 +320,7 @@ import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
 import { serveDocumentCompleteSequence } from './sequences/serveDocumentCompleteSequence';
+import { serveDocumentErrorSequence } from './sequences/serveDocumentErrorSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
@@ -845,6 +846,7 @@ export const presenter = {
     serveCaseToIrsSequence,
     serveCourtIssuedDocumentSequence,
     serveDocumentCompleteSequence,
+    serveDocumentErrorSequence,
     servePaperFiledDocumentSequence,
     setCaseDetailPageTabSequence,
     setCaseDetailPrimaryTabSequence,
