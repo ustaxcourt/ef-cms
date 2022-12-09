@@ -15,8 +15,8 @@ const getCaseRow = ({
   trialStatusOptions,
 }) => {
   return (
-    <React.Fragment className="hoverable" key={formattedCase.docketNumber}>
-      <tr className="vertical-align-middle-row">
+    <React.Fragment key={formattedCase.docketNumber}>
+      <tr className="hoverable vertical-align-middle-row">
         <td className="consolidated-case-column">
           <div className={indentMemberCase ? 'margin-left-2' : ''}>
             <ConsolidatedCaseIcon caseItem={formattedCase} />
