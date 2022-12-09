@@ -513,18 +513,6 @@ jobs:
               echo "skipping…"
             fi
       - run:
-          name: Judge Users Setup Lower Envs
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              . ./scripts/load-environment-from-secrets.sh
-              export REGION='us-east-1'
-              SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}" | sed -e "s/efcms-${ENV}-//")
-              export ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE}" --region "${REGION}" --query 'DomainStatus.Endpoint' --output text)
-              node ./shared/admin-tools/user/setup-glued-judges.js
-            else
-              echo "skipping…"
-            fi
-      - run:
           name: 'Deploy - Web Client - S3'
           command: |
             ./web-client/deploy-ui.sh
