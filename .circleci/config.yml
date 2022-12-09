@@ -484,7 +484,6 @@ jobs:
           name: Admin User Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               node shared/admin-tools/user/setup-admin.js
             else
               echo "skipping…"
@@ -493,7 +492,6 @@ jobs:
           name: Test Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               ./shared/admin-tools/user/setup-test-users.sh $ENV
             else
               echo "skipping…"
@@ -502,7 +500,6 @@ jobs:
           name: Setup Judge Users File Var
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
             else
               echo "skipping…"
@@ -511,7 +508,6 @@ jobs:
           name: Judge Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               ./scripts/data-import/judge/bulk-import-judge-users.sh
             else
               echo "skipping…"
@@ -532,7 +528,6 @@ jobs:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               cd web-api && node smoke-tests.js $ENV us-east-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}
             else
               echo "skipping…"
@@ -541,7 +536,6 @@ jobs:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               cd web-api && node smoke-tests.js $ENV us-west-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}
             else
               echo "skipping…"
