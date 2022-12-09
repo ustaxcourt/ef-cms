@@ -29,13 +29,13 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sort,
     userHeading,
   }: {
-    filters?: TPrintableTableFilters;
-    formattedCases?: TCase[];
-    formattedTrialSession?: TTrialSessionData;
-    sessionNotes?: string;
-    showCaseNotes?: boolean;
-    sort?: string;
-    userHeading?: string;
+    filters: TPrintableTableFilters;
+    formattedCases: TCase[];
+    formattedTrialSession: TTrialSessionData;
+    sessionNotes: string;
+    showCaseNotes: boolean;
+    sort: string;
+    userHeading: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
