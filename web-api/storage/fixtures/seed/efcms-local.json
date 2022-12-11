@@ -4702,11 +4702,6 @@
     "current": true
   },
   {
-    "pk": "stamp-disposition-enabled",
-    "sk": "stamp-disposition-enabled",
-    "current": true
-  },
-  {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "pk": "irsPractitioner|MS8888"
   },
@@ -26004,5 +25999,113 @@
     "docketNumber": "320-21",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
+  },
+  {
+    "createdAt": "2020-01-23T21:44:54.034Z",
+    "entityName": "UserCase",
+    "caseCaption": "Reuben Blair, Petitioner",
+    "gsi1pk": "user-case|103-20",
+    "sk": "case|103-20",
+    "docketNumberWithSuffix": "103-20L",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "103-20",
+    "status": "Calendared"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Calendared",
+    "gsi1pk": "work-item|6fbf5f4d-c485-4ae9-a7e4-e84bce6003a7",
+    "caseTitle": "Reuben Blair",
+    "section": "docket",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "workItemId": "6fbf5f4d-c485-4ae9-a7e4-e84bce6003a7",
+    "assigneeId": null,
+    "sentBy": "Test Private Practitioner",
+    "createdAt": "2022-12-01T20:02:10.611Z",
+    "highPriority": true,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|6fbf5f4d-c485-4ae9-a7e4-e84bce6003a7",
+    "docketNumberWithSuffix": "103-20L",
+    "docketEntry": {
+      "eventCode": "ADMR",
+      "createdAt": "2022-12-01T20:02:10.609Z",
+      "documentType": "Administrative Record",
+      "filedBy": "Petr. Reuben Blair",
+      "docketEntryId": "4796a931-14fb-43e6-948f-d2b67ce4c1cb",
+      "documentTitle": "Administrative Record",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|103-20",
+    "docketNumber": "103-20",
+    "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2022-12-01T20:02:10.611Z"
+  },
+  {
+    "role": "privatePractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "firmName": "GW Law Offices",
+    "pk": "case|103-20",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "privatePractitioner@example.com"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Administrative Record",
+    "filingDate": "2022-12-01T20:02:10.609Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2022-12-01T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2022-12-01T20:02:10.609Z",
+    "numberOfPages": 3,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Reuben Blair",
+    "docketEntryId": "4796a931-14fb-43e6-948f-d2b67ce4c1cb",
+    "sk": "docket-entry|4796a931-14fb-43e6-948f-d2b67ce4c1cb",
+    "certificateOfService": false,
+    "documentTitle": "Administrative Record",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "draftOrderState": null,
+    "index": 6,
+    "isFileAttached": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "ADMR",
+    "processingStatus": "complete",
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "servedPartiesCode": "B",
+    "certificateOfServiceDate": null,
+    "pk": "case|103-20",
+    "servedAt": "2022-12-01T20:02:10.612Z",
+    "docketNumber": "103-20"
   }
 ]
