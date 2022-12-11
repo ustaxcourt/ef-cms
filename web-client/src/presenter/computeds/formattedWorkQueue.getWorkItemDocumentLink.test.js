@@ -112,7 +112,9 @@ describe('getWorkItemDocumentLink', () => {
         queue: 'section',
       },
     });
-    expect(result).toEqual(`${baseWorkItemEditLink}/edit-court-issued`);
+    expect(result).toEqual(
+      `${baseWorkItemEditLink}/edit-court-issued?fromPage=qc-section-inbox`,
+    );
   });
 
   it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box', () => {
@@ -168,7 +170,9 @@ describe('getWorkItemDocumentLink', () => {
       },
     });
 
-    expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
+    expect(result).toEqual(
+      `${baseWorkItemEditLink}/complete?fromPage=qc-section-in-progress`,
+    );
   });
 
   it('should return /complete when the eventCode MISC and the isPaper is false', () => {
@@ -191,7 +195,9 @@ describe('getWorkItemDocumentLink', () => {
       },
     });
 
-    expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
+    expect(result).toEqual(
+      `${baseWorkItemEditLink}/complete?fromPage=qc-section-in-progress`,
+    );
   });
 
   it('should return case detail link if document is processed and user is docketclerk', () => {
@@ -259,7 +265,7 @@ describe('getWorkItemDocumentLink', () => {
     });
 
     expect(result).toEqual(
-      `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocketEntry.docketEntryId}/complete`,
+      `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocketEntry.docketEntryId}/complete?fromPage=qc-section-inbox`,
     );
   });
 
@@ -349,7 +355,9 @@ describe('getWorkItemDocumentLink', () => {
       },
     });
 
-    expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
+    expect(result).toEqual(
+      `${baseWorkItemEditLink}/edit?fromPage=qc-section-inbox`,
+    );
   });
 
   it('should return editLink as /edit if the box is my inbox and user is docketClerk', () => {
@@ -375,7 +383,7 @@ describe('getWorkItemDocumentLink', () => {
         queue: 'my',
       },
     });
-    expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
+    expect(result).toEqual(`${baseWorkItemEditLink}/edit?fromPage=qc-my-inbox`);
   });
 
   it('should return editLink as /review if the box is my inProgress and user is petitionsClerk', () => {
