@@ -28,7 +28,12 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
   describe('Create and serve docket entry immediately', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {});
+    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+      formOrdersAndNotices: {
+        key: 'orderForAmendedPetition',
+        value: true,
+      },
+    });
 
     petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
       hasIrsNoticeFormatted: 'No',
@@ -37,7 +42,7 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
         'Order for Amended Petition',
       ],
       ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: PAYMENT_STATUS.WAIVED,
+      petitionPaymentStatusFormatted: `${PAYMENT_STATUS.WAIVED} 05/05/05`,
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
     });
@@ -99,10 +104,17 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
     });
   });
 
+  // below here
+
   describe('Create docket entry, save for later, then serve', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {});
+    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+      formOrdersAndNotices: {
+        key: 'orderForAmendedPetition',
+        value: true,
+      },
+    });
 
     petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
       hasIrsNoticeFormatted: 'No',
@@ -111,7 +123,7 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
         'Order for Amended Petition',
       ],
       ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: PAYMENT_STATUS.WAIVED,
+      petitionPaymentStatusFormatted: `${PAYMENT_STATUS.WAIVED} 05/05/05`,
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
     });
