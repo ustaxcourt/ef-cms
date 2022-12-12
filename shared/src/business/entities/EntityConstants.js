@@ -610,6 +610,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OF',
     documentTitle: 'Order',
+    deadlineDescription: 'Filing Fee Due',
   },
   orderDesignatingPlaceOfTrial: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
@@ -626,6 +627,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAP',
     documentTitle: 'Order',
+    deadlineDescription: 'Amended Petition Due',
   },
   orderForAmendedPetitionAndFilingFee: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named
@@ -721,9 +723,6 @@ const SIGNED_DOCUMENT_TYPES = {
     eventCode: 'SDEC',
   },
 };
-
-const FILING_FEE_DEADLINE_DESCRIPTION = 'Filing Fee Due';
-const AMENDED_PETITION_DEADLINE_DESCRIPTION = 'Amended Petition Due';
 
 const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   {
@@ -1385,7 +1384,6 @@ module.exports = deepFreeze({
   ALLOWLIST_FEATURE_FLAGS,
   ALPHABETICALLY_ASCENDING,
   ALPHABETICALLY_DESCENDING,
-  AMENDED_PETITION_DEADLINE_DESCRIPTION,
   AMENDED_PETITION_FORM_NAME,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
@@ -1450,7 +1448,6 @@ module.exports = deepFreeze({
   EXHIBIT_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES,
   EXTERNAL_DOCUMENTS_ARRAY,
-  FILING_FEE_DEADLINE_DESCRIPTION,
   FILING_TYPES,
   GENERIC_ORDER_EVENT_CODE,
   INITIAL_DOCUMENT_TYPES_FILE_MAP,
