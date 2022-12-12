@@ -210,6 +210,34 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
   });
 
+  it.only('should create a deadline on the subject case when docket entry is an Order For Amended Petition', async () => {
+    const mockOrderForAmendedPetition = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Amended Petition',
+      eventCode: 'OAP',
+    };
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: mockOrderForAmendedPetition,
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline.mock
+        .calls[0][0].caseDeadline,
+    ).toMatchObject({
+      associatedJudge: caseRecord.associatedJudge,
+      deadlineDate: mockOrderForAmendedPetition.date,
+      //todo entity constants
+      description: 'Amended Petition Due',
+      docketNumber: caseRecord.docketNumber,
+      sortableDocketNumber: 18000101,
+    });
+  });
+
   it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: 'testing',
