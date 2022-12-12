@@ -5,16 +5,12 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { createMessageAction } from '../actions/CaseDetail/createMessageAction';
-import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
-import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCompleteDocketEntryAlertAction } from '../actions/DocketEntry/setCompleteDocketEntryAlertAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
-import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -31,14 +27,10 @@ export const completeDocketEntryQCAndSendMessageSequence = [
     success: showProgressSequenceDecorator([
       createMessageAction,
       stopShowValidationAction,
-      refreshExternalDocumentTitleFromEventCodeAction,
-      setPreviousDocumentDocketEntryAction,
-      generateTitleAction,
       completeDocketEntryQCAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
-      setCompleteDocketEntryAlertAction,
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,

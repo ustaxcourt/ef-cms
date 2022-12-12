@@ -41,8 +41,8 @@ describe('gotoEditDocketEntryMetaSequence', () => {
     });
 
     applicationContext
-      .getUseCases()
-      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(
+      .getUtilities()
+      .generateCourtIssuedDocumentTitle.mockReturnValue(
         'Order to do something',
       );
 

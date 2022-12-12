@@ -20,9 +20,11 @@ import {
 } from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export const needsNewCoversheet = ({
+  applicationContext,
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -35,8 +37,12 @@ export const needsNewCoversheet = ({
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
   const documentTitleUpdated =
-    currentDocketEntry.getDocumentTitleForCoversheet() !==
-    updatedDocketEntry.getDocumentTitleForCoversheet();
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: currentDocketEntry,
+    }) !==
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: updatedDocketEntry,
+    });
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
@@ -139,13 +145,18 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle =
-    updatedDocketEntry.getDocumentTitleForDocketRecord();
+  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+    applicationContext,
+    docketEntry: updatedDocketEntry,
+  });
 
-  let currentDocumentTitle =
-    currentDocketEntry.getDocumentTitleForDocketRecord();
+  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+    applicationContext,
+    docketEntry: currentDocketEntry,
+  });
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
+    applicationContext,
     currentDocketEntry,
     updatedDocketEntry,
   });
