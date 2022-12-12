@@ -1,15 +1,12 @@
 import { Case } from '../../entities/cases/Case';
 import { CaseDeadline } from '../../entities/CaseDeadline';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  FILING_FEE_DEADLINE_DESCRIPTION,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 import { createISODateString } from '../../utilities/DateHandler';
 const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
 
@@ -112,7 +109,8 @@ export const serveCourtIssuedDocumentInteractor = async (
       {
         associatedJudge: subjectCaseEntity.associatedJudge,
         deadlineDate: docketEntryToServe.date,
-        description: FILING_FEE_DEADLINE_DESCRIPTION,
+        description:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.deadlineDescription,
         docketNumber: subjectCaseDocketNumber,
         sortableDocketNumber: subjectCaseEntity.sortableDocketNumber,
       },

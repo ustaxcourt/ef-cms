@@ -250,7 +250,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       associatedJudge: caseRecord.associatedJudge,
       deadlineDate: mockOrderForAmendedPetition.date,
       description:
-        SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.deadlineDescription,
+        SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition
+          .deadlineDescription,
       docketNumber: caseRecord.docketNumber,
       sortableDocketNumber: 18000101,
     });
