@@ -247,7 +247,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const mockOrderForAmendedPetition = {
       date: '2030-01-20T00:00:00.000Z',
       docketNumber: MOCK_CASE.docketNumber,
-      documentType: 'Order for Filing Fee',
+      documentType: 'Order for Amended Petition',
       eventCode: 'OAP',
       signedAt: '2030-01-20T00:00:00.000Z',
       signedByUserId: judgeUser.userId,
