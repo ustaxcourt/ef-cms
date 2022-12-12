@@ -1,7 +1,7 @@
-import { FILING_FEE_DEADLINE_DESCRIPTION } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 import {
   applicationContext,
   testPdfDoc,
@@ -210,7 +210,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toMatchObject({
       associatedJudge: judgeUser.name,
       deadlineDate: mockOrderFilingFee.date,
-      description: FILING_FEE_DEADLINE_DESCRIPTION,
+      description:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.deadlineDescription,
       docketNumber: MOCK_CASE.docketNumber,
       sortableDocketNumber: 18000101,
     });
