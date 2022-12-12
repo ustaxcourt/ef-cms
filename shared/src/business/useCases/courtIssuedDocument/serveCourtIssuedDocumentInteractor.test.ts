@@ -288,6 +288,32 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
   });
 
+  it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Amended Petition', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        associatedJudge: judgeUser.name,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            eventCode: 'O',
+          },
+        ],
+      });
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [MOCK_CASE.docketNumber],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should serve the docketEntry on every case provided in the list of docketNumbers', async () => {
     applicationContext
       .getPersistenceGateway()
