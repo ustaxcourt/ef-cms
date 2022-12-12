@@ -28,9 +28,7 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
   describe('Create and serve docket entry immediately', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
-      paymentStatus: PAYMENT_STATUS.UNPAID,
-    });
+    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {});
 
     petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
       hasIrsNoticeFormatted: 'No',
@@ -39,7 +37,7 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
         'Order for Amended Petition',
       ],
       ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatusFormatted: PAYMENT_STATUS.WAIVED,
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
     });
@@ -104,9 +102,7 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
   describe('Create docket entry, save for later, then serve', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
-      paymentStatus: PAYMENT_STATUS.UNPAID,
-    });
+    petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {});
 
     petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
       hasIrsNoticeFormatted: 'No',
@@ -115,7 +111,7 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
         'Order for Amended Petition',
       ],
       ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
-      petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatusFormatted: PAYMENT_STATUS.WAIVED,
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
     });
