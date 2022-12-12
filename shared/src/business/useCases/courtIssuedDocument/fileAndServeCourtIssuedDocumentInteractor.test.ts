@@ -170,7 +170,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: 'testing',
+        clientConnectionId: mockClientConnectionId,
         docketEntryId: docketEntry.docketEntryId,
         docketNumbers: [docketEntry.docketNumber],
         form: docketEntry,
@@ -191,7 +191,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     };
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
+      clientConnectionId: mockClientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: mockOrderFilingFeeForm,
@@ -213,7 +213,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Filing Fee', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
+      clientConnectionId: mockClientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: {
@@ -236,7 +236,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     };
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
+      clientConnectionId: mockClientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: mockOrderForAmendedPetition,
@@ -259,7 +259,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should NOT create a deadline on the subject case when docket entry is NOT an Order For Amended Petition', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: 'testing',
+      clientConnectionId: mockClientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: {
