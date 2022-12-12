@@ -243,6 +243,51 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should create a deadline on the subject case when docket entry is an Order For Amended Petition', async () => {
+    const mockOrderForAmendedPetition = {
+      date: '2030-01-20T00:00:00.000Z',
+      docketNumber: MOCK_CASE.docketNumber,
+      documentType: 'Order for Filing Fee',
+      eventCode: 'OAP',
+      signedAt: '2030-01-20T00:00:00.000Z',
+      signedByUserId: judgeUser.userId,
+      signedJudgeName: judgeUser.name,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        associatedJudge: judgeUser.name,
+        docketEntries: [
+          {
+            ...mockOrderForAmendedPetition,
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [MOCK_CASE.docketNumber],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline.mock
+        .calls[0][0].caseDeadline,
+    ).toMatchObject({
+      associatedJudge: judgeUser.name,
+      deadlineDate: mockOrderForAmendedPetition.date,
+      description:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition
+          .deadlineDescription,
+      docketNumber: MOCK_CASE.docketNumber,
+      sortableDocketNumber: 18000101,
+    });
+  });
+
   it('should serve the docketEntry on every case provided in the list of docketNumbers', async () => {
     applicationContext
       .getPersistenceGateway()
