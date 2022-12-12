@@ -128,20 +128,19 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  if (
+  const isOrderForFilingFee =
     form.eventCode ===
-      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode ||
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode;
+  const isOrderForAmendedPetition =
     form.eventCode ===
-      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
-  ) {
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode;
+
+  if (isOrderForFilingFee || isOrderForAmendedPetition) {
     let description =
       SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition
         .deadlineDescription;
 
-    if (
-      form.eventCode ===
-      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode
-    ) {
+    if (isOrderForFilingFee) {
       description =
         SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.deadlineDescription;
     }
