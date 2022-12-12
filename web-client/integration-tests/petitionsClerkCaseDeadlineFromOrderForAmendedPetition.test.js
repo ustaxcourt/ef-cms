@@ -104,8 +104,6 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
     });
   });
 
-  // below here
-
   describe('Create docket entry, save for later, then serve', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
 
