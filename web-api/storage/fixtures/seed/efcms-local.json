@@ -4702,11 +4702,6 @@
     "current": true
   },
   {
-    "pk": "stamp-disposition-enabled",
-    "sk": "stamp-disposition-enabled",
-    "current": true
-  },
-  {
     "pk": "updated-trial-status-types",
     "sk": "updated-trial-status-types",
     "current": true
