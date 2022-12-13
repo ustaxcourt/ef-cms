@@ -1,6 +1,18 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
-import { loginAs, setupTest } from './helpers';
+import { formattedMessageDetail as formattedMessageDetailComputed } from '../src/presenter/computeds/formattedMessageDetail';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  waitForCondition,
+} from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const formattedMessageDetail = withAppContextDecorator(
+  formattedMessageDetailComputed,
+);
 
 describe('messages table journey', () => {
   const cerebralTest = setupTest();
@@ -88,5 +100,42 @@ describe('messages table journey', () => {
     );
 
     expect(foundMessage).toMatchObject(expectedMessageResult);
+
+    cerebralTest.messageId = foundMessage.messageId;
+  });
+
+  it('petitions clerk 1 completes message', async () => {
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: calendaredCaseDocketNumber,
+      parentMessageId: cerebralTest.messageId,
+    });
+
+    await cerebralTest.runSequence('openCompleteMessageModalSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'form.message',
+      value: 'Completed message.',
+    });
+
+    await cerebralTest.runSequence('completeMessageSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    const messageDetailFormatted = runCompute(formattedMessageDetail, {
+      state: cerebralTest.getState(),
+    });
+    expect(messageDetailFormatted.isCompleted).toEqual(true);
+
+    await refreshElasticsearchIndex();
+
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'Messages',
+    });
   });
 });
