@@ -23,7 +23,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/base/tags?page=1&name=16.) if an update is available for the current node version the project is using.
 
    To publish a new ECR docker image:
 
@@ -46,10 +46,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 ### Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
-
-#### axios
-
-`axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of 11/09/22. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait until they are ironed out and/or the upgrade guide is published.
 
 #### puppeteer / puppeteer-core
 
