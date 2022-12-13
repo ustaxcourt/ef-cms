@@ -57,6 +57,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     const interactorProps = {
+      areUpdatedTrialSessionTypesEnabled: false,
       filters: [
         { key: 'basisReached', label: 'Basis Reached' },
         { key: 'recall', label: 'Recall' },
@@ -74,7 +75,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       sessionNotes: 'session notes',
       showCaseNotes: true,
       sort: 'docket',
-      updatedTrialSessionTypes: false,
       userHeading: 'Yggdrasil - Session Copy',
     };
     await generatePrintableTrialSessionCopyReportInteractor(

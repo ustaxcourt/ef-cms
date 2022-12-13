@@ -46,7 +46,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const updatedTrialSessionTypes = await applicationContext
+  const areUpdatedTrialSessionTypesEnabled = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag: ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key,
@@ -57,13 +57,13 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     .printableWorkingCopySessionList({
       applicationContext,
       data: {
+        areUpdatedTrialSessionTypesEnabled,
         filters,
         formattedCases,
         formattedTrialSession,
         sessionNotes,
         showCaseNotes,
         sort,
-        updatedTrialSessionTypes,
         userHeading,
       },
     });
