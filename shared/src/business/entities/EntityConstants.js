@@ -707,8 +707,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
 };
 
-const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES =
-  SYSTEM_GENERATED_DOCUMENT_TYPES.filter(doc => doc.deadlineDescription);
+const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
+  Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).filter(
+    doc => doc.deadlineDescription,
+  ),
+);
 
 const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
