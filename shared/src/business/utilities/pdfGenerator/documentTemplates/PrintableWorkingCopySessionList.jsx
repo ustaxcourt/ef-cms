@@ -11,13 +11,13 @@ import {
 import classNames from 'classnames';
 
 export const PrintableWorkingCopySessionList = ({
+  areUpdatedTrialSessionTypesEnabled,
   filters,
   formattedCases,
   formattedTrialSession,
   sessionNotes,
   showCaseNotes,
   sort,
-  updatedTrialSessionTypes,
   userHeading,
 }) => {
   const trialSessionDateRange =
@@ -112,7 +112,7 @@ export const PrintableWorkingCopySessionList = ({
                     <td>
                       {generateCaseStatus(
                         formattedCase.trialStatus,
-                        updatedTrialSessionTypes,
+                        areUpdatedTrialSessionTypesEnabled,
                       )}
                     </td>
                   </tr>
