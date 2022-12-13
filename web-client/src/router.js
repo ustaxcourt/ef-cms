@@ -337,27 +337,31 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/complete',
+      '/case-detail/*/documents/*/complete..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
+        const { fromPage } = route.query();
         return app.getSequence('gotoEditPaperFilingSequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/edit-court-issued',
+      '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
+        const { fromPage } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
         return app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
           docketEntryId,
           docketNumber,
+          fromPage,
         });
       }),
     );
