@@ -56,7 +56,7 @@ const getCaseRow = ({
             id={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
             onChange={value => {
               trialSequences.autoSaveTrialSessionWorkingCopySequence({
-                key: trialSessionWorkingCopyStatus,
+                key: `caseMetadata.${formattedCase.docketNumber}.trialStatus`,
                 value,
               });
             }}
