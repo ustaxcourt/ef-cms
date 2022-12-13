@@ -1,6 +1,12 @@
+const createApplicationContext = require('../../../../src/applicationContext');
+const {
+  TrialSessionWorkingCopy,
+} = require('../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy');
+
 const isTrialSessionWorkingCopy = item => {
   return item.pk.startsWith('trial-session-working-copy|');
 };
+const applicationContext = createApplicationContext({});
 
 const migrateItems = items => {
   const itemsAfter = [];
@@ -34,7 +40,10 @@ const migrateItems = items => {
             break;
         }
       }
+
+      new TrialSessionWorkingCopy(item).validateWithLogging(applicationContext);
     }
+
     itemsAfter.push(item);
   }
   return itemsAfter;
