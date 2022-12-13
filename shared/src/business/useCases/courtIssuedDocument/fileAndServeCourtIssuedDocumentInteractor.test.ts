@@ -11,9 +11,19 @@ import {
   applicationContext,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
-import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
+
+let MOCK_DATE;
+
+jest.mock('../../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn().mockImplementation(() => MOCK_DATE),
+  };
+});
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -27,6 +37,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   jest.spyOn(DocketEntry.prototype, 'setAsServed');
 
   beforeEach(() => {
+    MOCK_DATE = '2022-12-06T22:54:06.000Z';
+
     mockWorkItem = {
       docketNumber: MOCK_CASE.docketNumber,
       section: DOCKET_SECTION,
@@ -137,7 +149,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry has already been served', async () => {
-    caseRecord.docketEntries[1].servedAt = createISODateString();
+    caseRecord.docketEntries[1].servedAt = MOCK_DATE;
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
@@ -342,6 +354,33 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.isOnDocketRecord).toBe(true);
+  });
+
+  it('should set the filingDate to be today even if it was already set on the past', async () => {
+    const mockForm = {
+      attachments: true,
+      date: '2009-03-01T21:40:46.415Z',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Hurry! This is urgent',
+      generatedDocumentTitle: 'Important Filing',
+      scenario: 'Standard',
+      serviceStamp: 'Blah blah blah',
+    };
+    caseRecord.docketEntries[0].filingDate = '2009-03-01T21:40:46.415Z';
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: mockForm,
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    const expectedDocketEntry =
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry.filingDate).toEqual(MOCK_DATE);
   });
 
   it('should mark the docketEntry as NOT a draft', async () => {
