@@ -13,6 +13,7 @@ export const WorkingCopySessionList = connect(
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
   function WorkingCopySessionList({
@@ -20,6 +21,7 @@ export const WorkingCopySessionList = connect(
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper,
   }) {
     return (
@@ -113,6 +115,7 @@ export const WorkingCopySessionList = connect(
                 <CaseListRowTrialSession
                   formattedCase={item}
                   key={item.docketNumber}
+                  trialSessionWorkingCopy={trialSessionWorkingCopy}
                 />
               );
             })}
