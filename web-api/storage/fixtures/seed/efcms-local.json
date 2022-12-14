@@ -4552,7 +4552,14 @@
     "partySecondary": false,
     "pk": "case|103-20",
     "documentTitle": "Petition",
-    "docketNumber": "103-20"
+    "docketNumber": "103-20",
+    "servedParties": [
+      {
+        "name": "Reuben Blair",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "servedAt": "2020-09-25T19:27:16.630Z"
   },
   {
     "isStricken": false,
