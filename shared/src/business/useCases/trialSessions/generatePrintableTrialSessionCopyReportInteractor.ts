@@ -29,11 +29,11 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sort,
     userHeading,
   }: {
-    showCaseNotes: boolean;
-    filters: string[];
+    filters: TPrintableTableFilters;
     formattedCases: TCase[];
     formattedTrialSession: TTrialSessionData;
     sessionNotes: string;
+    showCaseNotes: boolean;
     sort: string;
     userHeading: string;
   },

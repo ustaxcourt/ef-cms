@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../business/test/createTestApplicationContext');
-const { sendNotificationToUser } = require('./sendNotificationToUser');
+import { applicationContext } from '../business/test/createTestApplicationContext';
+import { sendNotificationToUser } from './sendNotificationToUser';
 
 const connections = [
   {
