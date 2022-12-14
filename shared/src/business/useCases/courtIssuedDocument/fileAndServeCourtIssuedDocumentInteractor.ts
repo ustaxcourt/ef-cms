@@ -67,7 +67,6 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     });
 
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
-
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });

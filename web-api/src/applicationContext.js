@@ -88,9 +88,15 @@ const {
   getCropBox,
 } = require('../../shared/src/business/utilities/getCropBox');
 const {
+  getDescriptionDisplay,
+} = require('../../shared/src/business/utilities/getDescriptionDisplay');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
+const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo');
 const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
@@ -699,7 +705,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
         getCropBox,
+        getDescriptionDisplay,
         getDocQcSectionForUser,
+        getDocumentTitleWithAdditionalInfo,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getStampBoxCoordinates,

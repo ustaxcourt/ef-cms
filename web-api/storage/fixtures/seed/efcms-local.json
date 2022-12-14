@@ -4552,7 +4552,14 @@
     "partySecondary": false,
     "pk": "case|103-20",
     "documentTitle": "Petition",
-    "docketNumber": "103-20"
+    "docketNumber": "103-20",
+    "servedParties": [
+      {
+        "name": "Reuben Blair",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "servedAt": "2020-09-25T19:27:16.630Z"
   },
   {
     "isStricken": false,
@@ -4699,6 +4706,11 @@
   {
     "pk": "consolidated-cases-party-association",
     "sk": "consolidated-cases-party-association",
+    "current": true
+  },
+  {
+    "pk": "updated-trial-status-types",
+    "sk": "updated-trial-status-types",
     "current": true
   },
   {
@@ -24135,8 +24147,8 @@
     "petitioners": [
       {
         "isAddressSealed": false,
-        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "city": "Los Angeles",
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "address1": "111 Fast Ln",
         "postalCode": "12355",
         "contactType": "petitioner",
