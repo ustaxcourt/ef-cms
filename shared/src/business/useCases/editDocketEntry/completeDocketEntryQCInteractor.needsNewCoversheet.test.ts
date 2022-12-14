@@ -28,63 +28,53 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   });
   it('should return true when receivedAt is updated', () => {
     updatedDocketEntry.receivedAt = '2020-08-26T05:00:00.000Z';
-    const expected = true;
     const result = needsNewCoversheet({
       applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual(true);
   });
 
   it('should return false when receivedAt format is different but the date is the same', () => {
     currentDocketEntry.receivedAt = '2019-08-25';
     updatedDocketEntry.receivedAt = '2019-08-25T05:00:00.000Z';
-    const expected = false;
     const result = needsNewCoversheet({
       applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
 
-    expect(result).toEqual(expected);
+    expect(result).toEqual(false);
   });
 
   it('should return true when certificateOfService is updated', () => {
     updatedDocketEntry.certificateOfService = true;
-    const expected = true;
-
     const result = needsNewCoversheet({
       applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual(true);
   });
 
   it('should return false when filedBy is updated', () => {
     updatedDocketEntry.filedBy = 'petitioner.smith';
-    const expected = false;
     const result = needsNewCoversheet({
       applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual(false);
   });
 
   it('should return true when documentTitle is updated', () => {
     updatedDocketEntry.documentTitle = 'fake title 2';
-    const expected = true;
     const result = needsNewCoversheet({
       applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual(true);
   });
 });
