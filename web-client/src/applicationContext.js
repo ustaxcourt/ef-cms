@@ -67,6 +67,7 @@ const {
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
 import { User } from '../../shared/src/business/entities/User';
+import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
@@ -697,6 +698,7 @@ const applicationContext = {
   getUserPermissions,
   getUtilities: () => {
     return {
+      abbreviateState,
       aggregatePartiesForService,
       calculateISODate,
       canAllowDocumentServiceForCase,
