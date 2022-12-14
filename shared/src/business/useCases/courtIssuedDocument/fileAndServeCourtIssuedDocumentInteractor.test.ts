@@ -184,15 +184,25 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should create a deadline on the subject case when docket entry is an Order For Filing Fee', async () => {
+    const orderFilingFeeEventCode = 'OF';
+
+    caseRecord.docketEntries.push({
+      ...mockDocketEntryWithWorkItem,
+      docketEntryId: 'ed68e80a-cab3-44b9-9280-03816bba8cba',
+      eventCode: orderFilingFeeEventCode,
+    });
+
     const mockOrderFilingFeeForm = {
       date: '2030-01-20T00:00:00.000Z',
       documentType: 'Order for Filing Fee',
-      eventCode: 'OF',
+      eventCode: orderFilingFeeEventCode,
     };
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketEntryId: caseRecord.docketEntries.find(
+        entry => entry.eventCode === orderFilingFeeEventCode,
+      ).docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: mockOrderFilingFeeForm,
       subjectCaseDocketNumber: caseRecord.docketNumber,
@@ -229,15 +239,24 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should create a deadline on the subject case when docket entry is an Order For Amended Petition', async () => {
+    const orderForAmendedPetitionEventCode = 'OAP';
+    caseRecord.docketEntries.push({
+      ...mockDocketEntryWithWorkItem,
+      docketEntryId: '3f82da02-e88c-4f8d-ba06-d6c1b8c109d5',
+      eventCode: orderForAmendedPetitionEventCode,
+    });
+
     const mockOrderForAmendedPetition = {
       date: '2030-01-20T00:00:00.000Z',
       documentType: 'Order for Amended Petition',
-      eventCode: 'OAP',
+      eventCode: orderForAmendedPetitionEventCode,
     };
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketEntryId: caseRecord.docketEntries.find(
+        entry => entry.eventCode === orderForAmendedPetitionEventCode,
+      ).docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: mockOrderForAmendedPetition,
       subjectCaseDocketNumber: caseRecord.docketNumber,
