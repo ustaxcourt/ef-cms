@@ -281,7 +281,7 @@
     "esbuild-plugin-resolve": "^1.0.3",
     "esbuild-plugin-svg": "^0.1.0",
     "esbuild-serve": "^1.0.1",
-    "esbuild-visualizer": "^0.3.1",
+    "esbuild-visualizer": "^0.4.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
