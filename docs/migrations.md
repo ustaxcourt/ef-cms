@@ -17,7 +17,7 @@ We are going to do a walkthrough tutorial in this section to explain how you can
 
 First, we'd want to create a new migration script called `0005-add-case-adjourned-field.js` and put it in the `web-api/migration-terraform/main/lambdas/migrations` directory.  Note that the `0005` numeric prefix is just for us developers to understand the ordering of these scripts; our system doesn't automatically sort these scripts by that prefix.  We will name the script with a numeric prefix and also a descriptive name.
 
-Second, we will need to implement a `migrateItems` function which will take in an array of dyanmo records and modify them based on certain criteria.  In this scenario, we only care about modifying the records that are cases.  Often when dealing with case migrations we want to fetch the entire case and aggregate the items together into a single case object so we can validate the entity.  
+Second, we will need to implement a `migrateItems` function which will take in an array of dynamo records and modify them based on certain criteria.  In this scenario, we only care about modifying the records that are cases.  Often when dealing with case migrations we want to fetch the entire case and aggregate the items together into a single case object so we can validate the entity.  
 
 The following is an example of how one might write a migration script for this scenario.  I added extra comments in the code ot help explain what is going on.
 
