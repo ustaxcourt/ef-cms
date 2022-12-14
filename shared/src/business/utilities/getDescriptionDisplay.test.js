@@ -10,14 +10,11 @@ describe('getDescriptionDisplay', () => {
   };
 
   it('returns descriptionDisplay as documentTitle with no added information', () => {
-    const expected = documentTitle;
     const result = getDescriptionDisplay(documentMetaData);
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual('doc title');
   });
 
   it('returns descriptionDisplay as documentType with no added information', () => {
-    const expected = 'doc type';
     documentMetaData = {
       ...documentMetaData,
       documentTitle: undefined,
@@ -25,11 +22,10 @@ describe('getDescriptionDisplay', () => {
     };
     const result = getDescriptionDisplay(documentMetaData);
 
-    expect(result).toEqual(expected);
+    expect(result).toEqual('doc type');
   });
 
   it('returns descriptionDisplay as description with no added information', () => {
-    const expected = 'doc description';
     documentMetaData = {
       ...documentMetaData,
       description,
@@ -37,12 +33,10 @@ describe('getDescriptionDisplay', () => {
       documentType: undefined,
     };
     const result = getDescriptionDisplay(documentMetaData);
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual('doc description');
   });
 
   it('returns descriptionDisplay as document title plus additionalInfo if addToCoversheet is true', () => {
-    const expected = 'doc title superfulous text';
     documentMetaData = {
       ...documentMetaData,
       addToCoversheet: true,
@@ -50,12 +44,10 @@ describe('getDescriptionDisplay', () => {
       documentTitle,
     };
     const result = getDescriptionDisplay(documentMetaData);
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual('doc title superfulous text');
   });
 
   it('returns descriptionDisplay as document title with no additionalInfo if addToCoversheet is false', () => {
-    const expected = 'doc title';
     documentMetaData = {
       ...documentMetaData,
       addToCoversheet: false,
@@ -64,11 +56,10 @@ describe('getDescriptionDisplay', () => {
     };
     const result = getDescriptionDisplay(documentMetaData);
 
-    expect(result).toEqual(expected);
+    expect(result).toEqual('doc title');
   });
 
   it('returns descriptionDisplay as freeText and documentTitle if eventCode is OCS and freeText is available', () => {
-    const expected = 'free text - doc title';
     documentMetaData = {
       ...documentMetaData,
       addToCoversheet: false,
@@ -79,6 +70,6 @@ describe('getDescriptionDisplay', () => {
     };
     const result = getDescriptionDisplay(documentMetaData);
 
-    expect(result).toEqual(expected);
+    expect(result).toEqual('free text - doc title');
   });
 });

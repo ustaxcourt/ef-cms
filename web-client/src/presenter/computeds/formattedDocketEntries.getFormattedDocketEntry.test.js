@@ -170,7 +170,6 @@ describe('getFormattedDocketEntry', () => {
     });
 
     it('should call getDescriptionDisplay if entry.documentTitle is set and return its result using document title and additional info', () => {
-      const expectedDescriptionDisplay = 'Answer With Extra Things';
       const additionalInfo = 'With Extra Things';
 
       const result = getFormattedDocketEntry({
@@ -186,7 +185,7 @@ describe('getFormattedDocketEntry', () => {
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
       ).toHaveBeenCalled();
-      expect(result.descriptionDisplay).toEqual(expectedDescriptionDisplay);
+      expect(result.descriptionDisplay).toEqual('Answer With Extra Things');
     });
 
     it('should not call getDescriptionDisplay or set descriptionDisplay on result if entry.documentTitle is undefined', () => {
