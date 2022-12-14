@@ -1,6 +1,9 @@
 const { TRIAL_STATUS_TYPES } = require('../entities/EntityConstants');
 
-const generateCaseStatus = (trialStatus, updatedTrialSessionTypes) => {
+const generateCaseStatus = (
+  trialStatus,
+  areUpdatedTrialSessionTypesEnabled,
+) => {
   if (!trialStatus) return 'Unassigned';
 
   let foundTrialStatusFromConstant;
@@ -8,7 +11,8 @@ const generateCaseStatus = (trialStatus, updatedTrialSessionTypes) => {
   Object.keys(TRIAL_STATUS_TYPES).forEach(key => {
     if (key === trialStatus) {
       foundTrialStatusFromConstant =
-        !updatedTrialSessionTypes && TRIAL_STATUS_TYPES[trialStatus].legacyLabel
+        !areUpdatedTrialSessionTypesEnabled &&
+        TRIAL_STATUS_TYPES[trialStatus].legacyLabel
           ? TRIAL_STATUS_TYPES[trialStatus].legacyLabel
           : TRIAL_STATUS_TYPES[trialStatus].label;
     }
