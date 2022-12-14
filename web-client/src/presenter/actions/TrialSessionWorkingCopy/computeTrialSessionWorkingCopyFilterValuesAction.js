@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { state } from 'cerebral';
 
 /**
@@ -20,43 +21,55 @@ export const computeTrialSessionWorkingCopyFilterValuesAction = ({
   if (props.key) {
     if (props.key === 'filters.showAll' && props.value) {
       store.set(state.trialSessionWorkingCopy.filters, {
-        aBasisReached: true,
+        basisReached: true,
         continued: true,
+        definiteTrial: true,
         dismissed: true,
+        motionToDismiss: true,
+        probableSettlement: true,
+        probableTrial: true,
         recall: true,
         rule122: true,
         setForTrial: true,
         settled: true,
         showAll: true,
         statusUnassigned: true,
-        takenUnderAdvisement: true,
+        submittedCAV: true,
       });
     } else if (props.key === 'filters.showAll') {
       store.set(state.trialSessionWorkingCopy.filters, {
-        aBasisReached: false,
+        basisReached: false,
         continued: false,
+        definiteTrial: false,
         dismissed: false,
+        motionToDismiss: false,
+        probableSettlement: false,
+        probableTrial: false,
         recall: false,
         rule122: false,
         setForTrial: false,
         settled: false,
         showAll: false,
         statusUnassigned: false,
-        takenUnderAdvisement: false,
+        submittedCAV: false,
       });
     } else if (props.key.includes('filters') && props.value === false) {
       store.set(state.trialSessionWorkingCopy.filters.showAll, false);
     } else if (
       props.key.includes('filters') &&
-      filters.aBasisReached &&
+      filters.basisReached &&
       filters.continued &&
+      filters.definiteTrial &&
       filters.dismissed &&
+      filters.motionToDismiss &&
+      filters.probableSettlement &&
+      filters.probableTrial &&
       filters.recall &&
       filters.rule122 &&
       filters.setForTrial &&
       filters.settled &&
       filters.statusUnassigned &&
-      filters.takenUnderAdvisement
+      filters.submittedCAV
     ) {
       store.set(state.trialSessionWorkingCopy.filters.showAll, true);
     }
