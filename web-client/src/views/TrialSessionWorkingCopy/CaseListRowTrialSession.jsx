@@ -18,8 +18,8 @@ const getCaseRow = ({
   updatedTrialSessionTypesEnabled,
 }) => {
   return (
-    <React.Fragment className="hoverable" key={formattedCase.docketNumber}>
-      <tr className="vertical-align-middle-row">
+    <React.Fragment key={formattedCase.docketNumber}>
+      <tr className="hoverable vertical-align-middle-row">
         <td className="consolidated-case-column">
           <div className={indentMemberCase ? 'margin-left-2' : ''}>
             <ConsolidatedCaseIcon caseItem={formattedCase} />
@@ -160,6 +160,7 @@ const getCaseRow = ({
             formattedCase: memberCase,
             indentMemberCase: true,
             trialSequences,
+            trialSessionWorkingCopyStatus,
             trialStatusOptions,
             unassignedLabel,
             updatedTrialSessionTypesEnabled,

@@ -126,4 +126,5 @@ const FilterCheckbox = connect(
     }
   },
 );
+
 WorkingCopyFilterHeader.displayName = 'WorkingCopyFilterHeader';

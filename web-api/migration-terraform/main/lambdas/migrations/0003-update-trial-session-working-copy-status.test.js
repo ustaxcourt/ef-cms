@@ -5,6 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 describe('migrateItems', () => {
   let documentClient;
 
+  const trialSessionId = '208a959f-9526-4db5-b262-e58c476a4604';
+  const userId = 'dabbad03-18d0-43ec-bafb-654e83405416';
+
   const unchangedTrialSessionWorkingCopies = [
     'Set for Trial',
     'Dismissed',
@@ -17,6 +20,8 @@ describe('migrateItems', () => {
       caseMetadata: { '108-18': { trialStatus: camelCase(status) } },
       pk: `trial-session-working-copy|${uuidv4()}`,
       sk: `user|${uuidv4()}`,
+      trialSessionId,
+      userId,
     };
   });
 
@@ -43,6 +48,8 @@ describe('migrateItems', () => {
     },
     pk: `trial-session-working-copy|${uuidv4()}`,
     sk: `user|${uuidv4()}`,
+    trialSessionId,
+    userId,
   };
 
   const mockTakenUnderAdvisement = {
@@ -65,6 +72,8 @@ describe('migrateItems', () => {
     },
     pk: `trial-session-working-copy|${uuidv4()}`,
     sk: `user|${uuidv4()}`,
+    trialSessionId,
+    userId,
   };
 
   it('should return and not modify records that are NOT trial session working copies', async () => {
