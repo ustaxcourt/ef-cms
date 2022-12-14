@@ -4552,7 +4552,14 @@
     "partySecondary": false,
     "pk": "case|103-20",
     "documentTitle": "Petition",
-    "docketNumber": "103-20"
+    "docketNumber": "103-20",
+    "servedParties": [
+      {
+        "name": "Reuben Blair",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "servedAt": "2020-09-25T19:27:16.630Z"
   },
   {
     "isStricken": false,
@@ -4702,8 +4709,8 @@
     "current": true
   },
   {
-    "pk": "stamp-disposition-enabled",
-    "sk": "stamp-disposition-enabled",
+    "pk": "updated-trial-status-types",
+    "sk": "updated-trial-status-types",
     "current": true
   },
   {
@@ -5754,45 +5761,6 @@
     "docketNumber": "999-15",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
-  },
-  {
-    "stampData": {},
-    "isStricken": false,
-    "documentType": "Order",
-    "filingDate": "2022-11-07T14:38:22.571Z",
-    "isMinuteEntry": false,
-    "pending": false,
-    "isDraft": true,
-    "receivedAt": "2022-11-08T05:00:00.000Z",
-    "isOnDocketRecord": false,
-    "signedJudgeName": "Maurice B. Foley",
-    "createdAt": "2022-11-06T14:38:25.362Z",
-    "documentContentsId": "8f04b515-95b3-4515-8225-9cdd889fd4ad",
-    "entityName": "DocketEntry",
-    "filedBy": "Test Docketclerk",
-    "docketEntryId": "d4a9662b-ca30-4bf4-b7fd-a3c976a84fb7",
-    "sk": "docket-entry|d4a9662b-ca30-4bf4-b7fd-a3c976a84fb7",
-    "documentIdBeforeSignature": "eebeeb30-d512-46a1-90ee-c174b21d615b",
-    "documentTitle": "Order that is a draft",
-    "relationship": "primaryDocument",
-    "addToCoversheet": false,
-    "draftOrderState": {
-      "eventCode": "O",
-      "documentTitle": "Order that is a draft",
-      "documentType": "Order",
-      "docketNumber": "320-21",
-      "freeText": "Order that is a draft"
-    },
-    "isFileAttached": true,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "O",
-    "processingStatus": "complete",
-    "filers": [],
-    "freeText": "Order that is a draft",
-    "signedAt": "2022-11-05T14:38:25.363Z",
-    "pk": "case|320-21",
-    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "320-21"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
