@@ -15,7 +15,7 @@ import { petitionsClerkServesPaperCaseToIRS } from './userFlows/petitionsClerkSe
 describe('Autogenerate Deadline when order for amended petition is served', () => {
   const cerebralTest = setupTest();
 
-  // cerebralTest.draftOrders = [];
+  cerebralTest.draftOrders = [];
 
   beforeAll(() => {
     jest.setTimeout(40000);
