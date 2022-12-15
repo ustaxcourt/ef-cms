@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { EnvironmentCredentials } = AWS;
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { getVersion } = require('../../shared/admin-tools/util');
 
 const es = new AWS.ES({
@@ -31,11 +32,38 @@ const getHost = async DomainName => {
  * @param {String} providers.version The name of the currently deployed stack (alpha or beta)
  * @returns {elasticsearch.Client} An instance of an Elasticsearch Client
  */
+
+const client = new Client({
+  ...AwsSigv4Signer({
+    // Must return a Promise that resolve to an AWS.Credentials object.
+    // This function is used to acquire the credentials when the client start and
+    // when the credentials are expired.
+    // The Client will refresh the Credentials only when they are expired.
+    // With AWS SDK V2, Credentials.refreshPromise is used when available to refresh the credentials.
+    // Example with AWS SDK V2:
+    getCredentials: () =>
+      new Promise((resolve, reject) => {
+        // Any other method to acquire a new Credentials object can be used.
+        AWS.config.getCredentials((err, credentials) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(credentials);
+          }
+        });
+      }),
+
+    region: 'us-east-1',
+  }),
+  node: 'https://search-xxx.region.es.amazonaws.com', // OpenSearch domain URL
+});
 const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = await getHost(domainName);
-  const credentials = new EnvironmentCredentials('AWS');
+  const protocol = 'https';
+
+  // const credentials = new EnvironmentCredentials('AWS');
   // return new elasticsearch.Client({
   //   amazonES: {
   //     credentials,
@@ -47,10 +75,26 @@ const getClient = async ({ environmentName, version }) => {
   //   host,
   //   log: 'warning',
   //   port: 443,
-  //   protocol: 'https',
   // });
   return new Client({
-    node: 'http://localhost:9200',
+    ...AwsSigv4Signer({
+      getCredentials: () =>
+        new Promise((resolve, reject) => {
+          // Any other method to acquire a new Credentials object can be used.
+          AWS.config.getCredentials((err, credentials) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(credentials);
+            }
+          });
+        }),
+
+      region: 'us-east-1',
+    }),
+
+    node: `${protocol}://${host}:443`,
+    // node: protocol + "://" + auth + "@" + host + ":" + port,
   });
 };
 
