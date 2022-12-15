@@ -6,6 +6,8 @@ import {
 import { state } from 'cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
+
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({
@@ -13,6 +15,18 @@ export const formattedMessages = (get, applicationContext) => {
     cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
     tableSort,
+  });
+
+  messages.forEach(message => {
+    message.showTrialInformation =
+      message.caseStatus === STATUS_TYPES.calendared;
+
+    if (message.showTrialInformation) {
+      setTrialInformationOnMessage({
+        applicationContext,
+        message,
+      });
+    }
   });
 
   const { box } = get(state.messageBoxToDisplay);
@@ -55,4 +69,20 @@ export const formattedMessages = (get, applicationContext) => {
   }
 
   return sharedComputedResult;
+};
+
+const setTrialInformationOnMessage = ({ applicationContext, message }) => {
+  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
+
+  if (message.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+    message.formattedTrialLocation = applicationContext
+      .getUtilities()
+      .abbreviateState(message.trialLocation);
+  } else {
+    message.formattedTrialLocation = message.trialLocation;
+  }
+
+  message.formattedTrialDate = applicationContext
+    .getUtilities()
+    .formatDateString(message.trialDate, 'MMDDYY');
 };

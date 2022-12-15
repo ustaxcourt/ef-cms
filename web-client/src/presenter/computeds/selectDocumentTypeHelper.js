@@ -124,7 +124,6 @@ export const getOptionsForCategory = ({
 };
 
 export const MAX_TITLE_LENGTH = 100;
-
 export const getPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,
