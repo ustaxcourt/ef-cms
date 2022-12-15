@@ -1,80 +1,61 @@
-import {
-  generateCaseStatus,
-  generateSelectedFilterList,
-  isMemberCase,
-  orderedFilterMap,
-} from './generateSelectedFilterList';
+import { generateCaseStatus, isMemberCase } from './generateSelectedFilterList';
 
 describe('generateCaseStatus', () => {
+  const statusLabelsPreUPDATE = [
+    { key: 'setForTrial', label: 'Set for Trial' },
+    { key: 'dismissed', label: 'Dismissed' },
+    { key: 'continued', label: 'Continued' },
+    { key: 'rule122', label: 'Rule 122' },
+    { key: 'basisReached', label: 'A Basis Reached' },
+    { key: 'settled', label: 'Settled' },
+    { key: 'recall', label: 'Recall' },
+    { key: 'submittedCAV', label: 'Taken Under Advisement' },
+  ];
+  const statusLabelsPostUPDATE = [
+    { key: 'basisReached', label: 'Basis Reached' },
+    { key: 'recall', label: 'Recall' },
+    { key: 'probableSettlement', label: 'Probable Settlement' },
+    { key: 'continued', label: 'Continued' },
+    { key: 'probableTrial', label: 'Probable Trial' },
+    { key: 'rule122', label: 'Rule 122' },
+    { key: 'definiteTrial', label: 'Definite Trial' },
+    { key: 'submittedCAV', label: 'Submitted/CAV' },
+    { key: 'motionToDismiss', label: 'Motion' },
+  ];
+
   it('should return "Unassigned" if trial status has not been selected', () => {
     const trialStatus = undefined;
-    const result = generateCaseStatus(trialStatus);
+    const areUpdatedTrialSessionTypesEnabled = false;
+    const result = generateCaseStatus(
+      trialStatus,
+      areUpdatedTrialSessionTypesEnabled,
+    );
     expect(result).toEqual('Unassigned');
   });
 
-  for (let index = 0; index < orderedFilterMap.length; index++) {
-    const caseFilter = orderedFilterMap[index];
-    it(`should not return the status "Unassigned" for valid filter code: ${caseFilter.code}`, () => {
-      const result = generateCaseStatus(caseFilter.code);
-      expect(result).not.toEqual('Unassigned');
+  for (let index = 0; index < statusLabelsPreUPDATE.length; index++) {
+    const areUpdatedTrialSessionTypesEnabled = false;
+    const caseFilter = statusLabelsPreUPDATE[index];
+    it(`should return the correct status label for filter code: ${caseFilter.key} prior to the UPDATED_TRIAL_STATUS_TYPES being turned on`, () => {
+      const result = generateCaseStatus(
+        caseFilter.key,
+        areUpdatedTrialSessionTypesEnabled,
+      );
+      expect(result).toEqual(caseFilter.label);
     });
   }
-});
 
-describe('generateSelectedFilterList', () => {
-  it('return all 9 filters when the user selects "Show All"', () => {
-    const userFilters = {
-      aBasisReached: true,
-      continued: true,
-      dismissed: true,
-      recall: true,
-      rule122: true,
-      setForTrial: true,
-      settled: true,
-      showAll: true,
-      statusUnassigned: true,
-      takenUnderAdvisement: true,
-    };
-    const result = generateSelectedFilterList(userFilters);
-
-    expect(result.length).toEqual(9);
-    expect(result).toEqual([
-      'Set For Trial',
-      'Dismissed',
-      'Continued',
-      'Rule 122',
-      'A Basis Reached',
-      'Settled',
-      'Recall',
-      'Taken Under Advisement',
-      'Status Unassigned',
-    ]);
-  });
-
-  it('return only the filters set to true', () => {
-    const userFilters = {
-      aBasisReached: true,
-      continued: false,
-      dismissed: true,
-      recall: false,
-      rule122: true,
-      setForTrial: true,
-      settled: false,
-      showAll: false,
-      statusUnassigned: false,
-      takenUnderAdvisement: true,
-    };
-    const result = generateSelectedFilterList(userFilters);
-
-    expect(result.length).toEqual(5);
-    expect(result).toEqual([
-      'Set For Trial',
-      'Dismissed',
-      'Rule 122',
-      'A Basis Reached',
-      'Taken Under Advisement',
-    ]);
-  });
+  for (let index = 0; index < statusLabelsPostUPDATE.length; index++) {
+    const areUpdatedTrialSessionTypesEnabled = true;
+    const caseFilter = statusLabelsPostUPDATE[index];
+    it(`should return the correct status label for filter code: ${caseFilter.key} after the UPDATED_TRIAL_STATUS_TYPES is turned on`, () => {
+      const result = generateCaseStatus(
+        caseFilter.key,
+        areUpdatedTrialSessionTypesEnabled,
+      );
+      expect(result).toEqual(caseFilter.label);
+    });
+  }
 });
 
 describe('isMemberCase', () => {

@@ -30,7 +30,7 @@ describe('getOutboxMessagesForSectionInteractor', () => {
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
-      entityName: 'Message',
+      entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
@@ -44,6 +44,8 @@ describe('getOutboxMessagesForSectionInteractor', () => {
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
+      trialDate: '2028-03-01T21:40:46.415Z',
+      trialLocation: 'El Paso, Texas',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,

@@ -11,7 +11,10 @@ const {
  * @returns {object} the document title
  */
 
-const getDocumentTitle = ({ applicationContext, docketEntry }) => {
+const getDocumentTitleForNoticeOfChange = ({
+  applicationContext,
+  docketEntry,
+}) => {
   let { documentTitle } = docketEntry;
   const filingsAndProceedings = getFilingsAndProceedings(
     formatDocketEntry(applicationContext, docketEntry),
@@ -27,4 +30,4 @@ const getDocumentTitle = ({ applicationContext, docketEntry }) => {
   return documentTitle;
 };
 
-module.exports = { getDocumentTitle };
+module.exports = { getDocumentTitleForNoticeOfChange };
