@@ -50,7 +50,7 @@ const getClient = async ({ environmentName, version }) => {
   //   protocol: 'https',
   // });
   return new Client({
-    node: 'http://localhost:9200',
+    node: host,
   });
 };
 
