@@ -8,8 +8,7 @@
     ELASTICSEARCH_API_VERSION,
   } = require('./elasticsearch/elasticsearch-settings');
 
-  const connectionClass = require('http-aws-es');
-  const elasticsearch = require('elasticsearch');
+  const { Client } = require('@opensearch-project/opensearch');
 
   AWS.config.httpOptions.timeout = 300000;
 
@@ -29,20 +28,24 @@
     region: 'us-east-1',
   };
 
-  const searchClientCache = new elasticsearch.Client({
-    amazonES: {
-      credentials: new EnvironmentCredentials('AWS'),
-      region: environment.region,
-    },
-    apiVersion: ELASTICSEARCH_API_VERSION,
-    connectionClass,
-    host: {
-      host: environment.elasticsearchEndpoint,
-      port: 443,
-      protocol: 'https',
-    },
-    log: 'warning',
+  let searchClientCache = new Client({
+    node: 'http://localhost:9200',
   });
+
+  // const searchClientCache = new elasticsearch.Client({
+  //   amazonES: {
+  //     credentials: new EnvironmentCredentials('AWS'),
+  //     region: environment.region,
+  //   },
+  //   apiVersion: ELASTICSEARCH_API_VERSION,
+  //   connectionClass,
+  //   host: {
+  //     host: environment.elasticsearchEndpoint,
+  //     port: 443,
+  //     protocol: 'https',
+  //   },
+  //   log: 'warning',
+  // });
 
   await Promise.all(
     elasticsearchIndexes.map(async index => {

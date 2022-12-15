@@ -2,9 +2,8 @@
 // node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
 
 const AWS = require('aws-sdk');
-const connectionClass = require('http-aws-es');
-const elasticsearch = require('elasticsearch');
 const { chunk } = require('lodash');
+const { Client } = require('@opensearch-project/opensearch');
 const { get } = require('lodash');
 
 const environmentName = process.argv[2] || 'exp1';
@@ -20,19 +19,23 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
-const esClient = new elasticsearch.Client({
-  amazonES: {
-    credentials: new EnvironmentCredentials('AWS'),
-    region: 'us-east-1',
-  },
-  apiVersion: '7.7',
-  awsConfig: new AWS.Config({ region: 'us-east-1' }),
-  connectionClass,
-  host: esEndpoint,
-  log: 'warning',
-  port: 443,
-  protocol: 'https',
+const esClient = new Client({
+  node: 'http://localhost:9200',
 });
+
+// const esClient = new elasticsearch.Client({
+//   amazonES: {
+//     credentials: new EnvironmentCredentials('AWS'),
+//     region: 'us-east-1',
+//   },
+//   apiVersion: '7.7',
+//   awsConfig: new AWS.Config({ region: 'us-east-1' }),
+//   connectionClass,
+//   host: esEndpoint,
+//   log: 'warning',
+//   port: 443,
+//   protocol: 'https',
+// });
 
 const TABLE_NAME = `efcms-${environmentName}-${version}`;
 

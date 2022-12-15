@@ -5,11 +5,10 @@ const { getVersion } = require('../../shared/admin-tools/util');
 const es = new AWS.ES({
   region: 'us-east-1',
 });
-const connectionClass = require('http-aws-es');
-const elasticsearch = require('elasticsearch');
 const {
   ELASTICSEARCH_API_VERSION,
 } = require('../elasticsearch/elasticsearch-settings');
+const { Client } = require('@opensearch-project/opensearch');
 
 const getHost = async DomainName => {
   try {
@@ -37,18 +36,21 @@ const getClient = async ({ environmentName, version }) => {
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = await getHost(domainName);
   const credentials = new EnvironmentCredentials('AWS');
-  return new elasticsearch.Client({
-    amazonES: {
-      credentials,
-      region: 'us-east-1',
-    },
-    apiVersion: ELASTICSEARCH_API_VERSION,
-    awsConfig: new AWS.Config({ region: 'us-east-1' }),
-    connectionClass,
-    host,
-    log: 'warning',
-    port: 443,
-    protocol: 'https',
+  // return new elasticsearch.Client({
+  //   amazonES: {
+  //     credentials,
+  //     region: 'us-east-1',
+  //   },
+  //   apiVersion: ELASTICSEARCH_API_VERSION,
+  //   awsConfig: new AWS.Config({ region: 'us-east-1' }),
+  //   connectionClass,
+  //   host,
+  //   log: 'warning',
+  //   port: 443,
+  //   protocol: 'https',
+  // });
+  return new Client({
+    node: 'http://localhost:9200',
   });
 };
 
