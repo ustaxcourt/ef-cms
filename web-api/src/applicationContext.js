@@ -2,9 +2,7 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
-const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const elasticsearch = require('elasticsearch');
 const pdfLib = require('pdf-lib');
 const pug = require('pug');
 const sass = require('sass');
@@ -226,6 +224,7 @@ const {
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
+const { Client } = require('@opensearch-project/opensearch');
 
 const {
   Case,
@@ -649,18 +648,18 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
-          searchClientCache = new elasticsearch.Client({
-            host: environment.elasticsearchEndpoint,
+          searchClientCache = new Client({
+            node: 'http://localhost:9200',
           });
         } else {
-          searchClientCache = new elasticsearch.Client({
+          searchClientCache = new Client({
             amazonES: {
               credentials: new EnvironmentCredentials('AWS'),
               region: environment.region,
             },
             apiVersion: '7.7',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
-            connectionClass,
+            // connectionClass,
             host: environment.elasticsearchEndpoint,
             log: 'warning',
             port: 443,
