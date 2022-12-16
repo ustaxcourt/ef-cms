@@ -33,7 +33,6 @@ const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = await getHost(domainName);
-  const protocol = 'https';
 
   return new Client({
     ...AwsSigv4Signer({
@@ -50,7 +49,7 @@ const getClient = async ({ environmentName, version }) => {
 
       region: 'us-east-1',
     }),
-    node: `${protocol}://${host}:443`,
+    node: `https://${host}:443`,
   });
 };
 

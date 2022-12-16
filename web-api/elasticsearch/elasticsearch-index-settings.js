@@ -19,11 +19,7 @@
   const deployingEnvironment = process.env.ENV;
   environment.elasticsearchEndpoint = process.argv[2];
 
-  const host = environment.elasticsearchEndpoint;
-  const port = process.env.ELASTICSEARCH_PORT || 443;
-  const protocol = process.env.ELASTICSEARCH_PROTOCOL || 'https';
-
-  const searchClientCache = new Client({
+  const openSearchClient = new Client({
     ...AwsSigv4Signer({
       getCredentials: () =>
         new Promise((resolve, reject) => {
@@ -40,10 +36,8 @@
     node:
       environment.stage === 'local'
         ? environment.elasticsearchEndpoint
-        : `${protocol}://${host}:${port}`,
+        : `https://${environment.elasticsearchEndpoint}:443`,
   });
-
-  console.log('**** here 3 *****');
 
   const esSettings = settings({
     environment: deployingEnvironment,
@@ -53,16 +47,13 @@
   await Promise.all(
     elasticsearchIndexes.map(async index => {
       try {
-        const { body: indexExists } = await searchClientCache.indices.exists({
+        const { body: indexExists } = await openSearchClient.indices.exists({
           body: {},
           index,
         });
 
-        console.log('does ', index, 'exist? ', indexExists);
-
         if (!indexExists) {
-          console.log('going to create ', index);
-          await searchClientCache.indices.create({
+          await openSearchClient.indices.create({
             body: {
               mappings: {
                 dynamic: false,
@@ -73,7 +64,7 @@
             index,
           });
         } else {
-          searchClientCache.indices.putSettings({
+          openSearchClient.indices.putSettings({
             body: {
               index: {
                 max_result_window: esSettings.index.max_result_window,
@@ -84,7 +75,10 @@
           });
         }
       } catch (e) {
-        console.log('***** \n\n\n', e);
+        console.log(
+          'Error trying to create or update the OpenSearch indices: ',
+          e,
+        );
       }
     }),
   );

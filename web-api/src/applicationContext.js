@@ -646,10 +646,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
             node: environment.elasticsearchEndpoint,
           });
         } else {
-          const host = environment.elasticsearchEndpoint;
-          const port = 443;
-          const protocol = 'https';
-
           searchClientCache = new Client({
             ...AwsSigv4Signer({
               getCredentials: () =>
@@ -664,21 +660,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
                 }),
               region: 'us-east-1',
             }),
-            node: `${protocol}://${host}:${port}`,
+            node: `https://${environment.elasticsearchEndpoint}:443`,
           });
-          // searchClientCache = new Client({
-          //   amazonES: {
-          //     credentials: new EnvironmentCredentials('AWS'),
-          //     region: environment.region,
-          //   },
-          //   apiVersion: '7.7',
-          //   awsConfig: new AWS.Config({ region: 'us-east-1' }),
-          //   // connectionClass,
-          //   host: environment.elasticsearchEndpoint,
-          //   log: 'warning',
-          //   port: 443,
-          //   protocol: 'https',
-          // });
         }
       }
       return searchClientCache;
