@@ -9,6 +9,7 @@
 
   const environment = {
     region: 'us-east-1',
+    stage: process.env.STAGE || 'local',
   };
 
   AWS.config.httpOptions.timeout = 300000;
