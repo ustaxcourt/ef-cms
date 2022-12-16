@@ -33,30 +33,6 @@ const getHost = async DomainName => {
  * @returns {elasticsearch.Client} An instance of an Elasticsearch Client
  */
 
-const client = new Client({
-  ...AwsSigv4Signer({
-    // Must return a Promise that resolve to an AWS.Credentials object.
-    // This function is used to acquire the credentials when the client start and
-    // when the credentials are expired.
-    // The Client will refresh the Credentials only when they are expired.
-    // With AWS SDK V2, Credentials.refreshPromise is used when available to refresh the credentials.
-    // Example with AWS SDK V2:
-    getCredentials: () =>
-      new Promise((resolve, reject) => {
-        // Any other method to acquire a new Credentials object can be used.
-        AWS.config.getCredentials((err, credentials) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(credentials);
-          }
-        });
-      }),
-
-    region: 'us-east-1',
-  }),
-  node: 'https://search-xxx.region.es.amazonaws.com', // OpenSearch domain URL
-});
 const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
