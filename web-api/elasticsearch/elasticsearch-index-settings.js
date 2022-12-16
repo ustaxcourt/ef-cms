@@ -17,23 +17,15 @@
     process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS;
   const deployingEnvironment = process.env.ENV;
   environment.elasticsearchEndpoint = process.argv[2];
-  console.log(
-    '***environment.elasticsearchEndpoint',
-    environment.elasticsearchEndpoint,
-  );
 
   const host = environment.elasticsearchEndpoint;
   const port = process.env.ELASTICSEARCH_PORT || 443;
   const protocol = process.env.ELASTICSEARCH_PROTOCOL || 'https';
 
-  console.log(`***interpolated node: ${protocol}://${host}:${port}`);
-
-  let searchClientCache = new Client({
-    // node: `${protocol}://${host}:${port}`,
+  const searchClientCache = new Client({
     ...AwsSigv4Signer({
       getCredentials: () =>
         new Promise((resolve, reject) => {
-          // Any other method to acquire a new Credentials object can be used.
           AWS.config.getCredentials((err, credentials) => {
             if (err) {
               reject(err);
@@ -42,32 +34,12 @@
             }
           });
         }),
-      node: `${protocol}://${host}:${port}`,
       region: 'us-east-1',
     }),
-
-    // ssl: {
-    //   ca: fs.readFileSync(ca_certs_path),
-    //   // You can turn off certificate verification (rejectUnauthorized: false) if you're using self-signed certificates with a hostname mismatch.
-    //   // cert: fs.readFileSync(client_cert_path),
-    //   // key: fs.readFileSync(client_key_path)
-    // },
+    node: `${protocol}://${host}:${port}`,
   });
 
-  // const searchClientCache = new Client({
-  //   amazonES: {
-  //     credentials: new EnvironmentCredentials('AWS'),
-  //     region: environment.region,
-  //   },
-  //   apiVersion: ELASTICSEARCH_API_VERSION,
-  //   connectionClass,
-  //   host: {
-  //     host: environment.elasticsearchEndpoint,
-  //     port: process.env.ELASTICSEARCH_PORT || 443,
-  //     protocol: process.env.ELASTICSEARCH_PROTOCOL || 'https',
-  //   },
-  //   log: 'warning',
-  // });
+  console.log('**** here 3 *****');
 
   const esSettings = settings({
     environment: deployingEnvironment,
