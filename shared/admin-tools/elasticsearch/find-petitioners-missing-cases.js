@@ -9,7 +9,7 @@ const { get } = require('lodash');
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
-const esEndpoint = process.argv[4];
+const openSearchEndpoint = process.argv[4];
 
 const CHUNK_SIZE = 100;
 
@@ -18,7 +18,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
-const esClient = new Client({
+const openSearchClient = new Client({
   ...AwsSigv4Signer({
     getCredentials: () =>
       new Promise((resolve, reject) => {
@@ -33,13 +33,13 @@ const esClient = new Client({
 
     region: 'us-east-1',
   }),
-  node: `https://${esEndpoint}:443`,
+  node: `https://${openSearchEndpoint}:443`,
 });
 
 const TABLE_NAME = `efcms-${environmentName}-${version}`;
 
 const queryForPetitioners = async () => {
-  let results = await esClient.search({
+  let results = await openSearchClient.search({
     body: {
       query: {
         bool: {
