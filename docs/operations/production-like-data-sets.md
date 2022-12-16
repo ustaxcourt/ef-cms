@@ -18,8 +18,8 @@ In order to do this, you need to have an empty DDB table in the environment to w
     . ./shared/admin-tools/users/setup-test-users.sh "${ENV}"
     ```
 
-5. If the /bulk-import-judge-users.sh has been run on this environment via circle, you'll need to run ./setup-glued-judges to reconcile the duplicate judges. 
+5. If the `bulk-import-judge-users.sh` script has been run on this environment (check the "Judge Users Setup" step in `.circleci/config.yml` to find out), you'll need to run `setup-glued-judges` to reconcile the duplicate judges. 
 
     ```bash
-    . ./shared/admin-tools/users/setup-glued-judges.sh 
+    node ./shared/admin-tools/users/setup-glued-judges.js
     ```
