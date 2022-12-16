@@ -54,7 +54,6 @@ exports.search = async ({ applicationContext, searchParameters }) => {
     ({ body } = await applicationContext
       .getSearchClient()
       .search(searchParameters));
-    console.log('***IN searchClient.js BODY***', body);
   } catch (searchError) {
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');

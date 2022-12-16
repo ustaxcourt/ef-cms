@@ -1,15 +1,11 @@
 const AWS = require('aws-sdk');
-const { EnvironmentCredentials } = AWS;
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+const { Client } = require('@opensearch-project/opensearch');
 const { getVersion } = require('../../shared/admin-tools/util');
 
 const es = new AWS.ES({
   region: 'us-east-1',
 });
-const {
-  ELASTICSEARCH_API_VERSION,
-} = require('../elasticsearch/elasticsearch-settings');
-const { Client } = require('@opensearch-project/opensearch');
 
 const getHost = async DomainName => {
   try {
@@ -39,24 +35,10 @@ const getClient = async ({ environmentName, version }) => {
   const host = await getHost(domainName);
   const protocol = 'https';
 
-  // const credentials = new EnvironmentCredentials('AWS');
-  // return new elasticsearch.Client({
-  //   amazonES: {
-  //     credentials,
-  //     region: 'us-east-1',
-  //   },
-  //   apiVersion: ELASTICSEARCH_API_VERSION,
-  //   awsConfig: new AWS.Config({ region: 'us-east-1' }),
-  //   connectionClass,
-  //   host,
-  //   log: 'warning',
-  //   port: 443,
-  // });
   return new Client({
     ...AwsSigv4Signer({
       getCredentials: () =>
         new Promise((resolve, reject) => {
-          // Any other method to acquire a new Credentials object can be used.
           AWS.config.getCredentials((err, credentials) => {
             if (err) {
               reject(err);
@@ -68,9 +50,7 @@ const getClient = async ({ environmentName, version }) => {
 
       region: 'us-east-1',
     }),
-
     node: `${protocol}://${host}:443`,
-    // node: protocol + "://" + auth + "@" + host + ":" + port,
   });
 };
 
