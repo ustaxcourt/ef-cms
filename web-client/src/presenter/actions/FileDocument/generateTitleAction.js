@@ -10,18 +10,17 @@ import { state } from 'cerebral';
  */
 export const generateTitleAction = ({ applicationContext, get, store }) => {
   const documentMetadata = get(state.form);
-
   let documentTitle = applicationContext
-    .getUseCases()
-    .generateDocumentTitleInteractor(applicationContext, {
+    .getUtilities()
+    .generateExternalDocumentTitle(applicationContext, {
       documentMetadata,
     });
   store.set(state.form.documentTitle, documentTitle);
 
   if (!isEmpty(documentMetadata.secondaryDocument)) {
     documentTitle = applicationContext
-      .getUseCases()
-      .generateDocumentTitleInteractor(applicationContext, {
+      .getUtilities()
+      .generateExternalDocumentTitle(applicationContext, {
         documentMetadata: documentMetadata.secondaryDocument,
       });
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
