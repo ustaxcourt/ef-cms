@@ -17,7 +17,7 @@ const getClusterStats = async ({ environmentName, version }) => {
     const res = await esClient.count({
       index: indexName,
     });
-    counts[indexName] = res.count;
+    counts[indexName] = res.body.count;
   }
 
   return { counts, info };
