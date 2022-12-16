@@ -30,7 +30,6 @@
 
   let searchClientCache = new Client({
     // node: `${protocol}://${host}:${port}`,
-    node: environment.elasticsearchEndpoint,
     ...AwsSigv4Signer({
       getCredentials: () =>
         new Promise((resolve, reject) => {
@@ -43,6 +42,7 @@
             }
           });
         }),
+      node: `${protocol}://${host}:${port}`,
       region: 'us-east-1',
     }),
 
