@@ -4,12 +4,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateTitleForPaperFilingAction', () => {
-  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
+  const { generateExternalDocumentTitle } = applicationContext.getUtilities();
 
   presenter.providers.applicationContext = applicationContext;
 
-  it('should call generateDocumentTitle with correct data and replace a previously generated documentTitle with an ungenerated one', async () => {
-    generateDocumentTitleInteractor.mockReturnValue('First Amended Answer');
+  it('should call generateExternalDocumentTitle with correct data and replace a previously generated documentTitle with an ungenerated one', async () => {
+    generateExternalDocumentTitle.mockReturnValue('First Amended Answer');
     await runAction(generateTitleForPaperFilingAction, {
       modules: {
         presenter,
@@ -26,9 +26,9 @@ describe('generateTitleForPaperFilingAction', () => {
       },
     });
 
-    expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
+    expect(generateExternalDocumentTitle.mock.calls.length).toEqual(1);
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata,
+      generateExternalDocumentTitle.mock.calls[0][1].documentMetadata,
     ).toMatchObject({
       documentTitle: '[First, Second, etc. ] Amended [Document Name]',
     });
@@ -49,9 +49,9 @@ describe('generateTitleForPaperFilingAction', () => {
       },
     });
 
-    expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
+    expect(generateExternalDocumentTitle.mock.calls.length).toEqual(1);
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata,
+      generateExternalDocumentTitle.mock.calls[0][1].documentMetadata,
     ).toMatchObject({
       documentTitle: 'Order to do something',
     });
