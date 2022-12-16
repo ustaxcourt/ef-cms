@@ -36,7 +36,10 @@
         }),
       region: 'us-east-1',
     }),
-    node: `${protocol}://${host}:${port}`,
+    node:
+      environment.stage === 'local'
+        ? environment.elasticsearchEndpoint
+        : `${protocol}://${host}:${port}`,
   });
 
   console.log('**** here 3 *****');

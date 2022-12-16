@@ -224,6 +224,7 @@ const {
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');
 
 const {
@@ -246,14 +247,7 @@ const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
 
-const {
-  CognitoIdentityServiceProvider,
-  DynamoDB,
-  EnvironmentCredentials,
-  S3,
-  SES,
-  SQS,
-} = AWS;
+const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -649,22 +643,42 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
           searchClientCache = new Client({
-            node: 'http://localhost:9200',
+            node: environment.elasticsearchEndpoint,
           });
         } else {
+          const host = environment.elasticsearchEndpoint;
+          const port = 443;
+          const protocol = 'https';
+
           searchClientCache = new Client({
-            amazonES: {
-              credentials: new EnvironmentCredentials('AWS'),
-              region: environment.region,
-            },
-            apiVersion: '7.7',
-            awsConfig: new AWS.Config({ region: 'us-east-1' }),
-            // connectionClass,
-            host: environment.elasticsearchEndpoint,
-            log: 'warning',
-            port: 443,
-            protocol: 'https',
+            ...AwsSigv4Signer({
+              getCredentials: () =>
+                new Promise((resolve, reject) => {
+                  AWS.config.getCredentials((err, credentials) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(credentials);
+                    }
+                  });
+                }),
+              region: 'us-east-1',
+            }),
+            node: `${protocol}://${host}:${port}`,
           });
+          // searchClientCache = new Client({
+          //   amazonES: {
+          //     credentials: new EnvironmentCredentials('AWS'),
+          //     region: environment.region,
+          //   },
+          //   apiVersion: '7.7',
+          //   awsConfig: new AWS.Config({ region: 'us-east-1' }),
+          //   // connectionClass,
+          //   host: environment.elasticsearchEndpoint,
+          //   log: 'warning',
+          //   port: 443,
+          //   protocol: 'https',
+          // });
         }
       }
       return searchClientCache;
