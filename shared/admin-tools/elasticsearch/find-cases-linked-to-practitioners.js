@@ -8,7 +8,7 @@ const { get } = require('lodash');
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
-const esEndpoint = process.argv[4];
+const openSearchEndpoint = process.argv[4];
 const TABLE_NAME = `efcms-${environmentName}-${version}`;
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
@@ -31,7 +31,7 @@ const esClient = new Client({
 
     region: 'us-east-1',
   }),
-  node: `https://${esEndpoint}:443`,
+  node: `https://${openSearchEndpoint}:443`,
 });
 
 const getOpenCases = async () => {
