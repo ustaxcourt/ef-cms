@@ -2,6 +2,7 @@
 // node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
 
 const AWS = require('aws-sdk');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { chunk } = require('lodash');
 const { Client } = require('@opensearch-project/opensearch');
 const { get } = require('lodash');
@@ -12,30 +13,28 @@ const esEndpoint = process.argv[4];
 
 const CHUNK_SIZE = 100;
 
-const { EnvironmentCredentials } = AWS;
-
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
 
 const esClient = new Client({
-  node: 'http://localhost:9200',
-});
+  ...AwsSigv4Signer({
+    getCredentials: () =>
+      new Promise((resolve, reject) => {
+        AWS.config.getCredentials((err, credentials) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(credentials);
+          }
+        });
+      }),
 
-// const esClient = new elasticsearch.Client({
-//   amazonES: {
-//     credentials: new EnvironmentCredentials('AWS'),
-//     region: 'us-east-1',
-//   },
-//   apiVersion: '7.7',
-//   awsConfig: new AWS.Config({ region: 'us-east-1' }),
-//   connectionClass,
-//   host: esEndpoint,
-//   log: 'warning',
-//   port: 443,
-//   protocol: 'https',
-// });
+    region: 'us-east-1',
+  }),
+  node: `https://${esEndpoint}:443`,
+});
 
 const TABLE_NAME = `efcms-${environmentName}-${version}`;
 
