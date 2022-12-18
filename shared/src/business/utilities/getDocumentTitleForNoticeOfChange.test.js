@@ -1,7 +1,9 @@
+const {
+  getDocumentTitleForNoticeOfChange,
+} = require('./getDocumentTitleForNoticeOfChange');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getDocumentTitle } = require('./getDocumentTitle');
 
-describe('getDocumentTitle', () => {
+describe('getDocumentTitleForNoticeOfChange', () => {
   let docketEntry;
 
   beforeEach(() => {
@@ -38,7 +40,7 @@ describe('getDocumentTitle', () => {
     };
 
     expect(
-      getDocumentTitle({
+      getDocumentTitleForNoticeOfChange({
         applicationContext,
         docketEntry: docketEntryOriginalTitle,
       }),
@@ -49,22 +51,24 @@ describe('getDocumentTitle', () => {
     docketEntry.addToCoversheet = true;
     docketEntry.additionalInfo2 = undefined;
 
-    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
-      docketEntry.documentTitle,
-    );
-    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
-      `${docketEntry.documentTitle} ${docketEntry.additionalInfo}`,
-    );
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).not.toEqual(docketEntry.documentTitle);
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).toEqual(`${docketEntry.documentTitle} ${docketEntry.additionalInfo}`);
   });
 
   it('appends additionalInfo2 to docketEntry.documentTitle + additionalInfo when they are defined', () => {
     docketEntry.addToCoversheet = true;
     docketEntry.additionalInfo2 = 'Another one (DJ Khaled)';
 
-    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
-      docketEntry.documentTitle,
-    );
-    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).not.toEqual(docketEntry.documentTitle);
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).toEqual(
       `${docketEntry.documentTitle} ${docketEntry.additionalInfo} ${docketEntry.additionalInfo2}`,
     );
   });
@@ -74,14 +78,16 @@ describe('getDocumentTitle', () => {
     docketEntry.additionalInfo = undefined;
     docketEntry.additionalInfo2 = 'Another one (DJ Khaled)';
 
-    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
-      docketEntry.documentTitle,
-    );
-    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).not.toEqual(docketEntry.documentTitle);
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).not.toEqual(
       `${docketEntry.documentTitle} ${docketEntry.additionalInfo} ${docketEntry.additionalInfo2}`,
     );
-    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
-      `${docketEntry.documentTitle} ${docketEntry.additionalInfo2}`,
-    );
+    expect(
+      getDocumentTitleForNoticeOfChange({ applicationContext, docketEntry }),
+    ).toEqual(`${docketEntry.documentTitle} ${docketEntry.additionalInfo2}`);
   });
 });
