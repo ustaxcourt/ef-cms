@@ -21,8 +21,8 @@ export const generateCourtIssuedDocumentTitleAction = ({
   documentMetadata.judgeWithTitle = judgeWithTitle;
 
   let documentTitle = applicationContext
-    .getUseCases()
-    .generateCourtIssuedDocumentTitleInteractor({
+    .getUtilities()
+    .generateCourtIssuedDocumentTitle({
       documentMetadata,
     });
 
