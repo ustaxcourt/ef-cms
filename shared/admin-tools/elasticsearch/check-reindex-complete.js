@@ -2,7 +2,7 @@ const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
-  const info = await esClient.indices.stats({
+  const { info } = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
   });
