@@ -2,6 +2,8 @@
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
+  TRIAL_SESSION_SCOPE_TYPES,
+  TRIAL_STATUS_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -543,6 +545,104 @@ describe('processFormattedMessages', () => {
         expect(result.messages[0].consolidatedIconTooltipText).toEqual(
           'Consolidated case',
         );
+      });
+    });
+
+    it('should set showTrialInformation to true when caseStatus is calendared', () => {
+      const mockCalendaredMessage = {
+        caseStatus: TRIAL_STATUS_TYPES.calendared,
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-20',
+        message: 'This is a test message',
+        trialDate: '2025-01-01T16:29:13.122Z',
+        trialLocation: 'Austin, TX',
+      };
+
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            ...mockCalendaredMessage,
+          },
+        ],
+      });
+
+      expect(result.messages[0].showTrialInformation).toBe(true);
+    });
+
+    it('should set showTrialInformation to false when caseStatus is NOT calendared', () => {
+      const mockCalendaredMessage = {
+        caseStatus: TRIAL_STATUS_TYPES.new,
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-20',
+        message: 'This is a test message',
+      };
+
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            ...mockCalendaredMessage,
+          },
+        ],
+      });
+
+      expect(result.messages[0].showTrialInformation).toBe(false);
+    });
+
+    it('should format the trialDate and trialLocation on the message when caseStatus is Calendared', () => {
+      const mockCalendaredMessage = {
+        caseStatus: TRIAL_STATUS_TYPES.calendared,
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-20',
+        message: 'This is a test message',
+        trialDate: '2019-01-01T16:29:13.122Z',
+        trialLocation: 'Houston, Texas',
+      };
+
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            ...mockCalendaredMessage,
+          },
+        ],
+      });
+
+      expect(result.messages[0]).toMatchObject({
+        formattedTrialDate: '01/01/19',
+        formattedTrialLocation: 'Houston, TX',
+      });
+    });
+
+    it(`should not abbreviate trialLocation when it is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const mockCalendaredMessage = {
+        caseStatus: TRIAL_STATUS_TYPES.calendared,
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-20',
+        message: 'This is a test message',
+        trialDate: '2019-01-01T16:29:13.122Z',
+        trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      };
+
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            ...mockCalendaredMessage,
+          },
+        ],
+      });
+
+      expect(
+        applicationContext.getUtilities().abbreviateState,
+      ).not.toHaveBeenCalled();
+      expect(result.messages[0]).toMatchObject({
+        formattedTrialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
       });
     });
   });
