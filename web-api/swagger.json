@@ -4762,6 +4762,27 @@
         }
       }
     },
+    "/judges/{judgeId}/trial-sessions": {
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets all trial sessions for a judge",
+        "description": "gets all trial sessions for a judge.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
     "/trial-sessions": {
       "get": {
         "tags": ["trialsessions"],
