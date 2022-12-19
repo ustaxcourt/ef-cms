@@ -9,8 +9,10 @@
 
   const environment = {
     region: 'us-east-1',
-    stage: process.env.STAGE || 'local',
+    stage: process.env.ENV || 'local',
   };
+
+  console.log('***environment.stage***', environment.stage);
 
   AWS.config.httpOptions.timeout = 300000;
 
@@ -31,7 +33,7 @@
             }
           });
         }),
-      region: 'us-east-1',
+      region: environment.region,
     }),
     node:
       environment.stage === 'local'
