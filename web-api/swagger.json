@@ -4763,6 +4763,14 @@
       }
     },
     "/judges/{judgeId}/trial-sessions": {
+      "parameters": [
+        {
+          "name": "judgeId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["trialsessions"],
         "summary": "gets all trial sessions for a judge",
