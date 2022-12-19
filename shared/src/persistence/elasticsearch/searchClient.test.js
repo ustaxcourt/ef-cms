@@ -98,10 +98,10 @@ describe('searchClient', () => {
     expect(formatMessageResult).toHaveBeenCalledTimes(1);
   });
 
-  it('searchAll should not perform a search query if the count query is malformed', async () => {
+  it('searchAll should not perform a search query when the count query is malformed', async () => {
     applicationContext
       .getSearchClient()
-      .count.mockReturnValue(mockMalformedQueryResult);
+      .count.mockRejectedValue(mockMalformedQueryResult);
 
     await searchAll({
       applicationContext,
