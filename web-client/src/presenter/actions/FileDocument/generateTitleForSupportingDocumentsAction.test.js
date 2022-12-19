@@ -4,12 +4,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateTitleForSupportingDocumentsAction', () => {
-  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
+  const { generateExternalDocumentTitle } = applicationContext.getUtilities();
 
   presenter.providers.applicationContext = applicationContext;
 
-  it('should call generateDocumentTitle with correct data for supporting documents', async () => {
-    generateDocumentTitleInteractor.mockReturnValue(null);
+  it('should call generateExternalDocumentTitle with correct data for supporting documents', async () => {
+    generateExternalDocumentTitle.mockReturnValue(null);
     await runAction(generateTitleForSupportingDocumentsAction, {
       modules: {
         presenter,
@@ -33,11 +33,11 @@ describe('generateTitleForSupportingDocumentsAction', () => {
     });
 
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata
+      generateExternalDocumentTitle.mock.calls[0][1].documentMetadata
         .documentType,
     ).toEqual('Motion for a New Trial');
     expect(
-      generateDocumentTitleInteractor.mock.calls[1][1].documentMetadata
+      generateExternalDocumentTitle.mock.calls[1][1].documentMetadata
         .documentType,
     ).toEqual('Application for Waiver of Filing Fee');
   });
