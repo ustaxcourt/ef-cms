@@ -16,8 +16,6 @@ import { petitionsClerkServesPaperCaseToIRS } from './userFlows/petitionsClerkSe
 describe('Autogenerate Deadline when order for amended petition is served', () => {
   const cerebralTest = setupTest();
 
-  cerebralTest.draftOrders = [];
-
   beforeAll(() => {
     jest.setTimeout(40000);
   });
@@ -221,34 +219,15 @@ describe('Autogenerate Deadline when order for amended petition is served', () =
         docketNumber: cerebralTest.docketNumber,
       });
 
-      await cerebralTest.runSequence(
-        'updateCourtIssuedDocketEntryFormValueSequence',
-        {
-          key: 'documentType',
-          value:
-            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition
-              .documentType,
-        },
-      );
-
-      await cerebralTest.runSequence(
-        'updateCourtIssuedDocketEntryFormValueSequence',
-        {
-          key: 'eventCode',
-          value:
-            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode,
-        },
-      );
-
-      await cerebralTest.runSequence(
-        'updateCourtIssuedDocketEntryFormValueSequence',
-        {
-          key: 'scenario',
-          value: 'Type D',
-        },
-      );
-
+      /* eslint-disable sort-keys-fix/sort-keys-fix */
+      // Sorting object keys must be disabled, otherwise the date values
+      // bubble to the top during sorting and cause the test to fail
       const docketEntryFormData = {
+        documentType:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.documentType,
+        eventCode:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode,
+        scenario: 'Type D',
         day: '2',
         month: '2',
         year: '2050',
