@@ -68,12 +68,13 @@ exports.searchAll = async ({ applicationContext, searchParameters }) => {
 
   let countQ;
   try {
-    countQ = await applicationContext.getSearchClient().count({
+    const body = await applicationContext.getSearchClient().count({
       body: {
         query,
       },
       index,
     });
+    countQ = body.count;
   } catch (searchError) {
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');

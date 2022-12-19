@@ -63,9 +63,6 @@ const {
   testPdfDoc,
 } = require('./getFakeFile');
 const {
-  filterWorkItemsForUser,
-} = require('../../../src/business/utilities/filterWorkItemsForUser');
-const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
@@ -114,9 +111,6 @@ const {
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
-const {
-  getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentTitleWithAdditionalInfo,
 } = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
@@ -310,9 +304,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterWorkItemsForUser: jest
-      .fn()
-      .mockImplementation(filterWorkItemsForUser),
+    filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatDateString: jest
@@ -541,9 +533,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),
-    getDocumentQCInboxForUser: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForUserPersistence),
+    getDocumentQCInboxForUser: jest.fn(),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
