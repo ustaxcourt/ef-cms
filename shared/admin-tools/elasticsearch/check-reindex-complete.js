@@ -1,8 +1,3 @@
-/**
- * check that a subset of ES indexes counts on alpha and beta match.
- */
-
-// @path
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const getClusterStats = async ({ environmentName, version }) => {

@@ -540,9 +540,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
+    getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForUserPersistence),
