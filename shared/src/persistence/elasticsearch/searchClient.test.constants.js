@@ -143,6 +143,68 @@ exports.mockMessageSearchResult = {
   },
 };
 
+exports.mockWorkItemSearchResult = {
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    hits: {
+      hits: [
+        {
+          _id: 'case|312-work-item|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          _index: 'efcms-work-item',
+          _routing: 'case|312-21_case|312-21|mapping',
+          _score: null,
+          _source: {
+            messageId: {
+              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+              docketNumber: {
+                S: '312-21',
+              },
+            },
+          },
+          _type: '_doc',
+          inner_hits: {
+            'case-mappings': {
+              hits: {
+                hits: [
+                  {
+                    _id: 'case|312-21_case|312-21|mapping',
+                    _index: 'efcms-message',
+                    _score: 1,
+                    _source: {
+                      leadDocketNumber: {
+                        S: '312-21',
+                      },
+                    },
+                    _type: '_doc',
+                  },
+                ],
+                max_score: 1,
+                total: {
+                  relation: 'eq',
+                  value: 1,
+                },
+              },
+            },
+          },
+          sort: [1629483399420],
+        },
+      ],
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 1,
+      },
+    },
+    timed_out: false,
+    took: 5,
+  },
+};
+
 exports.mockMalformedQueryResult = {
   error: {
     reason: 'query malformed, empty clause found at [5:3]',
