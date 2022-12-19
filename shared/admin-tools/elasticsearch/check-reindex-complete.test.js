@@ -16,13 +16,13 @@ describe('isReindexComplete', () => {
   });
 
   it('should call getClient with the correct environment and table versions when destination table is alpha', async () => {
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
-    count.mockReturnValueOnce({ count: 9 });
-    count.mockReturnValueOnce({ count: 8 });
-    count.mockReturnValueOnce({ count: 5 });
+    count.mockReturnValueOnce({ body: { count: 9 } });
+    count.mockReturnValueOnce({ body: { count: 8 } });
+    count.mockReturnValueOnce({ body: { count: 5 } });
 
     process.env.DESTINATION_TABLE = 'efcms-exp100-alpha';
     await isReindexComplete(mockEnvName);
@@ -32,13 +32,13 @@ describe('isReindexComplete', () => {
   });
 
   it('should call getClient with the correct environment and table versions when destination table is beta', async () => {
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
-    count.mockReturnValueOnce({ count: 9 });
-    count.mockReturnValueOnce({ count: 8 });
-    count.mockReturnValueOnce({ count: 5 });
+    count.mockReturnValueOnce({ body: { count: 9 } });
+    count.mockReturnValueOnce({ body: { count: 8 } });
+    count.mockReturnValueOnce({ body: { count: 5 } });
 
     process.env.DESTINATION_TABLE = 'efcms-exp100-beta';
     await isReindexComplete(mockEnvName);
@@ -48,13 +48,13 @@ describe('isReindexComplete', () => {
   });
 
   it('should return false when there is a difference in the current and destination index count', async () => {
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
-    count.mockReturnValueOnce({ count: 9 });
-    count.mockReturnValueOnce({ count: 8 });
-    count.mockReturnValueOnce({ count: 5 });
+    count.mockReturnValueOnce({ body: { count: 9 } });
+    count.mockReturnValueOnce({ body: { count: 8 } });
+    count.mockReturnValueOnce({ body: { count: 5 } });
 
     const result = await isReindexComplete(mockEnvName);
 
@@ -62,13 +62,13 @@ describe('isReindexComplete', () => {
   });
 
   it('should return false when there is no difference in the current and destination index count and elasticsearch is still reindexing', async () => {
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
     stats
       .mockReturnValueOnce({
@@ -149,13 +149,13 @@ describe('isReindexComplete', () => {
   });
 
   it('should return true when there is no difference in the current and destination index count and elasticsearch is finished reindexing', async () => {
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
-    count.mockReturnValueOnce({ count: 3 });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
+    count.mockReturnValueOnce({ body: { count: 3 } });
 
     stats
       .mockReturnValueOnce({
