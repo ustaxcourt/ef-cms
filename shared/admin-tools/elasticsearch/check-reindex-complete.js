@@ -9,9 +9,6 @@ const getClusterStats = async ({ environmentName, version }) => {
 
   const info = apiResponse.body.indices;
 
-  console.log('esClient.indices***', esClient.indices);
-  console.log('info***', info);
-
   const counts = {};
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
     const res = await esClient.count({
@@ -57,11 +54,6 @@ exports.isReindexComplete = async environmentName => {
     'efcms-message',
     'efcms-work-item',
   ]) {
-    console.log(
-      'destination info***',
-      destinationInfo['efcms-case-deadline'].total,
-    );
-
     const operationsDestination =
       destinationInfo[indexName].total.translog.operations;
     if (operationsDestination > 0) {
@@ -74,5 +66,3 @@ exports.isReindexComplete = async environmentName => {
 
   return true;
 };
-
-exports.isReindexComplete('exp1');

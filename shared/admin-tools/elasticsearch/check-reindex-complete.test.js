@@ -13,6 +13,27 @@ describe('isReindexComplete', () => {
 
   beforeEach(() => {
     getClient.mockReturnValue(mockIndices);
+    stats.mockReturnValue({
+      body: {
+        indices: {
+          'efcms-case-deadline': {
+            total: {
+              translog: { operations: 0 },
+            },
+          },
+          'efcms-message': {
+            total: {
+              translog: { operations: 0 },
+            },
+          },
+          'efcms-work-item': {
+            total: {
+              translog: { operations: 0 },
+            },
+          },
+        },
+      },
+    });
   });
 
   it('should call getClient with the correct environment and table versions when destination table is alpha', async () => {
@@ -72,71 +93,75 @@ describe('isReindexComplete', () => {
 
     stats
       .mockReturnValueOnce({
-        indices: {
-          'efcms-case': {
-            total: {
-              docs: {
-                count: 3,
+        body: {
+          indices: {
+            'efcms-case': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-docket-entry': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-docket-entry': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-user': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-user': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
           },
         },
       })
       .mockReturnValueOnce({
-        indices: {
-          'efcms-case': {
-            total: {
-              docs: {
-                count: 3,
+        body: {
+          indices: {
+            'efcms-case': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-case-deadline': {
-            total: {
-              translog: {
-                operations: 3,
+            'efcms-case-deadline': {
+              total: {
+                translog: {
+                  operations: 3,
+                },
               },
             },
-          },
-          'efcms-docket-entry': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-docket-entry': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-message': {
-            total: {
-              translog: {
-                operations: 3,
+            'efcms-message': {
+              total: {
+                translog: {
+                  operations: 3,
+                },
               },
             },
-          },
-          'efcms-user': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-user': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-work-item': {
-            total: {
-              translog: {
-                operations: 3,
+            'efcms-work-item': {
+              total: {
+                translog: {
+                  operations: 3,
+                },
               },
             },
           },
@@ -159,71 +184,75 @@ describe('isReindexComplete', () => {
 
     stats
       .mockReturnValueOnce({
-        indices: {
-          'efcms-case': {
-            total: {
-              docs: {
-                count: 3,
+        body: {
+          indices: {
+            'efcms-case': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-docket-entry': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-docket-entry': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-user': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-user': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
           },
         },
       })
       .mockReturnValueOnce({
-        indices: {
-          'efcms-case': {
-            total: {
-              docs: {
-                count: 3,
+        body: {
+          indices: {
+            'efcms-case': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-case-deadline': {
-            total: {
-              translog: {
-                operations: 0,
+            'efcms-case-deadline': {
+              total: {
+                translog: {
+                  operations: 0,
+                },
               },
             },
-          },
-          'efcms-docket-entry': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-docket-entry': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-message': {
-            total: {
-              translog: {
-                operations: 0,
+            'efcms-message': {
+              total: {
+                translog: {
+                  operations: 0,
+                },
               },
             },
-          },
-          'efcms-user': {
-            total: {
-              docs: {
-                count: 3,
+            'efcms-user': {
+              total: {
+                docs: {
+                  count: 3,
+                },
               },
             },
-          },
-          'efcms-work-item': {
-            total: {
-              translog: {
-                operations: 0,
+            'efcms-work-item': {
+              total: {
+                translog: {
+                  operations: 0,
+                },
               },
             },
           },
