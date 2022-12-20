@@ -2,10 +2,15 @@ const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
-  const { info } = await esClient.indices.stats({
+  const apiResponse = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
   });
+
+  const info = apiResponse.body.indices;
+
+  console.log('esClient.indices***', esClient.indices);
+  console.log('info***', info);
 
   const counts = {};
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
@@ -52,8 +57,13 @@ exports.isReindexComplete = async environmentName => {
     'efcms-message',
     'efcms-work-item',
   ]) {
+    console.log(
+      'destination info***',
+      destinationInfo['efcms-case-deadline'].total,
+    );
+
     const operationsDestination =
-      destinationInfo.indices[indexName].total.translog.operations;
+      destinationInfo[indexName].total.translog.operations;
     if (operationsDestination > 0) {
       console.log(
         `${operationsDestination} operations on ${indexName} still processing, waiting 60 seconds to check operations again.`,
@@ -64,3 +74,5 @@ exports.isReindexComplete = async environmentName => {
 
   return true;
 };
+
+exports.isReindexComplete('exp1');
