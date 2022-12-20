@@ -48,6 +48,14 @@ describe('formattedDashboardTrialSessions', () => {
         swingSession: true,
         trialLocation: 'Jacksonville, FL',
       },
+      {
+        isCalendared: true,
+        judge: { name: '3', userId: '1' },
+        sessionStatus: 'New',
+        startDate: '2017-11-27T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Jacksonville, FL',
+      },
     ];
   });
 
@@ -60,7 +68,7 @@ describe('formattedDashboardTrialSessions', () => {
     });
   });
 
-  it('returns at most 5 trial sessions for judge userId', () => {
+  it('returns the expected recent and upcoming sessions', () => {
     applicationContext.getCurrentUser = () => ({
       userId: '6',
     });
