@@ -44,7 +44,9 @@ describe('formattedTrialSessionDetails', () => {
 
     applicationContext
       .getUtilities()
-      .formattedTrialSessionDetails.mockImplementation(() => mockTrialSession);
+      .getFormattedTrialSessionDetails.mockImplementation(
+        () => mockTrialSession,
+      );
   });
 
   it('returns undefined if state.trialSession is undefined', () => {
