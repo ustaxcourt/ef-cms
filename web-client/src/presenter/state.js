@@ -303,6 +303,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   individualInProgressCount: 0,
@@ -360,6 +361,9 @@ export const baseState = {
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
+  },
+  trialSessionJudge: {
+    name: '',
   },
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
