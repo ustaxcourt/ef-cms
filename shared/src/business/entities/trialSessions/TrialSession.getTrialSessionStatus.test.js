@@ -4,7 +4,7 @@ import {
 } from '../EntityConstants';
 import { getTrialSessionStatus } from './TrialSession';
 
-describe('formattedTrialSessionDetails', () => {
+describe('getFormattedTrialSessionDetails', () => {
   describe('getTrialSessionStatus', () => {
     it('returns `Closed` when all trial session cases are inactive / removed from trial and sessionScope is locationBased', () => {
       const session = {
