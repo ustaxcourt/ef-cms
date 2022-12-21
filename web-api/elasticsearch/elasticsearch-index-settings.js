@@ -12,8 +12,6 @@
     stage: process.env.ENV || 'local',
   };
 
-  console.log('***environment.stage***', environment.stage);
-
   AWS.config.httpOptions.timeout = 300000;
 
   const overriddenNumberOfReplicasIfNonProd =
