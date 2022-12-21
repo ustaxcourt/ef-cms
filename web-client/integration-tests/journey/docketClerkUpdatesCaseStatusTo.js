@@ -21,6 +21,7 @@ export const docketClerkUpdatesCaseStatusTo = (
         state: cerebralTest.getState(),
       },
     );
+
     expect(updateCaseModalHelper.caseStatusOptions).toContain(
       caseStatusToUpdateTo,
     );
