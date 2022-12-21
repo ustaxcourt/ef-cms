@@ -2059,8 +2059,8 @@ Case.prototype.canConsolidate = function (caseToConsolidate) {
   const ineligibleStatusTypes = [
     CASE_STATUS_TYPES.new,
     CASE_STATUS_TYPES.generalDocket,
-    CASE_STATUS_TYPES.closed,
     CASE_STATUS_TYPES.onAppeal,
+    ...CLOSED_CASE_STATUSES,
   ];
 
   const caseToCheck = caseToConsolidate || this;
@@ -2338,16 +2338,6 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
   );
 };
 
-/**
- * Returns true if the case status is one of the closed statuses, otherwise
- * returns false.
- *
- * @returns {Boolean} true if the case has been closed
- */
-Case.prototype.isClosed = function () {
-  return CLOSED_CASE_STATUSES.includes(this.status);
-};
-
 const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
 const isLeadCase = rawCase => rawCase.docketNumber === rawCase.leadDocketNumber;
@@ -2379,7 +2369,7 @@ const shouldGenerateNoticesForCase = rawCase => {
   if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
     return rawCase.shouldGenerateNotices;
   }
-  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+  const isOpen = ![...CLOSED_CASE_STATUSES, CASE_STATUS_TYPES.new].includes(
     rawCase.status,
   );
   const MAX_CLOSED_DATE = calculateISODate({
