@@ -5,9 +5,12 @@ const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
 const fiscalYear = process.argv[3] || new Date().getFullYear();
 
+const startOfYear = computeDate({ day: 1, month: 10, year: fiscalYear - 1 });
+const endOfYear = computeDate({ day: 1, month: 10, year: fiscalYear });
+
 const fiscalYearDateRange = {
-  gte: computeDate({ day: 1, month: 10, year: fiscalYear - 1 }),
-  lte: computeDate({ day: 30, month: 9, year: fiscalYear }),
+  gte: startOfYear,
+  lt: endOfYear,
 };
 
 const receivedAtRange = {
@@ -164,6 +167,80 @@ const determineDocketNumberSuffix = async ({
   return result.results[0].docketNumberSuffix;
 };
 
+const getTotalOpenCasesEOY = async ({ applicationContext }) => {
+  const { count: currentOpenCount } = await applicationContext
+    .getSearchClient()
+    .count({
+      body: {
+        query: {
+          bool: {
+            must_not: {
+              term: {
+                'status.S': 'Closed',
+              },
+            },
+          },
+        },
+      },
+      index: 'efcms-case',
+    });
+
+  console.log({ currentOpenCount });
+
+  const { count: numberOpenedSinceEOY } = await applicationContext
+    .getSearchClient()
+    .count({
+      body: {
+        query: {
+          range: {
+            'receivedAt.S': {
+              gte: endOfYear,
+            },
+          },
+        },
+      },
+      index: 'efcms-case',
+    });
+
+  console.log({ numberOpenedSinceEOY });
+  const { count: numberClosedSinceEOY } = await applicationContext
+    .getSearchClient()
+    .count({
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                range: {
+                  'closedDate.S': {
+                    gte: endOfYear,
+                  },
+                },
+              },
+              {
+                range: {
+                  'receivedAt.S': {
+                    lt: endOfYear,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      index: 'efcms-case',
+    });
+
+  console.log({ numberClosedSinceEOY });
+
+  const numberOfCasesOpenAtEOY =
+    currentOpenCount - numberOpenedSinceEOY + numberClosedSinceEOY;
+
+  console.log({
+    numberOfCasesOpenAtEOY,
+  });
+};
+
 (async () => {
   const applicationContext = createApplicationContext({});
   await getOpinionsFiledByCaseType({
@@ -173,6 +250,9 @@ const determineDocketNumberSuffix = async ({
     applicationContext,
   });
   await getCasesFiledByType({
+    applicationContext,
+  });
+  await getTotalOpenCasesEOY({
     applicationContext,
   });
 })();
