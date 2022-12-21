@@ -3,9 +3,11 @@ const fs = require('fs');
 const { computeDate } = require('../../src/business/utilities/DateHandler');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
+const fiscalYear = process.argv[3] || new Date().getFullYear();
+
 const fiscalYearDateRange = {
-  gte: computeDate({ day: 1, month: 10, year: 2021 }),
-  lte: computeDate({ day: 30, month: 9, year: 2022 }),
+  gte: computeDate({ day: 1, month: 10, year: fiscalYear - 1 }),
+  lte: computeDate({ day: 30, month: 9, year: fiscalYear }),
 };
 
 const receivedAtRange = {
@@ -40,7 +42,7 @@ let suffixAndMonthlyAggregation = suffixAggregation;
 suffixAndMonthlyAggregation['by-suffix']['aggs'] = monthlyAggregation;
 suffixAndMonthlyAggregation['no-suffix']['aggs'] = monthlyAggregation;
 
-const getOpinionsFiledInFiscalYear = async ({ applicationContext }) => {
+const getOpinionsFiledByCaseType = async ({ applicationContext }) => {
   const result = await search({
     applicationContext,
     searchParameters: {
@@ -78,7 +80,10 @@ const getOpinionsFiledInFiscalYear = async ({ applicationContext }) => {
   for (const suffix in opinionsFiledByCaseType) {
     rows.push([suffix, opinionsFiledByCaseType[suffix]].join(','));
   }
-  fs.writeFileSync('./opinions-filed-by-case-type.csv', rows.join('\n'));
+  fs.writeFileSync(
+    `./FY-${fiscalYear}-opinions-filed-by-case-type.csv`,
+    rows.join('\n'),
+  );
 };
 
 const getCasesOpenedAndClosed = async ({ applicationContext }) => {
@@ -107,7 +112,10 @@ const getCasesOpenedAndClosed = async ({ applicationContext }) => {
   const rows = [];
   rows.push(['Closed', totalClosed].join(','));
   rows.push(['Filed', totalFiled].join(','));
-  fs.writeFileSync('./cases-filed-and-closed.csv', rows.join('\n'));
+  fs.writeFileSync(
+    `./FY-${fiscalYear}-cases-filed-and-closed.csv`,
+    rows.join('\n'),
+  );
 };
 
 const getCasesFiledByType = async ({ applicationContext }) => {
@@ -124,7 +132,10 @@ const getCasesFiledByType = async ({ applicationContext }) => {
   );
   rows.push(['Regular', results.aggregations['no-suffix'].doc_count].join(','));
   rows.unshift(['Type', 'Count'].join(','));
-  fs.writeFileSync('./cases-filed-by-type.csv', rows.join('\n'));
+  fs.writeFileSync(
+    `./FY-${fiscalYear}-cases-filed-by-type.csv`,
+    rows.join('\n'),
+  );
 };
 
 const determineDocketNumberSuffix = async ({
@@ -155,7 +166,7 @@ const determineDocketNumberSuffix = async ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  await getOpinionsFiledInFiscalYear({
+  await getOpinionsFiledByCaseType({
     applicationContext,
   });
   await getCasesOpenedAndClosed({
