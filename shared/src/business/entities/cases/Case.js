@@ -9,6 +9,7 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
+  CLOSED_CASE_STATUSES,
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
@@ -2328,6 +2329,16 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
     !this.blocked &&
     (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
   );
+};
+
+/**
+ * Returns true if the case status is one of the closed statuses, otherwise
+ * returns false.
+ *
+ * @returns {Boolean} true if the case has been closed
+ */
+Case.prototype.isClosed = function () {
+  return CLOSED_CASE_STATUSES.includes(this.status);
 };
 
 const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;

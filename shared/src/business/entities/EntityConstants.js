@@ -177,6 +177,11 @@ const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
 };
 
+const CLOSED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.closedDismissed,
+];
+
 const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
   PRIMARY_SUPPORTING: 'primarySupportingDocument',
@@ -1596,5 +1601,6 @@ module.exports = deepFreeze({
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   US_STATES_OTHER,
+  CLOSED_CASE_STATUSES,
   US_STATES,
 });
