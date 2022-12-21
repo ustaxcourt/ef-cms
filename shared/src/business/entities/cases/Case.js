@@ -494,7 +494,7 @@ Case.VALIDATION_RULES = {
     }),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
-    is: joi.valid(...CLOSED_CASE_STATUSES),
+    is: joi.exist().valid(...CLOSED_CASE_STATUSES),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
