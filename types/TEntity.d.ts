@@ -196,6 +196,7 @@ type TTrialSessionData = {
   courtReporter: string;
   courthouseName: string;
   createdAt: string;
+  sessionStatus: string;
   estimatedEndDate: string;
   irsCalendarAdministrator: string;
   isCalendared: boolean;

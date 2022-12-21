@@ -1,9 +1,8 @@
 import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
-} from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { getTrialSessionStatus } from './TrialSessionInfoDto';
+} from '../EntityConstants';
+import { getTrialSessionStatus } from './TrialSession';
 
 describe('formattedTrialSessionDetails', () => {
   describe('getTrialSessionStatus', () => {
@@ -15,7 +14,7 @@ describe('formattedTrialSessionDetails', () => {
         ],
       };
 
-      const results = getTrialSessionStatus({ applicationContext, session });
+      const results = getTrialSessionStatus(session);
 
       expect(results).toEqual(SESSION_STATUS_GROUPS.closed);
     });
@@ -29,7 +28,7 @@ describe('formattedTrialSessionDetails', () => {
         sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
       };
 
-      const results = getTrialSessionStatus({ applicationContext, session });
+      const results = getTrialSessionStatus(session);
 
       expect(results).not.toEqual(SESSION_STATUS_GROUPS.closed);
     });
@@ -43,7 +42,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: true,
       };
 
-      const results = getTrialSessionStatus({ applicationContext, session });
+      const results = getTrialSessionStatus(session);
 
       expect(results).toEqual(SESSION_STATUS_GROUPS.open);
     });
@@ -57,7 +56,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: false,
       };
 
-      const results = getTrialSessionStatus({ applicationContext, session });
+      const results = getTrialSessionStatus(session);
 
       expect(results).toEqual(SESSION_STATUS_GROUPS.new);
     });
