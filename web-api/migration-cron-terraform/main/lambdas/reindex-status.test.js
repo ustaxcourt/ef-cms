@@ -21,9 +21,8 @@ describe('reindex-status', () => {
     jest.clearAllMocks();
   });
 
-  it('should make get and post requests when MIGRATE_FLAG is false and REINDEX_FLAG is false', async () => {
+  it('should make get and post requests when MIGRATE_FLAG is false', async () => {
     process.env.MIGRATE_FLAG = false;
-    process.env.REINDEX_FLAG = false;
     axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
     axios.get.mockImplementation(() =>
       Promise.resolve({ data: { items: mockJobs } }),
@@ -37,7 +36,6 @@ describe('reindex-status', () => {
 
   it('should make get and post requests when MIGRATE_FLAG is true and isReindexComplete returns true', async () => {
     process.env.MIGRATE_FLAG = true;
-    process.env.REINDEX_FLAG = false;
     isReindexComplete.mockReturnValueOnce(true);
     axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
     axios.get.mockImplementation(() =>
@@ -50,9 +48,8 @@ describe('reindex-status', () => {
     expect(axios.post).toHaveBeenCalledTimes(1);
   });
 
-  it('should make get and post requests when REINDEX_FLAG is true and isReindexComplete returns true', async () => {
+  it('should make get and post requests when isReindexComplete returns true', async () => {
     process.env.MIGRATE_FLAG = false;
-    process.env.REINDEX_FLAG = true;
     isReindexComplete.mockReturnValueOnce(true);
     axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
     axios.get.mockImplementation(() =>
@@ -67,7 +64,6 @@ describe('reindex-status', () => {
 
   it('should NOT make get and post requests when MIGRATE_FLAG is true and isReindexFinished returns false', async () => {
     process.env.MIGRATE_FLAG = true;
-    process.env.REINDEX_FLAG = false;
     isReindexComplete.mockReturnValue(false);
 
     await handler();
