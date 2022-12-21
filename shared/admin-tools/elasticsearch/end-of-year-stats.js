@@ -32,21 +32,8 @@ const suffixAggregation = {
   },
 };
 
-const monthlyAggregation = {
-  'by-month': {
-    date_histogram: {
-      calendar_interval: 'month',
-      field: 'filingDate.S',
-    },
-  },
-};
-
-let suffixAndMonthlyAggregation = suffixAggregation;
-suffixAndMonthlyAggregation['by-suffix']['aggs'] = monthlyAggregation;
-suffixAndMonthlyAggregation['no-suffix']['aggs'] = monthlyAggregation;
-
 const getOpinionsFiledByCaseType = async ({ applicationContext }) => {
-  const result = await search({
+  const results = await search({
     applicationContext,
     searchParameters: {
       body: {
@@ -68,7 +55,7 @@ const getOpinionsFiledByCaseType = async ({ applicationContext }) => {
     },
   });
   let opinionsFiledByCaseType = {};
-  for (const hit of result.results) {
+  for (const hit of results.results) {
     const docketNumberSuffix =
       (await determineDocketNumberSuffix({
         applicationContext,
@@ -241,6 +228,40 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
   });
 };
 
+const getPercentageOfCasesInWhichPetitionerIsRepresented = async ({applicationContext}) => {
+  const results = await applicationContext.getSearchClient().search({
+    body: {
+      aggs: {
+        'pro-se': {
+          missing: {
+            field: 'privatePractitioners.L.M.userId.S',
+          },
+        },
+        represented: {
+          filter: {
+            exists: {
+              field: 'privatePractitioners.L.M.userId.S',
+            },
+          },
+        },
+      },
+      query: receivedAtRange,
+    },
+    index: 'efcms-case',
+  });
+
+  const proSeCount = results.aggregations['pro-se'].doc_count;
+  const representedCount = results.aggregations.represented.doc_count;
+  const rows = [];
+  rows.push(['Type', 'Count'].join(','));
+  rows.push(['Pro Se', proSeCount].join(','));
+  rows.push(['Represented', representedCount].join(','));
+  fs.writeFileSync(
+    `./FY-${fiscalYear}-cases-by-representation.csv`,
+    rows.join('\n'),
+  );
+};
+
 (async () => {
   const applicationContext = createApplicationContext({});
   await getOpinionsFiledByCaseType({
@@ -253,6 +274,9 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
     applicationContext,
   });
   await getTotalOpenCasesEOY({
+    applicationContext,
+  });
+  await getPercentageOfCasesInWhichPetitionerIsRepresented({
     applicationContext,
   });
 })();
