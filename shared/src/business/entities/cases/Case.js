@@ -1971,6 +1971,7 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
  */
 Case.prototype.setCaseStatus = function (caseStatus) {
   this.status = caseStatus;
+
   if (
     [
       CASE_STATUS_TYPES.generalDocket,
@@ -1978,7 +1979,7 @@ Case.prototype.setCaseStatus = function (caseStatus) {
     ].includes(caseStatus)
   ) {
     this.associatedJudge = CHIEF_JUDGE;
-  } else if (caseStatus === CASE_STATUS_TYPES.closed) {
+  } else if (CLOSED_CASE_STATUSES.includes(caseStatus)) {
     this.closeCase();
   }
   return this;
