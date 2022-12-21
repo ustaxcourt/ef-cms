@@ -185,8 +185,6 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
       index: 'efcms-case',
     });
 
-  console.log({ currentOpenCount });
-
   const { count: numberOpenedSinceEOY } = await applicationContext
     .getSearchClient()
     .count({
@@ -202,7 +200,6 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
       index: 'efcms-case',
     });
 
-  console.log({ numberOpenedSinceEOY });
   const { count: numberClosedSinceEOY } = await applicationContext
     .getSearchClient()
     .count({
@@ -231,14 +228,19 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
       index: 'efcms-case',
     });
 
-  console.log({ numberClosedSinceEOY });
-
   const numberOfCasesOpenAtEOY =
     currentOpenCount - numberOpenedSinceEOY + numberClosedSinceEOY;
 
-  console.log({
-    numberOfCasesOpenAtEOY,
-  });
+  const rows = [];
+  rows.push(['Current Open Cases', currentOpenCount].join(','));
+  rows.push(['Cases Opened since EOY', numberOpenedSinceEOY].join(','));
+  rows.push(['Cases Closed since EOY', numberClosedSinceEOY].join(','));
+  rows.push(['Total Cases Open at EOY', numberOfCasesOpenAtEOY].join(','));
+
+  fs.writeFileSync(
+    `./FY-${fiscalYear}-cases-open-at-end-of-fiscal-year.csv`,
+    rows.join('\n'),
+  );
 };
 
 (async () => {
