@@ -1,11 +1,14 @@
-import { SESSION_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const formattedTrialSession = applicationContext
     .getUtilities()
-    .formattedTrialSessionDetails({
+    .getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: get(state.trialSession),
     });
@@ -57,7 +60,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
           TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
-        formattedTrialSession.isClosed !== true
+        formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed
       ) {
         formattedTrialSession.canClose = true;
       }
