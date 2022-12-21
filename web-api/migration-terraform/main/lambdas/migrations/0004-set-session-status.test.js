@@ -28,6 +28,31 @@ describe('migrateItems', () => {
     trialSessionId: '539c4338-0fac-42eb-b0eb-d53b8d0195cc',
   };
 
+  it('should return and not modify records that are NOT trial session working copies', async () => {
+    const items = [
+      {
+        pk: 'case|101-10',
+        sk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
+      },
+      {
+        pk: 'case|102-20',
+        sk: 'case|102-20',
+      },
+    ];
+    const results = await migrateItems(items);
+
+    expect(results).toEqual([
+      {
+        pk: 'case|101-10',
+        sk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
+      },
+      {
+        pk: 'case|102-20',
+        sk: 'case|102-20',
+      },
+    ]);
+  });
+
   it('should set the trial-session sessionStatus to new when NOT calendared', async () => {
     const items = [{ ...mockSession, isCalendared: false }];
     const results = await migrateItems(items);
@@ -44,7 +69,7 @@ describe('migrateItems', () => {
   it('should set the trial-session sessionStatus to open when calendared', async () => {
     const items = [mockSession];
     const results = await migrateItems(items);
-
+    console.log('results', results);
     expect(results).toEqual([
       {
         ...mockSession,
@@ -53,14 +78,13 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should set the trial-session sessionStatus to closed when isClosed it true', async () => {
+  it('should set the trial-session sessionStatus to closed when isClosed it true, and delete the old isClosed value', async () => {
     const items = [{ ...mockSession, isClosed: true }];
     const results = await migrateItems(items);
 
     expect(results).toEqual([
       {
         ...mockSession,
-        isClosed: true,
         sessionStatus: 'Closed',
       },
     ]);
@@ -95,7 +119,7 @@ describe('migrateItems', () => {
             removedFromTrialDate: '2100-12-01T00:00:00.000Z',
           },
         ],
-        isClosed: false,
+        isClosed: undefined,
         sessionScope: 'Location-based',
         sessionStatus: 'Closed',
       },
@@ -131,7 +155,7 @@ describe('migrateItems', () => {
             removedFromTrialDate: '2100-12-01T00:00:00.000Z',
           },
         ],
-        isClosed: false,
+        isClosed: undefined,
         sessionScope: 'Standalone Remote',
         sessionStatus: 'Open',
       },
