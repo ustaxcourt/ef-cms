@@ -47,7 +47,7 @@ const getOpinionsFiledInFiscalYear = ({ applicationContext }) => {
                   'eventCode.S': ['MOP', 'OST', 'SOP', 'TCOP'],
                 },
               },
-              ...fiscalYearDateRange,
+              fiscalYearDateRange,
             ],
           },
         },
