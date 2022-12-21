@@ -1,6 +1,5 @@
 const createApplicationContext = require('../../../web-api/src/applicationContext');
 const fs = require('fs');
-
 const { computeDate } = require('../../src/business/utilities/DateHandler');
 
 const fiscalYearDateRange = {
@@ -14,47 +13,36 @@ const receivedAtRange = {
   },
 };
 
-/*
-COUNT QUERY:
-applicationContext.getSearchClient().count({
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              terms: {
-                'eventCode.S': ['MOP', 'OST', 'SOP', 'TCOP'],
-              },
-            },
-            ...fiscalYearDateRange,
-          ],
-        },
-      },
+const suffixAggregation = {
+  'by-suffix': {
+    terms: {
+      field: 'docketNumberSuffix.S',
     },
-    index: 'efcms-docket-entry',
-  });
- */
+  },
+  'no-suffix': {
+    missing: {
+      field: 'docketNumberSuffix.S',
+    },
+  },
+};
+
+const monthlyAggregation = {
+  'by-month': {
+    date_histogram: {
+      calendar_interval: 'month',
+      field: 'filingDate.S',
+    },
+  },
+};
+
+let suffixAndMonthlyAggregation = suffixAggregation;
+suffixAndMonthlyAggregation['by-suffix']['aggs'] = monthlyAggregation;
+suffixAndMonthlyAggregation['no-suffix']['aggs'] = monthlyAggregation;
 
 const getOpinionsFiledInFiscalYear = async ({ applicationContext }) => {
   const result = await applicationContext.getSearchClient().search({
     body: {
-      aggs: {
-        'no-suffix': {
-          aggs: {
-            'by-month': {
-              date_histogram: {
-                calendar_interval: 'month',
-                field: 'filingDate.S',
-              },
-            },
-          },
-          missing: {
-            field: 'docketNumberSuffix.S',
-          },
-        },
-        'with-suffix': {},
-      },
-      index: 'efcms-docket-entry',
+      aggs: suffixAndMonthlyAggregation,
       query: {
         bool: {
           must: [
@@ -68,8 +56,9 @@ const getOpinionsFiledInFiscalYear = async ({ applicationContext }) => {
         },
       },
     },
+    index: 'efcms-docket-entry',
   });
-  console.log(result.aggregations['by-month'].buckets);
+  console.log(result);
 };
 
 const getCasesOpenedAndClosed = async ({ applicationContext }) => {
@@ -104,18 +93,7 @@ const getCasesOpenedAndClosed = async ({ applicationContext }) => {
 const getCasesFiledByType = async ({ applicationContext }) => {
   const results = await applicationContext.getSearchClient().search({
     body: {
-      aggs: {
-        'by-suffix': {
-          terms: {
-            field: 'docketNumberSuffix.S',
-          },
-        },
-        'no-suffix': {
-          missing: {
-            field: 'docketNumberSuffix.S',
-          },
-        },
-      },
+      aggs: suffixAggregation,
       query: receivedAtRange,
     },
     index: 'efcms-case',
