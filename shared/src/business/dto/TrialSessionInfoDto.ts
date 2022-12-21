@@ -1,3 +1,28 @@
+const { isEmpty, isEqual } = require('lodash');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../entities/EntityConstants');
+
+export const getTrialSessionStatus = ({ applicationContext, session }) => {
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
+
+  const allCases = session.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (
+    session.isClosed ||
+    (!isEmpty(allCases) &&
+      isEqual(allCases, inactiveCases) &&
+      session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+  ) {
+    return SESSION_STATUS_GROUPS.closed;
+  } else if (session.isCalendared) {
+    return SESSION_STATUS_GROUPS.open;
+  } else {
+    return SESSION_STATUS_GROUPS.new;
+  }
+};
+
 export class TrialSessionInfoDto {
   public estimatedEndDate: string;
   public isCalendared: boolean;
@@ -37,8 +62,9 @@ export class TrialSessionInfoDto {
     this.trialSessionId = rawTrialSession.trialSessionId;
     this.noticeIssuedDate = rawTrialSession.noticeIssuedDate;
 
-    this.sessionStatus = applicationContext
-      .getUtilities()
-      .getTrialSessionStatus({ applicationContext, session: rawTrialSession });
+    this.sessionStatus = getTrialSessionStatus({
+      applicationContext,
+      session: rawTrialSession,
+    });
   }
 }
