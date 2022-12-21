@@ -1,7 +1,4 @@
-import {
-  DOCKET_NUMBER_SUFFIXES,
-  SESSION_STATUS_GROUPS,
-} from '../entities/EntityConstants';
+import { DOCKET_NUMBER_SUFFIXES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -326,51 +323,6 @@ describe('formattedTrialSessionDetails', () => {
       { docketNumber: '101-18' },
       { docketNumber: '102-19' },
     ]);
-  });
-
-  it('sets computedStatus to New if the session is not calendared', () => {
-    const result = getFormattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        isCalendared: false,
-      },
-    });
-    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.new);
-  });
-
-  it('sets computedStatus to Open if the session is calendared and calendaredCases contains open cases', () => {
-    const result = getFormattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        calendaredCases: [
-          {
-            docketEntries: [],
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-        ],
-        isCalendared: true,
-      },
-    });
-    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.open);
-  });
-
-  it('sets computedStatus to Closed if the session is calendared and caseOrder contains only cases with removedFromTrial = true', () => {
-    const result = getFormattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        caseOrder: [
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-            removedFromTrial: true,
-          },
-        ],
-        isCalendared: true,
-      },
-    });
-    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
   });
 
   it('should set the correct consolidated case flags', () => {

@@ -173,8 +173,6 @@ exports.getFormattedTrialSessionDetails = ({
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
 
-  trialSession.computedStatus = trialSession.sessionStatus;
-
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYY');

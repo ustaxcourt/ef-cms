@@ -220,7 +220,7 @@ describe('formattedTrialSessionDetails', () => {
         state: {
           trialSession: {
             ...TRIAL_SESSION,
-            computedStatus: SESSION_STATUS_GROUPS.open,
+            sessionStatus: SESSION_STATUS_GROUPS.open,
             startDate: PAST_DATE,
           },
         },
@@ -233,7 +233,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should be false when trial session start date is in the past and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        computedStatus: SESSION_STATUS_GROUPS.closed,
+        sessionStatus: SESSION_STATUS_GROUPS.closed,
         startDate: PAST_DATE,
       };
 
@@ -251,7 +251,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should be true when trial session start date is in the future and it is NOT closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        computedStatus: SESSION_STATUS_GROUPS.open,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
         startDate: FUTURE_DATE,
       };
 
@@ -269,7 +269,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should be false when trial session start date is in the future and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        computedStatus: SESSION_STATUS_GROUPS.closed,
+        sessionStatus: SESSION_STATUS_GROUPS.closed,
         startDate: FUTURE_DATE,
       };
 
@@ -358,7 +358,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should be true when the trial session is calendared and has open cases', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        computedStatus: SESSION_STATUS_GROUPS.open,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
       };
 
       const result = runCompute(formattedTrialSessionDetails, {
@@ -375,7 +375,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should be true when the trial session is calendared and has no open cases', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        computedStatus: SESSION_STATUS_GROUPS.closed,
+        sessionStatus: SESSION_STATUS_GROUPS.closed,
       };
 
       const result = runCompute(formattedTrialSessionDetails, {
