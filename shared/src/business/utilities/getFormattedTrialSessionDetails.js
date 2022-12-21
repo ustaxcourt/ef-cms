@@ -119,7 +119,7 @@ const compareCasesByDocketNumber = (a, b) => {
 exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 
-exports.formattedTrialSessionDetails = ({
+exports.getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
