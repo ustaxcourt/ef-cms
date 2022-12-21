@@ -78,7 +78,7 @@ describe('setCaseStatus', () => {
 
     updatedCase.setCaseStatus(CASE_STATUS_TYPES.closedDismissed);
 
-    expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
+    expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closedDismissed);
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
     expect(closeCaseSpy).toHaveBeenCalled();
     closeCaseSpy.mockRestore();
