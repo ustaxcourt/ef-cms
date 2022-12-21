@@ -1,10 +1,8 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { refreshElasticsearchIndex } from '../helpers';
-
-export const docketClerkUpdatesCaseStatusToClosed = cerebralTest => {
-  return it('Docket clerk updates case status to closed', async () => {
-    cerebralTest.setState('caseDetail', {});
-
+export const docketClerkUpdatesCaseStatusTo = (
+  cerebralTest,
+  caseStatusToUpdateTo,
+) => {
+  return it(`Docket clerk updates case status to ${caseStatusToUpdateTo}`, async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -16,22 +14,18 @@ export const docketClerkUpdatesCaseStatusToClosed = cerebralTest => {
     expect(cerebralTest.getState('modal.showModal')).toEqual(
       'UpdateCaseModalDialog',
     );
-
     expect(cerebralTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
-      value: CASE_STATUS_TYPES.closed,
+      value: caseStatusToUpdateTo,
     });
 
     await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
-    await refreshElasticsearchIndex();
-
     expect(cerebralTest.getState('caseDetail.status')).toEqual(
-      CASE_STATUS_TYPES.closed,
+      caseStatusToUpdateTo,
     );
-
     expect(cerebralTest.getState('modal')).toEqual({});
   });
 };
