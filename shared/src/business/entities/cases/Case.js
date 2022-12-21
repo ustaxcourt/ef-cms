@@ -494,7 +494,7 @@ Case.VALIDATION_RULES = {
     }),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
-    is: joi.valid(CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.closedDismissed),
+    is: joi.valid(...CLOSED_CASE_STATUSES),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
@@ -1033,9 +1033,15 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
   this.docketEntries = [...this.docketEntries, docketEntryEntity];
 };
 
-Case.prototype.closeCase = function () {
+Case.prototype.closeCase = function ({ closedStatus }) {
+  if (!CLOSED_CASE_STATUSES.includes(closedStatus)) {
+    throw new Error(
+      `Closed case status must be one of ${CLOSED_CASE_STATUSES}`,
+    );
+  }
+
   this.closedDate = createISODateString();
-  this.status = CASE_STATUS_TYPES.closed;
+  this.status = closedStatus;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
   return this;
@@ -1980,7 +1986,7 @@ Case.prototype.setCaseStatus = function (caseStatus) {
   ) {
     this.associatedJudge = CHIEF_JUDGE;
   } else if (CLOSED_CASE_STATUSES.includes(caseStatus)) {
-    this.closeCase();
+    this.closeCase({ closedStatus: caseStatus });
   }
   return this;
 };
