@@ -20,11 +20,11 @@ describe('an external user files a document for their legacy case', () => {
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 

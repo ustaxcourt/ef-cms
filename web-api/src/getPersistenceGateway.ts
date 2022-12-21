@@ -162,9 +162,11 @@ import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/wo
 import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
 import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
 import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
+import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
+import jwt from 'jsonwebtoken';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
@@ -278,12 +280,10 @@ const gatewayMethods = {
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
     ? (applicationContext, { code }) => {
-        // TODO: can these be refactored to `import` ?
-        const jwt = require('jsonwebtoken');
-        const { userMap } = require('../../shared/src/test/mockUserTokenMap');
+        const email = code.toLowerCase();
         const user = {
-          ...userMap[code],
-          sub: userMap[code].userId,
+          ...userMap[email],
+          sub: userMap[email].userId,
         };
         const token = jwt.sign(user, 'secret');
         return {
