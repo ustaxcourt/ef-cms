@@ -1,6 +1,7 @@
 const createApplicationContext = require('../../../web-api/src/applicationContext');
 const fs = require('fs');
 const { computeDate } = require('../../src/business/utilities/DateHandler');
+const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
 const fiscalYearDateRange = {
   gte: computeDate({ day: 1, month: 10, year: 2021 }),
@@ -40,25 +41,44 @@ suffixAndMonthlyAggregation['by-suffix']['aggs'] = monthlyAggregation;
 suffixAndMonthlyAggregation['no-suffix']['aggs'] = monthlyAggregation;
 
 const getOpinionsFiledInFiscalYear = async ({ applicationContext }) => {
-  const result = await applicationContext.getSearchClient().search({
-    body: {
-      aggs: suffixAndMonthlyAggregation,
-      query: {
-        bool: {
-          must: [
-            {
-              terms: {
-                'eventCode.S': ['MOP', 'OST', 'SOP', 'TCOP'],
+  const result = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                terms: {
+                  'eventCode.S': ['MOP', 'OST', 'SOP', 'TCOP'],
+                },
               },
-            },
-            receivedAtRange,
-          ],
+              receivedAtRange,
+            ],
+          },
         },
       },
+      index: 'efcms-docket-entry',
+      size: 20000,
     },
-    index: 'efcms-docket-entry',
   });
-  console.log(result);
+  let opinionsFiledByCaseType = {};
+  for (const hit of result.results) {
+    const docketNumberSuffix =
+      (await determineDocketNumberSuffix({
+        applicationContext,
+        docketNumber: hit.docketNumber,
+      })) || 'Regular';
+    if (!(docketNumberSuffix in opinionsFiledByCaseType)) {
+      opinionsFiledByCaseType[docketNumberSuffix] = 0;
+    }
+    opinionsFiledByCaseType[docketNumberSuffix]++;
+  }
+  const rows = [];
+  for (const suffix in opinionsFiledByCaseType) {
+    rows.push([suffix, opinionsFiledByCaseType[suffix]].join(','));
+  }
+  fs.writeFileSync('./opinions-filed-by-case-type.csv', rows.join('\n'));
 };
 
 const getCasesOpenedAndClosed = async ({ applicationContext }) => {
@@ -105,6 +125,32 @@ const getCasesFiledByType = async ({ applicationContext }) => {
   rows.push(['Regular', results.aggregations['no-suffix'].doc_count].join(','));
   rows.unshift(['Type', 'Count'].join(','));
   fs.writeFileSync('./cases-filed-by-type.csv', rows.join('\n'));
+};
+
+const determineDocketNumberSuffix = async ({
+  applicationContext,
+  docketNumber,
+}) => {
+  const result = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                term: {
+                  'docketNumber.S': docketNumber,
+                },
+              },
+            ],
+          },
+        },
+      },
+      index: 'efcms-case',
+    },
+  });
+  return result.results[0].docketNumberSuffix;
 };
 
 (async () => {
