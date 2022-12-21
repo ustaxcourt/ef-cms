@@ -2,11 +2,21 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('./Case');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
+const { CLOSED_CASE_STATUSES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('closeCase', () => {
-  it('should update the status of the case to closed and add a closedDate', () => {
+  it('should throw an error when the closed status provided is NOT a valid closed status', () => {
+    const myCase = new Case(MOCK_CASE, {
+      applicationContext,
+    });
+
+    expect(() => myCase.closeCase({ closedStatus: 'Blahblahblah' })).toThrow(
+      'Closed case status must be one of Closed,Closed - Dismissed',
+    );
+  });
+
+  it('should update the status of the case to the closed status provided when it is a valid closed status', () => {
     const myCase = new Case(
       {
         ...MOCK_CASE,
@@ -20,7 +30,9 @@ describe('closeCase', () => {
         applicationContext,
       },
     );
-    myCase.closeCase();
+
+    myCase.closeCase({ closedStatus: CLOSED_CASE_STATUSES[0] });
+
     expect(myCase).toMatchObject({
       blocked: false,
       blockedDate: undefined,
@@ -28,7 +40,7 @@ describe('closeCase', () => {
       closedDate: expect.anything(),
       highPriority: false,
       highPriorityReason: undefined,
-      status: CASE_STATUS_TYPES.closed,
+      status: CLOSED_CASE_STATUSES[0],
     });
   });
 });
