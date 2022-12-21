@@ -167,7 +167,7 @@ const CASE_STATUS_TYPES = {
   calendared: 'Calendared', // Case has been scheduled for trial
   cav: 'CAV', // Core alternative valuation
   closed: 'Closed', // Judge has made a ruling to close the case (either because it has been settled, adjudicated, or withdrawn)
-  closedDismissed: 'Closed - Dismissed', // Judge has made a ruling to close the case becaused it has been dismissed
+  closedDismissed: 'Closed - Dismissed', // Judge has made a ruling to close the case because it has been dismissed
   generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
   jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
