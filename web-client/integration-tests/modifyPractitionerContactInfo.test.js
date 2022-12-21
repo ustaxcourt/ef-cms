@@ -8,19 +8,16 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
-const cerebralTest = setupTest();
-
 describe('Modify Practitioner Contact Information', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  cerebralTest.createdDocketNumbers = [];
+
+  let caseDetail;
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  let caseDetail;
-  cerebralTest.createdDocketNumbers = [];
 
   loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('login as a practitioner and creates a case that will be served', async () => {
