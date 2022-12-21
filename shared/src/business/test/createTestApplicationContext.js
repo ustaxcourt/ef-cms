@@ -81,9 +81,6 @@ const {
   formatPhoneNumber,
 } = require('../../../src/business/utilities/formatPhoneNumber');
 const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
-const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
 const {
@@ -129,6 +126,9 @@ const {
 const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
+const {
+  getFormattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   getSealedDocketEntryTooltip,
 } = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
@@ -323,9 +323,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
-    formattedTrialSessionDetails: jest
-      .fn()
-      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
       .fn()
@@ -354,6 +351,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedPartiesNameAndTitle: jest
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
+    getFormattedTrialSessionDetails: jest
+      .fn()
+      .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearInETObj: jest
       .fn()
