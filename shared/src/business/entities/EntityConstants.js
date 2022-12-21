@@ -1421,6 +1421,7 @@ const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
 const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   APPLICATION: 'Application',
+  APPLICATION_PACKAGE: 'Application Package',
   CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
   FEE_RECEIPT: 'Fee Receipt',
   ADMISSIONS_CERTIFICATE: 'Admission Certificate',
