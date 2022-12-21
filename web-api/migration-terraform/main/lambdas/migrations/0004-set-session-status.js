@@ -22,6 +22,9 @@ const migrateItems = items => {
         applicationContext,
         session: item,
       });
+
+      delete item.isClosed;
+
       new TrialSession(item, { applicationContext }).validateWithLogging(
         applicationContext,
       );

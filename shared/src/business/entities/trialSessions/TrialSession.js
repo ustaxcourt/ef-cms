@@ -54,7 +54,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.estimatedEndDate = rawSession.estimatedEndDate || null;
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
-  this.isClosed = rawSession.isClosed || false;
   this.sessionStatus = rawSession.sessionStatus;
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
   this.maxCases = rawSession.maxCases;
