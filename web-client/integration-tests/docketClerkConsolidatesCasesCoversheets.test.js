@@ -32,7 +32,6 @@ describe('Case Consolidation Coversheets Journey', () => {
   };
 
   beforeAll(() => {
-    jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
   });
 
