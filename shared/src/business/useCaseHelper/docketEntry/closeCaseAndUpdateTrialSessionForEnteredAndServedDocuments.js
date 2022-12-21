@@ -1,10 +1,11 @@
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
   applicationContext,
   caseEntity,
 }) => {
-  caseEntity.closeCase();
+  caseEntity.closeCase({ closedStatus: CASE_STATUS_TYPES.closed });
 
   await applicationContext
     .getPersistenceGateway()
