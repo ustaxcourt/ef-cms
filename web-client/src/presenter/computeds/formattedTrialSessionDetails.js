@@ -18,9 +18,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       applicationContext.getConstants();
 
     formattedTrialSession.showOpenCases =
-      formattedTrialSession.computedStatus === SESSION_STATUS_GROUPS.open;
+      formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.open;
     formattedTrialSession.showOnlyClosedCases =
-      formattedTrialSession.computedStatus === SESSION_STATUS_GROUPS.closed;
+      formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
 
     if (formattedTrialSession.chambersPhoneNumber) {
       formattedTrialSession.chambersPhoneNumber = applicationContext
@@ -46,7 +46,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         trialDateInFuture && !formattedTrialSession.isCalendared;
       formattedTrialSession.canEdit =
         trialDateInFuture &&
-        formattedTrialSession.computedStatus !== SESSION_STATUS_GROUPS.closed;
+        formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed;
 
       const allCases = formattedTrialSession.caseOrder || [];
       const inactiveCases = allCases.filter(

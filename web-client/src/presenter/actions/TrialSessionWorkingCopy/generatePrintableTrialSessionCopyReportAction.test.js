@@ -89,7 +89,6 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
 
   it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
     const mockFormattedTrialSessionDetails = {
-      computedStatus: 'complete',
       estimatedEndDate: '2020-11-27T05:00:00.000Z',
       formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,
       formattedCourtReporter: 'Test Court Reporter',
@@ -98,6 +97,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       formattedStartDateFull: '2020-11-27T05:00:00.000Z',
       formattedTerm: MOCK_TRIAL_REGULAR.term,
       formattedTrialClerk: 'Test Trial Clerk',
+      sessionStatus: 'complete',
       startDate: '2020-11-27T05:00:00.000Z',
       trialLocation: MOCK_TRIAL_REGULAR.trialLocation,
     };
