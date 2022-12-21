@@ -4,6 +4,7 @@ const {
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
 const {
+  SESSION_STATUS_TYPES,
   SESSION_TERMS,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
@@ -54,6 +55,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
   this.isClosed = rawSession.isClosed || false;
+  this.sessionStatus = rawSession.sessionStatus;
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
   this.maxCases = rawSession.maxCases;
   this.meetingId = rawSession.meetingId;
@@ -210,6 +212,9 @@ TrialSession.validationRules = {
     ).required(),
     sessionScope: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
+    ).required(),
+    sessionStatus: JoiValidationConstants.STRING.valid(
+      ...Object.values(SESSION_STATUS_TYPES),
     ).required(),
     sessionType: JoiValidationConstants.STRING.valid(
       ...Object.values(SESSION_TYPES),
