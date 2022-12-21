@@ -29277,6 +29277,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Denver, Colorado",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
@@ -29299,6 +29300,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "Open",
     "trialLocation": "Standalone Remote",
     "proceedingType": "Remote",
     "createdAt": "2020-10-25T05:00:00.000Z",
@@ -29321,6 +29323,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Birmingham, Alabama",
     "proceedingType": "In Person",
     "createdAt": "2020-10-02T05:00:00.000Z",
@@ -29345,6 +29348,7 @@
     "address1": "123 Main St",
     "gsi1pk": "trial-session-catalog",
     "postalCode": "94535",
+    "sessionStatus": "Open",
     "trialLocation": "Birmingham, Alabama",
     "proceedingType": "In Person",
     "createdAt": "2019-10-27T05:00:00.000Z",
@@ -29368,6 +29372,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Dallas, Texas",
     "proceedingType": "In Person",
     "createdAt": "2020-10-25T05:00:00.000Z",
@@ -29391,6 +29396,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Birmingham, Alabama",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
@@ -29413,6 +29419,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Birmingham, Alabama",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
@@ -29438,6 +29445,7 @@
     "address1": "123 Main St",
     "gsi1pk": "trial-session-catalog",
     "postalCode": "94535",
+    "sessionStatus": "Open",
     "trialLocation": "Washington, District of Columbia",
     "proceedingType": "In Person",
     "createdAt": "2019-10-27T05:00:00.000Z",
@@ -29464,6 +29472,7 @@
     "address1": "123 Main St",
     "gsi1pk": "trial-session-catalog",
     "postalCode": "94535",
+    "sessionStatus": "Open",
     "trialLocation": "New York City, New York",
     "proceedingType": "In Person",
     "createdAt": "2019-10-27T05:00:00.000Z",
@@ -29490,6 +29499,7 @@
     "address1": "123 Main St",
     "gsi1pk": "trial-session-catalog",
     "postalCode": "94535",
+    "sessionStatus": "Open",
     "trialLocation": "San Francisco, California",
     "proceedingType": "In Person",
     "createdAt": "2019-10-27T05:00:00.000Z",
@@ -29513,6 +29523,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Las Vegas, Nevada",
     "proceedingType": "In Person",
     "createdAt": "2020-10-25T05:00:00.000Z",
@@ -29534,6 +29545,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Kansas City, Missouri",
     "proceedingType": "In Person",
     "createdAt": "2020-10-02T05:00:00.000Z",
@@ -29555,6 +29567,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Kansas City, Missouri",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
@@ -29575,24 +29588,10 @@
     "status": "Closed"
   },
   {
-    "caseOrder": [
-      {
-        "docketNumber": "108-19"
-      },
-      {
-        "docketNumber": "101-20"
-      },
-      {
-        "docketNumber": "103-20",
-        "isManuallyAdded": true
-      }
-    ],
     "city": "San Francisco",
-    "address1": "123 Main St",
     "gsi1pk": "trial-session-catalog",
     "postalCode": "94535",
     "trialLocation": "Houston, Texas",
-    "proceedingType": "In Person",
     "createdAt": "2020-10-27T05:00:00.000Z",
     "entityName": "TrialSession",
     "swingSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
@@ -29605,17 +29604,32 @@
     },
     "startTime": "10:00",
     "term": "Fall",
-    "pk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "state": "CA",
+    "isCalendared": true,
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "caseOrder": [
+      {
+        "docketNumber": "108-19"
+      },
+      {
+        "docketNumber": "101-20"
+      },
+      {
+        "docketNumber": "103-20",
+        "isManuallyAdded": true
+      }
+    ],
+    "address1": "123 Main St",
+    "sessionStatus": "Open",
+    "proceedingType": "In Person",
+    "pk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "swingSession": true,
     "startDate": "2020-11-27T05:00:00.000Z",
-    "isCalendared": true,
-    "maxCases": 100,
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "maxCases": 100
   },
   {
     "caseOrder": [],
@@ -29623,6 +29637,7 @@
     "address1": "some random street",
     "gsi1pk": "trial-session-catalog",
     "postalCode": "33333",
+    "sessionStatus": "Open",
     "trialLocation": "Memphis, Tennessee",
     "proceedingType": "In Person",
     "createdAt": "2021-02-22T21:21:02.171Z",
@@ -29642,6 +29657,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Denver, Colorado",
     "proceedingType": "In Person",
     "createdAt": "2020-10-02T05:00:00.000Z",
@@ -29663,6 +29679,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Lubbock, Texas",
     "proceedingType": "In Person",
     "createdAt": "2020-10-25T05:00:00.000Z",
@@ -29684,6 +29701,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Dallas, Texas",
     "proceedingType": "In Person",
     "createdAt": "2019-08-25T05:00:00.000Z",
@@ -29708,6 +29726,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Seattle, Washington",
     "proceedingType": "In Person",
     "createdAt": "2019-08-25T05:00:00.000Z",
@@ -29730,6 +29749,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Las Vegas, Nevada",
     "proceedingType": "In Person",
     "createdAt": "2019-08-25T05:00:00.000Z",
@@ -29752,6 +29772,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Houston, Texas",
     "proceedingType": "In Person",
     "createdAt": "2019-08-27T05:00:00.000Z",
@@ -29776,6 +29797,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
+    "sessionStatus": "New",
     "trialLocation": "Seattle, Washington",
     "proceedingType": "In Person",
     "createdAt": "2020-10-25T05:00:00.000Z",
