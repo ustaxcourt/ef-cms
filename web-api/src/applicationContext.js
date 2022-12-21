@@ -48,7 +48,6 @@ const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
   formattedTrialSessionDetails,
-  getTrialSessionStatus,
 } = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
 const {
   compareISODateStrings,
@@ -712,7 +711,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getStampBoxCoordinates,
-        getTrialSessionStatus,
         getWorkQueueFilters,
         isLeadCase,
         isPending: DocketEntry.isPending,
