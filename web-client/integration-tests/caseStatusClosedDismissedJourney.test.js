@@ -1,6 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
@@ -56,6 +57,7 @@ describe('Case status: Closed - Dismissed Journey', () => {
     docketClerkViewsDraftOrder(cerebralTest);
     docketClerkSignsOrder(cerebralTest);
     docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 0);
+    docketClerkServesDocument(cerebralTest, 0);
 
     it('docket clerk verifies case status has been automatically updated to "Closed - Dismissed"', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
