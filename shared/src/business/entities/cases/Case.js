@@ -493,7 +493,7 @@ Case.VALIDATION_RULES = {
     }),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
-    is: CASE_STATUS_TYPES.closed,
+    is: joi.valid(CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.closedDismissed),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
