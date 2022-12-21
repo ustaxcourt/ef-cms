@@ -4,6 +4,7 @@ const {
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
 const {
+  SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
   SESSION_TERMS,
   SESSION_TYPES,
@@ -15,8 +16,28 @@ const {
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { isEmpty } = require('lodash');
+const { isEmpty, isEqual } = require('lodash');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
+
+const getTrialSessionStatus = session => {
+  const allCases = session.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (
+    session.isClosed ||
+    (!isEmpty(allCases) &&
+      isEqual(allCases, inactiveCases) &&
+      session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+  ) {
+    return SESSION_STATUS_GROUPS.closed;
+  } else if (session.isCalendared) {
+    return SESSION_STATUS_GROUPS.open;
+  } else {
+    return SESSION_STATUS_GROUPS.new;
+  }
+};
 
 /**
  * constructor
@@ -54,7 +75,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.estimatedEndDate = rawSession.estimatedEndDate || null;
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
-  this.sessionStatus = rawSession.sessionStatus;
+  this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
   this.maxCases = rawSession.maxCases;
   this.meetingId = rawSession.meetingId;
@@ -331,6 +352,7 @@ TrialSession.prototype.generateSortKeyPrefix = function () {
  */
 TrialSession.prototype.setAsCalendared = function () {
   this.isCalendared = true;
+  this.sessionStatus = SESSION_STATUS_TYPES.open;
   return this;
 };
 
@@ -402,11 +424,15 @@ TrialSession.prototype.removeCaseFromCalendar = function ({
   const caseToUpdate = this.caseOrder.find(
     trialCase => trialCase.docketNumber === docketNumber,
   );
+
   if (caseToUpdate) {
     caseToUpdate.disposition = disposition;
     caseToUpdate.removedFromTrial = true;
     caseToUpdate.removedFromTrialDate = createISODateString();
   }
+
+  this.sessionStatus = getTrialSessionStatus(this);
+
   return this;
 };
 
@@ -491,5 +517,6 @@ TrialSession.prototype.setAsClosed = function () {
 
 module.exports = {
   TrialSession: validEntityDecorator(TrialSession),
+  getTrialSessionStatus,
   isStandaloneRemoteSession,
 };

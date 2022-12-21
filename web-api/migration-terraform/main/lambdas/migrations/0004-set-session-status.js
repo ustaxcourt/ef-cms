@@ -1,7 +1,7 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
   getTrialSessionStatus,
-} = require('../../../../../shared/src/business/dto/TrialSessionInfoDto');
+} = require('../../../../../shared/src/business/entities/trialSessions/TrialSession');
 const {
   TrialSession,
 } = require('../../../../../shared/src/business/entities/trialSessions/TrialSession');
@@ -18,10 +18,7 @@ const migrateItems = items => {
 
   for (const item of items) {
     if (isTrialSession(item)) {
-      item.sessionStatus = getTrialSessionStatus({
-        applicationContext,
-        session: item,
-      });
+      item.sessionStatus = getTrialSessionStatus(item);
 
       delete item.isClosed;
 
