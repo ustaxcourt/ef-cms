@@ -12,7 +12,6 @@ const { navigateTo: loginAs } = require('../support/pages/maintenance');
 
 describe('Petitioner updates and verifies their email', () => {
   before(() => {
-    // cy.session('petitioner9Session', () => {
     loginAs('petitioner9');
     // wait because the UI flips views for some reason when you click on a button too soon when
     // goto sequences are not Fully done (cerebral or riot router bug?)
