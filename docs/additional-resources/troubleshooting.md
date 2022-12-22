@@ -298,3 +298,30 @@ Solution:
 
 - It may help to run `docker system prune` as suggested in [this stackoverflow answer](https://stackoverflow.com/a/65524014)
 - After running that command, try running `npm run deploy:ci-image` again.
+
+## 504 Errors
+
+Problem:
+
+- A DAWSON API call returns a `504` Status Code
+
+Solution:
+
+- These are also known as a Gateway Timeout. In our case, it usually means that AWS Lambda took too long (29 seconds) to execute. It could also mean that AWS is experiencing a service disruption. You have a few options to try and troubleshoot:
+
+  - Refer to the [AWS Service Dashboard](https://health.aws.amazon.com/health/status) to check if there are any current issues with AWS Lambda in `us-east-1` or `us-west-1`. It's not uncommon for them to be experiencing issues and not reporting them.
+  - Query Kibana to see the APIs that are returning a Status Code of 504. If it's an unusual amount of them, higher than historical activity, then it's quite likely that there's an AWS outage. Consider opening up a ticket with AWS Support. Ideally, we shouldn't be seeing any.
+  - If it's consistently the same endpoint, then perhaps one of its downstream dependencies is not healthy (e.g., DynamoDB for database reads or writes).
+  - Navigate to the current color's `api_<env>_<color>` Lambda, and click the Monitor tab. See if you notice any Lambda invocations that are hitting the 29s limit.
+  - Go to Cloudwatch > Log Insights, and query the log group for reports that mention a duration greater than 28000ms:
+
+    ```text
+    fields @timestamp, @message
+    | filter @duration > 28000
+    | sort @timestamp desc
+    | limit 20
+    ```
+
+    Here you can hopefully find some record or Lambda Request ID to track down to see any other information that may have been logged by that invocation.
+
+## 502 Errors
