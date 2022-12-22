@@ -3,13 +3,8 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-
 describe('adc views counsel on case', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
+  const cerebralTest = setupTest();
   afterAll(() => {
     cerebralTest.closeSocket();
   });

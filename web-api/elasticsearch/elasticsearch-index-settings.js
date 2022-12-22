@@ -2,65 +2,58 @@
   const AWS = require('aws-sdk');
   const { elasticsearchIndexes } = require('./elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
-  const connectionClass = require('http-aws-es');
-  const elasticsearch = require('elasticsearch');
   const mappings = require('./elasticsearch-mappings');
-  const {
-    ELASTICSEARCH_API_VERSION,
-    settings,
-  } = require('./elasticsearch-settings');
+  const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+  const { Client } = require('@opensearch-project/opensearch');
+  const { settings } = require('./elasticsearch-settings');
 
-  AWS.config.httpOptions.timeout = 300000;
-  const { EnvironmentCredentials } = AWS;
-
-  // eslint-disable-next-line spellcheck/spell-checker
-  /*
-    Supported versions can be found at
-    https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version
-    Changes to the API version ought to also be reflected in
-    - elasticsearch.tf
-    - delete-elasticsearch-index.js
-  */
   const environment = {
     region: 'us-east-1',
+    stage: process.env.ENV || 'local',
   };
 
-  environment.elasticsearchEndpoint = process.argv[2];
-
-  const searchClientCache = new elasticsearch.Client({
-    amazonES: {
-      credentials: new EnvironmentCredentials('AWS'),
-      region: environment.region,
-    },
-    apiVersion: ELASTICSEARCH_API_VERSION,
-    connectionClass,
-    host: {
-      host: environment.elasticsearchEndpoint,
-      port: process.env.ELASTICSEARCH_PORT || 443,
-      protocol: process.env.ELASTICSEARCH_PROTOCOL || 'https',
-    },
-    log: 'warning',
-  });
+  AWS.config.httpOptions.timeout = 300000;
 
   const overriddenNumberOfReplicasIfNonProd =
     process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS;
   const deployingEnvironment = process.env.ENV;
+  environment.elasticsearchEndpoint = process.argv[2];
+
+  const openSearchClient = new Client({
+    ...AwsSigv4Signer({
+      getCredentials: () =>
+        new Promise((resolve, reject) => {
+          AWS.config.getCredentials((err, credentials) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(credentials);
+            }
+          });
+        }),
+      region: environment.region,
+    }),
+    node:
+      environment.stage === 'local'
+        ? environment.elasticsearchEndpoint
+        : `https://${environment.elasticsearchEndpoint}:443`,
+  });
+
+  const esSettings = settings({
+    environment: deployingEnvironment,
+    overriddenNumberOfReplicasIfNonProd,
+  });
 
   await Promise.all(
     elasticsearchIndexes.map(async index => {
       try {
-        const esSettings = settings({
-          environment: deployingEnvironment,
-          overriddenNumberOfReplicasIfNonProd,
-        });
-
-        const indexExists = await searchClientCache.indices.exists({
+        const { body: indexExists } = await openSearchClient.indices.exists({
           body: {},
           index,
         });
 
         if (!indexExists) {
-          searchClientCache.indices.create({
+          await openSearchClient.indices.create({
             body: {
               mappings: {
                 dynamic: false,
@@ -71,7 +64,7 @@
             index,
           });
         } else {
-          searchClientCache.indices.putSettings({
+          openSearchClient.indices.putSettings({
             body: {
               index: {
                 max_result_window: esSettings.index.max_result_window,
@@ -82,7 +75,10 @@
           });
         }
       } catch (e) {
-        console.log(e);
+        console.log(
+          'Error trying to create or update the OpenSearch indices: ',
+          e,
+        );
       }
     }),
   );
