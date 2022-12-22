@@ -578,12 +578,6 @@ jobs:
               ./enable-reindex-cron.sh
               echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             fi
-      - run:
-          name: Reindex
-          command: |
-            if [ "$MIGRATE_FLAG" == "false" ]; then
-              node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
-            fi
 
   migrate:
     docker:
