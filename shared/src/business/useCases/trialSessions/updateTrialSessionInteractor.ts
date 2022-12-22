@@ -37,7 +37,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       updatedTrialSessionEntity.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
       updatedTrialSessionEntity.isCalendared &&
-      caseEntity.status !== CASE_STATUS_TYPES.closed;
+      !caseEntity.isClosed();
 
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
