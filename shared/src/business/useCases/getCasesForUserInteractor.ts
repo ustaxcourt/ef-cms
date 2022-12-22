@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
 import { UserCase } from '../entities/UserCase';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 
@@ -25,13 +25,11 @@ export const getCasesForUserInteractor = async (
   });
 
   const sortedClosedCases = allUserCases
-    .filter(({ status }) => status === CASE_STATUS_TYPES.closed)
+    .filter(aCase => Case.isClosed(aCase))
     .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
     .reverse();
 
-  let filteredOpenCases = allUserCases.filter(
-    ({ status }) => status !== CASE_STATUS_TYPES.closed,
-  );
+  let filteredOpenCases = allUserCases.filter(aCase => !Case.isClosed(aCase));
 
   let {
     casesAssociatedWithUserOrLeadCaseMap,
