@@ -10,10 +10,6 @@ import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFil
 describe('Docket clerk consolidated case work item journey', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
