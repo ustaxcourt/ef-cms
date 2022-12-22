@@ -17,6 +17,10 @@ import { withAppContextDecorator } from '../src/withAppContext';
 describe('Docket Clerk serves non multi-docketable entry on consolidated case', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

@@ -17,13 +17,13 @@ import {
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { updateACaseType } from './journey/updateACaseType';
 
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
+cerebralTest.createdCases = [];
+
 describe('order search journey for docket number', () => {
-  const cerebralTest = setupTest();
-
-  cerebralTest.draftOrders = [];
-  cerebralTest.createdCases = [];
-
   beforeEach(() => {
+    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {

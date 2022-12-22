@@ -16,6 +16,10 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('Docket Record Filter Journey', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];

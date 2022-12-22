@@ -3,12 +3,13 @@ import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFil
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
 
-describe('an external user files a document for their legacy case', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
+describe('an external user files a document for their legacy case', () => {
   const seededDocketNumber = '999-15';
 
   beforeAll(() => {
+    jest.setTimeout(30000);
     cerebralTest.docketNumber = seededDocketNumber;
   });
 

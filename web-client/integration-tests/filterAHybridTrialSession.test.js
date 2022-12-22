@@ -1,7 +1,5 @@
-import {
-  CASE_TYPES_MAP,
-  PROCEDURE_TYPES_MAP,
-} from '../../shared/src/business/entities/EntityConstants';
+import { PROCEDURE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../src/applicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -10,8 +8,13 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases } from './journey/petitionsClerkViewsAHybridTrialSessionsFilteredEligibleCases';
 
+const cerebralTest = setupTest();
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
+
 describe('Filter A Hybrid Trial Session', () => {
-  const cerebralTest = setupTest();
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

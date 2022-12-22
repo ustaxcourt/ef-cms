@@ -15,7 +15,13 @@ import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/peti
 describe('Generate Notices of Trial Session with Paper Service', () => {
   const cerebralTest = setupTest();
 
-  cerebralTest.casesReadyForTrial = [];
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   const caseCount = 2;
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
@@ -35,11 +41,10 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     procedureType: 'Small', // should generate a Standing Pretrial Order for Small Cases
     trialLocation,
   };
-  const createdDocketNumbers = [];
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  cerebralTest.casesReadyForTrial = [];
+
+  const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (testSession, id, caseOverrides) => {
     loginAs(testSession, 'petitioner@example.com');

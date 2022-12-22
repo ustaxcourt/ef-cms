@@ -12,6 +12,10 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Document title journey', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

@@ -13,12 +13,12 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
+
 describe('order search journey with special characters', () => {
-  const cerebralTest = setupTest();
-
-  cerebralTest.draftOrders = [];
-
   beforeEach(() => {
+    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {

@@ -7,10 +7,16 @@ import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsC
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
-describe('Generate Notices of Trial Session with Electronically Service', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
-  cerebralTest.casesReadyForTrial = [];
+describe('Generate Notices of Trial Session with Electronically Service', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   const caseCount = 2;
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
@@ -19,11 +25,10 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     procedureType: 'Regular', // should generate a Standing Pretrial Order
     trialLocation,
   };
-  const createdDocketNumbers = [];
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  cerebralTest.casesReadyForTrial = [];
+
+  const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (testSession, id, caseOverrides) => {
     loginAs(testSession, 'petitioner@example.com');

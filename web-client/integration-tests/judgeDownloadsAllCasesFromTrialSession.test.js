@@ -1,11 +1,16 @@
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
+
 import { loginAs, setupTest, waitForExpectedItemToExist } from './helpers';
 const AdmZip = require('adm-zip');
+
+const cerebralTest = setupTest();
 const fs = require('fs');
 const http = require('http');
 
 describe('Judge downloads all cases from trial session', () => {
-  const cerebralTest = setupTest();
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

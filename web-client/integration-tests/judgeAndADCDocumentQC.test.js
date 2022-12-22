@@ -13,8 +13,12 @@ import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journe
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
+const cerebralTest = setupTest();
+
 describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
-  const cerebralTest = setupTest();
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

@@ -19,6 +19,10 @@ import { unassociatedUserViewsCaseDetailForUnsealedCase } from './journey/unasso
 describe('Docket Clerk unseals a case', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
