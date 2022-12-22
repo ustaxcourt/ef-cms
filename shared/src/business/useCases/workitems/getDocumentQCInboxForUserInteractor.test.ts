@@ -4,73 +4,50 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { docketClerkUser } from '../../../test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
-  let mockWorkItem = {
-    createdAt: '',
-    docketEntry: {
-      sentBy: 'petitioner',
-    },
-    docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    messages: [],
-    section: DOCKET_SECTION,
-    sentBy: 'docketclerk',
-  };
-
-  it('throws an error if the user does not have access to the work item', async () => {
+  it('should throw an error when the user does not have access retrieve work items', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
       userId: 'petitioner',
     });
-    applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
-      () => mockWorkItem;
 
-    let error;
-    try {
-      await getDocumentQCInboxForUserInteractor(applicationContext, {
-        userId: '123',
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
+    await expect(
+      getDocumentQCInboxForUserInteractor(applicationContext, {
+        userId: null,
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('fetches the authorized user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
+  it('should fetch the user from persistence', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
-      userId: 'docketClerk',
+      userId: docketClerkUser.userId,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getUserById.mock.calls[0][0]
         .userId,
-    ).toEqual('docketClerk');
+    ).toEqual(docketClerkUser.userId);
   });
 
-  it('queries workItems for the given userId', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
+  it('should query workItems that are associated with the provided userId', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
-      userId: 'docketClerk',
+      userId: docketClerkUser.userId,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForUser.mock
         .calls[0][0].userId,
-    ).toEqual('docketClerk');
+    ).toEqual(docketClerkUser.userId);
   });
 
-  it('filters the returned workItems for the given user', async () => {
+  it('should filter the workItems for the provided user', async () => {
     const workItem = {
       assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
       assigneeName: 'bob',
@@ -83,15 +60,10 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       sentBy: 'bob',
     };
 
-    const mockUser = {
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
+      .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -102,14 +74,11 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       .filterWorkItemsForUser.mockImplementation(({ workItems }) => workItems);
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
-      userId: 'docketClerk',
+      userId: docketClerkUser.userId,
     });
 
     expect(
-      applicationContext.getUtilities().filterWorkItemsForUser.mock.calls[0][0],
-    ).toEqual({
-      user: mockUser,
-      workItems: [workItem],
-    });
+      applicationContext.getUtilities().filterWorkItemsForUser,
+    ).toHaveBeenCalled();
   });
 });
