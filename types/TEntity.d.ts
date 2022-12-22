@@ -221,6 +221,7 @@ type TTrialSessionData = {
   trialSessionId: string;
   judge: {
     name: string;
+    userId: string;
   };
   trialClerk: string;
 };
