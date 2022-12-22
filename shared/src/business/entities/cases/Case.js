@@ -1066,7 +1066,7 @@ Case.prototype.isClosed = function () {
  *
  * @returns {Boolean} true if the case has been closed, false otherwise
  */
-Case.isClosed = function (rawCase) {
+const isClosed = function (rawCase) {
   return CLOSED_CASE_STATUSES.includes(rawCase.status);
 };
 
@@ -2433,6 +2433,7 @@ module.exports = {
   getPractitionersRepresenting,
   hasPartyWithServiceType,
   isAssociatedUser,
+  isClosed,
   isLeadCase,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
