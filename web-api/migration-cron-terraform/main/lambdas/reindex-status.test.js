@@ -36,21 +36,7 @@ describe('reindex-status', () => {
 
   it('should make get and post requests when MIGRATE_FLAG is true and isReindexComplete returns true', async () => {
     process.env.MIGRATE_FLAG = true;
-    isReindexComplete.mockReturnValueOnce(true);
-    axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
-    axios.get.mockImplementation(() =>
-      Promise.resolve({ data: { items: mockJobs } }),
-    );
-
-    await handler();
-
-    expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledTimes(1);
-  });
-
-  it('should make get and post requests when isReindexComplete returns true', async () => {
-    process.env.MIGRATE_FLAG = false;
-    isReindexComplete.mockReturnValueOnce(true);
+    isReindexComplete.mockReturnValue(true);
     axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
     axios.get.mockImplementation(() =>
       Promise.resolve({ data: { items: mockJobs } }),
@@ -67,7 +53,7 @@ describe('reindex-status', () => {
     isReindexComplete.mockReturnValue(false);
 
     await handler();
-
+    expect(isReindexComplete).toHaveBeenCalledTimes(1);
     expect(axios.get).toHaveBeenCalledTimes(0);
     expect(axios.post).toHaveBeenCalledTimes(0);
   });
