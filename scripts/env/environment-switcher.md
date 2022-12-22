@@ -14,13 +14,13 @@
 1. Open the new file and populate your AWS account details and credentials.
 1. Create a configuration file for the DAWSON environment:
     ```
-    cp scripts/env/environments/example.env scripts/env/environment/myenv.env
+    cp scripts/env/environments/example.env scripts/env/environments/myenv.env
     ```
 1. Open the new file and populate your DAWSON environment name and AWS account configuration filename.
 1. (Optional) Define any additional values used for local testing.
 1. Create a configuration file for local development:
     ```
-   cp scripts/env/environments/local-example.env scripts/env/environment/local.env
+   cp scripts/env/environments/local-example.env scripts/env/environments/local.env
    ```
 1. (Optional) Open the new file and define any variables you use for local development.
 
