@@ -221,6 +221,7 @@ type TTrialSessionData = {
   trialSessionId: string;
   judge: {
     name: string;
+    userId: string;
   };
   trialClerk: string;
 };
@@ -426,3 +427,16 @@ type TContact = {
 };
 
 type TError = TContact;
+
+type TPrintableTableFilters = {
+  aBasisReached: boolean;
+  continued: boolean;
+  dismissed: boolean;
+  recall: boolean;
+  rule122: boolean;
+  setForTrial: boolean;
+  settled: boolean;
+  showAll: boolean;
+  statusUnassigned: boolean;
+  takenUnderAdvisement: boolean;
+};

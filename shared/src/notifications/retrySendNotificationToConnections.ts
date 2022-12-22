@@ -8,11 +8,16 @@
  * @param {object} providers.connections the connections
  * @param {string} providers.messageStringified the messageStringified
  */
-exports.retrySendNotificationToConnections = async ({
+export const retrySendNotificationToConnections = async ({
   applicationContext,
   connections,
   deleteGoneConnections = true,
   messageStringified,
+}: {
+  applicationContext: IApplicationContext;
+  connections: TConnection[];
+  deleteGoneConnections?: boolean;
+  messageStringified: string;
 }) => {
   const maxRetries = 1;
 
