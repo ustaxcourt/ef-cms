@@ -7,11 +7,16 @@
  * @param {string} providers.userId the id of the user
  * @returns {Promise} upon completion of notification delivery
  */
-exports.sendNotificationToUser = async ({
+export const sendNotificationToUser = async ({
   applicationContext,
   clientConnectionId,
   message,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  clientConnectionId?: string;
+  message: string;
+  userId: string;
 }) => {
   let connections = await applicationContext
     .getPersistenceGateway()

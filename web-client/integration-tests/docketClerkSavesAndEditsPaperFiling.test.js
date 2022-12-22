@@ -3,12 +3,8 @@ import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/
 import { docketClerkEditsPaperFiledDocketEntryFromQC } from './journey/docketClerkEditsPaperFiledDocketEntryFromQC';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-
 describe('Docket clerk saves and then edits a paper filing', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
