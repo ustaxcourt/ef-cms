@@ -303,7 +303,6 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   individualInProgressCount: 0,
