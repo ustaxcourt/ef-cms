@@ -1058,7 +1058,16 @@ Case.prototype.closeCase = function ({ closedStatus }) {
  * @returns {Boolean} true if the case has been closed, false otherwise
  */
 Case.prototype.isClosed = function () {
-  return CLOSED_CASE_STATUSES.includes(this.status);
+  return Case.isClosed(this);
+};
+
+/**
+ * Determines if the case has been closed
+ *
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+Case.isClosed = function (rawCase) {
+  return CLOSED_CASE_STATUSES.includes(rawCase.status);
 };
 
 /**
