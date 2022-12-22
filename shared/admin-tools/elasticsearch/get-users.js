@@ -17,5 +17,5 @@ const version = process.argv[3] || 'alpha';
     index: 'efcms-user',
   };
   const results = await esClient.search(query);
-  console.log(results.hits.hits.map(hit => hit['_source']['email']['S']));
+  console.log(results.body.hits.hits.map(hit => hit['_source']['email']['S']));
 })();

@@ -236,7 +236,7 @@ const version = process.argv[3] || 'alpha';
   //   },
   //   index: 'efcms-case',
   // };
-  const hits = get(results, 'hits.hits');
+  const hits = get(results, 'body.hits.hits');
   const formatHit = hit => {
     return {
       ...AWS.DynamoDB.Converter.unmarshall(hit['_source']),
