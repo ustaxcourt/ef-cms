@@ -7,15 +7,17 @@ import { TrialSessionInfoDto } from '../../dto/TrialSessionInfoDto';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
- * getTrialSessionsInteractor
+ * getTrialSessionsForJudgeInteractor
  *
  * @param {object} applicationContext the application context
  * @returns {Array<TrialSession>} the trial sessions returned from persistence
  */
-export const getTrialSessionsInteractor = async (
+export const getTrialSessionsForJudgeInteractor = async (
   applicationContext: IApplicationContext,
+  judgeId: string,
 ) => {
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -26,7 +28,11 @@ export const getTrialSessionsInteractor = async (
       applicationContext,
     });
 
-  const validatedSessions = TrialSession.validateRawCollection(trialSessions, {
+  const judgeSessions = trialSessions.filter(
+    session => session.judge?.userId === judgeId,
+  );
+
+  const validatedSessions = TrialSession.validateRawCollection(judgeSessions, {
     applicationContext,
   });
 
