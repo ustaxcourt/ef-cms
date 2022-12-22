@@ -633,11 +633,6 @@ jobs:
               npm run start:migration -- $ENV
             fi
       - run:
-          name: Enable Check Reindex Status Cron
-          command: |
-            ./enable-reindex-cron.sh
-
-      - run:
           name: Wait for SQS Queue to Empty
           no_output_timeout: 5h
           command: |
@@ -656,6 +651,10 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
+      - run:
+          name: Enable Check Reindex Status Cron
+          command: |
+            ./enable-reindex-cron.sh
 
   disable-reindex-cron:
     docker:
@@ -932,7 +931,35 @@ workflows:
 
   build-and-deploy:
     jobs:
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
+      - build-ts-api:
+          <<: *build-and-deploy-defaults
+      - verify-pdfs:
+          <<: *build-and-deploy-defaults
       - deploy:
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-pa11y-public-search
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
+            - build-ts-api
+            - verify-pdfs
           filters:
             branches:
               only:
