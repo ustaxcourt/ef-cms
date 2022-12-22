@@ -4,14 +4,10 @@ import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDeta
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('chambers user skips signing an order', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
+  cerebralTest.draftOrders = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });
