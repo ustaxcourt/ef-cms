@@ -16,10 +16,6 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
 
   cerebralTest.draftOrders = [];
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
