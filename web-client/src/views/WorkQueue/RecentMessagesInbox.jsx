@@ -76,7 +76,14 @@ export const RecentMessagesInbox = connect(
                   <td className="message-queue-row">
                     <span>{item.caseTitle}</span>
                   </td>
-                  <td>{item.caseStatus}</td>
+                  {item.showTrialInformation ? (
+                    <td className="message-queue-row">
+                      {item.caseStatus} - {item.formattedTrialDate}{' '}
+                      {item.formattedTrialLocation}
+                    </td>
+                  ) : (
+                    <td className="message-queue-row">{item.caseStatus}</td>
+                  )}
                   <td>{item.from}</td>
                   <td>{item.fromSection}</td>
                 </tr>
