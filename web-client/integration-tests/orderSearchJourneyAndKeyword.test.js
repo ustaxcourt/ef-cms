@@ -14,10 +14,10 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 
 describe('order search journey', () => {
   const cerebralTest = setupTest();
-
   cerebralTest.draftOrders = [];
 
   beforeEach(() => {
+    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {

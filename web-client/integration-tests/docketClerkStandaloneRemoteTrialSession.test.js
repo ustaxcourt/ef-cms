@@ -29,6 +29,10 @@ describe('Docket clerk standalone remote trial session journey', () => {
     timeout: 2000,
   });
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

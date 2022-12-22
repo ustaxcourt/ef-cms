@@ -8,6 +8,10 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 describe('Docket clerk views printable docket record', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

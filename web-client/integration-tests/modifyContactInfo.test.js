@@ -1,8 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-  PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { docketClerkViewsQCItemForNCAForUnrepresentedPetitioner } from './journey/docketClerkViewsQCItemForNCAForUnrepresentedPetitioner';
 import { loginAs, setupTest, uploadPetition } from './helpers';
@@ -14,14 +10,20 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-describe('Modify Petitioner Contact Information', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
+const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, PARTY_TYPES } =
+  applicationContext.getConstants();
 
-  let caseDetail;
+describe('Modify Petitioner Contact Information', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  let caseDetail;
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
