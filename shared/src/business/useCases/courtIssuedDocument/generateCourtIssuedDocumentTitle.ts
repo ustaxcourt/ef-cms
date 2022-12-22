@@ -2,15 +2,13 @@ import { COURT_ISSUED_EVENT_CODES } from '../../entities/EntityConstants';
 import { CourtIssuedDocumentFactory } from '../../entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 
 /**
- * generateCourtIssuedDocumentTitleInteractor
+ * generateCourtIssuedDocumentTitle
  *
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-export const generateCourtIssuedDocumentTitleInteractor = ({
-  documentMetadata,
-}) => {
+export const generateCourtIssuedDocumentTitle = ({ documentMetadata }) => {
   const filingEvent = COURT_ISSUED_EVENT_CODES.find(
     item => documentMetadata.eventCode === item.eventCode,
   );

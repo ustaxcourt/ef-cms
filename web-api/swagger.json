@@ -4762,6 +4762,35 @@
         }
       }
     },
+    "/judges/{judgeId}/trial-sessions": {
+      "parameters": [
+        {
+          "name": "judgeId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets all trial sessions for a judge",
+        "description": "gets all trial sessions for a judge.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
     "/trial-sessions": {
       "get": {
         "tags": ["trialsessions"],
@@ -8319,13 +8348,25 @@
             "continued": {
               "type": "boolean"
             },
-            "aBasisReached": {
+            "basisReached": {
               "type": "boolean"
             },
-            "takenUnderAdvisement": {
+            "submittedCAV": {
               "type": "boolean"
             },
             "statusUnassigned": {
+              "type": "boolean"
+            },
+            "definiteTrial": {
+              "type": "boolean"
+            },
+            "motionToDismiss": {
+              "type": "boolean"
+            },
+            "probableSettlement": {
+              "type": "boolean"
+            },
+            "probableTrial": {
               "type": "boolean"
             }
           }
