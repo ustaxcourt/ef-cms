@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../business/test/createTestApplicationContext');
-const {
-  sendNotificationToConnection,
-} = require('./sendNotificationToConnection');
+import { applicationContext } from '../business/test/createTestApplicationContext';
+import { sendNotificationToConnection } from './sendNotificationToConnection';
 
 const mockConnection = {
   connectionId: '1',
