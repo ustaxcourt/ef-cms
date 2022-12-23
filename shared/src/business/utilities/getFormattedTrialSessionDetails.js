@@ -1,5 +1,4 @@
 const { compact, partition } = require('lodash');
-const { getTrialSessionStatus } = require('../dto/TrialSessionInfoDto');
 const { PARTIES_CODES } = require('../entities/EntityConstants');
 
 exports.setPretrialMemorandumFiler = ({ caseItem }) => {
@@ -120,7 +119,7 @@ exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 exports.getSortableDocketNumber = getSortableDocketNumber;
 
-exports.formattedTrialSessionDetails = ({
+exports.getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
@@ -174,11 +173,6 @@ exports.formattedTrialSessionDetails = ({
   trialSession.formattedTerm = `${
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
-
-  trialSession.computedStatus = getTrialSessionStatus({
-    applicationContext,
-    session: trialSession,
-  });
 
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
