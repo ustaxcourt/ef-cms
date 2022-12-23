@@ -5,12 +5,12 @@ import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAdd
 import { unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument } from './journey/unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument';
 
 describe('External user views legacy sealed documents', () => {
-  const seededDocketNumber = '69312-87';
   const cerebralTest = setupTest();
+
+  const seededDocketNumber = '69312-87';
 
   beforeAll(() => {
     console.error = () => {};
-    jest.setTimeout(30000);
 
     cerebralTest.docketNumber = seededDocketNumber;
     cerebralTest.docketEntryId = 'cdf5a93e-abbd-4225-88df-88fc03f8af18';
