@@ -26,7 +26,6 @@ There are two basic meeting rhythms: daily design calls/standups and bi-weekly a
 
 ### Bi-weekly
 
-- **Sprint review prep** — Every other Monday
 - **Sprint review** — Every other Tuesday, demo to client stakeholders
 - **Sprint retrospective** — Every other Tuesday
 - **Sprint planning** — Every other Wednesday
