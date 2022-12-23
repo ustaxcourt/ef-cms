@@ -183,7 +183,6 @@ const printableDocketRecordVisible = async () => {
 
 describe('Case permissions test', () => {
   beforeEach(() => {
-    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {

@@ -15,11 +15,8 @@ import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Petitioner Service Indicator Journey', () => {
   const cerebralTest = setupTest();
-  cerebralTest.draftOrders = [];
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  cerebralTest.draftOrders = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();
