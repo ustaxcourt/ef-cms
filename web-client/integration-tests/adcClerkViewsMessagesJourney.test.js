@@ -13,16 +13,14 @@ import { runCompute } from 'cerebral/test';
 import { showSortableHeaders as showSortableHeadersComputed } from '../src/presenter/computeds/showSortableHeaders';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedMessagesComputed = withAppContextDecorator(
-  formattedMessages,
-  applicationContext,
-);
-
-const cerebralTest = setupTest();
-
 describe('ADC Clerk Views Messages Journey', () => {
+  const cerebralTest = setupTest();
+
+  const formattedMessagesComputed = withAppContextDecorator(
+    formattedMessages,
+    applicationContext,
+  );
   beforeAll(() => {
-    jest.setTimeout(30000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',
