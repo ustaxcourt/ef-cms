@@ -12,10 +12,6 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 describe('Docket Clerk serves a Order of Amended Petition', () => {
   const cerebralTest = setupTest();
 
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
