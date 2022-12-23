@@ -112,7 +112,6 @@ import {
   compareCasesByDocketNumber,
   formatCase as formatCaseForTrialSession,
   formattedTrialSessionDetails,
-  getTrialSessionStatus,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
@@ -754,7 +753,6 @@ const applicationContext = {
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,
       getStandaloneRemoteDocumentTitle,
-      getTrialSessionStatus,
       getWorkQueueFilters,
       hasPartyWithServiceType,
       isClosed,

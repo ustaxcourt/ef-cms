@@ -7,16 +7,12 @@ import {
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 const { faker } = require('@faker-js/faker');
 
-const cerebralTest = setupTest();
-
-const validEmail = `${faker.internet.userName()}_no_error@example.com`;
-
 describe('admissions clerk creates user for case', () => {
-  let petitionerContactId;
+  const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const validEmail = `${faker.internet.userName()}_no_error@example.com`;
+
+  let petitionerContactId;
 
   afterAll(() => {
     cerebralTest.closeSocket();
