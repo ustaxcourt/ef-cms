@@ -9,10 +9,6 @@ import { petitionsClerkVerifyNotEligibleCase } from './journey/petitionsClerkVer
 describe('Docket clerk verifies high priority case is not blocked', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
