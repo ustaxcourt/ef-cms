@@ -21,17 +21,14 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedTrialSessionDetails = withAppContextDecorator(
-  formattedTrialSessionDetailsComputed,
-);
-
 describe('Docket Clerk edits a calendared trial session', () => {
   const cerebralTest = setupTest();
-  let overrides = {};
 
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
+  const formattedTrialSessionDetails = withAppContextDecorator(
+    formattedTrialSessionDetailsComputed,
+  );
+
+  let overrides = {};
 
   afterAll(() => {
     cerebralTest.closeSocket();
