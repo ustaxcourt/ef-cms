@@ -1,8 +1,10 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
+import { userSendsMessage } from './journey/userSendsMessage';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
@@ -16,6 +18,12 @@ describe('messages table journey', () => {
     trialDate: '2020-11-27T05:00:00.000Z',
     trialLocation: 'Houston, Texas',
   };
+  const messageSubjectForJudge = 'Check your recent messages!';
+
+  const judgesChambers = applicationContext
+    .getPersistenceGateway()
+    .getJudgesChambers();
+  const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
 
   beforeAll(() => {
     jest.setTimeout(40000);
@@ -130,5 +138,26 @@ describe('messages table journey', () => {
     );
 
     expect(orignalMessage).toBeDefined();
+  });
+
+  userSendsMessage(
+    cerebralTest,
+    messageSubjectForJudge,
+    judgesChambers.COHENS_CHAMBERS_SECTION.section,
+    judgeCohenUserId,
+  );
+
+  loginAs(cerebralTest, 'judgeCohen@example.com');
+  it('judge views recent messages with trial information', async () => {
+    await cerebralTest.runSequence('gotoDashboardSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
+
+    const messages = cerebralTest.getState('messages');
+
+    const expectedMessage = messages.find(
+      m => m.subject === messageSubjectForJudge,
+    );
+
+    expect(expectedMessage).toMatchObject(expectedMessageResult);
   });
 });

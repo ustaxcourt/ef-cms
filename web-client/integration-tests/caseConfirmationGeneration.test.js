@@ -5,13 +5,8 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { userNavigatesToCreateCaseConfirmation } from './journey/userNavigatesToCreateCaseConfirmation';
 
-const cerebralTest = setupTest();
-
 describe('Case Confirmation', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
+  const cerebralTest = setupTest();
   afterAll(() => {
     cerebralTest.closeSocket();
   });
