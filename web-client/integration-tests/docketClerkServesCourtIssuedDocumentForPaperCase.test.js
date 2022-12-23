@@ -11,10 +11,6 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

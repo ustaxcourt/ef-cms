@@ -2,12 +2,8 @@ import { docketClerkCreatesAnOrderWithAddedDocketNumbers } from './journey/docke
 import { docketClerkEditsOrderAndChecksAddedDocketNumbers } from './journey/docketClerkEditsOrderAndChecksAddedDocketNumbers';
 import { loginAs, setupTest } from './helpers';
 
-const cerebralTest = setupTest();
-
 describe('Docketclerk creates an order with added docket numbers on the cover sheet', () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
