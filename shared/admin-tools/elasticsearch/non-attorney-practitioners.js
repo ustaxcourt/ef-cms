@@ -254,7 +254,7 @@ const retrieveNonAttorneys = async () => {
 
   const nonAttorneys = {};
   const results = await esClient.search(query);
-  results.hits.hits.forEach(hit => {
+  results.body.hits.hits.forEach(hit => {
     const userId = hit['_source']['pk']['S'].replace('user|', '');
     nonAttorneys[userId] = {
       barNumber: hit['_source']['barNumber']['S'],
@@ -299,7 +299,7 @@ const retrieveCases = async userIds => {
     index: 'efcms-case',
   };
   const results = await esClient.search(query);
-  return results.hits.hits.map(hit => {
+  return results.body.hits.hits.map(hit => {
     return {
       caseCaption: hit['_source'].caseCaption?.S
         ? hit['_source']['caseCaption']['S']
@@ -374,7 +374,7 @@ const retrieveDocketEntries = async docketNumbers => {
     index: 'efcms-docket-entry',
   };
   const results = await esClient.search(query);
-  return results.hits.hits.map(hit => {
+  return results.body.hits.hits.map(hit => {
     return {
       docketNumber: hit['_source']['docketNumber']['S'],
       eventCode: hit['_source'].eventCode?.S

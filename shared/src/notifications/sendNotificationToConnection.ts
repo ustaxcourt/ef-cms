@@ -6,10 +6,14 @@
  * @param {object} providers.connection the connection to send the message to
  * @param {string} providers.messageStringified the message
  */
-exports.sendNotificationToConnection = async ({
+export const sendNotificationToConnection = async ({
   applicationContext,
   connection,
   messageStringified,
+}: {
+  applicationContext: IApplicationContext;
+  connection: TConnection;
+  messageStringified: string;
 }) => {
   const { connectionId, endpoint } = connection;
 
