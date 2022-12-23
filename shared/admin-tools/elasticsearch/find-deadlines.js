@@ -78,7 +78,7 @@ const loadCase = async docketNumber => {
   };
 
   const results = await esClient.search(query);
-  const docketNumbers = results.hits.hits.map(
+  const docketNumbers = results.body.hits.hits.map(
     row => row['_source']['docketNumber']['S'],
   );
   const records = await Promise.all(docketNumbers.map(loadCase));

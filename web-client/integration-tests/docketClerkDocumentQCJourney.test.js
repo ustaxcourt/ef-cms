@@ -18,10 +18,6 @@ import { practitionerRequestsAccessToCase } from './journey/practitionerRequests
 describe('Docket Clerk Document QC Journey', () => {
   const cerebralTest = setupTest();
 
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
