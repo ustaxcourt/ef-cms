@@ -15,6 +15,7 @@ module.exports = defineConfig({
     },
     specPattern: 'cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress-smoketests/support/index.js',
+    testIsolation: false,
   },
   fixturesFolder: 'cypress-smoketests/fixtures',
   reporter: 'spec',
