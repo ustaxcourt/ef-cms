@@ -1,13 +1,34 @@
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-const {
-  generatePrintableTrialSessionCopyReportInteractor,
-} = require('./generatePrintableTrialSessionCopyReportInteractor');
-const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { ROLES } = require('../../entities/EntityConstants');
+import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
 
 describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockUser;
   let mockTrialSession;
+
+  const interactorProps = {
+    areUpdatedTrialSessionTypesEnabled: false,
+    filters: {
+      aBasisReached: true,
+      continued: true,
+      dismissed: true,
+      recall: true,
+      rule122: true,
+      setForTrial: true,
+      settled: true,
+      showAll: true,
+      statusUnassigned: true,
+      takenUnderAdvisement: true,
+    },
+    formattedCases: [MOCK_CASE],
+    formattedTrialSession: mockTrialSession,
+    sessionNotes: 'session notes',
+    showCaseNotes: true,
+    sort: 'docket',
+    userHeading: 'Yggdrasil - Session Copy',
+  };
 
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
@@ -47,34 +68,14 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     };
 
     await expect(
-      generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-        formattedTrialSession: mockTrialSession,
-      }),
+      generatePrintableTrialSessionCopyReportInteractor(
+        applicationContext,
+        interactorProps,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
-    const interactorProps = {
-      areUpdatedTrialSessionTypesEnabled: false,
-      filters: [
-        { key: 'basisReached', label: 'Basis Reached' },
-        { key: 'recall', label: 'Recall' },
-        { key: 'probableSettlement', label: 'Probable Settlement' },
-        { key: 'continued', label: 'Continued' },
-        { key: 'probableTrial', label: 'Probable Trial' },
-        { key: 'rule122', label: 'Rule 122' },
-        { key: 'definiteTrial', label: 'Definite Trial' },
-        { key: 'submittedCAV', label: 'Submitted/CAV' },
-        { key: 'motionToDismiss', label: 'Motion' },
-        { key: 'statusUnassigned', label: 'Unassigned' },
-      ],
-      formattedCases: [{ someprop: 'value of some prop' }],
-      formattedTrialSession: mockTrialSession,
-      sessionNotes: 'session notes',
-      showCaseNotes: true,
-      sort: 'docket',
-      userHeading: 'Yggdrasil - Session Copy',
-    };
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       interactorProps,
@@ -92,9 +93,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   it('uploads the Trial Session Working Copy PDF to s3', async () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      {
-        formattedTrialSession: mockTrialSession,
-      },
+      interactorProps,
     );
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
@@ -104,9 +103,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   it('should return the Trial Session Working Copy PDF url', async () => {
     const results = await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      {
-        formattedTrialSession: mockTrialSession,
-      },
+      interactorProps,
     );
 
     expect(
@@ -121,9 +118,10 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     });
 
     await expect(
-      generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-        formattedTrialSession: mockTrialSession,
-      }),
+      generatePrintableTrialSessionCopyReportInteractor(
+        applicationContext,
+        interactorProps,
+      ),
     ).rejects.toEqual('error');
     expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
