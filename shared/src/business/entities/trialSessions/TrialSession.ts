@@ -9,12 +9,13 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
-import { createISODateString } from '../../utilities/DateHandler';
-import { isEmpty } from 'lodash';
 import {
+  TValidationEntity,
   joiValidationDecorator,
   validEntityDecorator,
 } from '../JoiValidationDecorator';
+import { createISODateString } from '../../utilities/DateHandler';
+import { isEmpty } from 'lodash';
 import joi from 'joi';
 
 const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
@@ -57,7 +58,7 @@ export type TCaseOrder = {
   removedFromTrialDate?: string;
 };
 
-class TrialSessionClass {
+export class TrialSessionClass {
   public entityName: string;
   public address1: string;
   public address2: string;
@@ -93,6 +94,16 @@ class TrialSessionClass {
   public trialSessionId: string;
   public judge: TJudge;
   public trialClerk: TTrialClerk;
+
+  // this static method is later overwritten by the joi validation decorator
+  static validateRawCollection<T>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    trialSessions: T[],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ): T[] {
+    return [];
+  }
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -323,7 +334,6 @@ class TrialSessionClass {
    */
   generateSortKeyPrefix() {
     const { sessionType, trialLocation } = this;
-
     const caseProcedureSymbol =
       {
         Regular: 'R',
@@ -459,9 +469,10 @@ class TrialSessionClass {
    * @returns {Array} A list of property names of the trial session that are empty
    */
   getEmptyFields() {
-    const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING[
-      this.proceedingType
-    ].filter(property => isEmpty(this[property]));
+    const missingProperties =
+      TrialSessionClass.PROPERTIES_REQUIRED_FOR_CALENDARING[
+        this.proceedingType
+      ].filter(property => isEmpty(this[property]));
 
     return missingProperties;
   }
@@ -534,4 +545,8 @@ export const isStandaloneRemoteSession = function (sessionScope) {
   return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
 };
 
-export const TrialSession = validEntityDecorator(TrialSessionClass);
+export const TrialSession: typeof TrialSessionClass =
+  validEntityDecorator(TrialSessionClass);
+
+// eslint-disable-next-line no-redeclare
+export interface TrialSessionClass extends TValidationEntity {}
