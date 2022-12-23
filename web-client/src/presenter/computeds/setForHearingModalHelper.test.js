@@ -12,30 +12,35 @@ describe('set for hearing modal helper', () => {
 
   const trialSessions = [
     {
+      sessionStatus: 'New',
       sessionType: 'Small',
       startDate: '2019-05-01T21:40:46.415Z',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '4',
     },
     {
+      sessionStatus: 'Open',
       sessionType: 'Regular',
       startDate: '2019-03-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '1',
     },
     {
+      sessionStatus: 'Open',
       sessionType: 'Hybrid',
       startDate: '2018-02-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '2',
     },
     {
+      sessionStatus: 'New',
       sessionType: 'Special',
       startDate: '2019-01-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '3',
     },
     {
+      sessionStatus: 'New',
       sessionType: 'Motion/Hearing',
       startDate: '2018-12-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
@@ -53,11 +58,13 @@ describe('set for hearing modal helper', () => {
           trialSessions: [
             ...trialSessions,
             {
+              sessionStatus: 'New',
               trialLocation: 'Nashville, Tennessee',
               trialSessionId: '6',
             },
             {
               isCalendared: true,
+              sessionStatus: 'Open',
               startDate: '2021-12-01T21:40:46.415Z',
               trialLocation: 'Little Rock, Arkansas',
               trialSessionId: '1337',
@@ -89,6 +96,7 @@ describe('set for hearing modal helper', () => {
           trialSessions: trialSessions.map(trialSession => ({
             ...trialSession,
             isCalendared: true,
+            sessionStatus: 'Open',
           })),
         },
       },
@@ -97,28 +105,28 @@ describe('set for hearing modal helper', () => {
     expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormatted).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toMatchObject({
-      Alabama: [
-        {
+      Alabama: expect.arrayContaining([
+        expect.objectContaining({
           optionText: 'Birmingham, Alabama 01/01/19 (SP)',
           trialLocationState: US_STATES.AL,
           trialSessionId: '3',
-        },
-        {
+        }),
+        expect.objectContaining({
           sessionType: 'Hybrid',
           startDate: '2018-02-01T21:40:46.415Z',
           trialLocation: 'Mobile, Alabama',
           trialSessionId: '2',
-        },
-        {
+        }),
+        expect.objectContaining({
           optionText: 'Mobile, Alabama 12/01/18 (M/H)',
           trialSessionId: '5',
-        },
-      ],
+        }),
+      ]),
       Idaho: [
-        {
+        expect.objectContaining({
           optionText: 'Boise, Idaho 05/01/19 (S)',
           trialSessionId: '4',
-        },
+        }),
       ],
     });
     expect(result.trialSessionStatesSorted).toEqual([
@@ -140,6 +148,7 @@ describe('set for hearing modal helper', () => {
           trialSessions: trialSessions.map(trialSession => ({
             ...trialSession,
             isCalendared: true,
+            sessionStatus: 'Open',
           })),
         },
       },
@@ -148,23 +157,23 @@ describe('set for hearing modal helper', () => {
     expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormatted).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toMatchObject({
-      Alabama: [
-        {
+      Alabama: expect.arrayContaining([
+        expect.objectContaining({
           optionText: 'Birmingham, Alabama 01/01/19 (SP)',
           trialLocationState: US_STATES.AL,
           trialSessionId: '3',
-        },
-        {
+        }),
+        expect.objectContaining({
           sessionType: 'Regular',
           startDate: '2019-03-01T21:40:46.415Z',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '1',
-        },
-        {
+        }),
+        expect.objectContaining({
           optionText: 'Mobile, Alabama 12/01/18 (M/H)',
           trialSessionId: '5',
-        },
-      ],
+        }),
+      ]),
       Idaho: [
         {
           optionText: 'Boise, Idaho 05/01/19 (S)',

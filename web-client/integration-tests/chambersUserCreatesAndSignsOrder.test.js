@@ -7,14 +7,10 @@ import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraf
 import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Chambers dashboard', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
+  cerebralTest.draftOrders = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });

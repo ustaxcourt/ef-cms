@@ -12,10 +12,6 @@ import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSub
 describe('Admissions Clerk modified petitioner address and email', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

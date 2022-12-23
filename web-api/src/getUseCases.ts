@@ -337,6 +337,9 @@ const {
   getTrialSessionDetailsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
 const {
+  getTrialSessionsForJudgeInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeInteractor');
+const {
   getTrialSessionsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
 const {
@@ -691,6 +694,7 @@ const useCases = {
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
+  getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUploadPolicyInteractor,
   getUserByIdInteractor,
