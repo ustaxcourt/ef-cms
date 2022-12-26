@@ -281,15 +281,24 @@ const gatewayMethods = {
   confirmAuthCode: process.env.IS_LOCAL
     ? (applicationContext, { code }) => {
         const email = code.toLowerCase();
-        const user = {
-          ...userMap[email],
-          sub: userMap[email].userId,
-        };
-        const token = jwt.sign(user, 'secret');
-        return {
-          refreshToken: token,
-          token,
-        };
+        if (userMap[email]) {
+          const user = {
+            ...userMap[email],
+            sub: userMap[email].userId,
+          };
+          const token = jwt.sign(user, 'secret');
+          return {
+            refreshToken: token,
+            token,
+          };
+        } else {
+          return {
+            alertError: {
+              message: 'Login credentials not found.',
+              title: 'LOGIN ERROR',
+            },
+          };
+        }
       }
     : confirmAuthCode,
   decrementJobCounter,
