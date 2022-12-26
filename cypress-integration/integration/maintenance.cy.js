@@ -18,10 +18,6 @@ describe('Maintenance mode', () => {
     disengageMaintenance();
   });
 
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('refreshToken');
-  });
-
   it('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
     engageMaintenance();
     getMaintenanceModal().should('exist');
