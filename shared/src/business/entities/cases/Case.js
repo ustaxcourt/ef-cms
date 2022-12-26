@@ -1040,12 +1040,35 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
   this.docketEntries = [...this.docketEntries, docketEntryEntity];
 };
 
+/**
+ * Close the case with the provided status
+ *
+ * @returns {Case} the updated case entity
+ */
 Case.prototype.closeCase = function ({ closedStatus }) {
   this.closedDate = createISODateString();
   this.status = closedStatus;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
   return this;
+};
+
+/**
+ * Determines if the case has been closed
+ *
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+Case.prototype.isClosed = function () {
+  return isClosed(this);
+};
+
+/**
+ * Determines if the case has been closed
+ *
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+const isClosed = function (rawCase) {
+  return CLOSED_CASE_STATUSES.includes(rawCase.status);
 };
 
 /**
@@ -2411,6 +2434,7 @@ module.exports = {
   getPractitionersRepresenting,
   hasPartyWithServiceType,
   isAssociatedUser,
+  isClosed,
   isLeadCase,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
