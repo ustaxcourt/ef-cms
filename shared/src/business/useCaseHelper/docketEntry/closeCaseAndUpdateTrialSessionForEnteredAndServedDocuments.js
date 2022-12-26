@@ -1,5 +1,5 @@
 const {
-  CASE_DISSMISSAL_ORDER_TYPES,
+  CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
 } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -11,7 +11,7 @@ exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
 }) => {
   let closedStatus = CASE_STATUS_TYPES.closed;
 
-  if (CASE_DISSMISSAL_ORDER_TYPES.includes(eventCode)) {
+  if (CASE_DISMISSAL_ORDER_TYPES.includes(eventCode)) {
     closedStatus = CASE_STATUS_TYPES.closedDismissed;
   }
 

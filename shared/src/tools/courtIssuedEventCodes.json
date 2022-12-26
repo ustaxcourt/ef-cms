@@ -117,7 +117,7 @@
     "documentTitle": "Order of Dismissal Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
-    "closesAndDissmissesCase": true,
+    "closesAndDismissesCase": true,
     "requiresSignature": true
   },
   {
@@ -126,7 +126,7 @@
     "documentTitle": "Order of Dismissal and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
-    "closesAndDissmissesCase": true,
+    "closesAndDismissesCase": true,
     "requiresSignature": true
   },
   {
@@ -332,7 +332,7 @@
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
-    "closesAndDissmissesCase": true,
+    "closesAndDismissesCase": true,
     "requiresSignature": true
   },
   {
