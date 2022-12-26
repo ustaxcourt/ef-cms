@@ -495,7 +495,7 @@ Case.VALIDATION_RULES = {
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: joi.exist().valid(...CLOSED_CASE_STATUSES),
-    otherwise: joi.optional().allow(null),
+    otherwise: joi.optional(),
     then: joi.required(),
   }),
   correspondence: joi
@@ -723,10 +723,17 @@ Case.VALIDATION_RULES = {
       }),
     })
     .description('List of Statistic Entities for the case.'),
-  status: JoiValidationConstants.STRING.valid(
-    ...Object.values(CASE_STATUS_TYPES),
-  )
-    .optional()
+  status: joi
+    .alternatives()
+    .conditional('closedDate', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.STRING.valid(
+        ...Object.values(CASE_STATUS_TYPES),
+      ).optional(),
+      then: JoiValidationConstants.STRING.required().valid(
+        ...CLOSED_CASE_STATUSES,
+      ),
+    })
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
   trialDate: joi
@@ -1034,12 +1041,6 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 };
 
 Case.prototype.closeCase = function ({ closedStatus }) {
-  if (!CLOSED_CASE_STATUSES.includes(closedStatus)) {
-    throw new Error(
-      `Closed case status must be one of ${CLOSED_CASE_STATUSES}`,
-    );
-  }
-
   this.closedDate = createISODateString();
   this.status = closedStatus;
   this.unsetAsBlocked();
