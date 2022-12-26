@@ -295,7 +295,7 @@ const gatewayMethods = {
           return {
             alertError: {
               message: 'Login credentials not found.',
-              title: 'LOGIN ERROR',
+              title: 'Login error!',
             },
           };
         }
