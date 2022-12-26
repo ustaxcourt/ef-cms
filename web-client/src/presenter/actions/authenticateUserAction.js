@@ -6,7 +6,11 @@
  * @param {Function} providers.props the cerebral props argument stream containing 'code'
  * @returns {Promise} async action
  */
-export const authenticateUserAction = async ({ applicationContext, props }) => {
+export const authenticateUserAction = async ({
+  applicationContext,
+  path,
+  props,
+}) => {
   const { code } = props;
 
   const response = await applicationContext
@@ -15,7 +19,10 @@ export const authenticateUserAction = async ({ applicationContext, props }) => {
       code,
     });
 
-  return {
-    token: response.token,
-  };
+  console.log('response:', response);
+  if (response.alertError) {
+    return path.no({ alertError: response.alertError });
+  } else {
+    return path.yes({ token: response.token });
+  }
 };
