@@ -6,16 +6,6 @@ const { CLOSED_CASE_STATUSES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('closeCase', () => {
-  it('should throw an error when the closed status provided is NOT a valid closed status', () => {
-    const myCase = new Case(MOCK_CASE, {
-      applicationContext,
-    });
-
-    expect(() => myCase.closeCase({ closedStatus: 'Blahblahblah' })).toThrow(
-      'Closed case status must be one of Closed,Closed - Dismissed',
-    );
-  });
-
   it('should update the status of the case to the closed status provided when it is a valid closed status', () => {
     const myCase = new Case(
       {

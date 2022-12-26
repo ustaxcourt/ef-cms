@@ -42,7 +42,7 @@ describe('canConsolidate', () => {
   });
 
   it('should return false when the case status is Closed', () => {
-    caseEntity.status = CASE_STATUS_TYPES.onAppeal;
+    caseEntity.status = CASE_STATUS_TYPES.closed;
 
     const result = caseEntity.canConsolidate();
 
@@ -50,7 +50,7 @@ describe('canConsolidate', () => {
   });
 
   it('should return false when the case status is Closed - Dismissed', () => {
-    caseEntity.status = CASE_STATUS_TYPES.onAppeal;
+    caseEntity.status = CASE_STATUS_TYPES.closedDismissed;
 
     const result = caseEntity.canConsolidate();
 
