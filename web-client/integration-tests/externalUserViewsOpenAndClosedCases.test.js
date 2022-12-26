@@ -10,10 +10,6 @@ import { privatePractitionerViewsOpenAndClosedCases } from './journey/privatePra
 describe('external user views open and closed cases', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
