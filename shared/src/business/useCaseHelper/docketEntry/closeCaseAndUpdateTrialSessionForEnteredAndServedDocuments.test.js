@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_DISSMISSAL_ORDER_TYPES,
+  CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -31,7 +31,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     });
   });
 
-  CASE_DISSMISSAL_ORDER_TYPES.forEach(orderEventCode => {
+  CASE_DISMISSAL_ORDER_TYPES.forEach(orderEventCode => {
     it(`should close the case with status type ${CASE_STATUS_TYPES.closedDismissed} when the document being filed is an ${orderEventCode}`, async () => {
       await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
         applicationContext,
@@ -45,7 +45,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     });
   });
 
-  it(`should close the case with status type ${CASE_STATUS_TYPES.closed} when the document being filed is NOT one of ${CASE_DISSMISSAL_ORDER_TYPES}`, async () => {
+  it(`should close the case with status type ${CASE_STATUS_TYPES.closed} when the document being filed is NOT one of ${CASE_DISMISSAL_ORDER_TYPES}`, async () => {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity: mockCaseEntity,
