@@ -14390,7 +14390,6 @@
     "preferredTrialCity": "San Francisco, California",
     "hasPendingItems": false,
     "initialCaption": "Hanan Al Hroub, Petitioner",
-    "closedDate": "2020-04-14T03:01:50.746Z",
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|104-18",
     "docketNumber": "104-18",
@@ -15591,7 +15590,6 @@
   },
   {
     "createdAt": "2020-04-14T19:59:46.086Z",
-    "closedDate": "2020-04-14T03:01:50.746Z",
     "entityName": "UserCase",
     "caseCaption": "Hanan Al Hroub, Petitioner",
     "gsi1pk": "user-case|104-17",
@@ -15603,7 +15601,6 @@
   },
   {
     "createdAt": "2020-04-14T19:59:46.086Z",
-    "closedDate": "2020-04-14T03:01:50.746Z",
     "entityName": "UserCase",
     "caseCaption": "Hanan Al Hroub, Petitioner",
     "gsi1pk": "user-case|104-18",
@@ -18197,7 +18194,6 @@
     "preferredTrialCity": "San Francisco, California",
     "hasPendingItems": false,
     "initialCaption": "Hanan Al Hroub, Petitioner",
-    "closedDate": "2020-04-14T03:01:50.746Z",
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|104-17",
     "docketNumber": "104-17",
