@@ -6,16 +6,12 @@ import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViews
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk Views Draft Documents', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
