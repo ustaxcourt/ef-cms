@@ -16,6 +16,7 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
   hasPartyWithServiceType,
+  isClosed,
   isLeadCase,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
@@ -754,6 +755,7 @@ const applicationContext = {
       getStandaloneRemoteDocumentTitle,
       getWorkQueueFilters,
       hasPartyWithServiceType,
+      isClosed,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
