@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -11,17 +11,8 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const cerebralTest = setupTest();
-const { CASE_TYPES_MAP } = applicationContext.getConstants();
-
 describe('Trial Session Eligible Cases Journey (judge)', () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  const cerebralTest = setupTest();
 
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
@@ -31,6 +22,10 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
     trialLocation,
   };
   const createdDocketNumbers = [];
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, overrides);
