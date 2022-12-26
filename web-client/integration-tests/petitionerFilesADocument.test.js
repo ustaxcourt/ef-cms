@@ -6,12 +6,8 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const cerebralTest = setupTest();
-
 describe('petitioner files document', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
