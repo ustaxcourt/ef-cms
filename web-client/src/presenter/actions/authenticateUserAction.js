@@ -19,7 +19,6 @@ export const authenticateUserAction = async ({
       code,
     });
 
-  console.log('response:', response);
   if (response.alertError) {
     return path.no({ alertError: response.alertError });
   } else {
