@@ -1466,7 +1466,7 @@ Case.prototype.checkForReadyForTrial = function () {
  * returns a sortable docket number in ${year}${index} format
  *
  * @param {string} docketNumber the docket number to use
- * @returns {string} the sortable docket number
+ * @returns {string|void} the sortable docket number
  */
 Case.getSortableDocketNumber = function (docketNumber) {
   if (!docketNumber) {
@@ -1658,7 +1658,7 @@ const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
  * @param {Object} providers the providers object
  * @param {String} providers.contactType the type of contact we are looking for (primary or secondary)
  * @param {Object} providers.rawCase the raw case
- * @returns {(Object|undefined)} the contact object on the case
+ * @returns {Object|void} the contact object on the case
  */
 const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
   if (!rawCase.petitioners) {
