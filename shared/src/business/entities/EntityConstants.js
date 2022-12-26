@@ -221,6 +221,10 @@ const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
 ).map(pickEventCode);
 
+const CASE_DISSMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.closesAndDissmissesCase,
+).map(o => o.eventCode);
+
 const ORDER_TYPES = [
   {
     documentType: 'Order',
@@ -1468,6 +1472,7 @@ module.exports = deepFreeze({
   BENCH_OPINION_EVENT_CODE,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
+  CASE_DISSMISSAL_ORDER_TYPES,
   CASE_INVENTORY_PAGE_SIZE,
   CASE_LIST_PAGE_SIZE,
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
