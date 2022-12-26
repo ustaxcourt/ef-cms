@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkEditsDocketEntryNonstandardA } from './journey/docketClerkEditsDocketEntryNonstandardA';
 import { docketClerkEditsDocketEntryNonstandardB } from './journey/docketClerkEditsDocketEntryNonstandardB';
@@ -11,14 +14,10 @@ import { docketClerkEditsDocketEntryNonstandardH } from './journey/docketClerkEd
 import { docketClerkEditsDocketEntryStandard } from './journey/docketClerkEditsDocketEntryStandard';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('docket clerk updates docket entries', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  cerebralTest.draftOrders = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();
