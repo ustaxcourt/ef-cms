@@ -1,4 +1,6 @@
-import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
+const {
+  INITIAL_DOCUMENT_TYPES,
+} = require('../business/entities/EntityConstants');
 
 exports.MOCK_DOCUMENTS = [
   {
