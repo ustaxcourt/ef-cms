@@ -72,7 +72,6 @@ const {
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatCase: formatCaseForTrialSession,
-  formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
   formatJudgeName,
