@@ -1,22 +1,16 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { statisticsFormHelper as statisticsFormHelperComputed } from '../src/presenter/computeds/statisticsFormHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
-const { CASE_TYPES_MAP } = applicationContext.getConstants();
-const cerebralTest = setupTest();
-
-const statisticsFormHelper = withAppContextDecorator(
-  statisticsFormHelperComputed,
-);
-
 describe('Docket Clerk Verifies Docket Record Display', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const statisticsFormHelper = withAppContextDecorator(
+    statisticsFormHelperComputed,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
