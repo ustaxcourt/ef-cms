@@ -457,6 +457,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       PENDING_ITEMS_PAGE_SIZE: 100,
       SES_CONCURRENCY_LIMIT: process.env.SES_CONCURRENCY_LIMIT || 6,
       SESSION_STATUS_GROUPS,
+      WARNING_PAYLOAD_SIZE_MB: 5,
     }),
     getCurrentUser,
     getDispatchers: () => ({
