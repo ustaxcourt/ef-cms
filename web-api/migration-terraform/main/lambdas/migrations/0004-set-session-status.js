@@ -1,10 +1,12 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  getTrialSessionStatus,
-} = require('../../../../../shared/src/business/entities/trialSessions/TrialSession');
+  SESSION_STATUS_GROUPS,
+  TRIAL_SESSION_SCOPE_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
   TrialSession,
 } = require('../../../../../shared/src/business/entities/trialSessions/TrialSession');
+const { isEmpty, isEqual } = require('lodash');
 
 const isTrialSession = item => {
   return (
@@ -12,6 +14,26 @@ const isTrialSession = item => {
   );
 };
 const applicationContext = createApplicationContext({});
+
+const getTrialSessionStatus = session => {
+  const allCases = session.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (
+    session.isClosed ||
+    (!isEmpty(allCases) &&
+      isEqual(allCases, inactiveCases) &&
+      session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+  ) {
+    return SESSION_STATUS_GROUPS.closed;
+  } else if (session.isCalendared) {
+    return SESSION_STATUS_GROUPS.open;
+  } else {
+    return SESSION_STATUS_GROUPS.new;
+  }
+};
 
 const migrateItems = items => {
   const itemsAfter = [];
