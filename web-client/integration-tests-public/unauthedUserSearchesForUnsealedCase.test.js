@@ -27,10 +27,6 @@ describe('Unauthed user sees unsealed case', () => {
   testClient.draftOrders = [];
 
   describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
-
     afterAll(() => {
       testClient.closeSocket();
     });
