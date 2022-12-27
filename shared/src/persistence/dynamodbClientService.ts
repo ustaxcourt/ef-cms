@@ -391,7 +391,7 @@ export const batchGet = async ({ applicationContext, keys }) => {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.items the items to write
- * @returns {Promise} the promise of the persistence call
+ * @returns {Promise|void} the promise of the persistence call
  */
 export const batchDelete = ({ applicationContext, items }) => {
   if (!items || items.length === 0) {
