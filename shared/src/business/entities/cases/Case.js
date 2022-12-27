@@ -1043,6 +1043,7 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 /**
  * Reopen the case with the provided status
  *
+ * @param {String} reopenedStatus the status to set the case to
  * @returns {Case} the updated case entity
  */
 Case.prototype.reopenCase = function ({ reopenedStatus }) {
