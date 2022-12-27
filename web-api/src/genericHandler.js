@@ -98,12 +98,13 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
       }
 
       const responsePayload = JSON.stringify(returnResults);
-      const responsePayloadSizeBytes = responsePayload.length * 2;
+      const responsePayloadSizeMB =
+        Buffer.byteLength(JSON.stringify(responsePayload)) / 1024 / 1024;
       const MB_WARNING =
         applicationContext.getConstants().WARNING_PAYLOAD_SIZE_MB;
-      if (responsePayloadSizeBytes / 1024 / 1024 >= MB_WARNING) {
+      if (responsePayloadSizeMB >= MB_WARNING) {
         applicationContext.logger.warn(
-          `the returned api payload was over ${MB_WARNING}MB, investigate reducing the size before 502 gateway errors occur in the future`,
+          `the returned api payload was ${responsePayloadSizeMB}MB which is over the ${MB_WARNING}MB warning threshold, investigate reducing the size before 502 gateway errors occur in the future`,
         );
       }
 
