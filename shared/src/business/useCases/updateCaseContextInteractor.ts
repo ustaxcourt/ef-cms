@@ -94,11 +94,6 @@ export const updateCaseContextInteractor = async (
           applicationContext,
           docketNumber: newCase.docketNumber,
         });
-    } else if (
-      CLOSED_CASE_STATUSES.includes(oldCase.status) &&
-      !CLOSED_CASE_STATUSES.includes(caseStatus)
-    ) {
-      newCase.reopenCase({ reopenedStatus: caseStatus });
     }
 
     if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {

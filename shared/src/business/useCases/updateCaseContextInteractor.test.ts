@@ -97,28 +97,6 @@ describe('updateCaseContextInteractor', () => {
     expect(result.trialSessionId).toBeUndefined();
   });
 
-  it('should call reopenCase when the old case status was in CLOSED_CASE_STATUSES and the new case status is not in CLOSED_CASE_STATUSES', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          closedDate: '2019-03-01T21:40:48.000Z',
-          status: CLOSED_CASE_STATUSES[0],
-        }),
-      );
-    const reopenCaseSpy = jest.spyOn(Case.prototype, 'reopenCase');
-
-    await updateCaseContextInteractor(applicationContext, {
-      caseStatus: CASE_STATUS_TYPES.generalDocket,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(reopenCaseSpy).toHaveBeenCalledWith({
-      reopenedStatus: CASE_STATUS_TYPES.generalDocket,
-    });
-  });
-
   it('should call updateCase and deleteCaseTrialSortMappingRecords if the old case status was Ready for Trial and the new status is different', async () => {
     applicationContext
       .getPersistenceGateway()

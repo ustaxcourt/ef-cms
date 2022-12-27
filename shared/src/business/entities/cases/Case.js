@@ -1077,6 +1077,7 @@ Case.prototype.isClosed = function () {
 /**
  * Determines if the case has been closed
  *
+ * @param caseStatus the status of the case
  * @returns {Boolean} true if the case has been closed, false otherwise
  */
 const isClosed = function (rawCase) {
@@ -2008,22 +2009,31 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
 /**
  * set case status
  *
- * @param {string} caseStatus the case status to update
+ * @param {string} updatedCaseStatus the case status to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseStatus = function (caseStatus) {
-  this.status = caseStatus;
+Case.prototype.setCaseStatus = function (updatedCaseStatus) {
+  const previousCaseStatus = this.status;
+
+  this.status = updatedCaseStatus;
 
   if (
     [
       CASE_STATUS_TYPES.generalDocket,
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    ].includes(caseStatus)
+    ].includes(updatedCaseStatus)
   ) {
     this.associatedJudge = CHIEF_JUDGE;
-  } else if (CLOSED_CASE_STATUSES.includes(caseStatus)) {
-    this.closeCase({ closedStatus: caseStatus });
   }
+
+  if (isClosedStatus(updatedCaseStatus)) {
+    this.closeCase({ closedStatus: updatedCaseStatus });
+  } else {
+    if (isClosed(previousCaseStatus)) {
+      this.reopenCase({ reopenedStatus: updatedCaseStatus });
+    }
+  }
+
   return this;
 };
 
