@@ -289,9 +289,7 @@ describe('genericHandler', () => {
       applicationContext.getConstants.mockReturnValue({
         WARNING_PAYLOAD_SIZE_MB: 5,
       });
-      const payload = new Array(5e4).fill(
-        'this is a large string with a lot of data which is close to the 5mb threshold',
-      );
+      const payload = 'a'.repeat(1024 * 1024 * 5);
       const callback = () => Promise.resolve(payload);
 
       await genericHandler(MOCK_EVENT, callback, {
@@ -299,7 +297,7 @@ describe('genericHandler', () => {
       });
 
       expect(applicationContext.logger.warn).toHaveBeenCalledWith(
-        'the returned api payload was over 5MB, investigate reducing the size before 502 gateway errors occur in the future',
+        'the returned api payload was 5.000005722045898MB which is over the 5MB warning threshold, investigate reducing the size before 502 gateway errors occur in the future',
       );
     });
 
@@ -307,9 +305,7 @@ describe('genericHandler', () => {
       applicationContext.getConstants.mockReturnValue({
         WARNING_PAYLOAD_SIZE_MB: 5,
       });
-      const payload = new Array(1e4).fill(
-        'this is a large string with a lot of data which is close to the 5mb threshold',
-      );
+      const payload = 'a'.repeat(1024 * 1024 * 4);
       const callback = () => Promise.resolve(payload);
 
       await genericHandler(MOCK_EVENT, callback, {
