@@ -1,7 +1,6 @@
 export class TrialSessionInfoDto {
   public estimatedEndDate: string;
   public isCalendared: boolean;
-  public isClosed: boolean;
   public judge: {
     name: string;
     userId: string;
@@ -21,7 +20,6 @@ export class TrialSessionInfoDto {
   constructor(rawTrialSession: TTrialSessionData) {
     this.estimatedEndDate = rawTrialSession.estimatedEndDate;
     this.isCalendared = rawTrialSession.isCalendared;
-    this.isClosed = rawTrialSession.isClosed;
     this.judge = rawTrialSession.judge;
     this.proceedingType = rawTrialSession.proceedingType;
     this.sessionType = rawTrialSession.sessionType;
