@@ -11,15 +11,13 @@ import { petitionsClerkViewsCreateNewCase } from './journey/petitionsClerkViewsC
 import { petitionsClerkViewsScanView } from './journey/petitionsClerkViewsScanView';
 import { practitionerViewsCaseDetailWithPaperService } from './journey/practitionerViewsCaseDetailWithPaperService';
 
-const cerebralTest = setupTest();
-
 describe('Case from Paper Document Scan journey', () => {
+  const cerebralTest = setupTest();
+
   let scannerSourceIndex = 0;
   let scannerSourceName = 'scanner A';
 
   beforeEach(() => {
-    jest.setTimeout(30000);
-
     global.window.localStorage.getItem = key => {
       if (key === 'scannerSourceIndex') {
         return `"${scannerSourceIndex}"`;

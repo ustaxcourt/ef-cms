@@ -1,5 +1,5 @@
+import { UNSERVABLE_EVENT_CODES } from '../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper } from '../src/presenter/computeds/addCourtIssuedDocketEntryHelper';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { caseDetailSubnavHelper } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
@@ -13,15 +13,10 @@ import {
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
-  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  cerebralTest.draftOrders = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();
