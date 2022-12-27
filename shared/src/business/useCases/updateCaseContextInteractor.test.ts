@@ -8,6 +8,7 @@ import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '../../test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '../../test/mockTrial';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
+const { Case } = require('../entities/cases/Case');
 
 describe('updateCaseContextInteractor', () => {
   beforeAll(() => {
@@ -96,19 +97,26 @@ describe('updateCaseContextInteractor', () => {
     expect(result.trialSessionId).toBeUndefined();
   });
 
-  it.only('should call reopenCase when the old case status was in CLOSED_CASE_STATUSES and the new case status is not in CLOSED_CASE_STATUSES', async () => {
+  it('should call reopenCase when the old case status was in CLOSED_CASE_STATUSES and the new case status is not in CLOSED_CASE_STATUSES', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({ ...MOCK_CASE, status: CLOSED_CASE_STATUSES[0] }),
+        Promise.resolve({
+          ...MOCK_CASE,
+          closedDate: '2019-03-01T21:40:48.000Z',
+          status: CLOSED_CASE_STATUSES[0],
+        }),
       );
+    const reopenCaseSpy = jest.spyOn(Case.prototype, 'reopenCase');
 
-    const result = await updateCaseContextInteractor(applicationContext, {
+    await updateCaseContextInteractor(applicationContext, {
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    expect(result.closedDate).toBeUndefined();
+    expect(reopenCaseSpy).toHaveBeenCalledWith({
+      reopenedStatus: CASE_STATUS_TYPES.generalDocket,
+    });
   });
 
   it('should call updateCase and deleteCaseTrialSortMappingRecords if the old case status was Ready for Trial and the new status is different', async () => {
