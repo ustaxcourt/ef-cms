@@ -1048,8 +1048,6 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 Case.prototype.reopenCase = function ({ reopenedStatus }) {
   this.closedDate = undefined;
   this.status = reopenedStatus;
-  // this.unsetAsBlocked();
-  // this.unsetAsHighPriority();
   return this;
 };
 
