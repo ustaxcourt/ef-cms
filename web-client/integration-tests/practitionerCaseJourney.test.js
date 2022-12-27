@@ -40,10 +40,6 @@ import { withAppContextDecorator } from '../src/withAppContext';
 describe('Practitioner requests access to case', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
