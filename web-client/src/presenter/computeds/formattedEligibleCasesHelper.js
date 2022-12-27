@@ -78,7 +78,7 @@ const compareTrialSessionEligibleCases = eligibleCases => {
   };
 };
 
-exports.formattedEligibleCasesHelper = (get, applicationContext) => {
+export const formattedEligibleCasesHelper = (get, applicationContext) => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const { formatCaseForTrialSession, setConsolidationFlagsForDisplay } =
     applicationContext.getUtilities();
