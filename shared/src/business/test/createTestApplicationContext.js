@@ -71,15 +71,16 @@ const {
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatCase: formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
+const {
   formatJudgeName,
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formatPhoneNumber,
 } = require('../../../src/business/utilities/formatPhoneNumber');
-const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
@@ -307,6 +308,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseForTrialSession: jest
+      .fn()
+      .mockImplementation(formatCaseForTrialSession),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
