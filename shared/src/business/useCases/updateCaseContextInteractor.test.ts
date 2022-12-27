@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  CLOSED_CASE_STATUSES,
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '../../test/mockCase';
@@ -93,6 +94,21 @@ describe('updateCaseContextInteractor', () => {
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(result.associatedJudge).toEqual(CHIEF_JUDGE);
     expect(result.trialSessionId).toBeUndefined();
+  });
+
+  it.only('should call reopenCase when the old case status was in CLOSED_CASE_STATUSES and the new case status is not in CLOSED_CASE_STATUSES', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({ ...MOCK_CASE, status: CLOSED_CASE_STATUSES[0] }),
+      );
+
+    const result = await updateCaseContextInteractor(applicationContext, {
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(result.closedDate).toBeUndefined();
   });
 
   it('should call updateCase and deleteCaseTrialSortMappingRecords if the old case status was Ready for Trial and the new status is different', async () => {
