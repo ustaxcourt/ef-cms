@@ -33,6 +33,7 @@ export const updateCaseContextInteractor = async (
   },
 ) => {
   const user = applicationContext.getCurrentUser();
+  const { CLOSED_CASE_STATUSES } = applicationContext.getConstants();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
     throw new UnauthorizedError('Unauthorized for update case');
@@ -91,6 +92,11 @@ export const updateCaseContextInteractor = async (
           applicationContext,
           docketNumber: newCase.docketNumber,
         });
+    } else if (
+      CLOSED_CASE_STATUSES.includes(oldCase.status) &&
+      !CLOSED_CASE_STATUSES.includes(caseStatus)
+    ) {
+      newCase.reopenCase(caseStatus);
     }
 
     if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
