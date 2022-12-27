@@ -73,6 +73,7 @@ export const getFormattedMessages = ({
       }),
       'MMDDYY',
     );
+
     const formattedMessages = messages.map(message => {
       const {
         consolidatedIconTooltipText,
