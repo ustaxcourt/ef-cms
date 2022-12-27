@@ -24,10 +24,6 @@ const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
 const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 
 describe(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     testClient.closeSocket();
   });
