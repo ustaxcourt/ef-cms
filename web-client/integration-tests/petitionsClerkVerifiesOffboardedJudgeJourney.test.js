@@ -7,18 +7,14 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueSectionHelper as workQueueSectionHelperComputed } from '../src/presenter/computeds/workQueueSectionHelper';
 
-const cerebralTest = setupTest();
-
 describe('Petitions clerk verifies offboarded judge journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const OFFBOARDED_JUDGE_NAMES = ['Guy'];
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const OFFBOARDED_JUDGE_NAMES = ['Guy'];
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   for (const judgeName of OFFBOARDED_JUDGE_NAMES) {
