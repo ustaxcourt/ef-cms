@@ -1,3 +1,10 @@
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  CLOSED_CASE_STATUSES,
+  DOCKET_NUMBER_SUFFIXES,
+  USER_ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
@@ -5,10 +12,9 @@ import { withAppContextDecorator } from '../../withAppContext';
 import { without } from 'lodash';
 
 describe('caseInventoryReportHelper', () => {
-  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, STATUS_TYPES, USER_ROLES } =
-    applicationContext.getConstants();
   const testCaseInventoryPageSize = 25;
-  const constants = {
+
+  const mockConstants = {
     ...applicationContext.getConstants(),
     CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
   };
@@ -17,7 +23,7 @@ describe('caseInventoryReportHelper', () => {
     caseInventoryReportHelperComputed,
     {
       ...applicationContext,
-      getConstants: () => constants,
+      getConstants: () => mockConstants,
     },
   );
 
@@ -26,7 +32,7 @@ describe('caseInventoryReportHelper', () => {
     userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
   });
 
-  it('should return all case statuses except Closed', () => {
+  it('should return all case statuses except closed statuses', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         screenMetadata: {},
@@ -34,7 +40,7 @@ describe('caseInventoryReportHelper', () => {
     });
 
     expect(result.caseStatuses).toEqual(
-      without(Object.values(STATUS_TYPES), 'Closed'),
+      without(Object.values(CASE_STATUS_TYPES), CLOSED_CASE_STATUSES),
     );
   });
 
@@ -76,7 +82,7 @@ describe('caseInventoryReportHelper', () => {
       state: {
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
-          status: STATUS_TYPES.new,
+          status: CASE_STATUS_TYPES.new,
         },
       },
     });

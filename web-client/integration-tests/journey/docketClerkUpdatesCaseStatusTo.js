@@ -1,3 +1,7 @@
+import { runCompute } from 'cerebral/test';
+import { updateCaseModalHelper as updateCaseModalHelperComputed } from '../../src/presenter/computeds/updateCaseModalHelper';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
 export const docketClerkUpdatesCaseStatusTo = (
   cerebralTest,
   caseStatusToUpdateTo,
@@ -11,6 +15,16 @@ export const docketClerkUpdatesCaseStatusTo = (
 
     await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
+    const updateCaseModalHelper = runCompute(
+      withAppContextDecorator(updateCaseModalHelperComputed),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(updateCaseModalHelper.caseStatusOptions).toContain(
+      caseStatusToUpdateTo,
+    );
     expect(cerebralTest.getState('modal.showModal')).toEqual(
       'UpdateCaseModalDialog',
     );
