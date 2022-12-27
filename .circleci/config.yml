@@ -550,35 +550,6 @@ jobs:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
 
-  reindex:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
-            source $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "false" ]; then
-              cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
-              source $BASH_ENV
-              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            fi
-      - run:
-          name: Enable Check Reindex Status Cron
-          command: |
-            if [ "$MIGRATE_FLAG" == "false" ]; then
-              ./enable-reindex-cron.sh
-              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            fi
-
   migrate:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
