@@ -97,7 +97,7 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
         });
       }
 
-      const responsePayload = JSON.stringify(returnResults);
+      const responsePayload = JSON.stringify(returnResults ?? '');
       const responsePayloadSizeMB =
         Buffer.byteLength(JSON.stringify(responsePayload)) / 1024 / 1024;
       const MB_WARNING =
