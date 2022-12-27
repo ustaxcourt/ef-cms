@@ -925,12 +925,9 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - reindex:
-          requires:
-            - deploy
       - migrate:
           requires:
-            - reindex
+            - deploy
           filters:
             branches:
               only:
@@ -1048,14 +1045,10 @@ workflows:
             - e2e-cypress-public
             - build-ts-api
             - verify-pdfs
-      - reindex:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - deploy
       - migrate:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - reindex
+            - deploy
       - wait-for-reindex:
           <<: *build-and-deploy-with-context-defaults
           type: approval
