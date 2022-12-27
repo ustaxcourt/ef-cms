@@ -1,8 +1,12 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  CLOSED_CASE_STATUSES,
+} = require('../EntityConstants');
 const { Case } = require('./Case');
-const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setCaseStatus', () => {
@@ -82,5 +86,25 @@ describe('setCaseStatus', () => {
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
     expect(closeCaseSpy).toHaveBeenCalled();
     closeCaseSpy.mockRestore();
+  });
+
+  it('should update the case status and call reopenCase when the new status is NOT a closed case status and the previous status is a closed case status', () => {
+    const reopenCaseSpy = jest.spyOn(Case.prototype, 'reopenCase');
+
+    const updatedCase = new Case(
+      {
+        ...MOCK_CASE,
+        associatedJudge: 'Judge Buch',
+        status: CLOSED_CASE_STATUSES.closed,
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
+
+    expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
+    expect(reopenCaseSpy).toHaveBeenCalled();
   });
 });
