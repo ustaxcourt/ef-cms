@@ -283,36 +283,4 @@ describe('genericHandler', () => {
       ).resolves.not.toThrow();
     });
   });
-
-  describe('warn on large payload responses', () => {
-    it('should log a warning when the response payload is over 5mb', async () => {
-      applicationContext.getConstants.mockReturnValue({
-        WARNING_PAYLOAD_SIZE_MB: 5,
-      });
-      const payload = 'a'.repeat(1024 * 1024 * 5);
-      const callback = () => Promise.resolve(payload);
-
-      await genericHandler(MOCK_EVENT, callback, {
-        applicationContext,
-      });
-
-      expect(applicationContext.logger.warn).toHaveBeenCalledWith(
-        'the returned api payload was 5.000005722045898MB which is over the 5MB warning threshold, investigate reducing the size before 502 gateway errors occur in the future',
-      );
-    });
-
-    it('should NOT log a warning when the response payload is under a 5mb', async () => {
-      applicationContext.getConstants.mockReturnValue({
-        WARNING_PAYLOAD_SIZE_MB: 5,
-      });
-      const payload = 'a'.repeat(1024 * 1024 * 4);
-      const callback = () => Promise.resolve(payload);
-
-      await genericHandler(MOCK_EVENT, callback, {
-        applicationContext,
-      });
-
-      expect(applicationContext.logger.warn).not.toHaveBeenCalled();
-    });
-  });
 });

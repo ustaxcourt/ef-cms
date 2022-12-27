@@ -97,17 +97,6 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
         });
       }
 
-      const responsePayload = JSON.stringify(returnResults ?? '');
-      const responsePayloadSizeMB =
-        Buffer.byteLength(JSON.stringify(responsePayload)) / 1024 / 1024;
-      const MB_WARNING =
-        applicationContext.getConstants().WARNING_PAYLOAD_SIZE_MB;
-      if (responsePayloadSizeMB >= MB_WARNING) {
-        applicationContext.logger.warn(
-          `the returned api payload was ${responsePayloadSizeMB}MB which is over the ${MB_WARNING}MB warning threshold, investigate reducing the size before 502 gateway errors occur in the future`,
-        );
-      }
-
       return returnResults;
     } catch (e) {
       if (!e.skipLogging) {
