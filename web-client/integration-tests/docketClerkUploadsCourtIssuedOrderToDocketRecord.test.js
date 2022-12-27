@@ -11,11 +11,10 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const cerebralTest = setupTest();
-
 describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
-    jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
   });
 
