@@ -1041,6 +1041,19 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 };
 
 /**
+ * Reopen the case with the provided status
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.reopenCase = function ({ reopenedStatus }) {
+  this.closedDate = undefined;
+  this.status = reopenedStatus;
+  // this.unsetAsBlocked();
+  // this.unsetAsHighPriority();
+  return this;
+};
+
+/**
  * Close the case with the provided status
  *
  * @returns {Case} the updated case entity
