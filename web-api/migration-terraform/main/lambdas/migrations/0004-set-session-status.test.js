@@ -54,7 +54,9 @@ describe('migrateItems', () => {
   });
 
   it('should set the trial-session sessionStatus to new when NOT calendared', async () => {
-    const items = [{ ...mockSession, isCalendared: false }];
+    const items = [
+      { ...mockSession, isCalendared: false, sessionStatus: undefined },
+    ];
     const results = await migrateItems(items);
 
     expect(results).toEqual([
@@ -67,9 +69,8 @@ describe('migrateItems', () => {
   });
 
   it('should set the trial-session sessionStatus to open when calendared', async () => {
-    const items = [mockSession];
+    const items = [{ ...mockSession, sessionStatus: undefined }];
     const results = await migrateItems(items);
-    console.log('results', results);
     expect(results).toEqual([
       {
         ...mockSession,
@@ -90,7 +91,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should set the trial-session sessionStatus to open when all cases removed from the trial session and not standaloneRemote', async () => {
+  it('should set the trial-session sessionStatus to Closed when all cases are removed from the trial session, and the case is Location-based', async () => {
     const items = [
       {
         ...mockSession,
@@ -126,7 +127,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should set the trial-session sessionStatus to open when all cases removed from the trial session and is standaloneRemote', async () => {
+  it('should set the trial-session sessionStatus to open when all cases are removed from the trial session, and the session is standaloneRemote', async () => {
     const items = [
       {
         ...mockSession,
