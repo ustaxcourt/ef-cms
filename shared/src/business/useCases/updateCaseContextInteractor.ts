@@ -1,4 +1,7 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CLOSED_CASE_STATUSES,
+} from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
@@ -33,7 +36,6 @@ export const updateCaseContextInteractor = async (
   },
 ) => {
   const user = applicationContext.getCurrentUser();
-  const { CLOSED_CASE_STATUSES } = applicationContext.getConstants();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
     throw new UnauthorizedError('Unauthorized for update case');
