@@ -1,8 +1,8 @@
 import {
   ADVANCED_SEARCH_TABS,
+  COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -15,7 +15,6 @@ const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
-const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 testClient.draftOrders = [];
 
@@ -39,10 +38,6 @@ const searchTerm = firstName;
  * add a case with the contactSecondary.name provided
  */
 describe(`Petitioner creates cases with name ${firstName}`, () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     testClient.closeSocket();
   });
