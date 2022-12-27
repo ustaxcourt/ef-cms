@@ -1077,11 +1077,21 @@ Case.prototype.isClosed = function () {
 /**
  * Determines if the case has been closed
  *
- * @param caseStatus the status of the case
+ * @param rawCase the case
  * @returns {Boolean} true if the case has been closed, false otherwise
  */
 const isClosed = function (rawCase) {
-  return CLOSED_CASE_STATUSES.includes(rawCase.status);
+  return this.isClosedStatus(rawCase.status);
+};
+
+/**
+ * Determines if the case has a closed status
+ *
+ * @param caseStatus the status of the case
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+const isClosedStatus = function (caseStatus) {
+  return CLOSED_CASE_STATUSES.includes(caseStatus);
 };
 
 /**
@@ -2029,7 +2039,7 @@ Case.prototype.setCaseStatus = function (updatedCaseStatus) {
   if (isClosedStatus(updatedCaseStatus)) {
     this.closeCase({ closedStatus: updatedCaseStatus });
   } else {
-    if (isClosed(previousCaseStatus)) {
+    if (isClosedStatus(previousCaseStatus)) {
       this.reopenCase({ reopenedStatus: updatedCaseStatus });
     }
   }
@@ -2457,6 +2467,7 @@ module.exports = {
   hasPartyWithServiceType,
   isAssociatedUser,
   isClosed,
+  isClosedStatus,
   isLeadCase,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
