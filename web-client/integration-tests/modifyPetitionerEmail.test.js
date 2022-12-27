@@ -11,19 +11,16 @@ import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesE
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 const { faker } = require('@faker-js/faker');
 
-const cerebralTest = setupTest();
-
 describe('Modify Petitioner Email', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  cerebralTest.createdDocketNumbers = [];
+
+  let caseDetail;
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  let caseDetail;
-  cerebralTest.createdDocketNumbers = [];
 
   loginAs(cerebralTest, 'petitioner9@example.com');
   it('petitioner creates a case', async () => {

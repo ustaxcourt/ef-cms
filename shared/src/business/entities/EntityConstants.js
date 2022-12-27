@@ -1420,6 +1420,7 @@ const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
 const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION_PACKAGE: 'Application Package',
   APPLICATION: 'Application',
   CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
   FEE_RECEIPT: 'Fee Receipt',
