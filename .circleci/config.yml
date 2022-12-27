@@ -484,7 +484,6 @@ jobs:
           name: Admin User Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               node shared/admin-tools/user/setup-admin.js
             else
               echo "skipping…"
@@ -501,7 +500,6 @@ jobs:
           name: Setup Judge Users File Var
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
             else
               echo "skipping…"
@@ -510,7 +508,6 @@ jobs:
           name: Judge Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              . ./scripts/load-environment-from-secrets.sh
               ./scripts/data-import/judge/bulk-import-judge-users.sh
             else
               echo "skipping…"
