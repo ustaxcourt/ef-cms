@@ -19,10 +19,6 @@ describe('Stamp disposition clerk of the court journey test', () => {
   const grantedMotionDocketEntryTitle = 'Motion GRANTED';
   const signedJudgeName = 'Maurice B. Foley';
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
