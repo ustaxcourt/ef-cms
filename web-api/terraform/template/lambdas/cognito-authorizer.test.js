@@ -73,6 +73,11 @@ describe('cognito-authorizer', () => {
       logLevel: 'debug',
     };
 
+    jwk.decode.mockReturnValue({
+      header: { kid: 'key-identifier' },
+      payload: { iss: `issuer-url-${Math.random()}` },
+    });
+
     jest.spyOn(axios, 'get').mockImplementation(() => {});
     jest.spyOn(transport, 'log').mockImplementation(() => {});
   });
@@ -98,10 +103,6 @@ describe('cognito-authorizer', () => {
   it('returns unauthorized if there is an error in contacting the issuer', async () => {
     axios.get.mockImplementation(() => {
       throw new Error('any error');
-    });
-    jwk.decode.mockReturnValue({
-      header: { kid: 'key-identifier' },
-      payload: { iss: `issuer-url-${Math.random()}` },
     });
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
@@ -138,11 +139,6 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if issuer is not the cognito user pools', async () => {
-    jwk.decode.mockReturnValue({
-      header: { kid: 'key-identifier' },
-      payload: { iss: `issuer-url-${Math.random()}` },
-    });
-
     axios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'not-expected-key-identifier' }] },
@@ -166,11 +162,6 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if token is not verified', async () => {
-    jwk.decode.mockReturnValue({
-      header: { kid: 'key-identifier' },
-      payload: { iss: `issuer-url-${Math.random()}` },
-    });
-
     axios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
@@ -207,11 +198,6 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized', async () => {
-    jwk.decode.mockReturnValue({
-      header: { kid: 'key-identifier' },
-      payload: { iss: `issuer-url-${Math.random()}` },
-    });
-
     setupHappyPath({ sub: 'test-sub' });
 
     const policy = await handler(event, context);
@@ -244,11 +230,6 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId instead of sub', async () => {
-    jwk.decode.mockReturnValue({
-      header: { kid: 'key-identifier' },
-      payload: { iss: `issuer-url-${Math.random()}` },
-    });
-
     setupHappyPath({ 'custom:userId': 'test-custom:userId' });
 
     const policy = await handler(event, context);
@@ -333,10 +314,6 @@ describe('cognito-authorizer', () => {
   });
 
   it('should return a policy if the authorization token is provided', async () => {
-    jwk.decode.mockReturnValue({
-      header: { kid: 'key-identifier' },
-      payload: { iss: `issuer-url-${Math.random()}` },
-    });
     setupHappyPath({ sub: 'test-sub' });
     event = {
       authorizationToken: `Bearer ${TOKEN_VALUE}`,
