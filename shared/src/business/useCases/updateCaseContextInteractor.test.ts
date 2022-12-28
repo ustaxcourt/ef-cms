@@ -1,14 +1,12 @@
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-  CLOSED_CASE_STATUSES,
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '../../test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '../../test/mockTrial';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
-const { Case } = require('../entities/cases/Case');
 
 describe('updateCaseContextInteractor', () => {
   beforeAll(() => {

@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  CLOSED_CASE_STATUSES,
-} from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
