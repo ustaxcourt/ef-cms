@@ -95,7 +95,7 @@ describe('setCaseStatus', () => {
       {
         ...MOCK_CASE,
         associatedJudge: 'Judge Buch',
-        status: CLOSED_CASE_STATUSES.closed,
+        status: CLOSED_CASE_STATUSES[0],
       },
       {
         applicationContext,

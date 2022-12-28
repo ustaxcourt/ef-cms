@@ -23,6 +23,6 @@ describe('reopenCase', () => {
     caseEntity.reopenCase({ reopenedStatus: mockReopenedStatus });
 
     expect(caseEntity.closedDate).toBeUndefined();
-    expect(caseEntity.caseStatus).toBe(mockReopenedStatus);
+    expect(caseEntity.status).toBe(mockReopenedStatus);
   });
 });
