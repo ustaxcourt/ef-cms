@@ -16,7 +16,7 @@ describe('Penalty', () => {
     it('should fail if name is undefined', () => {
       const penalty = new Penalty(
         {
-          amount: 100.0,
+          irsPenaltyAmount: 100.0,
           name: undefined,
           statisticId,
         },
@@ -29,10 +29,10 @@ describe('Penalty', () => {
       );
     });
 
-    it('should fail if amount is undefined', () => {
+    it('should fail if irsPenaltyAmount is undefined', () => {
       const penalty = new Penalty(
         {
-          amount: undefined,
+          irsPenaltyAmount: undefined,
           name: 'Penalty 1',
           statisticId,
         },
@@ -41,14 +41,14 @@ describe('Penalty', () => {
 
       expect(penalty.isValid()).toBeFalsy();
       expect(Object.keys(penalty.getFormattedValidationErrors())).toContain(
-        'amount',
+        'irsPenaltyAmount',
       );
     });
 
-    it('should fail if amount is not a number', () => {
+    it('should fail if irsPenaltyAmount is not a number', () => {
       const penalty = new Penalty(
         {
-          amount: 'something',
+          irsPenaltyAmount: 'something',
           name: 'Penalty 1',
           statisticId,
         },
@@ -57,14 +57,14 @@ describe('Penalty', () => {
 
       expect(penalty.isValid()).toBeFalsy();
       expect(Object.keys(penalty.getFormattedValidationErrors())).toContain(
-        'amount',
+        'irsPenaltyAmount',
       );
     });
 
     it('should fail with statisticId undefined', () => {
       const penalty = new Penalty(
         {
-          amount: 100.0,
+          irsPenaltyAmount: 100.0,
           name: 'Penalty 1',
           statisticId: undefined,
         },
@@ -80,7 +80,7 @@ describe('Penalty', () => {
     it('should pass with valid values', () => {
       const penalty = new Penalty(
         {
-          amount: 100.0,
+          irsPenaltyAmount: 100.0,
           name: 'Penalty 1',
           statisticId,
         },
