@@ -550,39 +550,6 @@ jobs:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
 
-  reindex:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
-            source $BASH_ENV
-            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
-              cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
-              source $BASH_ENV
-              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            fi
-      - run:
-          name: Enable Check Reindex Status Cron
-          command: |
-            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
-              ./enable-reindex-cron.sh
-              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            fi
-      - run:
-          name: Reindex
-          command: |
-            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
-              node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
-            fi
-
   migrate:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
@@ -1099,10 +1066,6 @@ workflows:
     jobs:
       - deploy:
           <<: *build-and-deploy-with-context-defaults
-      - reindex:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - deploy
       - migrate:
           <<: *build-and-deploy-with-context-defaults
           requires:
