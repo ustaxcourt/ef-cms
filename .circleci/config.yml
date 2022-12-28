@@ -904,12 +904,6 @@ test-build-deploy-defaults: &test-build-deploy-defaults
       only:
         - test
 
-build-and-deploy-defaults: &build-and-deploy-defaults
-  filters:
-    branches:
-      ignore:
-        - prod
-
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
   filters:
@@ -1007,7 +1001,6 @@ workflows:
                 - develop
                 - irs
                 - staging
-                - test
                 - experimental1
                 - experimental2
                 - experimental3
