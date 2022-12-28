@@ -1081,7 +1081,7 @@ Case.prototype.isClosed = function () {
  * @returns {Boolean} true if the case has been closed, false otherwise
  */
 const isClosed = function (rawCase) {
-  return this.isClosedStatus(rawCase.status);
+  return isClosedStatus(rawCase.status);
 };
 
 /**
