@@ -71,6 +71,10 @@ const {
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatCase: formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
+const {
   formatJudgeName,
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
@@ -307,6 +311,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseForTrialSession: jest
+      .fn()
+      .mockImplementation(formatCaseForTrialSession),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
@@ -315,6 +322,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
+    formattedTrialSessionDetails: jest
+      .fn()
+      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
       .fn()
