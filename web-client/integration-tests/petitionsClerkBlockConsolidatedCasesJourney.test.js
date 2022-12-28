@@ -10,26 +10,22 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const blockedCasesReportHelperComputed = withAppContextDecorator(
-  blockedCasesReportHelper,
-  applicationContext,
-);
-
-let leadDocketNumber;
-let memberCaseDocketNumber;
-
 describe('Manually block consolidated cases', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
+
+  let leadDocketNumber;
+  let memberCaseDocketNumber;
+
+  const blockedCasesReportHelperComputed = withAppContextDecorator(
+    blockedCasesReportHelper,
+    applicationContext,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const cerebralTest = setupTest();
-
-  const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {

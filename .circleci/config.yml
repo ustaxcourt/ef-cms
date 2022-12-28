@@ -7,10 +7,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v25-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v24-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v25-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v25-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v24-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v25-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v25-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -56,14 +56,383 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v24-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v25-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
 jobs:
+  build-client-integration:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: large
+    parallelism: 16
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Create web-client Artifacts Directory
+          command: mkdir /tmp/web-client/
+      - run:
+          name: Web Client - Integration Test
+          command: |
+            CI=true \
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+            QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
+            DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
+            S3_ENDPOINT=http://localhost:9000 \
+            SKIP_CACHE_INVALIDATION=true \
+            AWS_ACCESS_KEY_ID=S3RVER \
+            AWS_SECRET_ACCESS_KEY=S3RVER \
+            npm run start:api:ci > /tmp/web-client/server-output.txt &
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:9200 ./wait-until.sh
+            URL=http://localhost:9000/ ./wait-until.sh
+            URL=http://localhost:8000/shell ./wait-until.sh
+            sleep 20 # figure out why we need to sleep here since we wait above ^
+            export TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
+            npm run test:client:integration:ci
+      - store_artifacts:
+          path: /tmp/web-client
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/web-client
+            - project/web-client/coverage-integration-*
+
+  verify-pdfs:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Verify PDFs
+          command: |
+            npm run test:pdf-output
+            node image-compare-pdfs.js
+
+  build-ts-api:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Build Typescript Api
+          command: |
+            npm run build:assets
+            npm run build:lambda:api
+
+  e2e-pa11y:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y
+          environment:
+            CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+            URL=http://localhost:1234 ./wait-until.sh
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:8000/shell ./wait-until.sh
+            URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
+            sleep 10
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:4 --node-flags --max-old-space-size=1024
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
+      - store_artifacts:
+          path: /tmp/pa11y
+
+  e2e-pa11y-public:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y
+          environment:
+            CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+            ./wait-until-services.sh
+            URL=http://localhost:5000/ ./wait-until.sh
+            sleep 10
+            npm run test:pa11y:public --node-flags --max-old-space-size=1536
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
+      - store_artifacts:
+          path: /tmp/pa11y
+
+  e2e-pa11y-public-search:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y
+          environment:
+            CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+            ./wait-until-services.sh
+            URL=http://localhost:5000/ ./wait-until.sh
+            sleep 10
+            npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
+      - store_artifacts:
+          path: /tmp/pa11y
+
+  e2e-cypress:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: large
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Cypress
+          environment:
+            CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run start:all >> /tmp/cypress/cypress-output.txt &
+            ./wait-until-services.sh
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            sleep 5
+            npm run cypress:integration
+      - store_artifacts:
+          path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
+
+  e2e-cypress-smoketests-local:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: large
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Cypress
+          environment:
+            CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+            npm run start:all >> /tmp/cypress/cypress-output.txt &
+            ./wait-until-services.sh
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            sleep 5
+            npm run cypress:smoketests:local
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
+      - store_artifacts:
+          path: /tmp/cypress
+
+  e2e-cypress-public:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.10.2
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Cypress
+          environment:
+            CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+            CHECK_DEPLOY_DATE_INTERVAL: 5000
+          command: |
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+            npm run start:all >> /tmp/cypress/cypress-output.txt &
+            ./wait-until-services.sh
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            sleep 5
+            npm run cypress:integration:public
+      - store_artifacts:
+          path: /root/project/cypress-integration/videos/public
+      - store_artifacts:
+          path: /tmp/cypress
+
   deploy:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -84,15 +453,8 @@ jobs:
           command: |
             ./setup-for-blue-green-migration.sh
       - run:
-          name: Setup Reindex If Needed
-          command: |
-            ./setup-for-reindex.sh
-      - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Reindex Flag
-          command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Setup Destination Table Var
           command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -115,6 +477,7 @@ jobs:
           name: Admin User Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+              . ./scripts/load-environment-from-secrets.sh
               node shared/admin-tools/user/setup-admin.js
             else
               echo "skipping…"
@@ -131,6 +494,7 @@ jobs:
           name: Setup Judge Users File Var
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
+              . ./scripts/load-environment-from-secrets.sh
               echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
             else
               echo "skipping…"
@@ -139,6 +503,7 @@ jobs:
           name: Judge Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
+              . ./scripts/load-environment-from-secrets.sh
               ./scripts/data-import/judge/bulk-import-judge-users.sh
             else
               echo "skipping…"
@@ -155,22 +520,6 @@ jobs:
           name: 'Deploy - Web API - Cognito Customize'
           command: |
             cd web-api && ./setup-cognito-ui.sh $ENV
-      - run:
-          name: 'Deploy - Web API - Smoke Tests - us-east-1'
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              cd web-api && node smoke-tests.js $ENV us-east-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: 'Deploy - Web API - Smoke Tests - us-west-1'
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              cd web-api && node smoke-tests.js $ENV us-west-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}
-            else
-              echo "skipping…"
-            fi
       - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
@@ -236,7 +585,10 @@ jobs:
 
   migrate:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -247,7 +599,6 @@ jobs:
             cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
@@ -299,7 +650,10 @@ jobs:
 
   disable-reindex-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -317,7 +671,10 @@ jobs:
 
   smoketests:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -345,7 +702,10 @@ jobs:
 
   smoketests-readonly:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -383,7 +743,10 @@ jobs:
 
   deploy-switch-colors-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -401,7 +764,10 @@ jobs:
 
   disable-switch-colors-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -417,7 +783,10 @@ jobs:
 
   switch-colors:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -436,7 +805,10 @@ jobs:
 
   backup-source-dynamo-table:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: small
     steps:
       - git-shallow-clone/checkout
@@ -457,7 +829,10 @@ jobs:
 
   delete-api-mappings:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: small
     steps:
       - git-shallow-clone/checkout
@@ -475,7 +850,10 @@ jobs:
 
   cleanup:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium
     steps:
       - git-shallow-clone/checkout
@@ -487,7 +865,6 @@ jobs:
             source $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
       - run:
@@ -520,16 +897,12 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
-      - run:
-          name: Cleanup Deploy Table After Reindex
-          command: |
-            if [ $REINDEX_FLAG == true ]; then
-              npm run reindex:cleanup -- $ENV
-            fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
+      only:
+        - test
       ignore:
         - prod # run with context workflow below
 
@@ -545,7 +918,35 @@ workflows:
 
   build-and-deploy:
     jobs:
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
+      - build-ts-api:
+          <<: *build-and-deploy-defaults
+      - verify-pdfs:
+          <<: *build-and-deploy-defaults
       - deploy:
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-pa11y-public-search
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
+            - build-ts-api
+            - verify-pdfs
           filters:
             branches:
               only:
@@ -559,12 +960,9 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - reindex:
-          requires:
-            - deploy
       - migrate:
           requires:
-            - reindex
+            - deploy
           filters:
             branches:
               only:
@@ -652,8 +1050,36 @@ workflows:
 
   build-and-deploy-with-context:
     jobs:
+      - build-client-integration:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-with-context-defaults
+      - build-ts-api:
+          <<: *build-and-deploy-with-context-defaults
+      - verify-pdfs:
+          <<: *build-and-deploy-with-context-defaults
       - deploy:
           <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-pa11y-public-search
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
+            - build-ts-api
+            - verify-pdfs
       - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
@@ -661,7 +1087,7 @@ workflows:
       - migrate:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - reindex
+            - deploy
       - wait-for-reindex:
           <<: *build-and-deploy-with-context-defaults
           type: approval

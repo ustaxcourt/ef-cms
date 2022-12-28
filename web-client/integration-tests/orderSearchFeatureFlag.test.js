@@ -8,12 +8,9 @@ import {
   setOrderSearchEnabled,
   setupTest,
 } from './helpers';
-const cerebralTest = setupTest();
 
 describe('Order search feature flags', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(async () => {
     cerebralTest.closeSocket();

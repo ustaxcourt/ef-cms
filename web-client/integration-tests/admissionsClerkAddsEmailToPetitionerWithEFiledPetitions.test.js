@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -10,16 +10,11 @@ import {
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const cerebralTest = setupTest();
-
 describe('admissions clerk adds an email to a petitioner who already exists in the system and has a separate efile petition', () => {
-  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
   const EMAIL_TO_ADD = 'petitioner3@example.com';
-  let originalDocketNumber;
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  let originalDocketNumber;
 
   afterAll(() => {
     cerebralTest.closeSocket();

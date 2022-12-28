@@ -327,6 +327,48 @@ describe('case detail edit computed', () => {
     expect(result.showReadOnlyTrialLocation).toBeFalsy();
   });
 
+  it('sets requestForPlaceOfTrialDocumentId to docketEntryId and requestForPlaceOfTrialDocumentTitle to documentTitle when documentType is "Request for Place of Trial"', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        form: {
+          docketEntries: [
+            {
+              docketEntryId: '123',
+              documentTitle: 'Request for Place of Trial at Somewhere, USA',
+              documentType: 'Request for Place of Trial',
+            },
+          ],
+          isPaper: true,
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+    expect(result.requestForPlaceOfTrialDocumentId).toEqual('123');
+    expect(result.requestForPlaceOfTrialDocumentTitle).toEqual(
+      'Request for Place of Trial at Somewhere, USA',
+    );
+  });
+
+  it('does not set requestForPlaceOfTrialDocumentId to docketEntryId and requestForPlaceOfTrialDocumentTitle to documentTitle when documentType is undefined', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        form: {
+          docketEntries: [
+            {
+              docketEntryId: '456',
+              documentTitle: 'Something',
+              documentType: undefined,
+            },
+          ],
+          isPaper: true,
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+    expect(result.requestForPlaceOfTrialDocumentId).toBeUndefined();
+    expect(result.requestForPlaceOfTrialDocumentTitle).toBeUndefined();
+  });
+
   it('sets showOrderForFilingFee true if petitionPaymentStatus is unpaid', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {

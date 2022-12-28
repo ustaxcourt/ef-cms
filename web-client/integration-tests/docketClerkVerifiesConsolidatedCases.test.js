@@ -19,20 +19,16 @@ import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprior
 import { removePendingItemFromCase } from './journey/removePendingItemFromCase';
 import { updateACaseCaption } from './journey/updateACaseCaption';
 
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-
-const overrides = {
-  caseCaption: 'Mona Schultz, Petitioner',
-  docketNumberSuffix: 'L',
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
 describe('Docket Clerk verifies Consolidated Cases', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+
+  const overrides = {
+    caseCaption: 'Mona Schultz, Petitioner',
+    docketNumberSuffix: 'L',
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
 
   afterAll(() => {
     cerebralTest.closeSocket();

@@ -1,23 +1,20 @@
-/**
- * check that a subset of ES indexes counts on alpha and beta match.
- */
-
-// @path
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
-  const info = await esClient.indices.stats({
+  const apiResponse = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
   });
+
+  const info = apiResponse.body.indices;
 
   const counts = {};
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
     const res = await esClient.count({
       index: indexName,
     });
-    counts[indexName] = res.count;
+    counts[indexName] = res.body.count;
   }
 
   return { counts, info };
@@ -58,7 +55,7 @@ exports.isReindexComplete = async environmentName => {
     'efcms-work-item',
   ]) {
     const operationsDestination =
-      destinationInfo.indices[indexName].total.translog.operations;
+      destinationInfo[indexName].total.translog.operations;
     if (operationsDestination > 0) {
       console.log(
         `${operationsDestination} operations on ${indexName} still processing, waiting 60 seconds to check operations again.`,

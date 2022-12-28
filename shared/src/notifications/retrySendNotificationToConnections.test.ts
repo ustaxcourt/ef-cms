@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../business/test/createTestApplicationContext');
-const {
-  retrySendNotificationToConnections,
-} = require('./retrySendNotificationToConnections');
+import { applicationContext } from '../business/test/createTestApplicationContext';
+import { retrySendNotificationToConnections } from './retrySendNotificationToConnections';
 
 const mockConnections = [
   {
@@ -34,7 +30,9 @@ const mockConnections = [
 
 const mockMessageStringified = JSON.stringify('hello, computer');
 
-const notificationError = new Error('could not get notification client');
+const notificationError: NotificationError = new Error(
+  'could not get notification client',
+);
 notificationError.statusCode = 410;
 
 describe('retrySendNotificationToConnections', () => {
