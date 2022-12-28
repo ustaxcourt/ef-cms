@@ -282,7 +282,7 @@ const FORMATTED_CASES = [
         userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     ],
-    trialStatus: 'aBasisReached',
+    trialStatus: 'basisReached',
     userNotes:
       'Bacon ipsum dolor amet ad enim leberkas dolor id venison laboris deserunt ut jerky frankfurter voluptate strip steak cupim ipsum. Voluptate consectetur aliqua venison buffalo fugiat landjaeger. Et turkey corned beef fatback, ut pork cupidatat shoulder boudin in anim elit laborum ground round. Consequat tail irure duis.',
   },

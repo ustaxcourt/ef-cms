@@ -2,14 +2,14 @@ import { ExternalDocumentFactory } from '../../entities/externalDocument/Externa
 import { cloneDeep } from 'lodash';
 
 /**
- * generateDocumentTitleInteractor
+ * generateExternalDocumentTitle
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-export const generateDocumentTitleInteractor = (
+export const generateExternalDocumentTitle = (
   applicationContext: IApplicationContext,
   { documentMetadata },
 ) => {

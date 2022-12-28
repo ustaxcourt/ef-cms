@@ -7,6 +7,7 @@ import {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
@@ -17,7 +18,6 @@ import {
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { ROLES } from '../../entities/EntityConstants';
 import {
   applicationContext,
   testPdfDoc,
