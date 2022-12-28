@@ -19,10 +19,6 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 describe('External user views case with sealed docket entry', () => {
   const testClient = privateSetupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     testClient.closeSocket();
     testClient.draftOrders = [];

@@ -651,6 +651,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
+    deadlineDescription: 'AP & Fee Due',
   },
   orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -1420,6 +1421,7 @@ const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
 const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION_PACKAGE: 'Application Package',
   APPLICATION: 'Application',
   CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
   FEE_RECEIPT: 'Fee Receipt',
