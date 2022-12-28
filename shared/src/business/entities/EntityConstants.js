@@ -661,6 +661,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
+    deadlineDescription: 'AP & Fee Due',
   },
   orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
