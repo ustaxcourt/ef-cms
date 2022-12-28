@@ -113,4 +113,34 @@ joiValidationDecorator(
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
 
+/**
+ *  adds a Penalty object to the Statistic's penalties array
+ *
+ * @param {Object} penalty  the Penalty object to add
+ * @returns {void} modifies the penalties array on the Statistic
+ */
+Statistic.prototype.addPenalty = function ({ applicationContext, rawPenalty }) {
+  const rawPenaltyCopy = { ...rawPenalty };
+  if (!rawPenaltyCopy.statisticId) {
+    rawPenaltyCopy.statisticId = this.statisticId;
+  }
+  const penalty = new Penalty(rawPenaltyCopy, { applicationContext });
+  this.penalties.push(penalty);
+};
+
+/**
+ * updates a Penalty on the Statistic's penalties array
+ *
+ * @param {string} updatedPenalty the penaltyToUpdate Penalty object with updated info
+ * @returns {void} modifies the penalties array on the Statistic
+ */
+Statistic.prototype.updatePenalty = function (updatedPenalty) {
+  const foundPenalty = this.penalties.find(
+    penalty => penalty.penaltyId === updatedPenalty.penaltyId,
+  );
+  if (foundPenalty) {
+    Object.assign(foundPenalty, updatedPenalty);
+  }
+};
+
 exports.Statistic = validEntityDecorator(Statistic);
