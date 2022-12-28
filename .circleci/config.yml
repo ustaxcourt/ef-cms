@@ -898,11 +898,17 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
-build-and-deploy-defaults: &build-and-deploy-defaults
+test-build-deploy-defaults: &test-build-deploy-defaults
   filters:
     branches:
       only:
         - test
+
+build-and-deploy-defaults: &build-and-deploy-defaults
+  filters:
+    branches:
+      ignore:
+        - prod
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
@@ -914,26 +920,26 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
 workflows:
   version: 2
 
-  build-and-deploy:
+  test-build-deploy:
     jobs:
       - build-client-integration:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - e2e-pa11y:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - e2e-pa11y-public-search:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - e2e-cypress:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - build-ts-api:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - verify-pdfs:
-          <<: *build-and-deploy-defaults
+          <<: *test-build-deploy-defaults
       - deploy:
           requires:
             - build-client-integration
@@ -945,6 +951,56 @@ workflows:
             - e2e-cypress-public
             - build-ts-api
             - verify-pdfs
+          filters:
+            branches:
+              only:
+                - test
+      - migrate:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only:
+                - test
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          requires:
+            - wait-for-reindex
+      - smoketests:
+          requires:
+            - disable-reindex-cron
+          filters:
+            branches:
+              only:
+                - test
+      - smoketests-readonly:
+          requires:
+            - smoketests
+          filters:
+            branches:
+              only:
+                - test
+      - switch-colors:
+          requires:
+            - smoketests-readonly
+          filters:
+            branches:
+              only:
+                - test
+      - cleanup:
+          requires:
+            - switch-colors
+          filters:
+            branches:
+              only:
+                - test
+
+  build-and-deploy:
+    jobs:
+      - deploy:
           filters:
             branches:
               only:
