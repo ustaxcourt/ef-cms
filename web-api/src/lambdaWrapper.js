@@ -19,6 +19,8 @@ exports.lambdaWrapper = (lambda, options = {}) => {
     const shouldMimicApiGatewayAyncEndpoint =
       options.isAsync && process.env.NODE_ENV != 'production';
 
+    console.log('here', shouldMimicApiGatewayAyncEndpoint);
+
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
     let isTerminalUser =
