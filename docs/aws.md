@@ -8,7 +8,7 @@ The goal of this part of the documentation is to outline the various AWS service
 
 IAM is an AWS service for creating and managing users, roles, and permissions that can be used for interacting with aws via the cli, terraform, or attached to lambda functions to grant them access to other AWS resources.  By default, most AWS resources have limited access to other resources.  For example, since we use Elasticsearch and Dynamo on our project, we have to explicitly grant permissions to our lambda functions to be able to access those databases.  It's worth noting that IAM is not the same as Cognito. Cognito is for managing the users of the application and NOT of our AWS resources.
 
-A majority of our permissions are defined in our terraform files. For example, `iam/terraform/account-specific/main/circle-ci.tf` is where we grant access to our circle-ci user to be able to create and destroy the various AWS resources needed to deploy and environment.  Another common file you may modified in regards to permissions is the `iam/terraform/environment-specific/main/lambda.tf` file. 
+A majority of our permissions are defined in our terraform files. For example, `iam/terraform/account-specific/main/circle-ci.tf` is where we grant access to our circle-ci user to be able to create and destroy the various AWS resources needed to deploy and environment.  Another common file you may modified in regards to permissions is the `iam/terraform/environment-specific/main/lambda.tf` file.
 
 For the most part, you'll mainly be changing IAM policies if you need to grant more access to a resource.  The way a IAM policy is defined is as follows:
 
@@ -43,13 +43,13 @@ Cognito is a user management service provided by AWS which handles the ability t
 
 > DynamoDB is the source of truth of all our data in Dawson
 
-DynamoDB is a database as a service provided by AWS.  It is mainly a key-value store, but supports some additional features such as **global secondary indicies** which can be used for performing custom queries.  DynamoDB was picked due to it's no-sql nature and promises of reduced operation costs.  It is also highly scalable which was something we decided we might need since we have zero insight into the size of production dataset when we started with development. 
+DynamoDB is a database as a service provided by AWS.  It is mainly a key-value store, but supports some additional features such as **global secondary indicies** which can be used for performing custom queries.  DynamoDB was picked due to it's no-sql nature and promises of reduced operation costs.  It is also highly scalable which was something we decided we might need since we have zero insight into the size of production dataset when we started with development.
 
 When we create a table in DynamoDB, we must specify something called a **pk** and **sk**.  These stand for **primary key** and **sort key**.  Once your table is defined, every item in your table must have those two keys.  A useful feature of Dynamo is that you can attach any additional attributes to your records and store them directly into the database without needing to perform any type of migration.  It's similar to other No-SQL databases in that it doesn't require schema migrations.
 
 DynamoDB can basically be boiled down to a few main operations, PutItem, GetItem, and Query.  PutItem is how you can write items into dynamo.  This request will overwrite the existing item with the new version you provide.  GetItem is how can you request an item by providing the pk,sk pair.  Query is one of the most useful operations in that it allows you to query the database for items regardless of the sk.  You must know the PK to do a query, but the sk can do more interesting queries such as checking if the sk `begins_with` a prefix, etc.
 
-DynamoDB has many limitiations, and one of the main pitfalls of DynamoDB is that you need to really understand your applications access patterns before you can start using it in a useful way.  You can always add on GSI (global secondary indicies) at a later time if you need to.  These GSIs will allow you to query for items based on something other than the original PK,SK pair defined when creating the table, but know that with each GSI, you will be charged extra money for write requests.
+DynamoDB has many limitations, and one of the main pitfalls of DynamoDB is that you need to really understand your applications access patterns before you can start using it in a useful way.  You can always add on GSI (global secondary indicies) at a later time if you need to.  These GSIs will allow you to query for items based on something other than the original PK,SK pair defined when creating the table, but know that with each GSI, you will be charged extra money for write requests.
 
 In our project, our data is stored in a table named `efcms-$ENV-alpha` and `efcms-$ENV-beta`.  The `alpha` and `beta` suffixes are due to our blue-green migration process.  We also store data into another table called `efcms-deploy-$ENV` which is used to keep track of environment state, rate limiter configurations, a historical record of ran migration scripts, feature flags, etc.  Lastly, we store the terraform lock state in a table called `efcms-terraform-lock`.  These locks help prevent multiple terraform runs from running at the same time which can cause major issues.
 
@@ -140,4 +140,3 @@ In Dawson, we use SNS to notify lower environments when a case is sealed in prod
 ## EC2
 
 EC2 is a service which allows you to host a virtual machine.  We use EC2 to host dynamsoft which is a front end library used for scanning documents.  The only reason we host dynamsoft on an EC2 instance is due to how the license works for dynamsoft.  They require the license to be hosted only one machine, so having it hosted on S3 violates that license.
-
