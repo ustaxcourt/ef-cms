@@ -6,21 +6,15 @@ import { docketClerkRemovesCaseFromHearing } from './journey/docketClerkRemovesC
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
-const cerebralTest = setupTest();
-
 describe('trial hearings journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  cerebralTest.createdTrialSessions = [];
+  cerebralTest.createdCases = [];
 
   const trialLocation1 = `Denver, Colorado, ${Date.now()}`;
   const overrides1 = {
@@ -36,8 +30,10 @@ describe('trial hearings journey', () => {
     sessionType: 'Small',
     trialLocation: trialLocation2,
   };
-  cerebralTest.createdTrialSessions = [];
-  cerebralTest.createdCases = [];
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, overrides1);

@@ -11,9 +11,9 @@ import {
 } from './helpers';
 import applicationContextFactory from '../../web-api/src/applicationContext';
 
-const cerebralTest = setupTest();
-
 describe('verify old sent work items do not show up in the outbox', () => {
+  const cerebralTest = setupTest();
+
   let workItemNMinus1Days;
   let workItemNDays;
   let workItemNPlus1Days;
@@ -22,16 +22,11 @@ describe('verify old sent work items do not show up in the outbox', () => {
   let workItemIdNPlus1;
   let caseDetail;
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-
   it('creates the case', async () => {
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
