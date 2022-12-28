@@ -1,6 +1,7 @@
+const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  aggregateCaseItems,
-} = require('../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
+  Case,
+} = require('../../../../../shared/src/business/entities/cases/Case');
 const {
   CLOSED_CASE_STATUSES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
@@ -11,7 +12,7 @@ const isCaseRecord = item => {
 
 const applicationContext = createApplicationContext({});
 
-const migrateItems = async (items, documentClient) => {
+const migrateItems = async items => {
   const itemsAfter = [];
 
   for (const item of items) {
@@ -21,27 +22,11 @@ const migrateItems = async (items, documentClient) => {
       // set closedDate to undefined
       // validate case
       if (item.closedDate && !CLOSED_CASE_STATUSES.includes(item.status)) {
-        const fullCase = await documentClient
-          .query({
-            ExpressionAttributeNames: {
-              '#pk': 'pk',
-            },
-            ExpressionAttributeValues: {
-              ':pk': `case|${item.docketNumber}`,
-            },
-            KeyConditionExpression: '#pk = :pk',
-            TableName: process.env.SOURCE_TABLE,
-          })
-          .promise()
-          .then(res => {
-            return res.Items;
-          });
-
-        const caseRecord = aggregateCaseItems(fullCase);
         delete item.closedDate;
-        new Case(item, { applicationContext }).validateWithLogging(
+
+        new Case(item, {
           applicationContext,
-        );
+        }).validateWithLogging(applicationContext);
       }
     }
 
