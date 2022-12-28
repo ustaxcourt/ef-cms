@@ -12,12 +12,8 @@ import { practitionerRequestsAccessToCase } from './journey/practitionerRequests
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-
 describe('private practitioner views pending email journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

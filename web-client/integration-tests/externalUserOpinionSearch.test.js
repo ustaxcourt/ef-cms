@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-non-literal-regexp */
 import {
   ADVANCED_SEARCH_OPINION_TYPES,
   COUNTRY_TYPES,
