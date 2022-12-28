@@ -3,6 +3,7 @@ const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
   let mockCaseItem;
+  let documentClient;
 
   beforeEach(() => {
     mockCaseItem = {
@@ -25,7 +26,7 @@ describe('migrateItems', () => {
         sk: `trial-session|${mockTrialSessionId}`,
       },
     ];
-    const results = await migrateItems(mockItems);
+    const results = await migrateItems(mockItems, documentClient);
 
     expect(results).toEqual(mockItems);
   });
@@ -33,7 +34,7 @@ describe('migrateItems', () => {
   it('should set closedDate to undefined when the record is a case entity with a closedDate and a non-CLOSED_CASE_STATUSES status', async () => {
     const items = [mockCaseItem];
 
-    const results = await migrateItems(items);
+    const results = await migrateItems(items, documentClient);
 
     expect(results[0].closedDate).toBeUndefined();
   });
