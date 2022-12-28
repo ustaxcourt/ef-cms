@@ -35,7 +35,7 @@ describe('Case status: Closed - Dismissed Journey', () => {
     );
   });
 
-  describe.skip('Docket clerk serves an Order of Dismissal, case status automatically updates to Closed - Dismissed', () => {
+  describe('Docket clerk serves an Order of Dismissal, case status automatically updates to Closed - Dismissed', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
     it('petitioner creates an electronic case', async () => {
       const { docketNumber } = await uploadPetition(cerebralTest);
