@@ -162,4 +162,27 @@ describe('migrateItems', () => {
       },
     ]);
   });
+
+  it('should set the session status to new if it has no cases and it is not calendared', async () => {
+    const items = [
+      {
+        ...mockSession,
+        caseOrder: undefined,
+        isCalendared: false,
+        sessionScope: 'Standalone Remote',
+      },
+    ];
+    const results = await migrateItems(items);
+
+    expect(results).toEqual([
+      {
+        ...mockSession,
+        caseOrder: undefined,
+        isCalendared: false,
+        isClosed: undefined,
+        sessionScope: 'Standalone Remote',
+        sessionStatus: 'New',
+      },
+    ]);
+  });
 });
