@@ -137,29 +137,30 @@ describe('Statistic', () => {
   });
 
   describe('addPenalty and updatePenalty', () => {
+    let statistic;
+    let statisticId = applicationContext.getUniqueId();
+    // let statisticId = '081108f8-8b01-4e49-b437-999a581a16zz';
+    let penaltyArrayLength;
     const MOCK_PENALTY_WITH_STATISTIC_ID = {
-      amount: 200,
       entityName: 'Penalty',
+      irsPenaltyAmount: 200,
       name: 'I am a penalty!',
       penaltyId: '081108f8-8b01-4e49-b437-781a581a16ac',
-      statisticId: '081108f8-8b01-4e49-b437-999a581a16zz',
+      statisticId,
     };
     const MOCK_PENALTY_WITHOUT_STATISTIC_ID = {
-      amount: 200,
       entityName: 'Penalty',
+      irsPenaltyAmount: 200,
       name: 'I am a penalty!',
       penaltyId: '081108f8-8b01-4e49-b437-781a581a16ac',
     };
     const MOCK_UPDATED_PENALTY = {
-      amount: 250,
       entityName: 'Penalty',
+      irsPenaltyAmount: 250,
       name: 'I am an updated penalty!',
       penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
-      statisticId: '081108f8-8b01-4e49-b437-999a581a16zz',
+      statisticId,
     };
-    let statistic;
-    let statisticId = '081108f8-8b01-4e49-b437-999a581a16zz';
-    let penaltyArrayLength;
 
     beforeEach(() => {
       statistic = new Statistic(
@@ -168,10 +169,10 @@ describe('Statistic', () => {
           irsTotalPenalties: 1,
           penalties: [
             {
-              amount: 100.0,
+              irsPenaltyAmount: 100.0,
               name: 'Penalty 1',
               penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
-              statisticId: '081108f8-8b01-4e49-b437-999a581a16zz',
+              statisticId,
             },
           ],
           statisticId,

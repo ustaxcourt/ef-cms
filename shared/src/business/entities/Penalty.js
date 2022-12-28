@@ -21,20 +21,28 @@ Penalty.prototype.init = function init(rawProps, { applicationContext }) {
   }
 
   this.name = rawProps.name;
-  this.amount = rawProps.amount;
+  this.irsPenaltyAmount = rawProps.irsPenaltyAmount;
+  this.determinationPenaltyAmount = rawProps.determinationPenaltyAmount;
   this.penaltyId = rawProps.penaltyId || applicationContext.getUniqueId();
   this.statisticId = rawProps.statisticId;
 };
 
 Penalty.VALIDATION_ERROR_MESSAGES = {
-  amount: 'Amount is required',
+  irsPenaltyAmount: 'Enter penalty on IRS Notice',
   name: 'Name is required',
   statisticId: 'Statistic Id is required',
 };
 
 Penalty.VALIDATION_RULES = joi.object().keys({
-  amount: joi.number().required().description('The amount of penalty.'),
+  determinationPenaltyAmount: joi
+    .number()
+    .optional()
+    .description('The Court determined amount of the penalty.'),
   entityName: JoiValidationConstants.STRING.valid('Penalty').required(),
+  irsPenaltyAmount: joi
+    .number()
+    .required()
+    .description('The IRS Notice amount of the penalty.'),
   name: JoiValidationConstants.STRING.max(50)
     .required()
     .description('Penalty name.'),
