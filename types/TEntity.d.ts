@@ -209,7 +209,6 @@ type TTrialSessionData = {
   postalCode: string;
   sessionScope: string;
   sessionType: string;
-  isClosed: boolean;
   startDate: string;
   startTime: string;
   state: string;

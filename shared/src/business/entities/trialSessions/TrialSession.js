@@ -19,26 +19,6 @@ const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty, isEqual } = require('lodash');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 
-const getTrialSessionStatus = session => {
-  const allCases = session.caseOrder || [];
-  const inactiveCases = allCases.filter(
-    sessionCase => sessionCase.removedFromTrial === true,
-  );
-
-  if (
-    session.isClosed ||
-    (!isEmpty(allCases) &&
-      isEqual(allCases, inactiveCases) &&
-      session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
-  ) {
-    return SESSION_STATUS_GROUPS.closed;
-  } else if (session.isCalendared) {
-    return SESSION_STATUS_GROUPS.open;
-  } else {
-    return SESSION_STATUS_GROUPS.new;
-  }
-};
-
 /**
  * constructor
  *
@@ -431,7 +411,19 @@ TrialSession.prototype.removeCaseFromCalendar = function ({
     caseToUpdate.removedFromTrialDate = createISODateString();
   }
 
-  this.sessionStatus = getTrialSessionStatus(this);
+  const allCases = this.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (
+    this.sessionStatus === SESSION_STATUS_GROUPS.closed ||
+    (!isEmpty(allCases) &&
+      isEqual(allCases, inactiveCases) &&
+      this.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+  ) {
+    this.sessionStatus = SESSION_STATUS_GROUPS.closed;
+  }
 
   return this;
 };
@@ -517,6 +509,5 @@ TrialSession.prototype.setAsClosed = function () {
 
 module.exports = {
   TrialSession: validEntityDecorator(TrialSession),
-  getTrialSessionStatus,
   isStandaloneRemoteSession,
 };
