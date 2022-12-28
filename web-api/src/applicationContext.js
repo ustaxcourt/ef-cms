@@ -244,9 +244,6 @@ const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
-// increase the timeout for zip uploads to S3
-AWS.config.httpOptions.timeout = 300000;
-
 const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -323,6 +320,11 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
       endpoint: useMasterRegion
         ? environment.masterDynamoDbEndpoint
         : environment.dynamoDbEndpoint,
+      httpOptions: {
+        connectTimeout: 3000,
+        timeout: 4000,
+      },
+      maxRetries: 4,
       region: useMasterRegion ? environment.masterRegion : environment.region,
     });
   }
@@ -436,6 +438,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         };
       } else {
         return new CognitoIdentityServiceProvider({
+          httpOptions: {
+            connectTimeout: 3000,
+            timeout: 4000,
+          },
+          maxRetries: 4,
           region: 'us-east-1',
         });
       }
@@ -521,6 +528,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
       } else {
         if (!sesCache) {
           sesCache = new SES({
+            httpOptions: {
+              connectTimeout: 3000,
+              timeout: 4000,
+            },
+            maxRetries: 4,
             region: 'us-east-1',
           });
         }
@@ -579,6 +591,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (!sqsCache) {
         sqsCache = new SQS({
           apiVersion: '2012-11-05',
+          httpOptions: {
+            connectTimeout: 3000,
+            timeout: 4000,
+          },
+          maxRetries: 4,
         });
       }
       return sqsCache;
@@ -614,7 +631,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
         };
       } else {
-        notificationServiceCache = new AWS.SNS({});
+        notificationServiceCache = new AWS.SNS({
+          httpOptions: {
+            connectTimeout: 3000,
+            timeout: 4000,
+          },
+          maxRetries: 4,
+        });
       }
       return notificationServiceCache;
     },
@@ -671,6 +694,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
+          httpOptions: {
+            timeout: 300000,
+          },
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });
