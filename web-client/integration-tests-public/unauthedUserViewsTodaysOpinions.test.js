@@ -19,10 +19,6 @@ describe('Unauthed user views todays opinions', () => {
   const cerebralTest = setupTest();
   const testClient = setupTestClient();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     testClient.closeSocket();
     testClient.draftOrders = [];

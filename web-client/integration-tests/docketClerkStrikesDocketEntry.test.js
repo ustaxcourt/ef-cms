@@ -20,10 +20,6 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
 
   console.error = () => null;
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
