@@ -903,8 +903,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
     branches:
       only:
         - test
-      ignore:
-        - prod # run with context workflow below
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
@@ -1050,36 +1048,8 @@ workflows:
 
   build-and-deploy-with-context:
     jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y-public-search:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-with-context-defaults
-      - build-ts-api:
-          <<: *build-and-deploy-with-context-defaults
-      - verify-pdfs:
-          <<: *build-and-deploy-with-context-defaults
       - deploy:
           <<: *build-and-deploy-with-context-defaults
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-pa11y-public-search
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-            - build-ts-api
-            - verify-pdfs
       - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
