@@ -22,20 +22,17 @@ As a _______, so that ________, I need ________.
 
 ## Test Cases
 
-
-## Story Definition of Ready (Created on 9/26/21)
+## Story Definition of Ready (updated on 12/23/22)
 The following criteria must be met in order for the user story to be picked up by the Flexion development team.
 The user story must: 
-- [ ]  Be immediately actionable for the development team
-- [ ]  Be focused on users
-- [ ]  Include a narrative. “As a ____, so that I can ______, I need _____.”
-- [ ]  Include user-centric acceptance criteria that expresses the users' needs
-- [ ]  Include user-centric testing scenarios
-- [ ]  Include preconditions (story dependencies)
-- [ ]  Not include design or technical solutions
-- [ ]  Include non-standard testing, deployment, documentation, browser, mobile or security requirements, as well as any requirements for 3rd-party integrations
+- [ ] Is framed in business/user need, the value has been addressed.
+- [ ] Includes acceptance criteria
+- [ ] Has been refined
+- [ ] Pre conditions have been satisfied. 
 
-Process: Flexion developers and designers will test if the story meets acceptance criteria and test cases in Flexion dev and staging environments (“standard testing”). If additional acceptance criteria or testing scenarios are discovered while the story is in progress, a new story should be created, added to the backlog and prioritized by the product owner. 
+**Process:** 
+Flexion developers and designers will test if the story meets acceptance criteria and test cases in Flexion dev and staging environments (“standard testing”). If additional acceptance criteria or testing scenarios are discovered while the story is in progress, a new story should be created, added to the backlog and prioritized by the product owner. 
+
 
 ## Definition of Done (Updated 5-19-22)
 **Product Owner**

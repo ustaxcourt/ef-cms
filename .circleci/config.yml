@@ -15,7 +15,7 @@ commands:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
-              npm ci --legacy-peer-dep
+              npm ci --legacy-peer-deps
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
@@ -48,7 +48,7 @@ commands:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
-              npm ci --legacy-peer-dep
+              npm ci --legacy-peer-deps
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
@@ -453,15 +453,8 @@ jobs:
           command: |
             ./setup-for-blue-green-migration.sh
       - run:
-          name: Setup Reindex If Needed
-          command: |
-            ./setup-for-reindex.sh
-      - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Reindex Flag
-          command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Setup Destination Table Var
           command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -556,10 +549,7 @@ jobs:
 
   reindex:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.14.0
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.12.0
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
@@ -606,7 +596,6 @@ jobs:
             cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
@@ -873,7 +862,6 @@ jobs:
             source $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
       - run:
@@ -906,18 +894,12 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
-      - run:
-          name: Cleanup Deploy Table After Reindex
-          command: |
-            if [ $REINDEX_FLAG == true ]; then
-              npm run reindex:cleanup -- $ENV
-            fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
-      ignore:
-        - prod # run with context workflow below
+      only:
+        - test
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
@@ -973,12 +955,9 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - reindex:
-          requires:
-            - deploy
       - migrate:
           requires:
-            - reindex
+            - deploy
           filters:
             branches:
               only:
@@ -1066,36 +1045,8 @@ workflows:
 
   build-and-deploy-with-context:
     jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-pa11y-public-search:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-with-context-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-with-context-defaults
-      - build-ts-api:
-          <<: *build-and-deploy-with-context-defaults
-      - verify-pdfs:
-          <<: *build-and-deploy-with-context-defaults
       - deploy:
           <<: *build-and-deploy-with-context-defaults
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-pa11y-public-search
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-            - build-ts-api
-            - verify-pdfs
       - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
@@ -1103,7 +1054,7 @@ workflows:
       - migrate:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - reindex
+            - deploy
       - wait-for-reindex:
           <<: *build-and-deploy-with-context-defaults
           type: approval

@@ -1,27 +1,20 @@
-name: Node.js CI - lint
+name: Node.js CI - Lint
 
 on:
   pull_request:
   push:
     branches:
       - dependency-updates
+      - test
 
 jobs:
   Lint:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
       - name: NPM Install
-        run: npm ci --legacy-peer-dep && npm rebuild
+        run: npm ci --legacy-peer-deps
       - name: Lint
         run: npm run lint
       - name: Shellcheck
