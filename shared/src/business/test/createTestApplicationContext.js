@@ -321,9 +321,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
-    formattedTrialSessionDetails: jest
-      .fn()
-      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
       .fn()
