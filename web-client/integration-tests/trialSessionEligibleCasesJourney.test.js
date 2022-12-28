@@ -1,4 +1,8 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+  CHIEF_JUDGE,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -8,18 +12,8 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const cerebralTest = setupTest();
-const { CASE_TYPES_MAP, CHIEF_JUDGE, STATUS_TYPES } =
-  applicationContext.getConstants();
-
 describe('Trial Session Eligible Cases Journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  const cerebralTest = setupTest();
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
   const overrides = {
@@ -29,6 +23,10 @@ describe('Trial Session Eligible Cases Journey', () => {
     trialLocation,
   };
   const createdDocketNumbers = [];
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
@@ -174,7 +172,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[1],
       });
       expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
       expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
 
@@ -214,7 +212,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[1],
       });
       expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
       expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
 
@@ -285,7 +283,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(cerebralTest.getState('caseDetail.status')).toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
       expect(cerebralTest.getState('caseDetail.trialLocation')).toEqual(
         trialLocation,
@@ -302,7 +300,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[1],
       });
       expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
       expect(cerebralTest.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(cerebralTest.getState('caseDetail.trialDate')).toBeUndefined();
@@ -315,7 +313,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[2],
       });
       expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
 
       //Case #4 - assigned
@@ -323,7 +321,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[3],
       });
       expect(cerebralTest.getState('caseDetail.status')).toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
 
       //Case #5 - assigned
@@ -331,7 +329,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[4],
       });
       expect(cerebralTest.getState('caseDetail.status')).toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
     });
 
@@ -367,7 +365,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
 
       await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
@@ -386,7 +384,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
 
       await cerebralTest.runSequence('openAddToTrialModalSequence');
@@ -412,7 +410,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(cerebralTest.getState('caseDetail.status')).toEqual(
-        STATUS_TYPES.calendared,
+        CASE_STATUS_TYPES.calendared,
       );
 
       await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {

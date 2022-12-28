@@ -13,12 +13,8 @@ import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitio
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsDeletesOrderFromCase } from './journey/petitionsDeletesOrderFromCase';
 
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk Create Order Journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

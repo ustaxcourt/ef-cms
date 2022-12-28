@@ -5,18 +5,14 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-
 describe('petitions clerk edits a petition payment fee', () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  let caseDetail;
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  let caseDetail;
 
   loginAs(cerebralTest, 'petitioner@example.com');
 
