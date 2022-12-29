@@ -52,6 +52,7 @@ import {
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
+import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
@@ -66,6 +67,7 @@ import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPu
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
+import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
@@ -189,10 +191,12 @@ const applicationContextPublic = {
       formatDocketEntry,
       getContactPrimary,
       getContactSecondary,
+      getDescriptionDisplay,
       getJudgeLastName,
       getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      openUrlInNewTab,
       sortDocketEntries,
     };
   },

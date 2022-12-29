@@ -30,7 +30,6 @@ describe('Complete QC on lead case docket entry', () => {
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
   beforeAll(() => {
-    jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
   });
 

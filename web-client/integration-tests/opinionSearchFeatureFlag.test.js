@@ -8,12 +8,9 @@ import {
   setOpinionSearchEnabled,
   setupTest,
 } from '../integration-tests/helpers';
-const cerebralTest = setupTest();
 
 describe('Opinion search feature flags', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(async () => {
     cerebralTest.closeSocket();

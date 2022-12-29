@@ -3,56 +3,44 @@
   const {
     elasticsearchIndexes,
   } = require('./elasticsearch/elasticsearch-indexes');
+  const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+  const { Client } = require('@opensearch-project/opensearch');
+
   AWS.config.region = 'us-east-1';
-  const {
-    ELASTICSEARCH_API_VERSION,
-  } = require('./elasticsearch/elasticsearch-settings');
-
-  const connectionClass = require('http-aws-es');
-  const elasticsearch = require('elasticsearch');
-
   AWS.config.httpOptions.timeout = 300000;
-
-  const { EnvironmentCredentials } = AWS;
-
-  // eslint-disable-next-line spellcheck/spell-checker
-  /*
-    Supported versions can be found at
-    https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version
-    Changes to the API version ought to also be reflected in
-    - elasticsearch.tf
-    - delete-elasticsearch-index.js
-  */
 
   const environment = {
     elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,
     region: 'us-east-1',
   };
 
-  const searchClientCache = new elasticsearch.Client({
-    amazonES: {
-      credentials: new EnvironmentCredentials('AWS'),
-      region: environment.region,
-    },
-    apiVersion: ELASTICSEARCH_API_VERSION,
-    connectionClass,
-    host: {
-      host: environment.elasticsearchEndpoint,
-      port: 443,
-      protocol: 'https',
-    },
-    log: 'warning',
+  const openSearchClient = new Client({
+    ...AwsSigv4Signer({
+      getCredentials: () =>
+        new Promise((resolve, reject) => {
+          AWS.config.getCredentials((err, credentials) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(credentials);
+            }
+          });
+        }),
+
+      region: 'us-east-1',
+    }),
+    node: `https://${environment.elasticsearchEndpoint}:443`,
   });
 
   await Promise.all(
     elasticsearchIndexes.map(async index => {
       try {
-        const indexExists = await searchClientCache.indices.exists({
+        const indexExists = await openSearchClient.indices.exists({
           body: {},
           index,
         });
         if (indexExists) {
-          searchClientCache.indices.delete({
+          openSearchClient.indices.delete({
             index,
           });
         }

@@ -221,6 +221,7 @@ type TTrialSessionData = {
   trialSessionId: string;
   judge: {
     name: string;
+    userId: string;
   };
   trialClerk: string;
 };
@@ -228,16 +229,20 @@ type TTrialSessionData = {
 type TTrialSessionWorkingCopyData = {
   caseMetadata: any;
   filters: {
-    aBasisReached: boolean;
+    basisReached: boolean;
     continued: boolean;
+    definiteTrial: boolean;
     dismissed: boolean;
+    motionToDismiss: boolean;
+    probableSettlement: boolean;
+    probableTrial: boolean;
     recall: boolean;
     rule122: boolean;
     setForTrial: boolean;
     settled: boolean;
     showAll: boolean;
     statusUnassigned: boolean;
-    takenUnderAdvisement: boolean;
+    submittedCAV: boolean;
   };
   sessionNotes: string;
   sort: string;
@@ -422,3 +427,16 @@ type TContact = {
 };
 
 type TError = TContact;
+
+type TPrintableTableFilters = {
+  aBasisReached: boolean;
+  continued: boolean;
+  dismissed: boolean;
+  recall: boolean;
+  rule122: boolean;
+  setForTrial: boolean;
+  settled: boolean;
+  showAll: boolean;
+  statusUnassigned: boolean;
+  takenUnderAdvisement: boolean;
+};

@@ -361,6 +361,9 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  trialSessionJudge: {
+    name: '',
+  },
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

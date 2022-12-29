@@ -26,10 +26,6 @@ import { withAppContextDecorator } from '../src/withAppContext';
 describe('external users perform an advanced search for orders', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
