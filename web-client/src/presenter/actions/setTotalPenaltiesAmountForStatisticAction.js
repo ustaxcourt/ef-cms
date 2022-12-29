@@ -15,10 +15,11 @@ export const setTotalPenaltiesAmountForStatisticAction = ({
   store,
 }) => {
   const { totalPenalties } = props;
-  const { statisticIndex } = get(state.modal);
+  const { penalties, statisticIndex } = get(state.modal);
 
   store.set(
     state.form.statistics[statisticIndex].irsTotalPenalties,
     totalPenalties,
   );
+  store.set(state.form.penalties, penalties);
 };
