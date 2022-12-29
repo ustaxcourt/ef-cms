@@ -91,10 +91,10 @@ const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 // Emails
 const {
   BouncedEmailAlert,
-} = require('../emailGenerator/emailTemplates/BouncedEmailAlert');
+} = require('../emailGenerator/emailTemplates/BouncedEmailAlert.jsx');
 const {
   DocumentService,
-} = require('../emailGenerator/emailTemplates/DocumentService');
+} = require('../emailGenerator/emailTemplates/DocumentService.jsx');
 const {
   PetitionService,
 } = require('../emailGenerator/emailTemplates/PetitionService.jsx');
