@@ -26,11 +26,13 @@ export const CalculatePenaltiesModal = connect(
     title,
     updateModalValueSequence,
   }) {
+    console.log('override', confirmSequenceOverride);
+    console.log('confirm', confirmSequence);
     return (
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        confirmLabel="Calculate"
+        confirmLabel="Calculate and Save"
         confirmSequence={() => {
           confirmSequenceOverride
             ? confirmSequenceOverride()
@@ -49,10 +51,10 @@ export const CalculatePenaltiesModal = connect(
                 className="usa-input"
                 id={`penalty_${index}`}
                 name={`penalties.${index}`}
-                value={penalties[index]}
+                value={penalties[index].irsPenaltyAmount}
                 onValueChange={values => {
                   updateModalValueSequence({
-                    key: `penalties.${index}`,
+                    key: `penalties.${index}.irsPenaltyAmount`,
                     value: values.value,
                   });
                 }}
