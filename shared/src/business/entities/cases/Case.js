@@ -1465,8 +1465,8 @@ Case.getSortableDocketNumber = function (docketNumber) {
     return;
   }
 
-  // NOTE: As of now, 1000-87 is the oldest case in DAWSON, which was filed in 1987
-  const oldestYear = 87;
+  // NOTE: 1574-65 is the oldest case in DAWSON, which was filed in 1965
+  const oldestYear = 65;
 
   const [sequentialNumber, yearFiled] = docketNumber.split('-');
   const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
