@@ -4,6 +4,7 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
+const { Penalty } = require('./Penalty');
 
 /**
  * Statistic constructor
@@ -30,6 +31,23 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
+  // temporary until migration is written - this allows us for now to run api locally
+  this.penalties = Array.isArray(rawStatistic.penalties)
+    ? assignPenalties({
+        applicationContext,
+        rawPenalties: rawStatistic.penalties,
+        statisticId: this.statisticId,
+      })
+    : [
+        new Penalty(
+          {
+            irsPenaltyAmount: this.irsTotalPenalties,
+            name: 'Penalty 1',
+            statisticId: this.statisticId,
+          },
+          { applicationContext },
+        ),
+      ];
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
@@ -84,6 +102,10 @@ Statistic.VALIDATION_RULES = joi.object().keys({
       then: joi.required(),
     })
     .description('Last date of the statistics period.'),
+  penalties: joi
+    .array()
+    .min(1)
+    .description('List of Penalty Entities for the statistic.'),
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
   ),
@@ -102,5 +124,42 @@ joiValidationDecorator(
   Statistic.VALIDATION_RULES,
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
+
+const assignPenalties = ({ applicationContext, rawPenalties, statisticId }) => {
+  return rawPenalties.map(penalty => {
+    return penalty.statisticId
+      ? new Penalty(penalty, { applicationContext })
+      : new Penalty({ ...penalty, statisticId }, { applicationContext });
+  });
+};
+
+/**
+ *  adds a Penalty object to the Statistic's penalties array
+ *
+ * @param {Object} penalty  the Penalty object to add
+ * @returns {void} modifies the penalties array on the Statistic
+ */
+Statistic.prototype.addPenalty = function ({ applicationContext, rawPenalty }) {
+  const rawPenaltyCopy = { ...rawPenalty };
+  if (!rawPenaltyCopy.statisticId) {
+    rawPenaltyCopy.statisticId = this.statisticId;
+  }
+  const penalty = new Penalty(rawPenaltyCopy, { applicationContext });
+  this.penalties.push(penalty);
+};
+
+/**
+ * updates a Penalty on the Statistic's penalties array
+ *
+ * @param {string} updatedPenalty the penaltyToUpdate Penalty object with updated info
+ * @returns {void} modifies the penalties array on the Statistic
+ */
+Statistic.prototype.updatePenalty = function (updatedPenalty) {
+  const foundPenalty = this.penalties.find(
+    penalty => penalty.penaltyId === updatedPenalty.penaltyId,
+  );
+
+  Object.assign(foundPenalty, updatedPenalty);
+};
 
 exports.Statistic = validEntityDecorator(Statistic);
