@@ -31,11 +31,11 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
-  this.penalties = Array.isArray(rawStatistic.penalties)
-    ? rawStatistic.penalties.map(
-        penalty => new Penalty(penalty, { applicationContext }),
-      )
-    : [];
+  this.penalties = assignPenalties({
+    applicationContext,
+    rawPenalties: rawStatistic.penalties,
+    statisticId: this.statisticId,
+  });
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
@@ -92,7 +92,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
     .description('Last date of the statistics period.'),
   penalties: joi
     .array()
-    .items(Penalty.VALIDATION_RULES)
+    .min(1)
     .description('List of Penalty Entities for the statistic.'),
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
@@ -112,6 +112,14 @@ joiValidationDecorator(
   Statistic.VALIDATION_RULES,
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
+
+const assignPenalties = ({ applicationContext, rawPenalties, statisticId }) => {
+  return rawPenalties.map(penalty => {
+    return penalty.statisticId
+      ? new Penalty(penalty, { applicationContext })
+      : new Penalty({ ...penalty, statisticId }, { applicationContext });
+  });
+};
 
 /**
  *  adds a Penalty object to the Statistic's penalties array
