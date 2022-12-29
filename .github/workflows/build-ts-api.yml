@@ -1,4 +1,4 @@
-name: Node.js CI - shared
+name: Build API Typescript
 
 on:
   pull_request:
@@ -8,12 +8,12 @@ on:
       - test
 
 jobs:
-  Shared:
+  build_ts_api:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Shared
+      - name: build typescript api
         run: |
           npm ci --legacy-peer-deps
-          npm run test:shared
+          npm run build:assets
+          npm run build:lambda:api
