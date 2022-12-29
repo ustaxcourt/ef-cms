@@ -227,13 +227,14 @@
     "busboy": "^1.0.0",
     "dot-prop": "5.1.1",
     "got": "11.8.5",
+    "json5": "2.2.2",
+    "loader-utils": "^2.0.3",
     "lodash": "^4.17.21",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
     "node-forge": "^1.2.1",
-    "underscore": "^1.13.1",
     "terser": "^5.14.2",
-    "loader-utils": "^2.0.3"
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -283,7 +284,7 @@
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "2.24.1",
     "eslint-plugin-jest": "^27.1.6",
     "eslint-plugin-jsdoc": "^39.6.4",
     "eslint-plugin-jsx-a11y": "^6.6.1",
