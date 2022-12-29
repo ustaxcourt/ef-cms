@@ -23,10 +23,8 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({
-  // eslint-disable-next-line no-unused-vars
   documentClient,
   items,
-  // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
   for (let { key, script } of migrationsToRun) {
@@ -113,7 +111,6 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
   }
 };
 
-// eslint-disable-next-line
 const hasMigrationRan = async key => {
   const { Item } = await dynamoDbDocumentClient
     .get({
