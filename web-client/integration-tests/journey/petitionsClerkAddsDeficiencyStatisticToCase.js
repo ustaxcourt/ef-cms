@@ -1,4 +1,5 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import { Penalty } from '../../../shared/src/business/entities/Penalty';
 import { Statistic } from '../../../shared/src/business/entities/Statistic';
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
@@ -58,6 +59,12 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       irsDeficiencyAmount:
         Statistic.VALIDATION_ERROR_MESSAGES.irsDeficiencyAmount,
       irsTotalPenalties: Statistic.VALIDATION_ERROR_MESSAGES.irsTotalPenalties,
+      penalties: [
+        {
+          index: 0,
+          irsPenaltyAmount: Penalty.VALIDATION_ERROR_MESSAGES.irsPenaltyAmount,
+        },
+      ],
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
