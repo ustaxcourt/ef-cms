@@ -31,11 +31,23 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
-  this.penalties = assignPenalties({
-    applicationContext,
-    rawPenalties: rawStatistic.penalties,
-    statisticId: this.statisticId,
-  });
+  // temporary until migration is written - this allows us for now to run api locally
+  this.penalties = Array.isArray(rawStatistic.penalties)
+    ? assignPenalties({
+        applicationContext,
+        rawPenalties: rawStatistic.penalties,
+        statisticId: this.statisticId,
+      })
+    : [
+        new Penalty(
+          {
+            irsPenaltyAmount: this.irsTotalPenalties,
+            name: 'Penalty 1',
+            statisticId: this.statisticId,
+          },
+          { applicationContext },
+        ),
+      ];
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
