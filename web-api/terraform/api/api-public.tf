@@ -140,6 +140,7 @@ resource "aws_api_gateway_stage" "api_public_stage" {
           user-agent = "$context.identity.userAgent"
         }
         method = "$context.httpMethod"
+        url = "$context.path"
       }
 
       authorizer = {
