@@ -33,6 +33,10 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
 );
 
 describe('Trial Session Eligible Cases Journey', () => {
+  beforeAll(() => {
+    jest.setTimeout(50000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
