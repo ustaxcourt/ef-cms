@@ -21,15 +21,21 @@ describe('Statistic', () => {
       );
     });
 
-    it('passes validation with minimal required information', () => {
+    it.only('passes validation with minimal required information', () => {
       const statistic = new Statistic(
         {
           irsDeficiencyAmount: 1,
           irsTotalPenalties: 1,
+          penalties: [],
           year: '2001',
           yearOrPeriod: 'Year',
         },
         { applicationContext },
+      );
+
+      console.log(
+        'validation errors: ',
+        statistic.getFormattedValidationErrors(),
       );
       expect(statistic.isValid()).toBeTruthy();
     });
