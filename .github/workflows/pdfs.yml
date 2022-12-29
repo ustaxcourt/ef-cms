@@ -1,0 +1,23 @@
+name: Verify PDFS
+
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
+      - test
+
+jobs:
+  test_pdfs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -o Acquire::Retries=3 -y graphicsmagick ghostscript
+          npm ci --legacy-peer-deps && npm rebuild
+      - name: Generate PDFs
+        run: npm run test:pdf-output
+      - name: Compare Images
+        run: node image-compare-pdfs.js
