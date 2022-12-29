@@ -73,7 +73,7 @@ brew install circleci
 
 All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I recommend looking through this list of scripts because you will be using a lot of them as you advance through learning this application.  But for now, let's just talk about the most important ones.
 
-### M1 Macs
+### M1 Macs - Docker Method
 
 #### Additional Prerequisites
 [Docker Desktop](https://www.docker.com/products/docker-desktop/). Ask a team member how to obtain a license if you don't already have one. **If you use Docker Desktop, you need to get a license**. Within Docker, allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. This will reduce the number of resource-related failures when running the application.
@@ -105,6 +105,22 @@ Use one of the mock logins documented below to log in to the private UI.
 
 If you have unexpected errors with running in Docker, try allocating 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap.
 
+### M1 Macs - Non-Docker Method
+
+This method does not use Docker, nor does it use Rosetta. It is also the method preferred by other M1 users on the team.
+
+Follow the instructions for setup as you would for Non-M1 Macs, but **before you run `npm i --legacy-peer-deps`**, run the following commands:
+
+``` 
+brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman libffi expat zlib
+brew link libffi --force
+brew link expat --force
+brew link zlib --force
+export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig/ 
+```
+
+This will install `node-canvas` dependencies globally. As of 12/05/2022, `node-canvas` does not have a package compatible with M1 Macs.
+
 ### Non-M1 Macs
 
 #### Checkout Develop
@@ -115,7 +131,7 @@ Make sure you are on the `ustaxcourt/staging` branch before you install the npm 
 
 All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
 
-`npm install`
+`npm install --legacy-peer-deps`
 
 #### 💻 MacOS Monterey+ 
 
