@@ -20,35 +20,35 @@ jest.mock('jsonwebtoken', () => {
   };
 });
 
-const TOKEN_VALUE =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
-
-const setupHappyPath = verifyObject => {
-  axios.get.mockImplementation(() => {
-    return Promise.resolve({
-      data: { keys: [{ kid: 'key-identifier' }] },
-    });
-  });
-
-  jwkToPem.mockImplementation(key => {
-    if (key.kid !== 'key-identifier') {
-      throw new Error('wrong key was given');
-    }
-
-    return 'test-pem';
-  });
-
-  jwk.verify.mockImplementation((token, pem, options, callback) => {
-    if (token !== TOKEN_VALUE || pem !== 'test-pem') {
-      throw new Error('wrong token or pem was passed to verification');
-    }
-
-    expect(options.issuer).toBeDefined();
-    callback(null, verifyObject);
-  });
-};
-
 describe('cognito-authorizer', () => {
+  const TOKEN_VALUE =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
+
+  const setupHappyPath = verifyObject => {
+    axios.get.mockImplementation(() => {
+      return Promise.resolve({
+        data: { keys: [{ kid: 'key-identifier' }] },
+      });
+    });
+
+    jwkToPem.mockImplementation(key => {
+      if (key.kid !== 'key-identifier') {
+        throw new Error('wrong key was given');
+      }
+
+      return 'test-pem';
+    });
+
+    jwk.verify.mockImplementation((token, pem, options, callback) => {
+      if (token !== TOKEN_VALUE || pem !== 'test-pem') {
+        throw new Error('wrong token or pem was passed to verification');
+      }
+
+      expect(options.issuer).toBeDefined();
+      callback(null, verifyObject);
+    });
+  };
+
   let event, context, transport;
 
   beforeEach(() => {
@@ -78,12 +78,8 @@ describe('cognito-authorizer', () => {
       payload: { iss: `issuer-url-${Math.random()}` },
     });
 
-    jest.spyOn(axios, 'get').mockImplementation(() => {});
-    jest.spyOn(transport, 'log').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
+    jest.spyOn(axios, 'get');
+    jest.spyOn(transport, 'log');
   });
 
   it('returns unauthorized when token is missing', async () => {
