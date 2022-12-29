@@ -322,9 +322,9 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
         : environment.dynamoDbEndpoint,
       httpOptions: {
         connectTimeout: 3000,
-        timeout: 4000,
+        timeout: 5000,
       },
-      maxRetries: 4,
+      maxRetries: 3,
       region: useMasterRegion ? environment.masterRegion : environment.region,
     });
   }
@@ -440,9 +440,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         return new CognitoIdentityServiceProvider({
           httpOptions: {
             connectTimeout: 3000,
-            timeout: 4000,
+            timeout: 5000,
           },
-          maxRetries: 4,
+          maxRetries: 3,
           region: 'us-east-1',
         });
       }
@@ -530,9 +530,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
           sesCache = new SES({
             httpOptions: {
               connectTimeout: 3000,
-              timeout: 4000,
+              timeout: 5000,
             },
-            maxRetries: 4,
+            maxRetries: 3,
             region: 'us-east-1',
           });
         }
@@ -593,9 +593,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
           apiVersion: '2012-11-05',
           httpOptions: {
             connectTimeout: 3000,
-            timeout: 4000,
+            timeout: 5000,
           },
-          maxRetries: 4,
+          maxRetries: 3,
         });
       }
       return sqsCache;
@@ -634,9 +634,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         notificationServiceCache = new AWS.SNS({
           httpOptions: {
             connectTimeout: 3000,
-            timeout: 4000,
+            timeout: 5000,
           },
-          maxRetries: 4,
+          maxRetries: 3,
         });
       }
       return notificationServiceCache;
