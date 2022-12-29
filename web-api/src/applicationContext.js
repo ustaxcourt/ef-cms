@@ -2,9 +2,7 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
-const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const elasticsearch = require('elasticsearch');
 const pdfLib = require('pdf-lib');
 const pug = require('pug');
 const sass = require('sass');
@@ -88,9 +86,15 @@ const {
   getCropBox,
 } = require('../../shared/src/business/utilities/getCropBox');
 const {
+  getDescriptionDisplay,
+} = require('../../shared/src/business/utilities/getDescriptionDisplay');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
+const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo');
 const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
@@ -220,6 +224,8 @@ const {
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+const { Client } = require('@opensearch-project/opensearch');
 
 const {
   Case,
@@ -241,14 +247,7 @@ const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
 
-const {
-  CognitoIdentityServiceProvider,
-  DynamoDB,
-  EnvironmentCredentials,
-  S3,
-  SES,
-  SQS,
-} = AWS;
+const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -643,22 +642,25 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
-          searchClientCache = new elasticsearch.Client({
-            host: environment.elasticsearchEndpoint,
+          searchClientCache = new Client({
+            node: environment.elasticsearchEndpoint,
           });
         } else {
-          searchClientCache = new elasticsearch.Client({
-            amazonES: {
-              credentials: new EnvironmentCredentials('AWS'),
-              region: environment.region,
-            },
-            apiVersion: '7.7',
-            awsConfig: new AWS.Config({ region: 'us-east-1' }),
-            connectionClass,
-            host: environment.elasticsearchEndpoint,
-            log: 'warning',
-            port: 443,
-            protocol: 'https',
+          searchClientCache = new Client({
+            ...AwsSigv4Signer({
+              getCredentials: () =>
+                new Promise((resolve, reject) => {
+                  AWS.config.getCredentials((err, credentials) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(credentials);
+                    }
+                  });
+                }),
+              region: 'us-east-1',
+            }),
+            node: `https://${environment.elasticsearchEndpoint}:443`,
           });
         }
       }
@@ -699,7 +701,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
         getCropBox,
+        getDescriptionDisplay,
         getDocQcSectionForUser,
+        getDocumentTitleWithAdditionalInfo,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getStampBoxCoordinates,

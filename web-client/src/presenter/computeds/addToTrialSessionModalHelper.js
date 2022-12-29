@@ -21,12 +21,7 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
     }
     trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
 
-    trialSession.computedStatus = applicationContext
-      .getUtilities()
-      .getTrialSessionStatus({
-        applicationContext,
-        session: trialSession,
-      });
+    trialSession.computedStatus = trialSession.sessionStatus;
 
     return trialSession;
   });

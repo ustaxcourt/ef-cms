@@ -78,4 +78,44 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
     });
     expect(routeStub).toHaveBeenCalledWith('/document-qc/my/inbox');
   });
+
+  it('should redirect to the my in progress page when fromPage is qc-section-inbox', async () => {
+    await runAction(confirmWorkItemAlreadyCompleteAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        constants: {
+          FROM_PAGES: {
+            qcMyInProgress: 'qc-my-in-progress',
+          },
+        },
+        fromPage: 'qc-my-in-progress',
+      },
+    });
+    expect(routeStub).toHaveBeenCalledWith('/document-qc/my/inProgress');
+  });
+
+  it('should redirect to the section in progress page when fromPage is qc-section-inbox', async () => {
+    await runAction(confirmWorkItemAlreadyCompleteAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        constants: {
+          FROM_PAGES: {
+            qcSectionInProgress: 'qc-section-in-progress',
+          },
+        },
+        fromPage: 'qc-section-in-progress',
+      },
+    });
+    expect(routeStub).toHaveBeenCalledWith('/document-qc/section/inProgress');
+  });
 });

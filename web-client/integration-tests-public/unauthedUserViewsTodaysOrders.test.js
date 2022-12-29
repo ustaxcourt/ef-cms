@@ -18,13 +18,11 @@ describe('Unauthed user views todays orders', () => {
   const testClient = setupTestClient();
 
   beforeAll(() => {
-    jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
   });
 
   afterAll(() => {
     testClient.closeSocket();
-    testClient.draftOrders = [];
   });
 
   loginAs(testClient, 'petitioner@example.com');

@@ -3,7 +3,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { getTrialSessionStatus } from './getFormattedTrialSessionDetails';
+import { getTrialSessionStatus } from '../dto/TrialSessionInfoDto';
 
 describe('formattedTrialSessionDetails', () => {
   describe('getTrialSessionStatus', () => {

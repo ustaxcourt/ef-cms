@@ -63,9 +63,6 @@ const {
   testPdfDoc,
 } = require('./getFakeFile');
 const {
-  filterWorkItemsForUser,
-} = require('../../../src/business/utilities/filterWorkItemsForUser');
-const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
@@ -74,15 +71,16 @@ const {
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatCase: formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
+const {
   formatJudgeName,
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formatPhoneNumber,
 } = require('../../../src/business/utilities/formatPhoneNumber');
-const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
@@ -114,9 +112,6 @@ const {
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
-const {
-  getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentTitleWithAdditionalInfo,
 } = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
@@ -203,6 +198,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getCropBox } = require('../../../src/business/utilities/getCropBox');
+const { getDescriptionDisplay } = require('../utilities/getDescriptionDisplay');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
@@ -309,11 +305,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterWorkItemsForUser: jest
-      .fn()
-      .mockImplementation(filterWorkItemsForUser),
+    filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseForTrialSession: jest
+      .fn()
+      .mockImplementation(formatCaseForTrialSession),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
@@ -336,6 +333,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
+    getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
@@ -538,12 +536,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDocumentQCInboxForUser: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForUserPersistence),
+    getDocumentQCInboxForSection: jest.fn(),
+    getDocumentQCInboxForUser: jest.fn(),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
