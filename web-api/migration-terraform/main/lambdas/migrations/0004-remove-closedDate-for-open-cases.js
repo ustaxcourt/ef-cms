@@ -5,9 +5,16 @@ const {
 const {
   CLOSED_CASE_STATUSES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
+  UserCase,
+} = require('../../../../../shared/src/business/entities/UserCase');
 
 const isCaseRecord = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
+};
+
+const isUserCaseRecord = item => {
+  return item.pk.startsWith('user|') && item.sk.startsWith('case|');
 };
 
 const applicationContext = createApplicationContext({});
@@ -21,6 +28,14 @@ const migrateItems = items => {
         delete item.closedDate;
 
         new Case(item, {
+          applicationContext,
+        }).validateWithLogging(applicationContext);
+      }
+    } else if (isUserCaseRecord(item)) {
+      if (item.closedDate && !CLOSED_CASE_STATUSES.includes(item.status)) {
+        delete item.closedDate;
+
+        new UserCase(item, {
           applicationContext,
         }).validateWithLogging(applicationContext);
       }
