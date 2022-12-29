@@ -11,6 +11,7 @@ describe('Statistic', () => {
     it('fails validation if a yearOrPeriod is an invalid value', () => {
       const statistic = new Statistic(
         {
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           yearOrPeriod: 'something else',
         },
         { applicationContext },
@@ -21,21 +22,16 @@ describe('Statistic', () => {
       );
     });
 
-    it.only('passes validation with minimal required information', () => {
+    it('passes validation with minimal required information', () => {
       const statistic = new Statistic(
         {
           irsDeficiencyAmount: 1,
           irsTotalPenalties: 1,
-          penalties: [],
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           year: '2001',
           yearOrPeriod: 'Year',
         },
         { applicationContext },
-      );
-
-      console.log(
-        'validation errors: ',
-        statistic.getFormattedValidationErrors(),
       );
       expect(statistic.isValid()).toBeTruthy();
     });
@@ -45,6 +41,7 @@ describe('Statistic', () => {
         {
           irsDeficiencyAmount: 'something else',
           irsTotalPenalties: 'something else',
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           year: 'something else',
           yearOrPeriod: 'Year',
         },
@@ -64,6 +61,7 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 1,
           irsTotalPenalties: 1,
           lastDateOfPeriod: '2050-03-01T21:40:46.415Z',
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           yearOrPeriod: 'Period',
         },
         { applicationContext },
@@ -80,6 +78,7 @@ describe('Statistic', () => {
         {
           irsDeficiencyAmount: 1,
           irsTotalPenalties: 1,
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           year: 2050,
           yearOrPeriod: 'Year',
         },
@@ -97,6 +96,7 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 654.32,
           irsTotalPenalties: 123.45,
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           year: 2015,
           yearOrPeriod: 'Year',
         },
@@ -112,6 +112,7 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 654.32,
           irsTotalPenalties: 123.45,
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           year: 2015,
           yearOrPeriod: 'Year',
         },
@@ -130,6 +131,7 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 654.32,
           irsTotalPenalties: 123.45,
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
           year: 2015,
           yearOrPeriod: 'Year',
         },
@@ -145,7 +147,6 @@ describe('Statistic', () => {
   describe('addPenalty and updatePenalty', () => {
     let statistic;
     let statisticId = applicationContext.getUniqueId();
-    // let statisticId = '081108f8-8b01-4e49-b437-999a581a16zz';
     let penaltyArrayLength;
     const MOCK_PENALTY_WITH_STATISTIC_ID = {
       entityName: 'Penalty',

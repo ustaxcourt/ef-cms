@@ -146,9 +146,8 @@ Statistic.prototype.updatePenalty = function (updatedPenalty) {
   const foundPenalty = this.penalties.find(
     penalty => penalty.penaltyId === updatedPenalty.penaltyId,
   );
-  if (foundPenalty) {
-    Object.assign(foundPenalty, updatedPenalty);
-  }
+
+  Object.assign(foundPenalty, updatedPenalty);
 };
 
 exports.Statistic = validEntityDecorator(Statistic);
