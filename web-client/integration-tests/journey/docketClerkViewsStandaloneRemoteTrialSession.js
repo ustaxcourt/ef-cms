@@ -18,7 +18,7 @@ export const docketClerkViewsStandaloneRemoteTrialSession = (
       },
     );
 
-    expect(trialSessionFormatted.computedStatus).toEqual(status);
+    expect(trialSessionFormatted.sessionStatus).toEqual(status);
     expect(trialSessionFormatted.startTime).toEqual('13:00');
     expect(trialSessionFormatted.sessionScope).toEqual('Standalone Remote');
   });

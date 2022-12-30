@@ -196,6 +196,7 @@ type TTrialSessionData = {
   courtReporter: string;
   courthouseName: string;
   createdAt: string;
+  sessionStatus: string;
   estimatedEndDate: string;
   irsCalendarAdministrator: string;
   isCalendared: boolean;
@@ -208,7 +209,6 @@ type TTrialSessionData = {
   postalCode: string;
   sessionScope: string;
   sessionType: string;
-  isClosed: boolean;
   startDate: string;
   startTime: string;
   state: string;

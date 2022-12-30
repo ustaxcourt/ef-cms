@@ -202,7 +202,7 @@ describe('closeTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate.isClosed,
-    ).toBe(true);
+        .calls[0][0].trialSessionToUpdate.sessionStatus,
+    ).toBe('Closed');
   });
 });

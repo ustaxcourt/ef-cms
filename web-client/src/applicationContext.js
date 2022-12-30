@@ -110,7 +110,7 @@ import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users
 import {
   compareCasesByDocketNumber,
   formatCase as formatCaseForTrialSession,
-  formattedTrialSessionDetails,
+  getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
@@ -726,7 +726,6 @@ const applicationContext = {
       formatJudgeName,
       formatNow,
       formatPhoneNumber,
-      formattedTrialSessionDetails,
       generateCourtIssuedDocumentTitle,
       generateExternalDocumentTitle,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
@@ -741,6 +740,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getFormattedPartiesNameAndTitle,
+      getFormattedTrialSessionDetails,
       getJudgeLastName,
       getMonthDayYearInETObj,
       getOtherFilers,
