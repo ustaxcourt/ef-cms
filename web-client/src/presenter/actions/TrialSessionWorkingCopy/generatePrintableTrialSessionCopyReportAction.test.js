@@ -89,7 +89,6 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
 
   it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
     const mockFormattedTrialSessionDetails = {
-      computedStatus: 'complete',
       estimatedEndDate: '2020-11-27T05:00:00.000Z',
       formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,
       formattedCourtReporter: 'Test Court Reporter',
@@ -98,6 +97,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       formattedStartDateFull: '2020-11-27T05:00:00.000Z',
       formattedTerm: MOCK_TRIAL_REGULAR.term,
       formattedTrialClerk: 'Test Trial Clerk',
+      sessionStatus: 'complete',
       startDate: '2020-11-27T05:00:00.000Z',
       trialLocation: MOCK_TRIAL_REGULAR.trialLocation,
     };
@@ -138,20 +138,6 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
       },
     );
-
-    expect(
-      applicationContext.getUseCases()
-        .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
-        .formattedTrialSession,
-    ).toEqual({
-      ...omit(mockFormattedTrialSessionDetails, [
-        'startDate',
-        'estimatedEndDate',
-      ]),
-      endDateForAdditionalPageHeaders: 'Nov 27, 2020',
-      formattedEstimatedEndDateFull: 'November 27, 2020',
-      startDateForAdditionalPageHeaders: 'Nov 27, 2020',
-    });
     expect(result.output.pdfUrl).toEqual(url);
   });
 
@@ -236,6 +222,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
       },
     );
+
     const expectedFilters = [
       { key: 'basisReached', label: 'Basis Reached' },
       { key: 'probableTrial', label: 'Probable Trial' },
@@ -249,6 +236,56 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
         .filters,
     ).toEqual(expectedFilters);
+    expect(result.output.pdfUrl).toEqual(url);
+  });
+
+  it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
+    const mockFormattedTrialSessionDetails = {
+      estimatedEndDate: '2020-11-27T05:00:00.000Z',
+      formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,
+      formattedCourtReporter: 'Test Court Reporter',
+      formattedIrsCalendarAdministrator: 'Test Calendar Admin',
+      formattedJudge: MOCK_TRIAL_REGULAR.judge.name,
+      formattedStartDateFull: '2020-11-27T05:00:00.000Z',
+      formattedTerm: MOCK_TRIAL_REGULAR.term,
+      formattedTrialClerk: 'Test Trial Clerk',
+      startDate: '2020-11-27T05:00:00.000Z',
+      trialLocation: MOCK_TRIAL_REGULAR.trialLocation,
+    };
+    const result = await runAction(
+      generatePrintableTrialSessionCopyReportAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          formattedCases: [formattedCaseMock],
+        },
+        state: {
+          formattedTrialSessionDetails: mockFormattedTrialSessionDetails,
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: {},
+          },
+          trialSessionWorkingCopyHelper: {
+            trialStatusFilters,
+          },
+        },
+      },
+    );
+    expect(
+      applicationContext.getUseCases()
+        .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
+        .formattedTrialSession,
+    ).toEqual({
+      ...omit(mockFormattedTrialSessionDetails, [
+        'startDate',
+        'estimatedEndDate',
+      ]),
+      endDateForAdditionalPageHeaders: 'Nov 27, 2020',
+      formattedEstimatedEndDateFull: 'November 27, 2020',
+      startDateForAdditionalPageHeaders: 'Nov 27, 2020',
+    });
     expect(result.output.pdfUrl).toEqual(url);
   });
 });
