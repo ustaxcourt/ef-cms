@@ -1471,7 +1471,7 @@ Case.getSortableDocketNumber = function (docketNumber) {
   const [sequentialNumber, yearFiled] = docketNumber.split('-');
   const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
   const yearFiledAdjusted =
-    parseInt(yearFiled) > oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
+    parseInt(yearFiled) >= oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
 
   return parseInt(`${yearFiledAdjusted}${sequentialNumberPadded}`);
 };
