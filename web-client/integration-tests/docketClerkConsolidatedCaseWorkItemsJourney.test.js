@@ -31,7 +31,9 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   // Document QC External filed document on Lead Case
 
-  cerebralTest.docketNumber = leadCaseDocketNumber;
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = leadCaseDocketNumber;
+  });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
@@ -253,13 +255,15 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
 
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = consolidatedCaseDocketNumber;
+  });
+
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
     fakeFile,
     consolidatedCaseDocketNumber,
   );
-
-  cerebralTest.docketNumber = consolidatedCaseDocketNumber;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -292,7 +296,9 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   // Document QC Internal filed document on Lead Case
 
-  cerebralTest.docketNumber = leadCaseDocketNumber;
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = leadCaseDocketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -315,7 +321,9 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   // Document QC Internal filed document on Non-lead Case
 
-  cerebralTest.docketNumber = consolidatedCaseDocketNumber;
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = consolidatedCaseDocketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
