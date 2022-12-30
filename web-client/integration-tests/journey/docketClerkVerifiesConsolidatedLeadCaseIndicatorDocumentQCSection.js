@@ -10,7 +10,6 @@ export const docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection =
     );
 
     return it('docket clerk verifies lead case indicator Section Document QC', async () => {
-      console.log('test docket number', cerebralTest.docketNumber);
       await refreshElasticsearchIndex();
       // await cerebralTest.runSequence('gotoWorkQueueSequence');
       await cerebralTest.runSequence('gotoWorkQueueSequence', {
@@ -22,12 +21,10 @@ export const docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection =
         state: cerebralTest.getState(),
       });
 
-      console.log('cerebralTest.docketEntryId', cerebralTest.docketEntryId);
       const foundWorkItem = sectionDocumentQCInbox.find(
         workItem =>
           workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
       );
-      console.log('foundWorkItem', foundWorkItem);
 
       expect(foundWorkItem).toMatchObject({
         consolidatedIconTooltipText: 'Lead case',

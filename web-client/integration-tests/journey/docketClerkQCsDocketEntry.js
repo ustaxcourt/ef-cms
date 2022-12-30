@@ -5,11 +5,6 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
     let { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    console.log(
-      'formattedDocketEntriesOnDocketRecord:::',
-      formattedDocketEntriesOnDocketRecord,
-    );
-
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
 
