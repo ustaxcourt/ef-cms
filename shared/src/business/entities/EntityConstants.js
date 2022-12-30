@@ -1203,11 +1203,17 @@ const SESSION_TYPES = {
   motionHearing: 'Motion/Hearing',
 };
 
-const SESSION_STATUS_GROUPS = {
-  all: 'All',
+const SESSION_STATUS_TYPES = {
   closed: 'Closed',
   new: 'New',
   open: 'Open',
+};
+
+const SESSION_STATUS_GROUPS = {
+  all: 'All',
+  closed: SESSION_STATUS_TYPES.closed,
+  new: SESSION_STATUS_TYPES.new,
+  open: SESSION_STATUS_TYPES.open,
 };
 
 const MAX_FILE_SIZE_MB = 250; // megabytes
@@ -1603,4 +1609,5 @@ module.exports = deepFreeze({
   UNSERVABLE_EVENT_CODES,
   US_STATES_OTHER,
   US_STATES,
+  SESSION_STATUS_TYPES,
 });
