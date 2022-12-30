@@ -21,9 +21,12 @@ export const docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection =
         state: cerebralTest.getState(),
       });
 
+      console.log('cerebralTest.docketEntryId', cerebralTest.docketEntryId);
       const foundWorkItem = sectionDocumentQCInbox.find(
-        workItem => workItem.docketNumber === docketNumber,
+        workItem =>
+          workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
       );
+      console.log('foundWorkItem', foundWorkItem);
 
       expect(foundWorkItem).toMatchObject({
         consolidatedIconTooltipText: 'Lead case',
