@@ -283,6 +283,7 @@ export const getFeatureFlagHelper = cerebralTest => {
 };
 
 export const getFormattedDocketEntriesForTest = async cerebralTest => {
+  // console.log('docketNumber:::::::::::', cerebralTest.docketNumber);
   await cerebralTest.runSequence('gotoCaseDetailSequence', {
     docketNumber: cerebralTest.docketNumber,
   });

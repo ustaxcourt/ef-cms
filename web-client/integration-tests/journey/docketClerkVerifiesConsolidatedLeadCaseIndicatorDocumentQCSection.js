@@ -10,9 +10,10 @@ export const docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection =
     );
 
     return it('docket clerk verifies lead case indicator Section Document QC', async () => {
+      console.log('test docket number', cerebralTest.docketNumber);
       await refreshElasticsearchIndex();
-      await cerebralTest.runSequence('gotoWorkQueueSequence');
-      await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      // await cerebralTest.runSequence('gotoWorkQueueSequence');
+      await cerebralTest.runSequence('gotoWorkQueueSequence', {
         box,
         queue,
       });
