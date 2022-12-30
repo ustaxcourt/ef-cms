@@ -77,6 +77,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     { box: 'outbox', queue: 'section' },
   );
 
+  cerebralTest.docketNumber = leadCaseDocketNumber;
   //file a unservable document
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
 
@@ -102,14 +103,6 @@ describe('Docket clerk consolidated case work item journey', () => {
       {
         key: 'eventCode',
         value: UNSERVABLE_EVENT_CODES[0], // CTRA
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'documentType',
-        value: 'Corrected Transcript',
       },
     );
 
