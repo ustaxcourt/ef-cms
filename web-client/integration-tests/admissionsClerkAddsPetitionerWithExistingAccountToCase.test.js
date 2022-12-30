@@ -12,7 +12,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 describe('admissions clerk adds petitioner with existing cognito account to case', () => {
   const cerebralTest = setupTest();
 
-  const EMAIL_TO_ADD = 'petitioner2@example.com';
+  const EMAIL_TO_ADD = 'petitioner4@example.com';
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -80,7 +80,7 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     await refreshElasticsearchIndex();
   });
 
-  loginAs(cerebralTest, 'petitioner2@example.com');
+  loginAs(cerebralTest, EMAIL_TO_ADD);
   it('petitioner with existing account verifies case is added to dashboard', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 
