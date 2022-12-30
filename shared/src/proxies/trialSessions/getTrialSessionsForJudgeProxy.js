@@ -9,6 +9,6 @@ const { get } = require('../requests');
 exports.getTrialSessionsForJudgeInteractor = (applicationContext, judgeId) => {
   return get({
     applicationContext,
-    endpoint: `/judges/${judgeId}/trial-sessions`,
+    endpoint: `/judges/${judgeId}/trial-sessions?fields=trialLocation,trialSessionId,sessionStatus,startDate`,
   });
 };
