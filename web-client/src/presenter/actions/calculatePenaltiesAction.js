@@ -8,9 +8,13 @@ import { state } from 'cerebral';
  * @returns {number} total computed value from penalty values
  */
 export const calculatePenaltiesAction = ({ get }) => {
-  const { penalties } = get(state.modal);
+  let { penalties } = get(state.modal);
 
-  const parseCurrency = value => `$${Number(value).toFixed(2)}`;
+  penalties = penalties.map(penalty => {
+    return penalty.irsPenaltyAmount;
+  });
+
+  const parseCurrency = value => Number(value).toFixed(2);
 
   const penaltyAggregator = (sum, stepValue) => Number(sum) + Number(stepValue);
 
