@@ -8,6 +8,9 @@ const {
   migrateItems: migration0003,
 } = require('./migrations/0003-update-trial-session-working-copy-status');
 const {
+  migrateItems: migration0004,
+} = require('./migrations/0004-set-session-status');
+const {
   migrateItems: migration0006,
 } = require('./migrations/0006-reformat-sortable-docket-number');
 
@@ -22,6 +25,10 @@ const migrationsToRun = [
   {
     key: '0006-reformat-sortable-docket-number.js',
     script: migration0006,
+  },
+  {
+    key: '0004-set-session-status.js',
+    script: migration0004,
   },
 ];
 
