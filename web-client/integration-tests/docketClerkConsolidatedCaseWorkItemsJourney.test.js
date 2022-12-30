@@ -31,6 +31,8 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   // Document QC External filed document on Lead Case
 
+  cerebralTest.docketNumber = leadCaseDocketNumber;
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   petitionsClerkAddsPractitionersToCase(
@@ -77,7 +79,6 @@ describe('Docket clerk consolidated case work item journey', () => {
     { box: 'outbox', queue: 'section' },
   );
 
-  cerebralTest.docketNumber = leadCaseDocketNumber;
   //file a unservable document
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
 
@@ -103,6 +104,14 @@ describe('Docket clerk consolidated case work item journey', () => {
       {
         key: 'eventCode',
         value: UNSERVABLE_EVENT_CODES[0], // CTRA
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Corrected Transcript',
       },
     );
 
@@ -171,7 +180,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to the docket record.',
+      'Document saved to selected cases in group.',
     );
 
     await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
@@ -250,6 +259,8 @@ describe('Docket clerk consolidated case work item journey', () => {
     consolidatedCaseDocketNumber,
   );
 
+  cerebralTest.docketNumber = consolidatedCaseDocketNumber;
+
   loginAs(cerebralTest, 'docketclerk@example.com');
 
   docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
@@ -267,19 +278,21 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   docketClerkQCsDocketEntry(cerebralTest);
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
     cerebralTest,
-    leadCaseDocketNumber,
+    consolidatedCaseDocketNumber,
     { box: 'outbox', queue: 'my' },
   );
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
     cerebralTest,
-    leadCaseDocketNumber,
+    consolidatedCaseDocketNumber,
     { box: 'outbox', queue: 'section' },
   );
 
   // Document QC Internal filed document on Lead Case
+
+  cerebralTest.docketNumber = leadCaseDocketNumber;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -301,6 +314,8 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   // Document QC Internal filed document on Non-lead Case
+
+  cerebralTest.docketNumber = consolidatedCaseDocketNumber;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
