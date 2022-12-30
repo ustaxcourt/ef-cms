@@ -1,3 +1,5 @@
+# Note: this is debian 11 (bullseye)
+
 FROM cypress/browsers:node16.17.1-chrome106-ff105-edge
 
 WORKDIR /home/app
@@ -21,9 +23,10 @@ RUN apt-get install -y -t \
   python-dev \
   python3-pip \
   jq=1.6-2.1 \
-  graphicsmagick=1.4+really1.3.36+hg16481-2 \
+  graphicsmagick=1.4+really1.3.36+hg16481-2+deb11u1 \
   ghostscript=9.53.3~dfsg-7+deb11u2 \
   chromium \
+  sudo \
   -V
 
 
