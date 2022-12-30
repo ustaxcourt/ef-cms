@@ -26,8 +26,6 @@ export const CalculatePenaltiesModal = connect(
     title,
     updateModalValueSequence,
   }) {
-    console.log('override', confirmSequenceOverride);
-    console.log('confirm', confirmSequence);
     return (
       <ModalDialog
         cancelLabel="Cancel"
