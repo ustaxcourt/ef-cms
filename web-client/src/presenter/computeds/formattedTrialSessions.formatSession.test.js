@@ -16,6 +16,7 @@ let TRIAL_SESSIONS_LIST = [];
 describe('formattedTrialSessions formatSession', () => {
   beforeAll(() => {
     nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
+    console.log('nextYear', nextYear);
   });
 
   beforeEach(() => {
