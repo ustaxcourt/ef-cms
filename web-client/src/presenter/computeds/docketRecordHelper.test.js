@@ -88,8 +88,6 @@ describe('docketRecordHelper', () => {
     const sortLabelsMobile = {
       byDate: 'Oldest to newest',
       byDateDesc: 'Newest to oldest',
-      byIndex: 'Order ascending',
-      byIndexDesc: 'Order descending',
     };
 
     Object.entries(sortLabelsMobile).forEach(([sortType, sortLabel]) => {
