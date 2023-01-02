@@ -61,4 +61,36 @@ describe('docketRecordHelper', () => {
       );
     });
   });
+
+  describe.only('sortLabelText', () => {
+    const sortLabels = {
+      byDate: 'Oldest to newest',
+      byDateDesc: 'Newest to oldest',
+      byIndex: 'Order ascending',
+      byIndexDesc: 'Order descending',
+    };
+
+    sortLabels.forEach(sortLabel => {
+      it('should be "Oldest to newest" when the sortOrder is "byDate"', () => {
+        const mockDocketNumber = '111-11';
+
+        const result = runCompute(docketRecordHelper, {
+          state: {
+            caseDetail: {
+              canAllowPrintableDocketRecord: true,
+              docketNumber: mockDocketNumber,
+            },
+            permissions: {},
+            sessionMetadata: {
+              docketRecordSort: {
+                mockDocketNumber: 'byDate',
+              },
+            },
+          },
+        });
+
+        expect(result.sortLabelText).toBe(sortLabels['byDate']);
+      });
+    });
+  });
 });

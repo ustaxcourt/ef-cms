@@ -138,18 +138,7 @@ export const DocketRecordHeader = connect(
                 toggleMobileDocketSortSequence();
               }}
             >
-              {sessionMetadata.docketRecordSort[
-                formattedCaseDetail.docketNumber
-              ] === 'byDate' && 'Oldest to newest'}
-              {sessionMetadata.docketRecordSort[
-                formattedCaseDetail.docketNumber
-              ] === 'byDateDesc' && 'Newest to oldest'}
-              {sessionMetadata.docketRecordSort[
-                formattedCaseDetail.docketNumber
-              ] === 'byIndex' && 'Order ascending'}
-              {sessionMetadata.docketRecordSort[
-                formattedCaseDetail.docketNumber
-              ] === 'byIndexDesc' && 'Order descending'}
+              {docketRecordHelper.sortLabelText}
               <FontAwesomeIcon icon="sort" size="sm" />
             </Button>
           </div>
