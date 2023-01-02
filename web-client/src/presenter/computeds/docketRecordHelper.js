@@ -13,8 +13,6 @@ export const docketRecordHelper = get => {
   const sortLabelsMobile = {
     byDate: 'Oldest to newest',
     byDateDesc: 'Newest to oldest',
-    byIndex: 'Order ascending',
-    byIndexDesc: 'Order descending',
   };
 
   const sortLabelTextMobile = sortLabelsMobile[sortOrder];
