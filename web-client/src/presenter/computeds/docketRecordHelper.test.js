@@ -2,6 +2,8 @@ import { docketRecordHelper } from './docketRecordHelper';
 import { runCompute } from 'cerebral/test';
 
 describe('docketRecordHelper', () => {
+  const mockDocketNumber = '111-11';
+
   describe('showEditOrSealDocketRecordEntry', () => {
     it('should be true when the user has EDIT_DOCKET_ENTRY permission', () => {
       const result = runCompute(docketRecordHelper, {
@@ -9,6 +11,11 @@ describe('docketRecordHelper', () => {
           permissions: {
             EDIT_DOCKET_ENTRY: true,
             SEAL_DOCKET_ENTRY: false,
+          },
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
           },
         },
       });
@@ -23,6 +30,11 @@ describe('docketRecordHelper', () => {
             EDIT_DOCKET_ENTRY: false,
             SEAL_DOCKET_ENTRY: true,
           },
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
+          },
         },
       });
 
@@ -35,6 +47,11 @@ describe('docketRecordHelper', () => {
           permissions: {
             EDIT_DOCKET_ENTRY: false,
             SEAL_DOCKET_ENTRY: false,
+          },
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
           },
         },
       });
@@ -53,6 +70,11 @@ describe('docketRecordHelper', () => {
             canAllowPrintableDocketRecord: mockCanAllowPrintableDocketRecord,
           },
           permissions: {},
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
+          },
         },
       });
 
@@ -62,18 +84,16 @@ describe('docketRecordHelper', () => {
     });
   });
 
-  describe.only('sortLabelText', () => {
-    const sortLabels = {
+  describe('sortLabelText', () => {
+    const sortValues = {
       byDate: 'Oldest to newest',
       byDateDesc: 'Newest to oldest',
       byIndex: 'Order ascending',
       byIndexDesc: 'Order descending',
     };
 
-    sortLabels.forEach(sortLabel => {
-      it('should be "Oldest to newest" when the sortOrder is "byDate"', () => {
-        const mockDocketNumber = '111-11';
-
+    Object.entries(sortValues).forEach(([sortType, sortLabel]) => {
+      it(`should be ${sortLabel} when the sortOrder is ${sortType}`, () => {
         const result = runCompute(docketRecordHelper, {
           state: {
             caseDetail: {
@@ -83,13 +103,13 @@ describe('docketRecordHelper', () => {
             permissions: {},
             sessionMetadata: {
               docketRecordSort: {
-                mockDocketNumber: 'byDate',
+                [mockDocketNumber]: sortType,
               },
             },
           },
         });
 
-        expect(result.sortLabelText).toBe(sortLabels['byDate']);
+        expect(result.sortLabelText).toBe(sortLabel);
       });
     });
   });
