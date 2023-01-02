@@ -138,7 +138,7 @@ export const DocketRecordHeader = connect(
                 toggleMobileDocketSortSequence();
               }}
             >
-              {docketRecordHelper.sortLabelText}
+              {docketRecordHelper.sortLabelTextMobile}
               <FontAwesomeIcon icon="sort" size="sm" />
             </Button>
           </div>

@@ -84,15 +84,15 @@ describe('docketRecordHelper', () => {
     });
   });
 
-  describe('sortLabelText', () => {
-    const sortValues = {
+  describe('sortLabelTextMobile', () => {
+    const sortLabelsMobile = {
       byDate: 'Oldest to newest',
       byDateDesc: 'Newest to oldest',
       byIndex: 'Order ascending',
       byIndexDesc: 'Order descending',
     };
 
-    Object.entries(sortValues).forEach(([sortType, sortLabel]) => {
+    Object.entries(sortLabelsMobile).forEach(([sortType, sortLabel]) => {
       it(`should be ${sortLabel} when the sortOrder is ${sortType}`, () => {
         const result = runCompute(docketRecordHelper, {
           state: {
@@ -109,7 +109,7 @@ describe('docketRecordHelper', () => {
           },
         });
 
-        expect(result.sortLabelText).toBe(sortLabel);
+        expect(result.sortLabelTextMobile).toBe(sortLabel);
       });
     });
   });
