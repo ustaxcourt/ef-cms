@@ -18,6 +18,7 @@ const pdfs = [
   { fileName: 'StampedCoverSheet.pdf', pageNumber: 1 },
   { fileName: 'Cover_Sheet_For_Consolidated_Cases.pdf', pageNumber: 1 },
   { fileName: 'Docket_Record.pdf', pageNumber: 1 },
+  { fileName: 'Document_Service_Email.pdf', pageNumber: 1 },
   { fileName: 'Notice_Of_Change_To_Remote_Proceeding.pdf', pageNumber: 1 },
   { fileName: 'Notice_Of_Change_Of_Trial_Judge.pdf', pageNumber: 1 },
   { fileName: 'Notice_Of_Change_To_In_Person_Proceeding.pdf', pageNumber: 1 },
@@ -34,6 +35,7 @@ const pdfs = [
   { fileName: 'Order.pdf', pageNumber: 1 },
   { fileName: 'Pending_Report.pdf', pageNumber: 1 },
   { fileName: 'Practitioner_Case_List.pdf', pageNumber: 1 },
+  { fileName: 'Petition_Service_Email.pdf', pageNumber: 1 },
   {
     fileName: 'Printable_Trial_Session_Working_Copy_With_Case_Notes.pdf',
     pageNumber: 1,
