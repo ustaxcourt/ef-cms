@@ -1,12 +1,9 @@
-import {
-  DOCKET_NUMBER_SUFFIXES,
-  SESSION_STATUS_GROUPS,
-} from '../entities/EntityConstants';
+import { DOCKET_NUMBER_SUFFIXES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   formatCase,
-  formattedTrialSessionDetails,
+  getFormattedTrialSessionDetails,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
 
@@ -28,14 +25,14 @@ describe('formattedTrialSessionDetails', () => {
   };
 
   it('returns undefined if state.trialSession is undefined', () => {
-    const result = formattedTrialSessionDetails({ applicationContext });
+    const result = getFormattedTrialSessionDetails({ applicationContext });
     expect(result).toBeUndefined();
   });
 
   it('formats trial session when all fields have values', () => {
     const mockChambersPhoneNumber = '1234567';
 
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...TRIAL_SESSION,
@@ -58,7 +55,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when address fields are empty', () => {
-    let result = formattedTrialSessionDetails({
+    let result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
     });
@@ -67,7 +64,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: true,
     });
 
-    result = formattedTrialSessionDetails({
+    result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: omit(TRIAL_SESSION, ['city']),
     });
@@ -76,7 +73,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: false,
     });
 
-    result = formattedTrialSessionDetails({
+    result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: omit(TRIAL_SESSION, ['state']),
     });
@@ -85,7 +82,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: false,
     });
 
-    result = formattedTrialSessionDetails({
+    result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: omit(TRIAL_SESSION, ['state']),
     });
@@ -94,7 +91,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: false,
     });
 
-    result = formattedTrialSessionDetails({
+    result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: omit(TRIAL_SESSION, ['postalCode']),
     });
@@ -105,7 +102,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when session assignments are empty', () => {
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...omit(TRIAL_SESSION, [
@@ -133,7 +130,7 @@ describe('formattedTrialSessionDetails', () => {
       alternateTrialClerkName,
       trialClerk: {},
     };
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: testTrialSession,
     });
@@ -144,7 +141,7 @@ describe('formattedTrialSessionDetails', () => {
 
   describe('formats trial session start times', () => {
     it('formats trial session start time', () => {
-      const result = formattedTrialSessionDetails({
+      const result = getFormattedTrialSessionDetails({
         applicationContext,
         trialSession: {
           ...TRIAL_SESSION,
@@ -157,7 +154,7 @@ describe('formattedTrialSessionDetails', () => {
     });
 
     it('formats trial session start time in the morning', () => {
-      const result = formattedTrialSessionDetails({
+      const result = getFormattedTrialSessionDetails({
         applicationContext,
         trialSession: {
           ...TRIAL_SESSION,
@@ -170,7 +167,7 @@ describe('formattedTrialSessionDetails', () => {
     });
 
     it('formats trial session start time at noon', () => {
-      const result = formattedTrialSessionDetails({
+      const result = getFormattedTrialSessionDetails({
         applicationContext,
         trialSession: {
           ...TRIAL_SESSION,
@@ -184,7 +181,7 @@ describe('formattedTrialSessionDetails', () => {
   });
   describe('formats trial session estimated end date', () => {
     it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
-      const result = formattedTrialSessionDetails({
+      const result = getFormattedTrialSessionDetails({
         applicationContext,
         trialSession: {
           ...TRIAL_SESSION,
@@ -197,7 +194,7 @@ describe('formattedTrialSessionDetails', () => {
     });
 
     it('formats trial session estimated end date', () => {
-      const result = formattedTrialSessionDetails({
+      const result = getFormattedTrialSessionDetails({
         applicationContext,
         trialSession: {
           ...TRIAL_SESSION,
@@ -211,7 +208,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('displays swing session area if session is a swing session', () => {
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...TRIAL_SESSION,
@@ -256,7 +253,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...TRIAL_SESSION,
@@ -303,7 +300,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('sorts calendared cases by docket number', () => {
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...TRIAL_SESSION,
@@ -328,53 +325,8 @@ describe('formattedTrialSessionDetails', () => {
     ]);
   });
 
-  it('sets computedStatus to New if the session is not calendared', () => {
-    const result = formattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        isCalendared: false,
-      },
-    });
-    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.new);
-  });
-
-  it('sets computedStatus to Open if the session is calendared and calendaredCases contains open cases', () => {
-    const result = formattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        calendaredCases: [
-          {
-            docketEntries: [],
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-        ],
-        isCalendared: true,
-      },
-    });
-    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.open);
-  });
-
-  it('sets computedStatus to Closed if the session is calendared and caseOrder contains only cases with removedFromTrial = true', () => {
-    const result = formattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        caseOrder: [
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-            removedFromTrial: true,
-          },
-        ],
-        isCalendared: true,
-      },
-    });
-    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
-  });
-
   it('should set the correct consolidated case flags', () => {
-    const result = formattedTrialSessionDetails({
+    const result = getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...TRIAL_SESSION,
