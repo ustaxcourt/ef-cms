@@ -143,16 +143,10 @@ export const DeficiencyStatisticsForm = connect(
                 </label>
                 <DollarsInput
                   className="usa-input usa-input-inline input-medium"
+                  disabled="true"
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
-                  onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  onValueChange={values => {
-                    updateFormValueSequence({
-                      key: 'irsTotalPenalties',
-                      value: values.value,
-                    });
-                  }}
                 />
                 <Button
                   link
