@@ -9,11 +9,11 @@ import { state } from 'cerebral';
  */
 export const setDefaultPenaltiesAction = ({ get, store }) => {
   const defaultPenaltiesArrayState = [
-    { irsPenaltyAmount: '' },
-    { irsPenaltyAmount: '' },
-    { irsPenaltyAmount: '' },
-    { irsPenaltyAmount: '' },
-    { irsPenaltyAmount: '' },
+    { irsPenaltyAmount: '0' },
+    { irsPenaltyAmount: '0' },
+    { irsPenaltyAmount: '0' },
+    { irsPenaltyAmount: '0' },
+    { irsPenaltyAmount: '0' },
   ];
   let penalties = get(state.form.penalties);
   penalties.forEach((penalty, index) => {
