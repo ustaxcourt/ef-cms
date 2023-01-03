@@ -125,7 +125,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-const createISODateString = (dateString, inputFormat) => {
+const createISODateString = (dateString?, inputFormat?) => {
   let result;
 
   if (!dateString) {

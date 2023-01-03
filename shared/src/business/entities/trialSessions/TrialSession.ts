@@ -1,5 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import {
+  SESSION_STATUS_TYPES,
   SESSION_TERMS,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
@@ -90,6 +91,7 @@ export class TrialSessionClass {
   public term: string;
   public termYear: string;
   public trialLocation: string;
+  public sessionStatus: string;
   public proceedingType: string;
   public trialSessionId: string;
   public judge: TJudge;
@@ -201,6 +203,9 @@ export class TrialSessionClass {
       sessionScope: JoiValidationConstants.STRING.valid(
         ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
       ).required(),
+      sessionStatus: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_STATUS_TYPES),
+      ).required(),
       sessionType: JoiValidationConstants.STRING.valid(
         ...Object.values(SESSION_TYPES),
       ).required(),
@@ -268,6 +273,7 @@ export class TrialSessionClass {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
+    this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
     this.isCalendared = rawSession.isCalendared || false;
