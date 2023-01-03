@@ -122,6 +122,35 @@ export const DocketRecordHeader = connect(
           </NonMobile>
 
           <Mobile>
+            <div className="grid-row">
+              <div className="grid-col-auto">
+                <label
+                  className="dropdown-label-serif margin-right-2"
+                  htmlFor="docket-record-filter"
+                  id="docket-record-filter-label"
+                >
+                  Filter by
+                </label>
+              </div>
+              <div className="grid-col-fill">
+                <BindedSelect
+                  aria-describedby="docket-record-filter-label"
+                  aria-label="docket record filter"
+                  bind="sessionMetadata.docketRecordFilter"
+                  id="docket-record-filter"
+                  name="docketRecordFilter"
+                >
+                  {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
+                    ([key, value]) => (
+                      <option key={`filter-${key}`} value={value}>
+                        {value}
+                      </option>
+                    ),
+                  )}
+                </BindedSelect>
+              </div>
+            </div>
+
             <Button
               link
               aria-hidden="true"
@@ -134,6 +163,7 @@ export const DocketRecordHeader = connect(
             >
               Printable Docket Record
             </Button>
+
             <Button
               link
               aria-label="docket record sort"
