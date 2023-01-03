@@ -313,22 +313,135 @@ const getPercentageOfCasesElectronicallyFiled = async ({
   fs.writeFileSync(`./FY-${fiscalYear}-cases-is-paper.csv`, rows.join('\n'));
 };
 
+const getLimitedEntryOfAppearances = async ({ applicationContext }) => {
+  // get all of the cases where an LEA was filed
+  const res = await applicationContext.getSearchClient().search({
+    body: {
+      _source: ['docketNumber.S', 'filingDate.S'],
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'eventCode.S': 'LEA',
+              },
+            },
+            {
+              range: {
+                'filingDate.S': fiscalYearDateRange,
+              },
+            },
+          ],
+          must_not: [
+            {
+              term: {
+                'isStricken.BOOL': true,
+              },
+            },
+          ],
+        },
+      },
+      size: 10000,
+    },
+  });
+
+  const rows = ['Docket Number,Suffix,Is Small,Is NOC Filed'];
+
+  // for each of these, check to see "a notice of completion" was filed
+  for (let i = 0; i < res.body.hits.hits.length; i++) {
+    const hit = res.body.hits.hits[i];
+    const docketNumber = hit['_source'].docketNumber.S;
+    const isNocFiled = await checkIfNOCIsFiled({
+      applicationContext,
+      docketNumber,
+      startRange: hit['_source'].filingDate.S,
+    });
+    const docketNumberSuffix = await getDocketNumberSuffix({
+      applicationContext,
+      docketNumber,
+    });
+
+    const isSmall =
+      ['S', 'SL'].indexOf(docketNumberSuffix) === -1 ? 'No' : 'Yes';
+
+    rows.push(
+      [docketNumber, docketNumberSuffix, isSmall, isNocFiled].join(','),
+    );
+  }
+  // console.log(rows);
+  fs.writeFileSync(`./FY-${fiscalYear}-lea-report.csv`, rows.join('\n'));
+};
+
+const getDocketNumberSuffix = async ({ applicationContext, docketNumber }) => {
+  const res = await applicationContext.getSearchClient().search({
+    body: {
+      _source: ['docketNumberSuffix.S'],
+      query: {
+        term: {
+          'docketNumber.S': docketNumber,
+        },
+      },
+    },
+  });
+  // console.log(res.body.hits.hits);
+
+  return res.body.hits.hits[0]['_source'].docketNumberSuffix?.S || '';
+};
+
+const checkIfNOCIsFiled = async ({
+  applicationContext,
+  docketNumber,
+  startRange,
+}) => {
+  const res = await applicationContext.getSearchClient().count({
+    body: {
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'eventCode.S': 'NOC',
+              },
+            },
+            {
+              term: {
+                'docketNumber.S': docketNumber,
+              },
+            },
+            {
+              range: {
+                'filingDate.S': {
+                  gte: startRange,
+                  lt: fiscalYearDateRange.lt,
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  return res.body.count === 0 ? 'No' : 'Yes';
+};
+
 (async () => {
   const applicationContext = createApplicationContext({});
-  await getOpinionsFiledByCaseType({
-    applicationContext,
-  });
-  await getCasesOpenedAndClosed({
-    applicationContext,
-  });
-  await getCasesFiledByType({
-    applicationContext,
-  });
-  await getTotalOpenCasesEOY({
-    applicationContext,
-  });
-  await getPercentageOfCasesInWhichPetitionerIsRepresented({
-    applicationContext,
-  });
-  await getPercentageOfCasesElectronicallyFiled({ applicationContext });
+  // await getOpinionsFiledByCaseType({
+  //   applicationContext,
+  // });
+  // await getCasesOpenedAndClosed({
+  //   applicationContext,
+  // });
+  // await getCasesFiledByType({
+  //   applicationContext,
+  // });
+  // await getTotalOpenCasesEOY({
+  //   applicationContext,
+  // });
+  // await getPercentageOfCasesInWhichPetitionerIsRepresented({
+  //   applicationContext,
+  // });
+  // await getPercentageOfCasesElectronicallyFiled({ applicationContext });
+  await getLimitedEntryOfAppearances({ applicationContext });
 })();
