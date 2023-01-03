@@ -147,7 +147,7 @@ describe('trial session working copy computed', () => {
     ]);
   });
 
-  it('should omit new trial status types instead of deprecated, not sort trialStatusFilters by displayOrder, and return legacyLabel when it exists when UPDATED_TRIAL_STATUS_TYPES feature flag is active', () => {
+  it('should omit new trial status types instead of deprecated, not sort trialStatusFilters by displayOrder, and return legacyLabel when it exists when UPDATED_TRIAL_STATUS_TYPES feature flag is inactive', () => {
     const { trialStatusFilters } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         featureFlags: {
@@ -170,12 +170,12 @@ describe('trial session working copy computed', () => {
 
     expect(trialStatusFilters).toMatchObject([
       {
-        key: 'setForTrial',
-        label: 'Set for Trial',
+        key: 'basisReached',
+        label: 'A Basis Reached',
       },
       {
-        key: 'dismissed',
-        label: 'Dismissed',
+        key: 'recall',
+        label: 'Recall',
       },
       { key: 'continued', label: 'Continued' },
       {
@@ -183,20 +183,20 @@ describe('trial session working copy computed', () => {
         label: 'Rule 122',
       },
       {
-        key: 'basisReached',
-        label: 'A Basis Reached',
+        key: 'submittedCAV',
+        label: 'Taken Under Advisement',
+      },
+      {
+        key: 'setForTrial',
+        label: 'Set for Trial',
+      },
+      {
+        key: 'dismissed',
+        label: 'Dismissed',
       },
       {
         key: 'settled',
         label: 'Settled',
-      },
-      {
-        key: 'recall',
-        label: 'Recall',
-      },
-      {
-        key: 'submittedCAV',
-        label: 'Taken Under Advisement',
       },
       {
         key: 'statusUnassigned',
