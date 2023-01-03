@@ -1039,6 +1039,11 @@ header.usa-header {
   border-bottom: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
 
+  /* little screens */
+  @media only screen and (max-width: $medium-screen) {
+    margin-bottom: 10px;
+  }
+
   h1 {
     position: relative;
     top: 2px;
