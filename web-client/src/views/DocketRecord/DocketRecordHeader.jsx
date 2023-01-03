@@ -147,7 +147,7 @@ export const DocketRecordHeader = connect(
               <FontAwesomeIcon icon="sort" size="sm" />
             </Button>
 
-            <div className="grid-row">
+            <div className="grid-row padding-y-075-rem">
               <div className="grid-col-auto">
                 <label
                   className="dropdown-label-serif margin-right-2"
