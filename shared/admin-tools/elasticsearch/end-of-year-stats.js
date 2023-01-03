@@ -427,21 +427,21 @@ const checkIfNOCIsFiled = async ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  // await getOpinionsFiledByCaseType({
-  //   applicationContext,
-  // });
-  // await getCasesOpenedAndClosed({
-  //   applicationContext,
-  // });
-  // await getCasesFiledByType({
-  //   applicationContext,
-  // });
-  // await getTotalOpenCasesEOY({
-  //   applicationContext,
-  // });
-  // await getPercentageOfCasesInWhichPetitionerIsRepresented({
-  //   applicationContext,
-  // });
-  // await getPercentageOfCasesElectronicallyFiled({ applicationContext });
+  await getOpinionsFiledByCaseType({
+    applicationContext,
+  });
+  await getCasesOpenedAndClosed({
+    applicationContext,
+  });
+  await getCasesFiledByType({
+    applicationContext,
+  });
+  await getTotalOpenCasesEOY({
+    applicationContext,
+  });
+  await getPercentageOfCasesInWhichPetitionerIsRepresented({
+    applicationContext,
+  });
+  await getPercentageOfCasesElectronicallyFiled({ applicationContext });
   await getLimitedEntryOfAppearances({ applicationContext });
 })();
