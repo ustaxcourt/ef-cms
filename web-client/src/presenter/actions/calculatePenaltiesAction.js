@@ -12,7 +12,8 @@ export const calculatePenaltiesAction = ({ get }) => {
 
   const parseCurrency = value => `$${Number(value).toFixed(2)}`;
 
-  const penaltyAggregator = (sum, stepValue) => Number(sum) + Number(stepValue);
+  const penaltyAggregator = (sum, penality) =>
+    Number(sum) + Number(penality.irsPenaltyAmount);
 
   const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));
 
