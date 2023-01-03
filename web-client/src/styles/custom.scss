@@ -1803,6 +1803,13 @@ button.change-scanner-button {
   font-size: 20px;
 }
 
+#docket-record-filter-label {
+  /* little screens */
+  @media only screen and (max-width: $medium-screen) {
+    line-height: 1.6em;
+  }
+}
+
 .narrow-hr {
   width: 30%;
   margin: 10px auto;
