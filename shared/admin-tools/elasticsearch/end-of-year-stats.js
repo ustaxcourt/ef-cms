@@ -3,10 +3,18 @@ const fs = require('fs');
 const { computeDate } = require('../../src/business/utilities/DateHandler');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
-const fiscalYear = process.argv[3] || new Date().getFullYear();
+const fiscalYear = process.argv[2] || new Date().getFullYear();
 
-const startOfYear = computeDate({ day: 1, month: 10, year: fiscalYear - 1 });
-const endOfYear = computeDate({ day: 1, month: 10, year: fiscalYear });
+const startOfYear = computeDate({
+  day: 1,
+  month: 10,
+  year: parseInt(fiscalYear) - 1,
+});
+const endOfYear = computeDate({
+  day: 1,
+  month: 10,
+  year: parseInt(fiscalYear),
+});
 
 const fiscalYearDateRange = {
   gte: startOfYear,
@@ -230,7 +238,9 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
   );
 };
 
-const getPercentageOfCasesInWhichPetitionerIsRepresented = async ({applicationContext}) => {
+const getPercentageOfCasesInWhichPetitionerIsRepresented = async ({
+  applicationContext,
+}) => {
   const results = await applicationContext.getSearchClient().search({
     body: {
       aggs: {
@@ -264,6 +274,45 @@ const getPercentageOfCasesInWhichPetitionerIsRepresented = async ({applicationCo
   );
 };
 
+const getPercentageOfCasesElectronicallyFiled = async ({
+  applicationContext,
+}) => {
+  const labels = ['Electronic', 'Paper'];
+
+  const results_count = await applicationContext.getSearchClient().count({
+    body: {
+      query: receivedAtRange,
+    },
+    index: 'efcms-case-v2',
+  });
+
+  const results = await applicationContext.getSearchClient().search({
+    body: {
+      aggs: {
+        'is-paper': {
+          terms: {
+            field: 'isPaper.BOOL',
+          },
+        },
+      },
+      query: receivedAtRange,
+    },
+    index: 'efcms-case-v2',
+  });
+
+  const rows = results.body.aggregations['is-paper'].buckets.map(
+    ({ doc_count, key }) => {
+      const pct =
+        Math.floor(
+          (parseInt(doc_count) / parseInt(results_count.body.count)) * 10000,
+        ) / 100;
+      return [labels[key], doc_count, pct].join(',');
+    },
+  );
+  rows.unshift('Type,Count,Percentage');
+  fs.writeFileSync(`./FY-${fiscalYear}-cases-is-paper.csv`, rows.join('\n'));
+};
+
 (async () => {
   const applicationContext = createApplicationContext({});
   await getOpinionsFiledByCaseType({
@@ -281,4 +330,5 @@ const getPercentageOfCasesInWhichPetitionerIsRepresented = async ({applicationCo
   await getPercentageOfCasesInWhichPetitionerIsRepresented({
     applicationContext,
   });
+  await getPercentageOfCasesElectronicallyFiled({ applicationContext });
 })();
