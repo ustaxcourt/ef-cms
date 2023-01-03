@@ -49,9 +49,9 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
         ),
       ];
 
-  this.irsTotalPenalties =
-    this.penalties.reduce((sum, penalty) => penalty.irsPenaltyAmount + sum) ??
-    0;
+  // this.irsTotalPenalties =
+  //   this.penalties.reduce((sum, penalty) => penalty.irsPenaltyAmount + sum) ??
+  //   0;
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
@@ -109,6 +109,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
   penalties: joi
     .array()
     .min(1)
+    .required()
     .description('List of Penalty Entities for the statistic.'),
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
