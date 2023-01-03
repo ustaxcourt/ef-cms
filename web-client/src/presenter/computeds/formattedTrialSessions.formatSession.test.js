@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { applicationContext } from '../../applicationContext';
 import { formatSession } from './formattedTrialSessions';
 
