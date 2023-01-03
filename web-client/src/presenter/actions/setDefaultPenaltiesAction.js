@@ -9,29 +9,14 @@ import { state } from 'cerebral';
  */
 export const setDefaultPenaltiesAction = ({ get, store }) => {
   // TODO: refactor this function some
-  const defaultPenaltiesArrayState = [
-    { irsPenaltyAmount: '0' },
-    { irsPenaltyAmount: '0' },
-    { irsPenaltyAmount: '0' },
-    { irsPenaltyAmount: '0' },
-    { irsPenaltyAmount: '0' },
-  ];
-  let penalties = get(state.form.penalties) ?? [];
-  penalties.forEach((penalty, index) => {
-    if (index > 9) return;
-    if (index > 4) {
-      defaultPenaltiesArrayState.push({
-        irsPenaltyAmount: `${penalty.irsPenaltyAmount}`,
-        name: `Penalty ${index + 1} (IRS)`,
-        penaltyId: penalty.penaltyId,
-      });
-    } else {
-      defaultPenaltiesArrayState[index] = {
-        irsPenaltyAmount: `${penalty.irsPenaltyAmount}`,
-        name: `Penalty ${index + 1} (IRS)`,
-        penaltyId: penalty.penaltyId,
-      };
+  const penalties = get(state.form.penalties);
+  let initialPenalties = penalties ?? [];
+
+  if (initialPenalties.length < 5) {
+    const missingPenalties = 5 - initialPenalties.length;
+    for (let i = 0; i < missingPenalties; i++) {
+      initialPenalties.push({});
     }
-  });
-  store.set(state.modal.penalties, defaultPenaltiesArrayState);
+  }
+  store.set(state.modal.penalties, initialPenalties);
 };
