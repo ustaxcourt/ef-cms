@@ -34,7 +34,7 @@ export const DocketRecordHeader = connect(
         <div className="grid-container padding-0 docket-record-header">
           <NonMobile>
             <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
-              <div className="tablet:grid-col-2">
+              <div className="tablet:grid-col-3">
                 <select
                   aria-label="docket record"
                   className="usa-select margin-top-0 sort"
@@ -101,7 +101,7 @@ export const DocketRecordHeader = connect(
               </div>
 
               {docketRecordHelper.showPrintableDocketRecord && (
-                <div className="tablet:grid-col-6 text-right">
+                <div className="tablet:grid-col-5 text-right">
                   <Button
                     link
                     aria-label="printable docket record"
@@ -122,6 +122,32 @@ export const DocketRecordHeader = connect(
           </NonMobile>
 
           <Mobile>
+            <Button
+              link
+              aria-hidden="true"
+              className="margin-top-1"
+              icon="print"
+              onClick={() => {
+                gotoPrintableDocketRecordSequence({
+                  docketNumber: formattedCaseDetail.docketNumber,
+                });
+              }}
+            >
+              Printable Docket Record
+            </Button>
+
+            <Button
+              link
+              aria-label="docket record sort"
+              className="mobile-sort-docket-button text-left"
+              onClick={() => {
+                toggleMobileDocketSortSequence();
+              }}
+            >
+              {docketRecordHelper.sortLabelTextMobile}
+              <FontAwesomeIcon icon="sort" size="sm" />
+            </Button>
+
             <div className="grid-row">
               <div className="grid-col-auto">
                 <label
@@ -150,31 +176,6 @@ export const DocketRecordHeader = connect(
                 </BindedSelect>
               </div>
             </div>
-
-            <Button
-              link
-              aria-hidden="true"
-              icon="print"
-              onClick={() => {
-                gotoPrintableDocketRecordSequence({
-                  docketNumber: formattedCaseDetail.docketNumber,
-                });
-              }}
-            >
-              Printable Docket Record
-            </Button>
-
-            <Button
-              link
-              aria-label="docket record sort"
-              className="mobile-sort-docket-button text-left"
-              onClick={() => {
-                toggleMobileDocketSortSequence();
-              }}
-            >
-              {docketRecordHelper.sortLabelTextMobile}
-              <FontAwesomeIcon icon="sort" size="sm" />
-            </Button>
           </Mobile>
         </div>
         {showModal === 'OpenPrintableDocketRecordModal' && (
