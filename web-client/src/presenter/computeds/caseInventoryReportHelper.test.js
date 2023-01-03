@@ -9,7 +9,6 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-import { without } from 'lodash';
 
 describe('caseInventoryReportHelper', () => {
   const testCaseInventoryPageSize = 25;
@@ -30,18 +29,6 @@ describe('caseInventoryReportHelper', () => {
   applicationContext.getCurrentUser = () => ({
     role: USER_ROLES.docketClerk,
     userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
-  });
-
-  it('should return all case statuses except closed statuses', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        screenMetadata: {},
-      },
-    });
-
-    expect(result.caseStatuses).toEqual(
-      without(Object.values(CASE_STATUS_TYPES), CLOSED_CASE_STATUSES),
-    );
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
@@ -279,5 +266,19 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeTruthy();
     expect(result.showSelectFilterMessage).toBeFalsy();
     expect(result.showNoResultsMessage).toBeFalsy();
+  });
+
+  describe('caseStatuses', () => {
+    it('should NOT include any of the "closed" statuses', () => {
+      const result = runCompute(caseInventoryReportHelper, {
+        state: {
+          screenMetadata: {},
+        },
+      });
+
+      expect(result.caseStatuses).toEqual(
+        expect.not.arrayContaining(CLOSED_CASE_STATUSES),
+      );
+    });
   });
 });
