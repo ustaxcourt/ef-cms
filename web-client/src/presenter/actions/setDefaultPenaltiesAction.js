@@ -8,6 +8,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setDefaultPenaltiesAction = ({ get, store }) => {
+  // TODO: refactor this function some
   const defaultPenaltiesArrayState = [
     { irsPenaltyAmount: '0' },
     { irsPenaltyAmount: '0' },
@@ -15,7 +16,7 @@ export const setDefaultPenaltiesAction = ({ get, store }) => {
     { irsPenaltyAmount: '0' },
     { irsPenaltyAmount: '0' },
   ];
-  let penalties = get(state.form.penalties);
+  let penalties = get(state.form.penalties) ?? [];
   penalties.forEach((penalty, index) => {
     if (index > 9) return;
     if (index > 4) {
