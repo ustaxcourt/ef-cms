@@ -12,7 +12,9 @@ export const CalculatePenaltiesModal = connect(
     confirmSequence: sequences.calculatePenaltiesSequence,
     confirmSequenceOverride: props.confirmSequenceOverride,
     penalties: state.modal.penalties,
-    statisticsFormHelper: state.statisticsFormHelper,
+    penaltyAmountType: state.statisticsFormHelper.penaltyAmountType,
+    showAddAnotherPenaltyButton:
+      state.statisticsFormHelper.showAddAnotherPenaltyButton,
     title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
@@ -22,7 +24,8 @@ export const CalculatePenaltiesModal = connect(
     confirmSequence,
     confirmSequenceOverride,
     penalties,
-    statisticsFormHelper,
+    penaltyAmountType,
+    showAddAnotherPenaltyButton,
     title,
     updateModalValueSequence,
   }) {
@@ -33,7 +36,7 @@ export const CalculatePenaltiesModal = connect(
         confirmLabel="Calculate and Save"
         confirmSequence={() => {
           confirmSequenceOverride
-            ? confirmSequenceOverride()
+            ? confirmSequenceOverride({ penaltyAmountType })
             : confirmSequence();
         }}
         title={title}
@@ -49,10 +52,10 @@ export const CalculatePenaltiesModal = connect(
                 className="usa-input"
                 id={`penalty_${index}`}
                 name={`penalties.${index}`}
-                value={penalties[index].irsPenaltyAmount || 0}
+                value={penalties[index][penaltyAmountType] || 0}
                 onValueChange={values => {
                   updateModalValueSequence({
-                    key: `penalties.${index}.irsPenaltyAmount`,
+                    key: `penalties.${index}.${penaltyAmountType}`,
                     value: values.value,
                   });
                   updateModalValueSequence({
@@ -63,7 +66,7 @@ export const CalculatePenaltiesModal = connect(
               />
             </div>
           ))}
-        {statisticsFormHelper.showAddAnotherPenaltyButton && (
+        {showAddAnotherPenaltyButton && (
           <Button
             link
             className="margin-top-2 modal-button-link"
