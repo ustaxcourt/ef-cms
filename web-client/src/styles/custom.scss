@@ -1055,10 +1055,6 @@ header.usa-header {
   }
 }
 
-.min-width-280 {
-  min-width: 280px;
-}
-
 hr.lighter {
   border-top: 1px solid color($theme-color-base-lighter);
 }
@@ -2068,4 +2064,10 @@ button.change-scanner-button {
 
 .padding-y-075-rem {
   padding: 0.75rem 0;
+}
+
+.docket-record-header {
+  .docket-record-filter {
+    max-width: 175px;
+  }
 }

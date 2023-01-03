@@ -75,7 +75,7 @@ export const DocketRecordHeader = connect(
                   ))}
                 </select>
               </div>
-              <div className="tablet:grid-col-fill min-width-280">
+              <div className="tablet:grid-col-fill">
                 <label
                   className="dropdown-label-serif margin-right-3"
                   htmlFor="inline-select"
@@ -87,7 +87,7 @@ export const DocketRecordHeader = connect(
                   aria-describedby="docket-record-filter-label"
                   aria-label="docket record filter"
                   bind="sessionMetadata.docketRecordFilter"
-                  className="select-left inline-select"
+                  className="select-left inline-select docket-record-filter"
                   name="docketRecordFilter"
                 >
                   {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
@@ -101,11 +101,10 @@ export const DocketRecordHeader = connect(
               </div>
 
               {docketRecordHelper.showPrintableDocketRecord && (
-                <div className="tablet:grid-col-3 text-right">
+                <div className="tablet:grid-col-4 text-right">
                   <Button
                     link
                     aria-label="printable docket record"
-                    className="margin-right-0"
                     icon="print"
                     id="printable-docket-record-button"
                     onClick={() => {
