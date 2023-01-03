@@ -5,12 +5,8 @@ import { irsSuperuserSearchForCase } from './journey/irsSuperuserSearchForCase';
 import { irsSuperuserSearchForUnservedCase } from './journey/irsSuperuserSearchForUnservedCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const cerebralTest = setupTest();
-
 describe('irsSuperuser case search', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

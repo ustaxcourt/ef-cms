@@ -1,8 +1,10 @@
+/* eslint-disable security/detect-non-literal-regexp */
 import {
   ADVANCED_SEARCH_OPINION_TYPES,
+  COUNTRY_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
+  PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsOpiniontoDocketyEntry } from './journey/docketClerkAddsOpinionToDocketEntry';
 import { docketClerkCreatesAnOpinion } from './journey/docketClerkCreatesAnOpinion';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
@@ -20,13 +22,8 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 import { userClicksDocketRecordLink } from './journey/userClicksDocketRecordLink';
 import { userPerformsAdvancedOpinionSearch } from './journey/userPerformsAdvancedOpinionSearch';
 
-const cerebralTest = setupTest();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('verify opinion search works for external users', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(async () => {
     cerebralTest.closeSocket();

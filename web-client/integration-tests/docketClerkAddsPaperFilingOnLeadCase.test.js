@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
@@ -17,13 +17,8 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 
 describe('Docket clerk adds paper filing on lead case', () => {
   const cerebralTest = setupTest();
-  const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

@@ -63,9 +63,6 @@ const {
   testPdfDoc,
 } = require('./getFakeFile');
 const {
-  filterWorkItemsForUser,
-} = require('../../../src/business/utilities/filterWorkItemsForUser');
-const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
@@ -74,15 +71,15 @@ const {
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatCase: formatCaseForTrialSession,
+} = require('../utilities/getFormattedTrialSessionDetails');
+const {
   formatJudgeName,
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formatPhoneNumber,
 } = require('../../../src/business/utilities/formatPhoneNumber');
-const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
@@ -115,9 +112,6 @@ const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
-  getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
-const {
   getDocumentTitleWithAdditionalInfo,
 } = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
 const {
@@ -129,6 +123,9 @@ const {
 const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
+const {
+  getFormattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   getSealedDocketEntryTooltip,
 } = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
@@ -310,11 +307,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterWorkItemsForUser: jest
-      .fn()
-      .mockImplementation(filterWorkItemsForUser),
+    filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseForTrialSession: jest
+      .fn()
+      .mockImplementation(formatCaseForTrialSession),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
@@ -323,9 +321,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
-    formattedTrialSessionDetails: jest
-      .fn()
-      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
       .fn()
@@ -354,6 +349,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedPartiesNameAndTitle: jest
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
+    getFormattedTrialSessionDetails: jest
+      .fn()
+      .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearInETObj: jest
       .fn()
@@ -540,12 +538,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDocumentQCInboxForUser: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForUserPersistence),
+    getDocumentQCInboxForSection: jest.fn(),
+    getDocumentQCInboxForUser: jest.fn(),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),

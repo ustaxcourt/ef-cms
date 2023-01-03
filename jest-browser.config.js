@@ -8,6 +8,5 @@ module.exports = {
   moduleNameMapper: {
     '^uuid$': require.resolve('uuid'),
   },
-  setupFilesAfterEnv: [`${__dirname}/enzyme.config.js`],
   testEnvironment: `${__dirname}/web-client/JsdomWithTextEncoderEnvironment.js`,
 };
