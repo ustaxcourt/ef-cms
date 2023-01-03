@@ -7,7 +7,11 @@ describe('calculatePenaltiesAction', () => {
       props: {},
       state: {
         modal: {
-          penalties: ['1.00', '2.00', '3.00'],
+          penalties: [
+            { irsPenaltyAmount: '1.00' },
+            { irsPenaltyAmount: '2.00' },
+            { irsPenaltyAmount: '3.00' },
+          ],
         },
       },
     });
@@ -20,7 +24,11 @@ describe('calculatePenaltiesAction', () => {
       props: {},
       state: {
         modal: {
-          penalties: ['1', '2', '3.001'],
+          penalties: [
+            { irsPenaltyAmount: '1' },
+            { irsPenaltyAmount: '2' },
+            { irsPenaltyAmount: '3.001' },
+          ],
         },
       },
     });
@@ -33,7 +41,11 @@ describe('calculatePenaltiesAction', () => {
       props: {},
       state: {
         modal: {
-          penalties: ['1', 2, '3'],
+          penalties: [
+            { irsPenaltyAmount: '1' },
+            { irsPenaltyAmount: '2' },
+            { irsPenaltyAmount: '3' },
+          ],
         },
       },
     });
@@ -46,7 +58,11 @@ describe('calculatePenaltiesAction', () => {
       props: {},
       state: {
         modal: {
-          penalties: ['6', null, ''],
+          penalties: [
+            { irsPenaltyAmount: '6' },
+            { irsPenaltyAmount: null },
+            { irsPenaltyAmount: '' },
+          ],
         },
       },
     });
