@@ -75,7 +75,7 @@ export const DocketRecordHeader = connect(
                   ))}
                 </select>
               </div>
-              <div className="tablet:grid-col-4">
+              <div className="tablet:grid-col-fill min-width-280">
                 <label
                   className="dropdown-label-serif margin-right-3"
                   htmlFor="inline-select"
@@ -101,7 +101,7 @@ export const DocketRecordHeader = connect(
               </div>
 
               {docketRecordHelper.showPrintableDocketRecord && (
-                <div className="tablet:grid-col-5 text-right">
+                <div className="tablet:grid-col-3 text-right">
                   <Button
                     link
                     aria-label="printable docket record"
