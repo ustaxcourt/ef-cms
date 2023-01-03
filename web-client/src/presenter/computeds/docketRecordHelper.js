@@ -11,8 +11,8 @@ export const docketRecordHelper = get => {
 
   const sortOrder = docketRecordSort[docketNumber];
   const sortLabelsMobile = {
-    byDate: 'Oldest to newest',
-    byDateDesc: 'Newest to oldest',
+    byDate: 'Oldest to Newest',
+    byDateDesc: 'Newest to Oldest',
   };
 
   const sortLabelTextMobile = sortLabelsMobile[sortOrder];
