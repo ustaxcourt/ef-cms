@@ -15,4 +15,4 @@ export const getTrialSessions = ({
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
-  });
+  }) as unknown as Promise<TTrialSessionData[]>;
