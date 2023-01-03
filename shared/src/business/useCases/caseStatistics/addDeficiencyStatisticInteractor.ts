@@ -30,6 +30,7 @@ export const addDeficiencyStatisticInteractor = async (
     irsDeficiencyAmount,
     irsTotalPenalties,
     lastDateOfPeriod,
+    penalties,
     year,
     yearOrPeriod,
   }: {
@@ -39,6 +40,7 @@ export const addDeficiencyStatisticInteractor = async (
     irsDeficiencyAmount: number;
     irsTotalPenalties: number;
     lastDateOfPeriod: string;
+    penalties: number[];
     year: string;
     yearOrPeriod: string;
   },
@@ -53,6 +55,7 @@ export const addDeficiencyStatisticInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  console.log('penalties in interactor', penalties);
   const statisticEntity = new Statistic(
     {
       determinationDeficiencyAmount,
@@ -60,6 +63,7 @@ export const addDeficiencyStatisticInteractor = async (
       irsDeficiencyAmount,
       irsTotalPenalties,
       lastDateOfPeriod,
+      penalties,
       year,
       yearOrPeriod,
     },
