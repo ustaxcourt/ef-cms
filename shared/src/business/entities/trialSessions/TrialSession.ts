@@ -1,5 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import {
+  SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
   SESSION_TERMS,
   SESSION_TYPES,
@@ -16,7 +17,7 @@ import {
   validEntityDecorator,
 } from '../JoiValidationDecorator';
 import { createISODateString } from '../../utilities/DateHandler';
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
 const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
@@ -360,6 +361,7 @@ export class TrialSessionClass {
    */
   setAsCalendared() {
     this.isCalendared = true;
+    this.sessionStatus = SESSION_STATUS_TYPES.open;
     return this;
   }
 
@@ -425,11 +427,27 @@ export class TrialSessionClass {
     const caseToUpdate = this.caseOrder.find(
       trialCase => trialCase.docketNumber === docketNumber,
     );
+
     if (caseToUpdate) {
       caseToUpdate.disposition = disposition;
       caseToUpdate.removedFromTrial = true;
       caseToUpdate.removedFromTrialDate = createISODateString();
     }
+
+    const allCases = this.caseOrder || [];
+    const inactiveCases = allCases.filter(
+      sessionCase => sessionCase.removedFromTrial === true,
+    );
+
+    if (
+      this.sessionStatus === SESSION_STATUS_GROUPS.closed ||
+      (!isEmpty(allCases) &&
+        isEqual(allCases, inactiveCases) &&
+        this.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+    ) {
+      this.sessionStatus = SESSION_STATUS_GROUPS.closed;
+    }
+
     return this;
   }
 
@@ -499,7 +517,7 @@ export class TrialSessionClass {
    * @returns {TrialSession} the trial session entity
    */
   setAsClosed() {
-    this.isClosed = true;
+    this.sessionStatus = SESSION_STATUS_TYPES.closed;
     return this;
   }
 }
