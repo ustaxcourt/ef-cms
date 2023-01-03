@@ -125,7 +125,6 @@ export const DocketRecordHeader = connect(
             <Button
               link
               aria-hidden="true"
-              className="margin-top-1"
               icon="print"
               onClick={() => {
                 gotoPrintableDocketRecordSequence({
