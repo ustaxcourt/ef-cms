@@ -142,8 +142,8 @@ export const DeficiencyStatisticsForm = connect(
                   Total penalties (IRS Notice)
                 </label>
                 <DollarsInput
+                  disabled
                   className="usa-input usa-input-inline input-medium"
-                  disabled="true"
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
@@ -203,6 +203,7 @@ export const DeficiencyStatisticsForm = connect(
                   Total penalties (Determination)
                 </label>
                 <DollarsInput
+                  disabled
                   className="usa-input usa-input-inline input-medium"
                   id="determination-total-penalties"
                   name="determinationTotalPenalties"

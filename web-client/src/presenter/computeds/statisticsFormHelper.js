@@ -11,6 +11,11 @@ export const statisticsFormHelper = (get, applicationContext) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const form = get(state.form);
 
+  const penaltyAmountType =
+    get(state.modal.key) === 'irsTotalPenalties'
+      ? 'irsPenaltyAmount'
+      : 'determinationPenaltyAmount';
+
   const showStatisticsForm =
     form.caseType === CASE_TYPES_MAP.deficiency && form.hasVerifiedIrsNotice;
 
@@ -31,6 +36,7 @@ export const statisticsFormHelper = (get, applicationContext) => {
   const showAddAnotherPenaltyButton = penalties && penalties.length < 10;
 
   return {
+    penaltyAmountType,
     showAddAnotherPenaltyButton,
     showAddMoreStatisticsButton,
     showStatisticsForm,
