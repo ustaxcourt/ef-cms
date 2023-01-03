@@ -27,6 +27,8 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     documentTitle: 'Court issued document filed on lead case',
     documentType: 'Miscellaneous',
     eventCode: 'MISC',
+    filingDateDay: 1,
+    filingDateYear: 2021,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 100,
   };

@@ -1,23 +1,13 @@
 /* eslint-disable max-lines */
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../shared/src/business/utilities/DateHandler';
 import { applicationContext } from '../../applicationContext';
 import { formatSession } from './formattedTrialSessions';
 
 const { TRIAL_SESSION_PROCEEDING_TYPES, TRIAL_SESSION_TYPES } =
   applicationContext.getConstants();
 
-let nextYear;
-
 let TRIAL_SESSIONS_LIST = [];
 
 describe('formattedTrialSessions formatSession', () => {
-  beforeAll(() => {
-    nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
-  });
-
   beforeEach(() => {
     TRIAL_SESSIONS_LIST = [
       {
@@ -37,7 +27,7 @@ describe('formattedTrialSessions formatSession', () => {
         judge: { name: '6', userId: '6' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: TRIAL_SESSION_TYPES.regular,
-        startDate: `${nextYear}-02-17T15:00:00.000Z`,
+        startDate: '2023-02-17T15:00:00.000Z',
         swingSession: false,
         term: 'Spring',
         trialLocation: 'Jacksonville, FL',

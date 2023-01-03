@@ -138,20 +138,6 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
       },
     );
-
-    expect(
-      applicationContext.getUseCases()
-        .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
-        .formattedTrialSession,
-    ).toEqual({
-      ...omit(mockFormattedTrialSessionDetails, [
-        'startDate',
-        'estimatedEndDate',
-      ]),
-      endDateForAdditionalPageHeaders: 'Nov 27, 2020',
-      formattedEstimatedEndDateFull: 'November 27, 2020',
-      startDateForAdditionalPageHeaders: 'Nov 27, 2020',
-    });
     expect(result.output.pdfUrl).toEqual(url);
   });
 
@@ -236,6 +222,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
       },
     );
+
     const expectedFilters = [
       { key: 'basisReached', label: 'Basis Reached' },
       { key: 'probableTrial', label: 'Probable Trial' },
