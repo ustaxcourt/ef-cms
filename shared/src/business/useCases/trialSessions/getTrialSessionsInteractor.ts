@@ -31,6 +31,6 @@ export const getTrialSessionsInteractor = async (
   });
 
   return validatedSessions.map(
-    trialSession => new TrialSessionInfoDto(trialSession, applicationContext),
+    trialSession => new TrialSessionInfoDto(trialSession),
   );
 };

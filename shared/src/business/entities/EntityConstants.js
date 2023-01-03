@@ -651,6 +651,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
+    deadlineDescription: 'AP & Fee Due',
   },
   orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -1202,11 +1203,17 @@ const SESSION_TYPES = {
   motionHearing: 'Motion/Hearing',
 };
 
-const SESSION_STATUS_GROUPS = {
-  all: 'All',
+const SESSION_STATUS_TYPES = {
   closed: 'Closed',
   new: 'New',
   open: 'Open',
+};
+
+const SESSION_STATUS_GROUPS = {
+  all: 'All',
+  closed: SESSION_STATUS_TYPES.closed,
+  new: SESSION_STATUS_TYPES.new,
+  open: SESSION_STATUS_TYPES.open,
 };
 
 const MAX_FILE_SIZE_MB = 250; // megabytes
@@ -1420,6 +1427,7 @@ const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
 const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION_PACKAGE: 'Application Package',
   APPLICATION: 'Application',
   CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
   FEE_RECEIPT: 'Fee Receipt',
@@ -1601,4 +1609,5 @@ module.exports = deepFreeze({
   UNSERVABLE_EVENT_CODES,
   US_STATES_OTHER,
   US_STATES,
+  SESSION_STATUS_TYPES,
 });

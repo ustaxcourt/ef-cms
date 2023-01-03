@@ -3,12 +3,8 @@ import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessag
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { userSendsMessage } from './journey/userSendsMessage';
 
-const cerebralTest = setupTest();
-
 describe('Judge messages journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

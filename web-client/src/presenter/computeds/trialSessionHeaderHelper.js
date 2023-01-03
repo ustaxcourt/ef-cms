@@ -13,7 +13,7 @@ export const trialSessionHeaderHelper = (get, applicationContext) => {
 
   const formattedTrialSession = applicationContext
     .getUtilities()
-    .formattedTrialSessionDetails({
+    .getFormattedTrialSessionDetails({
       applicationContext,
       trialSession: get(state.trialSession),
     });

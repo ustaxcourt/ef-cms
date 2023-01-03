@@ -29,10 +29,6 @@ describe('docket clerk interacts with pending items', () => {
 
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
