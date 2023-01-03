@@ -8,7 +8,7 @@ import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEm
 describe('admissions clerk adds an email to a petitioner who already exists in the system and has a separate efile petition', () => {
   const cerebralTest = setupTest();
 
-  const OLD_EMAIL = 'petitioner2@example.com';
+  const OLD_EMAIL = 'petitioner3@example.com';
   const NEW_EMAIL = 'petitioner5@example.com';
 
   afterAll(() => {
