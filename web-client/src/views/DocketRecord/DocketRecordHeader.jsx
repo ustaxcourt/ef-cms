@@ -32,7 +32,7 @@ export const DocketRecordHeader = connect(
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
-            <div className="tablet:grid-col-2">
+            <div className="tablet:grid-col-3">
               <select
                 aria-label="docket record"
                 className="usa-select margin-top-0 sort"
@@ -99,7 +99,7 @@ export const DocketRecordHeader = connect(
             </div>
 
             {docketRecordHelper.showPrintableDocketRecord && (
-              <div className="tablet:grid-col-6 text-right">
+              <div className="tablet:grid-col-5 text-right">
                 <Button
                   link
                   aria-label="printable docket record"
