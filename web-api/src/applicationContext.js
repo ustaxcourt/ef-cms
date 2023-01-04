@@ -45,7 +45,7 @@ const {
 const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
-  formattedTrialSessionDetails,
+  getFormattedTrialSessionDetails,
 } = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
 const {
   compareISODateStrings,
@@ -724,7 +724,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatDateString,
         formatJudgeName,
         formatNow,
-        formattedTrialSessionDetails,
         getAddressPhoneDiff,
         getCropBox,
         getDescriptionDisplay,
@@ -732,6 +731,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentTitleWithAdditionalInfo,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getFormattedTrialSessionDetails,
         getStampBoxCoordinates,
         getWorkQueueFilters,
         isLeadCase,
