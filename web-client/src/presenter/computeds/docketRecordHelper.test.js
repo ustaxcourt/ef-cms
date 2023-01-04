@@ -2,6 +2,8 @@ import { docketRecordHelper } from './docketRecordHelper';
 import { runCompute } from 'cerebral/test';
 
 describe('docketRecordHelper', () => {
+  const mockDocketNumber = '111-11';
+
   describe('showEditOrSealDocketRecordEntry', () => {
     it('should be true when the user has EDIT_DOCKET_ENTRY permission', () => {
       const result = runCompute(docketRecordHelper, {
@@ -9,6 +11,11 @@ describe('docketRecordHelper', () => {
           permissions: {
             EDIT_DOCKET_ENTRY: true,
             SEAL_DOCKET_ENTRY: false,
+          },
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
           },
         },
       });
@@ -23,6 +30,11 @@ describe('docketRecordHelper', () => {
             EDIT_DOCKET_ENTRY: false,
             SEAL_DOCKET_ENTRY: true,
           },
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
+          },
         },
       });
 
@@ -35,6 +47,11 @@ describe('docketRecordHelper', () => {
           permissions: {
             EDIT_DOCKET_ENTRY: false,
             SEAL_DOCKET_ENTRY: false,
+          },
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
           },
         },
       });
@@ -53,12 +70,45 @@ describe('docketRecordHelper', () => {
             canAllowPrintableDocketRecord: mockCanAllowPrintableDocketRecord,
           },
           permissions: {},
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
+          },
         },
       });
 
       expect(result.showPrintableDocketRecord).toBe(
         mockCanAllowPrintableDocketRecord,
       );
+    });
+  });
+
+  describe('sortLabelTextMobile', () => {
+    const sortLabelsMobile = {
+      byDate: 'Oldest to newest',
+      byDateDesc: 'Newest to oldest',
+    };
+
+    Object.entries(sortLabelsMobile).forEach(([sortType, sortLabel]) => {
+      it(`should be ${sortLabel} when the sortOrder is ${sortType}`, () => {
+        const result = runCompute(docketRecordHelper, {
+          state: {
+            caseDetail: {
+              canAllowPrintableDocketRecord: true,
+              docketNumber: mockDocketNumber,
+            },
+            permissions: {},
+            sessionMetadata: {
+              docketRecordSort: {
+                [mockDocketNumber]: sortType,
+              },
+            },
+          },
+        });
+
+        expect(result.sortLabelTextMobile).toBe(sortLabel);
+      });
     });
   });
 });
