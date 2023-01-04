@@ -10,9 +10,7 @@ import { state } from 'cerebral';
 export const calculatePenaltiesAction = ({ get }) => {
   let { penalties, subkey: penaltyAmountType } = get(state.modal);
 
-  penalties = penalties.filter(penalty => {
-    return penalty.name;
-  });
+  penalties = penalties.filter(penality => penality.name);
 
   const parseCurrency = value => Number(value).toFixed(2);
 
