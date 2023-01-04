@@ -11,7 +11,7 @@ const compareCasesByPractitioner = (a, b) => {
 };
 
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
-  const { ALLOWLIST_FEATURE_FLAGS, STATUS_TYPES, TRIAL_STATUS_TYPES } =
+  const { ALLOWLIST_FEATURE_FLAGS, TRIAL_STATUS_TYPES } =
     applicationContext.getConstants();
 
   const trialSession = get(state.trialSession);
@@ -26,7 +26,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     .slice()
     .filter(
       calendaredCase =>
-        calendaredCase.status !== STATUS_TYPES.closed &&
+        !applicationContext.getUtilities().isClosed(calendaredCase) &&
         calendaredCase.removedFromTrial !== true,
     )
     .filter(
