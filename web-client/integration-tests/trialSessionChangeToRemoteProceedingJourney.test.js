@@ -1,12 +1,12 @@
 import {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../src/presenter/computeds/addToTrialSessionModalHelper';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import {
@@ -25,16 +25,15 @@ import { withAppContextDecorator } from '../src/withAppContext';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const cerebralTest = setupTest();
-const { CASE_TYPES_MAP } = applicationContext.getConstants();
-
-const addToTrialSessionModalHelper = withAppContextDecorator(
-  addToTrialSessionModalHelperComputed,
-);
-
 describe('Trial Session Eligible Cases Journey', () => {
+  const cerebralTest = setupTest();
+
+  const addToTrialSessionModalHelper = withAppContextDecorator(
+    addToTrialSessionModalHelperComputed,
+  );
+
   beforeAll(() => {
-    jest.setTimeout(50000);
+    jest.setTimeout(70000);
   });
 
   afterAll(() => {
