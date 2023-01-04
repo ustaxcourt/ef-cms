@@ -15,7 +15,10 @@ export const setDefaultPenaltiesAction = ({ get, store }) => {
   if (initialPenalties.length < 5) {
     const missingPenalties = 5 - initialPenalties.length;
     for (let i = 0; i < missingPenalties; i++) {
-      initialPenalties.push({});
+      initialPenalties.push({
+        determinationPenaltyAmount: '0',
+        irsPenaltyAmount: '0',
+      });
     }
   }
   store.set(state.modal.penalties, initialPenalties);

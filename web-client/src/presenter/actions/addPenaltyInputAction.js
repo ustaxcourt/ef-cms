@@ -11,7 +11,10 @@ import { state } from 'cerebral';
 export const addPenaltyInputAction = ({ get, store }) => {
   const penalties = get(state.modal.penalties) || [];
   if (penalties.length < 10) {
-    penalties.push('');
+    penalties.push({
+      determinationPenaltyAmount: '0',
+      irsPenaltyAmount: '0',
+    });
 
     store.set(state.modal.penalties, penalties);
   }
