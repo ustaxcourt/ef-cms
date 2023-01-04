@@ -7,13 +7,11 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @returns {number} total computed value from penalty values
  */
-export const calculatePenaltiesAction = ({ get, props }) => {
-  let { penalties } = get(state.modal);
-
-  const { penaltyAmountType } = props;
+export const calculatePenaltiesAction = ({ get }) => {
+  let { penalties, subkey: penaltyAmountType } = get(state.modal);
 
   penalties = penalties.filter(penalty => {
-    return penalty[penaltyAmountType];
+    return penalty.name;
   });
 
   const parseCurrency = value => Number(value).toFixed(2);
