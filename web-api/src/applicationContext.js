@@ -20,6 +20,7 @@ const {
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
+  CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
@@ -458,7 +459,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
-        status => status !== CASE_STATUS_TYPES.closed,
+        status => !CLOSED_CASE_STATUSES.includes(status),
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
