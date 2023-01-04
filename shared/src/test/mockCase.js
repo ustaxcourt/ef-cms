@@ -40,6 +40,7 @@ exports.MOCK_CASE = {
   ],
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
+  sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
