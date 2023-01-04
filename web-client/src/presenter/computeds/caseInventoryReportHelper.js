@@ -2,8 +2,12 @@ import { state } from 'cerebral';
 import { without } from 'lodash';
 
 export const caseInventoryReportHelper = (get, applicationContext) => {
-  const { CASE_INVENTORY_PAGE_SIZE, CHIEF_JUDGE, STATUS_TYPES } =
-    applicationContext.getConstants();
+  const {
+    CASE_INVENTORY_PAGE_SIZE,
+    CHIEF_JUDGE,
+    CLOSED_CASE_STATUSES,
+    STATUS_TYPES,
+  } = applicationContext.getConstants();
   const { formatCase } = applicationContext.getUtilities();
 
   const judges = (get(state.judges) || [])
@@ -50,7 +54,7 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
   }
 
   return {
-    caseStatuses: without(Object.values(STATUS_TYPES), STATUS_TYPES.closed),
+    caseStatuses: without(Object.values(STATUS_TYPES), ...CLOSED_CASE_STATUSES),
     formattedReportData,
     judges,
     nextPageSize,
