@@ -32,7 +32,7 @@ export const DocketRecordHeader = connect(
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
-            <div className="tablet:grid-col-2">
+            <div className="tablet:grid-col-3">
               <select
                 aria-label="docket record"
                 className="usa-select margin-top-0 sort"
@@ -99,7 +99,7 @@ export const DocketRecordHeader = connect(
             </div>
 
             {docketRecordHelper.showPrintableDocketRecord && (
-              <div className="tablet:grid-col-6 text-right">
+              <div className="tablet:grid-col-5 text-right">
                 <Button
                   link
                   aria-label="printable docket record"
@@ -121,6 +121,7 @@ export const DocketRecordHeader = connect(
             <Button
               link
               aria-hidden="true"
+              className="margin-top-1"
               icon="print"
               onClick={() => {
                 gotoPrintableDocketRecordSequence({
@@ -138,14 +139,7 @@ export const DocketRecordHeader = connect(
                 toggleMobileDocketSortSequence();
               }}
             >
-              {formattedCaseDetail.docketRecordSort === 'byDate' &&
-                'Oldest to newest'}
-              {formattedCaseDetail.docketRecordSort === 'byDateDesc' &&
-                'Newest to oldest'}
-              {formattedCaseDetail.docketRecordSort === 'byIndex' &&
-                'Order ascending'}
-              {formattedCaseDetail.docketRecordSort === 'byIndexDesc' &&
-                'Order descending'}
+              {docketRecordHelper.sortLabelTextMobile}
               <FontAwesomeIcon icon="sort" size="sm" />
             </Button>
           </div>
