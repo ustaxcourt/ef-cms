@@ -166,7 +166,8 @@ const CASE_STATUS_TYPES = {
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
   calendared: 'Calendared', // Case has been scheduled for trial
   cav: 'CAV', // Core alternative valuation
-  closed: 'Closed', // Judge has made a ruling to close the case
+  closed: 'Closed', // Judge has made a ruling to close the case (either because it has been settled, adjudicated, or withdrawn)
+  closedDismissed: 'Closed - Dismissed', // Judge has made a ruling to close the case because it has been dismissed
   generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
   jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
@@ -175,6 +176,11 @@ const CASE_STATUS_TYPES = {
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
 };
+
+const CLOSED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.closedDismissed,
+];
 
 const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
@@ -213,6 +219,10 @@ const pickEventCode = d => d.eventCode;
 
 const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
+).map(pickEventCode);
+
+const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.closesAndDismissesCase,
 ).map(pickEventCode);
 
 const ORDER_TYPES = [
@@ -816,6 +826,7 @@ const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.assignedMotion,
   CASE_STATUS_TYPES.cav,
   CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.closedDismissed,
   CASE_STATUS_TYPES.generalDocket,
   CASE_STATUS_TYPES.generalDocketReadyForTrial,
   CASE_STATUS_TYPES.jurisdictionRetained,
@@ -1469,6 +1480,7 @@ module.exports = deepFreeze({
   BENCH_OPINION_EVENT_CODE,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
+  CASE_DISMISSAL_ORDER_TYPES,
   CASE_INVENTORY_PAGE_SIZE,
   CASE_LIST_PAGE_SIZE,
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
@@ -1608,6 +1620,7 @@ module.exports = deepFreeze({
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   US_STATES_OTHER,
+  CLOSED_CASE_STATUSES,
   US_STATES,
   SESSION_STATUS_TYPES,
 });
