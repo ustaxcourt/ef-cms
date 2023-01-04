@@ -68,18 +68,17 @@ The `east` table is master table, and if you delete these tables and recreate th
 2. Check to see if the **destination table** exists. You can do this via the AWS Console or AWS CLI:
 
     ```bash
-    $ aws dynamodb describe-table --table-name efcms-dev-alpha
+    aws dynamodb describe-table --table-name efcms-dev-alpha
     ```
 
     If you get an error, `An error occurred (ResourceNotFoundException) when calling the DescribeTable operation: Requested resource not found: Table: efcms-dev-alpha not found`, then you are ready to proceed with the deployment.
 
     If you do not, then it exists, and you must delete the table.
 
-3. If it exists, delete the **destination table** in both `east` and `west`. You can do this via the AWS Console or AWS CLI:
+3. If it exists, delete the **destination table** in both `east` and `west`. You can do this via this handy script:
 
     ```bash
-    $ aws dynamodb delete-table --table-name efcms-dev-alpha --region us-west-1
-    $ aws dynamodb delete-table --table-name efcms-dev-alpha --region us-east-1
+    ./scripts/dynamo/delete-dynamo-table.sh efcms-dev-alpha
     ```
 
     NOTE: after deleting the `west` table, you may have to wait a few minutes before you can delete the `east` table.

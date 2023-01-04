@@ -7,6 +7,9 @@ const {
 const {
   migrateItems: migration0004b,
 } = require('./migrations/0004-set-session-status');
+const {
+  migrateItems: migration0006,
+} = require('./migrations/0006-reformat-sortable-docket-number');
 
 // MODIFY THIS ARRAY TO ADD NEW MIGRATIONS OR REMOVE OLD ONES
 const migrationsToRun = [
@@ -21,6 +24,10 @@ const migrationsToRun = [
   {
     key: '0004-set-session-status.js',
     script: migration0004b,
+  },
+  {
+    key: '0006-reformat-sortable-docket-number.js',
+    script: migration0006,
   },
 ];
 
