@@ -245,7 +245,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
           serviceIndicator: 'Electronic',
         },
       ],
-      sortableDocketNumber: 18000101,
+      sortableDocketNumber: 2018000101,
       status: 'Calendared',
       trialDate: '2020-03-01T00:00:00.000Z',
       trialLocation: 'Washington, District of Columbia',
