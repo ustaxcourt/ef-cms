@@ -155,6 +155,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'irsTotalPenalties',
+                      subkey: 'irsPenaltyAmount',
                       title: 'Calculate Penalties on IRS Notice',
                     })
                   }
@@ -223,6 +224,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'determinationTotalPenalties',
+                      subkey: 'determinationPenaltyAmount',
                       title: 'Calculate Penalties as determined by Court',
                     })
                   }
