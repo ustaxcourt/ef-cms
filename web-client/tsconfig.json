@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "strict": false,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "types": ["jest", "node"],
+    "allowJs": true,
+    "jsx": "react"
+  }
+}

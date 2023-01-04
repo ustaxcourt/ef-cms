@@ -137,7 +137,7 @@ export default function ({
             sourceType: 'unambiguous',
             targets: 'defaults',
           },
-          filter: /\.(js|jsx)$/,
+          filter: /\.(js|jsx|tsx)$/,
         }),
         copy({
           assets: [
