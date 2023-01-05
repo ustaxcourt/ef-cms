@@ -1,4 +1,8 @@
-import { Case } from '../entities/cases/Case';
+import {
+  Case,
+  getPetitionerById,
+  isPetitionerPartOfGroup,
+} from '../entities/cases/Case';
 import { ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPublicCase';
@@ -31,6 +35,11 @@ export const getConsolidatedCasesByCaseInteractor = async (
   }
 
   const validatedConsolidatedCases = [];
+  const isAssociatedWithGroup = isPetitionerPartOfGroup({
+    consolidatedCases,
+    isPartyOfCase: getPetitionerById,
+    userId: user.userId,
+  });
 
   for (const consolidatedCase of consolidatedCases) {
     const isAssociated = await applicationContext
@@ -41,7 +50,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
         userId: user.userId,
       });
 
-    if (isAssociated) {
+    if (isAssociated || isAssociatedWithGroup) {
       validatedConsolidatedCases.push(
         new Case(consolidatedCase, { applicationContext })
           .validate()
