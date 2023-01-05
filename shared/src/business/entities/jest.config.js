@@ -5,7 +5,10 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     // 'src/**/*.js',
-    'cases/*.js',
+    // 'cases/*.js',
+    // 'cases/*.ts',
+    'trialSessions/*.js',
+    'trialSessions/*.ts',
     '!src/sharedAppContext.js',
     '!src/applicationContextForTests.js',
     '!src/**/getScannerMockInterface.js',
