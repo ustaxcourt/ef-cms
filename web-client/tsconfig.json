@@ -8,7 +8,7 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "types": ["jest", "node"],
-    "allowJs": true,
+    "allowJs": false,
     "jsx": "react"
   }
 }

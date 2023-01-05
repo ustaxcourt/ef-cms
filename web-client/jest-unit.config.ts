@@ -1,7 +1,6 @@
-const baseConfig = require('../jest-browser.config');
+import type { Config } from 'jest';
 
-module.exports = {
-  ...baseConfig,
+const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
@@ -32,4 +31,8 @@ module.exports = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
+  testRegex: 'web-client/src/.*\\.test\\.ts',
 };
+
+// eslint-disable-next-line import/no-default-export
+export default config;
