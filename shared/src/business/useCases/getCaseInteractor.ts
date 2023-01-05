@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -68,10 +69,6 @@ const getCaseForExternalUser = ({
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
-  console.log({
-    isAssociatedWithCase,
-    isAuthorizedToGetCase,
-  });
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
     return new Case(caseRecord, { applicationContext })
       .validate()
@@ -115,6 +112,13 @@ export const getCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
+  const isConsolidatedGroupAccessEnabled = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+    });
+
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
@@ -133,7 +137,7 @@ export const getCaseInteractor = async (
   const currentUser = applicationContext.getCurrentUser();
 
   let consolidatedCases;
-  if (caseRecord.leadDocketNumber) {
+  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
     consolidatedCases = await applicationContext
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor(applicationContext, {
@@ -153,7 +157,10 @@ export const getCaseInteractor = async (
         ROLE_PERMISSIONS.GET_CASE,
         getPetitionerById(caseRecord, currentUser.userId).contactId,
       );
-    } else if (caseRecord.leadDocketNumber) {
+    } else if (
+      isConsolidatedGroupAccessEnabled &&
+      caseRecord.leadDocketNumber
+    ) {
       isAuthorizedToGetCase = consolidatedCases.some(
         consolidatedCase =>
           !!getPetitionerById(consolidatedCase, currentUser.userId),
@@ -166,8 +173,7 @@ export const getCaseInteractor = async (
     user: currentUser,
   });
 
-  // TODO: this check should live in the case entity
-  if (caseRecord.leadDocketNumber) {
+  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
     isAssociatedWithCase =
       isAssociatedWithCase ||
       isPetitionerPartOfGroup({
