@@ -1,4 +1,8 @@
-import { Case } from '../entities/cases/Case';
+import {
+  Case,
+  getPetitionerById,
+  isPetitionerPartOfGroup,
+} from '../entities/cases/Case';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -146,13 +150,28 @@ export const getDownloadPolicyUrlInteractor = async (
   } else if (isIrsSuperuser) {
     handleIrsSuperUser({ docketEntryEntity, key, petitionDocketEntry });
   } else {
-    const userAssociatedWithCase = await applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
+    let userAssociatedWithCase;
+    if (caseEntity.leadDocketNumber) {
+      const consolidatedCases = await applicationContext
+        .getUseCases()
+        .getConsolidatedCasesByCaseInteractor(applicationContext, {
+          docketNumber: caseEntity.leadDocketNumber,
+        });
+
+      userAssociatedWithCase = isPetitionerPartOfGroup({
+        consolidatedCases,
+        isPartyOfCase: getPetitionerById,
         userId: user.userId,
       });
+    } else {
+      userAssociatedWithCase = await applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser({
+          applicationContext,
+          docketNumber: caseEntity.docketNumber,
+          userId: user.userId,
+        });
+    }
 
     if (key.includes('.pdf')) {
       if (

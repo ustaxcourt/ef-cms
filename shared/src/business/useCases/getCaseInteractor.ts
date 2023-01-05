@@ -4,6 +4,7 @@ import {
   canAllowPrintableDocketRecord,
   getPetitionerById,
   isAssociatedUser,
+  isPetitionerPartOfGroup,
   isSealedCase,
 } from '../entities/cases/Case';
 import { NotFoundError } from '../../errors/errors';
@@ -169,10 +170,11 @@ export const getCaseInteractor = async (
   if (caseRecord.leadDocketNumber) {
     isAssociatedWithCase =
       isAssociatedWithCase ||
-      consolidatedCases.some(
-        consolidatedCase =>
-          !!getPetitionerById(consolidatedCase, currentUser.userId),
-      );
+      isPetitionerPartOfGroup({
+        consolidatedCases,
+        isPartyOfCase: getPetitionerById,
+        userId: currentUser.userId,
+      });
   }
 
   let caseDetailRaw;
