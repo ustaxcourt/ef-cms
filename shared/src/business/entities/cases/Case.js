@@ -1657,6 +1657,14 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   );
 };
 
+const isPetitionerPartOfGroup = function ({
+  consolidatedCases,
+  isPartyOfCase,
+  userId,
+}) {
+  return consolidatedCases.some(aCase => !!isPartyOfCase(aCase, userId));
+};
+
 /**
  * Computes and sets additionalName for contactPrimary depending on partyType
  */
@@ -2474,6 +2482,7 @@ module.exports = {
   isClosed,
   isClosedStatus,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   shouldGenerateNoticesForCase,

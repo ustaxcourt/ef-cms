@@ -35,9 +35,18 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {
     const caseDetail = get(state.caseDetail);
-    isAssociated = !!applicationContext
-      .getUtilities()
-      .getPetitionerById(caseDetail, user.userId);
+
+    if (caseDetail.leadDocketNumber) {
+      isAssociated = applicationContext.getUtilities().isPetitionerPartOfGroup({
+        consolidatedCases: caseDetail.consolidatedCases,
+        isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
+        userId: user.userId,
+      });
+    } else {
+      isAssociated = !!applicationContext
+        .getUtilities()
+        .getPetitionerById(caseDetail, user.userId);
+    }
   } else if (user.role === USER_ROLES.irsSuperuser) {
     const caseDetail = get(state.caseDetail);
     const canAllowDocumentServiceForCase = applicationContext
