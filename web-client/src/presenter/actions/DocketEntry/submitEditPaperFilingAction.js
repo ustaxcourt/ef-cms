@@ -44,7 +44,7 @@ export const submitEditPaperFilingAction = async ({
     .editPaperFilingInteractor(applicationContext, {
       documentMetadata,
       isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
+      docketEntryId,
     });
 
   return {

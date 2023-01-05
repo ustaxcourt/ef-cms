@@ -95,7 +95,7 @@ describe('editPaperFilingInteractor', () => {
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
-        primaryDocumentFileId: mockDocketEntryId,
+        docketEntryId: mockDocketEntryId,
       } as any),
     ).rejects.toThrow('Unauthorized');
   });
@@ -105,7 +105,7 @@ describe('editPaperFilingInteractor', () => {
     await expect(
       editPaperFilingInteractor(applicationContext, {
         documentMetadata: {},
-        primaryDocumentFileId: notFoundDocketEntryId,
+        docketEntryId: notFoundDocketEntryId,
       } as any),
     ).rejects.toThrow(`Docket entry ${notFoundDocketEntryId} was not found.`);
   });
@@ -121,7 +121,7 @@ describe('editPaperFilingInteractor', () => {
           filers: [mockPrimaryId],
           isFileAttached: false,
         },
-        primaryDocumentFileId: '08ecbf7e-b316-46bb-9a66-b7474823d202',
+        docketEntryId: '08ecbf7e-b316-46bb-9a66-b7474823d202',
       } as any),
     ).rejects.toThrow('Docket entry has already been served');
   });
@@ -136,7 +136,7 @@ describe('editPaperFilingInteractor', () => {
         filers: [mockPrimaryId],
         isFileAttached: false,
       },
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     } as any);
 
     expect(
@@ -164,7 +164,7 @@ describe('editPaperFilingInteractor', () => {
         filers: [mockPrimaryId],
         isFileAttached: true,
       },
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     } as any);
 
     expect(
@@ -204,7 +204,7 @@ describe('editPaperFilingInteractor', () => {
           filers: [mockPrimaryId],
           isFileAttached: true,
         },
-        primaryDocumentFileId: mockDocketEntryId,
+        docketEntryId: mockDocketEntryId,
       } as any,
     );
 
@@ -223,7 +223,7 @@ describe('editPaperFilingInteractor', () => {
         filers: [mockPrimaryId],
         isFileAttached: true,
       },
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     } as any);
 
     expect(
@@ -254,7 +254,7 @@ describe('editPaperFilingInteractor', () => {
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
       },
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     } as any);
 
     const updatedDocketEntry = applicationContext
@@ -282,7 +282,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: true,
       },
       isSavingForLater: true,
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     });
 
     expect(
@@ -310,7 +310,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: false,
       },
       isSavingForLater: true,
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     });
 
     expect(
@@ -334,7 +334,7 @@ describe('editPaperFilingInteractor', () => {
           ...docketEntry,
         },
         isSavingForLater: false,
-        primaryDocumentFileId: docketEntry.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
       }),
     ).rejects.toThrow('Docket entry is already being served');
 
@@ -359,7 +359,7 @@ describe('editPaperFilingInteractor', () => {
           isFileAttached: false,
         },
         isSavingForLater: true,
-        primaryDocumentFileId: docketEntry.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
       }),
     ).resolves.not.toThrow();
   });
@@ -375,7 +375,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: true,
       },
       isSavingForLater: false,
-      primaryDocumentFileId: docketEntry.docketEntryId,
+      docketEntryId: docketEntry.docketEntryId,
     });
 
     expect(
@@ -409,7 +409,7 @@ describe('editPaperFilingInteractor', () => {
         ...docketEntry,
       },
       isSavingForLater: true,
-      primaryDocumentFileId: docketEntry.docketEntryId,
+      docketEntryId: docketEntry.docketEntryId,
     });
 
     expect(
@@ -441,7 +441,7 @@ describe('editPaperFilingInteractor', () => {
           isFileAttached: true,
         },
         isSavingForLater: false,
-        primaryDocumentFileId: docketEntry.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
       }),
     ).rejects.toThrow('whoops, that is an error!');
 
@@ -484,7 +484,7 @@ describe('editPaperFilingInteractor', () => {
           isFileAttached: true,
         },
         isSavingForLater: true,
-        primaryDocumentFileId: docketEntry.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
       }),
     ).rejects.toThrow('whoops, that is an error!');
 

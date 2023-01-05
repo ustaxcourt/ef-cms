@@ -17,19 +17,19 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
- * @param {string} providers.primaryDocumentFileId the id of the primary document file
- * @returns {object} the updated case after the documents are added
+ * @param {string} providers.docketEntryId the id of the docket entry
+ * @returns {object} The paper service PDF url
  */
 export const editPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
     documentMetadata,
     isSavingForLater,
-    primaryDocumentFileId,
+    docketEntryId,
   }: {
     documentMetadata: any;
     isSavingForLater: boolean;
-    primaryDocumentFileId: string;
+    docketEntryId: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -53,13 +53,11 @@ export const editPaperFilingInteractor = async (
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: primaryDocumentFileId,
+    docketEntryId,
   });
 
   if (!currentDocketEntry) {
-    throw new NotFoundError(
-      `Docket entry ${primaryDocumentFileId} was not found.`,
-    );
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (currentDocketEntry.servedAt) {
     throw new Error('Docket entry has already been served');
   }
@@ -111,7 +109,7 @@ export const editPaperFilingInteractor = async (
       {
         ...currentDocketEntry,
         ...editableFields,
-        docketEntryId: primaryDocumentFileId,
+        docketEntryId,
         documentTitle: editableFields.documentTitle,
         editState: JSON.stringify(editableFields),
         isOnDocketRecord: true,
@@ -180,7 +178,7 @@ export const editPaperFilingInteractor = async (
           .getUseCaseHelpers()
           .countPagesInDocument({
             applicationContext,
-            docketEntryId: primaryDocumentFileId,
+            docketEntryId,
           });
 
         Object.assign(workItem, {
