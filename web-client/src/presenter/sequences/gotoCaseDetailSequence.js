@@ -8,6 +8,7 @@ import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
@@ -82,6 +83,11 @@ export const gotoCaseDetailSequence = [
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
+  getFeatureFlagValueFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS
+      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER,
+    true,
+  ),
   getCaseAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,

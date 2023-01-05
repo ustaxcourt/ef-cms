@@ -17,6 +17,13 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   let isDirectlyAssociated = false;
   let pendingAssociation = false;
 
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+  const isConsolidatedGroupAccessEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
+    ],
+  );
+
   if (user.role === USER_ROLES.privatePractitioner) {
     const caseDetailPractitioners = get(state.caseDetail.privatePractitioners);
     const docketNumber = get(state.caseDetail.docketNumber);
@@ -40,11 +47,19 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const caseDetail = get(state.caseDetail);
 
     if (caseDetail.leadDocketNumber) {
-      isAssociated = applicationContext.getUtilities().isPetitionerPartOfGroup({
-        consolidatedCases: caseDetail.consolidatedCases,
-        isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
-        userId: user.userId,
-      });
+      if (isConsolidatedGroupAccessEnabled) {
+        isAssociated = applicationContext
+          .getUtilities()
+          .isPetitionerPartOfGroup({
+            consolidatedCases: caseDetail.consolidatedCases,
+            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
+            userId: user.userId,
+          });
+      } else {
+        isAssociated = !!applicationContext
+          .getUtilities()
+          .getPetitionerById(caseDetail, user.userId);
+      }
       isDirectlyAssociated = !!applicationContext
         .getUtilities()
         .getPetitionerById(caseDetail, user.userId);
@@ -65,5 +80,11 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     isAssociated = true;
   }
 
-  return { isAssociated, isDirectlyAssociated, pendingAssociation };
+  return {
+    isAssociated,
+    isDirectlyAssociated: isConsolidatedGroupAccessEnabled
+      ? isDirectlyAssociated
+      : isAssociated,
+    pendingAssociation,
+  };
 };
