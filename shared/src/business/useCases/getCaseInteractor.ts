@@ -36,6 +36,7 @@ const getSealedCase = ({
 
   if (!isAuthorizedToViewSealedCase) {
     const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    // TODO: check if part of consolidated group if the case is a consolidated group
     if (petitioner) {
       isAuthorizedToViewSealedCase = isAuthorized(
         currentUser,
@@ -66,6 +67,10 @@ const getCaseForExternalUser = ({
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
+  console.log({
+    isAssociatedWithCase,
+    isAuthorizedToGetCase,
+  });
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
     return new Case(caseRecord, { applicationContext })
       .validate()
@@ -126,6 +131,15 @@ export const getCaseInteractor = async (
 
   const currentUser = applicationContext.getCurrentUser();
 
+  let consolidatedCases;
+  if (caseRecord.leadDocketNumber) {
+    consolidatedCases = await applicationContext
+      .getUseCases()
+      .getConsolidatedCasesByCaseInteractor(applicationContext, {
+        docketNumber: caseRecord.leadDocketNumber,
+      });
+  }
+
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
@@ -138,13 +152,28 @@ export const getCaseInteractor = async (
         ROLE_PERMISSIONS.GET_CASE,
         getPetitionerById(caseRecord, currentUser.userId).contactId,
       );
+    } else if (caseRecord.leadDocketNumber) {
+      isAuthorizedToGetCase = consolidatedCases.some(
+        consolidatedCase =>
+          !!getPetitionerById(consolidatedCase, currentUser.userId),
+      );
     }
   }
 
-  const isAssociatedWithCase = isAssociatedUser({
+  let isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
     user: currentUser,
   });
+
+  // TODO: this check should live in the case entity
+  if (caseRecord.leadDocketNumber) {
+    isAssociatedWithCase =
+      isAssociatedWithCase ||
+      consolidatedCases.some(
+        consolidatedCase =>
+          !!getPetitionerById(consolidatedCase, currentUser.userId),
+      );
+  }
 
   let caseDetailRaw;
   caseRecord.isSealed = isSealedCase(caseRecord);
