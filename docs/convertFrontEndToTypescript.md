@@ -7,8 +7,7 @@
 - to rename jsx files: ``` find . -iname "*jsx*" -exec rename -f 's/\.jsx/\.tsx/' {} \; ```
 - to rename all js files: ```find . -iname "*.js*" -exec rename -f 's/\.js/\.ts/' {} \;```
 
-## Renaming Files
-
+## Renaming Files Utility
 - Install rename command utility with: ```brew install rename```
 - UNIX command to recursively rename all files in a folder:
 ``` find . -iname "*jsx*" -exec rename -f 's/\.jsx/\.tsx/' {} \; ```
