@@ -46,7 +46,7 @@ describe('submitEditPaperFilingAction', () => {
         isFileAttached: true,
         isPaper: true,
       },
-      primaryDocumentFileId: mockDocketEntryId,
+      docketEntryId: mockDocketEntryId,
     });
   });
 
