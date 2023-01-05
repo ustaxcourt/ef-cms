@@ -1,4 +1,4 @@
-const baseConfig = require('../../../../jest-browser.config');
+const baseConfig = require('../../../jest-browser.config');
 
 module.exports = {
   ...baseConfig,
@@ -7,8 +7,8 @@ module.exports = {
     // 'src/**/*.js',
     // 'cases/*.js',
     // 'cases/*.ts',
-    'trialSessions/*.js',
-    'trialSessions/*.ts',
+    '**/*.js',
+    '**/*.ts',
     '!src/sharedAppContext.js',
     '!src/applicationContextForTests.js',
     '!src/**/getScannerMockInterface.js',
