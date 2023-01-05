@@ -14,6 +14,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   let isAssociated = false;
+  let isDirectlyAssociated = false;
   let pendingAssociation = false;
 
   if (user.role === USER_ROLES.privatePractitioner) {
@@ -21,6 +22,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const docketNumber = get(state.caseDetail.docketNumber);
 
     isAssociated = some(caseDetailPractitioners, { userId: user.userId });
+    isDirectlyAssociated = isAssociated;
     if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
@@ -33,6 +35,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
 
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
+    isDirectlyAssociated = isAssociated;
   } else if (user.role === USER_ROLES.petitioner) {
     const caseDetail = get(state.caseDetail);
 
@@ -42,10 +45,14 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
         isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
         userId: user.userId,
       });
+      isDirectlyAssociated = !!applicationContext
+        .getUtilities()
+        .getPetitionerById(caseDetail, user.userId);
     } else {
       isAssociated = !!applicationContext
         .getUtilities()
         .getPetitionerById(caseDetail, user.userId);
+      isDirectlyAssociated = isAssociated;
     }
   } else if (user.role === USER_ROLES.irsSuperuser) {
     const caseDetail = get(state.caseDetail);
@@ -58,5 +65,5 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     isAssociated = true;
   }
 
-  return { isAssociated, pendingAssociation };
+  return { isAssociated, isDirectlyAssociated, pendingAssociation };
 };
