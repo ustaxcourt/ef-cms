@@ -45,7 +45,6 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     isDirectlyAssociated = isAssociated;
   } else if (user.role === USER_ROLES.petitioner) {
     const caseDetail = get(state.caseDetail);
-
     if (caseDetail.leadDocketNumber) {
       if (isConsolidatedGroupAccessEnabled) {
         isAssociated = applicationContext
