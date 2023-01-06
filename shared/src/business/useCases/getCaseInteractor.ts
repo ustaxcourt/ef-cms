@@ -38,7 +38,6 @@ const getSealedCase = ({
 
   if (!isAuthorizedToViewSealedCase) {
     const petitioner = getPetitionerById(caseRecord, currentUser.userId);
-    // TODO: check if part of consolidated group if the case is a consolidated group
     if (petitioner) {
       isAuthorizedToViewSealedCase = isAuthorized(
         currentUser,
@@ -161,10 +160,11 @@ export const getCaseInteractor = async (
       isConsolidatedGroupAccessEnabled &&
       caseRecord.leadDocketNumber
     ) {
-      isAuthorizedToGetCase = consolidatedCases.some(
-        consolidatedCase =>
-          !!getPetitionerById(consolidatedCase, currentUser.userId),
-      );
+      isAuthorizedToGetCase = isPetitionerPartOfGroup({
+        consolidatedCases,
+        isPartyOfCase: getPetitionerById,
+        userId: currentUser.userId,
+      });
     }
   }
 

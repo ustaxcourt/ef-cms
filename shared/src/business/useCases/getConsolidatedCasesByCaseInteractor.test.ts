@@ -91,4 +91,44 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
       });
     },
   );
+
+  describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
+    it('should return all consolidated cases if the petitioner is part of the group', async () => {
+      applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+      const mockCases = [
+        {
+          ...MOCK_CASE,
+          caseCaption: 'Guy Fieri vs. Bobby Flay',
+          docketNumber: '101-20',
+          docketNumberWithSuffix: '101-20',
+          petitioners: [
+            { ...MOCK_CASE.petitioners[0], contactId: petitionerUser.userId },
+          ],
+        },
+        {
+          ...MOCK_CASE,
+          caseCaption: 'Guy Fieri vs. Gordon Ramsay',
+          docketNumber: '102-20',
+          docketNumberWithSuffix: '102-20',
+          leadDocketNumber: '101-20',
+        },
+      ];
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesByLeadDocketNumber.mockResolvedValue(mockCases);
+
+      let cases = await getConsolidatedCasesByCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '101-20',
+        },
+      );
+
+      expect(cases[0]).toMatchObject(mockCases[0]);
+      expect(cases[1]).toMatchObject(mockCases[1]);
+    });
+  });
 });
