@@ -23,9 +23,9 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 export const editPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
+    docketEntryId,
     documentMetadata,
     isSavingForLater,
-    docketEntryId,
   }: {
     documentMetadata: any;
     isSavingForLater: boolean;
@@ -124,43 +124,35 @@ export const editPaperFilingInteractor = async (
     if (editableFields.isFileAttached) {
       const { workItem } = docketEntryEntity;
 
-      if (!isSavingForLater) {
-        Object.assign(workItem, {
-          assigneeId: null,
-          assigneeName: null,
-          caseStatus: caseToUpdate.status,
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          inProgress: isSavingForLater,
-          section: DOCKET_SECTION,
-          sentBy: user.userId,
-        });
+      Object.assign(workItem, {
+        caseStatus: caseToUpdate.status,
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+        inProgress: isSavingForLater,
+      });
 
+      workItem.assignToUser({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        section: user.section,
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
+      });
+
+      if (!isSavingForLater) {
         workItem.setAsCompleted({
           message: 'completed',
           user,
         });
 
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-
-        docketEntryEntity.setWorkItem(workItem);
-
         const servedParties = aggregatePartiesForService(caseEntity);
         docketEntryEntity.setAsServed(servedParties.all);
         docketEntryEntity.setAsProcessingStatusAsCompleted();
-
-        caseEntity.updateDocketEntry(docketEntryEntity);
 
         const paperServiceResult = await applicationContext
           .getUseCaseHelpers()
@@ -181,36 +173,11 @@ export const editPaperFilingInteractor = async (
             docketEntryId,
           });
 
-        Object.assign(workItem, {
-          assigneeId: null,
-          assigneeName: null,
-          caseStatus: caseToUpdate.status,
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          inProgress: isSavingForLater,
-          section: DOCKET_SECTION,
-          sentBy: user.userId,
-        });
-
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-
         await applicationContext.getPersistenceGateway().saveWorkItem({
           applicationContext,
           workItem: workItem.validate().toRawObject(),
         });
       }
-      caseEntity.updateDocketEntry(docketEntryEntity);
 
       await applicationContext
         .getPersistenceGateway()

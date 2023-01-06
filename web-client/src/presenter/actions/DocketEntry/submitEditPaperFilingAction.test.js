@@ -4,7 +4,6 @@ import { runAction } from 'cerebral/test';
 import { submitEditPaperFilingAction } from './submitEditPaperFilingAction';
 
 describe('submitEditPaperFilingAction', () => {
-  const clientConnectionId = '999999999';
   const mockDocketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
   const mockPaperServicePdfUrl = 'toucancenter.org';
   const mockCaseDetail = {
@@ -29,7 +28,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
@@ -41,16 +39,16 @@ describe('submitEditPaperFilingAction', () => {
       applicationContext.getUseCases().editPaperFilingInteractor.mock
         .calls[0][1],
     ).toMatchObject({
+      docketEntryId: mockDocketEntryId,
       documentMetadata: {
         docketNumber: mockCaseDetail.docketNumber,
         isFileAttached: true,
         isPaper: true,
       },
-      docketEntryId: mockDocketEntryId,
     });
   });
 
-  it('should return generateCoversheet true when props.isSavingForLater is false and there is a file attached', async () => {
+  it('should return generateCoversheet true when props.isSavingForLater is false and there is a primary document file', async () => {
     const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
@@ -61,7 +59,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
@@ -72,7 +69,7 @@ describe('submitEditPaperFilingAction', () => {
     expect(output.generateCoversheet).toBe(true);
   });
 
-  it('should return generateCoversheet false when props.isSavingForLater is false and there is NOT a file attached', async () => {
+  it('should return generateCoversheet false when props.isSavingForLater is false and there is NOT a primary document file', async () => {
     const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
@@ -83,7 +80,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {},
       },
@@ -92,7 +88,7 @@ describe('submitEditPaperFilingAction', () => {
     expect(output.generateCoversheet).toBe(false);
   });
 
-  it('should return generateCoversheet false when props.isSavingForLater is true and there is a file attached', async () => {
+  it('should return generateCoversheet false when props.isSavingForLater is true and isFileAttached is true', async () => {
     const { output } = await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
@@ -103,7 +99,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {
           isFileAttached: true,
@@ -125,7 +120,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
@@ -147,7 +141,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
@@ -171,7 +164,6 @@ describe('submitEditPaperFilingAction', () => {
       },
       state: {
         caseDetail: mockCaseDetail,
-        clientConnectionId,
         docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
