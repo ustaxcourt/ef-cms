@@ -1,8 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-import {
-  DOCKET_SECTION,
-  DOCUMENT_RELATIONSHIPS,
-} from '../../entities/EntityConstants';
+import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -17,19 +14,19 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
- * @param {string} providers.primaryDocumentFileId the id of the primary document file
- * @returns {object} the updated case after the documents are added
+ * @param {string} providers.docketEntryId the id of the docket entry
+ * @returns {object} The paper service PDF url
  */
 export const editPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
+    docketEntryId,
     documentMetadata,
     isSavingForLater,
-    primaryDocumentFileId,
   }: {
     documentMetadata: any;
     isSavingForLater: boolean;
-    primaryDocumentFileId: string;
+    docketEntryId: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -38,35 +35,103 @@ export const editPaperFilingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber } = documentMetadata;
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber,
+      docketNumber: documentMetadata.docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: primaryDocumentFileId,
+    docketEntryId,
   });
 
   if (!currentDocketEntry) {
-    throw new NotFoundError(
-      `Docket entry ${primaryDocumentFileId} was not found.`,
-    );
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (currentDocketEntry.servedAt) {
     throw new Error('Docket entry has already been served');
+  } else if (currentDocketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
   }
 
-  if (!isSavingForLater) {
-    if (currentDocketEntry.isPendingService) {
-      throw new Error('Docket entry is already being served');
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const editableFields = {
+    addToCoversheet: documentMetadata.addToCoversheet,
+    additionalInfo: documentMetadata.additionalInfo,
+    additionalInfo2: documentMetadata.additionalInfo2,
+    attachments: documentMetadata.attachments,
+    certificateOfService: documentMetadata.certificateOfService,
+    certificateOfServiceDate: documentMetadata.certificateOfServiceDate,
+    documentTitle: documentMetadata.documentTitle,
+    documentType: documentMetadata.documentType,
+    eventCode: documentMetadata.eventCode,
+    filers: documentMetadata.filers,
+    freeText: documentMetadata.freeText,
+    freeText2: documentMetadata.freeText2,
+    hasOtherFilingParty: documentMetadata.hasOtherFilingParty,
+    isFileAttached: documentMetadata.isFileAttached,
+    lodged: documentMetadata.lodged,
+    mailingDate: documentMetadata.mailingDate,
+    objections: documentMetadata.objections,
+    ordinalValue: documentMetadata.ordinalValue,
+    otherFilingParty: documentMetadata.otherFilingParty,
+    partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
+    pending: documentMetadata.pending,
+    receivedAt: documentMetadata.receivedAt,
+    scenario: documentMetadata.scenario,
+    serviceDate: documentMetadata.serviceDate,
+  };
+
+  const updatedDocketEntryEntity = new DocketEntry(
+    {
+      ...currentDocketEntry,
+      ...editableFields,
+      docketEntryId,
+      editState: JSON.stringify(editableFields),
+      isOnDocketRecord: true,
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+      userId: user.userId,
+    },
+    { applicationContext, petitioners: caseEntity.petitioners },
+  );
+
+  const { workItem } = updatedDocketEntryEntity;
+
+  workItem.docketEntry = updatedDocketEntryEntity.toRawObject();
+  workItem.inProgress = isSavingForLater;
+
+  workItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
+  let paperServicePdfUrl;
+
+  try {
+    if (isSavingForLater) {
+      if (editableFields.isFileAttached) {
+        updatedDocketEntryEntity.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            docketEntryId,
+          });
+      }
+
+      await saveWorkItem({
+        applicationContext,
+        isReadyForService: !isSavingForLater,
+        workItem,
+      });
     } else {
       await applicationContext
         .getPersistenceGateway()
@@ -76,184 +141,40 @@ export const editPaperFilingInteractor = async (
           docketNumber: caseToUpdate.docketNumber,
           status: true,
         });
-    }
-  }
 
-  try {
-    const editableFields = {
-      addToCoversheet: documentMetadata.addToCoversheet,
-      additionalInfo: documentMetadata.additionalInfo,
-      additionalInfo2: documentMetadata.additionalInfo2,
-      attachments: documentMetadata.attachments,
-      certificateOfService: documentMetadata.certificateOfService,
-      certificateOfServiceDate: documentMetadata.certificateOfServiceDate,
-      documentTitle: documentMetadata.documentTitle,
-      documentType: documentMetadata.documentType,
-      eventCode: documentMetadata.eventCode,
-      filers: documentMetadata.filers,
-      freeText: documentMetadata.freeText,
-      freeText2: documentMetadata.freeText2,
-      hasOtherFilingParty: documentMetadata.hasOtherFilingParty,
-      isFileAttached: documentMetadata.isFileAttached,
-      lodged: documentMetadata.lodged,
-      mailingDate: documentMetadata.mailingDate,
-      objections: documentMetadata.objections,
-      ordinalValue: documentMetadata.ordinalValue,
-      otherFilingParty: documentMetadata.otherFilingParty,
-      partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
-      pending: documentMetadata.pending,
-      receivedAt: documentMetadata.receivedAt,
-      scenario: documentMetadata.scenario,
-      serviceDate: documentMetadata.serviceDate,
-    };
-
-    const docketEntryEntity = new DocketEntry(
-      {
-        ...currentDocketEntry,
-        ...editableFields,
-        docketEntryId: primaryDocumentFileId,
-        documentTitle: editableFields.documentTitle,
-        editState: JSON.stringify(editableFields),
-        isOnDocketRecord: true,
-        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-        userId: user.userId,
-      },
-      { applicationContext, petitioners: caseEntity.petitioners },
-    );
-
-    let paperServicePdfUrl;
-
-    if (editableFields.isFileAttached) {
-      const { workItem } = docketEntryEntity;
-
-      if (!isSavingForLater) {
-        Object.assign(workItem, {
-          assigneeId: null,
-          assigneeName: null,
-          caseStatus: caseToUpdate.status,
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          inProgress: isSavingForLater,
-          section: DOCKET_SECTION,
-          sentBy: user.userId,
-        });
-
+      if (editableFields.isFileAttached) {
         workItem.setAsCompleted({
           message: 'completed',
           user,
         });
 
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
+        await saveWorkItem({
+          applicationContext,
+          isReadyForService: !isSavingForLater,
+          workItem,
         });
 
-        docketEntryEntity.setWorkItem(workItem);
-
         const servedParties = aggregatePartiesForService(caseEntity);
-        docketEntryEntity.setAsServed(servedParties.all);
-        docketEntryEntity.setAsProcessingStatusAsCompleted();
+        updatedDocketEntryEntity.setAsServed(servedParties.all);
+        updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
 
-        caseEntity.updateDocketEntry(docketEntryEntity);
+        caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
         const paperServiceResult = await applicationContext
           .getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf({
             applicationContext,
             caseEntities: [caseEntity],
-            docketEntryId: docketEntryEntity.docketEntryId,
+            docketEntryId: updatedDocketEntryEntity.docketEntryId,
           });
 
         if (servedParties.paper.length > 0) {
           paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
         }
-      } else {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            docketEntryId: primaryDocumentFileId,
-          });
-
-        Object.assign(workItem, {
-          assigneeId: null,
-          assigneeName: null,
-          caseStatus: caseToUpdate.status,
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          inProgress: isSavingForLater,
-          section: DOCKET_SECTION,
-          sentBy: user.userId,
-        });
-
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-
-        await applicationContext.getPersistenceGateway().saveWorkItem({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        });
       }
-      caseEntity.updateDocketEntry(docketEntryEntity);
-
-      await applicationContext
-        .getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        });
-    } else if (!editableFields.isFileAttached && isSavingForLater) {
-      const { workItem } = docketEntryEntity;
-
-      Object.assign(workItem, {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: caseToUpdate.status,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        inProgress: isSavingForLater,
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
-
-      workItem.assignToUser({
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-
-      await applicationContext.getPersistenceGateway().saveWorkItem({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
     }
 
-    caseEntity.updateDocketEntry(docketEntryEntity);
+    caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
@@ -288,4 +209,26 @@ export const editPaperFilingInteractor = async (
 
     throw e;
   }
+};
+
+const saveWorkItem = async ({
+  applicationContext,
+  isReadyForService,
+  workItem,
+}) => {
+  const workItemRaw = workItem.validate().toRawObject();
+
+  if (isReadyForService) {
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+      applicationContext,
+      section: workItem.section,
+      userId: workItem.assigneeId,
+      workItem: workItemRaw,
+    });
+  }
+
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemRaw,
+  });
 };

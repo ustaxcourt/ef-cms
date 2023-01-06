@@ -12,15 +12,15 @@ const { put } = require('../requests');
  */
 exports.editPaperFilingInteractor = (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  { docketEntryId, documentMetadata, isSavingForLater },
 ) => {
   const { docketNumber } = documentMetadata;
   return put({
     applicationContext,
     body: {
+      docketEntryId,
       documentMetadata,
       isSavingForLater,
-      primaryDocumentFileId,
     },
     endpoint: `/case-documents/${docketNumber}/paper-filing`,
   });
