@@ -6,6 +6,7 @@ on:
     branches:
       - dependency-updates
       - test
+      - 9616-story
 
 jobs:
   e2e_cypress_smoketests_local:
