@@ -31,7 +31,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
 
   [docketClerkUser, petitionsClerkUser].forEach(internalUser => {
     it(`should return Case entity for consolidated cases by the leadDocketNumber for ${internalUser.name}`, async () => {
-      applicationContext.getCurrentUser.mockReturnValue(internalUser);
+      applicationContext.getCurrentUser.mockReturnValueOnce(internalUser);
 
       let cases = await getConsolidatedCasesByCaseInteractor(
         applicationContext,
@@ -65,7 +65,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
         applicationContext
           .getPersistenceGateway()
           .verifyCaseForUser.mockResolvedValueOnce(false)
-          .mockResolvedValue(true);
+          .mockResolvedValueOnce(true);
 
         applicationContext.getCurrentUser.mockReturnValue(externalUser);
 
@@ -93,11 +93,11 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
   );
 
   describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
-    it('should return all consolidated cases if the petitioner is part of the group', async () => {
+    it('should return all full consolidated cases if the petitioner is part of the group', async () => {
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValue(true);
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+        .getFeatureFlagValueInteractor.mockResolvedValueOnce(true);
+      applicationContext.getCurrentUser.mockReturnValueOnce(petitionerUser);
       const mockCases = [
         {
           ...MOCK_CASE,
@@ -118,7 +118,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
       ];
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(mockCases);
+        .getCasesByLeadDocketNumber.mockResolvedValueOnce(mockCases);
 
       let cases = await getConsolidatedCasesByCaseInteractor(
         applicationContext,
@@ -127,8 +127,23 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
         },
       );
 
-      expect(cases[0]).toMatchObject(mockCases[0]);
-      expect(cases[1]).toMatchObject(mockCases[1]);
+      expect(cases[0].entityName).toEqual('Case');
+      expect(cases[1].entityName).toEqual('Case');
     });
+  });
+
+  it('should return all public consolidated cases if the petitioner is not associated with the group', async () => {
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockResolvedValueOnce(true);
+
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
+    let cases = await getConsolidatedCasesByCaseInteractor(applicationContext, {
+      docketNumber: '101-20',
+    });
+
+    expect(cases[0].entityName).toEqual('PublicCase');
+    expect(cases[1].entityName).toEqual('PublicCase');
   });
 });
