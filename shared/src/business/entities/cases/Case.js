@@ -1657,6 +1657,13 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   );
 };
 
+/**
+ * @param {Object} options the options argument
+ * @param {Array} options.consolidatedCases an array of consolidated cases
+ * @param {Function} isPartyOfCase a function used to know if a userId is part of the case
+ * @param {String} userId the user's id
+ * @returns {boolean} true if the user is a party of the case
+ */
 const isPetitionerPartOfGroup = function ({
   consolidatedCases,
   isPartyOfCase,
