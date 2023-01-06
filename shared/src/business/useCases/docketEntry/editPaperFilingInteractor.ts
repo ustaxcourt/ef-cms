@@ -52,6 +52,8 @@ export const editPaperFilingInteractor = async (
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (currentDocketEntry.servedAt) {
     throw new Error('Docket entry has already been served');
+  } else if (currentDocketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
   }
 
   const editableFields = {
@@ -102,11 +104,8 @@ export const editPaperFilingInteractor = async (
 
   const { workItem } = updatedDocketEntryEntity;
 
-  Object.assign(workItem, {
-    caseStatus: caseToUpdate.status,
-    docketEntry: updatedDocketEntryEntity.toRawObject(),
-    inProgress: isSavingForLater,
-  });
+  workItem.docketEntry = updatedDocketEntryEntity.toRawObject();
+  workItem.inProgress = isSavingForLater;
 
   workItem.assignToUser({
     assigneeId: user.userId,
@@ -134,50 +133,47 @@ export const editPaperFilingInteractor = async (
         workItem,
       });
     } else {
-      if (currentDocketEntry.isPendingService) {
-        throw new Error('Docket entry is already being served');
-      } else {
-        await applicationContext
-          .getPersistenceGateway()
-          .updateDocketEntryPendingServiceStatus({
-            applicationContext,
-            docketEntryId: currentDocketEntry.docketEntryId,
-            docketNumber: caseToUpdate.docketNumber,
-            status: true,
-          });
-      }
-
-      if (editableFields.isFileAttached) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
-
-        await saveWorkItem({
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
           applicationContext,
-          isReadyForService: !isSavingForLater,
-          workItem,
+          docketEntryId: currentDocketEntry.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          status: true,
+        });
+    }
+
+    if (editableFields.isFileAttached) {
+      workItem.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+
+      await saveWorkItem({
+        applicationContext,
+        isReadyForService: !isSavingForLater,
+        workItem,
+      });
+
+      const servedParties = aggregatePartiesForService(caseEntity);
+      updatedDocketEntryEntity.setAsServed(servedParties.all);
+      updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
+
+      caseEntity.updateDocketEntry(updatedDocketEntryEntity);
+
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities: [caseEntity],
+          docketEntryId: updatedDocketEntryEntity.docketEntryId,
         });
 
-        const servedParties = aggregatePartiesForService(caseEntity);
-        updatedDocketEntryEntity.setAsServed(servedParties.all);
-        updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
-
-        caseEntity.updateDocketEntry(updatedDocketEntryEntity);
-
-        const paperServiceResult = await applicationContext
-          .getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf({
-            applicationContext,
-            caseEntities: [caseEntity],
-            docketEntryId: updatedDocketEntryEntity.docketEntryId,
-          });
-
-        if (servedParties.paper.length > 0) {
-          paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-        }
+      if (servedParties.paper.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
       }
     }
+
     caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
