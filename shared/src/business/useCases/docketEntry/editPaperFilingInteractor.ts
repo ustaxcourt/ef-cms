@@ -38,7 +38,6 @@ export const editPaperFilingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -47,7 +46,7 @@ export const editPaperFilingInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber,
+      docketNumber: documentMetadata.docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -110,7 +109,6 @@ export const editPaperFilingInteractor = async (
         ...currentDocketEntry,
         ...editableFields,
         docketEntryId,
-        documentTitle: editableFields.documentTitle,
         editState: JSON.stringify(editableFields),
         isOnDocketRecord: true,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
