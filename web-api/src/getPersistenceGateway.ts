@@ -9,6 +9,7 @@ import { bulkIndexRecords } from '../../shared/src/persistence/elasticsearch/bul
 import { caseAdvancedSearch } from '../../shared/src/persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from '../../shared/src/persistence/elasticsearch/casePublicSearch';
 import { confirmAuthCode } from '../../shared/src/persistence/cognito/confirmAuthCode';
+import { confirmAuthCodeLocal } from '../../shared/src/persistence/cognito/confirmAuthCodeLocal';
 import { createCase } from '../../shared/src/persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
@@ -162,11 +163,9 @@ import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/wo
 import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
 import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
 import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
-import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
-import jwt from 'jsonwebtoken';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
@@ -279,27 +278,7 @@ const gatewayMethods = {
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
-    ? (applicationContext, { code }) => {
-        const email = code.toLowerCase();
-        if (userMap[email]) {
-          const user = {
-            ...userMap[email],
-            sub: userMap[email].userId,
-          };
-          const token = jwt.sign(user, 'secret');
-          return {
-            refreshToken: token,
-            token,
-          };
-        } else {
-          return {
-            alertError: {
-              message: 'Login credentials not found.',
-              title: 'Login error!',
-            },
-          };
-        }
-      }
+    ? confirmAuthCodeLocal
     : confirmAuthCode,
   decrementJobCounter,
   deleteCaseDeadline,
