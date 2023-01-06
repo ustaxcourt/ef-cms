@@ -18,8 +18,8 @@ describe('setCaseAssociationAction', () => {
       },
     });
 
-    expect(state.screenMetadata.isAssociated).toBeTruthy();
-    expect(state.screenMetadata.pendingAssociation).toBeTruthy();
-    expect(state.screenMetadata.isDirectlyAssociated).toBeTruthy();
+    expect(state.screenMetadata.isAssociated).toBe(true);
+    expect(state.screenMetadata.pendingAssociation).toBe(true);
+    expect(state.screenMetadata.isDirectlyAssociated).toBe(true);
   });
 });
