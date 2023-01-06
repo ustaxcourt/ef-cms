@@ -1,8 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-import {
-  DOCKET_SECTION,
-  DOCUMENT_RELATIONSHIPS,
-} from '../../entities/EntityConstants';
+import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -37,10 +34,6 @@ export const editPaperFilingInteractor = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -104,6 +97,10 @@ export const editPaperFilingInteractor = async (
       serviceDate: documentMetadata.serviceDate,
     };
 
+    const user = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId: authorizedUser.userId });
+
     const docketEntryEntity = new DocketEntry(
       {
         ...currentDocketEntry,
@@ -119,29 +116,29 @@ export const editPaperFilingInteractor = async (
 
     let paperServicePdfUrl;
 
+    const { workItem } = docketEntryEntity;
+
+    Object.assign(workItem, {
+      caseStatus: caseToUpdate.status,
+      docketEntry: {
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
+      },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+      inProgress: isSavingForLater,
+    });
+
+    workItem.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
     if (editableFields.isFileAttached) {
-      const { workItem } = docketEntryEntity;
-
-      Object.assign(workItem, {
-        caseStatus: caseToUpdate.status,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        inProgress: isSavingForLater,
-      });
-
-      workItem.assignToUser({
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-
       if (!isSavingForLater) {
         workItem.setAsCompleted({
           message: 'completed',
@@ -179,39 +176,12 @@ export const editPaperFilingInteractor = async (
         });
       }
 
-      await applicationContext
-        .getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        });
+      await saveWorkItem({
+        applicationContext,
+        isReadyForService: !isSavingForLater,
+        workItem,
+      });
     } else if (!editableFields.isFileAttached && isSavingForLater) {
-      const { workItem } = docketEntryEntity;
-
-      Object.assign(workItem, {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: caseToUpdate.status,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        inProgress: isSavingForLater,
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
-
-      workItem.assignToUser({
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-
       await applicationContext.getPersistenceGateway().saveWorkItem({
         applicationContext,
         workItem: workItem.validate().toRawObject(),
@@ -253,4 +223,26 @@ export const editPaperFilingInteractor = async (
 
     throw e;
   }
+};
+
+const saveWorkItem = async ({
+  applicationContext,
+  isReadyForService,
+  workItem,
+}) => {
+  const workItemRaw = workItem.validate().toRawObject();
+
+  if (isReadyForService) {
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+      applicationContext,
+      section: workItem.section,
+      userId: workItem.assigneeId,
+      workItem: workItemRaw,
+    });
+  }
+
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemRaw,
+  });
 };
