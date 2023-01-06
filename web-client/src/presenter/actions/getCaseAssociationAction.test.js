@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -34,6 +35,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: true,
+      isDirectlyAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -61,6 +63,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: false,
+      isDirectlyAssociated: false,
       pendingAssociation: true,
     });
   });
@@ -88,6 +91,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: false,
+      isDirectlyAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -115,6 +119,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: true,
+      isDirectlyAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -134,6 +139,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: true,
+      isDirectlyAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -153,6 +159,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: false,
+      isDirectlyAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -180,6 +187,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: false,
+      isDirectlyAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -211,6 +219,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: true,
+      isDirectlyAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -242,6 +251,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: false,
+      isDirectlyAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -269,6 +279,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: true,
+      isDirectlyAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -294,6 +305,7 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: false,
+      isDirectlyAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -324,7 +336,85 @@ describe('getCaseAssociation', () => {
 
     expect(results.output).toEqual({
       isAssociated: true,
+      isDirectlyAssociated: true,
       pendingAssociation: false,
+    });
+  });
+
+  describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
+    it('isAssociated should be true when the petitioners userId exists in the consolidated group list', async () => {
+      const petitionerContactId = '123';
+
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitioner,
+        userId: petitionerContactId,
+      });
+
+      const results = await runAction(getCaseAssociationAction, {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          caseDetail: {
+            consolidatedCases: [
+              {
+                petitioners: [
+                  {
+                    contactId: petitionerContactId,
+                  },
+                ],
+              },
+            ],
+            leadDocketNumber: '101-20',
+            petitioners: [
+              {
+                contactId: 'not-petitioner-contact-id',
+              },
+            ],
+          },
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: true,
+          },
+        },
+      });
+
+      expect(results.output.isAssociated).toBe(true);
+      expect(results.output.isDirectlyAssociated).toBe(false);
+    });
+
+    it('isDirectlyAssociated should be true when the id of the caseDetail petitioner matches the users id', async () => {
+      const petitionerContactId = '123';
+
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitioner,
+        userId: petitionerContactId,
+      });
+
+      const results = await runAction(getCaseAssociationAction, {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          caseDetail: {
+            consolidatedCases: [],
+            leadDocketNumber: '101-20',
+            petitioners: [
+              {
+                contactId: petitionerContactId,
+              },
+            ],
+          },
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: true,
+          },
+        },
+      });
+
+      expect(results.output.isDirectlyAssociated).toBe(true);
     });
   });
 });
