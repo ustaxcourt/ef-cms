@@ -56,6 +56,10 @@ export const editPaperFilingInteractor = async (
     throw new Error('Docket entry is already being served');
   }
 
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
     additionalInfo: documentMetadata.additionalInfo,
@@ -83,10 +87,6 @@ export const editPaperFilingInteractor = async (
     serviceDate: documentMetadata.serviceDate,
   };
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const updatedDocketEntryEntity = new DocketEntry(
     {
       ...currentDocketEntry,
@@ -99,8 +99,6 @@ export const editPaperFilingInteractor = async (
     },
     { applicationContext, petitioners: caseEntity.petitioners },
   );
-
-  let paperServicePdfUrl;
 
   const { workItem } = updatedDocketEntryEntity;
 
@@ -115,6 +113,8 @@ export const editPaperFilingInteractor = async (
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
+
+  let paperServicePdfUrl;
 
   try {
     if (isSavingForLater) {
@@ -141,36 +141,36 @@ export const editPaperFilingInteractor = async (
           docketNumber: caseToUpdate.docketNumber,
           status: true,
         });
-    }
 
-    if (editableFields.isFileAttached) {
-      workItem.setAsCompleted({
-        message: 'completed',
-        user,
-      });
-
-      await saveWorkItem({
-        applicationContext,
-        isReadyForService: !isSavingForLater,
-        workItem,
-      });
-
-      const servedParties = aggregatePartiesForService(caseEntity);
-      updatedDocketEntryEntity.setAsServed(servedParties.all);
-      updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
-
-      caseEntity.updateDocketEntry(updatedDocketEntryEntity);
-
-      const paperServiceResult = await applicationContext
-        .getUseCaseHelpers()
-        .serveDocumentAndGetPaperServicePdf({
-          applicationContext,
-          caseEntities: [caseEntity],
-          docketEntryId: updatedDocketEntryEntity.docketEntryId,
+      if (editableFields.isFileAttached) {
+        workItem.setAsCompleted({
+          message: 'completed',
+          user,
         });
 
-      if (servedParties.paper.length > 0) {
-        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+        await saveWorkItem({
+          applicationContext,
+          isReadyForService: !isSavingForLater,
+          workItem,
+        });
+
+        const servedParties = aggregatePartiesForService(caseEntity);
+        updatedDocketEntryEntity.setAsServed(servedParties.all);
+        updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
+
+        caseEntity.updateDocketEntry(updatedDocketEntryEntity);
+
+        const paperServiceResult = await applicationContext
+          .getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf({
+            applicationContext,
+            caseEntities: [caseEntity],
+            docketEntryId: updatedDocketEntryEntity.docketEntryId,
+          });
+
+        if (servedParties.paper.length > 0) {
+          paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+        }
       }
     }
 
