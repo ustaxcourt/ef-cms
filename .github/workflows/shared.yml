@@ -6,7 +6,6 @@ on:
     branches:
       - dependency-updates
       - test
-      - 9616-story
 
 jobs:
   Shared:
