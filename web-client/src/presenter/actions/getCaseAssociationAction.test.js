@@ -384,6 +384,48 @@ describe('getCaseAssociation', () => {
       expect(results.output.isDirectlyAssociated).toBe(false);
     });
 
+    it('isAssociated should be false when the petitioners userId does not exist on the current case, and the feature flag is off', async () => {
+      const petitionerContactId = '123';
+
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitioner,
+        userId: petitionerContactId,
+      });
+
+      const results = await runAction(getCaseAssociationAction, {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          caseDetail: {
+            consolidatedCases: [
+              {
+                petitioners: [
+                  {
+                    contactId: petitionerContactId,
+                  },
+                ],
+              },
+            ],
+            leadDocketNumber: '101-20',
+            petitioners: [
+              {
+                contactId: 'not-petitioner-contact-id',
+              },
+            ],
+          },
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: false,
+          },
+        },
+      });
+
+      expect(results.output.isAssociated).toBe(false);
+      expect(results.output.isDirectlyAssociated).toBe(false);
+    });
+
     it('isDirectlyAssociated should be true when the id of the caseDetail petitioner matches the users id', async () => {
       const petitionerContactId = '123';
 
