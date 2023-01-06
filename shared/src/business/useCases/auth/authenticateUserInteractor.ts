@@ -12,7 +12,7 @@ export const authenticateUserInteractor = async (
 ) => {
   const { alertError, refreshToken, token } = await applicationContext
     .getPersistenceGateway()
-    .confirmAuthCode(applicationContext, { code });
+    .confirmAuthCode({ applicationContext, code });
 
   return {
     alertError,
