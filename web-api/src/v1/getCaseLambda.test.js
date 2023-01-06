@@ -38,7 +38,15 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const applicationContext = createSilentApplicationContext(user);
 
     // Case is retrieved before determining authorization
+
+    //TODO TODO TODO ask Mike about this
+
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      get: jest.fn().mockReturnValue({
+        promise: jest
+          .fn()
+          .mockReturnValue(Promise.resolve({ Item: { current: true } })),
+      }),
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
           Promise.resolve({
@@ -66,6 +74,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
     // Case is retrieved before determining authorization
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      get: jest.fn().mockReturnValue({
+        promise: jest
+          .fn()
+          .mockReturnValue(Promise.resolve({ Item: { current: true } })),
+      }),
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
           Promise.resolve({
@@ -98,6 +111,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const applicationContext = createSilentApplicationContext(user);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      get: jest.fn().mockReturnValue({
+        promise: jest
+          .fn()
+          .mockReturnValue(Promise.resolve({ Item: { current: true } })),
+      }),
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
           Promise.resolve({
@@ -124,6 +142,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const applicationContext = createSilentApplicationContext(user);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      get: jest.fn().mockReturnValue({
+        promise: jest
+          .fn()
+          .mockReturnValue(Promise.resolve({ Item: { current: true } })),
+      }),
       query: jest.fn().mockReturnValue({
         promise: jest
           .fn()
@@ -150,6 +173,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const applicationContext = createSilentApplicationContext(user);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      get: jest.fn().mockReturnValue({
+        promise: jest
+          .fn()
+          .mockReturnValue(Promise.resolve({ Item: { current: true } })),
+      }),
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
           Promise.resolve({
