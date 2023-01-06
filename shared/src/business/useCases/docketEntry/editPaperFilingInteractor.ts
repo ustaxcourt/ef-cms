@@ -152,6 +152,8 @@ export const editPaperFilingInteractor = async (
         docketEntryEntity.setAsServed(servedParties.all);
         docketEntryEntity.setAsProcessingStatusAsCompleted();
 
+        caseEntity.updateDocketEntry(docketEntryEntity);
+
         const paperServiceResult = await applicationContext
           .getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf({
