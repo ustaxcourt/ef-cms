@@ -36,11 +36,7 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     ));
   }
 
-  // this is temporary until the flow for 9616 is implemented (QC workflow)
-  const editingDocketEntry = !!get(state.isEditingDocketEntry);
-
   const showConsolidatedCasesForService =
-    !editingDocketEntry &&
     areMultiDocketablePaperFilingsEnabled &&
     formattedCaseDetail.isLeadCase &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
