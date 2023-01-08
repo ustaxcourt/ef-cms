@@ -6,8 +6,6 @@ import {
 import { state } from 'cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
-
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({
@@ -16,6 +14,8 @@ export const formattedMessages = (get, applicationContext) => {
     messages: get(state.messages) || [],
     tableSort,
   });
+
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   messages.forEach(message => {
     message.showTrialInformation =
@@ -71,7 +71,10 @@ export const formattedMessages = (get, applicationContext) => {
   return sharedComputedResult;
 };
 
-const setTrialInformationOnMessage = ({ applicationContext, message }) => {
+export const setTrialInformationOnMessage = ({
+  applicationContext,
+  message,
+}) => {
   const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
 
   if (message.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {

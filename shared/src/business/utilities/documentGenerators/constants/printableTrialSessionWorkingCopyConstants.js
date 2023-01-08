@@ -442,7 +442,6 @@ const FORMATTED_CASES = [
 ];
 
 const FORMATTED_TRIAL_SESSION = {
-  computedStatus: 'Open',
   endDateForAdditionalPageHeaders: 'Feb 10, 2023',
   formattedChambersPhoneNumber: '1234567',
   formattedCourtReporter: 'Test court report',
@@ -452,6 +451,7 @@ const FORMATTED_TRIAL_SESSION = {
   formattedStartDateFull: 'January 26, 2023',
   formattedTerm: 'Winter 23',
   formattedTrialClerk: 'Test trial clerk',
+  sessionStatus: 'Open',
   startDateForAdditionalPageHeaders: 'Jan 26, 2023',
   trialLocation: 'Washington, District of Columbia',
 };

@@ -4,6 +4,8 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  PARTY_TYPES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { Case, getOtherFilers } from '../entities/cases/Case';
@@ -11,7 +13,6 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
-import { PARTY_TYPES, ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
 import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';

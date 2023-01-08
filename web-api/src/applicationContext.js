@@ -2,9 +2,7 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
-const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const elasticsearch = require('elasticsearch');
 const pdfLib = require('pdf-lib');
 const pug = require('pug');
 const sass = require('sass');
@@ -22,6 +20,7 @@ const {
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
+  CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
@@ -47,7 +46,7 @@ const {
 const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
-  formattedTrialSessionDetails,
+  getFormattedTrialSessionDetails,
 } = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
 const {
   compareISODateStrings,
@@ -226,6 +225,8 @@ const {
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+const { Client } = require('@opensearch-project/opensearch');
 
 const {
   Case,
@@ -244,17 +245,7 @@ const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
-// increase the timeout for zip uploads to S3
-AWS.config.httpOptions.timeout = 300000;
-
-const {
-  CognitoIdentityServiceProvider,
-  DynamoDB,
-  EnvironmentCredentials,
-  S3,
-  SES,
-  SQS,
-} = AWS;
+const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -330,6 +321,11 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
       endpoint: useMasterRegion
         ? environment.masterDynamoDbEndpoint
         : environment.dynamoDbEndpoint,
+      httpOptions: {
+        connectTimeout: 3000,
+        timeout: 5000,
+      },
+      maxRetries: 3,
       region: useMasterRegion ? environment.masterRegion : environment.region,
     });
   }
@@ -443,6 +439,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         };
       } else {
         return new CognitoIdentityServiceProvider({
+          httpOptions: {
+            connectTimeout: 3000,
+            timeout: 5000,
+          },
+          maxRetries: 3,
           region: 'us-east-1',
         });
       }
@@ -458,7 +459,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
-        status => status !== CASE_STATUS_TYPES.closed,
+        status => !CLOSED_CASE_STATUSES.includes(status),
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
@@ -528,6 +529,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
       } else {
         if (!sesCache) {
           sesCache = new SES({
+            httpOptions: {
+              connectTimeout: 3000,
+              timeout: 5000,
+            },
+            maxRetries: 3,
             region: 'us-east-1',
           });
         }
@@ -586,6 +592,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (!sqsCache) {
         sqsCache = new SQS({
           apiVersion: '2012-11-05',
+          httpOptions: {
+            connectTimeout: 3000,
+            timeout: 5000,
+          },
+          maxRetries: 3,
         });
       }
       return sqsCache;
@@ -621,7 +632,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
         };
       } else {
-        notificationServiceCache = new AWS.SNS({});
+        notificationServiceCache = new AWS.SNS({
+          httpOptions: {
+            connectTimeout: 3000,
+            timeout: 5000,
+          },
+          maxRetries: 3,
+        });
       }
       return notificationServiceCache;
     },
@@ -649,22 +666,25 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
-          searchClientCache = new elasticsearch.Client({
-            host: environment.elasticsearchEndpoint,
+          searchClientCache = new Client({
+            node: environment.elasticsearchEndpoint,
           });
         } else {
-          searchClientCache = new elasticsearch.Client({
-            amazonES: {
-              credentials: new EnvironmentCredentials('AWS'),
-              region: environment.region,
-            },
-            apiVersion: '7.7',
-            awsConfig: new AWS.Config({ region: 'us-east-1' }),
-            connectionClass,
-            host: environment.elasticsearchEndpoint,
-            log: 'warning',
-            port: 443,
-            protocol: 'https',
+          searchClientCache = new Client({
+            ...AwsSigv4Signer({
+              getCredentials: () =>
+                new Promise((resolve, reject) => {
+                  AWS.config.getCredentials((err, credentials) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(credentials);
+                    }
+                  });
+                }),
+              region: 'us-east-1',
+            }),
+            node: `https://${environment.elasticsearchEndpoint}:443`,
           });
         }
       }
@@ -675,6 +695,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
+          httpOptions: {
+            timeout: 300000,
+          },
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });
@@ -702,7 +725,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatDateString,
         formatJudgeName,
         formatNow,
-        formattedTrialSessionDetails,
         getAddressPhoneDiff,
         getCropBox,
         getDescriptionDisplay,
@@ -710,6 +732,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentTitleWithAdditionalInfo,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getFormattedTrialSessionDetails,
         getStampBoxCoordinates,
         getWorkQueueFilters,
         isLeadCase,

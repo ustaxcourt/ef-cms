@@ -8522,7 +8522,7 @@
         "formattedTrialSession": {
           "type": "object",
           "properties": {
-            "computedStatus": {
+            "sessionStatus": {
               "type": "string"
             },
             "formattedJudge": {

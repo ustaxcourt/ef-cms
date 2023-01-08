@@ -1,4 +1,5 @@
-import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdatesCaseStatusToClosed';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { irsPractitionerViewsOpenAndClosedCases } from './journey/irsPractitionerViewsOpenAndClosedCases';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsOpenAndClosedCases } from './journey/petitionerViewsOpenAndClosedCases';
@@ -6,12 +7,8 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { privatePractitionerViewsOpenAndClosedCases } from './journey/privatePractitionerViewsOpenAndClosedCases';
 
-const cerebralTest = setupTest();
-
 describe('external user views open and closed cases', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -19,9 +16,11 @@ describe('external user views open and closed cases', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create the case to close', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    const { docketNumber } = await uploadPetition(cerebralTest);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -29,7 +28,7 @@ describe('external user views open and closed cases', () => {
   petitionsClerkAddsRespondentsToCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToClosed(cerebralTest);
+  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.closed);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerViewsOpenAndClosedCases(cerebralTest);
