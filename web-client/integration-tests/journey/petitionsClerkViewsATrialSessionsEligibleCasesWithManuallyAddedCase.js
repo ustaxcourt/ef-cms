@@ -27,6 +27,6 @@ export const petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase
           state: cerebralTest.getState(),
         },
       );
-      expect(trialSessionFormatted.computedStatus).toEqual('New');
+      expect(trialSessionFormatted.sessionStatus).toEqual('New');
     });
   };

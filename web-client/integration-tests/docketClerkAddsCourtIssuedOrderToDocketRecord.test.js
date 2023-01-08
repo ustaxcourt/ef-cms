@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { DOCKET_NUMBER_SUFFIXES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkAddsDocketEntryFromOrderWithDate } from './journey/docketClerkAddsDocketEntryFromOrderWithDate';
@@ -21,15 +21,10 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDocketEntry';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
+  cerebralTest.draftOrders = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });

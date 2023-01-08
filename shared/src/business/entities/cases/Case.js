@@ -9,6 +9,7 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
+  CLOSED_CASE_STATUSES,
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
@@ -493,8 +494,8 @@ Case.VALIDATION_RULES = {
     }),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
-    is: CASE_STATUS_TYPES.closed,
-    otherwise: joi.optional().allow(null),
+    is: joi.exist().valid(...CLOSED_CASE_STATUSES),
+    otherwise: joi.optional(),
     then: joi.required(),
   }),
   correspondence: joi
@@ -722,10 +723,17 @@ Case.VALIDATION_RULES = {
       }),
     })
     .description('List of Statistic Entities for the case.'),
-  status: JoiValidationConstants.STRING.valid(
-    ...Object.values(CASE_STATUS_TYPES),
-  )
-    .optional()
+  status: joi
+    .alternatives()
+    .conditional('closedDate', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.STRING.valid(
+        ...Object.values(CASE_STATUS_TYPES),
+      ).optional(),
+      then: JoiValidationConstants.STRING.required().valid(
+        ...CLOSED_CASE_STATUSES,
+      ),
+    })
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
   trialDate: joi
@@ -1032,12 +1040,58 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
   this.docketEntries = [...this.docketEntries, docketEntryEntity];
 };
 
-Case.prototype.closeCase = function () {
+/**
+ * Reopen the case with the provided status
+ *
+ * @param {String} reopenedStatus the status to set the case to
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.reopenCase = function ({ reopenedStatus }) {
+  this.closedDate = undefined;
+  this.status = reopenedStatus;
+  return this;
+};
+
+/**
+ * Close the case with the provided status
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.closeCase = function ({ closedStatus }) {
   this.closedDate = createISODateString();
-  this.status = CASE_STATUS_TYPES.closed;
+  this.status = closedStatus;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
   return this;
+};
+
+/**
+ * Determines if the case has been closed
+ *
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+Case.prototype.isClosed = function () {
+  return isClosed(this);
+};
+
+/**
+ * Determines if the case has been closed
+ *
+ * @param {object} rawCase the case
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+const isClosed = function (rawCase) {
+  return isClosedStatus(rawCase.status);
+};
+
+/**
+ * Determines if the case has a closed status
+ *
+ * @param {string} caseStatus the status of the case
+ * @returns {Boolean} true if the case has been closed, false otherwise
+ */
+const isClosedStatus = function (caseStatus) {
+  return CLOSED_CASE_STATUSES.includes(caseStatus);
 };
 
 /**
@@ -1458,17 +1512,22 @@ Case.prototype.checkForReadyForTrial = function () {
  * returns a sortable docket number in ${year}${index} format
  *
  * @param {string} docketNumber the docket number to use
- * @returns {string} the sortable docket number
+ * @returns {string|void} the sortable docket number
  */
 Case.getSortableDocketNumber = function (docketNumber) {
   if (!docketNumber) {
     return;
   }
 
-  // Note: This does not yet take into account pre-2000's years
-  const docketNumberSplit = docketNumber.split('-');
-  docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
-  return parseInt(`${docketNumberSplit[1]}${docketNumberSplit[0]}`);
+  // NOTE: 1574-65 is the oldest case in DAWSON, which was filed in 1965
+  const oldestYear = 65;
+
+  const [sequentialNumber, yearFiled] = docketNumber.split('-');
+  const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
+  const yearFiledAdjusted =
+    parseInt(yearFiled) >= oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
+
+  return parseInt(`${yearFiledAdjusted}${sequentialNumberPadded}`);
 };
 
 /**
@@ -1650,7 +1709,7 @@ const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
  * @param {Object} providers the providers object
  * @param {String} providers.contactType the type of contact we are looking for (primary or secondary)
  * @param {Object} providers.rawCase the raw case
- * @returns {(Object|undefined)} the contact object on the case
+ * @returns {Object|void} the contact object on the case
  */
 const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
   if (!rawCase.petitioners) {
@@ -1965,21 +2024,31 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
 /**
  * set case status
  *
- * @param {string} caseStatus the case status to update
+ * @param {string} updatedCaseStatus the case status to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseStatus = function (caseStatus) {
-  this.status = caseStatus;
+Case.prototype.setCaseStatus = function (updatedCaseStatus) {
+  const previousCaseStatus = this.status;
+
+  this.status = updatedCaseStatus;
+
   if (
     [
       CASE_STATUS_TYPES.generalDocket,
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    ].includes(caseStatus)
+    ].includes(updatedCaseStatus)
   ) {
     this.associatedJudge = CHIEF_JUDGE;
-  } else if (caseStatus === CASE_STATUS_TYPES.closed) {
-    this.closeCase();
   }
+
+  if (isClosedStatus(updatedCaseStatus)) {
+    this.closeCase({ closedStatus: updatedCaseStatus });
+  } else {
+    if (isClosedStatus(previousCaseStatus)) {
+      this.reopenCase({ reopenedStatus: updatedCaseStatus });
+    }
+  }
+
   return this;
 };
 
@@ -2051,8 +2120,8 @@ Case.prototype.canConsolidate = function (caseToConsolidate) {
   const ineligibleStatusTypes = [
     CASE_STATUS_TYPES.new,
     CASE_STATUS_TYPES.generalDocket,
-    CASE_STATUS_TYPES.closed,
     CASE_STATUS_TYPES.onAppeal,
+    ...CLOSED_CASE_STATUSES,
   ];
 
   const caseToCheck = caseToConsolidate || this;
@@ -2361,7 +2430,7 @@ const shouldGenerateNoticesForCase = rawCase => {
   if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
     return rawCase.shouldGenerateNotices;
   }
-  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+  const isOpen = ![...CLOSED_CASE_STATUSES, CASE_STATUS_TYPES.new].includes(
     rawCase.status,
   );
   const MAX_CLOSED_DATE = calculateISODate({
@@ -2402,6 +2471,8 @@ module.exports = {
   getPractitionersRepresenting,
   hasPartyWithServiceType,
   isAssociatedUser,
+  isClosed,
+  isClosedStatus,
   isLeadCase,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
