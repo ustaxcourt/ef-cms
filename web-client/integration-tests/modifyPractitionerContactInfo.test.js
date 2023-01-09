@@ -19,7 +19,7 @@ describe('Modify Practitioner Contact Information', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   it('login as a practitioner and creates a case that will be served', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
