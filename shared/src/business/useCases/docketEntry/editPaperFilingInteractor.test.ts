@@ -434,5 +434,94 @@ describe('editPaperFilingInteractor', () => {
         applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
       ).toHaveBeenCalledTimes(3);
     });
+
+    it('should return a paper service pdf url when at least one party in the consolidated group has paper service', async () => {
+      const mockedPaerServicePdfUrl = 'www.example.com';
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(async ({ docketNumber }) => ({
+          ...caseRecord,
+          docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+          petitioners: [
+            {
+              ...caseRecord.petitioners[0],
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
+        }));
+      applicationContext
+        .getUseCaseHelpers()
+        .fileAndServeDocumentOnOneCase.mockImplementation(
+          ({ caseEntity }) => caseEntity,
+        );
+      applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
+          pdfUrl: mockedPaerServicePdfUrl,
+        });
+
+      const result = await editPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: ['101-23', '101-24'],
+        docketEntryId: mockDocketEntryId,
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          isFileAttached: true,
+        },
+        isSavingForLater: false,
+      });
+
+      expect(result.paperServicePdfUrl).toEqual(mockedPaerServicePdfUrl);
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities,
+      ).toEqual([
+        expect.objectContaining({ docketNumber: caseRecord.docketNumber }),
+        expect.objectContaining({ docketNumber: '101-23' }),
+        expect.objectContaining({ docketNumber: '101-24' }),
+      ]);
+    });
+
+    it('should NOT return a paper service pdf url when no party in the consolidated group has paper service', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(async ({ docketNumber }) => ({
+          ...caseRecord,
+          docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+          petitioners: [
+            {
+              ...caseRecord.petitioners[0],
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        }));
+      applicationContext
+        .getUseCaseHelpers()
+        .fileAndServeDocumentOnOneCase.mockImplementation(
+          ({ caseEntity }) => caseEntity,
+        );
+      applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);
+
+      const result = await editPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: ['101-23', '101-24'],
+        docketEntryId: mockDocketEntryId,
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          isFileAttached: true,
+        },
+        isSavingForLater: false,
+      });
+
+      expect(result.paperServicePdfUrl).toEqual(undefined);
+    });
   });
 });
