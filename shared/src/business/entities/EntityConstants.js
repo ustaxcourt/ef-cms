@@ -166,7 +166,8 @@ const CASE_STATUS_TYPES = {
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
   calendared: 'Calendared', // Case has been scheduled for trial
   cav: 'CAV', // Core alternative valuation
-  closed: 'Closed', // Judge has made a ruling to close the case
+  closed: 'Closed', // Judge has made a ruling to close the case (either because it has been settled, adjudicated, or withdrawn)
+  closedDismissed: 'Closed - Dismissed', // Judge has made a ruling to close the case because it has been dismissed
   generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
   jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
@@ -175,6 +176,11 @@ const CASE_STATUS_TYPES = {
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
 };
+
+const CLOSED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.closedDismissed,
+];
 
 const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
@@ -213,6 +219,10 @@ const pickEventCode = d => d.eventCode;
 
 const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
+).map(pickEventCode);
+
+const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.closesAndDismissesCase,
 ).map(pickEventCode);
 
 const ORDER_TYPES = [
@@ -651,6 +661,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
+    deadlineDescription: 'AP & Fee Due',
   },
   orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -815,6 +826,7 @@ const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.assignedMotion,
   CASE_STATUS_TYPES.cav,
   CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.closedDismissed,
   CASE_STATUS_TYPES.generalDocket,
   CASE_STATUS_TYPES.generalDocketReadyForTrial,
   CASE_STATUS_TYPES.jurisdictionRetained,
@@ -1202,11 +1214,17 @@ const SESSION_TYPES = {
   motionHearing: 'Motion/Hearing',
 };
 
-const SESSION_STATUS_GROUPS = {
-  all: 'All',
+const SESSION_STATUS_TYPES = {
   closed: 'Closed',
   new: 'New',
   open: 'Open',
+};
+
+const SESSION_STATUS_GROUPS = {
+  all: 'All',
+  closed: SESSION_STATUS_TYPES.closed,
+  new: SESSION_STATUS_TYPES.new,
+  open: SESSION_STATUS_TYPES.open,
 };
 
 const MAX_FILE_SIZE_MB = 250; // megabytes
@@ -1236,53 +1254,11 @@ const SECTIONS = sortBy([
 ]);
 
 const TRIAL_STATUS_TYPES = {
-  setForTrial: {
-    deprecated: true,
-    displayOrder: 999,
-    label: 'Set for Trial',
-  },
-  dismissed: {
-    deprecated: true,
-    displayOrder: 999,
-    label: 'Dismissed',
-  },
-  continued: {
-    deprecated: false,
-    displayOrder: 4,
-    label: 'Continued',
-  },
-  rule122: {
-    deprecated: false,
-    displayOrder: 6,
-    label: 'Rule 122',
-  },
   basisReached: {
     deprecated: false,
     displayOrder: 1,
     legacyLabel: 'A Basis Reached',
     label: 'Basis Reached',
-  },
-  settled: {
-    deprecated: true,
-    displayOrder: 999,
-    label: 'Settled',
-  },
-  recall: {
-    deprecated: false,
-    displayOrder: 2,
-    label: 'Recall',
-  },
-  submittedCAV: {
-    deprecated: false,
-    displayOrder: 8,
-    legacyLabel: 'Taken Under Advisement',
-    label: 'Submitted/CAV',
-  },
-  motionToDismiss: {
-    deprecated: false,
-    displayOrder: 9,
-    new: true,
-    label: 'Motion',
   },
   probableSettlement: {
     deprecated: false,
@@ -1301,6 +1277,48 @@ const TRIAL_STATUS_TYPES = {
     displayOrder: 7,
     new: true,
     label: 'Definite Trial',
+  },
+  motionToDismiss: {
+    deprecated: false,
+    displayOrder: 9,
+    new: true,
+    label: 'Motion',
+  },
+  recall: {
+    deprecated: false,
+    displayOrder: 2,
+    label: 'Recall',
+  },
+  continued: {
+    deprecated: false,
+    displayOrder: 4,
+    label: 'Continued',
+  },
+  rule122: {
+    deprecated: false,
+    displayOrder: 6,
+    label: 'Rule 122',
+  },
+  submittedCAV: {
+    deprecated: false,
+    displayOrder: 8,
+    legacyLabel: 'Taken Under Advisement',
+    label: 'Submitted/CAV',
+  },
+  setForTrial: {
+    deprecated: true,
+    displayOrder: 999,
+    label: 'Set for Trial',
+  },
+  dismissed: {
+    deprecated: true,
+    displayOrder: 999,
+    label: 'Dismissed',
+  },
+  settled: {
+    deprecated: true,
+    displayOrder: 999,
+    label: 'Settled',
   },
 };
 
@@ -1420,6 +1438,7 @@ const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
 const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+  APPLICATION_PACKAGE: 'Application Package',
   APPLICATION: 'Application',
   CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
   FEE_RECEIPT: 'Fee Receipt',
@@ -1461,6 +1480,7 @@ module.exports = deepFreeze({
   BENCH_OPINION_EVENT_CODE,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
+  CASE_DISMISSAL_ORDER_TYPES,
   CASE_INVENTORY_PAGE_SIZE,
   CASE_LIST_PAGE_SIZE,
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
@@ -1600,5 +1620,7 @@ module.exports = deepFreeze({
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   US_STATES_OTHER,
+  CLOSED_CASE_STATUSES,
   US_STATES,
+  SESSION_STATUS_TYPES,
 });

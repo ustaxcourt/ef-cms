@@ -2,12 +2,8 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsCaseNote } from './journey/petitionsClerkAddsCaseNote';
 import { petitionsClerkDeletesCaseNote } from './journey/petitionsClerkDeletesCaseNote';
 
-const cerebralTest = setupTest();
-
 describe('petitions clerk case notes journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

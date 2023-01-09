@@ -3,7 +3,7 @@
  *
  * @param {string} template the template for replacement
  * @param  {...any} values the values to replace the brackets
- * @returns {string} the template with the brackets replaced with replacement values
+ * @returns {string|void} the template with the brackets replaced with replacement values
  */
 const replaceBracketed = (template, ...values) => {
   if (!template) return;
