@@ -147,7 +147,7 @@ describe('messages table journey', () => {
     judgeCohenUserId,
   );
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgecohen@example.com');
   it('judge views recent messages with trial information', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
