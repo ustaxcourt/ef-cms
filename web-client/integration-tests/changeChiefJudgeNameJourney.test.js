@@ -23,8 +23,10 @@ describe('Chief Judge feature flag configuration', () => {
     await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     cerebralTest.closeSocket();
+    await setJudgeTitle(judgeFoleyUserId, 'Chief Judge');
+    await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
