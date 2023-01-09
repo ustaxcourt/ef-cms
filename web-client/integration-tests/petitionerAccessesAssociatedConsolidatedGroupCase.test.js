@@ -1,7 +1,7 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { clearDatabase, seedDatabase } from './utils/database';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 import path from 'path';
@@ -33,6 +33,7 @@ describe('Petitioner accesses a case that does not belong to them, but is part o
         '../../web-api/storage/fixtures/seed/efcms-local.json',
       ),
     );
+    await refreshElasticsearchIndex();
   });
 
   loginAs(cerebralTest, 'petitioner2@example.com');
