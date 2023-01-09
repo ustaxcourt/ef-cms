@@ -363,4 +363,76 @@ describe('editPaperFilingInteractor', () => {
 
     expect(paperServicePdfUrl).toEqual(mockPdfUrl);
   });
+
+  describe('multi-docketing', () => {
+    it('should throw an error when the docket entry is being multi-docketed on a member case that is NOT consolidated', async () => {
+      const nonConsolidatedDocketNumber = '101-19';
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+          if (docketNumber === caseRecord.docketNumber) {
+            return { ...caseRecord, leadDocketNumber: caseRecord.docketNumber };
+          } else if (docketNumber === nonConsolidatedDocketNumber) {
+            return { leadDocketNumber: undefined };
+          }
+        });
+
+      await expect(
+        editPaperFilingInteractor(applicationContext, {
+          consolidatedGroupDocketNumbers: [nonConsolidatedDocketNumber],
+          docketEntryId: mockDocketEntryId,
+          documentMetadata: caseRecord.docketEntries[0],
+          isSavingForLater: false,
+        }),
+      ).rejects.toThrow(
+        'Cannot multi-docket on a case that is not consolidated',
+      );
+    });
+
+    it('should throw an error when the docket entry is being filed on a case that is NOT consolidated and the request includes consolidated group docket numbers to multi-docket on', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...caseRecord,
+          leadDocketNumber: undefined,
+        });
+
+      await expect(
+        editPaperFilingInteractor(applicationContext, {
+          consolidatedGroupDocketNumbers: ['101-23'],
+          docketEntryId: mockDocketEntryId,
+          documentMetadata: { docketNumber: caseRecord.docketNumber },
+          isSavingForLater: false,
+        }),
+      ).rejects.toThrow(
+        'Cannot multi-docket on a case that is not consolidated',
+      );
+    });
+
+    it('should file and serve the docket entry on all provided docket numbers when the user requests the docket entry be multi-docketed on a consolidated group', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...caseRecord,
+          leadDocketNumber: caseRecord.docketNumber,
+        });
+
+      await editPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: ['101-23', '101-24'],
+        docketEntryId: mockDocketEntryId,
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          isFileAttached: true,
+        },
+        isSavingForLater: false,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+      ).toHaveBeenCalledTimes(3);
+    });
+  });
 });

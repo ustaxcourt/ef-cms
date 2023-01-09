@@ -1,4 +1,4 @@
-import { Case } from '../../entities/cases/Case';
+import { Case, isLeadCase } from '../../entities/cases/Case';
 import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
@@ -12,6 +12,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {string[]} providers.consolidatedGroupDocketNumbers list of consolidatedDocketNumbers to file docket entry on
  * @param {object} providers.documentMetadata the document metadata
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
  * @param {string} providers.docketEntryId the id of the docket entry
@@ -20,6 +21,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 export const editPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
+    consolidatedGroupDocketNumbers,
     docketEntryId,
     documentMetadata,
     isSavingForLater,
@@ -27,6 +29,7 @@ export const editPaperFilingInteractor = async (
     documentMetadata: any;
     isSavingForLater: boolean;
     docketEntryId: string;
+    consolidatedGroupDocketNumbers?: string[];
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -54,6 +57,40 @@ export const editPaperFilingInteractor = async (
     throw new Error('Docket entry has already been served');
   } else if (currentDocketEntry.isPendingService) {
     throw new Error('Docket entry is already being served');
+  }
+
+  // If the case to serve the docket entry on is a lead case
+  // Retrieve every case in the consolidated group argument
+  // Verify the lead docket number is the same as the case to serve the docket entry on
+  let consolidatedCaseEntities;
+  if (isLeadCase(caseEntity)) {
+    const getCasesFromPersistencePromises = consolidatedGroupDocketNumbers.map(
+      consolidatedGroupDocketNumber => {
+        return applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber: consolidatedGroupDocketNumber,
+          });
+      },
+    );
+    const consolidatedCases = await Promise.all(
+      getCasesFromPersistencePromises,
+    );
+    consolidatedCases.forEach(consolidatedCase => {
+      if (consolidatedCase.leadDocketNumber !== caseEntity.docketNumber) {
+        throw new Error(
+          'Cannot multi-docket on a case that is not consolidated',
+        );
+      }
+    });
+    consolidatedCaseEntities = consolidatedCases.map(
+      consolidatedCase => new Case(consolidatedCase, { applicationContext }),
+    );
+  }
+
+  if (!isLeadCase(caseEntity) && consolidatedGroupDocketNumbers?.length) {
+    throw new Error('Cannot multi-docket on a case that is not consolidated');
   }
 
   const user = await applicationContext
@@ -143,33 +180,54 @@ export const editPaperFilingInteractor = async (
         });
 
       if (editableFields.isFileAttached) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
-
-        await saveWorkItem({
-          applicationContext,
-          isReadyForService: !isSavingForLater,
-          workItem,
-        });
-
-        const servedParties = aggregatePartiesForService(caseEntity);
-        updatedDocketEntryEntity.setAsServed(servedParties.all);
-        updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
-
-        caseEntity.updateDocketEntry(updatedDocketEntryEntity);
-
-        const paperServiceResult = await applicationContext
-          .getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf({
-            applicationContext,
-            caseEntities: [caseEntity],
-            docketEntryId: updatedDocketEntryEntity.docketEntryId,
+        if (!isLeadCase(caseEntity)) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
           });
 
-        if (servedParties.paper.length > 0) {
-          paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+          await saveWorkItem({
+            applicationContext,
+            isReadyForService: !isSavingForLater,
+            workItem,
+          });
+
+          const servedParties = aggregatePartiesForService(caseEntity);
+          updatedDocketEntryEntity.setAsServed(servedParties.all);
+          updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
+
+          caseEntity.updateDocketEntry(updatedDocketEntryEntity);
+          const paperServiceResult = await applicationContext
+            .getUseCaseHelpers()
+            .serveDocumentAndGetPaperServicePdf({
+              applicationContext,
+              caseEntities: [caseEntity],
+              docketEntryId: updatedDocketEntryEntity.docketEntryId,
+            });
+
+          if (servedParties.paper.length > 0) {
+            paperServicePdfUrl =
+              paperServiceResult && paperServiceResult.pdfUrl;
+          }
+        } else {
+          const caseEntitiesToFileOn = [
+            caseEntity,
+            ...consolidatedCaseEntities,
+          ];
+
+          const fileDocumentPromises = caseEntitiesToFileOn.map(aCase =>
+            applicationContext
+              .getUseCaseHelpers()
+              .fileAndServeDocumentOnOneCase({
+                applicationContext,
+                caseEntity: aCase,
+                docketEntryEntity: updatedDocketEntryEntity,
+                subjectCaseDocketNumber: documentMetadata.docketNumber,
+                user,
+              }),
+          );
+
+          await Promise.all(fileDocumentPromises);
         }
       }
     }
