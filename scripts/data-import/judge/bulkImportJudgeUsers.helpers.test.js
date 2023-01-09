@@ -40,7 +40,7 @@ describe('bulkImportJudgeUsers helpers', () => {
     };
 
     mockCurrentJudge = {
-      email: 'judgeDredd@example.com',
+      email: 'judgedredd@example.com',
       judgeFullName: 'Joseph S. Dredd',
       judgeTitle: 'Judge',
       name: 'Dredd',
