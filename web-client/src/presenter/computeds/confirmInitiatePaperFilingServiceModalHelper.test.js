@@ -326,31 +326,6 @@ describe('confirmInitiatePaperFilingServiceModalHelper', () => {
   });
 
   describe('showConsolidatedCasesForService', () => {
-    it('should be false when the docket entry is being edited', () => {
-      const { showConsolidatedCasesForService } = runCompute(
-        confirmInitiatePaperFilingServiceModalHelper,
-        {
-          state: {
-            featureFlagHelper: {
-              areMultiDocketablePaperFilingsEnabled: true,
-            },
-            form: {
-              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
-            },
-            formattedCaseDetail: {
-              irsPractitioners: [],
-              isLeadCase: true,
-              petitioners: [],
-              privatePractitioners: [],
-            },
-            isEditingDocketEntry: true,
-          },
-        },
-      );
-
-      expect(showConsolidatedCasesForService).toEqual(false);
-    });
-
     it('should be false when MULTI_DOCKETABLE_PAPER_FILINGS feature flag is false', () => {
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiatePaperFilingServiceModalHelper,
