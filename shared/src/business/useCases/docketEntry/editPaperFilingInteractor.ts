@@ -21,7 +21,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 export const editPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
-    consolidatedGroupDocketNumbers,
+    consolidatedGroupDocketNumbers = [],
     docketEntryId,
     documentMetadata,
     isSavingForLater,
@@ -51,47 +51,29 @@ export const editPaperFilingInteractor = async (
     docketEntryId,
   });
 
-  if (!currentDocketEntry) {
-    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
-  } else if (currentDocketEntry.servedAt) {
-    throw new Error('Docket entry has already been served');
-  } else if (currentDocketEntry.isPendingService) {
-    throw new Error('Docket entry is already being served');
-  }
+  let consolidatedCaseRecords = await Promise.all(
+    consolidatedGroupDocketNumbers.map(consolidatedGroupDocketNumber =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: consolidatedGroupDocketNumber,
+      }),
+    ),
+  );
 
-  // If the case to serve the docket entry on is a lead case
-  // Retrieve every case in the consolidated group argument
-  // Verify the lead docket number is the same as the case to serve the docket entry on
-  let consolidatedCaseEntities;
-  if (isLeadCase(caseEntity)) {
-    const getCasesFromPersistencePromises = consolidatedGroupDocketNumbers.map(
-      consolidatedGroupDocketNumber => {
-        return applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: consolidatedGroupDocketNumber,
-          });
-      },
-    );
-    const consolidatedCases = await Promise.all(
-      getCasesFromPersistencePromises,
-    );
-    consolidatedCases.forEach(consolidatedCase => {
-      if (consolidatedCase.leadDocketNumber !== caseEntity.docketNumber) {
-        throw new Error(
-          'Cannot multi-docket on a case that is not consolidated',
-        );
-      }
-    });
-    consolidatedCaseEntities = consolidatedCases.map(
-      consolidatedCase => new Case(consolidatedCase, { applicationContext }),
-    );
-  }
+  let consolidatedCaseEntities = consolidatedCaseRecords.map(
+    consolidatedCase => new Case(consolidatedCase, { applicationContext }),
+  );
 
-  if (!isLeadCase(caseEntity) && consolidatedGroupDocketNumbers?.length) {
-    throw new Error('Cannot multi-docket on a case that is not consolidated');
-  }
+  validateDocketEntryCanBeEdited({
+    docketEntry: currentDocketEntry,
+    docketEntryId,
+  });
+
+  validateConsolidatedCasePaperFilingRequest({
+    caseEntity,
+    consolidatedCases: consolidatedCaseEntities,
+    consolidatedGroupDocketNumbers,
+  });
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -197,7 +179,7 @@ export const editPaperFilingInteractor = async (
           updatedDocketEntryEntity.setAsProcessingStatusAsCompleted();
 
           caseEntity.updateDocketEntry(updatedDocketEntryEntity);
-          const paperServiceResult = await applicationContext
+          const paperServiceResult = await applicationContext // TODO: Rename?
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf({
               applicationContext,
@@ -210,24 +192,31 @@ export const editPaperFilingInteractor = async (
               paperServiceResult && paperServiceResult.pdfUrl;
           }
         } else {
-          const caseEntitiesToFileOn = [
-            caseEntity,
-            ...consolidatedCaseEntities,
-          ];
+          let caseEntitiesToFileOn = [caseEntity, ...consolidatedCaseEntities];
 
-          const fileDocumentPromises = caseEntitiesToFileOn.map(aCase =>
-            applicationContext
-              .getUseCaseHelpers()
-              .fileAndServeDocumentOnOneCase({
-                applicationContext,
-                caseEntity: aCase,
-                docketEntryEntity: updatedDocketEntryEntity,
-                subjectCaseDocketNumber: documentMetadata.docketNumber,
-                user,
-              }),
+          caseEntitiesToFileOn = await Promise.all(
+            caseEntitiesToFileOn.map(aCase =>
+              applicationContext
+                .getUseCaseHelpers()
+                .fileAndServeDocumentOnOneCase({
+                  applicationContext,
+                  caseEntity: aCase,
+                  docketEntryEntity: updatedDocketEntryEntity,
+                  subjectCaseDocketNumber: documentMetadata.docketNumber,
+                  user,
+                }),
+            ),
           );
 
-          await Promise.all(fileDocumentPromises);
+          const paperServiceResult = await applicationContext // TODO: Rename?
+            .getUseCaseHelpers()
+            .serveDocumentAndGetPaperServicePdf({
+              applicationContext,
+              caseEntities: caseEntitiesToFileOn,
+              docketEntryId: updatedDocketEntryEntity.docketEntryId,
+            });
+
+          paperServicePdfUrl = paperServiceResult?.pdfUrl;
         }
       }
     }
@@ -266,6 +255,46 @@ export const editPaperFilingInteractor = async (
     }
 
     throw e;
+  }
+};
+
+const validateDocketEntryCanBeEdited = ({
+  docketEntry,
+  docketEntryId,
+}: {
+  docketEntry: DocketEntry;
+  docketEntryId: string;
+}): void => {
+  if (!docketEntry) {
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  } else if (docketEntry.servedAt) {
+    throw new Error('Docket entry has already been served');
+  } else if (docketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
+  }
+};
+
+const validateConsolidatedCasePaperFilingRequest = ({
+  caseEntity,
+  consolidatedCases,
+  consolidatedGroupDocketNumbers,
+}: {
+  caseEntity: Case;
+  consolidatedCases: Case[];
+  consolidatedGroupDocketNumbers: string[];
+}): void => {
+  if (isLeadCase(caseEntity)) {
+    consolidatedCases.forEach(consolidatedCase => {
+      if (consolidatedCase.leadDocketNumber !== caseEntity.docketNumber) {
+        throw new Error(
+          'Cannot multi-docket on a case that is not consolidated',
+        );
+      }
+    });
+  }
+
+  if (!isLeadCase(caseEntity) && consolidatedGroupDocketNumbers?.length) {
+    throw new Error('Cannot multi-docket on a case that is not consolidated');
   }
 };
 
