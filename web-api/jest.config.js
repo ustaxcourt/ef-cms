@@ -4,7 +4,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'switch-environment-color.js',
-    'src/**/*.js',
+    'src/**/*.{js,ts}',
     'migration-terraform/main/lambdas/migrations/*.js',
     '!src/applicationContext.js',
     '!src/getUseCaseHelpers.js',
