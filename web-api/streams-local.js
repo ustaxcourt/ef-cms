@@ -75,7 +75,7 @@ const processChunks = async () => {
   }
   chunks = [];
 
-  setTimeout(processChunks, 5000);
+  setTimeout(processChunks, 1);
 };
 
 processChunks();
