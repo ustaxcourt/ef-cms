@@ -25,7 +25,8 @@ export const docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection = (
     });
 
     const foundWorkItem = sectionDocumentQCInbox.find(
-      workItem => workItem.docketNumber === docketNumber,
+      workItem =>
+        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(foundWorkItem).toMatchObject({
