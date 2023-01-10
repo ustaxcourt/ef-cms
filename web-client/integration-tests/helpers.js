@@ -1055,7 +1055,6 @@ export const refreshElasticsearchIndex = async (time = 2000) => {
     const value = await axios
       .get('http://localhost:7777/isDone')
       .then(response => response.data);
-    console.log(value, typeof value);
     return value === true;
   });
   await axios.post('http://localhost:9200/_refresh');
