@@ -21,6 +21,7 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
+// TODO: rename to TDocketEntry
 type DocketEntry = {
   additionalInfo: string;
   addToCoversheet: boolean;
@@ -40,6 +41,8 @@ type DocketEntry = {
   isPaper: string;
   lodged: boolean;
   mailingDate: string;
+  isPendingService: boolean;
+  numberOfPages: number;
   otherFilingParty: string;
   editState: object;
   isLegacyServed: boolean;
@@ -50,6 +53,7 @@ type DocketEntry = {
   servedAt: string;
   sk: string;
   userId: string;
+  workItem: WorkItem;
 };
 
 type TDocketEntryEntity = {
@@ -58,7 +62,29 @@ type TDocketEntryEntity = {
 
   validate(): TDocketEntryEntity;
   toRawObject(): DocketEntry;
+
+  workItem: TWorkItemEntity;
 } & DocketEntry;
+
+type TWorkItemEntity = {
+  assignToUser: ({
+    assigneeId,
+    assigneeName,
+    section,
+    sentBy,
+    sentBySection,
+    sentByUserId,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    section: string;
+    sentBy: string;
+    sentBySection: string;
+    sentByUserId: string;
+  }) => TWorkItemEntity;
+  toRawObject(): WorkItem;
+  validate(): TWorkItemEntity;
+} & WorkItem;
 
 type WorkItem = {
   createdAt: string;
@@ -69,6 +95,7 @@ type WorkItem = {
   completedAt: string;
   updatedAt: string;
   gsi1pk: string;
+  inProgress: boolean;
 };
 
 type TOutboxItem = {
@@ -258,6 +285,7 @@ type TCaseEntity = {
     docketEntryId: string;
   }) => TDocketEntryEntity;
   addDocketEntry: (docketEntry: TDocketEntryEntity) => void;
+  updateDocketEntry: (docketEntry: TDocketEntryEntity) => void;
 } & TCase;
 
 type TCase = {
