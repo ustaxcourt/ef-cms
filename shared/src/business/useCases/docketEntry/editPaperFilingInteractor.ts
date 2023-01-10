@@ -133,6 +133,11 @@ export const editPaperFilingInteractor = async (
     sentByUserId: user.userId,
   });
 
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItem.validate().toRawObject(),
+  });
+
   let paperServicePdfUrl;
 
   try {
@@ -262,7 +267,7 @@ const validateDocketEntryCanBeEdited = ({
   docketEntry,
   docketEntryId,
 }: {
-  docketEntry: DocketEntry;
+  docketEntry: TDocketEntryEntity;
   docketEntryId: string;
 }): void => {
   if (!docketEntry) {
@@ -318,4 +323,203 @@ const saveWorkItem = async ({
     applicationContext,
     workItem: workItemRaw,
   });
+};
+
+const getEditPaperFilingStrategy = (
+  applicationContext: IApplicationContext,
+  {
+    consolidatedGroupDocketNumbers,
+    docketEntryId,
+    documentMetadata,
+    isSavingForLater,
+  }: {
+    documentMetadata: any;
+    isSavingForLater: boolean;
+    docketEntryId: string;
+    consolidatedGroupDocketNumbers?: string[];
+  },
+): Function => {
+  if (isSavingForLater) {
+    return saveForLaterStrategy;
+  }
+};
+
+const saveForLaterStrategy = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    documentMetadata,
+  }: {
+    documentMetadata: any;
+    docketEntryId: string;
+  },
+) => {
+  const authorizedUser = authorizeRequest(applicationContext);
+
+  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
+    applicationContext,
+    docketEntryId,
+    docketNumber: documentMetadata.docketNumber,
+  });
+
+  validateDocketEntryCanBeEdited({
+    docketEntry: docketEntryEntity,
+    docketEntryId,
+  });
+
+  // TODO: do we need this???
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const updatedDocketEntryEntity = await updateDocketEntry({
+    applicationContext,
+    caseEntity,
+    docketEntry: docketEntryEntity,
+    documentMetadata,
+    userId: user.userId,
+  });
+
+  await updateAndSaveWorkItem({
+    applicationContext,
+    docketEntry: updatedDocketEntryEntity,
+    user,
+  });
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
+};
+
+const authorizeRequest = (applicationContext: IApplicationContext): TUser => {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  return authorizedUser;
+};
+
+const updateDocketEntry = async ({
+  applicationContext,
+  caseEntity,
+  docketEntry,
+  documentMetadata,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: TCaseEntity;
+  docketEntry: TDocketEntryEntity;
+  documentMetadata: any;
+  userId: string;
+}): Promise<TDocketEntryEntity> => {
+  const editableFields = {
+    addToCoversheet: documentMetadata.addToCoversheet,
+    additionalInfo: documentMetadata.additionalInfo,
+    additionalInfo2: documentMetadata.additionalInfo2,
+    attachments: documentMetadata.attachments,
+    certificateOfService: documentMetadata.certificateOfService,
+    certificateOfServiceDate: documentMetadata.certificateOfServiceDate,
+    documentTitle: documentMetadata.documentTitle,
+    documentType: documentMetadata.documentType,
+    eventCode: documentMetadata.eventCode,
+    filers: documentMetadata.filers,
+    freeText: documentMetadata.freeText,
+    freeText2: documentMetadata.freeText2,
+    hasOtherFilingParty: documentMetadata.hasOtherFilingParty,
+    isFileAttached: documentMetadata.isFileAttached,
+    lodged: documentMetadata.lodged,
+    mailingDate: documentMetadata.mailingDate,
+    objections: documentMetadata.objections,
+    ordinalValue: documentMetadata.ordinalValue,
+    otherFilingParty: documentMetadata.otherFilingParty,
+    partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
+    pending: documentMetadata.pending,
+    receivedAt: documentMetadata.receivedAt,
+    scenario: documentMetadata.scenario,
+    serviceDate: documentMetadata.serviceDate,
+  };
+
+  const updatedDocketEntryEntity: TDocketEntryEntity = new DocketEntry(
+    {
+      ...docketEntry,
+      ...editableFields,
+      editState: JSON.stringify(editableFields),
+      isOnDocketRecord: true,
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+      userId,
+    },
+    { applicationContext, petitioners: caseEntity.petitioners },
+  );
+
+  if (editableFields.isFileAttached) {
+    updatedDocketEntryEntity.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: docketEntry.docketEntryId,
+      });
+  }
+
+  caseEntity.updateDocketEntry(updatedDocketEntryEntity);
+
+  return updatedDocketEntryEntity;
+};
+
+const updateAndSaveWorkItem = async ({
+  applicationContext,
+  docketEntry,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  docketEntry: TDocketEntryEntity;
+  user: TUser;
+}): Promise<void> => {
+  const { workItem } = docketEntry;
+  workItem.docketEntry = docketEntry.toRawObject();
+  workItem.inProgress = true;
+
+  workItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItem.validate().toRawObject(),
+  });
+};
+
+const getDocketEntryToEdit = async ({
+  applicationContext,
+  docketEntryId,
+  docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  docketEntryId: string;
+}): Promise<{
+  caseEntity: TCaseEntity;
+  docketEntryEntity: TDocketEntryEntity;
+}> => {
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
+  return { caseEntity, docketEntryEntity };
 };
