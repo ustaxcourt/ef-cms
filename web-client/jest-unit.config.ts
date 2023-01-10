@@ -31,7 +31,11 @@ const config: Config = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
+  // preset: 'ts-jest',
   testRegex: 'web-client/src/.*\\.test\\.ts',
+  transform: {
+    '^.+\\.[t]sx?$': ['ts-jest', { diagnostics: false }],
+  },
 };
 
 // eslint-disable-next-line import/no-default-export
