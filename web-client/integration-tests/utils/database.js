@@ -1,4 +1,5 @@
 import { chunk } from 'lodash';
+import { exec } from 'child_process';
 import AWS from 'aws-sdk';
 import fs from 'fs';
 
@@ -36,7 +37,6 @@ const CHUNK_SIZE = 25;
 export const clearDatabase = async () => {
   let hasMoreResults = true;
   let lastKey = null;
-  let count = 0;
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -52,9 +52,6 @@ export const clearDatabase = async () => {
 
         const chunks = chunk(results.Items, CHUNK_SIZE);
         for (let c of chunks) {
-          count += CHUNK_SIZE;
-          console.log(`deleting chunk: ${count} total deleted`);
-
           await client
             .batchWrite({
               RequestItems: {
@@ -74,7 +71,30 @@ export const clearDatabase = async () => {
   }
 };
 
-export const seedDatabase = filePath => {
+export const seedDatabase = async filePath => {
+  await clearDatabase();
+  await resetElasticsearch();
+
   const entries = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+  // we want to process the case entries LAST because we get stream errors otherwise
+  entries.sort((a, b) => {
+    const isACase = a.pk.includes('case|') && a.sk.includes('case|') ? 1 : 0;
+    const isBCase = b.pk.includes('case|') && b.sk.includes('case|') ? 1 : 0;
+    return isACase - isBCase;
+  });
+
   return putEntries(entries);
+};
+
+export const resetElasticsearch = () => {
+  return new Promise((resolve, reject) =>
+    exec(
+      'ELASTICSEARCH_ENDPOINT=http://localhost:9200 ELASTICSEARCH_HOST=localhost ./web-api/seed-elasticsearch.sh',
+      (error, stdout) => {
+        if (error) reject(error);
+        resolve(stdout);
+      },
+    ),
+  );
 };

@@ -54,9 +54,6 @@ describe('petitioner files document', () => {
   petitionerFilesDocumentForCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  it('refresh elasticsearch index', async () => {
-    await refreshElasticsearchIndex();
-  });
   docketClerkViewsSectionInboxHighPriority(cerebralTest);
   docketClerkRemovesCaseFromTrial(cerebralTest);
 
