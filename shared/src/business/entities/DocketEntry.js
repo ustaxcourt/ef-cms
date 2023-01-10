@@ -471,7 +471,7 @@ const isServed = function (rawDocketEntry) {
  * @returns {String} served parties code
  */
 const getServedPartiesCode = servedParties => {
-  let servedPartiesCode = '';
+  let servedPartiesCode = undefined;
   if (servedParties && servedParties.length > 0) {
     if (
       servedParties.length === 1 &&
