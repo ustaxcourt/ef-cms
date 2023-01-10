@@ -304,7 +304,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "jest-environment-node": "^29.3.1",
     "jsdoc": "^4.0.0",
-    "jsdom": "^20.0.3",
+    "jsdom": "^21.0.0",
     "json2yaml": "^1.1.0",
     "lint-staged": "^13.1.0",
     "lint-staged-shellcheck": "^0.1.2",
