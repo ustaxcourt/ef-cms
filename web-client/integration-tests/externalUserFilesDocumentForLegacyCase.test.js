@@ -2,6 +2,7 @@ import { associatedExternalUserViewsCaseDetailForOwnedCase } from './journey/ass
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase.js';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
+import { userTriesToFileAnUnavailableDocumentType } from './journey/userTriesToFileAnUnavailableDocumentType';
 
 describe('an external user files a document for their legacy case', () => {
   const cerebralTest = setupTest();
@@ -19,14 +20,17 @@ describe('an external user files a document for their legacy case', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('verifies otherFiler parties receive paper service when serviceIndicator is set to paper', async () => {
