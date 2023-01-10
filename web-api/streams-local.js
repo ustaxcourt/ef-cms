@@ -9,6 +9,10 @@ const config = {
   endpoint: process.env.DYNAMODB_ENDPOINT,
   region: 'us-east-1',
 };
+
+const express = require('express');
+const app = express();
+
 const dynamodbClient = new AWS.DynamoDB(config);
 const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
 
@@ -20,6 +24,10 @@ const tableName = 'efcms-local';
 const DynamoDBReadable = require('dynamodb-streams-readable');
 
 let chunks = [];
+
+app.get('/isDone', (req, res) => {
+  res.send(chunks.length === 0);
+});
 
 (async () => {
   const streamARN = await dynamodbClient
@@ -67,7 +75,9 @@ const processChunks = async () => {
   }
   chunks = [];
 
-  setTimeout(processChunks, 1000);
+  setTimeout(processChunks, 5000);
 };
 
 processChunks();
+
+app.listen(7777);
