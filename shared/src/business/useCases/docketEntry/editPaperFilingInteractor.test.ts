@@ -150,10 +150,12 @@ describe('editPaperFilingInteractor', () => {
         filers: [mockPrimaryId],
         freeText: 'Some text about this document',
         hasOtherFilingParty: true,
+        isFileAttached: true,
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
       },
-    } as any);
+      isSavingForLater: false,
+    });
 
     const updatedDocketEntry = applicationContext
       .getPersistenceGateway()
@@ -236,24 +238,14 @@ describe('editPaperFilingInteractor', () => {
       isSavingForLater: false,
     });
 
-    expect(
+    const firstStatusCall =
       applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: caseRecord.docketNumber,
-      status: true,
-    });
-    expect(
+        .updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
+    const secondStatusCall =
       applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: caseRecord.docketNumber,
-      status: false,
-    });
+        .updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
+    expect(firstStatusCall).toEqual(true);
+    expect(secondStatusCall).toEqual(false);
   });
 
   it('should not call the persistence method to set and unset the pending service status on the docket entry when it`s being saved for later', async () => {
@@ -401,7 +393,10 @@ describe('editPaperFilingInteractor', () => {
         editPaperFilingInteractor(applicationContext, {
           consolidatedGroupDocketNumbers: ['101-23'],
           docketEntryId: mockDocketEntryId,
-          documentMetadata: { docketNumber: caseRecord.docketNumber },
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            isFileAttached: true,
+          },
           isSavingForLater: false,
         }),
       ).rejects.toThrow(
@@ -439,17 +434,19 @@ describe('editPaperFilingInteractor', () => {
       const mockedPaerServicePdfUrl = 'www.example.com';
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementation(async ({ docketNumber }) => ({
-          ...caseRecord,
-          docketNumber,
-          leadDocketNumber: caseRecord.docketNumber,
-          petitioners: [
-            {
-              ...caseRecord.petitioners[0],
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            },
-          ],
-        }));
+        .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
+          Promise.resolve({
+            ...caseRecord,
+            docketNumber,
+            leadDocketNumber: caseRecord.docketNumber,
+            petitioners: [
+              {
+                ...caseRecord.petitioners[0],
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+              },
+            ],
+          }),
+        );
       applicationContext
         .getUseCaseHelpers()
         .fileAndServeDocumentOnOneCase.mockImplementation(
@@ -488,17 +485,19 @@ describe('editPaperFilingInteractor', () => {
     it('should NOT return a paper service pdf url when no party in the consolidated group has paper service', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementation(async ({ docketNumber }) => ({
-          ...caseRecord,
-          docketNumber,
-          leadDocketNumber: caseRecord.docketNumber,
-          petitioners: [
-            {
-              ...caseRecord.petitioners[0],
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            },
-          ],
-        }));
+        .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
+          Promise.resolve({
+            ...caseRecord,
+            docketNumber,
+            leadDocketNumber: caseRecord.docketNumber,
+            petitioners: [
+              {
+                ...caseRecord.petitioners[0],
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              },
+            ],
+          }),
+        );
       applicationContext
         .getUseCaseHelpers()
         .fileAndServeDocumentOnOneCase.mockImplementation(
