@@ -1034,6 +1034,7 @@ export const waitForExpectedItemToExist = async ({
   console.log(`Waited ${waitTime}ms for ${currentItem}`);
 };
 
+// will run the cb every second until it returns true
 const waitUntil = cb => {
   return new Promise(resolve => {
     const waitUntilInternal = async () => {
