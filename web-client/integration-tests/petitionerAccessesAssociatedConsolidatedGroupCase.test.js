@@ -1,8 +1,8 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
-import { clearDatabase, seedDatabase } from './utils/database';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
+import { seedDatabase } from './utils/database';
 import { withAppContextDecorator } from '../src/withAppContext';
 import path from 'path';
 
@@ -18,7 +18,6 @@ describe('Petitioner accesses a case that does not belong to them, but is part o
   const cerebralTest = setupTest();
 
   beforeAll(async () => {
-    await clearDatabase();
     await seedDatabase(
       path.resolve(__dirname, './fixtures/consolidated-cases.json'),
     );
@@ -26,7 +25,6 @@ describe('Petitioner accesses a case that does not belong to them, but is part o
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await clearDatabase();
     await seedDatabase(
       path.resolve(
         __dirname,

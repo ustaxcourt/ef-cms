@@ -19,6 +19,8 @@ const {
 const tableName = 'efcms-local';
 const DynamoDBReadable = require('dynamodb-streams-readable');
 
+let chunks = [];
+
 (async () => {
   const streamARN = await dynamodbClient
     .describeTable({
@@ -45,13 +47,8 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
       new Writable({
         objectMode: true,
         write: (chunk, encoding, processNextChunk) => {
-          processStreamRecordsLambda({
-            Records: chunk,
-          })
-            .then(() => processNextChunk())
-            .catch(err => {
-              console.log('error', err);
-            });
+          chunks.push(chunk);
+          processNextChunk();
         },
       }),
     );
@@ -59,3 +56,18 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
 
   StreamDescription.Shards.forEach(shard => processShard(shard));
 })();
+
+const processChunks = async () => {
+  for (const chunk of chunks) {
+    await processStreamRecordsLambda({
+      Records: chunk,
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+  chunks = [];
+
+  setTimeout(processChunks, 1000);
+};
+
+processChunks();
