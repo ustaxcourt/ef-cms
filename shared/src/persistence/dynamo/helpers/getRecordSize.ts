@@ -1,9 +1,6 @@
 const Decimal = require('decimal.js');
 const utf8 = require('utf8');
 
-const BASE_LOGICAL_SIZE_OF_NESTED_TYPES = 1;
-const LOGICAL_SIZE_OF_EMPTY_DOCUMENT = 3;
-
 /**
  * getRecordSize
  *
@@ -24,10 +21,10 @@ export const getRecordSize = record => {
   return totalSize;
 };
 
-/**
- *
- */
-function calculateAttributeSizeInBytes(attr) {
+const calculateAttributeSizeInBytes = attr => {
+  const BASE_LOGICAL_SIZE_OF_NESTED_TYPES = 1;
+  const LOGICAL_SIZE_OF_EMPTY_DOCUMENT = 3;
+
   if (!attr) return 0;
 
   // Binary
@@ -116,12 +113,9 @@ function calculateAttributeSizeInBytes(attr) {
   }
 
   throw 'unknown data type in ' + JSON.stringify(attr);
-}
+};
 
-/**
- *
- */
-function calculateNumberSizeInBytes(n) {
+const calculateNumberSizeInBytes = n => {
   let decimal = new Decimal(n);
   if (decimal.isZero()) return 1;
   let fixed = decimal.toFixed();
@@ -129,12 +123,9 @@ function calculateNumberSizeInBytes(n) {
   if (fixed.startsWith('-')) size++;
   if (size > 21) size = 21;
   return size;
-}
+};
 
-/**
- *
- */
-function measure(n) {
+const measure = n => {
   if (n.indexOf('.') !== -1) {
     let parts = n.split('.');
     let p0 = parts[0];
@@ -149,12 +140,9 @@ function measure(n) {
   }
   n = zeros(n, true, true);
   return Math.ceil(n.length / 2);
-}
+};
 
-/**
- *
- */
-function zeros(n, left, right) {
+const zeros = (n, left, right) => {
   while (left && true) {
     let t = n.replace(/^(0{2})/, '');
     if (t.length == n.length) break;
@@ -166,4 +154,4 @@ function zeros(n, left, right) {
     n = t;
   }
   return n;
-}
+};
