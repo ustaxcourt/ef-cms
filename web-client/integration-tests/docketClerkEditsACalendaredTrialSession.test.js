@@ -4,7 +4,7 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
-import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdatesCaseStatusToClosed';
+import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkVerifiesCaseStatusIsUnchanged } from './journey/docketClerkVerifiesCaseStatusIsUnchanged';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../src/presenter/computeds/formattedTrialSessionDetails';
@@ -82,7 +82,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToClosed(cerebralTest);
+  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.closed);
 
   overrides = {
     fieldToUpdate: 'judge',

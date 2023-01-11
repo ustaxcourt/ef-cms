@@ -2,8 +2,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_DISMISSAL_ORDER_TYPES,
+  CASE_STATUS_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
 } = require('./closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments');
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
@@ -11,6 +18,7 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
+  const eventCode = ENTERED_AND_SERVED_EVENT_CODES[4];
 
   jest.spyOn(Case.prototype, 'closeCase');
   jest.spyOn(TrialSession.prototype, 'removeCaseFromCalendar');
@@ -23,19 +31,37 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     });
   });
 
-  it('should close the case', async () => {
+  CASE_DISMISSAL_ORDER_TYPES.forEach(orderEventCode => {
+    it(`should close the case with status type ${CASE_STATUS_TYPES.closedDismissed} when the document being filed is an ${orderEventCode}`, async () => {
+      await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+        applicationContext,
+        caseEntity: mockCaseEntity,
+        eventCode: orderEventCode,
+      });
+
+      expect(Case.prototype.closeCase).toHaveBeenCalledWith({
+        closedStatus: CASE_STATUS_TYPES.closedDismissed,
+      });
+    });
+  });
+
+  it(`should close the case with status type ${CASE_STATUS_TYPES.closed} when the document being filed is NOT one of ${CASE_DISMISSAL_ORDER_TYPES}`, async () => {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity: mockCaseEntity,
+      eventCode,
     });
 
-    expect(Case.prototype.closeCase).toHaveBeenCalled();
+    expect(Case.prototype.closeCase).toHaveBeenCalledWith({
+      closedStatus: CASE_STATUS_TYPES.closed,
+    });
   });
 
   it('should make a call to delete the case trial sort mapping records', async () => {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity: mockCaseEntity,
+      eventCode,
     });
 
     expect(
@@ -51,6 +77,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
         { ...MOCK_CASE, trialSessionId: undefined },
         { applicationContext },
       ),
+      eventCode,
     });
 
     expect(
@@ -75,6 +102,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
         { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
         { applicationContext },
       ),
+      eventCode,
     });
 
     expect(TrialSession.prototype.removeCaseFromCalendar).toHaveBeenCalledWith({
@@ -97,6 +125,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
         { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
         { applicationContext },
       ),
+      eventCode,
     });
 
     expect(TrialSession.prototype.deleteCaseFromCalendar).toHaveBeenCalledWith({
@@ -119,6 +148,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
           { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
           { applicationContext },
         ),
+        eventCode,
       }),
     ).rejects.toThrow();
 
@@ -141,6 +171,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
         { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
         { applicationContext },
       ),
+      eventCode,
     });
 
     expect(
