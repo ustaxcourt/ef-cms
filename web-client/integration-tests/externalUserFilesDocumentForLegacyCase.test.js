@@ -22,12 +22,12 @@ describe('an external user files a document for their legacy case', () => {
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
   userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
   userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
   externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
   userTriesToFileAnUnavailableDocumentType(cerebralTest);
