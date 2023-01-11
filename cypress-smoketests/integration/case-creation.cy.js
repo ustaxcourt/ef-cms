@@ -81,7 +81,7 @@ describe('Petitioner', () => {
 describe('Private practitioner', () => {
   before(async () => {
     const results = await getUserToken(
-      'privatepractitioner1@example.com',
+      'privatePractitioner1@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
