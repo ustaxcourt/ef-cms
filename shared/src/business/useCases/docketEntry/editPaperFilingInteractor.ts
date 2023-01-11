@@ -46,72 +46,6 @@ export const editPaperFilingInteractor = async (
   return paperServicePdfUrl;
 };
 
-const validateDocketEntryCanBeEdited = ({
-  docketEntry,
-  docketEntryId,
-}: {
-  docketEntry: TDocketEntryEntity;
-  docketEntryId: string;
-}): void => {
-  if (!docketEntry) {
-    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
-  } else if (docketEntry.servedAt) {
-    throw new Error('Docket entry has already been served');
-  } else if (docketEntry.isPendingService) {
-    throw new Error('Docket entry is already being served');
-  }
-};
-
-const validateDocketEntryCanBeServed = ({
-  documentMetadata,
-}: {
-  documentMetadata: any;
-}): void => {
-  if (!documentMetadata.isFileAttached) {
-    throw new Error('Docket entry cannot be served without a file attached');
-  }
-};
-
-const validateMultiDocketPaperFilingRequest = ({
-  caseEntity,
-  consolidatedCases,
-}: {
-  caseEntity: Case;
-  consolidatedCases: Case[];
-}): void => {
-  if (!isLeadCase(caseEntity)) {
-    throw new Error('Cannot multi-docket on a case that is not consolidated');
-  }
-
-  consolidatedCases.forEach(consolidatedCase => {
-    if (consolidatedCase.leadDocketNumber !== caseEntity.docketNumber) {
-      throw new Error('Cannot multi-docket on a case that is not consolidated');
-    }
-  });
-};
-
-// const saveWorkItem = async ({
-//   applicationContext,
-//   isReadyForService,
-//   workItem,
-// }) => {
-//   const workItemRaw = workItem.validate().toRawObject();
-
-//   if (isReadyForService) {
-//     await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-//       applicationContext,
-//       section: workItem.section,
-//       userId: workItem.assigneeId,
-//       workItem: workItemRaw,
-//     });
-//   }
-
-//   await applicationContext.getPersistenceGateway().saveWorkItem({
-//     applicationContext,
-//     workItem: workItemRaw,
-//   });
-// };
-
 const getEditPaperFilingStrategy = ({
   consolidatedGroupDocketNumbers,
   isSavingForLater,
@@ -352,6 +286,50 @@ const saveForLaterStrategy = async ({
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity,
+  });
+};
+
+const validateDocketEntryCanBeEdited = ({
+  docketEntry,
+  docketEntryId,
+}: {
+  docketEntry: TDocketEntryEntity;
+  docketEntryId: string;
+}): void => {
+  if (!docketEntry) {
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  } else if (docketEntry.servedAt) {
+    throw new Error('Docket entry has already been served');
+  } else if (docketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
+  }
+};
+
+const validateDocketEntryCanBeServed = ({
+  documentMetadata,
+}: {
+  documentMetadata: any;
+}): void => {
+  if (!documentMetadata.isFileAttached) {
+    throw new Error('Docket entry cannot be served without a file attached');
+  }
+};
+
+const validateMultiDocketPaperFilingRequest = ({
+  caseEntity,
+  consolidatedCases,
+}: {
+  caseEntity: Case;
+  consolidatedCases: Case[];
+}): void => {
+  if (!isLeadCase(caseEntity)) {
+    throw new Error('Cannot multi-docket on a case that is not consolidated');
+  }
+
+  consolidatedCases.forEach(consolidatedCase => {
+    if (consolidatedCase.leadDocketNumber !== caseEntity.docketNumber) {
+      throw new Error('Cannot multi-docket on a case that is not consolidated');
+    }
   });
 };
 
