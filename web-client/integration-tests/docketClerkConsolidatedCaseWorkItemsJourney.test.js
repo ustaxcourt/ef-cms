@@ -1,10 +1,11 @@
+import { docketClerkAddsAnUnservableDocument } from './journey/docketClerkAddsAnUnservableDocument';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
+import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection';
 import { docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
 describe('Docket clerk consolidated case work item journey', () => {
@@ -19,15 +20,11 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   // Document QC External filed document on Lead Case
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = leadCaseDocketNumber;
+  });
 
-  petitionsClerkAddsPractitionersToCase(
-    cerebralTest,
-    true,
-    leadCaseDocketNumber,
-  );
-
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
 
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
@@ -65,17 +62,22 @@ describe('Docket clerk consolidated case work item journey', () => {
     { box: 'outbox', queue: 'section' },
   );
 
-  // Document QC External filed document on Non-lead Case
+  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  docketClerkAddsAnUnservableDocument(cerebralTest);
 
-  petitionsClerkAddsPractitionersToCase(
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
     cerebralTest,
-    true,
-    consolidatedCaseDocketNumber,
+    leadCaseDocketNumber,
+    { box: 'outbox', queue: 'section' },
   );
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  // Document QC External filed document on Non-lead Case
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
+
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = consolidatedCaseDocketNumber;
+  });
 
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
@@ -100,19 +102,23 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   docketClerkQCsDocketEntry(cerebralTest);
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
     cerebralTest,
-    leadCaseDocketNumber,
+    consolidatedCaseDocketNumber,
     { box: 'outbox', queue: 'my' },
   );
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
     cerebralTest,
-    leadCaseDocketNumber,
+    consolidatedCaseDocketNumber,
     { box: 'outbox', queue: 'section' },
   );
 
   // Document QC Internal filed document on Lead Case
+
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = leadCaseDocketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -134,6 +140,10 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   // Document QC Internal filed document on Non-lead Case
+
+  it('sets the docketNumber', () => {
+    cerebralTest.docketNumber = consolidatedCaseDocketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 

@@ -9,6 +9,7 @@ import { bulkIndexRecords } from '../../shared/src/persistence/elasticsearch/bul
 import { caseAdvancedSearch } from '../../shared/src/persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from '../../shared/src/persistence/elasticsearch/casePublicSearch';
 import { confirmAuthCode } from '../../shared/src/persistence/cognito/confirmAuthCode';
+import { confirmAuthCodeLocal } from '../../shared/src/persistence/cognito/confirmAuthCodeLocal';
 import { createCase } from '../../shared/src/persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
@@ -277,20 +278,7 @@ const gatewayMethods = {
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
-    ? (applicationContext, { code }) => {
-        // TODO: can these be refactored to `import` ?
-        const jwt = require('jsonwebtoken');
-        const { userMap } = require('../../shared/src/test/mockUserTokenMap');
-        const user = {
-          ...userMap[code],
-          sub: userMap[code].userId,
-        };
-        const token = jwt.sign(user, 'secret');
-        return {
-          refreshToken: token,
-          token,
-        };
-      }
+    ? confirmAuthCodeLocal
     : confirmAuthCode,
   createPractitionerDocument,
   decrementJobCounter,
