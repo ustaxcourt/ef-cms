@@ -32,7 +32,7 @@ function calculateAttributeSizeInBytes(attr) {
 
   // Binary
   if (attr.hasOwnProperty('B')) {
-    return atob(attr.B).length;
+    return Buffer.from(attr.B, 'base64').toString().length;
   }
 
   // String
@@ -50,7 +50,7 @@ function calculateAttributeSizeInBytes(attr) {
     let size = 0;
 
     for (let i = 0; i < attr.BS.length; i++) {
-      size += atob(attr.BS[i]).length;
+      size += Buffer.from(attr.BS[i], 'base64').toString().length;
     }
 
     return size;
