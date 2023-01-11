@@ -16,6 +16,9 @@ const validMarshalledRecord = {
   isAdmin: {
     BOOL: 'true',
   },
+  myBinary: {
+    B: 'c29tZXRoaW5n',
+  },
 };
 
 describe('getRecordSize', () => {
@@ -30,4 +33,26 @@ describe('getRecordSize', () => {
 
     expect(result).not.toBe(0);
   });
+
+  it('should return the total size of a valid, marshalled dynamodb record with properties', () => {
+    const result = getRecordSize(validMarshalledRecord);
+
+    expect(result).toBe(0);
+  });
+});
+
+describe('calculateAttributeSizeInBytes', () => {
+  const attr = {
+    Example: {
+      B: 'something',
+    },
+  }; // => size of Example plus the size of something
+
+  const typesToTest = [
+    {
+      expected: 1,
+      name: 'MyBinary',
+      type: 'B',
+    },
+  ];
 });
