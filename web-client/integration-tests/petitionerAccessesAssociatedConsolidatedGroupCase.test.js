@@ -2,9 +2,9 @@ import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/prese
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
-import { seedDatabase } from './utils/database';
+import { seedData } from './fixtures/consolidated-cases';
+import { seedDatabase, seedFullDataset } from './utils/database.js';
 import { withAppContextDecorator } from '../src/withAppContext';
-import path from 'path';
 
 const formattedDocketEntriesHelper = withAppContextDecorator(
   formattedDocketEntriesComputed,
@@ -18,19 +18,12 @@ describe('Petitioner accesses a case that does not belong to them, but is part o
   const cerebralTest = setupTest();
 
   beforeAll(async () => {
-    await seedDatabase(
-      path.resolve(__dirname, './fixtures/consolidated-cases.json'),
-    );
+    await seedDatabase(seedData);
   });
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await seedDatabase(
-      path.resolve(
-        __dirname,
-        '../../web-api/storage/fixtures/seed/efcms-local.json',
-      ),
-    );
+    await seedFullDataset();
   });
 
   loginAs(cerebralTest, 'petitioner2@example.com');

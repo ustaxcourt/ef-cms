@@ -2,6 +2,7 @@ import { chunk } from 'lodash';
 import { exec } from 'child_process';
 import AWS from 'aws-sdk';
 import fs from 'fs';
+import path from 'path';
 
 AWS.config = new AWS.Config();
 AWS.config.region = 'us-east-1';
@@ -71,11 +72,9 @@ export const clearDatabase = async () => {
   }
 };
 
-export const seedDatabase = async filePath => {
+export const seedDatabase = async entries => {
   await clearDatabase();
   await resetElasticsearch();
-
-  const entries = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
   // we want to process the case entries LAST because we get stream errors otherwise
   entries.sort((a, b) => {
@@ -85,6 +84,19 @@ export const seedDatabase = async filePath => {
   });
 
   return putEntries(entries);
+};
+
+export const seedFullDataset = async () => {
+  const entries = JSON.parse(
+    fs.readFileSync(
+      path.join(
+        __dirname,
+        '../../../web-api/storage/fixtures/seed/efcms-local.json',
+      ),
+    ),
+  );
+
+  await seedDatabase(entries);
 };
 
 export const resetElasticsearch = () => {
