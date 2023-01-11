@@ -14,6 +14,8 @@ export const getRecordSize = record => {
   let totalSize = 0;
 
   for (let name in record) {
+    if (!record.hasOwnProperty(name)) continue;
+
     const attributeSize = calculateAttributeSizeInBytes(record[name]);
     const sizeOfName = utf8.encode(name).length;
     totalSize += sizeOfName + attributeSize;
