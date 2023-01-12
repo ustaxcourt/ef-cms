@@ -1,7 +1,5 @@
 const createApplicationContext = require('../../../../src/applicationContext');
-const {
-  getRecordSize,
-} = require('../../../../../shared/src/persistence/dynamo/helpers/getRecordSize');
+const { getRecordSize } = require('../utilities/getRecordSize');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = items => {
