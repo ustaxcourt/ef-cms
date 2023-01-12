@@ -70,11 +70,23 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
                 applicationContext.logger.info(
                   `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
                 );
+                return 'already-migrated';
               } else {
                 throw e;
               }
             })
             .catch(retry);
+        }).then(res => {
+          if (res !== 'already-migrated') {
+            applicationContext.logger.info(
+              `Successfully migrated ${item.pk} ${item.sk}`,
+              {
+                pk: item.pk,
+                sk: item.sk,
+              },
+            );
+          }
+          return res;
         }),
       );
     }

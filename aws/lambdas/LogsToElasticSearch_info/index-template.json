@@ -57,6 +57,9 @@
           "docketEntryId": {
             "type": "keyword"
           },
+          "pk": {
+            "type": "keyword"
+          },
           "trialSessionId": {
             "type": "keyword"
           }
