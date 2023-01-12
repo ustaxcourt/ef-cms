@@ -1,11 +1,8 @@
-import { state } from 'cerebral';
-
 /**
  * fix
  */
 export const createPaperServicePdfForCasesAction = async ({
   applicationContext,
-  get,
   props,
 }) => {
   //props.pdfsArray from previous action
@@ -13,6 +10,7 @@ export const createPaperServicePdfForCasesAction = async ({
   let { calendaredCasePdfDataArray } = props;
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
+  const user = applicationContext.getCurrentUser();
 
   for (let index = 0; index < calendaredCasePdfDataArray.length; index++) {
     const calendaredCasePdf = await PDFDocument.load(
