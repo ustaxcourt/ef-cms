@@ -11,7 +11,14 @@ const migrateItems = items => {
     const itemSize = Buffer.byteLength(JSON.stringify(item)) / 1024;
     applicationContext.logger.info(`JSON Item Size: ${itemSize.toFixed(1)}kb`);
 
-    const recordSize = getRecordSize(item) / 1000;
+    let recordSize;
+    try {
+      recordSize = getRecordSize(item) / 1000;
+    } catch (e) {
+      applicationContext.logger.info(
+        `DynamoDB Record Size Error: ${e}, ${item}`,
+      );
+    }
     applicationContext.logger.info(`DynamoDB Record Size: ${recordSize}kb`);
 
     if (entityConstructor) {
