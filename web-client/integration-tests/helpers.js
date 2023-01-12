@@ -1054,7 +1054,7 @@ export const refreshElasticsearchIndex = async (time = 2000) => {
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
   await waitUntil(async () => {
     const value = await axios
-      .get('http://localhost:7777/isDone')
+      .get('http://localhost:5005/isDone')
       .then(response => response.data);
     return value === true;
   });
