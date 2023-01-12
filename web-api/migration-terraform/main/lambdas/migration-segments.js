@@ -5,6 +5,7 @@ const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
+const { getRecordSize } = require('./utilities/getRecordSize');
 const { migrationsToRun } = require('./migrationsToRun');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 const applicationContext = createApplicationContext({});
@@ -76,10 +77,13 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
             .catch(retry);
         }).then(res => {
           if (res !== 'already-migrated') {
+            const recordSizeInBytes = getRecordSize(item);
+
             applicationContext.logger.info(
               `Successfully migrated ${item.pk} ${item.sk}`,
               {
                 pk: item.pk,
+                recordSizeInBytes,
                 sk: item.sk,
               },
             );
