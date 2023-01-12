@@ -121,8 +121,8 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
 };
 
 /**
- * @param {string} dateString a date string to be sent to persistence
- * @param {string} inputFormat optional parameter containing hints on how to parse dateString
+ * @param {string?} dateString a date string to be sent to persistence
+ * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
 const createISODateString = (dateString, inputFormat) => {
