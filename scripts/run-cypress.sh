@@ -123,5 +123,5 @@ fi
 if [ -n "${OPEN}" ]; then
   cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
 else
-  cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
+  DEBUG=cypress:server:util:process_profiler cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
 fi
