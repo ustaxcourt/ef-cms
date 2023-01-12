@@ -24,3 +24,12 @@ The way typescript works is generally in three steps
 
 Currently Having difficulty with step 2 in transpiling as many tests use the shared directory. The shared directory has javascript files that may not be compatible with how we build frontend.
 
+
+## Cerebral W/ typescript and Babel
+- Cerebral currently requires a transpile step in order for us to run our javascript. It is using the plugin: babel-plugin-cerebral
+- What this plugin does is add an extra transpile step which converts how we use cerebral. It changes all get(state`modal.penalties`) => get(state`modal.penalties`). 
+- We can either always have this build step or just start using the syntax that cerebral would like us to use.
+- Below is a simple regex for vscode to find and replace areas we may be doing this. 
+
+find: \(state\.([a-zA-Z0-9\.]+)
+replace: (state`$1`
