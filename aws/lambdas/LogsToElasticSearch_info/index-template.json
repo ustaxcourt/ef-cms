@@ -123,6 +123,10 @@
             "type": "integer",
             "ignore_malformed": true
           },
+          "responseSize": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
           "statusCode": {
             "type": "integer",
             "ignore_malformed": true
