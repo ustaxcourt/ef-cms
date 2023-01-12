@@ -34,7 +34,6 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
   { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
-  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
@@ -138,7 +137,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  const paperServiceDocumentsPdf = await PDFDocument.create();
+  let calendaredCasePdfDataArray = [];
 
   for (let calendaredCase of calendaredCases) {
     const casePdfDocumentsExistsInS3 = await applicationContext
@@ -162,38 +161,8 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
         useTempBucket: true,
       });
 
-    const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
-
-    await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
-      copyFrom: calendaredCasePdf,
-      copyInto: paperServiceDocumentsPdf,
-    });
+    calendaredCasePdfDataArray.push(calendaredCasePdfData);
   }
 
-  const { docketEntryId, hasPaper, url } = await applicationContext
-    .getUseCaseHelpers()
-    .savePaperServicePdf({
-      applicationContext,
-      document: paperServiceDocumentsPdf,
-    });
-
-  if (url) {
-    applicationContext.logger.info(
-      `generated the printable paper service pdf at ${url}`,
-      {
-        url,
-      },
-    );
-  }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'notice_generation_complete',
-      docketEntryId,
-      hasPaper,
-      pdfUrl: url || null,
-    },
-    userId: user.userId,
-  });
+  return calendaredCasePdfDataArray;
 };
