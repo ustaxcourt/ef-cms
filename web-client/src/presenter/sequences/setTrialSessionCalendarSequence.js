@@ -23,5 +23,7 @@ export const setTrialSessionCalendarSequence = [
   getCalendaredCasesForTrialSessionAction,
   setCalendaredCasesOnTrialSessionAction,
   mergeCaseOrderIntoCalendaredCasesAction,
-  setNoticesForCalendaredTrialSessionAction,
+  setNoticesForCalendaredTrialSessionAction, // geenrating pdfs per case, saving to s3, waiting for that job to finisg, retrieve from s3 
+  //THEN creating paperservicepdf(copy and append)
+  createPaperServicePdfForCasesAction,
 ];
