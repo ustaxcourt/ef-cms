@@ -1,5 +1,8 @@
 import type { Config } from 'jest';
 
+// console.log('I AM JSWITH TS regex thing: ', JSON.stringify(jsWithTs));
+// console.log('I AM JSWITHBABEL regex thing: ', JSON.stringify(jsWithBabel));
+
 const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
@@ -31,10 +34,15 @@ const config: Config = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  // preset: 'ts-jest',
   testRegex: 'web-client/src/.*\\.test\\.ts',
   transform: {
-    '^.+\\.[t]sx?$': ['ts-jest', { diagnostics: false }],
+    '^.+\\.[tj]sx?$': [
+      'ts-jest',
+      {
+        diagnostics: false,
+        tsconfig: 'web-client/tsconfig.json',
+      },
+    ],
   },
 };
 

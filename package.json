@@ -189,7 +189,7 @@
     "test:client:_integration": "NO_SCANNER=true SKIP_VIRUS_SCAN=true IS_LOCAL=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 jest --runInBand --config web-client/jest-integration.config.js",
     "test:client:integration": "npm run test:client:_integration -- --testPathPattern='web-client/integration-tests/.*\\.test\\.js' --testPathPattern='web-client/integration-tests-public/.*\\.test\\.js'",
     "test:client:integration:ci": "npm run test:client:_integration -- --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} ${TESTFILES}",
-    "test:client:unit": "jest --config web-client/jest-unit.config.ts",
+    "test:client:unit": "jest --config web-client/jest-unit.config.ts --detectOpenHandles",
     "test:scripts": "jest --config scripts/jest-scripts.config.js --testPathPattern=\"scripts/.*\\.test\\.js\"",
     "test:client": "CI=false npm run test:_client -- --testPathPattern=\"web-client/.*\\.test\\.js\"",
     "test:debug": "NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --detectOpenHandles --logHeapUsage --runInBand --config web-client/jest.config.js",

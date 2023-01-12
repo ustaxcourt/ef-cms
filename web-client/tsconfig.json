@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2020",
     "noImplicitAny": false,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -8,7 +8,11 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "types": ["jest", "node"],
-    "allowJs": false,
+    "allowJs": true,
     "jsx": "react"
-  }
+  },
+  "include": [
+    "./shared/src/**/*",
+    "./web-client/src/**/*"
+  ],
 }
