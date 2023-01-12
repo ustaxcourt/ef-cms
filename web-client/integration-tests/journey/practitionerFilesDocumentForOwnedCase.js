@@ -123,5 +123,13 @@ export const practitionerFilesDocumentForOwnedCase = (
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');
+
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+
+    const newDocument = cerebralTest.getState(
+      `caseDetail.docketEntries.${docketEntries.length - 1}`,
+    );
+
+    cerebralTest.docketEntryId = newDocument.docketEntryId;
   });
 };
