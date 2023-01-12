@@ -195,6 +195,9 @@ const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
 const {
+  generateTrialSessionPaperServicePdfLambda,
+} = require('./trialSessions/generateTrialSessionPaperServicePdfLambda');
+const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
@@ -1017,6 +1020,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
  * trial-sessions
  */
 {
+  app.post(
+    '/async/trial-sessions/paper-service-pdf',
+    lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
+  );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
     lambdaWrapper(setNoticesForCalendaredTrialSessionLambda, { isAsync: true }),

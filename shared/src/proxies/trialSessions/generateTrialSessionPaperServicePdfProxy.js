@@ -5,16 +5,16 @@ const { post } = require('../requests');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the trial session id
- * @param {string} providers.docketNumber optional docketNumber for setting a single case
+ * @param {string} providers.calendaredCasePdfDataArray the pdf data from all the calendared cases associated with the trial session
  * @returns {Promise<*>} the promise of the api call
  */
 exports.generateTrialSessionPaperServicePdfInteractor = (
   applicationContext,
-  { trialSessionId },
+  { calendaredCasePdfDataArray },
 ) => {
   return post({
     applicationContext,
-    endpoint: '/async/trial-sessions/name-me-please',
+    body: { calendaredCasePdfDataArray },
+    endpoint: '/async/trial-sessions/paper-service-pdf',
   });
 };
