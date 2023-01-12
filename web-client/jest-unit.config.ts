@@ -4,7 +4,7 @@ import type { Config } from 'jest';
 // console.log('I AM JSWITHBABEL regex thing: ', JSON.stringify(jsWithBabel));
 
 const config: Config = {
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: [
     'src/**/*.js',
     '!integration-tests/**/*.js',
