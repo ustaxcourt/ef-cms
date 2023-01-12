@@ -77,13 +77,19 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
             .catch(retry);
         }).then(res => {
           if (res !== 'already-migrated') {
-            const recordSizeInBytes = getRecordSize(item);
-
+            let recordSize;
+            try {
+              recordSize = getRecordSize(item) / 1000;
+            } catch (e) {
+              applicationContext.logger.info(
+                `DynamoDB Record Size Error: ${e}, ${item}`,
+              );
+            }
             applicationContext.logger.info(
               `Successfully migrated ${item.pk} ${item.sk}`,
               {
                 pk: item.pk,
-                recordSizeInBytes,
+                recordSizeInBytes: recordSize || 0,
                 sk: item.sk,
               },
             );
