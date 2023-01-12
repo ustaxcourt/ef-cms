@@ -89,8 +89,8 @@ describe('generateTrialCalendarPdfInteractor', () => {
         .getCalendaredCasesForTrialSession.mock.calls.length,
     ).toBe(1);
     expect(
-      applicationContext.getUtilities().formattedTrialSessionDetails.mock.calls
-        .length,
+      applicationContext.getUtilities().getFormattedTrialSessionDetails.mock
+        .calls.length,
     ).toBe(1);
     expect(
       applicationContext.getDocumentGenerators().trialCalendar.mock.calls

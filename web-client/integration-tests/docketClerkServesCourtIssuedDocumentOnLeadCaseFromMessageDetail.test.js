@@ -38,8 +38,6 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
   };
 
   beforeAll(() => {
-    jest.setTimeout(30000);
-
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

@@ -7,12 +7,8 @@ import {
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest } from './helpers';
 
-const cerebralTest = setupTest();
-
 describe('Petitions clerk creates Estate case with long additionalName', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
