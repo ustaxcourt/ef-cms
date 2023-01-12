@@ -1,4 +1,4 @@
-const { migrateItems } = require('./0001-remove-has-sealed-documents');
+const { migrateItems } = require('./0006-reformat-sortable-docket-number');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
@@ -8,9 +8,11 @@ describe('migrateItems', () => {
   beforeEach(() => {
     mockCaseItem = {
       ...MOCK_CASE,
+      docketNumber: '1050-20',
       hasSealedDocuments: true,
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `case|${MOCK_CASE.docketNumber}`,
+      sortableDocketNumber: 20001050,
     };
   });
 
@@ -39,11 +41,11 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should remove the hasSealedDocuments property when the record is a case entity', async () => {
+  it('should adjust the sortableDocketNumber property only when the record is a case entity', async () => {
     const items = [mockCaseItem];
 
     const results = await migrateItems(items, documentClient);
 
-    expect(results[0].hasSealedDocuments).toBeUndefined();
+    expect(results[0].sortableDocketNumber).toBe(2020001050);
   });
 });

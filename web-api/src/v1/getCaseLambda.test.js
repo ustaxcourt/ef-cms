@@ -186,7 +186,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       practitioners: [],
       preferredTrialCity: 'Washington, District of Columbia',
       respondents: [],
-      sortableDocketNumber: 18000101,
+      sortableDocketNumber: 2018000101,
       status: 'Calendared',
     });
   });
