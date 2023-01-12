@@ -158,6 +158,45 @@ describe('migration-segments', () => {
     ).rejects.toThrow('fail');
   });
 
+  it('logs a message if the item is successfully migrated to the destination table', async () => {
+    failValidation = false;
+    documentClientMock.get = () => ({
+      promise: () => ({ Item: false }),
+    });
+    documentClientMock.put = () => ({
+      promise: () => new Promise(resolve => resolve()),
+    });
+    documentClientMock.scan = () => ({
+      promise: () =>
+        new Promise(resolve =>
+          resolve({
+            Items: [
+              {
+                pk: 'case|101-20',
+                sk: 'case|101-20',
+              },
+            ],
+            LastEvaluatedKey: null,
+          }),
+        ),
+    });
+    await handler({
+      Records: [
+        {
+          body: JSON.stringify({ segment: 0, totalSegments: 1 }),
+          receiptHandle: 'abc',
+        },
+      ],
+    });
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      'Successfully migrated case|101-20 case|101-20',
+      {
+        pk: 'case|101-20',
+        sk: 'case|101-20',
+      },
+    );
+  });
+
   it('logs a message if the item already exist in the destination table', async () => {
     failValidation = false;
     documentClientMock.get = () => ({
@@ -193,6 +232,13 @@ describe('migration-segments', () => {
     });
     expect(mockLogger.info).toHaveBeenCalledWith(
       'The item of case|101-20 case|101-20 alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
+    );
+    expect(mockLogger.info).not.toHaveBeenCalledWith(
+      'Successfully migrated case|101-20 case|101-20',
+      {
+        pk: 'case|101-20',
+        sk: 'case|101-20',
+      },
     );
   });
 
