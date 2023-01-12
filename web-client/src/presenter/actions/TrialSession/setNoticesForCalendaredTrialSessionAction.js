@@ -23,5 +23,5 @@ export const setNoticesForCalendaredTrialSessionAction = async ({
       trialSessionId,
     });
 
-  return calendaredCasePdfDataArray;
+  return { calendaredCasePdfDataArray };
 };
