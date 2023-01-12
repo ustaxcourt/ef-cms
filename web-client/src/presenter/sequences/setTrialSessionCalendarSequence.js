@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { createPaperServicePdfForCasesAction } from '../actions/TrialSession/createPaperServicePdfForCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
@@ -23,7 +24,7 @@ export const setTrialSessionCalendarSequence = [
   getCalendaredCasesForTrialSessionAction,
   setCalendaredCasesOnTrialSessionAction,
   mergeCaseOrderIntoCalendaredCasesAction,
-  setNoticesForCalendaredTrialSessionAction, // geenrating pdfs per case, saving to s3, waiting for that job to finisg, retrieve from s3 
+  setNoticesForCalendaredTrialSessionAction, // geenrating pdfs per case, saving to s3, waiting for that job to finisg, retrieve from s3
   //THEN creating paperservicepdf(copy and append)
   createPaperServicePdfForCasesAction,
 ];
