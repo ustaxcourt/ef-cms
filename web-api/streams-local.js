@@ -25,6 +25,10 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
 
 let chunks = [];
 
+/**
+ * this endpoint it hit to know when the streams queue is empty.  An empty queue
+ * means everything added to dynamo should have been indexed into elasticsearch.
+ */
 app.get('/isDone', (req, res) => {
   res.send(chunks.length === 0);
 });
