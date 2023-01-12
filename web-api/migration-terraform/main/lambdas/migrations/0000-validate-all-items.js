@@ -1,4 +1,7 @@
 const createApplicationContext = require('../../../../src/applicationContext');
+const {
+  getRecordSize,
+} = require('../../../../../shared/src/persistence/dynamo/helpers/getRecordSize');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = items => {
@@ -8,14 +11,10 @@ const migrateItems = items => {
     );
 
     const itemSize = Buffer.byteLength(JSON.stringify(item)) / 1024;
-    console.log(
-      'Entity: ',
-      item.pk,
-      item.sk,
-      ' size is ',
-      itemSize.toFixed(1),
-      'KB',
-    );
+    applicationContext.logger.info(`JSON Item Size: ${itemSize.toFixed(1)}kb`);
+
+    const recordSize = getRecordSize(item) / 1000;
+    applicationContext.logger.info(`DynamoDB Record Size: ${recordSize}kb`);
 
     if (entityConstructor) {
       new entityConstructor(item, {
