@@ -39,6 +39,8 @@ jobs:
         with:
           port: 8000
           cors: '*'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
       - name: Run E2E Cypress
         run: |
           npm ci --legacy-peer-deps
