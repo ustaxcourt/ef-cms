@@ -76,22 +76,82 @@ describe('editPaperFilingInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
-  describe('saveForLater', () => {
-    describe('Happy Path', () => {
-      it('should not throw an error indicating the document is already pending service', async () => {
+  describe('Save For Later or Serve Agnostic', () => {
+    describe('Sad Path', () => {
+      it('should throw an error when the user is not authorized to edit docket entries', async () => {
+        applicationContext.getCurrentUser.mockImplementation(
+          () => petitionerUser,
+        );
+
         await expect(
           editPaperFilingInteractor(applicationContext, {
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
-              ...caseRecord.docketEntries[0],
-              isPendingService: true,
+              docketNumber: caseRecord.docketNumber,
+              documentTitle: 'My Document',
+              documentType: 'Memorandum in Support',
+              eventCode: 'MISP',
+              filers: [mockPrimaryId],
+              isFileAttached: false,
             },
-            isSavingForLater: true,
+            isSavingForLater: false,
           }),
-        ).resolves.not.toThrow();
+        ).rejects.toThrow('Unauthorized');
       });
 
-      it('should update the docket entry and work item with a file attached', async () => {
+      it('should throw an error when the docket entry is not found on the case', async () => {
+        const notFoundDocketEntryId = 'this is not an ID';
+
+        await expect(
+          editPaperFilingInteractor(applicationContext, {
+            docketEntryId: notFoundDocketEntryId,
+            documentMetadata: {},
+            isSavingForLater: true,
+          }),
+        ).rejects.toThrow(
+          `Docket entry ${notFoundDocketEntryId} was not found.`,
+        );
+      });
+
+      it('should throw an error when the docket entry has already been served', async () => {
+        await expect(
+          editPaperFilingInteractor(applicationContext, {
+            docketEntryId: mockServedDocketEntryId,
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+            },
+            isSavingForLater: false,
+          }),
+        ).rejects.toThrow('Docket entry has already been served');
+      });
+
+      it('should throw an error when the docket entry is ready for service but is already pending service', async () => {
+        const docketEntry = caseRecord.docketEntries[0];
+        docketEntry.isPendingService = true;
+
+        await expect(
+          editPaperFilingInteractor(applicationContext, {
+            docketEntryId: docketEntry.docketEntryId,
+            documentMetadata: docketEntry,
+            isSavingForLater: false,
+          }),
+        ).rejects.toThrow('Docket entry is already being served');
+
+        expect(
+          applicationContext.getUseCaseHelpers()
+            .serveDocumentAndGetPaperServicePdf,
+        ).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Save For Later', () => {
+    describe('Happy Path', () => {
+      it('should update the docket entry and update the counted pages when Docket Entry has a file attached', async () => {
+        applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument.mockResolvedValueOnce(2);
+
         await editPaperFilingInteractor(applicationContext, {
           docketEntryId: mockDocketEntryId,
           documentMetadata: {
@@ -105,18 +165,18 @@ describe('editPaperFilingInteractor', () => {
           isSavingForLater: true,
         });
 
+        const updatedDocketEntry = applicationContext
+          .getUseCaseHelpers()
+          .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+            doc => doc.docketEntryId === mockDocketEntryId,
+          );
         expect(
           applicationContext.getPersistenceGateway().getCaseByDocketNumber,
         ).toHaveBeenCalled();
         expect(
           applicationContext.getPersistenceGateway().saveWorkItem,
         ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getUseCaseHelpers().countPagesInDocument,
-        ).toHaveBeenCalled();
+        expect(updatedDocketEntry.numberOfPages).toEqual(2);
       });
 
       it('should update the docket entry and workitem when a file is NOT attached to the docket entry', async () => {
@@ -194,7 +254,7 @@ describe('editPaperFilingInteractor', () => {
   });
 
   describe('Serve', () => {
-    describe('Single Docket', () => {
+    describe('Single Docketing', () => {
       it('should update only allowed editable fields on a docket entry document', async () => {
         await editPaperFilingInteractor(applicationContext, {
           docketEntryId: mockDocketEntryId,
@@ -318,7 +378,7 @@ describe('editPaperFilingInteractor', () => {
       });
     });
 
-    describe('multi-docketing', () => {
+    describe('Multi Docketing', () => {
       describe('Happy Path', () => {
         it('should file and serve the docket entry on all provided docket numbers when the user requests the docket entry be multi-docketed on a consolidated group', async () => {
           applicationContext
@@ -491,65 +551,6 @@ describe('editPaperFilingInteractor', () => {
             'Cannot multi-docket on a case that is not consolidated',
           );
         });
-      });
-    });
-  });
-
-  describe('SaveForLater or Serve Agnostic', () => {
-    describe('Sad Path', () => {
-      it('should throw an error when the user is not authorized to edit docket entries', async () => {
-        applicationContext.getCurrentUser.mockImplementation(
-          () => petitionerUser,
-        );
-
-        await expect(
-          editPaperFilingInteractor(applicationContext, {
-            docketEntryId: '',
-            documentMetadata: {},
-          } as any),
-        ).rejects.toThrow('Unauthorized');
-      });
-
-      it('should throw an error when the docket entry is not found on the case', async () => {
-        const notFoundDocketEntryId = 'this is not an ID';
-
-        await expect(
-          editPaperFilingInteractor(applicationContext, {
-            docketEntryId: notFoundDocketEntryId,
-            documentMetadata: {},
-          } as any),
-        ).rejects.toThrow(
-          `Docket entry ${notFoundDocketEntryId} was not found.`,
-        );
-      });
-
-      it('should throw an error when the docket entry has already been served', async () => {
-        await expect(
-          editPaperFilingInteractor(applicationContext, {
-            docketEntryId: mockServedDocketEntryId,
-            documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
-            },
-          } as any),
-        ).rejects.toThrow('Docket entry has already been served');
-      });
-
-      it('should throw an error when the docket entry is ready for service but is already pending service', async () => {
-        const docketEntry = caseRecord.docketEntries[0];
-        docketEntry.isPendingService = true;
-
-        await expect(
-          editPaperFilingInteractor(applicationContext, {
-            docketEntryId: docketEntry.docketEntryId,
-            documentMetadata: docketEntry,
-            isSavingForLater: false,
-          }),
-        ).rejects.toThrow('Docket entry is already being served');
-
-        expect(
-          applicationContext.getUseCaseHelpers()
-            .serveDocumentAndGetPaperServicePdf,
-        ).not.toHaveBeenCalled();
       });
     });
   });
