@@ -1,11 +1,3 @@
-const documentClientMock = {
-  get: null,
-  put: null,
-  scan: null,
-};
-const DynamoDBMock = class {
-  constructor() {}
-};
 const deleteMessageMock = jest.fn().mockReturnValue({
   promise: () => Promise.resolve({}),
 });
@@ -15,14 +7,25 @@ const SQSMock = class {
   }
 };
 
+const documentClientMock = {
+  get: null,
+  put: null,
+  scan: null,
+};
+const DynamoDBMock = class {
+  constructor() {}
+};
 DynamoDBMock.DocumentClient = jest.fn().mockReturnValue(documentClientMock);
 DynamoDBMock.Converter = { marshall: jest.fn() };
+
 jest.mock('aws-sdk', () => {
   return { DynamoDB: DynamoDBMock, SQS: SQSMock };
 });
+
 jest.mock('promise-retry', () => cb => {
   return cb();
 });
+
 jest.mock('./migrationsToRun', () => ({
   migrationsToRun: [
     {
@@ -33,21 +36,18 @@ jest.mock('./migrationsToRun', () => ({
     },
   ],
 }));
+
+const mockValidationMigration = jest.fn();
+jest.mock('./migrations/0000-validate-all-items', () => ({
+  migrateItems: mockValidationMigration,
+}));
+
 const mockLogger = {
   debug: jest.fn(),
   error: jest.fn(),
   info: jest.fn(),
 };
-let failValidation = false;
 const mockApplicationContext = {
-  getEntityByName: () =>
-    function () {
-      this.validateForMigration = () => {
-        if (failValidation) {
-          throw new Error('fail');
-        }
-      };
-    },
   logger: mockLogger,
 };
 jest.mock(
@@ -89,6 +89,8 @@ describe('migration-segments', () => {
           }),
         ),
     });
+
+    mockValidationMigration.mockImplementation(items => items);
   });
 
   it('should skip running a migration when it already existed as a record in the deploy table', async () => {
@@ -112,14 +114,11 @@ describe('migration-segments', () => {
   });
 
   it('will throw an exception if items are invalid', async () => {
-    failValidation = true;
-
-    await expect(handler(mockLambdaEvent)).rejects.toThrow('fail');
+    mockValidationMigration.mockRejectedValue(new Error());
+    await expect(handler(mockLambdaEvent)).rejects.toThrow();
   });
 
   it('logs a message if the item is successfully migrated to the destination table', async () => {
-    failValidation = false;
-
     await handler(mockLambdaEvent);
 
     expect(mockLogger.info).toHaveBeenCalledWith(
@@ -133,7 +132,6 @@ describe('migration-segments', () => {
   });
 
   it('logs a message if the item already exist in the destination table', async () => {
-    failValidation = false;
     documentClientMock.put = () => ({
       promise: () =>
         new Promise((resolve, reject) =>
@@ -156,7 +154,6 @@ describe('migration-segments', () => {
   });
 
   it('throw an error if an item could not be put into dynamo for some reason', async () => {
-    failValidation = false;
     documentClientMock.put = () => ({
       promise: () =>
         new Promise((resolve, reject) =>
