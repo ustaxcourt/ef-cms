@@ -17,11 +17,7 @@ interface IEditPaperFilingRequest {
 /**
  *
  * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string[]} providers.consolidatedGroupDocketNumbers list of consolidatedDocketNumbers to file docket entry on
- * @param {object} providers.documentMetadata the document metadata
- * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
- * @param {string} providers.docketEntryId the id of the docket entry
+ * @param {IEditPaperFilingRequest} request the request data
  * @returns {object} The paper service PDF url
  */
 export const editPaperFilingInteractor = async (
@@ -30,6 +26,8 @@ export const editPaperFilingInteractor = async (
 ): Promise<{ paperServicePdfUrl?: string }> => {
   request.consolidatedGroupDocketNumbers =
     request.consolidatedGroupDocketNumbers || [];
+
+  authorizeRequest(applicationContext);
 
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
     applicationContext,
@@ -90,9 +88,8 @@ const saveForLaterStrategy = async ({
   caseEntity: TCaseEntity;
   docketEntryEntity: TDocketEntryEntity;
 }): Promise<{ paperServicePdfUrl?: string }> => {
-  const authorizedUser = authorizeRequest(applicationContext);
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  // TODO: do we need this???
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -130,13 +127,11 @@ const multiDocketServeStrategy = async ({
   docketEntryEntity: TDocketEntryEntity;
   request: IEditPaperFilingRequest;
 }): Promise<{ paperServicePdfUrl?: string }> => {
-  const authorizedUser = authorizeRequest(applicationContext);
-
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
   });
 
-  let consolidatedCaseRecords = await Promise.all(
+  const consolidatedCaseRecords = await Promise.all(
     request.consolidatedGroupDocketNumbers.map(consolidatedGroupDocketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
@@ -145,7 +140,7 @@ const multiDocketServeStrategy = async ({
     ),
   );
 
-  let consolidatedCaseEntities = consolidatedCaseRecords.map(
+  const consolidatedCaseEntities = consolidatedCaseRecords.map(
     consolidatedCase => new Case(consolidatedCase, { applicationContext }),
   );
 
@@ -156,7 +151,9 @@ const multiDocketServeStrategy = async ({
 
   const caseEntitiesToFileOn = [caseEntity, ...consolidatedCaseEntities];
 
-  const paperServicePdfUrl = await doAllTheServyStuff({
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  const paperServicePdfUrl = await serveDocketEntry({
     applicationContext,
     caseEntitiesToFileOn,
     docketEntryEntity,
@@ -179,15 +176,15 @@ const singleDocketServeStrategy = async ({
   docketEntryEntity: TDocketEntryEntity;
   request: IEditPaperFilingRequest;
 }): Promise<{ paperServicePdfUrl?: string }> => {
-  const authorizedUser = authorizeRequest(applicationContext);
-
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
   });
 
   const caseEntitiesToFileOn = [caseEntity];
 
-  const paperServicePdfUrl = await doAllTheServyStuff({
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  const paperServicePdfUrl = await serveDocketEntry({
     applicationContext,
     caseEntitiesToFileOn,
     docketEntryEntity,
@@ -200,7 +197,7 @@ const singleDocketServeStrategy = async ({
 };
 
 // *********************************** Small Helper Functions ***********************************
-const doAllTheServyStuff = async ({
+const serveDocketEntry = async ({
   applicationContext,
   caseEntitiesToFileOn,
   docketEntryEntity,
@@ -225,7 +222,6 @@ const doAllTheServyStuff = async ({
     });
 
   try {
-    // TODO: do we need this???
     const user = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
@@ -238,13 +234,27 @@ const doAllTheServyStuff = async ({
       userId: user.userId,
     });
 
-    const paperServicePdfUrl = await serveDocketEntryOnCases({
-      applicationContext,
-      caseEntitiesToFileOn,
-      docketEntryEntity: updatedDocketEntryEntity,
-      subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
-      user,
-    });
+    caseEntitiesToFileOn = await Promise.all(
+      caseEntitiesToFileOn.map(aCase =>
+        applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
+          applicationContext,
+          caseEntity: aCase,
+          docketEntryEntity: updatedDocketEntryEntity,
+          subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
+          user,
+        }),
+      ),
+    );
+
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntities: caseEntitiesToFileOn,
+        docketEntryId: updatedDocketEntryEntity.docketEntryId,
+      });
+
+    const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
     await applicationContext
       .getPersistenceGateway()
@@ -255,7 +265,7 @@ const doAllTheServyStuff = async ({
         status: false,
       });
 
-    return paperServicePdfUrl;
+    return { paperServicePdfUrl };
   } catch (e) {
     await applicationContext
       .getPersistenceGateway()
@@ -277,7 +287,6 @@ const validateDocketEntryCanBeEdited = ({
   docketEntry: TDocketEntryEntity;
   docketEntryId: string;
 }): void => {
-  console.log('I AM DOCKET ENTRY: ', docketEntry);
   if (!docketEntry) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (docketEntry.servedAt) {
@@ -315,14 +324,12 @@ const validateMultiDocketPaperFilingRequest = ({
   });
 };
 
-const authorizeRequest = (applicationContext: IApplicationContext): TUser => {
+const authorizeRequest = (applicationContext: IApplicationContext): void => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  return authorizedUser;
 };
 
 const updateDocketEntry = async ({
@@ -445,41 +452,4 @@ const getDocketEntryToEdit = async ({
   });
 
   return { caseEntity, docketEntryEntity };
-};
-
-const serveDocketEntryOnCases = async ({
-  applicationContext,
-  caseEntitiesToFileOn,
-  docketEntryEntity,
-  subjectCaseDocketNumber,
-  user,
-}: {
-  applicationContext: IApplicationContext;
-  caseEntitiesToFileOn: TCaseEntity[];
-  docketEntryEntity: TDocketEntryEntity;
-  subjectCaseDocketNumber: string;
-  user: TUser;
-}): Promise<{ paperServicePdfUrl?: string }> => {
-  caseEntitiesToFileOn = await Promise.all(
-    caseEntitiesToFileOn.map(aCase =>
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
-        applicationContext,
-        caseEntity: aCase,
-        docketEntryEntity,
-        subjectCaseDocketNumber,
-        user,
-      }),
-    ),
-  );
-
-  const paperServiceResult = await applicationContext // TODO: Rename?
-    .getUseCaseHelpers()
-    .serveDocumentAndGetPaperServicePdf({
-      applicationContext,
-      caseEntities: caseEntitiesToFileOn,
-      docketEntryId: docketEntryEntity.docketEntryId,
-    });
-
-  const paperServicePdfUrl = paperServiceResult?.pdfUrl;
-  return { paperServicePdfUrl };
 };
