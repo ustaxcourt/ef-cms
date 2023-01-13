@@ -11,6 +11,7 @@ import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSessi
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const setTrialSessionCalendarSequence = [
   clearModalStateAction,
@@ -24,7 +25,5 @@ export const setTrialSessionCalendarSequence = [
   getCalendaredCasesForTrialSessionAction,
   setCalendaredCasesOnTrialSessionAction,
   mergeCaseOrderIntoCalendaredCasesAction,
-  setNoticesForCalendaredTrialSessionAction, // geenrating pdfs per case, saving to s3, waiting for that job to finisg, retrieve from s3
-  //THEN creating paperservicepdf(copy and append)
-  createPaperServicePdfForCasesAction,
+  setNoticesForCalendaredTrialSessionAction,
 ];

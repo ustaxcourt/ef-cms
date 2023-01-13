@@ -7,9 +7,13 @@ export const createPaperServicePdfForCasesAction = async ({
 }) => {
   let { calendaredCasePdfDataArray } = props;
 
-  await applicationContext
+  console.log(calendaredCasePdfDataArray, './............');
+
+  const { docketEntryId, hasPaper, url } = await applicationContext
     .getUseCases()
     .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
       calendaredCasePdfDataArray,
     });
+
+  return { docketEntryId, hasPaper, url };
 };

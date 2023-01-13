@@ -163,6 +163,14 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
     calendaredCasePdfDataArray.push(calendaredCasePdfData);
   }
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_complete',
+      calendaredCasePdfDataArray,
+    },
+    userId: user.userId,
+  });
 
-  return calendaredCasePdfDataArray;
+  // return calendaredCasePdfDataArray;
 };
