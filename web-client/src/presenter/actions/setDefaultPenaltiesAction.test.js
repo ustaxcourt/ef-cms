@@ -13,7 +13,7 @@ describe('setDefaultPenaltiesAction', () => {
 
     const { penalties } = result.state.modal;
 
-    expect(penalties.length).toEqual(5);
+    expect(penalties.length).toEqual(1);
   });
 
   it('should keep the initial penalities as is when loading', async () => {
@@ -58,8 +58,6 @@ describe('setDefaultPenaltiesAction', () => {
         determinationPenaltyAmount: '3.00',
         irsPenaltyAmount: '4.00',
       },
-      {},
-      {},
     ]);
   });
 });
