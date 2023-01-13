@@ -26,7 +26,7 @@ describe('Judge messages journey', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   userSendsMessage(cerebralTest, message2Subject);
 
-  loginAs(cerebralTest, 'judgeColvin@example.com');
+  loginAs(cerebralTest, 'judgecolvin@example.com');
   judgeViewsDashboardMessages(cerebralTest, [message1Subject, message2Subject]);
   judgeViewsCaseDetail(cerebralTest);
 });

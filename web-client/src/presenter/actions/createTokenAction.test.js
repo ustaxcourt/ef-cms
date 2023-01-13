@@ -36,10 +36,10 @@ describe('createTokenAction', () => {
         modules: {
           presenter,
         },
-        state: { form: { name: 'judgeFieri@example.com' } },
+        state: { form: { name: 'judgefieri@example.com' } },
       }),
     ).rejects.toThrow(
-      'The legacy judge "judgeFieri@example.com" cannot login.',
+      'The legacy judge "judgefieri@example.com" cannot login.',
     );
   });
 });
