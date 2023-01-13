@@ -125,7 +125,7 @@ exports.processItems = async ({ documentClient, items, ranMigrations }) => {
 
             let recordSize;
             try {
-              recordSize = getRecordSize(marshalledItem) / 1024;
+              recordSize = getRecordSize(marshalledItem);
             } catch (e) {
               applicationContext.logger.info(
                 `DynamoDB Record Size Calculation Error: ${e}, ${JSON.stringify(
