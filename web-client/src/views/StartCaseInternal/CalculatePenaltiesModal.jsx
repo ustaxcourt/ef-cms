@@ -52,7 +52,8 @@ export const CalculatePenaltiesModal = connect(
                 className="usa-input"
                 id={`penalty_${index}`}
                 name={`penalties.${index}`}
-                value={penalties[index][penaltyAmountType] || 0}
+                placeholder="$0.00"
+                value={penalties[index][penaltyAmountType]}
                 onValueChange={values => {
                   updateModalValueSequence({
                     key: `penalties.${index}.${penaltyAmountType}`,
