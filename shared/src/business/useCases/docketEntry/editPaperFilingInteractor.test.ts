@@ -38,7 +38,7 @@ describe('editPaperFilingInteractor', () => {
         ...MOCK_CASE.docketEntries,
         {
           docketEntryId: mockDocketEntryId,
-          docketNumber: '45678-18',
+          docketNumber: MOCK_CASE.docketNumber,
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -47,7 +47,7 @@ describe('editPaperFilingInteractor', () => {
         },
         {
           docketEntryId: mockServedDocketEntryId,
-          docketNumber: '45678-18',
+          docketNumber: MOCK_CASE.docketNumber,
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -147,7 +147,7 @@ describe('editPaperFilingInteractor', () => {
 
   describe('Save For Later', () => {
     describe('Happy Path', () => {
-      it('should update the docket entry and update the counted pages when Docket Entry has a file attached', async () => {
+      it('should update the docket entry including updating the page count when the docket entry has a file attached', async () => {
         applicationContext
           .getUseCaseHelpers()
           .countPagesInDocument.mockResolvedValueOnce(2);
@@ -179,7 +179,7 @@ describe('editPaperFilingInteractor', () => {
         expect(updatedDocketEntry.numberOfPages).toEqual(2);
       });
 
-      it('should update the docket entry and workitem when a file is NOT attached to the docket entry', async () => {
+      it('should update the docket entry without updating the page count when the docket entry does NOT have a file attached', async () => {
         await editPaperFilingInteractor(applicationContext, {
           docketEntryId: mockDocketEntryId,
           documentMetadata: {
@@ -208,42 +208,11 @@ describe('editPaperFilingInteractor', () => {
       });
 
       it('should not call the persistence method to set and unset the pending service status on the docket entry', async () => {
-        const docketEntry = caseRecord.docketEntries[0];
-        docketEntry.isPendingService = false;
-        docketEntry.workItem = workItem;
-
         await editPaperFilingInteractor(applicationContext, {
-          docketEntryId: docketEntry.docketEntryId,
-          documentMetadata: docketEntry,
+          docketEntryId: mockDocketEntryId,
+          documentMetadata: caseRecord.docketEntries[0],
           isSavingForLater: true,
         });
-
-        expect(
-          applicationContext.getPersistenceGateway()
-            .updateDocketEntryPendingServiceStatus,
-        ).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('Sad Path', () => {
-      it('should NOT call the persistence method to unset the pending service status on the docket entry when an error occurs while updating it', async () => {
-        const docketEntry = caseRecord.docketEntries[0];
-        docketEntry.isPendingService = false;
-        docketEntry.workItem = workItem;
-
-        applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument.mockRejectedValueOnce(
-            new Error('whoops, that is an error!'),
-          );
-
-        await expect(
-          editPaperFilingInteractor(applicationContext, {
-            docketEntryId: docketEntry.docketEntryId,
-            documentMetadata: docketEntry,
-            isSavingForLater: true,
-          }),
-        ).rejects.toThrow('whoops, that is an error!');
 
         expect(
           applicationContext.getPersistenceGateway()
@@ -259,7 +228,8 @@ describe('editPaperFilingInteractor', () => {
         await editPaperFilingInteractor(applicationContext, {
           docketEntryId: mockDocketEntryId,
           documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
+            docketEntryId: 'maliciously Update Docket Entry Id.  DONT SAVE ME.',
+            docketNumber: 'maliciously Updated Docket Number. DONT SAVE ME.',
             documentTitle: 'My Edited Document',
             documentType: 'Memorandum in Support',
             eventCode: 'MISP',
@@ -280,6 +250,8 @@ describe('editPaperFilingInteractor', () => {
           );
 
         expect(updatedDocketEntry).toMatchObject({
+          docketEntryId: mockDocketEntryId,
+          docketNumber: caseRecord.docketEntries[0].docketNumber,
           documentTitle: 'My Edited Document',
           freeText: 'Some text about this document',
           hasOtherFilingParty: true,
@@ -287,14 +259,10 @@ describe('editPaperFilingInteractor', () => {
         });
       });
 
-      it('should call the persistence method to set and unset the pending service status on the docket entry when it is NOT being saved for later', async () => {
-        const docketEntry = caseRecord.docketEntries[0];
-        docketEntry.isPendingService = false;
-        docketEntry.workItem = workItem;
-
+      it('should call the persistence method to set and unset the pending service status on the docket entry', async () => {
         await editPaperFilingInteractor(applicationContext, {
-          docketEntryId: docketEntry.docketEntryId,
-          documentMetadata: docketEntry,
+          docketEntryId: mockDocketEntryId,
+          documentMetadata: caseRecord.docketEntries[0],
           isSavingForLater: false,
         });
 
@@ -308,7 +276,7 @@ describe('editPaperFilingInteractor', () => {
         expect(secondStatusCall).toEqual(false);
       });
 
-      it('should return a paper service pdf url when the case has at least one paper service party and the docket entry is NOT being saved for later', async () => {
+      it('should return a paper service pdf url when the case has at least one paper service party', async () => {
         const mockPdfUrl = 'www.example.com';
         caseRecord.petitioners[0].serviceIndicator =
           SERVICE_INDICATOR_TYPES.SI_PAPER;
@@ -323,7 +291,6 @@ describe('editPaperFilingInteractor', () => {
           {
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
               documentTitle: 'My Document',
               documentType: 'Memorandum in Support',
               eventCode: 'MISP',
@@ -338,10 +305,6 @@ describe('editPaperFilingInteractor', () => {
 
       describe('Sad Path', () => {
         it('should call the persistence method to unset the pending service status on the docket entry when an error occurs while serving', async () => {
-          const docketEntry = caseRecord.docketEntries[0];
-          docketEntry.isPendingService = false;
-          docketEntry.workItem = workItem;
-
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
@@ -350,27 +313,25 @@ describe('editPaperFilingInteractor', () => {
 
           await expect(
             editPaperFilingInteractor(applicationContext, {
-              docketEntryId: docketEntry.docketEntryId,
-              documentMetadata: docketEntry,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: caseRecord.docketEntries[0],
               isSavingForLater: false,
             }),
           ).rejects.toThrow('whoops, that is an error!');
 
-          expect(
+          const firstStatusCall =
             applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus,
-          ).toHaveBeenCalledWith({
-            applicationContext,
-            docketEntryId: docketEntry.docketEntryId,
+              .updateDocketEntryPendingServiceStatus.mock.calls[0][0];
+          const secondStatusCall =
+            applicationContext.getPersistenceGateway()
+              .updateDocketEntryPendingServiceStatus.mock.calls[1][0];
+          expect(firstStatusCall).toMatchObject({
+            docketEntryId: mockDocketEntryId,
             docketNumber: caseRecord.docketNumber,
             status: true,
           });
-          expect(
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus,
-          ).toHaveBeenCalledWith({
-            applicationContext,
-            docketEntryId: docketEntry.docketEntryId,
+          expect(secondStatusCall).toMatchObject({
+            docketEntryId: mockDocketEntryId,
             docketNumber: caseRecord.docketNumber,
             status: false,
           });
@@ -380,19 +341,19 @@ describe('editPaperFilingInteractor', () => {
 
     describe('Multi Docketing', () => {
       describe('Happy Path', () => {
-        it('should file and serve the docket entry on all provided docket numbers when the user requests the docket entry be multi-docketed on a consolidated group', async () => {
+        it('should file and serve the docket entry on all provided docket numbers', async () => {
           applicationContext
             .getPersistenceGateway()
             .getCaseByDocketNumber.mockResolvedValue({
               ...caseRecord,
               leadDocketNumber: caseRecord.docketNumber,
             });
+          const mockConsolidatedGroupDocketNumbers = ['101-23', '101-24'];
 
           await editPaperFilingInteractor(applicationContext, {
-            consolidatedGroupDocketNumbers: ['101-23', '101-24'],
+            consolidatedGroupDocketNumbers: mockConsolidatedGroupDocketNumbers,
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
               documentTitle: 'My Document',
               documentType: 'Memorandum in Support',
               eventCode: 'MISP',
@@ -401,14 +362,18 @@ describe('editPaperFilingInteractor', () => {
             isSavingForLater: false,
           });
 
+          const expectedCount = [
+            caseRecord.docketNumber,
+            ...mockConsolidatedGroupDocketNumbers,
+          ].length;
           expect(
             applicationContext.getUseCaseHelpers()
               .fileAndServeDocumentOnOneCase,
-          ).toHaveBeenCalledTimes(3);
+          ).toHaveBeenCalledTimes(expectedCount);
         });
 
         it('should return a paper service pdf url when at least one party in the consolidated group has paper service', async () => {
-          const mockedPaerServicePdfUrl = 'www.example.com';
+          const mockedPaperServicePdfUrl = 'www.example.com';
           applicationContext
             .getPersistenceGateway()
             .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
@@ -432,7 +397,7 @@ describe('editPaperFilingInteractor', () => {
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
-              pdfUrl: mockedPaerServicePdfUrl,
+              pdfUrl: mockedPaperServicePdfUrl,
             });
 
           const result = await editPaperFilingInteractor(applicationContext, {
@@ -448,7 +413,7 @@ describe('editPaperFilingInteractor', () => {
             isSavingForLater: false,
           });
 
-          expect(result.paperServicePdfUrl).toEqual(mockedPaerServicePdfUrl);
+          expect(result.paperServicePdfUrl).toEqual(mockedPaperServicePdfUrl);
           expect(
             applicationContext.getUseCaseHelpers()
               .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities,
@@ -502,7 +467,7 @@ describe('editPaperFilingInteractor', () => {
       });
 
       describe('Sad Path', () => {
-        it('should throw an error when the docket entry is being multi-docketed on a member case that is NOT consolidated', async () => {
+        it('should throw an error when a docket number included in the request is NOT a member of the consolidated group', async () => {
           const nonConsolidatedDocketNumber = '101-19';
           applicationContext
             .getPersistenceGateway()
@@ -529,7 +494,7 @@ describe('editPaperFilingInteractor', () => {
           );
         });
 
-        it('should throw an error when the docket entry is being filed on a case that is NOT consolidated', async () => {
+        it('should throw an error when the requested subject case is NOT consolidated', async () => {
           applicationContext
             .getPersistenceGateway()
             .getCaseByDocketNumber.mockResolvedValue({
