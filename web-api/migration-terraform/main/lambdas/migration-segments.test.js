@@ -126,14 +126,17 @@ describe('migration-segments', () => {
     await expect(handler(mockLambdaEvent)).rejects.toThrow();
   });
 
-  it('should logs a message when an item is successfully migrated to the destination table', async () => {
+  it('should log a message when an item is successfully migrated to the destination table', async () => {
+    const mockRecordSize = 74;
+    mockGetRecordSize.mockReturnValue(mockRecordSize);
+
     await handler(mockLambdaEvent);
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       'Successfully migrated case|101-20 case|101-20',
       {
         pk: 'case|101-20',
-        recordSizeInBytes: expect.anything(),
+        recordSizeInBytes: mockRecordSize,
         sk: 'case|101-20',
       },
     );
