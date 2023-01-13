@@ -16,7 +16,9 @@ const DynamoDBMock = class {
   constructor() {}
 };
 DynamoDBMock.DocumentClient = jest.fn().mockReturnValue(documentClientMock);
-DynamoDBMock.Converter = { marshall: jest.fn() };
+DynamoDBMock.Converter = {
+  marshall: jest.fn().mockImplementation(item => item),
+};
 
 jest.mock('aws-sdk', () => {
   return { DynamoDB: DynamoDBMock, SQS: SQSMock };
@@ -25,6 +27,11 @@ jest.mock('aws-sdk', () => {
 jest.mock('promise-retry', () => cb => {
   return cb();
 });
+
+const mockGetRecordSize = jest.fn();
+jest.mock('./utilities/getRecordSize', () => ({
+  getRecordSize: mockGetRecordSize,
+}));
 
 jest.mock('./migrationsToRun', () => ({
   migrationsToRun: [
@@ -105,7 +112,7 @@ describe('migration-segments', () => {
     );
   });
 
-  it('runs any unran migrations', async () => {
+  it('should run a migration when it did NOT already exist as a record in the deploy table', async () => {
     await handler(mockLambdaEvent);
 
     expect(mockLogger.debug).toHaveBeenCalledWith(
@@ -113,12 +120,13 @@ describe('migration-segments', () => {
     );
   });
 
-  it('will throw an exception if items are invalid', async () => {
+  it('should throw an error when any item is invalid', async () => {
     mockValidationMigration.mockRejectedValue(new Error());
+
     await expect(handler(mockLambdaEvent)).rejects.toThrow();
   });
 
-  it('logs a message if the item is successfully migrated to the destination table', async () => {
+  it('should logs a message when an item is successfully migrated to the destination table', async () => {
     await handler(mockLambdaEvent);
 
     expect(mockLogger.info).toHaveBeenCalledWith(
@@ -131,7 +139,27 @@ describe('migration-segments', () => {
     );
   });
 
-  it('logs a message if the item already exist in the destination table', async () => {
+  it('should NOT throw an error when an error occurs while attempting to calculate a record`s size', async () => {
+    mockGetRecordSize.mockImplementation(() => {
+      throw new Error();
+    });
+
+    await handler(mockLambdaEvent);
+
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      'DynamoDB Record Size Calculation Error: Error, {"pk":"case|101-20","sk":"case|101-20"}',
+    );
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      'Successfully migrated case|101-20 case|101-20',
+      {
+        pk: 'case|101-20',
+        recordSizeInBytes: undefined,
+        sk: 'case|101-20',
+      },
+    );
+  });
+
+  it('should logs a message when an item already existed in the destination table', async () => {
     documentClientMock.put = () => ({
       promise: () =>
         new Promise((resolve, reject) =>
@@ -153,7 +181,7 @@ describe('migration-segments', () => {
     );
   });
 
-  it('throw an error if an item could not be put into dynamo for some reason', async () => {
+  it('should throw an error when an error occurs while saving an item into the destination table', async () => {
     documentClientMock.put = () => ({
       promise: () =>
         new Promise((resolve, reject) =>
@@ -166,7 +194,7 @@ describe('migration-segments', () => {
     );
   });
 
-  it('deletes the sqs event from the sqs queue when done', async () => {
+  it('should delete a message from the sqs queue when it is successfully processed', async () => {
     await handler(mockLambdaEvent);
 
     expect(deleteMessageMock).toHaveBeenCalled();
