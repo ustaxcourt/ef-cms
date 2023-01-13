@@ -33,3 +33,5 @@ Currently Having difficulty with step 2 in transpiling as many tests use the sha
 1. Delete dist folder in root directory
 1. Temporarliy comment out ./babel.config.js at root so there are no options.
 1. run command at root directory ```npx babel web-client/src --out-dir dist --ignore "**/*.jsx","**/*.test.js" --no-babelrc --plugins=babel-plugin-cerebral```
+1. Copy files from dist to web-client using command: ```ditto -V dist/ web-client/src/```
+1. Run a format on all files so that the only changes are the babel-cerebral changes by running : ```npm run lint:js/ts:fix```
