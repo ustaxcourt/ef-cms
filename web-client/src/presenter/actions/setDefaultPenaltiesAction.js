@@ -16,7 +16,7 @@ export const setDefaultPenaltiesAction = ({ get, store }) => {
     initialPenalties.push({
       // TODO: Move to an array on the Statistic Entity
       // determinationPenaltyAmount: '0',
-      irsPenaltyAmount: '0',
+      irsPenaltyAmount: '',
     });
   }
   store.set(state.modal.penalties, initialPenalties);

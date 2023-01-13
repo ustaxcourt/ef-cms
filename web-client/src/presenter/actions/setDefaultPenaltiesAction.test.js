@@ -22,17 +22,17 @@ describe('setDefaultPenaltiesAction', () => {
         form: {
           penalties: [
             {
-              determinationPenaltyAmount: '1.00',
+              // determinationPenaltyAmount: '1.00',
               irsPenaltyAmount: '5.00',
             },
 
             {
-              determinationPenaltyAmount: '2.00',
+              // determinationPenaltyAmount: '2.00',
               irsPenaltyAmount: '4.00',
             },
 
             {
-              determinationPenaltyAmount: '3.00',
+              // determinationPenaltyAmount: '3.00',
               irsPenaltyAmount: '4.00',
             },
           ],
@@ -47,15 +47,15 @@ describe('setDefaultPenaltiesAction', () => {
 
     expect(penalties).toEqual([
       {
-        determinationPenaltyAmount: '1.00',
+        // determinationPenaltyAmount: '1.00',
         irsPenaltyAmount: '5.00',
       },
       {
-        determinationPenaltyAmount: '2.00',
+        // determinationPenaltyAmount: '2.00',
         irsPenaltyAmount: '4.00',
       },
       {
-        determinationPenaltyAmount: '3.00',
+        // determinationPenaltyAmount: '3.00',
         irsPenaltyAmount: '4.00',
       },
     ]);
