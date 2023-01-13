@@ -151,7 +151,7 @@ const hasMigrationRan = async key => {
   return { [key]: !!Item };
 };
 
-exports.handler = async event => {
+export const handler = async event => {
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
