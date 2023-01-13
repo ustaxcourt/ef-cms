@@ -51,14 +51,5 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     );
   }
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'notice_generation_complete',
-      docketEntryId,
-      hasPaper,
-      pdfUrl: url || null,
-    },
-    userId: user.userId,
-  });
+  return { docketEntryId, hasPaper, url };
 };
