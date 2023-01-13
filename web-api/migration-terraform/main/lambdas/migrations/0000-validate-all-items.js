@@ -1,3 +1,4 @@
+const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../../src/applicationContext');
 const { getRecordSize } = require('../utilities/getRecordSize');
 const applicationContext = createApplicationContext({});
@@ -12,11 +13,15 @@ const migrateItems = items => {
     applicationContext.logger.info(`JSON Item Size: ${itemSize.toFixed(1)}kb`);
 
     let recordSize;
+
+    const marshalledItem = AWS.DynamoDB.Converter.marshall(item);
     try {
-      recordSize = getRecordSize(item) / 1000;
+      recordSize = getRecordSize(marshalledItem) / 1000;
     } catch (e) {
       applicationContext.logger.info(
-        `DynamoDB Record Size Error: ${e}, ${JSON.stringify(item)}`,
+        `DynamoDB Record Size Error (m-s): ${e}, ${JSON.stringify(
+          marshalledItem,
+        )}`,
       );
     }
     applicationContext.logger.info(`DynamoDB Record Size: ${recordSize}kb`);
