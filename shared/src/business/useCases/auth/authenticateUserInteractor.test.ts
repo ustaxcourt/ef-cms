@@ -20,8 +20,8 @@ describe('authenticateUserInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway().confirmAuthCode.mock
-        .calls[0][1],
-    ).toEqual({ code: expectedCode });
+        .calls[0][0],
+    ).toEqual({ applicationContext, code: expectedCode });
     expect(result).toEqual(refreshTokenAndToken);
   });
 });
