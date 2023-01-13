@@ -31,6 +31,17 @@ export const editPaperFilingInteractor = async (
   request.consolidatedGroupDocketNumbers =
     request.consolidatedGroupDocketNumbers || [];
 
+  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
+    applicationContext,
+    docketEntryId: request.docketEntryId,
+    docketNumber: request.documentMetadata.docketNumber,
+  });
+
+  validateDocketEntryCanBeEdited({
+    docketEntry: docketEntryEntity,
+    docketEntryId: request.docketEntryId,
+  });
+
   const editPaperFilingStrategy = getEditPaperFilingStrategy({
     consolidatedGroupDocketNumbers: request.consolidatedGroupDocketNumbers,
     isSavingForLater: request.isSavingForLater,
@@ -38,6 +49,8 @@ export const editPaperFilingInteractor = async (
 
   const paperServicePdfUrl = await editPaperFilingStrategy({
     applicationContext,
+    caseEntity,
+    docketEntryEntity,
     request,
   });
 
@@ -68,23 +81,16 @@ const getEditPaperFilingStrategy = ({
 
 const saveForLaterStrategy = async ({
   applicationContext,
+  caseEntity,
+  docketEntryEntity,
   request,
 }: {
   applicationContext: IApplicationContext;
   request: IEditPaperFilingRequest;
+  caseEntity: TCaseEntity;
+  docketEntryEntity: TDocketEntryEntity;
 }): Promise<{ paperServicePdfUrl?: string }> => {
   const authorizedUser = authorizeRequest(applicationContext);
-
-  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
-    applicationContext,
-    docketEntryId: request.docketEntryId,
-    docketNumber: request.documentMetadata.docketNumber,
-  });
-
-  validateDocketEntryCanBeEdited({
-    docketEntry: docketEntryEntity,
-    docketEntryId: request.docketEntryId,
-  });
 
   // TODO: do we need this???
   const user = await applicationContext
@@ -115,23 +121,16 @@ const saveForLaterStrategy = async ({
 
 const multiDocketServeStrategy = async ({
   applicationContext,
+  caseEntity,
+  docketEntryEntity,
   request,
 }: {
   applicationContext: IApplicationContext;
+  caseEntity: TCaseEntity;
+  docketEntryEntity: TDocketEntryEntity;
   request: IEditPaperFilingRequest;
 }): Promise<{ paperServicePdfUrl?: string }> => {
   const authorizedUser = authorizeRequest(applicationContext);
-
-  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
-    applicationContext,
-    docketEntryId: request.docketEntryId,
-    docketNumber: request.documentMetadata.docketNumber,
-  });
-
-  validateDocketEntryCanBeEdited({
-    docketEntry: docketEntryEntity,
-    docketEntryId: request.docketEntryId,
-  });
 
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
@@ -171,23 +170,16 @@ const multiDocketServeStrategy = async ({
 
 const singleDocketServeStrategy = async ({
   applicationContext,
+  caseEntity,
+  docketEntryEntity,
   request,
 }: {
   applicationContext: IApplicationContext;
+  caseEntity: TCaseEntity;
+  docketEntryEntity: TDocketEntryEntity;
   request: IEditPaperFilingRequest;
 }): Promise<{ paperServicePdfUrl?: string }> => {
   const authorizedUser = authorizeRequest(applicationContext);
-
-  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
-    applicationContext,
-    docketEntryId: request.docketEntryId,
-    docketNumber: request.documentMetadata.docketNumber,
-  });
-
-  validateDocketEntryCanBeEdited({
-    docketEntry: docketEntryEntity,
-    docketEntryId: request.docketEntryId,
-  });
 
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
@@ -285,6 +277,7 @@ const validateDocketEntryCanBeEdited = ({
   docketEntry: TDocketEntryEntity;
   docketEntryId: string;
 }): void => {
+  console.log('I AM DOCKET ENTRY: ', docketEntry);
   if (!docketEntry) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (docketEntry.servedAt) {
