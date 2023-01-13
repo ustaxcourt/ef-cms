@@ -212,7 +212,7 @@ type TTrialSessionData = {
   startDate: string;
   startTime: string;
   state: string;
-  swingSession: string;
+  swingSession: boolean;
   swingSessionId: string;
   term: string;
   termYear: string;
