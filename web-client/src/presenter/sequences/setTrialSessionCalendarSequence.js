@@ -2,7 +2,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { createPaperServicePdfForCasesAction } from '../actions/TrialSession/createPaperServicePdfForCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
@@ -11,7 +10,6 @@ import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSessi
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const setTrialSessionCalendarSequence = [
   clearModalStateAction,

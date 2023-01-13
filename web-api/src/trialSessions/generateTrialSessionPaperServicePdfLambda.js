@@ -12,9 +12,14 @@ exports.generateTrialSessionPaperServicePdfLambda = event =>
       ...JSON.parse(event.body),
     };
 
+    console.log(
+      'calendaredCasePdfDataArray LAMBDA',
+      calendaredCasePdfDataArray,
+    );
+
     return await applicationContext
       .getUseCases()
       .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
-        calendaredCasePdfDataArray,
+        ...JSON.parse(event.body),
       });
   });

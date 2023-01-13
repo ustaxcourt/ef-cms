@@ -20,6 +20,8 @@ exports.savePaperServicePdf = async ({ applicationContext, document }) => {
       useTempBucket: true,
     });
 
+    console.log('paperServicePdfData', paperServicePdfData);
+
     pdfInfo = await applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl({

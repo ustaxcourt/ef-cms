@@ -15,6 +15,10 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
   { calendaredCasePdfDataArray }: { calendaredCasePdfDataArray: any[] },
 ) => {
+  console.log(
+    '********* calendaredCasePdfDataArray in genInteractor',
+    calendaredCasePdfDataArray,
+  );
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -24,16 +28,23 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
+  console.log(
+    'calendaredCasePdfDataArray in genInteractor',
+    calendaredCasePdfDataArray,
+  );
   for (let index = 0; index < calendaredCasePdfDataArray.length; index++) {
     const calendaredCasePdf = await PDFDocument.load(
-      calendaredCasePdfDataArray[index],
+      calendaredCasePdfDataArray[index].data,
     );
 
     await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
       copyFrom: calendaredCasePdf,
       copyInto: paperServiceDocumentsPdf,
     });
+    console.log('1 paperServiceDocumentsPdf', paperServiceDocumentsPdf);
   }
+
+  console.log('2 paperServiceDocumentsPdf', paperServiceDocumentsPdf);
 
   const { docketEntryId, hasPaper, url } = await applicationContext
     .getUseCaseHelpers()
@@ -41,6 +52,8 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       applicationContext,
       document: paperServiceDocumentsPdf,
     });
+
+  console.log('url', url);
 
   if (url) {
     applicationContext.logger.info(

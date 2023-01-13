@@ -17,11 +17,9 @@ export const setNoticesForCalendaredTrialSessionAction = async ({
   const trialSessionId =
     props.trialSessionId || get(state.trialSession.trialSessionId);
 
-  const calendaredCasePdfDataArray = await applicationContext
+  await applicationContext
     .getUseCases()
     .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId,
     });
-
-  return { calendaredCasePdfDataArray };
 };
