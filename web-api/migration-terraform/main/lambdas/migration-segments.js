@@ -82,7 +82,9 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
               recordSize = getRecordSize(item) / 1000;
             } catch (e) {
               applicationContext.logger.info(
-                `DynamoDB Record Size Error: ${e}, ${item}`,
+                `DynamoDB Record Size Error (m-s): ${e}, ${JSON.stringify(
+                  item,
+                )}`,
               );
             }
             applicationContext.logger.info(
@@ -122,6 +124,7 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
         applicationContext.logger.info(
           `${segment}/${totalSegments} got ${results.Items.length} results`,
         );
+        applicationContext.logger.info(`*** ${JSON.stringify(results.Items)}`);
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await processItems({
