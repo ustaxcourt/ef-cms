@@ -57,6 +57,9 @@
           "docketEntryId": {
             "type": "keyword"
           },
+          "pk": {
+            "type": "keyword"
+          },
           "trialSessionId": {
             "type": "keyword"
           }
@@ -117,6 +120,10 @@
             "ignore_malformed": true
           },
           "responseTimeMs": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "responseSize": {
             "type": "integer",
             "ignore_malformed": true
           },

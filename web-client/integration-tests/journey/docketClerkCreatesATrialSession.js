@@ -142,6 +142,18 @@ export const docketClerkCreatesATrialSession = (
       value: '2050',
     });
 
+    if (overrides.swingSession) {
+      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'swingSession',
+        value: true,
+      });
+
+      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'swingSessionId',
+        value: overrides.swingSessionId,
+      });
+    }
+
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
