@@ -16,7 +16,7 @@ const migrateItems = items => {
       recordSize = getRecordSize(item) / 1000;
     } catch (e) {
       applicationContext.logger.info(
-        `DynamoDB Record Size Error: ${e}, ${item}`,
+        `DynamoDB Record Size Error: ${e}, ${JSON.stringify(item)}`,
       );
     }
     applicationContext.logger.info(`DynamoDB Record Size: ${recordSize}kb`);
