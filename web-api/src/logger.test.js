@@ -21,6 +21,11 @@ describe('logger', () => {
 
     res = {
       end: jest.fn(),
+      get(key) {
+        return {
+          'content-length': '500',
+        }[key];
+      },
       statusCode: 200,
     };
   });
