@@ -9,11 +9,20 @@ export const createPaperServicePdfForCasesAction = async ({
 
   console.log(calendaredCasePdfDataArray, './............');
 
-  const { docketEntryId, hasPaper, url } = await applicationContext
-    .getUseCases()
-    .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
-      calendaredCasePdfDataArray,
-    });
+  let docketEntryId = '';
+  let hasPaper;
+  let url = '';
+  try {
+    console.log('gonna try')(
+      ({ docketEntryId, hasPaper, url } = await applicationContext
+        .getUseCases()
+        .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
+          calendaredCasePdfDataArray,
+        })),
+    );
+  } catch (e) {
+    console.log('fuuuuuu', e);
+  }
 
   return { docketEntryId, hasPaper, url };
 };
