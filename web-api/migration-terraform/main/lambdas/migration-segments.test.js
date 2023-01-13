@@ -16,6 +16,7 @@ const SQSMock = class {
 };
 
 DynamoDBMock.DocumentClient = jest.fn().mockReturnValue(documentClientMock);
+DynamoDBMock.Converter = { marshall: jest.fn() };
 jest.mock('aws-sdk', () => {
   return { DynamoDB: DynamoDBMock, SQS: SQSMock };
 });
@@ -192,6 +193,7 @@ describe('migration-segments', () => {
       'Successfully migrated case|101-20 case|101-20',
       {
         pk: 'case|101-20',
+        recordSizeInBytes: expect.anything(),
         sk: 'case|101-20',
       },
     );
@@ -231,7 +233,7 @@ describe('migration-segments', () => {
       ],
     });
     expect(mockLogger.info).toHaveBeenCalledWith(
-      'The item of case|101-20 case|101-20 alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
+      'The item of case|101-20 case|101-20 already existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
     );
     expect(mockLogger.info).not.toHaveBeenCalledWith(
       'Successfully migrated case|101-20 case|101-20',
