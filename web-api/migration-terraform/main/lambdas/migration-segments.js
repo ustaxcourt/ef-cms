@@ -23,7 +23,7 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-const migrateRecords = async ({
+export const migrateRecords = async ({
   documentClient,
   items,
   ranMigrations = {},
@@ -41,9 +41,11 @@ const migrateRecords = async ({
   return items;
 };
 
-exports.migrateRecords = migrateRecords;
-
-const processItems = async ({ documentClient, items, ranMigrations }) => {
+export const processItems = async ({
+  documentClient,
+  items,
+  ranMigrations,
+}) => {
   try {
     items = await migrateRecords({ documentClient, items, ranMigrations });
   } catch (err) {
@@ -78,15 +80,18 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
         }).then(res => {
           if (res !== 'already-migrated') {
             let recordSize;
+
+            const marshalledItem = AWS.DynamoDB.Converter.marshall(item);
             try {
-              recordSize = getRecordSize(item) / 1000;
+              recordSize = getRecordSize(marshalledItem) / 1000;
             } catch (e) {
               applicationContext.logger.info(
                 `DynamoDB Record Size Error (m-s): ${e}, ${JSON.stringify(
-                  item,
+                  marshalledItem,
                 )}`,
               );
             }
+
             applicationContext.logger.info(
               `Successfully migrated ${item.pk} ${item.sk}`,
               {
@@ -103,8 +108,6 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
     await Promise.all(promises);
   }
 };
-
-exports.processItems = processItems;
 
 const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
   let hasMoreResults = true;
@@ -124,7 +127,6 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
         applicationContext.logger.info(
           `${segment}/${totalSegments} got ${results.Items.length} results`,
         );
-        applicationContext.logger.info(`*** ${JSON.stringify(results.Items)}`);
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await processItems({
