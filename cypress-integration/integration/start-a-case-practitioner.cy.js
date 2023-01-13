@@ -8,7 +8,7 @@ const { fillInAndSubmitForm } = require('../support/pages/start-a-case');
 
 describe('Start a case as a practitioner', () => {
   it('go to the practitioner dashboard and expect that a case list table is displayed with four cases', () => {
-    navigateToDashboard('privatePractitioner');
+    navigateToDashboard('privatepractitioner');
     getCaseList().should('have.length', 4);
   });
 
