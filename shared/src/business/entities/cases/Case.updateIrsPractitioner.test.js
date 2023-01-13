@@ -24,7 +24,7 @@ describe('updateIrsPractitioner', () => {
       {
         irsPractitioners: [
           new IrsPractitioner({
-            email: 'irsPractitioner@example.com',
+            email: 'irspractitioner@example.com',
             userId: 'irsPractitioner',
           }),
         ],
@@ -36,15 +36,15 @@ describe('updateIrsPractitioner', () => {
 
     expect(caseToVerify.irsPractitioners).not.toBeNull();
     expect(caseToVerify.irsPractitioners[0].email).toEqual(
-      'irsPractitioner@example.com',
+      'irspractitioner@example.com',
     );
 
     caseToVerify.updateIrsPractitioner({
-      email: 'irsPractitioner@example.com',
+      email: 'irspractitioner@example.com',
       userId: 'irsPractitioner',
     });
     expect(caseToVerify.irsPractitioners[0].email).toEqual(
-      'irsPractitioner@example.com',
+      'irspractitioner@example.com',
     );
   });
 
