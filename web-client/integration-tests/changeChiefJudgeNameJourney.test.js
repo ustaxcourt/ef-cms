@@ -77,7 +77,7 @@ describe('Chief Judge feature flag configuration', () => {
   });
 
   describe('Update judgeTitle', () => {
-    loginAs(cerebralTest, 'judgeFoley@example.com');
+    loginAs(cerebralTest, 'judgefoley@example.com');
 
     it('should retrieve correct judgeTitle before and after being updated in dynamo', async () => {
       const { docketEntryId } = cerebralTest.draftOrders[0];
