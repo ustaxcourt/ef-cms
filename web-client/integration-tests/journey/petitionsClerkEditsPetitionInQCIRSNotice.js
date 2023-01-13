@@ -172,7 +172,10 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     // Select calculate penalties for the first statistic
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'irsTotalPenalties',
       statisticIndex: 0,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
@@ -182,12 +185,12 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     let modal = cerebralTest.getState('modal');
 
     expect(modal.statisticIndex).toEqual(0);
-    expect(modal.penalties).toMatchObject(['', '', '', '', '']);
+    expect(modal.penalties).toMatchObject([{ irsPenaltyAmount: '' }]);
     expect(modal.showModal).toEqual('CalculatePenaltiesModal');
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(true);
 
-    // Add 5 more penalty inputs in the modal (reaching the maximum number of 10)
-    for (let i = 5; i < 10; i++) {
+    // Add 9 more penalty inputs in the modal (reaching the maximum number of 10)
+    for (let i = 1; i < 10; i++) {
       await cerebralTest.runSequence('addPenaltyInputSequence');
     }
 
@@ -209,18 +212,30 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     // Add some penalties and calculate the sum
     await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.0',
+      key: 'penalties.0.irsPenaltyAmount',
       value: '1',
     });
-
     await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.1',
-      value: '2',
+      key: 'penalties.0.name',
+      value: 'Penalty 1 (IRS)',
     });
 
     await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.2',
+      key: 'penalties.1.irsPenaltyAmount',
+      value: '2',
+    });
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.1.name',
+      value: 'Penalty 2 (IRS)',
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.2.irsPenaltyAmount',
       value: '3.01',
+    });
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.2.name',
+      value: 'Penalty 3 (IRS)',
     });
 
     await cerebralTest.runSequence('calculatePenaltiesSequence');
@@ -228,7 +243,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     statistics = cerebralTest.getState('form.statistics');
     modal = cerebralTest.getState('modal');
 
-    expect(statistics[0].irsTotalPenalties).toEqual('$6.01');
+    expect(statistics[0].irsTotalPenalties).toEqual('6.01');
     expect(modal.showModal).toBeUndefined();
 
     // Attempt to insert a non-number into currency amount inputs
