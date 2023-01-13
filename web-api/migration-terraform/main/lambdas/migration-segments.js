@@ -121,14 +121,14 @@ exports.processItems = async ({ documentClient, items, ranMigrations }) => {
             .catch(retry);
         }).then(res => {
           if (res !== 'already-migrated') {
-            let recordSize;
-
             const marshalledItem = AWS.DynamoDB.Converter.marshall(item);
+
+            let recordSize;
             try {
               recordSize = getRecordSize(marshalledItem) / 1024;
             } catch (e) {
               applicationContext.logger.info(
-                `DynamoDB Record Size Error (m-s): ${e}, ${JSON.stringify(
+                `DynamoDB Record Size Calculation Error: ${e}, ${JSON.stringify(
                   marshalledItem,
                 )}`,
               );
@@ -138,7 +138,7 @@ exports.processItems = async ({ documentClient, items, ranMigrations }) => {
               `Successfully migrated ${item.pk} ${item.sk}`,
               {
                 pk: item.pk,
-                recordSizeInBytes: recordSize || 0,
+                recordSizeInBytes: recordSize,
                 sk: item.sk,
               },
             );
