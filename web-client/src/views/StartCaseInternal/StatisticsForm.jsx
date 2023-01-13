@@ -56,6 +56,7 @@ export const StatisticsForm = connect(
           Total penalties
         </label>
         <DollarsInput
+          disabled
           className="usa-input usa-input-inline"
           id={`total-penalties-${index}`}
           name={`statistics.${index}.irsTotalPenalties`}
@@ -174,7 +175,9 @@ export const StatisticsForm = connect(
           icon="calculator"
           onClick={() =>
             showCalculatePenaltiesModalSequence({
+              key: 'irsTotalPenalties',
               statisticIndex: index,
+              subkey: 'irsPenaltyAmount',
               title: 'Calculate Penalties on IRS Notice',
             })
           }
