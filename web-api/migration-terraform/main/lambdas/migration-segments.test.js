@@ -57,13 +57,24 @@ jest.mock(
 const { handler } = require('./migration-segments');
 
 describe('migration-segments', () => {
-  it('skips migration if already ran', async () => {
+  const mockLambdaEvent = {
+    Records: [
+      {
+        body: JSON.stringify({ segment: 0, totalSegments: 1 }),
+        receiptHandle: 'abc',
+      },
+    ],
+  };
+
+  beforeEach(() => {
     documentClientMock.get = () => ({
-      promise: () => ({ Item: true }),
+      promise: () => ({ Item: false }),
     });
+
     documentClientMock.put = () => ({
       promise: () => new Promise(resolve => resolve()),
     });
+
     documentClientMock.scan = () => ({
       promise: () =>
         new Promise(resolve =>
@@ -78,48 +89,23 @@ describe('migration-segments', () => {
           }),
         ),
     });
-    await handler({
-      Records: [
-        {
-          body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-          receiptHandle: 'abc',
-        },
-      ],
+  });
+
+  it('should skip running a migration when it already existed as a record in the deploy table', async () => {
+    documentClientMock.get = () => ({
+      promise: () => ({ Item: true }),
     });
+
+    await handler(mockLambdaEvent);
+
     expect(mockLogger.debug).not.toHaveBeenCalledWith(
       'about to run migration just-a-test',
     );
   });
 
   it('runs any unran migrations', async () => {
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
-    });
-    documentClientMock.put = () => ({
-      promise: () => new Promise(resolve => resolve()),
-    });
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-    await handler({
-      Records: [
-        {
-          body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-          receiptHandle: 'abc',
-        },
-      ],
-    });
+    await handler(mockLambdaEvent);
+
     expect(mockLogger.debug).toHaveBeenCalledWith(
       'about to run migration just-a-test',
     );
@@ -127,68 +113,15 @@ describe('migration-segments', () => {
 
   it('will throw an exception if items are invalid', async () => {
     failValidation = true;
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
-    });
-    documentClientMock.put = () => ({
-      promise: () => new Promise(resolve => resolve()),
-    });
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-    await expect(
-      handler({
-        Records: [
-          {
-            body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-            receiptHandle: 'abc',
-          },
-        ],
-      }),
-    ).rejects.toThrow('fail');
+
+    await expect(handler(mockLambdaEvent)).rejects.toThrow('fail');
   });
 
   it('logs a message if the item is successfully migrated to the destination table', async () => {
     failValidation = false;
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
-    });
-    documentClientMock.put = () => ({
-      promise: () => new Promise(resolve => resolve()),
-    });
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-    await handler({
-      Records: [
-        {
-          body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-          receiptHandle: 'abc',
-        },
-      ],
-    });
+
+    await handler(mockLambdaEvent);
+
     expect(mockLogger.info).toHaveBeenCalledWith(
       'Successfully migrated case|101-20 case|101-20',
       {
@@ -201,37 +134,15 @@ describe('migration-segments', () => {
 
   it('logs a message if the item already exist in the destination table', async () => {
     failValidation = false;
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
-    });
     documentClientMock.put = () => ({
       promise: () =>
         new Promise((resolve, reject) =>
           reject(new Error('The conditional request failed')),
         ),
     });
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-    await handler({
-      Records: [
-        {
-          body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-          receiptHandle: 'abc',
-        },
-      ],
-    });
+
+    await handler(mockLambdaEvent);
+
     expect(mockLogger.info).toHaveBeenCalledWith(
       'The item of case|101-20 case|101-20 already existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
     );
@@ -246,70 +157,21 @@ describe('migration-segments', () => {
 
   it('throw an error if an item could not be put into dynamo for some reason', async () => {
     failValidation = false;
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
-    });
     documentClientMock.put = () => ({
       promise: () =>
         new Promise((resolve, reject) =>
           reject(new Error('NOT a conditional request failed ERROR')),
         ),
     });
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-    await expect(
-      handler({
-        Records: [
-          {
-            body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-            receiptHandle: 'abc',
-          },
-        ],
-      }),
-    ).rejects.toThrow('NOT a conditional request failed ERROR');
+
+    await expect(handler(mockLambdaEvent)).rejects.toThrow(
+      'NOT a conditional request failed ERROR',
+    );
   });
 
   it('deletes the sqs event from the sqs queue when done', async () => {
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
-    });
-    documentClientMock.put = () => ({
-      promise: () => new Promise(resolve => resolve()),
-    });
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-    await handler({
-      Records: [
-        {
-          body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-          receiptHandle: 'abc',
-        },
-      ],
-    });
+    await handler(mockLambdaEvent);
+
     expect(deleteMessageMock).toHaveBeenCalled();
   });
 });
