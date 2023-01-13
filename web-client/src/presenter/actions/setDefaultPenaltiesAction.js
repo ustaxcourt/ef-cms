@@ -10,6 +10,7 @@ import { state } from 'cerebral';
 export const setDefaultPenaltiesAction = ({ get, store }) => {
   // TODO: refactor this function some
   const penalties = get(state.form.penalties);
+  penalties;
   let initialPenalties = penalties ?? [];
 
   if (initialPenalties.length < 1) {
@@ -18,6 +19,8 @@ export const setDefaultPenaltiesAction = ({ get, store }) => {
       // determinationPenaltyAmount: '0',
       irsPenaltyAmount: '',
     });
+  } else {
+    initialPenalties = initialPenalties.filter(penalty => penalty.name);
   }
   store.set(state.modal.penalties, initialPenalties);
 };

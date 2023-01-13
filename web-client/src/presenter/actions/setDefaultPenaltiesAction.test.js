@@ -16,24 +16,26 @@ describe('setDefaultPenaltiesAction', () => {
     expect(penalties.length).toEqual(1);
   });
 
-  it('should keep the initial penalities as is when loading', async () => {
+  it('should keep the all penalities with names when loading', async () => {
     const result = await runAction(setDefaultPenaltiesAction, {
       state: {
         form: {
           penalties: [
             {
-              // determinationPenaltyAmount: '1.00',
               irsPenaltyAmount: '5.00',
+              // determinationPenaltyAmount: '1.00',
+              name: 'Penalty1',
             },
 
             {
+              irsPenaltyAmount: '4.00',
               // determinationPenaltyAmount: '2.00',
-              irsPenaltyAmount: '4.00',
+              name: 'Penalty2',
             },
 
             {
-              // determinationPenaltyAmount: '3.00',
               irsPenaltyAmount: '4.00',
+              // determinationPenaltyAmount: '3.00',,
             },
           ],
         },
@@ -47,16 +49,15 @@ describe('setDefaultPenaltiesAction', () => {
 
     expect(penalties).toEqual([
       {
-        // determinationPenaltyAmount: '1.00',
         irsPenaltyAmount: '5.00',
+        // determinationPenaltyAmount: '1.00',
+        name: 'Penalty1',
       },
+
       {
+        irsPenaltyAmount: '4.00',
         // determinationPenaltyAmount: '2.00',
-        irsPenaltyAmount: '4.00',
-      },
-      {
-        // determinationPenaltyAmount: '3.00',
-        irsPenaltyAmount: '4.00',
+        name: 'Penalty2',
       },
     ]);
   });
