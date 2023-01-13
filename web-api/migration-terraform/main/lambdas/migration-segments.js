@@ -7,23 +7,65 @@ const {
 const { chunk } = require('lodash');
 const { getRecordSize } = require('./utilities/getRecordSize');
 const { migrationsToRun } = require('./migrationsToRun');
+
 const MAX_DYNAMO_WRITE_SIZE = 25;
+
 const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
   region: 'us-east-1',
   retryDelayOptions: { base: 300 },
 });
-
 const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
   service: dynamodb,
 });
-
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-export const migrateRecords = async ({
+const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
+  let hasMoreResults = true;
+  let lastKey = null;
+  while (hasMoreResults) {
+    hasMoreResults = false;
+
+    await dynamoDbDocumentClient
+      .scan({
+        ExclusiveStartKey: lastKey,
+        Segment: segment,
+        TableName: process.env.SOURCE_TABLE,
+        TotalSegments: totalSegments,
+      })
+      .promise()
+      .then(async results => {
+        applicationContext.logger.info(
+          `${segment}/${totalSegments} got ${results.Items.length} results`,
+        );
+        hasMoreResults = !!results.LastEvaluatedKey;
+        lastKey = results.LastEvaluatedKey;
+        await exports.processItems({
+          documentClient: dynamoDbDocumentClient,
+          items: results.Items,
+          ranMigrations,
+        });
+      });
+  }
+};
+
+const hasMigrationRan = async key => {
+  const { Item } = await dynamoDbDocumentClient
+    .get({
+      Key: {
+        pk: `migration|${key}`,
+        sk: `migration|${key}`,
+      },
+      TableName: `efcms-deploy-${process.env.ENVIRONMENT}`,
+    })
+    .promise();
+  return { [key]: !!Item };
+};
+
+exports.migrateRecords = async ({
   documentClient,
   items,
   ranMigrations = {},
@@ -41,13 +83,13 @@ export const migrateRecords = async ({
   return items;
 };
 
-export const processItems = async ({
-  documentClient,
-  items,
-  ranMigrations,
-}) => {
+exports.processItems = async ({ documentClient, items, ranMigrations }) => {
   try {
-    items = await migrateRecords({ documentClient, items, ranMigrations });
+    items = await exports.migrateRecords({
+      documentClient,
+      items,
+      ranMigrations,
+    });
   } catch (err) {
     applicationContext.logger.error('Error migrating records', err);
     throw err;
@@ -69,7 +111,7 @@ export const processItems = async ({
             .catch(e => {
               if (e.message.includes('The conditional request failed')) {
                 applicationContext.logger.info(
-                  `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
+                  `The item of ${item.pk} ${item.sk} already existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
                 );
                 return 'already-migrated';
               } else {
@@ -109,49 +151,7 @@ export const processItems = async ({
   }
 };
 
-const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
-  let hasMoreResults = true;
-  let lastKey = null;
-  while (hasMoreResults) {
-    hasMoreResults = false;
-
-    await dynamoDbDocumentClient
-      .scan({
-        ExclusiveStartKey: lastKey,
-        Segment: segment,
-        TableName: process.env.SOURCE_TABLE,
-        TotalSegments: totalSegments,
-      })
-      .promise()
-      .then(async results => {
-        applicationContext.logger.info(
-          `${segment}/${totalSegments} got ${results.Items.length} results`,
-        );
-        hasMoreResults = !!results.LastEvaluatedKey;
-        lastKey = results.LastEvaluatedKey;
-        await processItems({
-          documentClient: dynamoDbDocumentClient,
-          items: results.Items,
-          ranMigrations,
-        });
-      });
-  }
-};
-
-const hasMigrationRan = async key => {
-  const { Item } = await dynamoDbDocumentClient
-    .get({
-      Key: {
-        pk: `migration|${key}`,
-        sk: `migration|${key}`,
-      },
-      TableName: `efcms-deploy-${process.env.ENVIRONMENT}`,
-    })
-    .promise();
-  return { [key]: !!Item };
-};
-
-export const handler = async event => {
+exports.handler = async event => {
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
