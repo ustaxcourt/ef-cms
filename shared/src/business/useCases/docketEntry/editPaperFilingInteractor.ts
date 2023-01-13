@@ -65,7 +65,7 @@ const getEditPaperFilingStrategy = ({
     return singleDocketServeStrategy;
   }
 
-  throw new Error('No strategy found');
+  throw new Error('No strategy found to edit paper filing');
 };
 
 const singleDocketServeStrategy = async ({
@@ -200,7 +200,6 @@ const multiDocketServeStrategy = async ({
       status: true,
     });
 
-  let error;
   try {
     // TODO: do we need this???
     const user = await applicationContext
@@ -223,22 +222,27 @@ const multiDocketServeStrategy = async ({
       user,
     });
 
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        status: false,
+      });
+
     return paperServicePdfUrl;
   } catch (e) {
-    error = e;
-  }
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        status: false,
+      });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseEntity.docketNumber,
-      status: false,
-    });
-
-  if (error) {
-    throw error;
+    throw e;
   }
 };
 
@@ -250,7 +254,7 @@ const saveForLaterStrategy = async ({
   applicationContext: IApplicationContext;
   documentMetadata: any;
   docketEntryId: string;
-}) => {
+}): Promise<{ paperServicePdfUrl?: string }> => {
   const authorizedUser = authorizeRequest(applicationContext);
 
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
@@ -287,6 +291,8 @@ const saveForLaterStrategy = async ({
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  return { paperServicePdfUrl: undefined };
 };
 
 const validateDocketEntryCanBeEdited = ({
