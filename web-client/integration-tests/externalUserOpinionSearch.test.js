@@ -66,7 +66,7 @@ describe('verify opinion search works for external users', () => {
       new RegExp(`"docketNumber":"${cerebralTest.docketNumber}"`);
 
     // associated irs practitioner - unsealed case
-    loginAs(cerebralTest, 'irsPractitioner@example.com');
+    loginAs(cerebralTest, 'irspractitioner@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -75,7 +75,7 @@ describe('verify opinion search works for external users', () => {
     userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - unsealed case
-    loginAs(cerebralTest, 'privatePractitioner@example.com');
+    loginAs(cerebralTest, 'privatepractitioner@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -84,7 +84,7 @@ describe('verify opinion search works for external users', () => {
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - unsealed case
-    loginAs(cerebralTest, 'irsPractitioner2@example.com');
+    loginAs(cerebralTest, 'irspractitioner2@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -93,7 +93,7 @@ describe('verify opinion search works for external users', () => {
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated private practitioner - unsealed case
-    loginAs(cerebralTest, 'privatePractitioner2@example.com');
+    loginAs(cerebralTest, 'privatepractitioner2@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -106,7 +106,7 @@ describe('verify opinion search works for external users', () => {
     docketClerkSealsCase(cerebralTest);
 
     // associated irs practitioner - sealed case
-    loginAs(cerebralTest, 'irsPractitioner@example.com');
+    loginAs(cerebralTest, 'irspractitioner@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -115,7 +115,7 @@ describe('verify opinion search works for external users', () => {
     userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - sealed case
-    loginAs(cerebralTest, 'privatePractitioner@example.com');
+    loginAs(cerebralTest, 'privatepractitioner@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -124,7 +124,7 @@ describe('verify opinion search works for external users', () => {
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - sealed case
-    loginAs(cerebralTest, 'irsPractitioner2@example.com');
+    loginAs(cerebralTest, 'irspractitioner2@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -133,7 +133,7 @@ describe('verify opinion search works for external users', () => {
     userClicksDocketRecordLink(cerebralTest, false);
 
     // unassociated private practitioner - sealed case
-    loginAs(cerebralTest, 'privatePractitioner2@example.com');
+    loginAs(cerebralTest, 'privatepractitioner2@example.com');
     userPerformsAdvancedOpinionSearch(
       cerebralTest,
       getSearchParams,
@@ -152,7 +152,7 @@ describe('verify opinion search works for external users', () => {
     const ashfordOpinionDocumentTitleKeyValue =
       '"documentTitle":"Summary Opinion Judge Ashford An opinion for testing"';
 
-    loginAs(cerebralTest, 'privatePractitioner@example.com');
+    loginAs(cerebralTest, 'privatepractitioner@example.com');
 
     // Search by keyword with opinion type and date range where matches exist
     let getSearchParams = () => ({

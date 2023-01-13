@@ -30,7 +30,7 @@ describe('bulkImportJudgeUsers helpers', () => {
   beforeAll(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
     mockLegacyJudge = {
-      email: 'judgeFieri@example.com',
+      email: 'judgefieri@example.com',
       judgeFullName: 'Fieri',
       judgeTitle: 'Legacy Judge',
       name: 'Fieri',
@@ -40,7 +40,7 @@ describe('bulkImportJudgeUsers helpers', () => {
     };
 
     mockCurrentJudge = {
-      email: 'judgeDredd@example.com',
+      email: 'judgedredd@example.com',
       judgeFullName: 'Joseph S. Dredd',
       judgeTitle: 'Judge',
       name: 'Dredd',
