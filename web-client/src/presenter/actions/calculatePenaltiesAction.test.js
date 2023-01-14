@@ -56,7 +56,7 @@ describe('calculatePenaltiesAction', () => {
     expect(result.output.totalPenalties).toEqual('6.00');
   });
 
-  it('coerces empty string and null values to 0', async () => {
+  it('should total only penalties that contain a penalty name', async () => {
     const result = await runAction(calculatePenaltiesAction, {
       props: {},
       state: {
