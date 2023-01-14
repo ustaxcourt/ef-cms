@@ -61,10 +61,10 @@ describe('formattedTrialSessions formatSession', () => {
     const result = formatSession(TRIAL_SESSIONS_LIST[1], applicationContext);
     expect(result).toMatchObject({
       formattedEstimatedEndDate: '02/17/45',
-      formattedStartDate: '02/17/23',
+      formattedStartDate: '02/17/24',
       judge: { name: '6', userId: '6' },
-      startDate: '2023-02-17T15:00:00.000Z',
-      startOfWeek: 'February 13, 2023',
+      startDate: '2024-02-17T15:00:00.000Z',
+      startOfWeek: 'February 12, 2024',
     });
   });
 });
