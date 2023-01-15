@@ -37,7 +37,7 @@ const compileUser = async (applicationContext, user) => {
 
   const res = await applicationContext.getSearchClient().search({
     body: {
-      _source: ['name.S', 'role.S', 'email.S', 'section.S'],
+      _source: ['name.S', 'role.S', 'email.S', 'section.S', 'userId.S'],
       query: {
         terms: {
           'role.S': Object.values(internalRoles),
@@ -51,7 +51,7 @@ const compileUser = async (applicationContext, user) => {
       .map(hit => unmarshall(hit['_source']))
       .map(user => compileUser(applicationContext, user)),
   );
-  console.log('Role,Name,Section,Email,Exists,Enabled');
+  console.log('Role,Name,Section,Email,UserId,Exists,Enabled');
   users.forEach(user => {
     console.log(
       [
@@ -59,6 +59,7 @@ const compileUser = async (applicationContext, user) => {
         user.name,
         user.section,
         user.email,
+        user.userId,
         user.exists ? 'Yes' : 'No',
         user.enabled ? 'Yes' : 'No',
       ].join(','),
