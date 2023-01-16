@@ -130,7 +130,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   let serviceResults;
 
   try {
-    for (const docketNumber of docketNumbers) {
+    for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({

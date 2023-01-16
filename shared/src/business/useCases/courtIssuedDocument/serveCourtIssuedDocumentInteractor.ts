@@ -124,16 +124,14 @@ export const serveCourtIssuedDocumentInteractor = async (
 
   try {
     for (const docketNumber of docketNumbers) {
-      if (docketNumber !== subjectCaseDocketNumber) {
-        const caseToUpdate = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber,
-          });
+      const caseToUpdate = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
 
-        caseEntities.push(new Case(caseToUpdate, { applicationContext }));
-      }
+      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
     }
 
     caseEntities = await Promise.all(

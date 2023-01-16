@@ -14,23 +14,23 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
 }) => {
   const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
     applicationContext.getConstants();
+  const { isLeadCase } = applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
   const { eventCode } = get(state.form);
-  const consolidatedCases = caseDetail.consolidatedCases || [];
 
-  const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
+  const consolidatedCases = caseDetail.consolidatedCases || [];
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
+    .filter(consolidatedCase => !isLeadCase(consolidatedCase))
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
   if (
-    !isLeadCase ||
-    docketNumbers.length === 0 ||
+    !isLeadCase(caseDetail) ||
     NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)
   ) {
-    docketNumbers = [caseDetail.docketNumber];
+    docketNumbers = [];
   }
 
   return { docketNumbers };
