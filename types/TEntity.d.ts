@@ -21,49 +21,10 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
-type DocketEntry = {
-  additionalInfo: string;
-  addToCoversheet: boolean;
-  caseCaption: string;
-  certificateOfService: string;
-  createdAt: string;
-  descriptionDisplay: string;
-  docketEntryId: string;
-  docketNumber: string;
-  documentTitle: string;
-  documentType: string;
-  eventCode: string;
-  filedBy: string;
-  filingDate: string;
-  index: number;
-  isFileAttached: boolean;
-  isPaper: string;
-  lodged: boolean;
-  mailingDate: string;
-  otherFilingParty: string;
-  editState: object;
-  isLegacyServed: boolean;
-  processingStatus: string;
-  pk: string;
-  receivedAt: string;
-  sentBy: string;
-  servedAt: string;
-  sk: string;
-  userId: string;
-};
-
-type TDocketEntryEntity = {
-  setAsProcessingStatusAsCompleted: () => void;
-  setNumberOfPages: (numberOfPages: number) => void;
-
-  validate(): TDocketEntryEntity;
-  toRawObject(): DocketEntry;
-} & DocketEntry;
-
 type WorkItem = {
   createdAt: string;
   assigneeId: string;
-  docketEntry: DocketEntry;
+  docketEntry: RawDocketEntry;
   docketNumber: string;
   workItemId: string;
   completedAt: string;
@@ -77,7 +38,7 @@ type TOutboxItem = {
   completedAt: string;
   completedBy: string;
   caseIsInProgress: boolean;
-  docketEntry: DocketEntry;
+  docketEntry: RawDocketEntry;
   docketNumber: string;
   highPriority: boolean;
   inProgress: boolean;
@@ -102,10 +63,11 @@ type TDynamoRecord = {
 };
 
 type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
+type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
 
 type TSectionWorkItem = {
   createdAt: string;
-  docketEntry: DocketEntry[];
+  docketEntry: RawDocketEntry[];
   docketNumber: string;
   docketNumberSuffix: string;
   messages: any;
@@ -252,12 +214,8 @@ type TTrialSessionWorkingCopyData = {
 };
 
 type TCaseEntity = {
-  getDocketEntryById: ({
-    docketEntryId,
-  }: {
-    docketEntryId: string;
-  }) => TDocketEntryEntity;
-  addDocketEntry: (docketEntry: TDocketEntryEntity) => void;
+  getDocketEntryById: (options: { docketEntryId: string }) => any;
+  addDocketEntry: (docketEntry: any) => unknown;
 } & TCase;
 
 type TCase = {
@@ -269,7 +227,7 @@ type TCase = {
   isSealed: boolean;
   blockedDate: string;
   blockedReason: string;
-  docketEntries: DocketEntry[];
+  docketEntries: RawDocketEntry[];
   canAllowDocumentService: string;
   caseTitle: string;
   canAllowPrintableDocketRecord: string;
@@ -440,3 +398,16 @@ type TPrintableTableFilters = {
   statusUnassigned: boolean;
   takenUnderAdvisement: boolean;
 };
+
+type SubType<Base, Condition> = Pick<
+  Base,
+  {
+    [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
+  }[keyof Base]
+>;
+
+type KeyOfType<Base, Types> = {
+  [Key in keyof Base]: Base[Key] extends Types ? Key : never;
+}[keyof Base];
+
+type Primitives = boolean | string | number | null | undefined;

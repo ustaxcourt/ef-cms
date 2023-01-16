@@ -83,6 +83,7 @@ export const updateCourtIssuedDocketEntryInteractor = async (
   Object.assign(workItem, {
     docketEntry: {
       ...docketEntryEntity.toRawObject(),
+
       createdAt: docketEntryEntity.createdAt,
     },
   });

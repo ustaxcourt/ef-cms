@@ -573,4 +573,5 @@ export const TrialSession: typeof TrialSessionClass =
   validEntityDecorator(TrialSessionClass);
 
 // eslint-disable-next-line no-redeclare
-export interface TrialSessionClass extends TValidationEntity {}
+export interface TrialSessionClass
+  extends TValidationEntity<TrialSessionClass> {}
