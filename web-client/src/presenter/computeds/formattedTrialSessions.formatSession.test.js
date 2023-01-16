@@ -45,7 +45,6 @@ describe('formattedTrialSessions formatSession', () => {
 
   it('should format start date and estimated end date as "MM/DD/YYYY"', () => {
     const result = formatSession(mockTrialSessions[1], applicationContext);
-
     expect(result).toMatchObject({
       formattedEstimatedEndDate: '02/17/45',
       formattedStartDate: '02/17/44',

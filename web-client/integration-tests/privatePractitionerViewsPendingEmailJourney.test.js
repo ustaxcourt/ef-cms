@@ -68,7 +68,7 @@ describe('private practitioner views pending email journey', () => {
     );
   });
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerRequestsAccessToCase(cerebralTest, fakeFile);
 
   it('unassociated private practitioner views pending email for counsel on case', () => {

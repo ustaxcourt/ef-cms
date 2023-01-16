@@ -4,7 +4,7 @@ const {
 
 describe('A Colvins chambers user has the correct flow for QC documents', function () {
   it('should log in as chambers user', () => {
-    navigateToDashboard('colvinsChambers');
+    navigateToDashboard('colvinschambers');
   });
 
   it('should navigate to document QC', () => {
