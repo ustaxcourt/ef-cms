@@ -24,7 +24,7 @@ export const createPaperServicePdfForCasesAction = async ({
     console.log('fuuuuuu', e);
   }
 
-  return { docketEntryId, hasPaper, url };
+  return { docketEntryId, hasPaper, pdfUrl: url };
 };
 //call a diff interactor seeihng if it works
 //if YES, call that new interactor with our pdf data array and see if that works
