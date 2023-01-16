@@ -8,21 +8,22 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setDefaultPenaltiesAction = ({ get, props, store }) => {
-  // TODO: refactor this function some
-  const penalties = get(state.form.penalties);
-  const { subkey: penaltyType } = props;
+  // TODO: refactor this function some;
+  const { statisticIndex, subkey: penaltyType } = props;
+  const penalties = get(state.form.statistics[statisticIndex].penalties);
 
   let initialPenalties = penalties ?? [];
+
+  initialPenalties = initialPenalties.filter(
+    penalty => penalty.penaltyType === penaltyType,
+  );
 
   if (initialPenalties.length < 1) {
     initialPenalties.push({
       penaltyAmount: '',
       penaltyType,
     });
-  } else {
-    initialPenalties = initialPenalties.filter(
-      penalty => penalty.penaltyType != penaltyType,
-    );
   }
+
   store.set(state.modal.penalties, initialPenalties);
 };
