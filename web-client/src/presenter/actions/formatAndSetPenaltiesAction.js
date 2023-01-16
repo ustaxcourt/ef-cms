@@ -13,12 +13,12 @@ export const formatAndSetPenaltiesAction = ({ get, store }) => {
 
   const parseCurrency = value => Number(value).toFixed(2);
 
-  penalties.map(penalty => {
+  const formattedPenalties = penalties.map(penalty => {
     return {
       ...penalty,
       irsPenaltyAmount: parseCurrency(penalty.irsPenaltyAmount),
     };
   });
 
-  store.set(state.form.penalties, penalties);
+  store.set(state.form.penalties, formattedPenalties);
 };
