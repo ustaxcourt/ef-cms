@@ -1,6 +1,6 @@
 # How We Work
 
-## [Team Charter](https://docs.google.com/document/d/1N1jRH2KzZZKqXQ0XNWf3sVNLM8jpQ7UcVo1Vd7o2_3Q/edit)(updated 6/2022)
+## [Team Charter](https://docs.google.com/document/d/1N1jRH2KzZZKqXQ0XNWf3sVNLM8jpQ7UcVo1Vd7o2_3Q/edit) (updated 6/2022)
 
 ## Tools
 
