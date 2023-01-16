@@ -17,7 +17,8 @@
     "./types/**/*.d.ts",
     "./web-api/src/**/*",
     "./shared/src/**/*",
-    "./web-client/src/**/*"
+    "./web-client/src/**/*",
+    "./shared/src/business/entities/DocketEntry.ts"
   ],
   "exclude": ["node_modules"]
 }
