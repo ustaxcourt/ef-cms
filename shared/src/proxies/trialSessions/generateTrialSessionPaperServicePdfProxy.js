@@ -12,7 +12,6 @@ exports.generateTrialSessionPaperServicePdfInteractor = (
   applicationContext,
   { calendaredCasePdfDataArray },
 ) => {
-  console.log('PROXY', calendaredCasePdfDataArray);
   return post({
     applicationContext,
     body: { calendaredCasePdfDataArray },

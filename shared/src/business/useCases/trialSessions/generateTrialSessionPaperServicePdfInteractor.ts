@@ -40,10 +40,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       copyFrom: calendaredCasePdf,
       copyInto: paperServiceDocumentsPdf,
     });
-    console.log('1 paperServiceDocumentsPdf', paperServiceDocumentsPdf);
   }
-
-  console.log('2 paperServiceDocumentsPdf', paperServiceDocumentsPdf);
 
   const { docketEntryId, hasPaper, url } = await applicationContext
     .getUseCaseHelpers()
@@ -51,8 +48,6 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       applicationContext,
       document: paperServiceDocumentsPdf,
     });
-
-  console.log('url', url);
 
   if (url) {
     applicationContext.logger.info(
