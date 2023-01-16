@@ -7,10 +7,10 @@ The password is set to the environment variable found in the [setup documentatio
 petitioner1@example.com – petitioner5@example.com
 
 ### Private Practitioner
-privatePractitioner1@example.com – privatePractitioner10@example.com
+privatepractitioner1@example.com – privatePractitioner10@example.com
 
 ### IRS Attorney
-irsPractitioner1@example.com – irsPractitioner10@example.com
+irspractitioner1@example.com – irsPractitioner10@example.com
 
 ### IRS Super User
 service.agent.test@irs.gov (IRS Superuser)
