@@ -16,6 +16,6 @@ exports.generateTrialSessionPaperServicePdfInteractor = (
   return post({
     applicationContext,
     body: { calendaredCasePdfDataArray },
-    endpoint: '/async/trial-sessions/paper-service-pdf',
+    endpoint: '/trial-sessions/paper-service-pdf',
   });
 };
