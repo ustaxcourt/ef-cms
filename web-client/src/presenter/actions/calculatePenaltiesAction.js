@@ -7,15 +7,22 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @returns {number} total computed value from penalty values
  */
-export const calculatePenaltiesAction = ({ get, props }) => {
-  let { penalties, subkey: penaltyAmountType } = get(state.modal);
-  const { statisticIndex } = props;
+export const calculatePenaltiesAction = ({ get }) => {
+  let {
+    penalties,
+    statisticIndex,
+    subkey: penaltyAmountType,
+  } = get(state.modal);
 
   let initialPenalties =
     get(state.form.statistics[statisticIndex].penalties) || [];
 
   initialPenalties = initialPenalties.filter(penalty => {
     penalty.penaltyType !== penaltyAmountType;
+  });
+
+  penalties.forEach(penalty => {
+    penalty.penaltyType = penaltyAmountType;
   });
 
   penalties = penalties.filter(penalty => penalty.name);
@@ -25,7 +32,7 @@ export const calculatePenaltiesAction = ({ get, props }) => {
   const parseCurrency = value => Number(value).toFixed(2);
 
   const penaltyAggregator = (sum, penalty) =>
-    Number(sum) + Number(penalty[penaltyAmountType]);
+    Number(sum) + Number(penalty.penaltyAmount);
 
   const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));
 
