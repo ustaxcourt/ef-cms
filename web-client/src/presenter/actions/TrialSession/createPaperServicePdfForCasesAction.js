@@ -11,7 +11,7 @@ export const createPaperServicePdfForCasesAction = async ({
   applicationContext,
   props,
 }) => {
-  let { trialNoticePdfsKeys } = props;
+  const { trialNoticePdfsKeys } = props;
 
   const { docketEntryId, hasPaper, pdfUrl } = await applicationContext
     .getUseCases()
