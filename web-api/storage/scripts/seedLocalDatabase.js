@@ -27,7 +27,7 @@ const putEntries = async entries => {
     try {
       validationMigration(chunk);
     } catch (e) {
-      console.log('Seed data is invalid, exiting.');
+      console.log('Seed data is invalid, exiting.', e);
       process.exit(1);
     }
 

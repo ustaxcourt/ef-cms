@@ -115,6 +115,7 @@ export class DocketEntryClass {
       petitioners,
     }: { applicationContext: IApplicationContext; petitioners?: any[] },
   ) {
+    this.entityName = 'DocketEntry';
     this.init(rawDocketEntry, { applicationContext, petitioners });
   }
 
@@ -248,7 +249,7 @@ export class DocketEntryClass {
     this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
-        ? isPendingOnCreation(rawDocketEntry)
+        ? DocketEntry.isPendingOnCreation(rawDocketEntry)
         : rawDocketEntry.pending;
     if (rawDocketEntry.previousDocument) {
       this.previousDocument = {
@@ -277,24 +278,6 @@ export class DocketEntryClass {
    */
   setWorkItem(workItem) {
     this.workItem = workItem;
-  }
-
-  /**
-   * The pending boolean on the DocketEntry just represents if the user checked the
-   * add to pending report checkbox.  This is a computed that uses that along with
-   * eventCodes and servedAt to determine if the docket entry is pending.
-   *
-   * @param {DocketEntryClass} docketEntry the docket entry to check pending state
-   * @returns {boolean} is the docket entry is pending or not
-   */
-  isPending(docketEntry) {
-    return (
-      docketEntry.pending &&
-      (isServed(docketEntry) ||
-        UNSERVABLE_EVENT_CODES.find(
-          unservedCode => unservedCode === docketEntry.eventCode,
-        ))
-    );
   }
 
   /**
@@ -529,6 +512,30 @@ and contact info from the raw docket entry
     this.isSealed = false;
     this.isLegacySealed = false;
   }
+
+  static isPendingOnCreation(rawDocketEntry) {
+    return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(
+      rawDocketEntry.eventCode,
+    );
+  }
+
+  /**
+   * The pending boolean on the DocketEntry just represents if the user checked the
+   * add to pending report checkbox.  This is a computed that uses that along with
+   * eventCodes and servedAt to determine if the docket entry is pending.
+   *
+   * @param {DocketEntryClass} docketEntry the docket entry to check pending state
+   * @returns {boolean} is the docket entry is pending or not
+   */
+  static isPending(docketEntry) {
+    return (
+      docketEntry.pending &&
+      (isServed(docketEntry) ||
+        UNSERVABLE_EVENT_CODES.find(
+          unservedCode => unservedCode === docketEntry.eventCode,
+        ))
+    );
+  }
 }
 
 /**
@@ -561,16 +568,6 @@ export const getServedPartiesCode = servedParties => {
   }
   return servedPartiesCode;
 };
-
-/**
- * Determines if the docket entry is in the list of document types that
- * are marked as pending as soon as they are created.
- *
- * @returns {boolean} is the docket entry is pending when it is created
- */
-export function isPendingOnCreation(rawDocketEntry) {
-  return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
-}
 
 joiValidationDecorator(DocketEntryClass, DOCKET_ENTRY_VALIDATION_RULES, {
   filedBy: [
