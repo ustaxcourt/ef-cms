@@ -26,13 +26,13 @@ describe('Document title journey', () => {
     completeDocumentTypeSectionHelperComputed,
   );
 
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   practitionerCreatesNewCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   it('Practitioner files Exhibit(s) document', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -161,7 +161,7 @@ describe('Document title journey', () => {
     );
   });
 
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   it('Practitioner files amendment to Exhibit(s) document', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
