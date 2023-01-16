@@ -41,6 +41,7 @@ const addPaperFilingMultiDocketableFlow = [
 ];
 
 const editPaperFilingNotMultiDocketableFlow = [
+  getDocketNumbersForConsolidatedServiceAction,
   submitEditPaperFilingAction,
   isCoversheetNeededAction,
   {
