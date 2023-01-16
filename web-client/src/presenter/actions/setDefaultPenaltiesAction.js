@@ -7,20 +7,22 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const setDefaultPenaltiesAction = ({ get, store }) => {
+export const setDefaultPenaltiesAction = ({ get, props, store }) => {
   // TODO: refactor this function some
   const penalties = get(state.form.penalties);
-  penalties;
+  const { penaltyType } = props;
+
   let initialPenalties = penalties ?? [];
 
   if (initialPenalties.length < 1) {
     initialPenalties.push({
-      // TODO: Move to an array on the Statistic Entity
-      // determinationPenaltyAmount: '0',
-      irsPenaltyAmount: '',
+      penaltyAmount: '',
+      penaltyType,
     });
   } else {
-    initialPenalties = initialPenalties.filter(penalty => penalty.name);
+    initialPenalties = initialPenalties.filter(
+      penalty => penalty.penaltyType != penaltyType,
+    );
   }
   store.set(state.modal.penalties, initialPenalties);
 };
