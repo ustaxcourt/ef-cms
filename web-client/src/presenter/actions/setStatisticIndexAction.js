@@ -9,6 +9,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setStatisticIndexAction = ({ props, store }) => {
+  //TODO: do we need these on state later on?
   store.set(state.modal.statisticIndex, props.statisticIndex);
   store.set(state.modal.key, props.key);
   store.set(state.modal.subkey, props.subkey);
