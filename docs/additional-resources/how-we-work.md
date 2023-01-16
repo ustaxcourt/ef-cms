@@ -4,8 +4,9 @@
 
 -   GitHub: We use our [GitHub organization](https://github.com/ustaxcourt/ef-cms) for storing both software and collaboratively-maintained text.
 -   ZenHub: We use the vendor's [ZenHub organization](https://github.com/flexion/ef-cms#workspaces/ef-cms-5bbe4bed4b5806bc2bec65d3/boards?repos=152320868&showPipelineDescriptions=false) for storing the product backlog.
--   Zoom: We use both the Court's and vendor's Zoom accounts for video teleconferences.
--   Slack: We use both the Court's and vendor's Slack for communication that falls outside of the structure of GitHub or ZenHub, but that doesn't rise to the level of email, or for communication that it's helpful for everybody else to be able to observe. Notable channels include:
+-   Trello: We use trello to maintain our [DevEx/OpEx backlog](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex)and [Team Experiments](https://trello.com/b/KwIWKgeb/dawson-experiments)
+-   Zoom: We use both the Court's and vendor's Zoom accounts for video teleconferences. All mobbing/paring/collaborative coding starts in [Clarion](https://us02web.zoom.us/j/87484491162?pwd=aGN0NFhTUTE3MHY0RHZFd3hUZ2tCUT09#success)
+-   Slack: We use Slack for communication that falls outside of the structure of GitHub or ZenHub, but that doesn't rise to the level of email, or for communication that it's helpful for everybody else to be able to observe. Notable channels include:
     - #ustcproject — Main project channel. Used to communicate high-level messages re: project
     - #ustc-story-channel — Channel used to communicate story-related work.
     - #ustcux — Design/research-specific channel.
@@ -21,12 +22,12 @@ There are two basic meeting rhythms: daily standups and weekly/bi-weekly agile s
 
 ### Weekly
 
-- **Stakeholder meeting** — on Mondays and Fridays, we review the current project status with stakeholders at the Court and discuss the schedule of large releases that need off-hours deployments
-- **Backlog refinement** — As needed
+- **DAWSON Stakeholder meeting** — on Mondays and Fridays, we review the current project status with stakeholders at the Court and discuss the schedule of large releases that need off-hours deployments. Currenly only attended by court staff and delivery manager. 
+- **Backlog refinement** — Weekly on Tuesdays
 
 ### Bi-weekly
 
-- **Sprint review** — Every other Thursday, demo to client stakeholders
+- **Sprint Demo** — Every other Thursday, demo to client stakeholders
 - **Sprint retrospective** — Every other Tuesday
 
 ## Product Team
