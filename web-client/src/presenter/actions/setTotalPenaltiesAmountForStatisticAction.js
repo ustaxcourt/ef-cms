@@ -18,5 +18,5 @@ export const setTotalPenaltiesAmountForStatisticAction = ({
   const { key, statisticIndex } = get(state.modal);
 
   store.set(state.form.statistics[statisticIndex][key], totalPenalties);
-  store.set(state.form.statistics[statisticIndex], penalties);
+  store.set(state.form.statistics[statisticIndex].penalties, penalties);
 };
