@@ -47,9 +47,9 @@ This team will participate in all scrum ceremonies in service of prioritizing, d
 
 We recognize that the Court staff and members of the public will be critical to helping us develop solutions that will deliver better service to petitioners, practitioners, and Court staff. We continuously perform observational research and usability testing, and create lightweight prototypes, to iterate on designs and develop a system that meets end-user needs.
 
-### Definition of Done
+### Definition of Ready/Done
 
-There are two checklists that define what "done" is for [user stories](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/ustc-story-template.md) and [bug fixes](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/bug-report.md).
+There are checklists that define what "Ready" or "done" means. For [user stories](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/ustc-story-template.md) and [bug fixes](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/bug-report.md).
 
 ### Accepting Vendor Work
 
