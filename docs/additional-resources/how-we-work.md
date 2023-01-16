@@ -1,5 +1,7 @@
 # How We Work
 
+## [Team Charter](https://docs.google.com/document/d/1N1jRH2KzZZKqXQ0XNWf3sVNLM8jpQ7UcVo1Vd7o2_3Q/edit)(updated 6/2022)
+
 ## Tools
 
 -   GitHub: We use our [GitHub organization](https://github.com/ustaxcourt/ef-cms) for storing both software and collaboratively-maintained text.
