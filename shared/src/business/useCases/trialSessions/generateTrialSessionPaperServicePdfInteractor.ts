@@ -58,5 +58,5 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     );
   }
 
-  return { docketEntryId, hasPaper, url };
+  return { docketEntryId, hasPaper, pdfUrl: url || null };
 };
