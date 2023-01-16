@@ -13,23 +13,21 @@
 
 ## Meetings
 
-There are two basic meeting rhythms: daily design calls/standups and bi-weekly agile sprint rituals. All meetings are held via video teleconference. A telephone bridge is maintained as a backup method of connecting, but participants are strongly encouraged to join via video.
+There are two basic meeting rhythms: daily standups and weekly/bi-weekly agile sprint rituals. All meetings are held via video teleconference. A telephone bridge is maintained as a backup method of connecting, but participants are strongly encouraged to join via video.
 
 ### Daily
 
-- **Daily design sync** — this meeting is a time to solution functionality, demo in-progress work with the team and review new wireframes
 - **Daily standup**
 
 ### Weekly
 
 - **Stakeholder meeting** — on Mondays and Fridays, we review the current project status with stakeholders at the Court and discuss the schedule of large releases that need off-hours deployments
+- **Backlog refinement** — As needed
 
 ### Bi-weekly
 
-- **Sprint review** — Every other Tuesday, demo to client stakeholders
+- **Sprint review** — Every other Thursday, demo to client stakeholders
 - **Sprint retrospective** — Every other Tuesday
-- **Sprint planning** — Every other Wednesday
-- **Backlog grooming** — As needed
 
 ## Product Team
 
@@ -39,17 +37,15 @@ There is a cross functional product team for the U.S. Tax Court case management 
 -   Technical lead: U.S. Tax Court
 -   User Experience designer: vendor
 -   Visual designer: vendor
--   Researcher: vendor
+-   UX Researcher: vendor
 -   Developers (Front-end, Back-end, Full-stack): vendor
--   Scrum Master: vendor
+-   Scrum Master/Delivery Manager: vendor
 
 This team will participate in all scrum ceremonies in service of prioritizing, defining and delivering value to the Court and the stakeholders it serves.
 
 ## Design Research
 
 We recognize that the Court staff and members of the public will be critical to helping us develop solutions that will deliver better service to petitioners, practitioners, and Court staff. We continuously perform observational research and usability testing, and create lightweight prototypes, to iterate on designs and develop a system that meets end-user needs.
-
-## Making Code Changes
 
 ### Definition of Done
 
