@@ -15,10 +15,6 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
   { calendaredCasePdfDataArray }: { calendaredCasePdfDataArray: any[] },
 ) => {
-  console.log(
-    '********* calendaredCasePdfDataArray in genInteractor',
-    calendaredCasePdfDataArray,
-  );
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -28,14 +24,17 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
-  console.log(
-    'calendaredCasePdfDataArray in genInteractor',
-    calendaredCasePdfDataArray,
-  );
   for (let index = 0; index < calendaredCasePdfDataArray.length; index++) {
-    const calendaredCasePdf = await PDFDocument.load(
-      calendaredCasePdfDataArray[index].data,
-    );
+    const calendaredCasePdfData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: calendaredCasePdfDataArray[index],
+        protocol: 'S3',
+        useTempBucket: true,
+      });
+
+    const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
 
     await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
       copyFrom: calendaredCasePdf,

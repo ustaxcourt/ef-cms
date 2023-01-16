@@ -152,16 +152,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       continue;
     }
 
-    const calendaredCasePdfData = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        key: `${jobId}-${calendaredCase.docketNumber}`,
-        protocol: 'S3',
-        useTempBucket: true,
-      });
-
-    calendaredCasePdfDataArray.push(calendaredCasePdfData);
+    calendaredCasePdfDataArray.push(`${jobId}-${calendaredCase.docketNumber}`);
   }
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
