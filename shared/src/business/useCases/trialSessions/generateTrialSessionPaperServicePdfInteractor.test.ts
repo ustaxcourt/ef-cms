@@ -19,10 +19,10 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   });
 
-  let trialNoticePdfsKeysArray;
+  let trialNoticePdfsKeys;
 
   beforeEach(() => {
-    trialNoticePdfsKeysArray = ['1234-5678'];
+    trialNoticePdfsKeys = ['1234-5678'];
 
     applicationContext.getCurrentUser.mockReturnValue(user);
 
@@ -44,36 +44,36 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
 
     await expect(
       generateTrialSessionPaperServicePdfInteractor(applicationContext, {
-        trialNoticePdfsKeysArray,
+        trialNoticePdfsKeys,
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should save the combined copies of the calendared cases for the trial sessions', async () => {
-    trialNoticePdfsKeysArray = ['123-123', '456-456', '789-789'];
+    trialNoticePdfsKeys = ['123-123', '456-456', '789-789'];
 
     await generateTrialSessionPaperServicePdfInteractor(applicationContext, {
-      trialNoticePdfsKeysArray,
+      trialNoticePdfsKeys,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledTimes(trialNoticePdfsKeysArray.length);
+    ).toHaveBeenCalledTimes(trialNoticePdfsKeys.length);
     expect(
       applicationContext.getUtilities().copyPagesAndAppendToTargetPdf,
-    ).toHaveBeenCalledTimes(trialNoticePdfsKeysArray.length);
+    ).toHaveBeenCalledTimes(trialNoticePdfsKeys.length);
 
     const pdfDoc =
       applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
         .calls[0][0].document;
-    expect(pdfDoc.getPages().length).toBe(trialNoticePdfsKeysArray.length);
+    expect(pdfDoc.getPages().length).toBe(trialNoticePdfsKeys.length);
   });
 
   it('should return paper service pdf related information', async () => {
     const result = await generateTrialSessionPaperServicePdfInteractor(
       applicationContext,
       {
-        trialNoticePdfsKeysArray,
+        trialNoticePdfsKeys,
       },
     );
 
@@ -96,7 +96,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     const result = await generateTrialSessionPaperServicePdfInteractor(
       applicationContext,
       {
-        trialNoticePdfsKeysArray,
+        trialNoticePdfsKeys,
       },
     );
 
