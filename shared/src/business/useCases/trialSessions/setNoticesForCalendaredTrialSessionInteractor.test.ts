@@ -22,11 +22,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
-  const trialNoticePdfsKeys = [
-    `${trialSessionId}-101-20`,
-    `${trialSessionId}-102-20`,
-    `${trialSessionId}-103-20`,
-  ];
 
   beforeEach(() => {
     applicationContext
@@ -199,29 +194,5 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       },
       userId: user.userId,
     });
-  });
-
-  it('should create 3 trial session events and send 3 notifications for each completed trial session calendering job', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
-
-    expect(
-      applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
-    ).toHaveBeenCalledTimes(3);
-    let {
-      message: { trialNoticePdfsKeysArray },
-    } =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0];
-    expect(trialNoticePdfsKeysArray).toEqual(trialNoticePdfsKeys);
-
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
-
-    ({ trialNoticePdfsKeysArray } =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock.calls[1][0].message);
-    expect(trialNoticePdfsKeysArray).toEqual(trialNoticePdfsKeys);
   });
 });

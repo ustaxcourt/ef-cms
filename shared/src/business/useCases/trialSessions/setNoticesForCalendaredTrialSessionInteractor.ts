@@ -137,7 +137,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  let trialNoticePdfsKeysArray = [];
+  let trialNoticePdfsKeys = [];
 
   for (let calendaredCase of calendaredCases) {
     const casePdfDocumentsExistsInS3 = await applicationContext
@@ -152,14 +152,14 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       continue;
     }
 
-    trialNoticePdfsKeysArray.push(`${jobId}-${calendaredCase.docketNumber}`);
+    trialNoticePdfsKeys.push(`${jobId}-${calendaredCase.docketNumber}`);
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      trialNoticePdfsKeysArray,
+      trialNoticePdfsKeys,
     },
     userId: user.userId,
   });
