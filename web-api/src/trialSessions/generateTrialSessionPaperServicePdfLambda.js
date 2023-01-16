@@ -8,15 +8,6 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.generateTrialSessionPaperServicePdfLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const calendaredCasePdfDataArray = {
-      ...JSON.parse(event.body),
-    };
-
-    console.log(
-      'calendaredCasePdfDataArray LAMBDA',
-      calendaredCasePdfDataArray,
-    );
-
     return await applicationContext
       .getUseCases()
       .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
