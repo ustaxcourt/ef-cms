@@ -13,7 +13,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
-  { trialNoticePdfsKeysArray }: { trialNoticePdfsKeysArray: any[] },
+  { trialNoticePdfsKeysArray }: { trialNoticePdfsKeysArray: string[] },
 ) => {
   const user = applicationContext.getCurrentUser();
 
