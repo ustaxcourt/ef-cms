@@ -7,10 +7,8 @@ import {
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCalendaredTrialSessionInteractor';
-import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
-  const mockPdfUrl = 'www.example.com';
   const unAuthorizedUser = new User({
     name: PARTY_TYPES.petitioner,
     role: ROLES.petitioner,
@@ -24,6 +22,11 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
+  const trialNoticePdfsKeys = [
+    `${trialSessionId}-101-20`,
+    `${trialSessionId}-102-20`,
+    `${trialSessionId}-103-20`,
+  ];
 
   beforeEach(() => {
     applicationContext
@@ -57,12 +60,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         unfinishedCases: 1,
       });
     applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        hasPaper: true,
-        url: mockPdfUrl,
-      });
-    applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
     applicationContext
@@ -70,9 +67,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
     applicationContext.getPersistenceGateway().setTrialSessionProcessingStatus =
       jest.fn();
-    applicationContext
-      .getPersistenceGateway()
-      .getDocument.mockResolvedValue(testPdfDoc);
 
     applicationContext.logger.warn.mockResolvedValue(
       `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
@@ -117,11 +111,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUtilities().copyPagesFromPdf,
     ).not.toHaveBeenCalled();
-
-    const pdfDoc =
-      applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
-        .calls[0][0].document;
-    expect(pdfDoc.getPages().length).toBe(0);
   });
 
   it('should NOT attempt to start a trial session calendering event if its already processing or completed', async () => {
@@ -199,17 +188,17 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId,
     });
 
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: {
-          action: 'notice_generation_complete',
-          hasPaper: false,
-        },
-        userId: user.userId,
-      }),
-    );
+    const result =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0];
+
+    expect(result).toMatchObject({
+      message: {
+        action: 'notice_generation_complete',
+        hasPaper: false,
+      },
+      userId: user.userId,
+    });
   });
 
   it('should create 3 trial session events and send 3 notifications for each completed trial session calendering job', async () => {
@@ -220,47 +209,19 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
     ).toHaveBeenCalledTimes(3);
-    const {
-      message: { hasPaper, pdfUrl },
-      userId,
+    let {
+      message: { trialNoticePdfsKeysArray },
     } =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0];
-    expect(pdfUrl).toBe(mockPdfUrl);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        url: null,
-      });
+    expect(trialNoticePdfsKeysArray).toEqual(trialNoticePdfsKeys);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId,
     });
 
-    const { pdfUrl: pdfUrlNull } =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message;
-    expect(pdfUrlNull).toBe(null);
-    expect(hasPaper).toBe(true);
-    expect(userId).toBe(user.userId);
-  });
-
-  it('should save the combined copies of the calendared cases for the trial sessions', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledTimes(3);
-    expect(
-      applicationContext.getUtilities().copyPagesAndAppendToTargetPdf,
-    ).toHaveBeenCalledTimes(3);
-
-    const pdfDoc =
-      applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
-        .calls[0][0].document;
-    expect(pdfDoc.getPages().length).toBe(3);
+    ({ trialNoticePdfsKeysArray } =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock.calls[1][0].message);
+    expect(trialNoticePdfsKeysArray).toEqual(trialNoticePdfsKeys);
   });
 });

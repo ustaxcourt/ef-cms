@@ -13,11 +13,11 @@ export const createPaperServicePdfForCasesAction = async ({
 }) => {
   let { trialNoticePdfsKeysArray } = props;
 
-  const { docketEntryId, hasPaper, url } = await applicationContext
+  const { docketEntryId, hasPaper, pdfUrl } = await applicationContext
     .getUseCases()
     .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
       trialNoticePdfsKeysArray,
     });
 
-  return { docketEntryId, hasPaper, pdfUrl: url };
+  return { docketEntryId, hasPaper, pdfUrl };
 };

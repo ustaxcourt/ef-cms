@@ -154,6 +154,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
     trialNoticePdfsKeysArray.push(`${jobId}-${calendaredCase.docketNumber}`);
   }
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
