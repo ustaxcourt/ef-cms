@@ -5,7 +5,7 @@
 -   GitHub: We use our [GitHub organization](https://github.com/ustaxcourt/ef-cms) for storing both software and collaboratively-maintained text.
 -   ZenHub: We use the vendor's [ZenHub organization](https://github.com/flexion/ef-cms#workspaces/ef-cms-5bbe4bed4b5806bc2bec65d3/boards?repos=152320868&showPipelineDescriptions=false) for storing the product backlog.
 -   Trello: We use trello to maintain our [DevEx/OpEx backlog](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex)and [Team Experiments](https://trello.com/b/KwIWKgeb/dawson-experiments)
--   Zoom: We use both the Court's and vendor's Zoom accounts for video teleconferences. All mobbing/paring/collaborative coding starts in [Clarion](https://us02web.zoom.us/j/87484491162?pwd=aGN0NFhTUTE3MHY0RHZFd3hUZ2tCUT09#success)
+-   Zoom: We use both the Court's and vendor's Zoom accounts for video teleconferences. 
 -   Slack: We use Slack for communication that falls outside of the structure of GitHub or ZenHub, but that doesn't rise to the level of email, or for communication that it's helpful for everybody else to be able to observe. Notable channels include:
     - #ustcproject — Main project channel. Used to communicate high-level messages re: project
     - #ustc-story-channel — Channel used to communicate story-related work.
@@ -19,6 +19,7 @@ There are two basic meeting rhythms: daily standups and weekly/bi-weekly agile s
 ### Daily
 
 - **Daily standup**
+- **Mobbing** - All mobbing/paring/collaborative coding starts in [Clarion](https://us02web.zoom.us/j/87484491162?pwd=aGN0NFhTUTE3MHY0RHZFd3hUZ2tCUT09#success)
 
 ### Weekly
 
@@ -36,11 +37,9 @@ There is a cross functional product team for the U.S. Tax Court case management 
 
 -   Product owner: U.S. Tax Court
 -   Technical lead: U.S. Tax Court
--   User Experience designer: vendor
--   Visual designer: vendor
--   UX Researcher: vendor
--   Developers (Front-end, Back-end, Full-stack): vendor
--   Scrum Master/Delivery Manager: vendor
+-   User Experience Design & Research: Vendor
+-   Developers (Front-end, Back-end, Full-stack): Vendor
+-   Scrum Master/Delivery Manager: Vendor
 
 This team will participate in all scrum ceremonies in service of prioritizing, defining and delivering value to the Court and the stakeholders it serves.
 
