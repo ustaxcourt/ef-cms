@@ -50,7 +50,7 @@ describe('Modify Respondent Contact Information', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentUpdatesAddress(cerebralTest);
 
   it('wait for notice of change of address to be generated for each case the respondent is associated with', async () => {

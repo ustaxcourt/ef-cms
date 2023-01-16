@@ -16,6 +16,7 @@ export class TrialSessionInfoDto {
   public noticeIssuedDate: string;
   public sessionScope: string;
   public sessionStatus: string;
+  public swingSession: boolean;
 
   constructor(rawTrialSession: TTrialSessionData) {
     this.estimatedEndDate = rawTrialSession.estimatedEndDate;
@@ -32,5 +33,6 @@ export class TrialSessionInfoDto {
     this.trialSessionId = rawTrialSession.trialSessionId;
     this.noticeIssuedDate = rawTrialSession.noticeIssuedDate;
     this.sessionStatus = rawTrialSession.sessionStatus;
+    this.swingSession = rawTrialSession.swingSession;
   }
 }

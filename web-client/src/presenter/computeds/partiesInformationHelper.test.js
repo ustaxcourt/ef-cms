@@ -122,7 +122,7 @@ describe('partiesInformationHelper', () => {
 
   describe('formattedPetitioners', () => {
     it('should set representingPractitioners and their pending emails when they exist for a petitioner', () => {
-      const mockPendingPractitionerEmail = 'pendingPractitioner@example.com';
+      const mockPendingPractitionerEmail = 'pendingpractitioner@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
