@@ -13,7 +13,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
-  { calendaredCasePdfDataArray }: { calendaredCasePdfDataArray: any[] },
+  { trialNoticePdfsKeysArray }: { trialNoticePdfsKeysArray: any[] },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -24,12 +24,12 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
-  for (let index = 0; index < calendaredCasePdfDataArray.length; index++) {
+  for (let index = 0; index < trialNoticePdfsKeysArray.length; index++) {
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: calendaredCasePdfDataArray[index],
+        key: trialNoticePdfsKeysArray[index],
         protocol: 'S3',
         useTempBucket: true,
       });
