@@ -75,23 +75,23 @@ describe('headerHelper', () => {
     expect(result.showMessages).toBe(false);
   });
 
-  it('should show the messages dropdpown for case services supervisors', () => {
+  it('should show the messages and document qc dropdpown menus for case services supervisors', () => {
     const result = runCompute(headerHelper, {
       state: getBaseState({ role: ROLES.caseServicesSupervisor }),
     });
-    expect(result.showMessagesDropDown).toBe(true);
+    expect(result.showMessagesAndQCDropDown).toBe(true);
   });
 
-  it('should not show the messages drop down for non case services supervisors', () => {
+  it('should not show the messages and document qc drop down menus for non case services supervisors', () => {
     [...internal, ...external].forEach(role => {
       const result = runCompute(headerHelper, {
         state: getBaseState({ role }),
       });
-      expect(result.showMessagesDropDown).toBe(false);
+      expect(result.showMessagesAndQCDropDown).toBe(false);
     });
   });
 
-  it('should not show messages for internal users with the general role', () => {
+  it('should not show messages and document qc dropdown menus for internal users with the general role', () => {
     const result = runCompute(headerHelper, {
       state: getBaseState({ role: ROLES.general }),
     });
@@ -161,6 +161,13 @@ describe('headerHelper', () => {
       });
       expect(result.showDocumentQC).toBeFalsy();
     });
+  });
+
+  it('should NOT show document qc for case services supervisors', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: ROLES.caseServicesSupervisor }),
+    });
+    expect(result.showDocumentQC).toBe(false);
   });
 
   it('should NOT show trial sessions for external users', () => {
