@@ -9,10 +9,12 @@ import { state } from 'cerebral';
  */
 export const setMultiDocketingCheckboxesAction = ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
-  const { consolidatedCases } = props;
+  const consolidatedCases =
+    props.consolidatedCases || get(state.caseDetail.consolidatedCases);
 
   const consolidatedCasesWithCheckboxInfo = consolidatedCases.map(aCase => ({
     checkboxDisabled: true,

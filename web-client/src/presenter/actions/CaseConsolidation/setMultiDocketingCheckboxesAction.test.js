@@ -12,7 +12,7 @@ describe('setMultiDocketingCheckboxesAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should format petitioner names and update state correctly', async () => {
+  it('should format petitioner names and create consolidated checkbox items on modal state', async () => {
     const { state } = await runAction(setMultiDocketingCheckboxesAction, {
       modules: {
         presenter,
@@ -61,5 +61,31 @@ describe('setMultiDocketingCheckboxesAction', () => {
       },
     ]);
     expect(state.modal.form.consolidatedCaseAllCheckbox).toEqual(true);
+  });
+
+  it('should get consolidated cases from state when they are not available in props', async () => {
+    const mockConsolidatedCases = [
+      MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      MOCK_CASE_WITH_SECONDARY_OTHERS,
+    ];
+
+    const { state } = await runAction(setMultiDocketingCheckboxesAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        consolidatedCases: undefined,
+      },
+      state: {
+        caseDetail: {
+          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+          consolidatedCases: mockConsolidatedCases,
+        },
+      },
+    });
+
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn.length).toEqual(
+      mockConsolidatedCases.length,
+    );
   });
 });
