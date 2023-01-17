@@ -66,6 +66,11 @@ export const addPaperFilingInteractor = async (
 
   if (!isCaseConsolidationFeatureOn) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
+  } else {
+    consolidatedGroupDocketNumbers = [
+      subjectCaseDocketNumber,
+      ...consolidatedGroupDocketNumbers,
+    ];
   }
 
   const isReadyForService =
