@@ -41,7 +41,6 @@ const addPaperFilingMultiDocketableFlow = [
 ];
 
 const editPaperFilingNotMultiDocketableFlow = [
-  getDocketNumbersForConsolidatedServiceAction,
   submitEditPaperFilingAction,
   isCoversheetNeededAction,
   {
@@ -89,6 +88,9 @@ export const submitPaperFilingSequence = [
           isEditingDocketEntryAction,
           {
             no: [
+              () => {
+                console.log('I AM NOT EDITING');
+              },
               isFileAttachedAction,
               {
                 no: addPaperFilingMultiDocketableFlow,
@@ -98,6 +100,9 @@ export const submitPaperFilingSequence = [
               },
             ],
             yes: [
+              () => {
+                console.log('I AM EDITING');
+              },
               getCaseAction,
               setCaseAction,
               isWorkItemAlreadyCompletedAction,
