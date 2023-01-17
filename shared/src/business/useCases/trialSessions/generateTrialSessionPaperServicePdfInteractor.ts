@@ -4,13 +4,14 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
+// eslint-disable-next-line spellcheck/spell-checker
 /**
  * generateTrialSessionPaperServicePdfInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id for the trial session
- * @returns {string} trial session calendar pdf url
+ * @param {string} providers.trialNoticePdfsKeys the trialNoticePdfsKeys
+ * @returns {object} docketEntryId, hasPaper, pdfUrl
  */
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
