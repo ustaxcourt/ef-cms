@@ -1,14 +1,23 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ItemizedPenaltiesModal } from './ItemizedPenaltiesModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const Statistics = connect(
   {
     caseDetail: state.caseDetail,
+    openItemizedPenaltiesModalSequence:
+      sequences.openItemizedPenaltiesModalSequence,
+    showModal: state.modal.showModal,
     statisticsHelper: state.statisticsHelper,
   },
-  function Statistics({ caseDetail, statisticsHelper }) {
+  function Statistics({
+    caseDetail,
+    openItemizedPenaltiesModalSequence,
+    showModal,
+    statisticsHelper,
+  }) {
     return (
       <>
         {statisticsHelper.showAddButtons && (
@@ -90,6 +99,15 @@ export const Statistics = connect(
                             Edit Year/Period
                           </Button>
                         )}
+                        <Button
+                          link
+                          className="padding-0 margin-left-2"
+                          onClick={() => {
+                            openItemizedPenaltiesModalSequence();
+                          }}
+                        >
+                          View Itemized Penalties
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -140,6 +158,7 @@ export const Statistics = connect(
             </div>
           </div>
         )}
+        {showModal === 'ItemizedPenaltiesModal' && <ItemizedPenaltiesModal />}
       </>
     );
   },
