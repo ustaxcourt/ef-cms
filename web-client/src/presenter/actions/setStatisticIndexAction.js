@@ -10,8 +10,11 @@ import { state } from 'cerebral';
  */
 export const setStatisticIndexAction = ({ props, store }) => {
   //TODO: do we need these on state later on?
-  props.statisticIndex ??
-    store.set(state.modal.statisticIndex, props.statisticIndex);
-  store.set(state.modal.key, props.key);
-  store.set(state.modal.subkey, props.subkey);
+  const { key, statisticIndex, subkey } = props;
+
+  if (typeof statisticIndex === 'number') {
+    store.set(state.modal.statisticIndex, statisticIndex);
+  }
+  store.set(state.modal.key, key);
+  store.set(state.modal.subkey, subkey);
 };
