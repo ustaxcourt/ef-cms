@@ -260,6 +260,7 @@ import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadl
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
+import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
@@ -785,6 +786,7 @@ export const presenter = {
     openEditOrderTitleModalSequence,
     openForwardMessageModalSequence,
     openGainElectronicAccessToCaseModalSequence,
+    openItemizedPenaltiesModalSequence,
     openPdfPreviewModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
     openPrintableTrialSessionWorkingCopyModalSequence,
