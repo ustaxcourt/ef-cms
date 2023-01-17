@@ -133,4 +133,28 @@ describe('case detail edit computed', () => {
     });
     expect(result.showAddAnotherPenaltyButton).toBeFalsy();
   });
+
+  it('sets penaltyAmountType to the string irsPenaltyAmount if state.modal.key is irsTotalPenalties', () => {
+    const expectedPenaltyAmountType = 'irsPenaltyAmount';
+
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+        modal: { key: 'irsTotalPenalties' },
+      },
+    });
+    expect(result.penaltyAmountType).toBe(expectedPenaltyAmountType);
+  });
+
+  it('sets penaltyAmountType to the string determinationPenaltyAmount if state.modal.key is not irsTotalPenalties', () => {
+    const expectedPenaltyAmountType = 'determinationPenaltyAmount';
+
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+        modal: { key: 'I am a Key. I think.' },
+      },
+    });
+    expect(result.penaltyAmountType).toBe(expectedPenaltyAmountType);
+  });
 });

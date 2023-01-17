@@ -12,7 +12,9 @@ export const CalculatePenaltiesModal = connect(
     confirmSequence: sequences.calculatePenaltiesSequence,
     confirmSequenceOverride: props.confirmSequenceOverride,
     penalties: state.modal.penalties,
-    statisticsFormHelper: state.statisticsFormHelper,
+    penaltyAmountType: state.statisticsFormHelper.penaltyAmountType,
+    showAddAnotherPenaltyButton:
+      state.statisticsFormHelper.showAddAnotherPenaltyButton,
     title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
@@ -22,7 +24,8 @@ export const CalculatePenaltiesModal = connect(
     confirmSequence,
     confirmSequenceOverride,
     penalties,
-    statisticsFormHelper,
+    penaltyAmountType,
+    showAddAnotherPenaltyButton,
     title,
     updateModalValueSequence,
   }) {
@@ -30,10 +33,10 @@ export const CalculatePenaltiesModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        confirmLabel="Calculate"
+        confirmLabel="Calculate and Save"
         confirmSequence={() => {
           confirmSequenceOverride
-            ? confirmSequenceOverride()
+            ? confirmSequenceOverride({ penaltyAmountType })
             : confirmSequence();
         }}
         title={title}
@@ -49,17 +52,22 @@ export const CalculatePenaltiesModal = connect(
                 className="usa-input"
                 id={`penalty_${index}`}
                 name={`penalties.${index}`}
-                value={penalties[index]}
+                placeholder="$0.00"
+                value={penalties[index][penaltyAmountType]}
                 onValueChange={values => {
                   updateModalValueSequence({
-                    key: `penalties.${index}`,
+                    key: `penalties.${index}.${penaltyAmountType}`,
                     value: values.value,
+                  });
+                  updateModalValueSequence({
+                    key: `penalties.${index}.name`,
+                    value: `Penalty ${index + 1} (IRS)`,
                   });
                 }}
               />
             </div>
           ))}
-        {statisticsFormHelper.showAddAnotherPenaltyButton && (
+        {showAddAnotherPenaltyButton && (
           <Button
             link
             className="margin-top-2 modal-button-link"

@@ -105,6 +105,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
   penalties: joi
     .array()
     .min(1)
+    .required()
     .description('List of Penalty Entities for the statistic.'),
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
