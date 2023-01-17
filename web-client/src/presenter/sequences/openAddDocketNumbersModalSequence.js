@@ -1,14 +1,14 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { hasAlreadyAddedDocketNumbersAction } from '../actions/CaseConsolidation/hasAlreadyAddedDocketNumbersAction';
+import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
 import { setupConsolidatedCasesForAddedDocketNumbersAction } from '../actions/CaseConsolidation/setupConsolidatedCasesForAddedDocketNumbersAction';
 
 export const openAddDocketNumbersModalSequence = [
   clearModalStateAction,
   hasAlreadyAddedDocketNumbersAction,
   {
-    no: [setupConsolidatedCasesAction],
+    no: [setMultiDocketingCheckboxesAction],
     yes: [setupConsolidatedCasesForAddedDocketNumbersAction],
   },
   setShowModalFactoryAction('AddDocketNumbersModal'),
