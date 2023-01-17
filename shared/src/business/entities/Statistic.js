@@ -48,10 +48,6 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
           { applicationContext },
         ),
       ];
-
-  // this.irsTotalPenalties =
-  //   this.penalties.reduce((sum, penalty) => penalty.irsPenaltyAmount + sum) ??
-  //   0;
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {

@@ -23,19 +23,16 @@ describe('setDefaultPenaltiesAction', () => {
           penalties: [
             {
               irsPenaltyAmount: '5.00',
-              // determinationPenaltyAmount: '1.00',
               name: 'Penalty1',
             },
 
             {
               irsPenaltyAmount: '4.00',
-              // determinationPenaltyAmount: '2.00',
               name: 'Penalty2',
             },
 
             {
               irsPenaltyAmount: '4.00',
-              // determinationPenaltyAmount: '3.00',,
             },
           ],
         },
@@ -50,13 +47,11 @@ describe('setDefaultPenaltiesAction', () => {
     expect(penalties).toEqual([
       {
         irsPenaltyAmount: '5.00',
-        // determinationPenaltyAmount: '1.00',
         name: 'Penalty1',
       },
 
       {
         irsPenaltyAmount: '4.00',
-        // determinationPenaltyAmount: '2.00',
         name: 'Penalty2',
       },
     ]);
