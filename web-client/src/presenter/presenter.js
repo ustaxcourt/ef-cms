@@ -28,7 +28,6 @@ import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequen
 import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
 import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
 import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
-import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
@@ -555,7 +554,6 @@ export const presenter = {
     broadcastIdleStatusActiveSequence,
     broadcastLogoutSequence,
     broadcastStayLoggedInSequence,
-    calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
     canEditContactInformationSequence,
     cancelAddDraftDocumentSequence,
