@@ -9,7 +9,6 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setStatisticIndexAction = ({ props, store }) => {
-  //TODO: do we need these on state later on?
   const { key, statisticIndex, subkey } = props;
 
   if (typeof statisticIndex === 'number') {

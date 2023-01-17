@@ -18,8 +18,8 @@ export const calculatePenaltiesAction = ({ get }) => {
     ? get(state.form.statistics[statisticIndex].penalties) || []
     : get(state.form.penalties) || [];
 
-  initialPenalties = initialPenalties.filter(penalty => {
-    penalty.penaltyType !== penaltyAmountType;
+  const filteredInitialPenalties = initialPenalties.filter(penalty => {
+    return penalty.penaltyType !== penaltyAmountType;
   });
 
   penalties.forEach(penalty => {
@@ -28,14 +28,14 @@ export const calculatePenaltiesAction = ({ get }) => {
 
   penalties = penalties.filter(penalty => penalty.name);
 
-  penalties = [...penalties, ...initialPenalties];
-
   const parseCurrency = value => Number(value).toFixed(2);
 
   const penaltyAggregator = (sum, penalty) =>
     Number(sum) + Number(penalty.penaltyAmount);
 
   const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));
+
+  penalties = [...penalties, ...filteredInitialPenalties];
 
   return {
     penalties,
