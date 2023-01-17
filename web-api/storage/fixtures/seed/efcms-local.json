@@ -33179,16 +33179,6 @@
     "email": "docketclerk@example.com"
   },
   {
-    "role": "caseServicesSupervisor",
-    "entityName": "User",
-    "name": "Test Case Services Supervisor",
-    "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
-    "section": "docket",
-    "pk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
-    "userId": "35959d1a-0981-40b2-a93d-f65c7977db52",
-    "email": "caseServicesSupervisor@example.com"
-  },
-  {
     "role": "clerkofcourt",
     "entityName": "User",
     "sk": "user|23dd8806-c0c7-4265-81f0-5f264ef78248",
