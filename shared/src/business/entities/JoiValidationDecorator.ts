@@ -120,7 +120,7 @@ function getFormattedValidationErrors(entity) {
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
-export interface TValidationEntity<T> {
+export interface IValidationEntity<T> {
   getErrorToMessageMap(): any;
   getSchema(): any;
   isValid(): boolean;

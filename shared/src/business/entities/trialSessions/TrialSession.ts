@@ -1,3 +1,8 @@
+import {
+  IValidationEntity,
+  joiValidationDecorator,
+  validEntityDecorator,
+} from '../JoiValidationDecorator';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import {
   SESSION_STATUS_GROUPS,
@@ -11,11 +16,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
-import {
-  TValidationEntity,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from '../JoiValidationDecorator';
 import { createISODateString } from '../../utilities/DateHandler';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
@@ -574,4 +574,4 @@ export const TrialSession: typeof TrialSessionClass =
 
 // eslint-disable-next-line no-redeclare
 export interface TrialSessionClass
-  extends TValidationEntity<TrialSessionClass> {}
+  extends IValidationEntity<TrialSessionClass> {}
