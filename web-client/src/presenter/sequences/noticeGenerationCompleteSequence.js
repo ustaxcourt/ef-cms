@@ -11,11 +11,16 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setPrintPaperDoneUrlAction } from '../actions/TrialSession/setPrintPaperDoneUrlAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
+import { shouldCreatePaperServicePdfForCasesAction } from '../actions/shouldCreatePaperServicePdfForCasesAction';
 import { shouldRefreshCaseAction } from '../actions/shouldRefreshCaseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const noticeGenerationCompleteSequence = [
-  createPaperServicePdfForCasesAction,
+  shouldCreatePaperServicePdfForCasesAction,
+  {
+    no: [],
+    yes: [createPaperServicePdfForCasesAction],
+  },
   unsetWaitingForResponseAction,
   clearModalStateAction,
   clearModalAction,
