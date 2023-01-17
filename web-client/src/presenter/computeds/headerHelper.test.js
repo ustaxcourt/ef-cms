@@ -20,7 +20,12 @@ const getBaseState = user => {
   };
 };
 
-const internal = [ROLES.petitionsClerk, ROLES.adc, ROLES.docketClerk];
+const internal = [
+  ROLES.petitionsClerk,
+  ROLES.caseServicesSupervisor,
+  ROLES.adc,
+  ROLES.docketClerk,
+];
 const external = [
   ROLES.petitioner,
   ROLES.privatePractitioner,
@@ -41,6 +46,11 @@ describe('headerHelper', () => {
 
     result = runCompute(headerHelper, {
       state: getBaseState({ role: ROLES.docketClerk }),
+    });
+    expect(result.showSearchInHeader).toBeTruthy();
+
+    result = runCompute(headerHelper, {
+      state: getBaseState({ role: ROLES.caseServicesSupervisor }),
     });
     expect(result.showSearchInHeader).toBeTruthy();
   });
