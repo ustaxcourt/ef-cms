@@ -5,7 +5,7 @@ const {
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 const { Penalty } = require('./Penalty');
-const { PENALTY_TYPES } = require('../EntityConstants');
+const { PENALTY_TYPES } = require('../entities/EntityConstants');
 
 /**
  * Statistic constructor
