@@ -176,7 +176,7 @@ export function joiValidationDecorator(
       });
 
       if (error) {
-        console.log('entity with error-------------', this);
+        console.log('Error, entity is invalid: ', this);
         throw new InvalidEntityError(
           this.entityName,
           JSON.stringify(
