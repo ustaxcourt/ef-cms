@@ -1,9 +1,11 @@
 import { calculatePenaltiesAction } from '../actions/calculatePenaltiesAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { setTotalPenaltiesAmountForAddStatisticAction } from '../actions/setTotalPenaltiesAmountForAddStatisticAction';
+import { setTotalPenaltiesAmountForStatisticAction } from '../actions/setTotalPenaltiesAmountForStatisticAction';
+
+// TODO: delete?
 
 export const calculatePenaltiesForAddSequence = [
   calculatePenaltiesAction,
-  setTotalPenaltiesAmountForAddStatisticAction,
+  setTotalPenaltiesAmountForStatisticAction,
   clearModalAction,
 ];

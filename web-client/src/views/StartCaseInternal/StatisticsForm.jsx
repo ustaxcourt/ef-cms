@@ -61,13 +61,6 @@ export const StatisticsForm = connect(
           id={`total-penalties-${index}`}
           name={`statistics.${index}.irsTotalPenalties`}
           value={form.statistics[index].irsTotalPenalties || ''}
-          onBlur={() => validatePetitionFromPaperSequence()}
-          onValueChange={values => {
-            updateStatisticsFormValueSequence({
-              key: `statistics.${index}.irsTotalPenalties`,
-              value: values.value,
-            });
-          }}
         />
       </>
     );
