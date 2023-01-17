@@ -1,5 +1,6 @@
 import {
   IValidationEntity,
+  TStaticValidationMethods,
   joiValidationDecorator,
   validEntityDecorator,
 } from '../JoiValidationDecorator';
@@ -97,16 +98,6 @@ export class TrialSessionClass {
   public trialSessionId: string;
   public judge: TJudge;
   public trialClerk: TTrialClerk;
-
-  // this static method is later overwritten by the joi validation decorator
-  static validateRawCollection<T>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    trialSessions: T[],
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ): T[] {
-    return [];
-  }
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -569,7 +560,10 @@ export const isStandaloneRemoteSession = function (sessionScope) {
   return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
 };
 
-export const TrialSession: typeof TrialSessionClass =
+export type TRawTrialSession = ExcludeMethods<TrialSessionClass>;
+
+export const TrialSession: typeof TrialSessionClass &
+  TStaticValidationMethods<TRawTrialSession> =
   validEntityDecorator(TrialSessionClass);
 
 // eslint-disable-next-line no-redeclare

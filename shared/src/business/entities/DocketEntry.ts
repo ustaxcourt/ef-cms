@@ -90,7 +90,7 @@ export class DocketEntryClass {
   public signedAt: string;
   public draftOrderState: string;
   public stampData: string;
-  public isDraft: string;
+  public isDraft?: boolean;
   public judge: string;
   public judgeUserId: string;
   public pending: string;
@@ -108,14 +108,19 @@ export class DocketEntryClass {
   public strickenByUserId: string;
   public workItem: any;
 
+  // Keeping this constructor setup like this so we get the typescript safety, but the
+  // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
   constructor(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     rawDocketEntry: any,
     {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       applicationContext,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       petitioners,
     }: { applicationContext: IApplicationContext; petitioners?: any[] },
   ) {
-    this.init(rawDocketEntry, { applicationContext, petitioners });
+    this.entityName = 'DocketEntry';
   }
 
   init(
@@ -141,7 +146,7 @@ export class DocketEntryClass {
         applicationContext,
       });
     }
-    this.entityName = 'DocketEntry';
+
     this.action = rawDocketEntry.action;
     this.additionalInfo = rawDocketEntry.additionalInfo;
     this.additionalInfo2 = rawDocketEntry.additionalInfo2;
@@ -582,10 +587,7 @@ export const DocketEntry: typeof DocketEntryClass =
   validEntityDecorator(DocketEntryClass);
 
 declare global {
-  type RawDocketEntry = Pick<
-    DocketEntryClass,
-    KeyOfType<DocketEntryClass, Primitives>
-  >;
+  type RawDocketEntry = ExcludeMethods<DocketEntryClass>;
 }
 // eslint-disable-next-line no-redeclare
 export interface DocketEntryClass extends IValidationEntity<DocketEntryClass> {}
