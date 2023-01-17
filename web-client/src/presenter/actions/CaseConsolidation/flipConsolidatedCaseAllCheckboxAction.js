@@ -8,35 +8,26 @@ import { state } from 'cerebral';
  *   sets tooltip on lead case if non-lead cases are enabled
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the Cerebral get object
  * @param {object} providers.store the Cerebral store object
  */
-export const flipConsolidatedCaseAllCheckboxAction = ({
-  applicationContext,
-  get,
-  store,
-}) => {
+export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
   const allCheckboxPreviousState = get(
     state.modal.form.consolidatedCaseAllCheckbox,
   );
 
-  let consolidatedCases = get(
+  let consolidatedCaseCheckBoxes = get(
     state.modal.form.consolidatedCasesToMultiDocketOn,
   );
 
-  consolidatedCases = consolidatedCases.map(consolidatedCase => {
-    const isLeadCase = applicationContext
-      .getUtilities()
-      .isLeadCase(consolidatedCase);
-
-    if (isLeadCase) {
+  consolidatedCaseCheckBoxes = consolidatedCaseCheckBoxes.map(aCase => {
+    if (aCase.isLeadCase) {
       const LEAD_CASE_TOOLTIP = 'The lead case cannot be unselected';
       const displayedTooltip = allCheckboxPreviousState
         ? LEAD_CASE_TOOLTIP
         : '';
       return {
-        ...consolidatedCase,
+        ...aCase,
         checkboxDisabled: true,
         checked: true,
         tooltip: displayedTooltip,
@@ -44,10 +35,9 @@ export const flipConsolidatedCaseAllCheckboxAction = ({
     }
 
     return {
-      ...consolidatedCase,
+      ...aCase,
       checkboxDisabled: !allCheckboxPreviousState,
       checked: !allCheckboxPreviousState,
-      tooltip: '',
     };
   });
 
@@ -57,6 +47,6 @@ export const flipConsolidatedCaseAllCheckboxAction = ({
   );
   store.set(
     state.modal.form.consolidatedCasesToMultiDocketOn,
-    consolidatedCases,
+    consolidatedCaseCheckBoxes,
   );
 };
