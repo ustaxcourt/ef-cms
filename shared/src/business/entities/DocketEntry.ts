@@ -13,7 +13,7 @@ import {
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import {
-  TValidationEntity,
+  IValidationEntity,
   joiValidationDecorator,
   validEntityDecorator,
 } from './JoiValidationDecorator';
@@ -115,7 +115,6 @@ export class DocketEntryClass {
       petitioners,
     }: { applicationContext: IApplicationContext; petitioners?: any[] },
   ) {
-    this.entityName = 'DocketEntry';
     this.init(rawDocketEntry, { applicationContext, petitioners });
   }
 
@@ -142,7 +141,7 @@ export class DocketEntryClass {
         applicationContext,
       });
     }
-
+    this.entityName = 'DocketEntry';
     this.action = rawDocketEntry.action;
     this.additionalInfo = rawDocketEntry.additionalInfo;
     this.additionalInfo2 = rawDocketEntry.additionalInfo2;
@@ -589,4 +588,4 @@ declare global {
   >;
 }
 // eslint-disable-next-line no-redeclare
-export interface DocketEntryClass extends TValidationEntity<DocketEntryClass> {}
+export interface DocketEntryClass extends IValidationEntity<DocketEntryClass> {}
