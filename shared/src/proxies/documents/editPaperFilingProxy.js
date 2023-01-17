@@ -5,19 +5,26 @@ const { put } = require('../requests');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {Array} providers.consolidatedGroupDocketNumbers list of member cases to multi-docket paper filing on
+ * @param {string} providers.docketEntryId the docket entry id
  * @param {object} providers.documentMetadata the document metadata
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
- * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {Promise<*>} the promise of the api call
  */
 exports.editPaperFilingInteractor = (
   applicationContext,
-  { docketEntryId, documentMetadata, isSavingForLater },
+  {
+    consolidatedGroupDocketNumbers,
+    docketEntryId,
+    documentMetadata,
+    isSavingForLater,
+  },
 ) => {
   const { docketNumber } = documentMetadata;
   return put({
     applicationContext,
     body: {
+      consolidatedGroupDocketNumbers,
       docketEntryId,
       documentMetadata,
       isSavingForLater,

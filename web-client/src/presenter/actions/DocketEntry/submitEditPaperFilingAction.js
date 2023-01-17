@@ -16,7 +16,8 @@ export const submitEditPaperFilingAction = async ({
   get,
   props,
 }) => {
-  const { isSavingForLater } = props;
+  const { docketNumbers: consolidatedGroupDocketNumbers, isSavingForLater } =
+    props;
 
   const formData = get(state.form);
   const docketEntryId = get(state.docketEntryId);
@@ -40,6 +41,7 @@ export const submitEditPaperFilingAction = async ({
   const { paperServicePdfUrl } = await applicationContext
     .getUseCases()
     .editPaperFilingInteractor(applicationContext, {
+      consolidatedGroupDocketNumbers,
       docketEntryId,
       documentMetadata,
       isSavingForLater,

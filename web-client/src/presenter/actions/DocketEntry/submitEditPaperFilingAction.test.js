@@ -17,19 +17,25 @@ describe('submitEditPaperFilingAction', () => {
     paperServicePdfUrl: mockPaperServicePdfUrl,
   });
 
-  it('should make a call to edit a paper filed docket entry', async () => {
+  it('should make a call to edit a paper filed docket entry and include consolidated group docket numbers when user has opted to multi-docket the paper filing', async () => {
+    const mockConsolidatedDocketNumbers = ['101-32', '102-32'];
+    const mockIsSavingForLater = false;
+    const mockDateRecieved = '2012-04-20T14:45:15.595Z';
+
     await runAction(submitEditPaperFilingAction, {
       modules: {
         presenter,
       },
       props: {
-        isSavingForLater: false,
+        docketNumbers: mockConsolidatedDocketNumbers,
+        isSavingForLater: mockIsSavingForLater,
         primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
         caseDetail: mockCaseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          dateReceived: mockDateRecieved,
           primaryDocumentFile: {},
         },
       },
@@ -38,13 +44,18 @@ describe('submitEditPaperFilingAction', () => {
     expect(
       applicationContext.getUseCases().editPaperFilingInteractor.mock
         .calls[0][1],
-    ).toMatchObject({
+    ).toEqual({
+      consolidatedGroupDocketNumbers: mockConsolidatedDocketNumbers,
       docketEntryId: mockDocketEntryId,
       documentMetadata: {
+        createdAt: mockDateRecieved,
+        dateReceived: mockDateRecieved,
         docketNumber: mockCaseDetail.docketNumber,
         isFileAttached: true,
         isPaper: true,
+        receivedAt: mockDateRecieved,
       },
+      isSavingForLater: mockIsSavingForLater,
     });
   });
 
