@@ -1,5 +1,6 @@
 import { AccountMenu } from './AccountMenu';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DocumentQCMenu } from './DocumentQCMenu';
 import { MessagesMenu } from './MessagesMenu';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
@@ -42,6 +43,7 @@ const BetaBar = toggleBetaBarSequence => {
 const NavigationItems = (
   headerHelper,
   {
+    isDocumentQCMenuOpen,
     isMessagesMenuOpen,
     isReportsMenuOpen,
     signOutSequence,
@@ -84,15 +86,25 @@ const NavigationItems = (
           </a>
         </li>
       )}
-      {headerHelper.showMessagesDropDown && (
-        <li
-          className={classNames(
-            'usa-nav__primary-item',
-            isMessagesMenuOpen && 'usa-nav__submenu--open',
-          )}
-        >
-          <MessagesMenu isExpanded={isMessagesMenuOpen} />
-        </li>
+      {headerHelper.showMessagesAndQCDropDown && (
+        <>
+          <li
+            className={classNames(
+              'usa-nav__primary-item',
+              isMessagesMenuOpen && 'usa-nav__submenu--open',
+            )}
+          >
+            <MessagesMenu isExpanded={isMessagesMenuOpen} />
+          </li>
+          <li
+            className={classNames(
+              'usa-nav__primary-item',
+              isDocumentQCMenuOpen && 'usa-nav__submenu--open',
+            )}
+          >
+            <DocumentQCMenu isExpanded={isDocumentQCMenuOpen} />
+          </li>
+        </>
       )}
       {headerHelper.showDocumentQC && (
         <li className={classNames('usa-nav__primary-item')}>
@@ -190,6 +202,7 @@ export const Header = connect(
   {
     headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
+    isDocumentQCMenuOpen: state.menuHelper.isDocumentQCMenuOpen,
     isMessagesMenuOpen: state.menuHelper.isMessagesMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
@@ -203,6 +216,7 @@ export const Header = connect(
   function Header({
     headerHelper,
     isAccountMenuOpen,
+    isDocumentQCMenuOpen,
     isMessagesMenuOpen,
     isReportsMenuOpen,
     resetHeaderAccordionsSequence,
@@ -282,6 +296,7 @@ export const Header = connect(
                   </Button>
                   {user &&
                     NavigationItems(headerHelper, {
+                      isDocumentQCMenuOpen,
                       isMessagesMenuOpen,
                       isReportsMenuOpen,
                       signOutSequence,

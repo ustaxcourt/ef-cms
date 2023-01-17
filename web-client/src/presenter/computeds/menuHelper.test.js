@@ -6,12 +6,14 @@ describe('menuHelper', () => {
     const { isAccountMenuOpen } = runCompute(menuHelper, {});
     const { isReportsMenuOpen } = runCompute(menuHelper, {});
     const { isMessagesMenuOpen } = runCompute(menuHelper, {});
+    const { isDocumentQCMenuOpen } = runCompute(menuHelper, {});
     const { isCaseDetailMenuOpen } = runCompute(menuHelper, {});
 
     expect(isMessagesMenuOpen).toEqual(false);
     expect(isAccountMenuOpen).toEqual(false);
     expect(isReportsMenuOpen).toEqual(false);
     expect(isCaseDetailMenuOpen).toEqual(false);
+    expect(isDocumentQCMenuOpen).toEqual(false);
   });
 
   it('should indicate Account Menu is open according to state', () => {
@@ -48,6 +50,18 @@ describe('menuHelper', () => {
     });
 
     expect(isMessagesMenuOpen).toEqual(true);
+  });
+
+  it('should indicate Document QC Menu is open according to state', () => {
+    const { isDocumentQCMenuOpen } = runCompute(menuHelper, {
+      state: {
+        navigation: {
+          openMenu: 'DocumentQCMenu',
+        },
+      },
+    });
+
+    expect(isDocumentQCMenuOpen).toEqual(true);
   });
 
   it('should indicate Case Detail Menu is open according to state', () => {

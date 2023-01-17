@@ -51,13 +51,13 @@ export const headerHelper = (get, applicationContext) => {
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
     pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
-    showDocumentQC: isInternalUser,
+    showDocumentQC: isInternalUser && !isCaseServicesSupervisor,
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages:
       isInternalUser &&
       userRole !== USER_ROLES.general &&
       !isCaseServicesSupervisor,
-    showMessagesDropDown: isCaseServicesSupervisor,
+    showMessagesAndQCDropDown: isCaseServicesSupervisor,
     showMyAccount: [
       USER_ROLES.privatePractitioner,
       USER_ROLES.irsPractitioner,
