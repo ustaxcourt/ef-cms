@@ -918,6 +918,7 @@ const ROLES = {
   adc: 'adc',
   admin: 'admin',
   admissionsClerk: 'admissionsclerk',
+  caseServicesSupervisor: 'caseServicesSupervisor',
   chambers: 'chambers',
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
