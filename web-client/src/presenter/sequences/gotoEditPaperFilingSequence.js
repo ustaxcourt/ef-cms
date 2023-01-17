@@ -3,11 +3,9 @@ import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -27,8 +25,6 @@ export const gotoEditPaperFiling = startWebSocketConnectionSequenceDecorator([
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  getConsolidatedCasesByCaseAction,
-  setConsolidatedCasesForCaseAction,
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,

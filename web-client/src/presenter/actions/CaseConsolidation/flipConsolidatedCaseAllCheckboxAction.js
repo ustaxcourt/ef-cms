@@ -17,9 +17,13 @@ export const flipConsolidatedCaseAllCheckboxAction = ({
   get,
   store,
 }) => {
-  const allCheckboxPreviousState = get(state.consolidatedCaseAllCheckbox);
+  const allCheckboxPreviousState = get(
+    state.modal.form.consolidatedCaseAllCheckbox,
+  );
 
-  let consolidatedCases = get(state.caseDetail.consolidatedCases);
+  let consolidatedCases = get(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+  );
 
   consolidatedCases = consolidatedCases.map(consolidatedCase => {
     const isLeadCase = applicationContext
@@ -47,6 +51,12 @@ export const flipConsolidatedCaseAllCheckboxAction = ({
     };
   });
 
-  store.set(state.consolidatedCaseAllCheckbox, !allCheckboxPreviousState);
-  store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+  store.set(
+    state.modal.form.consolidatedCaseAllCheckbox,
+    !allCheckboxPreviousState,
+  );
+  store.set(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+    consolidatedCases,
+  );
 };
