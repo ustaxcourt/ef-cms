@@ -14,8 +14,9 @@ export const calculatePenaltiesAction = ({ get }) => {
     subkey: penaltyAmountType,
   } = get(state.modal);
 
-  let initialPenalties =
-    get(state.form.statistics[statisticIndex].penalties) || [];
+  let initialPenalties = statisticIndex
+    ? get(state.form.statistics[statisticIndex].penalties) || []
+    : get(state.form.penalties) || [];
 
   initialPenalties = initialPenalties.filter(penalty => {
     penalty.penaltyType !== penaltyAmountType;

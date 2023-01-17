@@ -12,14 +12,14 @@ export const setDefaultFormForAddDeficiencySatisticsAction = ({
   store,
 }) => {
   let statistics = get(state.caseDetail.statistics);
-  const nextStatisticIndex = statistics.length;
+  // const nextStatisticIndex = statistics.length;
   if (isEmpty(statistics)) {
     statistics = [{}];
   }
 
   store.set(state.form, {
-    statisticIndex: nextStatisticIndex,
-    statistics,
+    // statisticIndex: nextStatisticIndex,
+    // statistics,
     yearOrPeriod: 'Year',
   });
 };
