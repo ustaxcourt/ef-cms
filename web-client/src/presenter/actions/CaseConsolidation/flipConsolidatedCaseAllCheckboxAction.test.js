@@ -26,116 +26,115 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
   };
 
   it("should flip the non-lead cases' checked states", async () => {
-    const changedCheckValue = false;
+    const mockOriginalCheckBoxValue = false;
 
-    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+    const { state } = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       modules: { presenter },
       state: {
         caseDetail: {
           ...LEAD_CASE,
-          consolidatedCases: [
-            LEAD_CASE,
-            {
-              ...SECOND_CASE,
-              checked: changedCheckValue,
-            },
-          ],
         },
-        consolidatedCaseAllCheckbox: false,
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: false,
+            consolidatedCasesToMultiDocketOn: [
+              LEAD_CASE,
+              {
+                ...SECOND_CASE,
+                checked: mockOriginalCheckBoxValue,
+              },
+            ],
+          },
+        },
       },
     });
 
-    expect(result.state.caseDetail).toEqual({
-      ...LEAD_CASE,
-      consolidatedCases: [
-        LEAD_CASE,
-        {
-          ...SECOND_CASE,
-          checkboxDisabled: true,
-          checked: !changedCheckValue,
-          tooltip: '',
-        },
-      ],
-    });
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+      LEAD_CASE,
+      {
+        ...SECOND_CASE,
+        checkboxDisabled: !mockOriginalCheckBoxValue,
+        checked: !mockOriginalCheckBoxValue,
+        tooltip: '',
+      },
+    ]);
   });
 
   it('should set checked to true for all cases & disable all checkboxes when consolidatedCaseAllCheckbox is set to checked', async () => {
-    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+    const { state } = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
-          ...LEAD_CASE,
-          consolidatedCases: [
-            {
-              ...LEAD_CASE,
-              checked: false,
-            },
-            {
-              ...SECOND_CASE,
-              checkboxDisabled: false,
-              checked: false,
-            },
-          ],
+        caseDetail: LEAD_CASE,
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: false,
+            consolidatedCasesToMultiDocketOn: [
+              {
+                ...LEAD_CASE,
+                checked: false,
+              },
+              {
+                ...SECOND_CASE,
+                checkboxDisabled: false,
+                checked: false,
+              },
+            ],
+          },
         },
-        consolidatedCaseAllCheckbox: false,
       },
     });
 
-    expect(result.state.caseDetail).toEqual({
-      ...LEAD_CASE,
-      consolidatedCases: [
-        {
-          ...LEAD_CASE,
-          checkboxDisabled: true,
-          checked: true,
-        },
-        {
-          ...SECOND_CASE,
-          checkboxDisabled: true,
-          checked: true,
-        },
-      ],
-    });
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+      {
+        ...LEAD_CASE,
+        checkboxDisabled: true,
+        checked: true,
+      },
+      {
+        ...SECOND_CASE,
+        checkboxDisabled: true,
+        checked: true,
+      },
+    ]);
   });
 
   it('should only have lead case checked & all sub-cases are enabled & lead case is disabled & lead case as a tooltip when consolidatedCaseAllCheckbox is set to unchecked', async () => {
-    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+    const { state } = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
-          ...LEAD_CASE,
-          consolidatedCases: [
-            {
-              ...LEAD_CASE,
-              checkboxDisabled: true,
-              checked: true,
-            },
-            {
-              ...SECOND_CASE,
-              checkboxDisabled: true,
-              checked: true,
-            },
-          ],
+        caseDetail: LEAD_CASE,
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: true,
+            consolidatedCasesToMultiDocketOn: [
+              {
+                ...LEAD_CASE,
+                checkboxDisabled: true,
+                checked: true,
+              },
+              {
+                ...SECOND_CASE,
+                checkboxDisabled: true,
+                checked: true,
+              },
+            ],
+          },
         },
-        consolidatedCaseAllCheckbox: true,
       },
     });
 
-    expect(result.state.caseDetail).toEqual({
-      ...LEAD_CASE,
-      consolidatedCases: [
-        {
-          ...LEAD_CASE,
-          checkboxDisabled: true,
-          checked: true,
-          tooltip: 'The lead case cannot be unselected',
-        },
-        {
-          ...SECOND_CASE,
-          checkboxDisabled: false,
-          checked: false,
-        },
-      ],
-    });
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+      {
+        ...LEAD_CASE,
+        checkboxDisabled: true,
+        checked: true,
+        tooltip: 'The lead case cannot be unselected',
+      },
+      {
+        ...SECOND_CASE,
+        checkboxDisabled: false,
+        checked: false,
+      },
+    ]);
   });
 });

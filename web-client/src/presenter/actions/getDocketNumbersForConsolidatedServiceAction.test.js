@@ -19,25 +19,27 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
         },
         state: {
           caseDetail: {
-            consolidatedCases: [
-              { checked: true, docketNumber: MOCK_CASE.docketNumber },
-              {
-                checked: true,
-                docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
-              },
-            ],
             docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
             leadDocketNumber: MOCK_CASE.docketNumber,
-          },
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
           },
           form: {
             eventCode: 'A',
           },
+          modal: {
+            form: {
+              consolidatedCasesToMultiDocketOn: [
+                {
+                  checked: true,
+                  docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+                  leadDocketNumber: MOCK_CASE.docketNumber,
+                },
+              ],
+            },
+          },
         },
       },
     );
+
     expect(output.docketNumbers).toEqual([]);
   });
 
@@ -50,21 +52,22 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
         },
         state: {
           caseDetail: {
-            consolidatedCases: [
-              { checked: true, docketNumber: MOCK_CASE.docketNumber },
-              {
-                checked: false,
-                docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
-              },
-            ],
             docketNumber: MOCK_CASE.docketNumber,
             leadDocketNumber: MOCK_CASE.docketNumber,
           },
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
-          },
           form: {
             eventCode: 'PSDE',
+          },
+          modal: {
+            form: {
+              consolidatedCasesToMultiDocketOn: [
+                {
+                  checked: true,
+                  docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+                  leadDocketNumber: MOCK_CASE.docketNumber,
+                },
+              ],
+            },
           },
         },
       },
@@ -82,35 +85,37 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
         },
         state: {
           caseDetail: {
-            consolidatedCases: [
-              {
-                checked: true,
-                docketNumber: MOCK_CASE.docketNumber,
-                leadDocketNumber: MOCK_CASE.docketNumber,
-              },
-              {
-                checked: false,
-                docketNumber: 'I should not show up',
-                leadDocketNumber: MOCK_CASE.docketNumber,
-              },
-              {
-                checked: true,
-                docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
-                leadDocketNumber: MOCK_CASE.docketNumber,
-              },
-            ],
             docketNumber: MOCK_CASE.docketNumber,
             leadDocketNumber: MOCK_CASE.docketNumber,
-          },
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
           },
           form: {
             eventCode: 'A',
           },
+          modal: {
+            form: {
+              consolidatedCasesToMultiDocketOn: [
+                {
+                  checked: true,
+                  docketNumber: MOCK_CASE.docketNumber,
+                  leadDocketNumber: MOCK_CASE.docketNumber,
+                },
+                {
+                  checked: false,
+                  docketNumber: 'I should not show up',
+                  leadDocketNumber: MOCK_CASE.docketNumber,
+                },
+                {
+                  checked: true,
+                  docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+                  leadDocketNumber: MOCK_CASE.docketNumber,
+                },
+              ],
+            },
+          },
         },
       },
     );
+
     expect(output).toEqual({
       docketNumbers: [MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber],
     });
