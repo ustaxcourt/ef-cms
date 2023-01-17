@@ -8,7 +8,8 @@
  */
 export const shouldCreatePaperServicePdfForCasesAction = ({ path, props }) => {
   const { trialNoticePdfsKeys } = props;
-  if (trialNoticePdfsKeys) {
+
+  if (trialNoticePdfsKeys.length) {
     return path.yes();
   } else {
     return path.no();

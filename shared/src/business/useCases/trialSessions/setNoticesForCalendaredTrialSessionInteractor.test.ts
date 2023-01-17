@@ -174,7 +174,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     );
   });
 
-  it('should send a notification with no paper service indicator for trial sessions with no calendared cases', async () => {
+  it('should send a notification with no paper service indicator and no pdf keys for trial sessions with no calendared cases', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockResolvedValue([]);
@@ -191,6 +191,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       message: {
         action: 'notice_generation_complete',
         hasPaper: false,
+        trialNoticePdfsKeys: [],
       },
       userId: user.userId,
     });
