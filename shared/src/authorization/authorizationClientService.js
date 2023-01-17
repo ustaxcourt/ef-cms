@@ -171,6 +171,10 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
   ],
+  caseServicesSupervisor: [
+    ...docketClerkPermissions,
+    ...petitionsClerkPermissions,
+  ],
   chambers: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,

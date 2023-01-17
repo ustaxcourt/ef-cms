@@ -52,6 +52,7 @@ const setupCourtUsers = async () => {
     [10, 'docketclerk', 'docket'],
     [10, 'petitionsclerk', 'petitions'],
     [10, 'trialclerk', 'trialClerks'],
+    [5, 'caseServicesSupervisor', 'caseServicesSupervisor'],
     [2, 'floater', 'floater'],
     [2, 'general', 'general'],
     [2, 'reportersOffice', 'reportersOffice'],
