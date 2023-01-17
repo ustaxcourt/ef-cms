@@ -5,6 +5,7 @@ const {
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 const { Penalty } = require('./Penalty');
+const { PENALTY_TYPES } = require('../EntityConstants');
 
 /**
  * Statistic constructor
@@ -48,10 +49,6 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
           { applicationContext },
         ),
       ];
-
-  // this.irsTotalPenalties =
-  //   this.penalties.reduce((sum, penalty) => penalty.irsPenaltyAmount + sum) ??
-  //   0;
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
@@ -165,6 +162,36 @@ Statistic.prototype.updatePenalty = function (updatedPenalty) {
   );
 
   Object.assign(foundPenalty, updatedPenalty);
+};
+
+Statistic.prototype.itemizeTotalPenalties = function ({
+  applicationContext,
+  determinationTotalPenalties,
+  irsTotalPenalties,
+}) {
+  if (irsTotalPenalties) {
+    new Penalty(
+      {
+        name: 'Penalty 1 (IRS)',
+        penaltyAmount: irsTotalPenalties,
+        penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+        statisticId: this.statisticId,
+      },
+      { applicationContext },
+    );
+  }
+
+  if (determinationTotalPenalties) {
+    new Penalty(
+      {
+        name: 'Penalty 1 (Court)',
+        penaltyAmount: determinationTotalPenalties,
+        penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+        statisticId: this.statisticId,
+      },
+      { applicationContext },
+    );
+  }
 };
 
 exports.Statistic = validEntityDecorator(Statistic);
