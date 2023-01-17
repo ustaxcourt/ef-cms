@@ -7,7 +7,6 @@ import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/g
 import { getConstants } from '../../getConstants';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
@@ -35,11 +34,7 @@ export const openConfirmPaperServiceModalSequence = [
   shouldSetupConsolidatedCasesAction,
   {
     no: [],
-    yes: [
-      getConsolidatedCasesByCaseAction,
-      setConsolidatedCasesForCaseAction,
-      setMultiDocketingCheckboxesAction,
-    ],
+    yes: [getConsolidatedCasesByCaseAction, setMultiDocketingCheckboxesAction],
   },
   setDocumentIsRequiredAction,
   generateTitleForPaperFilingAction,
