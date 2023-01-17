@@ -194,7 +194,7 @@ export const serveCourtIssuedDocumentInteractor = async (
   });
 
   const successMessage =
-    docketNumbers.length > 1
+    docketNumbers.length > 0
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
