@@ -9,6 +9,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const formatAndSetPenaltiesAction = ({ get, store }) => {
+  //TODO: delete?
   const { penalties } = get(state.modal);
 
   const parseCurrency = value => Number(value).toFixed(2);

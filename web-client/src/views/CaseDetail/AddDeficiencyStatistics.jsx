@@ -10,8 +10,7 @@ import React from 'react';
 
 export const AddDeficiencyStatistics = connect(
   {
-    calculatePenaltiesForAddSequence:
-      sequences.calculatePenaltiesForAddSequence,
+    calculatePenaltiesSequence: sequences.calculatePenaltiesSequence,
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     showModal: state.modal.showModal,
     submitAddDeficiencyStatisticsSequence:
@@ -20,7 +19,7 @@ export const AddDeficiencyStatistics = connect(
       sequences.validateAddDeficiencyStatisticsSequence,
   },
   function AddDeficiencyStatistics({
-    calculatePenaltiesForAddSequence,
+    calculatePenaltiesSequence,
     cancelAddStatisticSequence,
     showModal,
     submitAddDeficiencyStatisticsSequence,
@@ -57,7 +56,7 @@ export const AddDeficiencyStatistics = connect(
         {showModal === 'CalculatePenaltiesModal' && (
           <CalculatePenaltiesModal
             confirmSequenceOverride={async ({ penaltyAmountType }) => {
-              await calculatePenaltiesForAddSequence({ penaltyAmountType });
+              await calculatePenaltiesSequence({ penaltyAmountType });
               await validateAddDeficiencyStatisticsSequence();
             }}
           />

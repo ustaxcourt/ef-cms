@@ -11,8 +11,7 @@ import React from 'react';
 
 export const EditDeficiencyStatistic = connect(
   {
-    calculatePenaltiesForAddSequence:
-      sequences.calculatePenaltiesForAddSequence,
+    calculatePenaltiesSequence: sequences.calculatePenaltiesSequence,
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     editStatisticFormHelper: state.editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence:
@@ -24,7 +23,7 @@ export const EditDeficiencyStatistic = connect(
       sequences.validateAddDeficiencyStatisticsSequence,
   },
   function EditDeficiencyStatistic({
-    calculatePenaltiesForAddSequence,
+    calculatePenaltiesSequence,
     cancelAddStatisticSequence,
     editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence,
@@ -79,7 +78,7 @@ export const EditDeficiencyStatistic = connect(
         {showModal === 'CalculatePenaltiesModal' && (
           <CalculatePenaltiesModal
             confirmSequenceOverride={async () => {
-              await calculatePenaltiesForAddSequence();
+              await calculatePenaltiesSequence();
               await validateAddDeficiencyStatisticsSequence();
             }}
           />
