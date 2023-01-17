@@ -36,6 +36,9 @@ export const headerHelper = (get, applicationContext) => {
     ].includes(userRole) &&
       pageIsMessages);
 
+  const isCaseServicesSupervisor =
+    userRole === USER_ROLES.caseServicesSupervisor;
+
   return {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
@@ -50,7 +53,11 @@ export const headerHelper = (get, applicationContext) => {
     showAccountMenu: isLoggedIn,
     showDocumentQC: isInternalUser,
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
-    showMessages: isInternalUser && userRole !== USER_ROLES.general,
+    showMessages:
+      isInternalUser &&
+      userRole !== USER_ROLES.general &&
+      !isCaseServicesSupervisor,
+    showMessagesDropDown: isCaseServicesSupervisor,
     showMyAccount: [
       USER_ROLES.privatePractitioner,
       USER_ROLES.irsPractitioner,
