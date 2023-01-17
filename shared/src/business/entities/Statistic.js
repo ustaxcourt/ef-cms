@@ -35,12 +35,12 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   // temporary until migration is written - this allows us for now to run api locally
   this.penalties = [];
   Array.isArray(rawStatistic.penalties)
-    ? assignPenalties({
+    ? assignPenalties(this, {
         applicationContext,
         rawPenalties: rawStatistic.penalties,
         statisticId: this.statisticId,
       })
-    : itemizeTotalPenalties({
+    : itemizeTotalPenalties(this, {
         applicationContext,
         determinationTotalPenalties: this.determinationTotalPenalties,
         irsTotalPenalties: this.irsTotalPenalties,
@@ -123,11 +123,14 @@ joiValidationDecorator(
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
 
-const assignPenalties = ({ applicationContext, rawPenalties, statisticId }) => {
+const assignPenalties = (
+  obj,
+  { applicationContext, rawPenalties, statisticId },
+) => {
   rawPenalties.forEach(penalty => {
     penalty.statisticId
-      ? this.addPenalty({ applicationContext, rawPenalty: penalty })
-      : this.addPenalty({
+      ? obj.addPenalty({ applicationContext, rawPenalty: penalty })
+      : obj.addPenalty({
           applicationContext,
           rawPenalty: { ...penalty, statisticId },
         });
@@ -163,25 +166,22 @@ Statistic.prototype.updatePenalty = function (updatedPenalty) {
   Object.assign(foundPenalty, updatedPenalty);
 };
 
-const itemizeTotalPenalties = function ({
-  applicationContext,
-  determinationTotalPenalties,
-  irsTotalPenalties,
-}) {
-  if (irsTotalPenalties) {
-    this.addPenalty({
-      applicationContext,
-      rawPenalty: {
-        name: 'Penalty 1 (IRS)',
-        penaltyAmount: irsTotalPenalties,
-        penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
-        statisticId: this.statisticId,
-      },
-    });
-  }
+const itemizeTotalPenalties = function (
+  obj,
+  { applicationContext, determinationTotalPenalties, irsTotalPenalties },
+) {
+  obj.addPenalty({
+    applicationContext,
+    rawPenalty: {
+      name: 'Penalty 1 (IRS)',
+      penaltyAmount: irsTotalPenalties,
+      penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+      statisticId: this.statisticId,
+    },
+  });
 
   if (determinationTotalPenalties) {
-    this.addPenalty({
+    obj.addPenalty({
       applicationContext,
       rawPenalty: {
         name: 'Penalty 1 (Court)',

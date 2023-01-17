@@ -27,7 +27,13 @@ describe('Statistic', () => {
         {
           irsDeficiencyAmount: 1,
           irsTotalPenalties: 1,
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
           year: '2001',
           yearOrPeriod: 'Year',
         },
@@ -41,7 +47,13 @@ describe('Statistic', () => {
         {
           irsDeficiencyAmount: 'something else',
           irsTotalPenalties: 'something else',
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
           year: 'something else',
           yearOrPeriod: 'Year',
         },
@@ -78,7 +90,13 @@ describe('Statistic', () => {
         {
           irsDeficiencyAmount: 1,
           irsTotalPenalties: 1,
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
           year: 2050,
           yearOrPeriod: 'Year',
         },
@@ -96,7 +114,13 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 654.32,
           irsTotalPenalties: 123.45,
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
           year: 2015,
           yearOrPeriod: 'Year',
         },
@@ -112,7 +136,13 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 654.32,
           irsTotalPenalties: 123.45,
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
           year: 2015,
           yearOrPeriod: 'Year',
         },
@@ -131,7 +161,13 @@ describe('Statistic', () => {
           irsDeficiencyAmount: 654.32,
           irsTotalPenalties: 123.45,
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
           year: 2015,
           yearOrPeriod: 'Year',
         },
@@ -144,28 +180,31 @@ describe('Statistic', () => {
     });
   });
 
-  describe('addPenalty and updatePenalty', () => {
+  describe('Penalties', () => {
     let statistic;
     let statisticId = applicationContext.getUniqueId();
     let penaltyArrayLength;
     const MOCK_PENALTY_WITH_STATISTIC_ID = {
       entityName: 'Penalty',
-      irsPenaltyAmount: 200,
-      name: 'I am a penalty!',
+      name: 'Penalty 1 (IRS)',
+      penaltyAmount: 200,
       penaltyId: '081108f8-8b01-4e49-b437-781a581a16ac',
+      penaltyType: 'irsPenaltyAmount',
       statisticId,
     };
     const MOCK_PENALTY_WITHOUT_STATISTIC_ID = {
       entityName: 'Penalty',
-      irsPenaltyAmount: 200,
-      name: 'I am a penalty!',
+      name: 'Penalty 1 (Court)',
+      penaltyAmount: 200,
       penaltyId: '081108f8-8b01-4e49-b437-781a581a16ac',
+      penaltyType: 'determinationPenaltyAmount',
     };
     const MOCK_UPDATED_PENALTY = {
       entityName: 'Penalty',
-      irsPenaltyAmount: 250,
       name: 'I am an updated penalty!',
+      penaltyAmount: 250,
       penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
+      penaltyType: 'irsPenaltyAmount',
       statisticId,
     };
 
@@ -220,6 +259,74 @@ describe('Statistic', () => {
 
       expect(statistic.penalties.length).toEqual(penaltyArrayLength);
       expect(statistic.penalties[0]).toEqual(MOCK_UPDATED_PENALTY);
+    });
+
+    it('should itemize penalties created prior to penalty itemization', () => {
+      const preItemizationStatistic = new Statistic(
+        {
+          determinationTotalPenalties: 3000,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 2000,
+          statisticId,
+          year: '2001',
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      const expectedPenalties = [
+        {
+          entityName: 'Penalty',
+          name: 'Penalty 1 (IRS)',
+          penaltyAmount: 2000,
+          penaltyType: 'irsPenaltyAmount',
+          statisticId,
+        },
+        {
+          entityName: 'Penalty',
+          name: 'Penalty 1 (Court)',
+          penaltyAmount: 3000,
+          penaltyType: 'determinationPenaltyAmount',
+          statisticId,
+        },
+      ];
+      expect(preItemizationStatistic.penalties).toEqual([
+        expect.objectContaining(expectedPenalties[0]),
+        expect.objectContaining(expectedPenalties[1]),
+      ]);
+    });
+
+    it('should itemize penalties created prior to penalty itemization', () => {
+      const preItemizationStatistic = new Statistic(
+        {
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 2000,
+          statisticId,
+          year: '2001',
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      const expectedPenalties = [
+        {
+          entityName: 'Penalty',
+          name: 'Penalty 1 (IRS)',
+          penaltyAmount: 2000,
+          penaltyType: 'irsPenaltyAmount',
+          statisticId,
+        },
+        {
+          entityName: 'Penalty',
+          name: 'Penalty 1 (Court)',
+          penaltyAmount: 3000,
+          penaltyType: 'determinationPenaltyAmount',
+          statisticId,
+        },
+      ];
+      expect(preItemizationStatistic.penalties).toEqual([
+        expect.objectContaining(expectedPenalties[0]),
+      ]);
     });
   });
 });
