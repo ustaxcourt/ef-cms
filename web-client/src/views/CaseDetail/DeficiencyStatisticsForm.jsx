@@ -11,7 +11,7 @@ export const DeficiencyStatisticsForm = connect(
     form: state.form,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
-    statisticIndex: state.form.statisticIndex,
+    // statisticIndex: state.form.statisticIndex,
     updateAddDeficiencyFormValueSequence:
       sequences.updateAddDeficiencyFormValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -22,7 +22,7 @@ export const DeficiencyStatisticsForm = connect(
   function DeficiencyStatisticsForm({
     form,
     showCalculatePenaltiesModalSequence,
-    statisticIndex,
+    // statisticIndex,
     updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence,
@@ -148,9 +148,10 @@ export const DeficiencyStatisticsForm = connect(
                   className="usa-input usa-input-inline input-medium"
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
-                  value={
-                    form.statistics[statisticIndex].irsTotalPenalties || ''
-                  }
+                  // value={
+                  //   form.statistics[statisticIndex].irsTotalPenalties || ''
+                  // }
+                  value={form.irsTotalPenalties || ''}
                 />
                 <Button
                   link
@@ -159,7 +160,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'irsTotalPenalties',
-                      statisticIndex: form.statisticIndex,
+                      // statisticIndex: form.statisticIndex,
                       subkey: 'irsPenaltyAmount',
                       title: 'Calculate Penalties on IRS Notice',
                     })
