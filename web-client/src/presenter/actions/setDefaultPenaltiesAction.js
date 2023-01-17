@@ -8,15 +8,12 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setDefaultPenaltiesAction = ({ get, store }) => {
-  // TODO: refactor this function some
   const penalties = get(state.form.penalties);
   penalties;
   let initialPenalties = penalties ?? [];
 
   if (initialPenalties.length < 1) {
     initialPenalties.push({
-      // TODO: Move to an array on the Statistic Entity
-      // determinationPenaltyAmount: '0',
       irsPenaltyAmount: '',
     });
   } else {

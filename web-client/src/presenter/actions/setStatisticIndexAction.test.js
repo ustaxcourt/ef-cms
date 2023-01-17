@@ -7,6 +7,7 @@ describe('setStatisticIndexAction,', () => {
       props: {
         key: 'totalPenalties',
         statisticIndex: 5,
+        subkey: 'irsPenaltyAmount',
       },
       state: {
         modal: {
@@ -17,5 +18,6 @@ describe('setStatisticIndexAction,', () => {
 
     expect(result.state.modal.statisticIndex).toEqual(5);
     expect(result.state.modal.key).toEqual('totalPenalties');
+    expect(result.state.modal.subkey).toEqual('irsPenaltyAmount');
   });
 });

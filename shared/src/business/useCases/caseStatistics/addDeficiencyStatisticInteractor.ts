@@ -55,7 +55,6 @@ export const addDeficiencyStatisticInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  console.log('penalties in interactor', penalties);
   const statisticEntity = new Statistic(
     {
       determinationDeficiencyAmount,
