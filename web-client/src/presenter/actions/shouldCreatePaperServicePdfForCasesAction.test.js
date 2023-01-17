@@ -16,10 +16,13 @@ describe('shouldCreatePaperServicePdfForCasesAction', () => {
     };
   });
 
-  it('should return the no path if trialNoticePdfsKeys is not set', () => {
+  it('should return the no path if trialNoticePdfsKeys is empty', () => {
     runAction(shouldCreatePaperServicePdfForCasesAction, {
       modules: {
         presenter,
+      },
+      props: {
+        trialNoticePdfsKeys: [],
       },
       state: {},
     });
@@ -32,7 +35,7 @@ describe('shouldCreatePaperServicePdfForCasesAction', () => {
         presenter,
       },
       props: {
-        trialNoticePdfsKeys: '123-123',
+        trialNoticePdfsKeys: ['123-123'],
       },
       state: {},
     });
