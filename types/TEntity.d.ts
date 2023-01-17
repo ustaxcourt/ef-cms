@@ -149,45 +149,6 @@ type TUser = {
   contact?: TUserContact;
 };
 
-type TTrialSessionData = {
-  address1: string;
-  address2: string;
-  caseOrder: any;
-  chambersPhoneNumber: string;
-  city: string;
-  courtReporter: string;
-  courthouseName: string;
-  createdAt: string;
-  sessionStatus: string;
-  estimatedEndDate: string;
-  irsCalendarAdministrator: string;
-  isCalendared: boolean;
-  joinPhoneNumber: string;
-  maxCases: number;
-  meetingId: string;
-  notes: string;
-  noticeIssuedDate: string;
-  password: string;
-  postalCode: string;
-  sessionScope: string;
-  sessionType: string;
-  startDate: string;
-  startTime: string;
-  state: string;
-  swingSession: boolean;
-  swingSessionId: string;
-  term: string;
-  termYear: string;
-  trialLocation: string;
-  proceedingType: string;
-  trialSessionId: string;
-  judge: {
-    name: string;
-    userId: string;
-  };
-  trialClerk: string;
-};
-
 type TTrialSessionWorkingCopyData = {
   caseMetadata: any;
   filters: {
@@ -330,24 +291,6 @@ interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];
 }
 
-type TTrialSessionEntity = {
-  isCaseAlreadyCalendared(caseEntity: TCase): boolean;
-  deleteCaseFromCalendar({
-    docketNumber,
-  }: {
-    docketNumber: string;
-  }): TTrialSessionEntity;
-  manuallyAddCaseToCalendar({
-    calendarNotes,
-    caseEntity,
-  }: {
-    calendarNotes: string;
-    caseEntity: TCase;
-  });
-  validate(): TTrialSessionEntity;
-  toRawObject(): TTrialSessionData;
-} & TTrialSessionData;
-
 type TCorrespondence = {
   correspondenceId: string;
 };
@@ -410,4 +353,7 @@ type KeyOfType<Base, Types> = {
   [Key in keyof Base]: Base[Key] extends Types ? Key : never;
 }[keyof Base];
 
-type Primitives = boolean | string | number | null | undefined;
+type ExcludeMethods<T> = Pick<
+  T,
+  { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
+>;

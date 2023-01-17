@@ -32,11 +32,14 @@ export const getTrialSessionsForJudgeInteractor = async (
     session => session.judge?.userId === judgeId,
   );
 
-  const validatedSessions = TrialSession.validateRawCollection(judgeSessions, {
-    applicationContext,
-  });
+  const validatedSessions = TrialSession.validateRawCollection(
+    judgeSessions as any,
+    {
+      applicationContext,
+    },
+  );
 
   return validatedSessions.map(
-    trialSession => new TrialSessionInfoDto(trialSession),
+    trialSession => new TrialSessionInfoDto(trialSession as any),
   );
 };

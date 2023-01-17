@@ -133,6 +133,13 @@ export interface IValidationEntity<T> {
   toRawObjectFromJoi(): any;
 }
 
+export type TStaticValidationMethods<R> = {
+  validateRawCollection(
+    collection: R[],
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ): R[];
+};
+
 /**
  *
  * @param {Function} entityConstructor the entity constructor

@@ -1,5 +1,6 @@
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
+import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
@@ -19,7 +20,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
     trialSessionInformation,
   }: {
     docketNumber: string;
-    trialSessionInformation: TTrialSessionData;
+    trialSessionInformation: TRawTrialSession;
   },
 ) => {
   const formattedStartDate = formatDateString(
