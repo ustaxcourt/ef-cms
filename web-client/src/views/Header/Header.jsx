@@ -1,5 +1,6 @@
 import { AccountMenu } from './AccountMenu';
 import { Button } from '../../ustc-ui/Button/Button';
+import { MessagesMenu } from './MessagesMenu';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { VerifyEmailWarningNotification } from '../VerifyEmailWarningNotification';
@@ -40,7 +41,12 @@ const BetaBar = toggleBetaBarSequence => {
 
 const NavigationItems = (
   headerHelper,
-  { isReportsMenuOpen, signOutSequence, toggleMobileMenuSequence },
+  {
+    isMessagesMenuOpen,
+    isReportsMenuOpen,
+    signOutSequence,
+    toggleMobileMenuSequence,
+  },
 ) => {
   return (
     <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
@@ -76,6 +82,16 @@ const NavigationItems = (
           >
             Messages
           </a>
+        </li>
+      )}
+      {headerHelper.showMessagesDropDown && (
+        <li
+          className={classNames(
+            'usa-nav__primary-item',
+            isMessagesMenuOpen && 'usa-nav__submenu--open',
+          )}
+        >
+          <MessagesMenu isExpanded={isMessagesMenuOpen} />
         </li>
       )}
       {headerHelper.showDocumentQC && (
@@ -174,6 +190,7 @@ export const Header = connect(
   {
     headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
+    isMessagesMenuOpen: state.menuHelper.isMessagesMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showBetaBar: state.templateHelper.showBetaBar,
@@ -186,6 +203,7 @@ export const Header = connect(
   function Header({
     headerHelper,
     isAccountMenuOpen,
+    isMessagesMenuOpen,
     isReportsMenuOpen,
     resetHeaderAccordionsSequence,
     showBetaBar,
@@ -264,6 +282,7 @@ export const Header = connect(
                   </Button>
                   {user &&
                     NavigationItems(headerHelper, {
+                      isMessagesMenuOpen,
                       isReportsMenuOpen,
                       signOutSequence,
                       toggleMobileMenuSequence,

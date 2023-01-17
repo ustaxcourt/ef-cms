@@ -20,12 +20,7 @@ const getBaseState = user => {
   };
 };
 
-const internal = [
-  ROLES.petitionsClerk,
-  ROLES.caseServicesSupervisor,
-  ROLES.adc,
-  ROLES.docketClerk,
-];
+const internal = [ROLES.petitionsClerk, ROLES.adc, ROLES.docketClerk];
 const external = [
   ROLES.petitioner,
   ROLES.privatePractitioner,
@@ -70,6 +65,29 @@ describe('headerHelper', () => {
         state: getBaseState({ role }),
       });
       expect(result.showMessages).toBeTruthy();
+    });
+  });
+
+  it('showMessages should be false for case services supervisors', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: ROLES.caseServicesSupervisor }),
+    });
+    expect(result.showMessages).toBe(false);
+  });
+
+  it('should show the messages dropdpown for case services supervisors', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: ROLES.caseServicesSupervisor }),
+    });
+    expect(result.showMessagesDropDown).toBe(true);
+  });
+
+  it('should not show the messages drop down for non case services supervisors', () => {
+    [...internal, ...external].forEach(role => {
+      const result = runCompute(headerHelper, {
+        state: getBaseState({ role }),
+      });
+      expect(result.showMessagesDropDown).toBe(false);
     });
   });
 
