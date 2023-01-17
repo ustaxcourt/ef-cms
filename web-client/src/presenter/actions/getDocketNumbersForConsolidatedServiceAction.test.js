@@ -8,11 +8,9 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getDocketNumbersForConsolidatedServiceAction', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+  presenter.providers.applicationContext = applicationContext;
 
-  it('should only return the non-lead docketNumber for a multi-docketable document on a non-lead case', async () => {
+  it('should return an empty list when the docket entry is multi-docketable and being filed on a non-lead case', async () => {
     const { output } = await runAction(
       getDocketNumbersForConsolidatedServiceAction,
       {
@@ -40,12 +38,10 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
         },
       },
     );
-    expect(output).toEqual({
-      docketNumbers: [MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber],
-    });
+    expect(output.docketNumbers).toEqual([]);
   });
 
-  it('should ONLY return the lead docketNumber for a NON multi-docketable document on a lead case', async () => {
+  it('should return an empty list when the docket entry is not multi-docketable', async () => {
     const { output } = await runAction(
       getDocketNumbersForConsolidatedServiceAction,
       {
@@ -73,12 +69,11 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
         },
       },
     );
-    expect(output).toEqual({
-      docketNumbers: [MOCK_CASE.docketNumber],
-    });
+
+    expect(output.docketNumbers).toEqual([]);
   });
 
-  it('should ONLY return the lead docketNumber for a multi-docketable document on a lead case where only the lead case is checked', async () => {
+  it('should return the checked member case docket numbers for a multi-docketable docket entry being filed on a lead case', async () => {
     const { output } = await runAction(
       getDocketNumbersForConsolidatedServiceAction,
       {
@@ -88,69 +83,20 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
         state: {
           caseDetail: {
             consolidatedCases: [
-              { checked: true, docketNumber: MOCK_CASE.docketNumber },
+              {
+                checked: true,
+                docketNumber: MOCK_CASE.docketNumber,
+                leadDocketNumber: MOCK_CASE.docketNumber,
+              },
               {
                 checked: false,
-                docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+                docketNumber: 'I should not show up',
+                leadDocketNumber: MOCK_CASE.docketNumber,
               },
-            ],
-            docketNumber: MOCK_CASE.docketNumber,
-            leadDocketNumber: MOCK_CASE.docketNumber,
-          },
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
-          },
-          form: {
-            eventCode: 'A',
-          },
-        },
-      },
-    );
-    expect(output).toEqual({
-      docketNumbers: [MOCK_CASE.docketNumber],
-    });
-  });
-
-  it('should ONLY return the lead docketNumber for a multi-docketable document on a case when the case has no consolidatedCases associated with it', async () => {
-    const { output } = await runAction(
-      getDocketNumbersForConsolidatedServiceAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          caseDetail: {
-            docketNumber: MOCK_CASE.docketNumber,
-            leadDocketNumber: MOCK_CASE.docketNumber,
-          },
-          featureFlagHelper: {
-            consolidatedCasesPropagateDocketEntries: true,
-          },
-          form: {
-            eventCode: 'A',
-          },
-        },
-      },
-    );
-    expect(output).toEqual({
-      docketNumbers: [MOCK_CASE.docketNumber],
-    });
-  });
-
-  it('should return the docketNumbers for both lead and non-lead consolidated cases for a multi-docketable document on a lead case', async () => {
-    const { output } = await runAction(
-      getDocketNumbersForConsolidatedServiceAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          caseDetail: {
-            consolidatedCases: [
-              { checked: true, docketNumber: MOCK_CASE.docketNumber },
               {
                 checked: true,
                 docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+                leadDocketNumber: MOCK_CASE.docketNumber,
               },
             ],
             docketNumber: MOCK_CASE.docketNumber,
@@ -166,10 +112,7 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
       },
     );
     expect(output).toEqual({
-      docketNumbers: [
-        MOCK_CASE.docketNumber,
-        MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
-      ],
+      docketNumbers: [MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber],
     });
   });
 });
