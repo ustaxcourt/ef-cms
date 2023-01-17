@@ -7,6 +7,17 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const setDefaultPenaltiesAction = ({ store }) => {
-  store.set(state.modal.penalties, ['', '', '', '', '']);
+export const setDefaultPenaltiesAction = ({ get, store }) => {
+  const penalties = get(state.form.penalties);
+  penalties;
+  let initialPenalties = penalties ?? [];
+
+  if (initialPenalties.length < 1) {
+    initialPenalties.push({
+      irsPenaltyAmount: '',
+    });
+  } else {
+    initialPenalties = initialPenalties.filter(penalty => penalty.name);
+  }
+  store.set(state.modal.penalties, initialPenalties);
 };

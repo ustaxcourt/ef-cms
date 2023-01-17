@@ -142,17 +142,11 @@ export const DeficiencyStatisticsForm = connect(
                   Total penalties (IRS Notice)
                 </label>
                 <DollarsInput
+                  disabled
                   className="usa-input usa-input-inline input-medium"
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
-                  onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  onValueChange={values => {
-                    updateFormValueSequence({
-                      key: 'irsTotalPenalties',
-                      value: values.value,
-                    });
-                  }}
                 />
                 <Button
                   link
@@ -161,6 +155,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'irsTotalPenalties',
+                      subkey: 'irsPenaltyAmount',
                       title: 'Calculate Penalties on IRS Notice',
                     })
                   }
@@ -209,6 +204,7 @@ export const DeficiencyStatisticsForm = connect(
                   Total penalties (Determination)
                 </label>
                 <DollarsInput
+                  disabled
                   className="usa-input usa-input-inline input-medium"
                   id="determination-total-penalties"
                   name="determinationTotalPenalties"
@@ -228,6 +224,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'determinationTotalPenalties',
+                      subkey: 'determinationPenaltyAmount',
                       title: 'Calculate Penalties as determined by Court',
                     })
                   }

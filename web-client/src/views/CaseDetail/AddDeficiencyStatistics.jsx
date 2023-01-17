@@ -56,8 +56,8 @@ export const AddDeficiencyStatistics = connect(
         </section>
         {showModal === 'CalculatePenaltiesModal' && (
           <CalculatePenaltiesModal
-            confirmSequenceOverride={async () => {
-              await calculatePenaltiesForAddSequence();
+            confirmSequenceOverride={async ({ penaltyAmountType }) => {
+              await calculatePenaltiesForAddSequence({ penaltyAmountType });
               await validateAddDeficiencyStatisticsSequence();
             }}
           />

@@ -9,6 +9,16 @@ describe('updateDeficiencyStatisticInteractor', () => {
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,
     irsTotalPenalties: 1.1,
+    penalties: [
+      {
+        irsPenaltyAmount: 100.0,
+        name: 'Penalty 1 (IRS)',
+      },
+      {
+        irsPenaltyAmount: 200.0,
+        name: 'Penalty 2 (IRS)',
+      },
+    ],
     statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
     year: 2012,
     yearOrPeriod: 'Year',
