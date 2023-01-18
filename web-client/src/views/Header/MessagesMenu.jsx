@@ -54,7 +54,7 @@ export const MessagesMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a href="/" id="petitions-section-messages" onClick={() => {}}>
-                Petitions Sections Messages
+                Petitions Section Messages
               </a>
             </li>
           </ul>

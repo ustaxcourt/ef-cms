@@ -26,7 +26,7 @@ export const DocumentQCMenu = connect(
             'usa-accordion__button usa-nav__link',
             pageIsDocumentQC && 'usa-current',
           )}
-          id="messages-btn"
+          id="qc-btn"
           onClick={() => {
             toggleMenuSequence({ openMenu: 'DocumentQCMenu' });
           }}
@@ -54,7 +54,7 @@ export const DocumentQCMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a href="/" id="petitions-section-qc" onClick={() => {}}>
-                Petitions Sections QC
+                Petitions Section QC
               </a>
             </li>
           </ul>
