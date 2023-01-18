@@ -29,16 +29,17 @@ export const Messages = connect(
               aria-label="unread messages count"
               className="unread margin-right-2"
             ></span>
-            {messagesHelper.showIndividualMessages && (
-              <Button
-                link
-                className="button-switch-box"
-                href="/messages/section/inbox"
-              >
-                <FontAwesomeIcon icon={['far', 'clone']} />
-                Switch to Section Messages
-              </Button>
-            )}
+            {messagesHelper.showIndividualMessages &&
+              !messagesHelper.isCaseServicesSupervisor && (
+                <Button
+                  link
+                  className="button-switch-box"
+                  href="/messages/section/inbox"
+                >
+                  <FontAwesomeIcon icon={['far', 'clone']} />
+                  <> Switch to Section Messages</>
+                </Button>
+              )}
             {messagesHelper.showSectionMessages && (
               <Button
                 link

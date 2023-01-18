@@ -23,6 +23,7 @@ export const messagesHelper = (get, applicationContext) => {
 
   return {
     inboxCount,
+    isCaseServicesSupervisor,
     messagesTitle,
     showIndividualMessages,
     showSectionMessages,
