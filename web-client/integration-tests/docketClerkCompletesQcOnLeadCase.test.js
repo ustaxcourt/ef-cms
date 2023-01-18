@@ -160,7 +160,9 @@ describe('Complete QC on lead case docket entry', () => {
       'ConfirmInitiateCourtIssuedFilingServiceModal',
     );
 
-    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
+    expect(
+      cerebralTest.getState('modal.form.consolidatedCaseAllCheckbox'),
+    ).toBe(true);
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
