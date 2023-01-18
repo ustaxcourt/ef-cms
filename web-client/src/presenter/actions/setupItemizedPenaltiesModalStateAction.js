@@ -14,7 +14,11 @@ export const setupItemizedPenaltiesModalStateAction = ({
   props,
   store,
 }) => {
-  const { penalties } = props;
+  const { determinationTotalPenalties, irsTotalPenalties, penalties } = props;
+
+  const formatDollars = preFormattedDollars => {
+    return applicationContext.getUtilities().formatDollars(preFormattedDollars);
+  };
 
   const partitionedPenalties = partition(penalties, [
     'penaltyType',
@@ -27,15 +31,20 @@ export const setupItemizedPenaltiesModalStateAction = ({
   const itemizedPenalties = irsAmountPenalties.map(
     (irsAmountPenalty, index) => {
       let combinedPenalty = {
-        irsPenaltyAmount: irsAmountPenalty.penaltyAmount,
+        irsPenaltyAmount: formatDollars(irsAmountPenalty.penaltyAmount),
       };
       if (courtDeterminationAmounts[index]) {
-        combinedPenalty.courtDeterminationAmount =
-          courtDeterminationAmounts[index].penaltyAmount;
+        combinedPenalty.courtDeterminationAmount = formatDollars(
+          courtDeterminationAmounts[index].penaltyAmount,
+        );
       }
       return combinedPenalty;
     },
   );
 
-  store.set(state.modal.itemizedPenalties, itemizedPenalties);
+  store.set(state.modal, {
+    determinationTotalPenalties: formatDollars(determinationTotalPenalties),
+    irsTotalPenalties: formatDollars(irsTotalPenalties),
+    itemizedPenalties,
+  });
 };

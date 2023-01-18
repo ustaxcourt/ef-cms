@@ -4,21 +4,17 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const ItemizedPenaltiesModal = connect(
-  { penalties: state.modal.itemizedPenaltiesModal },
-  function ItemizedPenaltiesModal({ penalties }) {
+  { statistic: state.modal },
+  function ItemizedPenaltiesModal({ statistic }) {
     return (
-      <ModalDialog
-        className="text-center"
-        showButtons={false}
-        title="Itemized Penalties"
-      >
-        <div style={{ borderStyle: 'hidden' }}>
+      <ModalDialog showButtons={false} title="Itemized Penalties">
+        <div>
           <table
             aria-describedby="tab-work-queue"
-            className="usa-table ustc-table subsection"
-            id="section-work-queue"
+            className="usa-table ustc-table itemized-penalties-modal"
+            id="itemized-penalties-modal-id"
           >
-            <thead>
+            <thead className="itemized-penalties-modal">
               <tr>
                 <th></th>
                 <th>IRS Notice</th>
@@ -26,11 +22,31 @@ export const ItemizedPenaltiesModal = connect(
               </tr>
             </thead>
             <tbody>
-              {penalties.map()}
-              <tr>
-                <td>Penalty 1</td>
-                <td>{}</td>
-                <td>{}</td>
+              {statistic.itemizedPenalties.map((penaltyObject, index) => {
+                return (
+                  <tr key={`Penalty ${index + 1}`}>
+                    <td>
+                      <b>{`Penalty ${index + 1}`}</b>
+                    </td>
+                    <td>{penaltyObject.irsPenaltyAmount}</td>
+                    <td>{penaltyObject.courtDeterminationAmount || ''}</td>
+                  </tr>
+                );
+              })}
+              <tr className="total-subsection" key="totals">
+                <td>
+                  <b className="font-sans-lg">Total:</b>
+                </td>
+                <td>
+                  <span className="font-sans-lg">
+                    {statistic.irsTotalPenalties}
+                  </span>
+                </td>
+                <td>
+                  <span className="font-sans-lg">
+                    {statistic.determinationTotalPenalties}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
