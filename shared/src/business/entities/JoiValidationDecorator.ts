@@ -1,6 +1,6 @@
-const joi = require('joi');
-const { InvalidEntityError } = require('../../errors/errors');
-const { isEmpty } = require('lodash');
+import { InvalidEntityError } from '../../errors/errors';
+import { isEmpty } from 'lodash';
+import joi from 'joi';
 
 const setIsValidated = obj => {
   Object.defineProperty(obj, 'isValidated', {
@@ -45,7 +45,7 @@ function toRawObject(entity) {
  * @param {Entity} entity the entity to get formatted validation errors
  * @returns {object} errors (null if no errors)
  */
-function getFormattedValidationErrorsHelper(entity) {
+export function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
   if (!errors) return null;
   for (let key of Object.keys(errors)) {
@@ -120,19 +120,32 @@ function getFormattedValidationErrors(entity) {
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
+export interface TValidationEntity {
+  getErrorToMessageMap(): any;
+  getSchema(): any;
+  isValid(): boolean;
+  validateForMigration(): void;
+  validate(): TValidationEntity;
+  validateWithLogging(): void;
+  getFormattedValidationErrors(): any;
+  getValidationErrors(): any;
+  toRawObject(): any;
+  toRawObjectFromJoi(): any;
+}
+
 /**
  *
  * @param {Function} entityConstructor the entity constructor
  * @param {object} schema the joi validation schema
  * @param {object} errorToMessageMap the map of error fields and messages
  */
-exports.joiValidationDecorator = function (
+export function joiValidationDecorator(
   entityConstructor,
   schema,
   errorToMessageMap = {},
 ) {
   if (!entityConstructor['__proxy__']) {
-    entityConstructor = exports.validEntityDecorator(entityConstructor);
+    entityConstructor = validEntityDecorator(entityConstructor);
   }
   if (!schema.validate && typeof schema === 'object') {
     schema = joi.object().keys({ ...schema });
@@ -163,7 +176,7 @@ exports.joiValidationDecorator = function (
       });
 
       if (error) {
-        console.log('entity with error-------------', this);
+        console.log('Error, entity is invalid: ', this);
         throw new InvalidEntityError(
           this.entityName,
           JSON.stringify(
@@ -252,7 +265,7 @@ exports.joiValidationDecorator = function (
   entityConstructor.validateCollection = function (collection) {
     return collection.map(entity => entity.validate());
   };
-};
+}
 
 /**
  * Creates a new Proxy object from the provided entity constructor.
@@ -263,7 +276,7 @@ exports.joiValidationDecorator = function (
  * @returns {Function} a factory function with proxy trap for 'construct' and
  *   proxy trap for 'set' on the returned instances
  */
-exports.validEntityDecorator = entityFactoryFunction => {
+export function validEntityDecorator(entityFactoryFunction) {
   const hasInitFunction =
     typeof entityFactoryFunction === 'function' &&
     typeof entityFactoryFunction.prototype.init === 'function';
@@ -296,8 +309,6 @@ exports.validEntityDecorator = entityFactoryFunction => {
     iterable: false,
     value: true,
     writable: false,
-  });
+  } as any);
   return ValidEntityProxy;
-};
-
-exports.getFormattedValidationErrorsHelper = getFormattedValidationErrorsHelper;
+}

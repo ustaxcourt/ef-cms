@@ -263,7 +263,7 @@ Pa11y is set up using .json files that define which URL it should hit and what a
 
 ```javascript
 [
-  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/',
+  'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
   {
     actions: [
       'wait for #advanced-search-button to be visible',
@@ -271,7 +271,7 @@ Pa11y is set up using .json files that define which URL it should hit and what a
       'wait for .search-results to be visible',
     ],
     notes: 'checks a11y of advanced search results table',
-    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search?petitionerName=cairo',
+    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/search?petitionerName=cairo',
   }
   //.... more pa11y tests
 ]

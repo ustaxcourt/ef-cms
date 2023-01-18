@@ -2,14 +2,14 @@ const { getServedPartiesCode } = require('./DocketEntry');
 const { PARTIES_CODES, ROLES } = require('./EntityConstants');
 
 describe('getServedPartiesCode', () => {
-  it('returns an empty string if servedParties is undefined', () => {
+  it('returns undefined if servedParties is undefined', () => {
     const servedPartiesCode = getServedPartiesCode();
-    expect(servedPartiesCode).toEqual('');
+    expect(servedPartiesCode).toBeUndefined();
   });
 
-  it('returns an empty string if servedParties is an empty array', () => {
+  it('returns undefined if servedParties is an empty array', () => {
     const servedPartiesCode = getServedPartiesCode([]);
-    expect(servedPartiesCode).toEqual('');
+    expect(servedPartiesCode).toBeUndefined();
   });
 
   it('returns the servedParties code for respondent if the only party in the given servedParties array has the irsSuperUser role', () => {
