@@ -8,6 +8,7 @@ export const workQueueSectionHelper = (get, applicationContext) => {
       {
         adc: 'ADC',
         admissions: 'Admissions',
+        caseServicesSupervisor: 'Case Services Supervisor',
         chambers: 'Chambers',
         clerkofcourt: 'Clerk of the Court',
         docket: 'Docket',
