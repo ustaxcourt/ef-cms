@@ -4,7 +4,7 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const ItemizedPenaltiesModal = connect(
-  { penalties: state. },
+  { penalties: state.modal.itemizedPenaltiesModal },
   function ItemizedPenaltiesModal({ penalties }) {
     return (
       <ModalDialog

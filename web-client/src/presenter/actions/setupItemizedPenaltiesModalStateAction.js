@@ -29,10 +29,6 @@ export const setupItemizedPenaltiesModalStateAction = ({
       let combinedPenalty = {
         irsPenaltyAmount: irsAmountPenalty.penaltyAmount,
       };
-      console.log(
-        'courtDeterminationAmounts[index]',
-        courtDeterminationAmounts[index],
-      );
       if (courtDeterminationAmounts[index]) {
         combinedPenalty.courtDeterminationAmount =
           courtDeterminationAmounts[index].penaltyAmount;
