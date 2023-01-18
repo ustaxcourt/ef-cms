@@ -43,7 +43,10 @@ export const setupConsolidatedCasesForAddedDocketNumbersAction = ({
       };
     });
 
-    store.set(state.consolidatedCaseAllCheckbox, shouldSelectAll);
-    store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+    store.set(state.modal.form.consolidatedCaseAllCheckbox, true);
+    store.set(
+      state.modal.form.consolidatedCasesToMultiDocketOn,
+      consolidatedCases,
+    );
   }
 };
