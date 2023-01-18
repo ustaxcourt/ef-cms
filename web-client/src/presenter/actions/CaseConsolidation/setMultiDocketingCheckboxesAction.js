@@ -20,6 +20,7 @@ export const setMultiDocketingCheckboxesAction = ({
     checkboxDisabled: true,
     checked: true,
     docketNumber: aCase.docketNumber,
+    docketNumberWithSuffix: aCase.docketNumberWithSuffix,
     formattedPetitioners: aCase.petitioners.map(ptr => ptr.name).join(' & '),
     isLeadCase: applicationContext.getUtilities().isLeadCase(aCase),
   }));
