@@ -209,13 +209,6 @@ export const DeficiencyStatisticsForm = connect(
                   id="determination-total-penalties"
                   name="determinationTotalPenalties"
                   value={form.determinationTotalPenalties || ''}
-                  onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  onValueChange={values => {
-                    updateFormValueSequence({
-                      key: 'determinationTotalPenalties',
-                      value: values.value,
-                    });
-                  }}
                 />
                 <Button
                   link

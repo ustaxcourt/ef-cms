@@ -29,10 +29,10 @@ Penalty.prototype.init = function init(rawProps, { applicationContext }) {
 };
 
 Penalty.VALIDATION_ERROR_MESSAGES = {
-  name: 'Name is required',
-  penaltyAmount: 'Enter penalty amount',
-  penaltyType: 'Type of penalty is required',
-  statisticId: 'Statistic Id is required',
+  name: 'Name is required.',
+  penaltyAmount: 'Enter penalty amount.',
+  penaltyType: 'Type of penalty is required.',
+  statisticId: 'Statistic ID is required.',
 };
 
 Penalty.VALIDATION_RULES = joi.object().keys({
@@ -49,7 +49,7 @@ Penalty.VALIDATION_RULES = joi.object().keys({
   ),
   penaltyType: JoiValidationConstants.STRING.required()
     .valid(...Object.values(PENALTY_TYPES))
-    .description('The type of penalty (IRS or Court Determination)'),
+    .description('The type of penalty (IRS or Court Determination).'),
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
   ),

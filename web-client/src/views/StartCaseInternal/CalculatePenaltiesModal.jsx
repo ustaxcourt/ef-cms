@@ -35,6 +35,8 @@ export const CalculatePenaltiesModal = connect(
         cancelSequence={cancelSequence}
         confirmLabel="Calculate and Save"
         confirmSequence={() => {
+          //TODO: eliminade override
+          //TODO: validate #1 here?
           confirmSequenceOverride
             ? confirmSequenceOverride({ penaltyAmountType })
             : confirmSequence();
@@ -52,9 +54,9 @@ export const CalculatePenaltiesModal = connect(
                 className="usa-input"
                 id={`penalty_${index}`}
                 name={`penalties.${index}`}
-                placeholder="$0.00"
                 value={penalties[index].penaltyAmount}
                 onValueChange={values => {
+                  //TODO: validate #1 here?
                   updateModalValueSequence({
                     key: `penalties.${index}.penaltyAmount`,
                     value: values.value,

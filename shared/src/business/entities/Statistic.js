@@ -48,10 +48,11 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
-  determinationDeficiencyAmount: 'Enter deficiency as determined by Court',
-  determinationTotalPenalties: 'Enter total penalties as determined by Court',
-  irsDeficiencyAmount: 'Enter deficiency on IRS Notice',
-  irsTotalPenalties: 'Enter total penalties on IRS Notice',
+  //TODO: add more / fix validation error messages
+  determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
+  determinationTotalPenalties: 'Enter total penalties as determined by Court.',
+  irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
+  irsTotalPenalties: 'Enter total penalties on IRS Notice.',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
@@ -59,7 +60,8 @@ Statistic.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter last date of period',
   ],
-  year: 'Enter a valid year',
+  penalties: 'Enter at least one IRS penalty.',
+  year: 'Enter a valid year.',
 };
 
 Statistic.VALIDATION_RULES = joi.object().keys({
@@ -99,9 +101,14 @@ Statistic.VALIDATION_RULES = joi.object().keys({
       then: joi.required(),
     })
     .description('Last date of the statistics period.'),
+  //TODO: consider validating all penalties here (.items())
   penalties: joi
     .array()
-    .min(1)
+    .has(
+      joi.object().keys({
+        penaltyType: joi.string().valid('irsPenaltyAmount'),
+      }),
+    )
     .required()
     .description('List of Penalty Entities for the statistic.'),
   statisticId: JoiValidationConstants.UUID.required().description(
@@ -176,7 +183,7 @@ const itemizeTotalPenalties = function (
       name: 'Penalty 1 (IRS)',
       penaltyAmount: irsTotalPenalties,
       penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
-      statisticId: this.statisticId,
+      statisticId: obj.statisticId,
     },
   });
 
@@ -187,7 +194,7 @@ const itemizeTotalPenalties = function (
         name: 'Penalty 1 (Court)',
         penaltyAmount: determinationTotalPenalties,
         penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
-        statisticId: this.statisticId,
+        statisticId: obj.statisticId,
       },
     });
   }
