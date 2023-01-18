@@ -9,14 +9,12 @@ import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1View
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
 
-const cerebralTest = setupTest();
-
-cerebralTest.draftOrders = [];
-
 describe('Petitions Clerk Serves Court Issued Document From Message Detail', () => {
-  beforeAll(() => {
-    jest.setTimeout(40000);
+  const cerebralTest = setupTest();
 
+  cerebralTest.draftOrders = [];
+
+  beforeAll(() => {
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',
