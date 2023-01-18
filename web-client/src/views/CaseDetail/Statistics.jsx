@@ -163,7 +163,9 @@ export const Statistics = connect(
             </div>
           </div>
         )}
-        {showModal === 'ItemizedPenaltiesModal' && <ItemizedPenaltiesModal />}
+        {showModal === 'ItemizedPenaltiesModal' && (
+          <ItemizedPenaltiesModal cancelSequence="clearModalSequence" />
+        )}
       </>
     );
   },
