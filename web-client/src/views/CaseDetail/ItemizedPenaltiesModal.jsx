@@ -1,13 +1,20 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ItemizedPenaltiesModal = connect(
-  { statistic: state.modal },
-  function ItemizedPenaltiesModal({ statistic }) {
+  {
+    clearModalSequence: sequences.clearModalSequence,
+    statistic: state.modal,
+  },
+  function ItemizedPenaltiesModal({ clearModalSequence, statistic }) {
     return (
-      <ModalDialog showButtons={false} title="Itemized Penalties">
+      <ModalDialog
+        cancelSequence={clearModalSequence}
+        showButtons={false}
+        title="Itemized Penalties"
+      >
         <div>
           <table
             aria-describedby="tab-work-queue"
