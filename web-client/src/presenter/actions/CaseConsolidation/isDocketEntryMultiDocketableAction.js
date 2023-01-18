@@ -18,6 +18,7 @@ export const isDocketEntryMultiDocketableAction = ({
   const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
     applicationContext.getConstants();
 
+  const currentPage = get(state.currentPage);
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
 
@@ -32,6 +33,9 @@ export const isDocketEntryMultiDocketableAction = ({
   if (NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)) {
     return path.no();
   }
+
+  // return no if we are on message detail
+  if (currentPage === 'MessageDetail') return path.no();
 
   return path.yes();
 };
