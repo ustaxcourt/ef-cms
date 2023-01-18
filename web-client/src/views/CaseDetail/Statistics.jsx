@@ -103,7 +103,9 @@ export const Statistics = connect(
                           link
                           className="padding-0 margin-left-2"
                           onClick={() => {
-                            openItemizedPenaltiesModalSequence();
+                            openItemizedPenaltiesModalSequence({
+                              penalties: statistic.penalties,
+                            });
                           }}
                         >
                           View Itemized Penalties

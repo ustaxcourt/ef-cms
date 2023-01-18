@@ -30,7 +30,7 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('shouild set itemized penalties on state when both penalty types are equal in number', async () => {
+  it('should set itemized penalties on state when both penalty types are equal in number', async () => {
     const result = await runAction(setupItemizedPenaltiesModalStateAction, {
       modules: {
         presenter,
@@ -58,7 +58,60 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
     ]);
   });
 
-  // Where irs type penalties are greater in number
-  // When there are no courtDetermination penalties
-  // Where penalties on props is undefined or empty array
+  it('should set itemized penalties on state when irs type penalties are greater in number', async () => {
+    const result = await runAction(setupItemizedPenaltiesModalStateAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        penalties: [irsPenalty1, courtDetermination1, irsPenalty2],
+      },
+      state: {},
+    });
+
+    expect(result.state.modal.itemizedPenalties).toEqual([
+      {
+        courtDeterminationAmount: courtDetermination1.penaltyAmount,
+        irsPenaltyAmount: irsPenalty1.penaltyAmount,
+      },
+      {
+        irsPenaltyAmount: irsPenalty2.penaltyAmount,
+      },
+    ]);
+  });
+
+  it('should set itemized penalties on state when there are no courtDetermination penalties', async () => {
+    const result = await runAction(setupItemizedPenaltiesModalStateAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        penalties: [irsPenalty1, irsPenalty2],
+      },
+      state: {},
+    });
+
+    expect(result.state.modal.itemizedPenalties).toEqual([
+      {
+        irsPenaltyAmount: irsPenalty1.penaltyAmount,
+      },
+      {
+        irsPenaltyAmount: irsPenalty2.penaltyAmount,
+      },
+    ]);
+  });
+
+  it('should set itemized penalties on state when penalties is an empty array', async () => {
+    const result = await runAction(setupItemizedPenaltiesModalStateAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        penalties: [],
+      },
+      state: {},
+    });
+
+    expect(result.state.modal.itemizedPenalties).toEqual([]);
+  });
 });
