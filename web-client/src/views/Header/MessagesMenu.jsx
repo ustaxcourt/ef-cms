@@ -6,12 +6,14 @@ import classNames from 'classnames';
 
 export const MessagesMenu = connect(
   {
+    headerHelper: state.headerHelper,
     pageIsMessages: state.headerHelper.pageIsMessages,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
   function MessagesMenu({
+    headerHelper,
     isExpanded,
     pageIsMessages,
     resetHeaderAccordionsSequence,
@@ -20,6 +22,11 @@ export const MessagesMenu = connect(
   }) {
     return (
       <>
+        {headerHelper.unreadMessageCount > 0 && (
+          <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
+            {headerHelper.unreadMessageCount}
+          </div>
+        )}
         <button
           aria-expanded={isExpanded}
           className={classNames(
@@ -38,6 +45,7 @@ export const MessagesMenu = connect(
             <li className="usa-nav__submenu-item">
               <Button
                 link
+                href="/messages/my/inbox"
                 id="my-messages-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();

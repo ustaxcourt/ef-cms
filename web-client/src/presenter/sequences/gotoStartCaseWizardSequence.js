@@ -42,6 +42,7 @@ export const gotoStartCaseWizardSequence =
           USER_ROLES.admissionsClerk,
           USER_ROLES.chambers,
           USER_ROLES.clerkOfCourt,
+          USER_ROLES.caseServicesSupervisor,
           USER_ROLES.docketClerk,
           USER_ROLES.judge,
           USER_ROLES.petitionsClerk,

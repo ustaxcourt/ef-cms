@@ -34,6 +34,7 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
             USER_ROLES.clerkOfCourt,
             USER_ROLES.floater,
             USER_ROLES.general,
+            USER_ROLES.caseServicesSupervisor,
             USER_ROLES.reportersOffice,
             USER_ROLES.trialClerk,
           ],
