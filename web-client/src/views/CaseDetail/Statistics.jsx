@@ -104,6 +104,9 @@ export const Statistics = connect(
                           className="padding-0 margin-left-2"
                           onClick={() => {
                             openItemizedPenaltiesModalSequence({
+                              determinationTotalPenalties:
+                                statistic.determinationTotalPenalties,
+                              irsTotalPenalties: statistic.irsTotalPenalties,
                               penalties: statistic.penalties,
                             });
                           }}
