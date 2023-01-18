@@ -1,30 +1,25 @@
 import { state } from 'cerebral';
 
+// eslint-disable-next-line spellcheck/spell-checker
 /**
- * determines the path to be taken based on helper property
+ * Determines if the docket entry event code is one that can be multi-docketed
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext object
  * @param {object} providers.get the cerebral get object
  * @param {object} providers.path the cerebral path object
- * @returns {object} the next path based on if consolidated cases should be set up
+ * @returns {object} the next path based on if docket entry is multi-docketable
  */
-export const shouldSetupConsolidatedCasesAction = ({
+export const isDocketEntryMultiDocketableAction = ({
   applicationContext,
   get,
   path,
 }) => {
+  const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
+    applicationContext.getConstants();
+
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const {
-    ENTERED_AND_SERVED_EVENT_CODES,
-    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  } = applicationContext.getConstants();
-
-  const eventCodesNotCompatibleWithConsolidation = [
-    ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  ];
 
   let { eventCode } = get(state.form);
 
@@ -34,10 +29,7 @@ export const shouldSetupConsolidatedCasesAction = ({
     ));
   }
 
-  const shouldNotSetupConsolidatedCases =
-    eventCodesNotCompatibleWithConsolidation.includes(eventCode);
-
-  if (shouldNotSetupConsolidatedCases) {
+  if (NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)) {
     return path.no();
   }
 
