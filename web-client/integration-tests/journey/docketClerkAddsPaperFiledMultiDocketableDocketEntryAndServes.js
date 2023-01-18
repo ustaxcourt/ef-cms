@@ -64,6 +64,9 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
     expect(cerebralTest.getState('modal.showModal')).toEqual(
       'ConfirmInitiatePaperFilingServiceModal',
     );
+    expect(
+      cerebralTest.getState('modal.form.consolidatedCaseAllCheckbox'),
+    ).toBe(true);
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
@@ -73,8 +76,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       booleanExpressionCondition: () =>
         cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
-
-    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
 
     cerebralTest.multiDocketedDocketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
