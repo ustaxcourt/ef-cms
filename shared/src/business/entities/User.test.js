@@ -231,6 +231,9 @@ describe('User entity', () => {
     it('should return true when the user role is reportersOffice', () => {
       expect(User.isInternalUser(ROLES.reportersOffice)).toEqual(true);
     });
+    it('should return true when the user role is caseServicesSupervisor', () => {
+      expect(User.isInternalUser(ROLES.caseServicesSupervisor)).toEqual(true);
+    });
   });
 
   it('should filter out pendingEmailVerificationToken when filtered is true', () => {
