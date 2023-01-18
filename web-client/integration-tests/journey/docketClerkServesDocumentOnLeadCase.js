@@ -20,7 +20,8 @@ export const docketClerkServesDocumentOnLeadCase = cerebralTest => {
     const modal = cerebralTest.getState('modal.form');
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
-    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
+
+    expect(modal.consolidatedCaseAllCheckbox).toEqual(false);
 
     await cerebralTest.runSequence('updateCaseCheckboxSequence', {
       docketNumber: modal.consolidatedCasesToMultiDocketOn[1].docketNumber,
@@ -29,7 +30,7 @@ export const docketClerkServesDocumentOnLeadCase = cerebralTest => {
       cerebralTest.leadDocketNumber,
     );
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
-      modal.consolidatedCases[1].docketNumber,
+      modal.consolidatedCasesToMultiDocketOn[1].docketNumber,
     );
 
     await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
