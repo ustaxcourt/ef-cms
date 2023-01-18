@@ -17,19 +17,19 @@ export const docketClerkServesDocumentOnLeadCase = cerebralTest => {
       'ConfirmInitiateCourtIssuedFilingServiceModal',
     );
 
-    const caseDetail = cerebralTest.getState('caseDetail');
+    const modal = cerebralTest.getState('modal.form');
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
 
     await cerebralTest.runSequence('updateCaseCheckboxSequence', {
-      docketNumber: caseDetail.consolidatedCases[1].docketNumber,
+      docketNumber: modal.consolidatedCasesToMultiDocketOn[1].docketNumber,
     });
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
       cerebralTest.leadDocketNumber,
     );
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
-      caseDetail.consolidatedCases[1].docketNumber,
+      modal.consolidatedCases[1].docketNumber,
     );
 
     await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
