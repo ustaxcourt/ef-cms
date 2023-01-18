@@ -165,6 +165,7 @@ User.isInternalUser = function (role) {
     ROLES.admissionsClerk,
     ROLES.chambers,
     ROLES.clerkOfCourt,
+    ROLES.caseServicesSupervisor,
     ROLES.docketClerk,
     ROLES.floater,
     ROLES.general,
