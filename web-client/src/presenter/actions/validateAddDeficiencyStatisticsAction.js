@@ -16,20 +16,26 @@ export const validateAddDeficiencyStatisticsAction = ({
   path,
 }) => {
   const form = get(state.form);
-  console.log('form*** ', form);
 
   const combinedForm = combineLastDateOfPeriodFields({
     applicationContext,
     form,
   });
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validateAddDeficiencyStatisticsInteractor(applicationContext, {
       statistic: {
         ...combinedForm,
       },
     });
+
+  // we show this error when the calculate modal is not used to generate irsTotalPenalties
+  if (errors && errors.irsTotalPenalties && errors.penalties) {
+    delete errors.penalties;
+    errors.irsTotalPenalties =
+      'Use IRS Penalty Calculator to calculate total penalties.';
+  }
 
   if (!errors) {
     return path.success();

@@ -3271,8 +3271,8 @@
     "statistics": [
       {
         "lastDateOfPeriod": null,
-        "irsDeficiencyAmount": "1500.00",
-        "irsTotalPenalties": "150.00",
+        "irsDeficiencyAmount": 1500.0,
+        "irsTotalPenalties": 150.0,
         "statisticId": "38128813-53b7-4c53-acc2-33eb31ebc0ef",
         "year": "2019",
         "entityName": "Statistic",
