@@ -11,12 +11,16 @@ describe('updateDeficiencyStatisticInteractor', () => {
     irsTotalPenalties: 1.1,
     penalties: [
       {
-        irsPenaltyAmount: 100.0,
         name: 'Penalty 1 (IRS)',
+        penaltyAmount: 100.0,
+        penaltyType:
+          applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT,
       },
       {
-        irsPenaltyAmount: 200.0,
         name: 'Penalty 2 (IRS)',
+        penaltyAmount: 200.0,
+        penaltyType:
+          applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT,
       },
     ],
     statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
