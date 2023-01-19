@@ -1,20 +1,11 @@
-const requiredEnvVars = [
+const { requireEnvVars } = require('./util');
+requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
   'REGION',
-];
-const envVars = Object.keys(process.env);
-let missing = '';
-for (const key of requiredEnvVars) {
-  if (!envVars.includes(key) || !process.env[key]) {
-    missing += `${missing.length > 0 ? ', ' : ''}${key}`;
-  }
-}
-if (missing) {
-  console.error(`Missing environment variable(s): ${missing}`);
-  process.exit();
-}
+]);
+
 const connectionClass = require('http-aws-es');
 const elasticsearch = require('elasticsearch');
 const {
