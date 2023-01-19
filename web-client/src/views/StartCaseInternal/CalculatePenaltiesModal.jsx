@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CalculatePenaltiesModal = connect(
@@ -10,9 +10,7 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
-    confirmSequenceOverride: props.confirmSequenceOverride,
     penalties: state.modal.penalties,
-    penaltyAmountType: state.statisticsFormHelper.penaltyAmountType,
     showAddAnotherPenaltyButton:
       state.statisticsFormHelper.showAddAnotherPenaltyButton,
     title: state.modal.title,
@@ -22,9 +20,7 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence,
     cancelSequence,
     confirmSequence,
-    confirmSequenceOverride,
     penalties,
-    penaltyAmountType,
     showAddAnotherPenaltyButton,
     title,
     updateModalValueSequence,
@@ -34,13 +30,7 @@ export const CalculatePenaltiesModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Calculate and Save"
-        confirmSequence={() => {
-          //TODO: eliminade override
-          //TODO: validate #1 here?
-          confirmSequenceOverride
-            ? confirmSequenceOverride({ penaltyAmountType })
-            : confirmSequence();
-        }}
+        confirmSequence={confirmSequence}
         title={title}
       >
         {penalties &&
@@ -56,7 +46,6 @@ export const CalculatePenaltiesModal = connect(
                 name={`penalties.${index}`}
                 value={penalties[index].penaltyAmount}
                 onValueChange={values => {
-                  //TODO: validate #1 here?
                   updateModalValueSequence({
                     key: `penalties.${index}.penaltyAmount`,
                     value: values.value,
