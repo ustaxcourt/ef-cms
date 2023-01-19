@@ -155,6 +155,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'irsTotalPenalties',
+                      statisticId: form.statisticId,
                       subkey: 'irsPenaltyAmount',
                       title: 'Calculate Penalties on IRS Notice',
                     })

@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -6,18 +5,15 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
+ * @param {object} providers.applicationContext the application context
  */
 export const setDefaultFormForAddDeficiencyStatisticsAction = ({
-  get,
+  applicationContext,
   store,
 }) => {
-  let statistics = get(state.caseDetail.statistics);
-  if (isEmpty(statistics)) {
-    statistics = [{}];
-  }
-
   store.set(state.form, {
     penalties: [],
+    statisticId: applicationContext.getUniqueId(),
     yearOrPeriod: 'Year',
   });
 };

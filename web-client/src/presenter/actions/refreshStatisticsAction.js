@@ -19,12 +19,14 @@ export const refreshStatisticsAction = ({ applicationContext, get, store }) => {
   } else {
     if (statistics && statistics.length < 12) {
       statistics.push({
+        statisticId: applicationContext.getUniqueId(),
         yearOrPeriod: 'Year',
       });
       store.set(state.form.statistics, statistics);
     } else if (!statistics) {
       statistics = [
         {
+          statisticId: applicationContext.getUniqueId(),
           yearOrPeriod: 'Year',
         },
       ];

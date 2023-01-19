@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setDefaultPenaltiesAction = ({ get, props, store }) => {
-  const { statisticIndex, subkey: penaltyType } = props;
+  const { statisticId, statisticIndex, subkey: penaltyType } = props;
 
   const penalties = statisticIndex
     ? get(state.form.statistics[statisticIndex].penalties)
@@ -24,8 +24,10 @@ export const setDefaultPenaltiesAction = ({ get, props, store }) => {
     initialPenalties.push({
       penaltyAmount: '',
       penaltyType,
+      statisticId,
     });
   }
 
   store.set(state.modal.penalties, initialPenalties);
+  store.set(state.modal.statisticId, statisticId);
 };
