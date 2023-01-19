@@ -21,10 +21,17 @@ export const messagesHelper = (get, applicationContext) => {
     ? 'My Messages'
     : 'Section Messages';
 
+  const showSwitchToSectionMessagesButton =
+    showIndividualMessages && !isCaseServicesSupervisor;
+  const showSwitchToMyMessagesButton =
+    showSectionMessages && !isCaseServicesSupervisor;
+
   return {
     inboxCount,
     messagesTitle,
     showIndividualMessages,
     showSectionMessages,
+    showSwitchToMyMessagesButton,
+    showSwitchToSectionMessagesButton,
   };
 };
