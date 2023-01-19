@@ -1,4 +1,4 @@
-const queryFullCase = async (documentClient, docketNumber) => {
+export const queryFullCase = async (documentClient, docketNumber) => {
   let hasMoreResults = true;
   let lastKey = null;
   let allResults = [];
@@ -26,8 +26,4 @@ const queryFullCase = async (documentClient, docketNumber) => {
   }
 
   return allResults;
-};
-
-module.exports = {
-  queryFullCase,
 };

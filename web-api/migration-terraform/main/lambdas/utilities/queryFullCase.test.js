@@ -1,4 +1,4 @@
-const { queryFullCase } = require('./utilities');
+const { queryFullCase } = require('./queryFullCase');
 
 describe('queryFullCase', () => {
   let documentClient;

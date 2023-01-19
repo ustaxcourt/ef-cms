@@ -60,6 +60,9 @@
           "pk": {
             "type": "keyword"
           },
+          "recordSizeInBytes": {
+            "type": "integer"
+          },
           "trialSessionId": {
             "type": "keyword"
           }

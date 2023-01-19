@@ -7,7 +7,7 @@ import { getCalendaredCasesForTrialSessionInteractor } from './getCalendaredCase
 
 const mockJudge = {
   role: ROLES.judge,
-  section: 'judgeChambers',
+  section: 'judgechambers',
   userId: '123',
 };
 
