@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { calculatePenaltiesAction } from './calculatePenaltiesAction';
 import { runAction } from 'cerebral/test';
 
@@ -8,9 +9,27 @@ describe('calculatePenaltiesAction', () => {
       state: {
         modal: {
           penalties: [
-            { irsPenaltyAmount: '1.00', name: 'Penalty1' },
-            { irsPenaltyAmount: '2.00', name: 'Penalty2' },
-            { irsPenaltyAmount: '3.00', name: 'Penalty3' },
+            {
+              name: 'Penalty 1 (IRS)',
+              penaltyAmount: '1.00',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            {
+              name: 'Penalty 2 (IRS)',
+              penaltyAmount: '2.00',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            {
+              name: 'Penalty 3 (IRS)',
+              penaltyAmount: '3.00',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
           ],
           subkey: 'irsPenaltyAmount',
         },
@@ -26,9 +45,27 @@ describe('calculatePenaltiesAction', () => {
       state: {
         modal: {
           penalties: [
-            { irsPenaltyAmount: '1', name: 'Penalty1' },
-            { irsPenaltyAmount: '2', name: 'Penalty2' },
-            { irsPenaltyAmount: '3.001', name: 'Penalty3' },
+            {
+              name: 'Penalty 1 (IRS)',
+              penaltyAmount: '1',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            {
+              name: 'Penalty 2 (IRS)',
+              penaltyAmount: '2',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            {
+              name: 'Penalty 3 (IRS)',
+              penaltyAmount: '3.001',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
           ],
           subkey: 'irsPenaltyAmount',
         },
@@ -44,9 +81,27 @@ describe('calculatePenaltiesAction', () => {
       state: {
         modal: {
           penalties: [
-            { irsPenaltyAmount: '1', name: 'Penalty1' },
-            { irsPenaltyAmount: '2', name: 'Penalty2' },
-            { irsPenaltyAmount: '3', name: 'Penalty3' },
+            {
+              name: 'Penalty 1 (IRS)',
+              penaltyAmount: '1',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            {
+              name: 'Penalty 2 (IRS)',
+              penaltyAmount: '2',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            {
+              name: 'Penalty 3 (IRS)',
+              penaltyAmount: '3',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
           ],
           subkey: 'irsPenaltyAmount',
         },
@@ -62,9 +117,15 @@ describe('calculatePenaltiesAction', () => {
       state: {
         modal: {
           penalties: [
-            { irsPenaltyAmount: '6', name: 'Penalty1' },
-            { irsPenaltyAmount: null },
-            { irsPenaltyAmount: '' },
+            {
+              name: 'Penalty 1 (IRS)',
+              penaltyAmount: '6',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+            },
+            { penaltyAmount: null },
+            { penaltyAmount: '' },
           ],
           subkey: 'irsPenaltyAmount',
         },
