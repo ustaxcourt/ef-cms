@@ -10,32 +10,36 @@
  */
 export const validatePenaltiesAction = ({
   applicationContext,
-  get,
   path,
   props,
-  state,
 }) => {
-  const { statisticId } = get(state.form);
   const { penalties } = props;
 
   let errors = [];
 
+  if (penalties.length < 1) {
+    errors.push({
+      penaltyAmount: 'Please enter a penalty.',
+    });
+  }
+
   penalties.forEach(penalty => {
-    penalty.statisticId = statisticId;
     let error = applicationContext
       .getUseCases()
       .validatePenaltiesInteractor(applicationContext, { rawPenalty: penalty });
-    errors.push(error);
+
+    error && errors.push(error);
   });
 
-  if (!errors) {
-    return path.success({ penalties });
+  if (!errors.length) {
+    return path.success(props);
   } else {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors,
+      //TODO: this is not correct, need to show all the errors
+      error: errors[0],
     });
   }
 };

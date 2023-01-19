@@ -13,10 +13,14 @@ export const calculatePenaltiesAction = ({ get }) => {
     statisticIndex,
     subkey: penaltyAmountType,
   } = get(state.modal);
-
+  //TODO: clean this up
   let initialPenalties = statisticIndex
     ? get(state.form.statistics[statisticIndex].penalties) || []
     : get(state.form.penalties) || [];
+
+  const statisticId = statisticIndex
+    ? get(state.form.statistics[statisticIndex].statisticId) || []
+    : get(state.form.statisticId) || [];
 
   const filteredInitialPenalties = initialPenalties.filter(penalty => {
     return penalty.penaltyType !== penaltyAmountType;
@@ -24,9 +28,10 @@ export const calculatePenaltiesAction = ({ get }) => {
 
   penalties.forEach(penalty => {
     penalty.penaltyType = penaltyAmountType;
+    penalty.statisticId = statisticId;
   });
 
-  penalties = penalties.filter(penalty => penalty.name);
+  penalties = penalties.filter(penalty => penalty.inProgress);
 
   const parseCurrency = value => Number(value).toFixed(2);
 

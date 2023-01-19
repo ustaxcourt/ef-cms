@@ -10,16 +10,19 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
+    errors: state.modal.error,
     penalties: state.modal.penalties,
     showAddAnotherPenaltyButton:
       state.statisticsFormHelper.showAddAnotherPenaltyButton,
     title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
+  // TODO: add logic for determining whether to display (IRS) or (USTC)
   function CalculatePenaltiesModal({
     addPenaltyInputSequence,
     cancelSequence,
     confirmSequence,
+    errors,
     penalties,
     showAddAnotherPenaltyButton,
     title,
@@ -33,6 +36,11 @@ export const CalculatePenaltiesModal = connect(
         confirmSequence={confirmSequence}
         title={title}
       >
+        {errors && errors.penaltyAmount && (
+          <div>
+            <span className="usa-error-message">{errors.penaltyAmount}</span>
+          </div>
+        )}
         {penalties &&
           penalties.map((penalty, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -51,8 +59,8 @@ export const CalculatePenaltiesModal = connect(
                     value: values.value,
                   });
                   updateModalValueSequence({
-                    key: `penalties.${index}.name`,
-                    value: `Penalty ${index + 1} (IRS)`,
+                    key: `penalties.${index}.inProgress`,
+                    value: true,
                   });
                 }}
               />
