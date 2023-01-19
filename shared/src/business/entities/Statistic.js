@@ -34,7 +34,7 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
     rawStatistic.statisticId || applicationContext.getUniqueId();
   // temporary until migration is written - this allows us for now to run api locally
   this.penalties = [];
-  Array.isArray(rawStatistic.penalties)
+  rawStatistic.penalties.length > 0
     ? assignPenalties(this, {
         applicationContext,
         rawPenalties: rawStatistic.penalties,
@@ -50,9 +50,11 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
 Statistic.VALIDATION_ERROR_MESSAGES = {
   //TODO: add more / fix validation error messages
   determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
-  determinationTotalPenalties: 'Enter total penalties as determined by Court.',
+  determinationTotalPenalties:
+    'Enter itemized penalties to calculate total penalties as determined by Court.',
   irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
-  irsTotalPenalties: 'Enter total penalties on IRS Notice.',
+  irsTotalPenalties:
+    'Enter itemized penalties to calculate total penalties on IRS Notice.',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
@@ -60,7 +62,7 @@ Statistic.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter last date of period',
   ],
-  penalties: 'Enter at least one IRS penalty.',
+  penalties: 'Enter at least one itemized IRS penalty using Calculator.',
   year: 'Enter a valid year.',
 };
 

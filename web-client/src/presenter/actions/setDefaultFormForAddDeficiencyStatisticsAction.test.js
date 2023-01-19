@@ -1,10 +1,10 @@
 import { runAction } from 'cerebral/test';
-import { setDefaultFormForAddDeficiencySatisticsAction } from './setDefaultFormForAddDeficiencySatisticsAction';
+import { setDefaultFormForAddDeficiencyStatisticsAction } from './setDefaultFormForAddDeficiencyStatisticsAction';
 
-describe('setDefaultFormForAddDeficiencySatisticsAction', () => {
+describe('setDefaultFormForAddDeficiencyStatisticsAction', () => {
   it('sets state.form.yearOrPeriod to Year as the default value', async () => {
     const { state } = await runAction(
-      setDefaultFormForAddDeficiencySatisticsAction,
+      setDefaultFormForAddDeficiencyStatisticsAction,
       {
         state: {},
       },

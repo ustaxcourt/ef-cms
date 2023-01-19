@@ -16,6 +16,7 @@ export const validateAddDeficiencyStatisticsAction = ({
   path,
 }) => {
   const form = get(state.form);
+  console.log('form*** ', form);
 
   const combinedForm = combineLastDateOfPeriodFields({
     applicationContext,
