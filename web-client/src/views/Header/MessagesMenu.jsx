@@ -13,7 +13,6 @@ export const MessagesMenu = connect(
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
   function MessagesMenu({
-    headerHelper,
     isExpanded,
     pageIsMessages,
     resetHeaderAccordionsSequence,
@@ -22,16 +21,12 @@ export const MessagesMenu = connect(
   }) {
     return (
       <>
-        {headerHelper.unreadMessageCount > 0 && (
-          <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
-            {headerHelper.unreadMessageCount}
-          </div>
-        )}
-        <button
+        <Button
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
             pageIsMessages && 'usa-current',
+            'width-auto',
           )}
           id="messages-btn"
           onClick={() => {
@@ -39,7 +34,7 @@ export const MessagesMenu = connect(
           }}
         >
           <span>Messages</span>
-        </button>
+        </Button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
