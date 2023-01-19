@@ -167,9 +167,9 @@ Open a browser to [http://localhost:1234](http://localhost:1234) and enter one o
 
 ```txt
 petitioner@example.com
-privatePractitioner@example.com
-irsPractitioner@example.com
-irsSuperuser@example.com
+privatepractitioner@example.com
+irspractitioner@example.com
+irssuperuser@example.com
 adc@example.com
 admissionsclerk@example.com
 clerkofcourt@example.com
@@ -179,18 +179,18 @@ floater@example.com
 general@example.com
 petitionsclerk@example.com
 petitionsclerk1@example.com
-reportersOffice@example.com
+reportersoffice@example.com
 trialclerk@example.com
 judge.ashford@example.com
-ashfordsChambers@example.com
+ashfordschambers@example.com
 judge.buch@example.com
-buchsChambers@example.com
+buchschambers@example.com
 stjudge.carluzzo@example.com
-carluzzosChambers@example.com
+carluzzoschambers@example.com
 judge.cohen@example.com
-cohensChambers@example.com
+cohenschambers@example.com
 judge.colvin@example.com
-colvinsChambers@example.com
+colvinschambers@example.com
 ```
 
 
