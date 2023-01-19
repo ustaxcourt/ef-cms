@@ -13,6 +13,7 @@ export const MessagesMenu = connect(
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
   function MessagesMenu({
+    headerHelper,
     isExpanded,
     pageIsMessages,
     resetHeaderAccordionsSequence,
@@ -49,6 +50,11 @@ export const MessagesMenu = connect(
               >
                 My Messages
               </Button>
+              {headerHelper.unreadMessageCount > 0 && (
+                <div className="icon-unread-messages padding-top-2px text-bold text-ttop text-center">
+                  {headerHelper.unreadMessageCount}
+                </div>
+              )}
             </li>
             <li className="usa-nav__submenu-item">
               <a href="/" id="docket-section-messages" onClick={() => {}}>
