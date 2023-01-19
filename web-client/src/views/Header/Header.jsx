@@ -40,6 +40,7 @@ const BetaBar = toggleBetaBarSequence => {
   );
 };
 
+// eslint-disable-next-line complexity
 const NavigationItems = (
   headerHelper,
   {
@@ -89,16 +90,20 @@ const NavigationItems = (
       {headerHelper.showMessagesAndQCDropDown && (
         <>
           <li
+            className={classNames('usa-nav__primary-item', 'unread-messages')}
+          >
+            {headerHelper.unreadMessageCount > 0 && !isMessagesMenuOpen && (
+              <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
+                {headerHelper.unreadMessageCount}
+              </div>
+            )}
+          </li>
+          <li
             className={classNames(
               'usa-nav__primary-item',
               isMessagesMenuOpen && 'usa-nav__submenu--open',
             )}
           >
-            {headerHelper.unreadMessageCount > 0 && (
-              <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
-                {headerHelper.unreadMessageCount}
-              </div>
-            )}
             <MessagesMenu isExpanded={isMessagesMenuOpen} />
           </li>
           <li
