@@ -34,27 +34,31 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
     rawStatistic.statisticId || applicationContext.getUniqueId();
   // temporary until migration is written - this allows us for now to run api locally
   this.penalties = [];
-  rawStatistic.penalties.length > 0
-    ? assignPenalties(this, {
-        applicationContext,
-        rawPenalties: rawStatistic.penalties,
-        statisticId: this.statisticId,
-      })
-    : itemizeTotalPenalties(this, {
-        applicationContext,
-        determinationTotalPenalties: this.determinationTotalPenalties,
-        irsTotalPenalties: this.irsTotalPenalties,
-      });
+  if (
+    rawStatistic.penalties &&
+    rawStatistic.penalties.length > 0 &&
+    rawStatistic.irsTotalPenalties
+  ) {
+    assignPenalties(this, {
+      applicationContext,
+      rawPenalties: rawStatistic.penalties,
+      statisticId: this.statisticId,
+    });
+  } else if (rawStatistic.irsTotalPenalties) {
+    itemizeTotalPenalties(this, {
+      applicationContext,
+      determinationTotalPenalties: this.determinationTotalPenalties,
+      irsTotalPenalties: this.irsTotalPenalties,
+    });
+  }
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
   //TODO: add more / fix validation error messages
   determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
-  determinationTotalPenalties:
-    'Enter itemized penalties to calculate total penalties as determined by Court.',
+  determinationTotalPenalties: 'Enter total penalties as determined by Court.',
   irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
-  irsTotalPenalties:
-    'Enter itemized penalties to calculate total penalties on IRS Notice.',
+  irsTotalPenalties: 'Enter total penalties on IRS Notice.',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
@@ -62,7 +66,7 @@ Statistic.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter last date of period',
   ],
-  penalties: 'Enter at least one itemized IRS penalty using Calculator.',
+  penalties: 'Enter at least one IRS penalty.',
   year: 'Enter a valid year.',
 };
 
@@ -108,7 +112,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
     .array()
     .has(
       joi.object().keys({
-        penaltyType: joi.string().valid('irsPenaltyAmount'),
+        penaltyType: joi.string().valid(PENALTY_TYPES.IRS_PENALTY_AMOUNT),
       }),
     )
     .required()
