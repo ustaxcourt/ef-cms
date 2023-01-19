@@ -111,24 +111,10 @@ describe('messagesHelper', () => {
     expect(showSectionMessages).toBe(false);
   });
 
-  it('should return true for isCaseServicesSupervisor when the current user is a Case Services Supervisor', () => {
-    user = caseServicesSupervisorUser;
-
-    const { isCaseServicesSupervisor } = runCompute(messagesHelper, {
-      state: {
-        messageBoxToDisplay: {
-          queue: 'section',
-        },
-      },
-    });
-
-    expect(isCaseServicesSupervisor).toBe(true);
-  });
-
-  it('should return false for isCaseServicesSupervisor when the current user is NOT a Case Services Supervisor', () => {
+  it('should return true for showSwitchToMyMessagesButton when the current user is NOT a Case Services Supervisor', () => {
     user = docketClerkUser;
 
-    const { isCaseServicesSupervisor } = runCompute(messagesHelper, {
+    const { showSwitchToMyMessagesButton } = runCompute(messagesHelper, {
       state: {
         messageBoxToDisplay: {
           queue: 'section',
@@ -136,6 +122,48 @@ describe('messagesHelper', () => {
       },
     });
 
-    expect(isCaseServicesSupervisor).toBe(false);
+    expect(showSwitchToMyMessagesButton).toBe(true);
+  });
+
+  it('should return true for showSwitchToSectionMessagesButton when the current user is NOT a Case Services Supervisor', () => {
+    user = docketClerkUser;
+
+    const { showSwitchToSectionMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(showSwitchToSectionMessagesButton).toBe(true);
+  });
+
+  it('should return false for showSwitchToSectionMessagesButton when the current user is a Case Services Supervisor', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSwitchToSectionMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(showSwitchToSectionMessagesButton).toBe(false);
+  });
+
+  it('should return false for showSwitchToMyMessagesButton when the current user is a Case Services Supervisor', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSwitchToMyMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(showSwitchToMyMessagesButton).toBe(false);
   });
 });
