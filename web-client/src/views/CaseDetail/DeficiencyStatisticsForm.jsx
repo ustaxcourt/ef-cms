@@ -147,7 +147,7 @@ export const DeficiencyStatisticsForm = connect(
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
-                  onChange={() => {
+                  onInput={() => {
                     console.log('total Penalties validation firing');
                     validateAddDeficiencyStatisticsSequence();
                   }}

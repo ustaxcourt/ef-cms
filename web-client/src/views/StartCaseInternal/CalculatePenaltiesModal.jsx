@@ -18,7 +18,6 @@ export const CalculatePenaltiesModal = connect(
     title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  // TODO: add logic for determining whether to display (IRS) or (USTC)
   function CalculatePenaltiesModal({
     addPenaltyInputSequence,
     cancelSequence,
