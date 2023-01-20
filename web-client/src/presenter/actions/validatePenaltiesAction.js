@@ -13,11 +13,11 @@ export const validatePenaltiesAction = ({
   path,
   props,
 }) => {
-  const { penalties } = props;
+  const { currentPenalties, penalties } = props;
 
   let errors = {};
 
-  if (penalties.length < 1) {
+  if (currentPenalties.length < 1) {
     errors = {
       penaltyAmount: 'Please enter a penalty.',
     };

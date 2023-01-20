@@ -20,6 +20,10 @@ export const setupItemizedPenaltiesModalStateAction = ({
     return applicationContext.getUtilities().formatDollars(preFormattedDollars);
   };
 
+  const formattedDeterminationTotalPenalties = determinationTotalPenalties
+    ? formatDollars(determinationTotalPenalties)
+    : '';
+
   const partitionedPenalties = partition(penalties, [
     'penaltyType',
     applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT,
@@ -43,7 +47,7 @@ export const setupItemizedPenaltiesModalStateAction = ({
   );
 
   store.set(state.modal, {
-    determinationTotalPenalties: formatDollars(determinationTotalPenalties),
+    determinationTotalPenalties: formattedDeterminationTotalPenalties,
     irsTotalPenalties: formatDollars(irsTotalPenalties),
     itemizedPenalties,
   });

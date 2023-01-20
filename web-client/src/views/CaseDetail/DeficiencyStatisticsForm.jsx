@@ -147,6 +147,10 @@ export const DeficiencyStatisticsForm = connect(
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
+                  onChange={() => {
+                    console.log('total Penalties validation firing');
+                    validateAddDeficiencyStatisticsSequence();
+                  }}
                 />
                 <Button
                   link
@@ -210,6 +214,13 @@ export const DeficiencyStatisticsForm = connect(
                   id="determination-total-penalties"
                   name="determinationTotalPenalties"
                   value={form.determinationTotalPenalties || ''}
+                  onBlur={() => validateAddDeficiencyStatisticsSequence()}
+                  // onValueChange={values => {
+                  //   updateFormValueSequence({
+                  //     key: 'determinationTotalPenalties',
+                  //     value: values.value,
+                  //   });
+                  // }}
                 />
                 <Button
                   link
@@ -218,6 +229,7 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'determinationTotalPenalties',
+                      statisticId: form.statisticId,
                       subkey: 'determinationPenaltyAmount',
                       title: 'Calculate Penalties as determined by Court',
                     })

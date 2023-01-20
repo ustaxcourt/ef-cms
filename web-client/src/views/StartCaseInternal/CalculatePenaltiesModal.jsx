@@ -8,9 +8,10 @@ import React from 'react';
 export const CalculatePenaltiesModal = connect(
   {
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
     errors: state.modal.error,
+    nameAcronym: state.modal.nameAcronym,
     penalties: state.modal.penalties,
     showAddAnotherPenaltyButton:
       state.statisticsFormHelper.showAddAnotherPenaltyButton,
@@ -23,6 +24,7 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence,
     confirmSequence,
     errors,
+    nameAcronym,
     penalties,
     showAddAnotherPenaltyButton,
     title,
@@ -49,7 +51,7 @@ export const CalculatePenaltiesModal = connect(
             // eslint-disable-next-line react/no-array-index-key
             <div className="margin-top-3" key={index}>
               <label className="usa-label" htmlFor={`penalty_${index}`}>
-                Penalty {index + 1} (IRS)
+                Penalty {index + 1} {nameAcronym}
               </label>
               <DollarsInput
                 className="usa-input"
