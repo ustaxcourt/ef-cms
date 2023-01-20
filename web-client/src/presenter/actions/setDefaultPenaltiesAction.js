@@ -10,9 +10,10 @@ import { state } from 'cerebral';
 export const setDefaultPenaltiesAction = ({ get, props, store }) => {
   const { statisticId, statisticIndex, subkey: penaltyType } = props;
 
-  const penalties = statisticIndex
-    ? get(state.form.statistics[statisticIndex].penalties)
-    : get(state.form.penalties);
+  const penalties =
+    typeof statisticIndex === 'number'
+      ? get(state.form.statistics[statisticIndex].penalties)
+      : get(state.form.penalties);
 
   let initialPenalties = penalties ?? [];
 
@@ -27,7 +28,6 @@ export const setDefaultPenaltiesAction = ({ get, props, store }) => {
       name: `Penalty 1 ${nameAcronym}`,
       penaltyAmount: '',
       penaltyType,
-      statisticId,
     });
   }
 

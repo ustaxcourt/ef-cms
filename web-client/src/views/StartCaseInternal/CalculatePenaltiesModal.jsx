@@ -36,11 +36,14 @@ export const CalculatePenaltiesModal = connect(
         confirmSequence={confirmSequence}
         title={title}
       >
-        {errors && errors.penaltyAmount && (
-          <div>
-            <span className="usa-error-message">{errors.penaltyAmount}</span>
-          </div>
-        )}
+        {errors &&
+          Object.keys(errors).map(key => {
+            return (
+              <div key={errors[key]}>
+                <span className="usa-error-message">{errors[key]}</span>
+              </div>
+            );
+          })}
         {penalties &&
           penalties.map((penalty, index) => (
             // eslint-disable-next-line react/no-array-index-key
