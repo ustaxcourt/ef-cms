@@ -9,133 +9,122 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  const LEAD_CASE = {
-    ...MOCK_CASE,
+  const mockLeadCaseCheckbox = {
     checkboxDisabled: true,
     checked: true,
-    leadDocketNumber: MOCK_CASE.docketNumber,
-    tooltip: '',
+    docketNumber: MOCK_CASE.docketNumber,
+    formattedPetitioners: [],
+    isLeadCase: true,
   };
-
-  const customizedDocketNumber = '1337-42';
-  const SECOND_CASE = {
-    ...MOCK_CASE,
-    docketNumber: customizedDocketNumber,
-    leadDocketNumber: MOCK_CASE.docketNumber,
-    tooltip: '',
+  const mockMemberCaseDocketNumber = '1337-42';
+  const mockMemberCaseCheckbox = {
+    checkboxDisabled: true,
+    checked: false,
+    docketNumber: mockMemberCaseDocketNumber,
+    formattedPetitioners: [],
+    isLeadCase: false,
   };
 
   it("should flip the non-lead cases' checked states", async () => {
-    const changedCheckValue = false;
+    const mockOriginalCheckBoxValue = false;
 
-    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+    const { state } = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
-          ...LEAD_CASE,
-          consolidatedCases: [
-            LEAD_CASE,
-            {
-              ...SECOND_CASE,
-              checked: changedCheckValue,
-            },
-          ],
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: false,
+            consolidatedCasesToMultiDocketOn: [
+              mockLeadCaseCheckbox,
+              mockMemberCaseCheckbox,
+            ],
+          },
         },
-        consolidatedCaseAllCheckbox: false,
       },
     });
 
-    expect(result.state.caseDetail).toEqual({
-      ...LEAD_CASE,
-      consolidatedCases: [
-        LEAD_CASE,
-        {
-          ...SECOND_CASE,
-          checkboxDisabled: true,
-          checked: !changedCheckValue,
-          tooltip: '',
-        },
-      ],
-    });
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+      {
+        ...mockLeadCaseCheckbox,
+        tooltip: '',
+      },
+      {
+        ...mockMemberCaseCheckbox,
+        checkboxDisabled: !mockOriginalCheckBoxValue,
+        checked: !mockOriginalCheckBoxValue,
+      },
+    ]);
   });
 
   it('should set checked to true for all cases & disable all checkboxes when consolidatedCaseAllCheckbox is set to checked', async () => {
-    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+    const { state } = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
-          ...LEAD_CASE,
-          consolidatedCases: [
-            {
-              ...LEAD_CASE,
-              checked: false,
-            },
-            {
-              ...SECOND_CASE,
-              checkboxDisabled: false,
-              checked: false,
-            },
-          ],
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: false,
+            consolidatedCasesToMultiDocketOn: [
+              {
+                ...mockLeadCaseCheckbox,
+                checked: false,
+              },
+              {
+                ...mockMemberCaseCheckbox,
+                checkboxDisabled: false,
+                checked: false,
+              },
+            ],
+          },
         },
-        consolidatedCaseAllCheckbox: false,
       },
     });
 
-    expect(result.state.caseDetail).toEqual({
-      ...LEAD_CASE,
-      consolidatedCases: [
-        {
-          ...LEAD_CASE,
-          checkboxDisabled: true,
-          checked: true,
-        },
-        {
-          ...SECOND_CASE,
-          checkboxDisabled: true,
-          checked: true,
-        },
-      ],
-    });
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+      {
+        ...mockLeadCaseCheckbox,
+        tooltip: '',
+      },
+      {
+        ...mockMemberCaseCheckbox,
+        checkboxDisabled: true,
+        checked: true,
+      },
+    ]);
   });
 
   it('should only have lead case checked & all sub-cases are enabled & lead case is disabled & lead case as a tooltip when consolidatedCaseAllCheckbox is set to unchecked', async () => {
-    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+    const { state } = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
-          ...LEAD_CASE,
-          consolidatedCases: [
-            {
-              ...LEAD_CASE,
-              checkboxDisabled: true,
-              checked: true,
-            },
-            {
-              ...SECOND_CASE,
-              checkboxDisabled: true,
-              checked: true,
-            },
-          ],
+        caseDetail: mockLeadCaseCheckbox,
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: true,
+            consolidatedCasesToMultiDocketOn: [
+              mockLeadCaseCheckbox,
+              {
+                ...mockMemberCaseCheckbox,
+                checkboxDisabled: true,
+                checked: true,
+              },
+            ],
+          },
         },
-        consolidatedCaseAllCheckbox: true,
       },
     });
 
-    expect(result.state.caseDetail).toEqual({
-      ...LEAD_CASE,
-      consolidatedCases: [
-        {
-          ...LEAD_CASE,
-          checkboxDisabled: true,
-          checked: true,
-          tooltip: 'The lead case cannot be unselected',
-        },
-        {
-          ...SECOND_CASE,
-          checkboxDisabled: false,
-          checked: false,
-        },
-      ],
-    });
+    expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+      {
+        ...mockLeadCaseCheckbox,
+        checkboxDisabled: true,
+        checked: true,
+        tooltip: 'The lead case cannot be unselected',
+      },
+      {
+        ...mockMemberCaseCheckbox,
+        checkboxDisabled: false,
+        checked: false,
+      },
+    ]);
   });
 });

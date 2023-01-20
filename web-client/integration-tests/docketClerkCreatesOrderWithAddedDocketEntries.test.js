@@ -15,6 +15,5 @@ describe('Docketclerk creates an order with added docket numbers on the cover sh
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrderWithAddedDocketNumbers(cerebralTest);
-
   docketClerkEditsOrderAndChecksAddedDocketNumbers(cerebralTest);
 });
