@@ -1,4 +1,4 @@
-const { getOnly } = require('./helpers');
+const { getOnly, setTimeouts } = require('./helpers');
 
 const docketclerk = require('./pa11y-docketclerk');
 const judge = require('./pa11y-judge');
@@ -11,5 +11,5 @@ const urls = [...docketclerk, ...judge, ...reportersOffice].map(
 
 module.exports = {
   defaults,
-  urls: getOnly(urls),
+  urls: setTimeouts()(getOnly(urls)),
 };

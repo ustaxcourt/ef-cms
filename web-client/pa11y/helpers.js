@@ -13,6 +13,16 @@ const getOnly = urls => {
   return urls;
 };
 
+const setTimeouts =
+  (timeout = 60000) =>
+  urls => {
+    return urls.map(url => ({
+      ...url,
+      timeout,
+    }));
+  };
+
 module.exports = {
   getOnly,
+  setTimeouts,
 };
