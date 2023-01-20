@@ -15,12 +15,12 @@ export const validatePenaltiesAction = ({
 }) => {
   const { penalties } = props;
 
-  let errors = [];
+  let errors = {};
 
   if (penalties.length < 1) {
-    errors.push({
+    errors = {
       penaltyAmount: 'Please enter a penalty.',
-    });
+    };
   }
 
   penalties.forEach(penalty => {
@@ -28,18 +28,17 @@ export const validatePenaltiesAction = ({
       .getUseCases()
       .validatePenaltiesInteractor(applicationContext, { rawPenalty: penalty });
 
-    error && errors.push(error);
+    error && (errors = { ...errors, ...error });
   });
 
-  if (!errors.length) {
+  if (Object.keys(errors).length < 1) {
     return path.success(props);
   } else {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      //TODO: this is not correct, need to show all the errors
-      error: errors[0],
+      error: errors,
     });
   }
 };

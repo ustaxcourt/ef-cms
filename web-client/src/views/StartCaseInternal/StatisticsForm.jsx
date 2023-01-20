@@ -65,7 +65,7 @@ export const StatisticsForm = connect(
       </>
     );
 
-    const getSingleStatisticForm = index => (
+    const getSingleStatisticForm = (index, statistic) => (
       <div className="statistic-form" key={index}>
         <FormGroup>
           {['Year', 'Period'].map(option => (
@@ -161,7 +161,6 @@ export const StatisticsForm = connect(
             </>
           )}
         </FormGroup>
-
         <Button
           link
           className="padding-0 calculate-penalties"
@@ -169,6 +168,7 @@ export const StatisticsForm = connect(
           onClick={() =>
             showCalculatePenaltiesModalSequence({
               key: 'irsTotalPenalties',
+              statisticId: statistic.statisticId,
               statisticIndex: index,
               subkey: 'irsPenaltyAmount',
               title: 'Calculate Penalties on IRS Notice',
@@ -187,7 +187,7 @@ export const StatisticsForm = connect(
         <h4>Statistics Proposed By IRS</h4>
 
         {form.statistics.map((statistic, index) =>
-          getSingleStatisticForm(index),
+          getSingleStatisticForm(index, statistic),
         )}
 
         {statisticsFormHelper.showAddMoreStatisticsButton && (

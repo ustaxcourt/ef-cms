@@ -18,9 +18,7 @@ export const calculatePenaltiesAction = ({ get }) => {
     ? get(state.form.statistics[statisticIndex].penalties) || []
     : get(state.form.penalties) || [];
 
-  const statisticId = statisticIndex
-    ? get(state.form.statistics[statisticIndex].statisticId) || []
-    : get(state.form.statisticId) || [];
+  const statisticId = get(state.modal.statisticId);
 
   const filteredInitialPenalties = initialPenalties.filter(penalty => {
     return penalty.penaltyType !== penaltyAmountType;
