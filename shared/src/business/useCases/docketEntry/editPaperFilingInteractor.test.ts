@@ -1,5 +1,6 @@
 import {
   DOCKET_SECTION,
+  DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
@@ -14,6 +15,7 @@ describe('editPaperFilingInteractor', () => {
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
   const mockWorkItemId = 'a956aa05-19cb-4fc3-ba10-d97c1c567c12';
+  const clientConnectionId = '2810-happydoo';
 
   const mockPrimaryId = getContactPrimary(MOCK_CASE).contactId;
 
@@ -85,6 +87,7 @@ describe('editPaperFilingInteractor', () => {
 
         await expect(
           editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
               docketNumber: caseRecord.docketNumber,
@@ -104,6 +107,7 @@ describe('editPaperFilingInteractor', () => {
 
         await expect(
           editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             docketEntryId: notFoundDocketEntryId,
             documentMetadata: {},
             isSavingForLater: true,
@@ -116,6 +120,8 @@ describe('editPaperFilingInteractor', () => {
       it('should throw an error when the docket entry has already been served', async () => {
         await expect(
           editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
+
             docketEntryId: mockServedDocketEntryId,
             documentMetadata: {
               docketNumber: caseRecord.docketNumber,
@@ -131,6 +137,7 @@ describe('editPaperFilingInteractor', () => {
 
         await expect(
           editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             docketEntryId: docketEntry.docketEntryId,
             documentMetadata: docketEntry,
             isSavingForLater: false,
@@ -153,6 +160,7 @@ describe('editPaperFilingInteractor', () => {
           .countPagesInDocument.mockResolvedValueOnce(2);
 
         await editPaperFilingInteractor(applicationContext, {
+          clientConnectionId,
           docketEntryId: mockDocketEntryId,
           documentMetadata: {
             docketNumber: caseRecord.docketNumber,
@@ -181,6 +189,7 @@ describe('editPaperFilingInteractor', () => {
 
       it('should update the docket entry without updating the page count when the docket entry does NOT have a file attached', async () => {
         await editPaperFilingInteractor(applicationContext, {
+          clientConnectionId,
           docketEntryId: mockDocketEntryId,
           documentMetadata: {
             docketNumber: caseRecord.docketNumber,
@@ -209,6 +218,7 @@ describe('editPaperFilingInteractor', () => {
 
       it('should not call the persistence method to set and unset the pending service status on the docket entry', async () => {
         await editPaperFilingInteractor(applicationContext, {
+          clientConnectionId,
           docketEntryId: mockDocketEntryId,
           documentMetadata: caseRecord.docketEntries[0],
           isSavingForLater: true,
@@ -219,76 +229,96 @@ describe('editPaperFilingInteractor', () => {
             .updateDocketEntryPendingServiceStatus,
         ).not.toHaveBeenCalled();
       });
+
+      it('should not generate a paper service url', async () => {
+        await editPaperFilingInteractor(applicationContext, {
+          clientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          documentMetadata: caseRecord.docketEntries[0],
+          isSavingForLater: true,
+        });
+
+        expect(
+          applicationContext.getUseCaseHelpers()
+            .serveDocumentAndGetPaperServicePdf,
+        ).not.toHaveBeenCalled();
+        expect(
+          applicationContext.getNotificationGateway().sendNotificationToUser,
+        ).not.toHaveBeenCalled();
+      });
     });
   });
 
   describe('Serve', () => {
     describe('Single Docketing', () => {
-      it('should update only allowed editable fields on a docket entry document', async () => {
-        await editPaperFilingInteractor(applicationContext, {
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: {
-            docketEntryId: 'maliciously Update Docket Entry Id.  DONT SAVE ME.',
-            docketNumber: 'maliciously Updated Docket Number. DONT SAVE ME.',
-            documentTitle: 'My Edited Document',
-            documentType: 'Memorandum in Support',
-            eventCode: 'MISP',
-            filers: [mockPrimaryId],
-            freeText: 'Some text about this document',
-            hasOtherFilingParty: true,
-            isFileAttached: true,
-            isPaper: true,
-            otherFilingParty: 'Bert Brooks',
-          },
-          isSavingForLater: false,
-        });
-
-        const updatedDocketEntry = applicationContext
-          .getPersistenceGateway()
-          .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-            d => d.docketEntryId === mockDocketEntryId,
-          );
-
-        expect(updatedDocketEntry).toMatchObject({
-          docketEntryId: mockDocketEntryId,
-          docketNumber: caseRecord.docketEntries[0].docketNumber,
-          documentTitle: 'My Edited Document',
-          freeText: 'Some text about this document',
-          hasOtherFilingParty: true,
-          otherFilingParty: 'Bert Brooks',
-        });
-      });
-
-      it('should call the persistence method to set and unset the pending service status on the docket entry', async () => {
-        await editPaperFilingInteractor(applicationContext, {
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: caseRecord.docketEntries[0],
-          isSavingForLater: false,
-        });
-
-        const firstStatusCall =
-          applicationContext.getPersistenceGateway()
-            .updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
-        const secondStatusCall =
-          applicationContext.getPersistenceGateway()
-            .updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
-        expect(firstStatusCall).toEqual(true);
-        expect(secondStatusCall).toEqual(false);
-      });
-
-      it('should return a paper service pdf url when the case has at least one paper service party', async () => {
-        const mockPdfUrl = 'www.example.com';
-        caseRecord.petitioners[0].serviceIndicator =
-          SERVICE_INDICATOR_TYPES.SI_PAPER;
-        applicationContext
-          .getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf.mockReturnValue({
-            pdfUrl: mockPdfUrl,
+      describe('Happy Path', () => {
+        it('should update only allowed editable fields on a docket entry document', async () => {
+          await editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: {
+              docketEntryId:
+                'maliciously Update Docket Entry Id.  DONT SAVE ME.',
+              docketNumber: 'maliciously Updated Docket Number. DONT SAVE ME.',
+              documentTitle: 'My Edited Document',
+              documentType: 'Memorandum in Support',
+              eventCode: 'MISP',
+              filers: [mockPrimaryId],
+              freeText: 'Some text about this document',
+              hasOtherFilingParty: true,
+              isFileAttached: true,
+              isPaper: true,
+              otherFilingParty: 'Bert Brooks',
+            },
+            isSavingForLater: false,
           });
 
-        const { paperServicePdfUrl } = await editPaperFilingInteractor(
-          applicationContext,
-          {
+          const updatedDocketEntry = applicationContext
+            .getPersistenceGateway()
+            .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+              d => d.docketEntryId === mockDocketEntryId,
+            );
+
+          expect(updatedDocketEntry).toMatchObject({
+            docketEntryId: mockDocketEntryId,
+            docketNumber: caseRecord.docketEntries[0].docketNumber,
+            documentTitle: 'My Edited Document',
+            freeText: 'Some text about this document',
+            hasOtherFilingParty: true,
+            otherFilingParty: 'Bert Brooks',
+          });
+        });
+
+        it('should call the persistence method to set and unset the pending service status on the docket entry', async () => {
+          await editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: caseRecord.docketEntries[0],
+            isSavingForLater: false,
+          });
+
+          const firstStatusCall =
+            applicationContext.getPersistenceGateway()
+              .updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
+          const secondStatusCall =
+            applicationContext.getPersistenceGateway()
+              .updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
+          expect(firstStatusCall).toEqual(true);
+          expect(secondStatusCall).toEqual(false);
+        });
+
+        it('should send a message to the user with a paper service pdf url when the case has at least one paper service party', async () => {
+          const mockPdfUrl = 'www.example.com';
+          caseRecord.petitioners[0].serviceIndicator =
+            SERVICE_INDICATOR_TYPES.SI_PAPER;
+          applicationContext
+            .getUseCaseHelpers()
+            .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+              pdfUrl: mockPdfUrl,
+            });
+
+          await editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
               documentTitle: 'My Document',
@@ -297,10 +327,26 @@ describe('editPaperFilingInteractor', () => {
               isFileAttached: true,
             },
             isSavingForLater: false,
-          },
-        );
+          });
 
-        expect(paperServicePdfUrl).toEqual(mockPdfUrl);
+          expect(
+            applicationContext.getNotificationGateway().sendNotificationToUser,
+          ).toHaveBeenCalledWith({
+            applicationContext: expect.anything(),
+            clientConnectionId,
+            message: {
+              action: 'serve_document_complete',
+              alertSuccess: {
+                message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+                overwritable: false,
+              },
+              docketEntryId: mockDocketEntryId,
+              generateCoversheet: true,
+              pdfUrl: mockPdfUrl,
+            },
+            userId: docketClerkUser.userId,
+          });
+        });
       });
 
       describe('Sad Path', () => {
@@ -313,6 +359,7 @@ describe('editPaperFilingInteractor', () => {
 
           await expect(
             editPaperFilingInteractor(applicationContext, {
+              clientConnectionId,
               docketEntryId: mockDocketEntryId,
               documentMetadata: caseRecord.docketEntries[0],
               isSavingForLater: false,
@@ -351,6 +398,7 @@ describe('editPaperFilingInteractor', () => {
           const mockConsolidatedGroupDocketNumbers = ['101-23', '101-24'];
 
           await editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             consolidatedGroupDocketNumbers: mockConsolidatedGroupDocketNumbers,
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
@@ -372,7 +420,7 @@ describe('editPaperFilingInteractor', () => {
           ).toHaveBeenCalledTimes(expectedCount);
         });
 
-        it('should return a paper service pdf url when at least one party in the consolidated group has paper service', async () => {
+        it('should send a message to the user with a paper service pdf url when at least one party in the consolidated group has paper service', async () => {
           const mockedPaperServicePdfUrl = 'www.example.com';
           applicationContext
             .getPersistenceGateway()
@@ -400,7 +448,8 @@ describe('editPaperFilingInteractor', () => {
               pdfUrl: mockedPaperServicePdfUrl,
             });
 
-          const result = await editPaperFilingInteractor(applicationContext, {
+          await editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             consolidatedGroupDocketNumbers: ['101-23', '101-24'],
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
@@ -413,7 +462,6 @@ describe('editPaperFilingInteractor', () => {
             isSavingForLater: false,
           });
 
-          expect(result.paperServicePdfUrl).toEqual(mockedPaperServicePdfUrl);
           expect(
             applicationContext.getUseCaseHelpers()
               .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities,
@@ -422,9 +470,26 @@ describe('editPaperFilingInteractor', () => {
             expect.objectContaining({ docketNumber: '101-23' }),
             expect.objectContaining({ docketNumber: '101-24' }),
           ]);
+          expect(
+            applicationContext.getNotificationGateway().sendNotificationToUser,
+          ).toHaveBeenCalledWith({
+            applicationContext: expect.anything(),
+            clientConnectionId,
+            message: {
+              action: 'serve_document_complete',
+              alertSuccess: {
+                message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+                overwritable: false,
+              },
+              docketEntryId: mockDocketEntryId,
+              generateCoversheet: true,
+              pdfUrl: mockedPaperServicePdfUrl,
+            },
+            userId: docketClerkUser.userId,
+          });
         });
 
-        it('should NOT return a paper service pdf url when no party in the consolidated group has paper service', async () => {
+        it('should send a message to the user without a paper service pdf url when no party in the consolidated group has paper service', async () => {
           applicationContext
             .getPersistenceGateway()
             .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
@@ -449,7 +514,8 @@ describe('editPaperFilingInteractor', () => {
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);
 
-          const result = await editPaperFilingInteractor(applicationContext, {
+          await editPaperFilingInteractor(applicationContext, {
+            clientConnectionId,
             consolidatedGroupDocketNumbers: ['101-23', '101-24'],
             docketEntryId: mockDocketEntryId,
             documentMetadata: {
@@ -462,7 +528,23 @@ describe('editPaperFilingInteractor', () => {
             isSavingForLater: false,
           });
 
-          expect(result.paperServicePdfUrl).toEqual(undefined);
+          expect(
+            applicationContext.getNotificationGateway().sendNotificationToUser,
+          ).toHaveBeenCalledWith({
+            applicationContext: expect.anything(),
+            clientConnectionId,
+            message: {
+              action: 'serve_document_complete',
+              alertSuccess: {
+                message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+                overwritable: false,
+              },
+              docketEntryId: mockDocketEntryId,
+              generateCoversheet: true,
+              pdfUrl: undefined,
+            },
+            userId: docketClerkUser.userId,
+          });
         });
       });
 
@@ -484,6 +566,7 @@ describe('editPaperFilingInteractor', () => {
 
           await expect(
             editPaperFilingInteractor(applicationContext, {
+              clientConnectionId,
               consolidatedGroupDocketNumbers: [nonConsolidatedDocketNumber],
               docketEntryId: mockDocketEntryId,
               documentMetadata: caseRecord.docketEntries[0],
@@ -504,6 +587,7 @@ describe('editPaperFilingInteractor', () => {
 
           await expect(
             editPaperFilingInteractor(applicationContext, {
+              clientConnectionId,
               consolidatedGroupDocketNumbers: ['101-23'],
               docketEntryId: mockDocketEntryId,
               documentMetadata: {

@@ -1,5 +1,8 @@
 import { Case, isLeadCase } from '../../entities/cases/Case';
-import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
+import {
+  DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -12,6 +15,7 @@ interface IEditPaperFilingRequest {
   isSavingForLater: boolean;
   docketEntryId: string;
   consolidatedGroupDocketNumbers?: string[];
+  clientConnectionId: string;
 }
 
 /**
@@ -23,7 +27,7 @@ interface IEditPaperFilingRequest {
 export const editPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   request: IEditPaperFilingRequest,
-): Promise<{ paperServicePdfUrl?: string }> => {
+) => {
   request.consolidatedGroupDocketNumbers =
     request.consolidatedGroupDocketNumbers || [];
 
@@ -45,14 +49,12 @@ export const editPaperFilingInteractor = async (
     isSavingForLater: request.isSavingForLater,
   });
 
-  const paperServicePdfUrl = await editPaperFilingStrategy({
+  return editPaperFilingStrategy({
     applicationContext,
     caseEntity,
     docketEntryEntity,
     request,
   });
-
-  return paperServicePdfUrl;
 };
 
 const getEditPaperFilingStrategy = ({
@@ -87,7 +89,7 @@ const saveForLaterStrategy = async ({
   request: IEditPaperFilingRequest;
   caseEntity: TCaseEntity;
   docketEntryEntity: TDocketEntryEntity;
-}): Promise<{ paperServicePdfUrl?: string }> => {
+}) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await applicationContext
@@ -112,8 +114,6 @@ const saveForLaterStrategy = async ({
     applicationContext,
     caseToUpdate: caseEntity,
   });
-
-  return { paperServicePdfUrl: undefined };
 };
 
 const multiDocketServeStrategy = async ({
@@ -126,7 +126,7 @@ const multiDocketServeStrategy = async ({
   caseEntity: TCaseEntity;
   docketEntryEntity: TDocketEntryEntity;
   request: IEditPaperFilingRequest;
-}): Promise<{ paperServicePdfUrl?: string }> => {
+}) => {
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
   });
@@ -153,16 +153,15 @@ const multiDocketServeStrategy = async ({
 
   const authorizedUser = applicationContext.getCurrentUser();
 
-  const paperServicePdfUrl = await serveDocketEntry({
+  await serveDocketEntry({
     applicationContext,
     caseEntitiesToFileOn,
+    clientConnectionId: request.clientConnectionId,
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
-
-  return paperServicePdfUrl;
 };
 
 const singleDocketServeStrategy = async ({
@@ -175,7 +174,7 @@ const singleDocketServeStrategy = async ({
   caseEntity: TCaseEntity;
   docketEntryEntity: TDocketEntryEntity;
   request: IEditPaperFilingRequest;
-}): Promise<{ paperServicePdfUrl?: string }> => {
+}) => {
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
   });
@@ -184,22 +183,22 @@ const singleDocketServeStrategy = async ({
 
   const authorizedUser = applicationContext.getCurrentUser();
 
-  const paperServicePdfUrl = await serveDocketEntry({
+  await serveDocketEntry({
     applicationContext,
     caseEntitiesToFileOn,
+    clientConnectionId: request.clientConnectionId,
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
-
-  return paperServicePdfUrl;
 };
 
 // *********************************** Small Helper Functions ***********************************
 const serveDocketEntry = async ({
   applicationContext,
   caseEntitiesToFileOn,
+  clientConnectionId,
   docketEntryEntity,
   documentMetadata,
   subjectCaseEntity,
@@ -207,6 +206,7 @@ const serveDocketEntry = async ({
 }: {
   applicationContext: IApplicationContext;
   caseEntitiesToFileOn: TCaseEntity[];
+  clientConnectionId: string;
   docketEntryEntity: TDocketEntryEntity;
   documentMetadata: any;
   userId: string;
@@ -256,6 +256,22 @@ const serveDocketEntry = async ({
 
     const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete',
+        alertSuccess: {
+          message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+          overwritable: false,
+        },
+        docketEntryId: docketEntryEntity.docketEntryId,
+        generateCoversheet: true,
+        pdfUrl: paperServicePdfUrl,
+      },
+      userId: user.userId,
+    });
+
     await applicationContext
       .getPersistenceGateway()
       .updateDocketEntryPendingServiceStatus({
@@ -264,8 +280,6 @@ const serveDocketEntry = async ({
         docketNumber: subjectCaseEntity.docketNumber,
         status: false,
       });
-
-    return { paperServicePdfUrl };
   } catch (e) {
     await applicationContext
       .getPersistenceGateway()

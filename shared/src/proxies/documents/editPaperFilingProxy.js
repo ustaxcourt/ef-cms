@@ -29,6 +29,6 @@ exports.editPaperFilingInteractor = (
       documentMetadata,
       isSavingForLater,
     },
-    endpoint: `/case-documents/${docketNumber}/paper-filing`,
+    endpoint: `/async/case-documents/${docketNumber}/paper-filing`,
   });
 };
