@@ -29,19 +29,23 @@ export const calculatePenaltiesAction = ({ get }) => {
     penalty.statisticId = statisticId;
   });
 
-  penalties = penalties.filter(penalty => penalty.inProgress);
+  penalties = penalties.filter(penalty => penalty.penaltyAmount !== '');
 
   const parseCurrency = value => Number(value).toFixed(2);
 
   const penaltyAggregator = (sum, penalty) =>
     Number(sum) + Number(penalty.penaltyAmount);
 
-  const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));
+  const total = penalties.length
+    ? parseCurrency(penalties.reduce(penaltyAggregator, 0))
+    : undefined;
 
-  penalties = [...penalties, ...filteredInitialPenalties];
+  const allPenalties = [...penalties, ...filteredInitialPenalties];
 
+  // TODO: rename better
   return {
-    penalties,
+    currentPenalties: penalties,
+    penalties: allPenalties,
     totalPenalties: total,
   };
 };
