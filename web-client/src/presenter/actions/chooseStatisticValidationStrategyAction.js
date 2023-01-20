@@ -1,0 +1,16 @@
+import { state } from 'cerebral';
+/**
+ * Chooses which validation path the penalties form takes based on whether
+ * the case is being started or a statistic edited
+ *
+ * @param {object} providers.get the cerebral get function used for getting state.form
+ * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
+ * @returns {object} next path based on if modal has statistic index
+ */
+export const chooseValidationStrategyAction = ({ get, path }) => {
+  return get(state.modal.statisticIndex)
+    ? path.startCase()
+    : path.addEditStatistic();
+};
+
+//TODO: add test
