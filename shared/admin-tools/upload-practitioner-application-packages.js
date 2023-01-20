@@ -7,6 +7,9 @@ const createApplicationContext = require('../../web-api/src/applicationContext')
 const fs = require('fs');
 const tiff2pdf = require('tiff2pdf');
 const {
+  createISODateString,
+} = require('../src/business/utilities/DateHandler');
+const {
   MAX_SEARCH_CLIENT_RESULTS,
 } = require('../src/business/entities/EntityConstants');
 const { extname, parse } = require('path');
@@ -93,7 +96,7 @@ const createPractitionerDocumentEntity = async ({
         pk: `practitioner|${barNumber.toLowerCase()}`,
         practitionerDocumentFileId: fileId,
         sk: `document|${fileId}`,
-        uploadDate: 'foo',
+        uploadDate: createISODateString(),
       },
       TableName: applicationContext.environment.dynamoDbTableName,
     })
