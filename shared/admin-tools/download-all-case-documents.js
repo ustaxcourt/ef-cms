@@ -46,7 +46,6 @@ const downloadPdf = async ({
     applicationContext,
     docketNumber,
   });
-  console.log(Object.keys(caseEntity.docketEntries[0]));
   let numSealed = 0;
   let numError = 0;
   for (const docketEntry of caseEntity.docketEntries) {
