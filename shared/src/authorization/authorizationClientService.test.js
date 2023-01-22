@@ -23,7 +23,7 @@ describe('Authorization client service', () => {
   it('should return false when the role provided is not found in the AUTHORIZATION_MAP', () => {
     expect(
       isAuthorized(
-        { role: 'NOT_A_ROLE', userId: 'judgeBuch' },
+        { role: 'NOT_A_ROLE', userId: 'judgebuch' },
         ROLE_PERMISSIONS.WORKITEM,
       ),
     ).toBe(false);
@@ -121,7 +121,7 @@ describe('Authorization client service', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
         isAuthorized(
-          { role: ROLES.judge, userId: 'judgeBuch' },
+          { role: ROLES.judge, userId: 'judgebuch' },
           ROLE_PERMISSIONS.STAMP_MOTION,
         ),
       ).toBeTruthy();

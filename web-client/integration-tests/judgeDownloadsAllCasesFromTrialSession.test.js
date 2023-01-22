@@ -11,7 +11,7 @@ describe('Judge downloads all cases from trial session', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'judgeColvin@example.com');
+  loginAs(cerebralTest, 'judgecolvin@example.com');
   it('set the trial session', () => {
     cerebralTest.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195cc';
   });

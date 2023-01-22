@@ -1672,17 +1672,6 @@
       "allowStamp": true
     },
     {
-      "documentTitle": "Motion to Substitute Trial Exhibit(s)",
-      "documentType": "Motion to Substitute Trial Exhibit(s)",
-      "category": "Motion",
-      "eventCode": "M123",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": "",
-      "allowStamp": true
-    },
-    {
       "documentTitle": "Motion to Supplement the Record",
       "documentType": "Motion to Supplement the Record",
       "category": "Motion",
