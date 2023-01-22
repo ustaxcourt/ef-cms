@@ -83,6 +83,8 @@ fi
 CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.js"
 echo "${CONFIG_FILE}"
 
+export DEBUG=cypress:server:util:process_profiler
+
 if [ -n "${INTEGRATION}" ]; then
   echo "Running integration tests."
   export CYPRESS_TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
