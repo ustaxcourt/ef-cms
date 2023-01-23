@@ -1,7 +1,26 @@
-import { messagesHelper } from './messagesHelper';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  caseServicesSupervisorUser,
+  docketClerkUser,
+} from '../../../../shared/src/test/mockUsers';
+import { messagesHelper as messagesHelperComputed } from './messagesHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 describe('messagesHelper', () => {
+  let user;
+
+  const messagesHelper = withAppContextDecorator(messagesHelperComputed, {
+    ...applicationContext,
+    getCurrentUser: () => {
+      return user;
+    },
+  });
+
+  beforeEach(() => {
+    user = docketClerkUser;
+  });
+
   it('should set showIndividualMessages true and showSectionMessages false if messageBoxToDisplay.queue is my', () => {
     const result = runCompute(messagesHelper, {
       state: {
@@ -76,5 +95,75 @@ describe('messagesHelper', () => {
 
       expect(result.inboxCount).toEqual(3);
     });
+  });
+
+  it('should return false for showSectionMessages when the current user is a Case Services Supervisor', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSectionMessages } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(showSectionMessages).toBe(false);
+  });
+
+  it('should return true for showSwitchToMyMessagesButton when the current user is NOT a Case Services Supervisor', () => {
+    user = docketClerkUser;
+
+    const { showSwitchToMyMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(showSwitchToMyMessagesButton).toBe(true);
+  });
+
+  it('should return true for showSwitchToSectionMessagesButton when the current user is NOT a Case Services Supervisor', () => {
+    user = docketClerkUser;
+
+    const { showSwitchToSectionMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(showSwitchToSectionMessagesButton).toBe(true);
+  });
+
+  it('should return false for showSwitchToSectionMessagesButton when the current user is a Case Services Supervisor', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSwitchToSectionMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(showSwitchToSectionMessagesButton).toBe(false);
+  });
+
+  it('should return false for showSwitchToMyMessagesButton when the current user is a Case Services Supervisor', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSwitchToMyMessagesButton } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(showSwitchToMyMessagesButton).toBe(false);
   });
 });

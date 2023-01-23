@@ -72,6 +72,7 @@ const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
         USER_ROLES.adc,
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
+        USER_ROLES.caseServicesSupervisor,
         USER_ROLES.docketClerk,
         USER_ROLES.petitionsClerk,
       ],
