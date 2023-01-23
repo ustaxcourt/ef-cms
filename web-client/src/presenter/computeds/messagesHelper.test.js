@@ -1,3 +1,4 @@
+import { DOCKET_SECTION } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
@@ -165,5 +166,63 @@ describe('messagesHelper', () => {
     });
 
     expect(showSwitchToMyMessagesButton).toBe(false);
+  });
+
+  it('should return true for showSectionMessages when the current user is a Case Services Supervisor and messageBoxToDisplay.section is defined', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSectionMessages } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+          section: DOCKET_SECTION,
+        },
+      },
+    });
+
+    expect(showSectionMessages).toBe(true);
+  });
+
+  it('should return false for showSectionMessages when the current user is a Case Services Supervisor and messageBoxToDisplay.section is undefined', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showSectionMessages } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(showSectionMessages).toBe(false);
+  });
+
+  it('should return false for showIndividualMessages when the current user is a Case Services Supervisor and messageBoxToDisplay.section is defined', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showIndividualMessages } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+          section: DOCKET_SECTION,
+        },
+      },
+    });
+
+    expect(showIndividualMessages).toBe(false);
+  });
+
+  it('should return true for showIndividualMessages when the current user is a Case Services Supervisor and messageBoxToDisplay.section is undefined', () => {
+    user = caseServicesSupervisorUser;
+
+    const { showIndividualMessages } = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(showIndividualMessages).toBe(true);
   });
 });
