@@ -45,11 +45,11 @@ const getAllPetitions = async ({ applicationContext }) => {
   return results;
 };
 
-const getCounts = ({ gte, lte, petitions }) => {
+const getCounts = ({ gte, lt, petitions }) => {
   const petitionsReceivedInTimeframe = petitions.filter(
     p =>
       dateStringsCompared(p.createdAt, gte) >= 0 &&
-      dateStringsCompared(p.createdAt, lte) < 0,
+      dateStringsCompared(p.createdAt, lt) < 0,
   );
   return {
     isElectronic: petitionsReceivedInTimeframe.filter(
@@ -67,13 +67,13 @@ const getCounts = ({ gte, lte, petitions }) => {
   const start = DateTime.fromISO(`${year}-01-01`);
 
   for (let month = 0; month < 12; month++) {
-    const [gte, lte] = [
+    const [gte, lt] = [
       start.plus({ months: month }),
       start.plus({ months: month + 1 }),
     ];
     const { isElectronic, isPaper } = getCounts({
       gte: gte.toISO(),
-      lte: lte.toISO(),
+      lt: lt.toISO(),
       petitions,
     });
     console.log(
