@@ -14,8 +14,6 @@ export const chooseMessageBoxAction = ({ path, props, store }) => {
   store.set(state.messageBoxToDisplay.box, props.box);
   store.set(state.messageBoxToDisplay.section, props.section);
 
-  console.log('props in chooseMessageBoxAction', props);
-
   const messageBoxPath = `${props.queue}${props.box}`;
 
   return path[messageBoxPath]();
