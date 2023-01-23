@@ -32,7 +32,6 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
-  // temporary until migration is written - this allows us for now to run api locally
   this.penalties = [];
   if (
     rawStatistic.penalties &&
@@ -54,7 +53,6 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
-  //TODO: add more / fix validation error messages
   determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
   determinationTotalPenalties: 'Enter total penalties as determined by Court.',
   irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',

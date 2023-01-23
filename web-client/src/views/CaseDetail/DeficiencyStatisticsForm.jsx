@@ -148,7 +148,6 @@ export const DeficiencyStatisticsForm = connect(
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
                   onInput={() => {
-                    console.log('total Penalties validation firing');
                     validateAddDeficiencyStatisticsSequence();
                   }}
                 />
@@ -215,12 +214,6 @@ export const DeficiencyStatisticsForm = connect(
                   name="determinationTotalPenalties"
                   value={form.determinationTotalPenalties || ''}
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  // onValueChange={values => {
-                  //   updateFormValueSequence({
-                  //     key: 'determinationTotalPenalties',
-                  //     value: values.value,
-                  //   });
-                  // }}
                 />
                 <Button
                   link
