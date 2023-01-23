@@ -1173,7 +1173,7 @@ const router = {
     );
 
     registerRoute(
-      '/messages/*/*/?..',
+      '/messages/*/*/selectedSection?..',
       ifHasAccess({ app }, (queue, box) => {
         const { section } = route.query();
 
