@@ -11,21 +11,21 @@ export const calculatePenaltiesAction = ({ get }) => {
   let {
     penalties,
     statisticIndex,
-    subkey: penaltyAmountType,
+    subkey: modalPenaltyType,
   } = get(state.modal);
-  //TODO: clean this up
+
   let initialPenalties = statisticIndex
-    ? get(state.form.statistics[statisticIndex].penalties) || []
+    ? get(state.form.statistics[statisticIndex].penalties)
     : get(state.form.penalties) || [];
 
   const statisticId = get(state.modal.statisticId);
 
-  const filteredInitialPenalties = initialPenalties.filter(penalty => {
-    return penalty.penaltyType !== penaltyAmountType;
+  const excludedInitialPenalties = initialPenalties.filter(penalty => {
+    return penalty.penaltyType !== modalPenaltyType;
   });
 
   penalties.forEach(penalty => {
-    penalty.penaltyType = penaltyAmountType;
+    penalty.penaltyType = modalPenaltyType;
     penalty.statisticId = statisticId;
   });
 
@@ -36,16 +36,15 @@ export const calculatePenaltiesAction = ({ get }) => {
   const penaltyAggregator = (sum, penalty) =>
     Number(sum) + Number(penalty.penaltyAmount);
 
-  const total = penalties.length
+  const sumOfPenalties = penalties.length
     ? parseCurrency(penalties.reduce(penaltyAggregator, 0))
     : undefined;
 
-  const allPenalties = [...penalties, ...filteredInitialPenalties];
+  const listOfAllPenalties = [...penalties, ...excludedInitialPenalties];
 
-  // TODO: rename better
   return {
-    currentPenalties: penalties,
-    penalties: allPenalties,
-    totalPenalties: total,
+    itemizedPenaltiesOfCurrentType: penalties,
+    listOfAllPenalties,
+    sumOfPenalties,
   };
 };

@@ -5,7 +5,6 @@
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {object} providers.props the cerebral props object
- * @param {object} providers.get the cerebral store used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validatePenaltiesAction = ({
@@ -13,17 +12,17 @@ export const validatePenaltiesAction = ({
   path,
   props,
 }) => {
-  const { currentPenalties, penalties } = props;
+  const { itemizedPenaltiesOfCurrentType, listOfAllPenalties } = props;
 
   let errors = {};
 
-  if (currentPenalties.length < 1) {
+  if (itemizedPenaltiesOfCurrentType.length < 1) {
     errors = {
       penaltyAmount: 'Please enter a penalty.',
     };
   }
 
-  penalties.forEach(penalty => {
+  listOfAllPenalties.forEach(penalty => {
     let error = applicationContext
       .getUseCases()
       .validatePenaltiesInteractor(applicationContext, { rawPenalty: penalty });
