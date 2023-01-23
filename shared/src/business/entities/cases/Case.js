@@ -1658,6 +1658,21 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 };
 
 /**
+ * @param {Object} options the options argument
+ * @param {Array} options.consolidatedCases an array of consolidated cases
+ * @param {Function} isPartyOfCase a function used to know if a userId is part of the case
+ * @param {String} userId the user's id
+ * @returns {boolean} true if the user is a party of the case
+ */
+const isPetitionerPartOfGroup = function ({
+  consolidatedCases,
+  isPartyOfCase,
+  userId,
+}) {
+  return consolidatedCases.some(aCase => !!isPartyOfCase(aCase, userId));
+};
+
+/**
  * Computes and sets additionalName for contactPrimary depending on partyType
  */
 const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
@@ -2474,6 +2489,7 @@ module.exports = {
   isClosed,
   isClosedStatus,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   shouldGenerateNoticesForCase,

@@ -47,7 +47,7 @@ jobs:
           URL=http://localhost:4000/api/swagger ./wait-until.sh
           URL=http://localhost:8000/shell ./wait-until.sh
           URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
-          sleep 10
+          sleep 20
           npm run test:pa11y:1 --node-flags --max-old-space-size=1024
           npm run test:pa11y:2 --node-flags --max-old-space-size=1024
           npm run test:pa11y:3 --node-flags --max-old-space-size=1024
