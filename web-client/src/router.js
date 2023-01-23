@@ -1173,6 +1173,20 @@ const router = {
     );
 
     registerRoute(
+      '/messages/*/*/selectedSection?..',
+      ifHasAccess({ app }, (queue, box) => {
+        const { section } = route.query();
+
+        setPageTitle('Messages');
+        return app.getSequence('gotoMessagesSequence')({
+          box,
+          queue,
+          section,
+        });
+      }),
+    );
+
+    registerRoute(
       '/messages/*/message-detail/*',
       ifHasAccess({ app }, (docketNumber, parentMessageId) => {
         setPageTitle('Message detail');

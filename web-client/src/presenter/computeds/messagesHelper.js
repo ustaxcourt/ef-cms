@@ -7,9 +7,8 @@ export const messagesHelper = (get, applicationContext) => {
   const isCaseServicesSupervisor =
     userRole === USER_ROLES.caseServicesSupervisor;
   const messageBoxToDisplay = get(state.messageBoxToDisplay);
-  const showIndividualMessages = messageBoxToDisplay.queue === 'my';
-  const showSectionMessages =
-    messageBoxToDisplay.queue === 'section' && !isCaseServicesSupervisor;
+  let showIndividualMessages = messageBoxToDisplay.queue === 'my';
+  let showSectionMessages = messageBoxToDisplay.queue === 'section';
 
   const messagesInboxCount = get(state.messagesInboxCount);
   const messagesSectionCount = get(state.messagesSectionCount);
@@ -17,14 +16,24 @@ export const messagesHelper = (get, applicationContext) => {
     ? messagesInboxCount
     : messagesSectionCount;
 
-  const messagesTitle = showIndividualMessages
-    ? 'My Messages'
+  const selectedSection = messageBoxToDisplay.section;
+  const sectionTitle = selectedSection
+    ? `${
+        selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1)
+      } Section Messages`
     : 'Section Messages';
+
+  let messagesTitle = showIndividualMessages ? 'My Messages' : sectionTitle;
 
   const showSwitchToSectionMessagesButton =
     showIndividualMessages && !isCaseServicesSupervisor;
   const showSwitchToMyMessagesButton =
     showSectionMessages && !isCaseServicesSupervisor;
+
+  if (isCaseServicesSupervisor) {
+    showSectionMessages = !!selectedSection;
+    showIndividualMessages = !selectedSection;
+  }
 
   return {
     inboxCount,
