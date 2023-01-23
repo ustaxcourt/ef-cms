@@ -16,10 +16,10 @@ export const messagesHelper = (get, applicationContext) => {
     ? messagesInboxCount
     : messagesSectionCount;
 
-  let messageBoxSection = messageBoxToDisplay.section;
-  const sectionTitle = messageBoxSection
+  const selectedSection = messageBoxToDisplay.section;
+  const sectionTitle = selectedSection
     ? `${
-        messageBoxSection.charAt(0).toUpperCase() + messageBoxSection.slice(1)
+        selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1)
       } Section Messages`
     : 'Section Messages';
 
@@ -29,7 +29,6 @@ export const messagesHelper = (get, applicationContext) => {
     showIndividualMessages && !isCaseServicesSupervisor;
   const showSwitchToMyMessagesButton =
     showSectionMessages && !isCaseServicesSupervisor;
-  const selectedSection = messageBoxToDisplay.section;
 
   if (isCaseServicesSupervisor) {
     showSectionMessages = !!selectedSection;
