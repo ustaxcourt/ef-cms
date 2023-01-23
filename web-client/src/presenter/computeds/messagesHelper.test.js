@@ -68,6 +68,19 @@ describe('messagesHelper', () => {
     expect(result.messagesTitle).toEqual('Section Messages');
   });
 
+  it('should set messagesTitle to a capitalized section specific title if messageBoxToDisplay.section exists', () => {
+    let result = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'section',
+          section: 'docket',
+        },
+      },
+    });
+
+    expect(result.messagesTitle).toEqual('Docket Section Messages');
+  });
+
   describe('inbox count', () => {
     it("should return individual inbox count if the message box is the user's", () => {
       const result = runCompute(messagesHelper, {
