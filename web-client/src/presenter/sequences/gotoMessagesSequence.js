@@ -17,6 +17,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { setSectionForMessageBoxAction } from '../actions/setSectionForMessageBoxAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const goToMessages = startWebSocketConnectionSequenceDecorator([
@@ -30,6 +31,7 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
     [fetchUserNotificationsSequence, setMessageCountsAction],
     [
       chooseMessageBoxAction,
+      setSectionForMessageBoxAction,
       {
         mycompleted: [getCompletedMessagesForUserAction],
         myinbox: [getInboxMessagesForUserAction],
