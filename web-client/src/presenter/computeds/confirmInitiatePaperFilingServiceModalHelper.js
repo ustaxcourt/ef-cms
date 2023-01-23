@@ -46,11 +46,16 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
+  const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
+
   let parties;
   if (showConsolidatedCasesForService) {
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
-        if (!aCase.checked) {
+        const caseCheckbox = consolidatedCasesToMultiDocketOn.find(
+          checkboxCase => checkboxCase.docketNumber === aCase.docketNumber,
+        );
+        if (!caseCheckbox.checked) {
           return aggregatedParties;
         }
         aggregatedParties.petitioners = aggregatedParties.petitioners.concat(
@@ -92,6 +97,8 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
       return CONTACT_TYPE_TITLES[party.contactType];
     }
   };
+
+  console.log('parties: ', parties);
 
   Object.keys(parties).forEach(key => {
     parties[key].forEach(party => {

@@ -114,6 +114,24 @@ const saveForLaterStrategy = async ({
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  const { clientConnectionId, docketEntryId } = request;
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: {
+        message: 'Entry updated.',
+        overwritable: false,
+      },
+      docketEntryId,
+      generateCoversheet: false,
+      pdfUrl: undefined,
+    },
+    userId: user.userId,
+  });
 };
 
 const multiDocketServeStrategy = async ({

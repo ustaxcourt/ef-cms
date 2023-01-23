@@ -242,9 +242,33 @@ describe('editPaperFilingInteractor', () => {
           applicationContext.getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf,
         ).not.toHaveBeenCalled();
+      });
+
+      it('should send a message to the user when persisting edits has completed', async () => {
+        await editPaperFilingInteractor(applicationContext, {
+          clientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          documentMetadata: caseRecord.docketEntries[0],
+          isSavingForLater: true,
+        });
+
         expect(
           applicationContext.getNotificationGateway().sendNotificationToUser,
-        ).not.toHaveBeenCalled();
+        ).toHaveBeenCalledWith({
+          applicationContext: expect.anything(),
+          clientConnectionId,
+          message: {
+            action: 'serve_document_complete',
+            alertSuccess: {
+              message: 'Entry updated.',
+              overwritable: false,
+            },
+            docketEntryId: mockDocketEntryId,
+            generateCoversheet: false,
+            pdfUrl: undefined,
+          },
+          userId: docketClerkUser.userId,
+        });
       });
     });
   });
