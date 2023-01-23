@@ -9,14 +9,22 @@ export const messagesHelper = (get, applicationContext) => {
   const messageBoxToDisplay = get(state.messageBoxToDisplay);
   let showIndividualMessages = messageBoxToDisplay.queue === 'my';
   let showSectionMessages = messageBoxToDisplay.queue === 'section';
+
   const messagesInboxCount = get(state.messagesInboxCount);
   const messagesSectionCount = get(state.messagesSectionCount);
   const inboxCount = showIndividualMessages
     ? messagesInboxCount
     : messagesSectionCount;
-  let messagesTitle = showIndividualMessages
-    ? 'My Messages'
+
+  let messageBoxSection = messageBoxToDisplay.section;
+  const sectionTitle = messageBoxSection
+    ? `${
+        messageBoxSection.charAt(0).toUpperCase() + messageBoxSection.slice(1)
+      } Section Messages`
     : 'Section Messages';
+
+  let messagesTitle = showIndividualMessages ? 'My Messages' : sectionTitle;
+
   const showSwitchToSectionMessagesButton =
     showIndividualMessages && !isCaseServicesSupervisor;
   const showSwitchToMyMessagesButton =
@@ -24,11 +32,9 @@ export const messagesHelper = (get, applicationContext) => {
   if (isCaseServicesSupervisor) {
     if (messageBoxToDisplay.section) {
       showSectionMessages = true;
-      messagesTitle = 'Section Messages';
       showIndividualMessages = false;
     } else {
       showSectionMessages = false;
-      messagesTitle = 'My Messages';
       showIndividualMessages = true;
     }
   }
