@@ -1,11 +1,14 @@
 # How We Work
 
+## [Team Charter](https://docs.google.com/document/d/1N1jRH2KzZZKqXQ0XNWf3sVNLM8jpQ7UcVo1Vd7o2_3Q/edit) (updated 6/2022)
+
 ## Tools
 
 -   GitHub: We use our [GitHub organization](https://github.com/ustaxcourt/ef-cms) for storing both software and collaboratively-maintained text.
 -   ZenHub: We use the vendor's [ZenHub organization](https://github.com/flexion/ef-cms#workspaces/ef-cms-5bbe4bed4b5806bc2bec65d3/boards?repos=152320868&showPipelineDescriptions=false) for storing the product backlog.
--   Zoom: We use both the Court's and vendor's Zoom accounts for video teleconferences.
--   Slack: We use both the Court's and vendor's Slack for communication that falls outside of the structure of GitHub or ZenHub, but that doesn't rise to the level of email, or for communication that it's helpful for everybody else to be able to observe. Notable channels include:
+-   Trello: We use trello to maintain our [DevEx/OpEx backlog](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex)and [Team Experiments](https://trello.com/b/KwIWKgeb/dawson-experiments)
+-   Zoom: We use both the Court's and vendor's Zoom accounts for video teleconferences. 
+-   Slack: We use Slack for communication that falls outside of the structure of GitHub or ZenHub, but that doesn't rise to the level of email, or for communication that it's helpful for everybody else to be able to observe. Notable channels include:
     - #ustcproject — Main project channel. Used to communicate high-level messages re: project
     - #ustc-story-channel — Channel used to communicate story-related work.
     - #ustcux — Design/research-specific channel.
@@ -13,24 +16,22 @@
 
 ## Meetings
 
-There are two basic meeting rhythms: daily design calls/standups and bi-weekly agile sprint rituals. All meetings are held via video teleconference. A telephone bridge is maintained as a backup method of connecting, but participants are strongly encouraged to join via video.
+There are two basic meeting rhythms: daily standups and weekly/bi-weekly agile sprint rituals. All meetings are held via video teleconference. A telephone bridge is maintained as a backup method of connecting, but participants are strongly encouraged to join via video.
 
 ### Daily
 
-- **Daily design sync** — this meeting is a time to solution functionality, demo in-progress work with the team and review new wireframes
 - **Daily standup**
+- **Mobbing** - All mobbing/paring/collaborative coding starts in [Clarion](https://us02web.zoom.us/j/87484491162?pwd=aGN0NFhTUTE3MHY0RHZFd3hUZ2tCUT09#success)
 
 ### Weekly
 
-- **Stakeholder meeting** — on Mondays and Fridays, we review the current project status with stakeholders at the Court and discuss the schedule of large releases that need off-hours deployments
+- **DAWSON Stakeholder meeting** — on Mondays and Fridays, we review the current project status with stakeholders at the Court and discuss the schedule of large releases that need off-hours deployments. Currenly only attended by court staff and delivery manager. 
+- **Backlog refinement** — Weekly on Tuesdays
 
 ### Bi-weekly
 
-- **Sprint review prep** — Every other Monday
-- **Sprint review** — Every other Tuesday, demo to client stakeholders
+- **Sprint Demo** — Every other Thursday, demo to client stakeholders
 - **Sprint retrospective** — Every other Tuesday
-- **Sprint planning** — Every other Wednesday
-- **Backlog grooming** — As needed
 
 ## Product Team
 
@@ -38,11 +39,9 @@ There is a cross functional product team for the U.S. Tax Court case management 
 
 -   Product owner: U.S. Tax Court
 -   Technical lead: U.S. Tax Court
--   User Experience designer: vendor
--   Visual designer: vendor
--   Researcher: vendor
--   Developers (Front-end, Back-end, Full-stack): vendor
--   Scrum Master: vendor
+-   User Experience Design & Research: Vendor
+-   Developers (Front-end, Back-end, Full-stack): Vendor
+-   Scrum Master/Delivery Manager: Vendor
 
 This team will participate in all scrum ceremonies in service of prioritizing, defining and delivering value to the Court and the stakeholders it serves.
 
@@ -50,11 +49,9 @@ This team will participate in all scrum ceremonies in service of prioritizing, d
 
 We recognize that the Court staff and members of the public will be critical to helping us develop solutions that will deliver better service to petitioners, practitioners, and Court staff. We continuously perform observational research and usability testing, and create lightweight prototypes, to iterate on designs and develop a system that meets end-user needs.
 
-## Making Code Changes
+### Definition of Ready/Done
 
-### Definition of Done
-
-There are two checklists that define what "done" is for [user stories](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/ustc-story-template.md) and [bug fixes](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/bug-report.md).
+There are checklists that define what "Ready" or "done" means. For [user stories](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/ustc-story-template.md) and [bug fixes](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/bug-report.md).
 
 ### Accepting Vendor Work
 
