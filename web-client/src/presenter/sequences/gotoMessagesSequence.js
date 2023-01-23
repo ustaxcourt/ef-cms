@@ -30,8 +30,8 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   parallel([
     [fetchUserNotificationsSequence, setMessageCountsAction],
     [
-      chooseMessageBoxAction,
       setSectionForMessageBoxAction,
+      chooseMessageBoxAction,
       {
         mycompleted: [getCompletedMessagesForUserAction],
         myinbox: [getInboxMessagesForUserAction],
