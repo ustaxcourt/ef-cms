@@ -60,7 +60,6 @@ export const MessagesMenu = connect(
               <a
                 href="/messages/section/inbox/?section=docket"
                 id="docket-section-messages"
-                onClick={() => {}}
               >
                 Docket Section Messages
               </a>
@@ -69,7 +68,6 @@ export const MessagesMenu = connect(
               <a
                 href="/messages/section/inbox/?section=petitions"
                 id="petitions-section-messages"
-                onClick={() => {}}
               >
                 Petitions Section Messages
               </a>

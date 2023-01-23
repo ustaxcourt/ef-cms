@@ -1176,7 +1176,7 @@ const router = {
       '/messages/*/*/?..',
       ifHasAccess({ app }, (queue, box) => {
         const { section } = route.query();
-        console.log('section', section);
+
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
           box,

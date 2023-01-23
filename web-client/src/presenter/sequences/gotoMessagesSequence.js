@@ -21,7 +21,6 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 
 const goToMessages = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
-  () => console.log('gotomessages  seeeeequence'),
   resetCacheKeyAction,
   closeMobileMenuAction,
   clearScreenMetadataAction,
