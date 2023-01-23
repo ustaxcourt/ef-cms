@@ -57,12 +57,20 @@ export const MessagesMenu = connect(
               )}
             </li>
             <li className="usa-nav__submenu-item">
-              <a href="/" id="docket-section-messages" onClick={() => {}}>
+              <a
+                href="/messages/section/inbox/?section=docket"
+                id="docket-section-messages"
+                onClick={() => {}}
+              >
                 Docket Section Messages
               </a>
             </li>
             <li className="usa-nav__submenu-item">
-              <a href="/" id="petitions-section-messages" onClick={() => {}}>
+              <a
+                href="/messages/section/inbox/?section=petitions"
+                id="petitions-section-messages"
+                onClick={() => {}}
+              >
                 Petitions Section Messages
               </a>
             </li>
