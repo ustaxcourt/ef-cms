@@ -58,7 +58,7 @@ export const MessagesMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
-                href="/messages/section/inbox/?section=docket"
+                href="/messages/section/inbox/selectedSection?section=docket"
                 id="docket-section-messages"
               >
                 Docket Section Messages
@@ -66,7 +66,7 @@ export const MessagesMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
-                href="/messages/section/inbox/?section=petitions"
+                href="/messages/section/inbox/selectedSection?section=petitions"
                 id="petitions-section-messages"
               >
                 Petitions Section Messages
