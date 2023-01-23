@@ -29,13 +29,15 @@ describe('getInboxMessagesForSectionAction', () => {
     expect(results.output.messages).toEqual([message]);
   });
 
-  it('retrieves the messages for the section from props when it is defined', async () => {
+  it('retrieves the messages for the section from state when it is defined', async () => {
     await runAction(getInboxMessagesForSectionAction, {
       modules: {
         presenter,
       },
-      props: {
-        section: DOCKET_SECTION,
+      state: {
+        messageBoxToDisplay: {
+          section: DOCKET_SECTION,
+        },
       },
     });
 
@@ -46,7 +48,7 @@ describe('getInboxMessagesForSectionAction', () => {
     expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 
-  it('retrieves the messages for the current user"s section when props.section is undefined', async () => {
+  it("retrieves the messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
     const currentUserSection = { section: ADC_SECTION };
     applicationContext.getCurrentUser.mockReturnValue(currentUserSection);
 
@@ -54,7 +56,9 @@ describe('getInboxMessagesForSectionAction', () => {
       modules: {
         presenter,
       },
-      props: {},
+      state: {
+        messageBoxToDisplay: {},
+      },
     });
 
     expect(
