@@ -1,3 +1,7 @@
+import {
+  ADC_SECTION,
+  DOCKET_SECTION,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getInboxMessagesForSectionAction } from './getInboxMessagesForSectionAction';
 import { presenter } from '../presenter-mock';
@@ -23,5 +27,44 @@ describe('getInboxMessagesForSectionAction', () => {
       state: {},
     });
     expect(results.output.messages).toEqual([message]);
+  });
+
+  it('retrieves the messages for the section from state when it is defined', async () => {
+    await runAction(getInboxMessagesForSectionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        messageBoxToDisplay: {
+          section: DOCKET_SECTION,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
+        .calls[0][1],
+    ).toEqual({ section: 'docket' });
+    expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
+  });
+
+  it("retrieves the messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
+    const currentUserSection = { section: ADC_SECTION };
+    applicationContext.getCurrentUser.mockReturnValue(currentUserSection);
+
+    await runAction(getInboxMessagesForSectionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        messageBoxToDisplay: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
+        .calls[0][1],
+    ).toEqual(currentUserSection);
+    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });
 });
