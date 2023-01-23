@@ -46,10 +46,9 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
-  const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
-
   let parties;
   if (showConsolidatedCasesForService) {
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
         const caseCheckbox = consolidatedCasesToMultiDocketOn.find(
@@ -98,8 +97,6 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     }
   };
 
-  console.log('parties: ', parties);
-
   Object.keys(parties).forEach(key => {
     parties[key].forEach(party => {
       if (
@@ -115,11 +112,16 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
 
   let caseOrGroup = 'case';
 
-  if (
-    showConsolidatedCasesForService &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
-  ) {
-    caseOrGroup = 'group';
+  if (showConsolidatedCasesForService) {
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
+
+    const checkedBoxes = consolidatedCasesToMultiDocketOn.filter(
+      c => c.checked,
+    ).length;
+
+    if (checkedBoxes > 1) {
+      caseOrGroup = 'group';
+    }
   }
 
   return {
