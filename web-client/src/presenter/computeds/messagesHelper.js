@@ -29,15 +29,13 @@ export const messagesHelper = (get, applicationContext) => {
     showIndividualMessages && !isCaseServicesSupervisor;
   const showSwitchToMyMessagesButton =
     showSectionMessages && !isCaseServicesSupervisor;
+  const selectedSection = messageBoxToDisplay.section;
+
   if (isCaseServicesSupervisor) {
-    if (messageBoxToDisplay.section) {
-      showSectionMessages = true;
-      showIndividualMessages = false;
-    } else {
-      showSectionMessages = false;
-      showIndividualMessages = true;
-    }
+    showSectionMessages = !!selectedSection;
+    showIndividualMessages = !selectedSection;
   }
+
   return {
     inboxCount,
     messagesTitle,
