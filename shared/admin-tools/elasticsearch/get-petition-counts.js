@@ -16,7 +16,6 @@ const getAllPetitions = async ({ applicationContext }) => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
-      _source: ['createdAt.S', 'isPaper.BOOL'],
       body: {
         query: {
           bool: {
@@ -48,8 +47,8 @@ const getAllPetitions = async ({ applicationContext }) => {
 const getCounts = ({ gte, lt, petitions }) => {
   const petitionsReceivedInTimeframe = petitions.filter(
     p =>
-      dateStringsCompared(p.createdAt, gte) >= 0 &&
-      dateStringsCompared(p.createdAt, lt) < 0,
+      dateStringsCompared(p.receivedAt, gte) >= 0 &&
+      dateStringsCompared(p.receivedAt, lt) < 0,
   );
   return {
     isElectronic: petitionsReceivedInTimeframe.filter(
