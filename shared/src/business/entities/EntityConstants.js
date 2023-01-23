@@ -1238,6 +1238,7 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabyte
 
 const ADC_SECTION = 'adc';
 const ADMISSIONS_SECTION = 'admissions';
+const CASE_SERVICES_SUPERVISOR_SECTION = 'caseServicesSupervisor';
 const CHAMBERS_SECTION = 'chambers';
 const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 const DOCKET_SECTION = 'docket';
@@ -1250,6 +1251,7 @@ const TRIAL_CLERKS_SECTION = 'trialClerks';
 const SECTIONS = sortBy([
   ADC_SECTION,
   ADMISSIONS_SECTION,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CHAMBERS_SECTION,
   CLERK_OF_COURT_SECTION,
   DOCKET_SECTION,

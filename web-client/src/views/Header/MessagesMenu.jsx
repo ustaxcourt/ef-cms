@@ -6,12 +6,14 @@ import classNames from 'classnames';
 
 export const MessagesMenu = connect(
   {
+    headerHelper: state.headerHelper,
     pageIsMessages: state.headerHelper.pageIsMessages,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
   function MessagesMenu({
+    headerHelper,
     isExpanded,
     pageIsMessages,
     resetHeaderAccordionsSequence,
@@ -20,11 +22,12 @@ export const MessagesMenu = connect(
   }) {
     return (
       <>
-        <button
+        <Button
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
             pageIsMessages && 'usa-current',
+            'width-auto',
           )}
           id="messages-btn"
           onClick={() => {
@@ -32,12 +35,13 @@ export const MessagesMenu = connect(
           }}
         >
           <span>Messages</span>
-        </button>
+        </Button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
               <Button
                 link
+                href="/messages/my/inbox"
                 id="my-messages-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
@@ -46,6 +50,11 @@ export const MessagesMenu = connect(
               >
                 My Messages
               </Button>
+              {headerHelper.unreadMessageCount > 0 && (
+                <div className="icon-unread-messages padding-top-2px text-bold text-ttop text-center">
+                  {headerHelper.unreadMessageCount}
+                </div>
+              )}
             </li>
             <li className="usa-nav__submenu-item">
               <a href="/" id="docket-section-messages" onClick={() => {}}>
