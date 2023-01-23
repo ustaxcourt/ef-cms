@@ -9,6 +9,10 @@ const config = {
   endpoint: process.env.DYNAMODB_ENDPOINT,
   region: 'us-east-1',
 };
+
+const express = require('express');
+const app = express();
+
 const dynamodbClient = new AWS.DynamoDB(config);
 const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
 
@@ -18,6 +22,16 @@ const {
 
 const tableName = 'efcms-local';
 const DynamoDBReadable = require('dynamodb-streams-readable');
+
+let chunks = [];
+
+/**
+ * This endpoint it hit to know when the streams queue is empty.  An empty queue
+ * means everything added to dynamo should have been indexed into elasticsearch.
+ */
+app.get('/isDone', (req, res) => {
+  res.send(chunks.length === 0);
+});
 
 (async () => {
   const streamARN = await dynamodbClient
@@ -45,13 +59,8 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
       new Writable({
         objectMode: true,
         write: (chunk, encoding, processNextChunk) => {
-          processStreamRecordsLambda({
-            Records: chunk,
-          })
-            .then(() => processNextChunk())
-            .catch(err => {
-              console.log('error', err);
-            });
+          chunks.push(chunk);
+          processNextChunk();
         },
       }),
     );
@@ -59,3 +68,20 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
 
   StreamDescription.Shards.forEach(shard => processShard(shard));
 })();
+
+const processChunks = async () => {
+  for (const chunk of chunks) {
+    await processStreamRecordsLambda({
+      Records: chunk,
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+  chunks = [];
+
+  setTimeout(processChunks, 1);
+};
+
+processChunks();
+
+app.listen(5005);
