@@ -23,6 +23,32 @@ const REQUEST_EVENT = {
 
 describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   let CI;
+
+  const mockExpectedResponse = {
+    caseCaption: 'Test Petitioner, Petitioner',
+    caseType: 'Other',
+    contactPrimary: {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      email: 'petitioner@example.com',
+      name: 'Test Petitioner',
+      phone: '1234567',
+      postalCode: '12345',
+      state: 'TN',
+    },
+    docketEntries: [],
+    docketNumber: '101-18',
+    docketNumberSuffix: null,
+    filingType: 'Myself',
+    noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
+    partyType: 'Petitioner',
+    practitioners: [],
+    preferredTrialCity: 'Washington, District of Columbia',
+    respondents: [],
+    sortableDocketNumber: 2018000101,
+    status: 'Calendared',
+  };
+
   // disable logging by mimicking CI for this test
   beforeAll(() => {
     ({ CI } = process.env);
@@ -37,7 +63,10 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentApplicationContext(user);
 
-    // Case is retrieved before determining authorization
+    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+      .fn()
+      .mockResolvedValue(true);
+
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
@@ -63,6 +92,10 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   it('returns 200 when the user is not associated and the case is found', async () => {
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentApplicationContext(user);
+
+    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+      .fn()
+      .mockResolvedValue(true);
 
     // Case is retrieved before determining authorization
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
@@ -97,6 +130,10 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentApplicationContext(user);
 
+    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+      .fn()
+      .mockResolvedValue(true);
+
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
@@ -123,6 +160,10 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentApplicationContext(user);
 
+    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+      .fn()
+      .mockResolvedValue(true);
+
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
         promise: jest
@@ -143,51 +184,34 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     );
   });
 
-  it('returns the case in v1 format', async () => {
-    // Careful! Changing this test would mean that the v1 format is changing;
-    // this would mean breaking changes for any user of the v1 API
-    const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentApplicationContext(user);
+  [true, false].forEach(isFeatureFlagOn => {
+    it(`returns the case in v1 format - when feature flag is ${isFeatureFlagOn}`, async () => {
+      // Careful! Changing this test would mean that the v1 format is changing;
+      // this would mean breaking changes for any user of the v1 API
+      const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
+      const applicationContext = createSilentApplicationContext(user);
 
-    applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [mockDynamoCaseRecord],
-          }),
-        ),
-      }),
-    });
+      applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+        .fn()
+        .mockResolvedValue(isFeatureFlagOn);
 
-    const response = await getCaseLambda(REQUEST_EVENT, {
-      applicationContext,
-    });
+      applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+        query: jest.fn().mockReturnValue({
+          promise: jest.fn().mockReturnValue(
+            Promise.resolve({
+              Items: [mockDynamoCaseRecord],
+            }),
+          ),
+        }),
+      });
 
-    expect(response.statusCode).toBe('200');
-    expect(response.headers['Content-Type']).toBe('application/json');
-    expect(JSON.parse(response.body)).toMatchObject({
-      caseCaption: 'Test Petitioner, Petitioner',
-      caseType: 'Other',
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-      },
-      docketEntries: [],
-      docketNumber: '101-18',
-      docketNumberSuffix: null,
-      filingType: 'Myself',
-      noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
-      partyType: 'Petitioner',
-      practitioners: [],
-      preferredTrialCity: 'Washington, District of Columbia',
-      respondents: [],
-      sortableDocketNumber: 2018000101,
-      status: 'Calendared',
+      const response = await getCaseLambda(REQUEST_EVENT, {
+        applicationContext,
+      });
+
+      expect(response.statusCode).toBe('200');
+      expect(response.headers['Content-Type']).toBe('application/json');
+      expect(JSON.parse(response.body)).toMatchObject(mockExpectedResponse);
     });
   });
 });
