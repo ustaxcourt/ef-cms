@@ -1,3 +1,4 @@
+import { TransactionBuilder } from '../createTransaction';
 import { query, remove } from '../../dynamodbClientService';
 
 /**
@@ -11,9 +12,11 @@ import { query, remove } from '../../dynamodbClientService';
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
+  transaction,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
+  transaction?: TransactionBuilder;
 }) => {
   const records = await query({
     ExpressionAttributeNames: {
@@ -34,6 +37,7 @@ export const deleteCaseTrialSortMappingRecords = async ({
         pk: record.pk,
         sk: record.sk,
       },
+      transaction,
     });
   };
 

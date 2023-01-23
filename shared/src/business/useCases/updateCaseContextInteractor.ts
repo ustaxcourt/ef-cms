@@ -54,6 +54,10 @@ export const updateCaseContextInteractor = async (
     newCase.setAssociatedJudge(associatedJudge);
   }
 
+  const transaction = applicationContext
+    .getPersistenceGateway()
+    .createTransaction();
+
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
   if (caseStatus !== oldCase.status) {
@@ -78,6 +82,7 @@ export const updateCaseContextInteractor = async (
 
       await applicationContext.getPersistenceGateway().updateTrialSession({
         applicationContext,
+        transaction,
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
@@ -100,16 +105,18 @@ export const updateCaseContextInteractor = async (
           applicationContext,
           caseSortTags: newCase.generateTrialSortTags(),
           docketNumber: newCase.docketNumber,
+          transaction,
         });
     }
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: newCase,
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: newCase.validate().toRawObject(),
+    transaction,
+  });
 
-  return new Case(updatedCase, { applicationContext }).toRawObject();
+  await transaction.commit({ applicationContext });
+
+  return newCase.toRawObject();
 };

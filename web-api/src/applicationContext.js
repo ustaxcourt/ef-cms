@@ -306,6 +306,7 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
       put: fallbackHandler({ key: 'put', ...config }),
       query: fallbackHandler({ key: 'query', ...config }),
       scan: fallbackHandler({ key: 'scan', ...config }),
+      transactWrite: fallbackHandler({ key: 'transactWrite', ...config }),
       update: fallbackHandler({ key: 'update', ...config }),
     };
   }

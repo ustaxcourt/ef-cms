@@ -1,3 +1,4 @@
+import { TransactionBuilder } from './dynamo/createTransaction';
 import { chunk, isEmpty } from 'lodash';
 
 /**
@@ -86,57 +87,31 @@ export const describeDeployTable = async ({ applicationContext }) => {
 export const put = ({
   applicationContext,
   Item,
+  transaction,
 }: {
   Item: TDynamoRecord;
   applicationContext: IApplicationContext;
-}): Promise<TDynamoRecord> => {
-  return applicationContext
-    .getDocumentClient()
-    .put({
-      Item: filterEmptyStrings(Item),
-      TableName: getTableName({
-        applicationContext,
-      }),
-    })
-    .promise()
-    .then(() => Item);
-};
-
-/**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
-export const update = ({
-  applicationContext,
-  ConditionExpression,
-  ExpressionAttributeNames,
-  ExpressionAttributeValues,
-  Key,
-  UpdateExpression,
-}: {
-  ConditionExpression?: string;
-  ExpressionAttributeNames: Record<string, string>;
-  ExpressionAttributeValues: Record<string, string | boolean>;
-  Key: Record<string, string>;
-  UpdateExpression: string;
-  applicationContext: IApplicationContext;
-}): Promise<TDynamoRecord[]> => {
-  const filteredValues = filterEmptyStrings(ExpressionAttributeValues);
-  return applicationContext
-    .getDocumentClient()
-    .update({
-      ConditionExpression,
-      ExpressionAttributeNames,
-      ExpressionAttributeValues: filteredValues,
-      Key,
-      TableName: getTableName({
-        applicationContext,
-      }),
-      UpdateExpression,
-    })
-    .promise()
-    .then(() => undefined);
+  transaction?: TransactionBuilder;
+}): Promise<any> => {
+  return transaction
+    ? transaction.add({
+        Put: {
+          Item: filterEmptyStrings(Item),
+          TableName: getTableName({
+            applicationContext,
+          }),
+        },
+      })
+    : applicationContext
+        .getDocumentClient()
+        .put({
+          Item: filterEmptyStrings(Item),
+          TableName: getTableName({
+            applicationContext,
+          }),
+        })
+        .promise()
+        .then(() => Item);
 };
 
 /**
@@ -433,15 +408,24 @@ export const batchDelete = ({ applicationContext, items }) => {
 export const remove = ({
   applicationContext,
   key,
+  transaction,
 }: {
   applicationContext: IApplicationContext;
   key: Record<string, string>;
+  transaction?: TransactionBuilder;
 }) => {
-  return applicationContext
-    .getDocumentClient()
-    .delete({
-      Key: key,
-      TableName: getTableName({ applicationContext }),
-    })
-    .promise();
+  transaction
+    ? transaction.add({
+        Delete: {
+          Key: key,
+          TableName: getTableName({ applicationContext }),
+        },
+      })
+    : applicationContext
+        .getDocumentClient()
+        .delete({
+          Key: key,
+          TableName: getTableName({ applicationContext }),
+        })
+        .promise();
 };

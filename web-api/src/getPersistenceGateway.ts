@@ -20,6 +20,7 @@ import { createNewPractitionerUser } from '../../shared/src/persistence/dynamo/u
 import { createOrUpdatePractitionerUser } from '../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createOrUpdateUser } from '../../shared/src/persistence/dynamo/users/createOrUpdateUser';
 import { createPractitionerDocument } from '../../shared/src/persistence/dynamo/practitioners/createPractitionerDocument';
+import { createTransaction } from '../../shared/src/persistence/dynamo/createTransaction';
 import { createTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { decrementJobCounter } from '../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter';
@@ -280,6 +281,7 @@ const gatewayMethods = {
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createTransaction,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,

@@ -1,11 +1,14 @@
+import { TransactionBuilder } from '../createTransaction';
 import { put } from '../../dynamodbClientService';
 
 export const updateTrialSession = ({
   applicationContext,
+  transaction,
   trialSessionToUpdate,
 }: {
   applicationContext: IApplicationContext;
   trialSessionToUpdate: TTrialSessionData;
+  transaction?: TransactionBuilder;
 }) =>
   put({
     Item: {
@@ -15,4 +18,5 @@ export const updateTrialSession = ({
       sk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
     },
     applicationContext,
+    transaction,
   });

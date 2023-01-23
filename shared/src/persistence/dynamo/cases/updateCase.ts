@@ -1,3 +1,4 @@
+import { TransactionBuilder } from '../createTransaction';
 import { fieldsToOmitBeforePersisting } from './createCase';
 import { omit } from 'lodash';
 import { put } from '../../dynamodbClientService';
@@ -13,9 +14,11 @@ import { put } from '../../dynamodbClientService';
 export const updateCase = async ({
   applicationContext,
   caseToUpdate,
+  transaction,
 }: {
   applicationContext: IApplicationContext;
   caseToUpdate: TCase;
+  transaction?: TransactionBuilder;
 }) => {
   const setLeadCase = caseToUpdate.leadDocketNumber
     ? { gsi1pk: `case|${caseToUpdate.leadDocketNumber}` }
@@ -29,6 +32,7 @@ export const updateCase = async ({
       sk: `case|${caseToUpdate.docketNumber}`,
     },
     applicationContext,
+    transaction,
   });
 
   return caseToUpdate;

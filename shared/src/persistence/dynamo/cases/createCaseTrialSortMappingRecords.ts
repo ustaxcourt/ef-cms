@@ -1,3 +1,4 @@
+import { TransactionBuilder } from '../createTransaction';
 import { deleteCaseTrialSortMappingRecords } from './deleteCaseTrialSortMappingRecords';
 import { put, query } from '../../dynamodbClientService';
 
@@ -13,10 +14,12 @@ export const createCaseTrialSortMappingRecords = async ({
   applicationContext,
   caseSortTags,
   docketNumber,
+  transaction,
 }: {
   applicationContext: IApplicationContext;
   caseSortTags: any;
   docketNumber: string;
+  transaction?: TransactionBuilder;
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
 
@@ -50,6 +53,7 @@ export const createCaseTrialSortMappingRecords = async ({
         sk: nonHybrid,
       },
       applicationContext,
+      transaction,
     }),
     put({
       Item: {
@@ -59,6 +63,7 @@ export const createCaseTrialSortMappingRecords = async ({
         sk: hybrid,
       },
       applicationContext,
+      transaction,
     }),
   ]);
 };
