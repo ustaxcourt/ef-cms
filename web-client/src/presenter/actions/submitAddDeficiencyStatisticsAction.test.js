@@ -25,6 +25,16 @@ describe('submitAddDeficiencyStatisticsAction', () => {
           irsDeficiencyAmount: '3',
           irsTotalPenalties: '4',
           lastDateOfPeriod: null,
+          penalties: [
+            {
+              name: 'Penalty 1 (IRS)',
+              penaltyAmount: '100.00',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+              statisticId: applicationContext.getUniqueId(),
+            },
+          ],
           year: '2019',
           yearOrPeriod: 'Year',
         },
@@ -60,6 +70,16 @@ describe('submitAddDeficiencyStatisticsAction', () => {
           irsDeficiencyAmount: '3',
           irsTotalPenalties: '4',
           lastDateOfPeriod: null,
+          penalties: [
+            {
+              name: 'Penalty 1 (IRS)',
+              penaltyAmount: '37.00',
+              penaltyType:
+                applicationContext.getConstants().PENALTY_TYPES
+                  .IRS_PENALTY_AMOUNT,
+              statisticId: applicationContext.getUniqueId(),
+            },
+          ],
           year: '2019',
           yearOrPeriod: 'Year',
         },

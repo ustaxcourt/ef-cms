@@ -5,9 +5,16 @@ import { runAction } from 'cerebral/test';
 
 describe('refreshStatisticsAction', () => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
+  const statisticId = '8c35ffbb-773a-4a29-9868-329ffae4e065';
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+  });
+
+  beforeEach(() => {
+    presenter.providers.applicationContext.getUniqueId.mockReturnValue(
+      statisticId,
+    );
   });
 
   it('should clear the statistics array if case type is not deficiency', async () => {
@@ -54,6 +61,7 @@ describe('refreshStatisticsAction', () => {
         yearOrPeriod: 'Year',
       },
       {
+        statisticId,
         yearOrPeriod: 'Year',
       },
     ]);
@@ -95,6 +103,7 @@ describe('refreshStatisticsAction', () => {
 
     expect(result.state.form.statistics).toEqual([
       {
+        statisticId,
         yearOrPeriod: 'Year',
       },
     ]);
