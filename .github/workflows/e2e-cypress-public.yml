@@ -41,7 +41,7 @@ jobs:
           cors: '*'
       - name: Run E2E Cypress
         run: |
-          npm ci --legacy-peer-deps
+          npm ci
           mkdir -p /tmp/cypress/
           npm run start:all >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh

@@ -182,123 +182,65 @@ describe('getDocumentDownloadUrlLambda', () => {
     );
   });
 
-  it('returns the document download URL in v2 format', async () => {
-    const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentApplicationContext(user);
+  [true, false].forEach(isFeatureFlagOn => {
+    it(`returns the document download URL in v2 format - when feature flag is ${isFeatureFlagOn}`, async () => {
+      const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
+      const applicationContext = createSilentApplicationContext(user);
 
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
-      .fn()
-      .mockResolvedValue(true);
-    const request = Object.assign({}, REQUEST_EVENT, {
-      pathParameters: {
-        docketNumber: '123-30',
-        key: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-      },
-    });
-
-    applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [
-              {
-                docketNumber: '123-20',
-                judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-                pk: 'case|123-20',
-                sk: 'case|23',
-                status: 'New',
-              },
-              {
-                archived: false,
-                docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-                pk: 'case|123-20',
-                sk: 'docket-entry|124',
-              },
-            ],
-          }),
-        ),
-      }),
-    });
-
-    applicationContext.getPersistenceGateway().getDownloadPolicyUrl = jest
-      .fn()
-      .mockImplementation(({ key, useTempBucket }) => {
-        return {
-          url: `https://example.com/download-policy-url/${
-            useTempBucket ? 'temp-' : ''
-          }bucket/item/${key}`,
-        };
+      applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+        .fn()
+        .mockResolvedValue(true);
+      const request = Object.assign({}, REQUEST_EVENT, {
+        pathParameters: {
+          docketNumber: '123-30',
+          key: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+        },
       });
 
-    const response = await getDocumentDownloadUrlLambda(request, {
-      applicationContext,
-    });
-
-    expect(response.statusCode).toBe('200');
-    expect(response.headers['Content-Type']).toBe('application/json');
-    expect(JSON.parse(response.body)).toHaveProperty(
-      'url',
-      'https://example.com/download-policy-url/bucket/item/26c6a0e5-5d11-45f0-9904-04d103ada04f',
-    );
-  });
-
-  it('returns the document download URL in v2 format when feature flag is off', async () => {
-    const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentApplicationContext(user);
-
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
-      .fn()
-      .mockResolvedValue(false);
-    const request = Object.assign({}, REQUEST_EVENT, {
-      pathParameters: {
-        docketNumber: '123-30',
-        key: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-      },
-    });
-
-    applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [
-              {
-                docketNumber: '123-20',
-                judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-                pk: 'case|123-20',
-                sk: 'case|23',
-                status: 'New',
-              },
-              {
-                archived: false,
-                docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-                pk: 'case|123-20',
-                sk: 'docket-entry|124',
-              },
-            ],
-          }),
-        ),
-      }),
-    });
-
-    applicationContext.getPersistenceGateway().getDownloadPolicyUrl = jest
-      .fn()
-      .mockImplementation(({ key, useTempBucket }) => {
-        return {
-          url: `https://example.com/download-policy-url/${
-            useTempBucket ? 'temp-' : ''
-          }bucket/item/${key}`,
-        };
+      applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+        query: jest.fn().mockReturnValue({
+          promise: jest.fn().mockReturnValue(
+            Promise.resolve({
+              Items: [
+                {
+                  docketNumber: '123-20',
+                  judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+                  pk: 'case|123-20',
+                  sk: 'case|23',
+                  status: 'New',
+                },
+                {
+                  archived: false,
+                  docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+                  pk: 'case|123-20',
+                  sk: 'docket-entry|124',
+                },
+              ],
+            }),
+          ),
+        }),
       });
 
-    const response = await getDocumentDownloadUrlLambda(request, {
-      applicationContext,
-    });
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl = jest
+        .fn()
+        .mockImplementation(({ key, useTempBucket }) => {
+          return {
+            url: `https://example.com/download-policy-url/${
+              useTempBucket ? 'temp-' : ''
+            }bucket/item/${key}`,
+          };
+        });
 
-    expect(response.statusCode).toBe('200');
-    expect(response.headers['Content-Type']).toBe('application/json');
-    expect(JSON.parse(response.body)).toHaveProperty(
-      'url',
-      'https://example.com/download-policy-url/bucket/item/26c6a0e5-5d11-45f0-9904-04d103ada04f',
-    );
+      const response = await getDocumentDownloadUrlLambda(request, {
+        applicationContext,
+      });
+
+      expect(response.statusCode).toBe('200');
+      expect(response.headers['Content-Type']).toBe('application/json');
+      expect(JSON.parse(response.body)).toHaveProperty(
+        'url',
+        'https://example.com/download-policy-url/bucket/item/26c6a0e5-5d11-45f0-9904-04d103ada04f',
+      );
+    });
   });
 });
