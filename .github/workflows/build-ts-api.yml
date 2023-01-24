@@ -13,6 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: build typescript api
         run: |
-          npm ci --legacy-peer-deps
+          npm ci
           npm run build:assets
           npm run build:lambda:api
