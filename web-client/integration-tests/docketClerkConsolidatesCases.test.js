@@ -1,4 +1,4 @@
-import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
@@ -23,6 +23,7 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 describe('Case Consolidation Journey', () => {
   const cerebralTest = setupTest();
+  const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
