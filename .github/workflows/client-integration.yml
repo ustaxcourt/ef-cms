@@ -47,7 +47,7 @@ jobs:
           cors: '*'
       - name: Web Client - Integration Test
         run: |
-          npm ci --legacy-peer-deps
+          npm ci
           mkdir -p /tmp/web-client
           npm run start:api:ci > /tmp/web-client/server-output.txt &
           URL=http://localhost:4000/api/swagger ./wait-until.sh
