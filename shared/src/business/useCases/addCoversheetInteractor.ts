@@ -31,6 +31,8 @@ export const addCoversheetInteractor = async (
     useInitialData: boolean;
   },
 ) => {
+  // s3 update logic begins here
+
   if (!caseEntity) {
     const caseRecord = await applicationContext
       .getPersistenceGateway()
@@ -81,6 +83,7 @@ export const addCoversheetInteractor = async (
     key: docketEntryId,
   });
 
+  // Dynamodb update logic beings here
   let docketNumbersToUpdate = [docketNumber];
 
   if (consolidatedCases) {

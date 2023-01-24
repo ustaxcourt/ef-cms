@@ -12,10 +12,12 @@ import { query, remove } from '../../dynamodbClientService';
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
+  omit = [],
   transaction,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
+  omit?: any[];
   transaction?: TransactionBuilder;
 }) => {
   const records = await query({
@@ -41,7 +43,13 @@ export const deleteCaseTrialSortMappingRecords = async ({
     });
   };
 
-  const results = await Promise.all(records.map(clientDelete));
+  const results = await Promise.all(
+    records
+      .filter(record => {
+        return !omit.some(({ pk, sk }) => record.pk === pk && record.sk === sk);
+      })
+      .map(clientDelete),
+  );
 
   return results;
 };

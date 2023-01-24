@@ -61,6 +61,7 @@ import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cas
 import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
+import { getCasesMetaByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesMetaByLeadDocketNumber';
 import { getClientId } from '../../shared/src/persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from '../../shared/src/persistence/cognito/getCognitoUserIdByEmail';
 import { getCompletedSectionInboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
@@ -69,6 +70,7 @@ import { getConfigurationItemValue } from '../../shared/src/persistence/dynamo/d
 import { getDeployTableStatus } from '../../shared/src/persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketEntry } from '../../shared/src/persistence/dynamo/documents/getDocketEntry';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -309,6 +311,7 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesForUser,
+  getCasesMetaByLeadDocketNumber,
   getClientId,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
@@ -316,6 +319,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketEntry,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,

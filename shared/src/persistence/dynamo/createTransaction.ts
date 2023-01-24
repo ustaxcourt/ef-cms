@@ -10,6 +10,7 @@ export const createTransaction = () => {
       transaction.push(transactionItem);
     },
     commit({ applicationContext }) {
+      console.log(JSON.stringify(transaction, null, 2));
       return applicationContext
         .getDocumentClient()
         .transactWrite({

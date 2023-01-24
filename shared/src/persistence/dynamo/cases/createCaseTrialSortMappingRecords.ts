@@ -41,6 +41,11 @@ export const createCaseTrialSortMappingRecords = async ({
     await deleteCaseTrialSortMappingRecords({
       applicationContext,
       docketNumber,
+      omit: [
+        { pk: 'eligible-for-trial-case-catalog', sk: nonHybrid },
+        { pk: 'eligible-for-trial-case-catalog', sk: hybrid },
+      ],
+      transaction,
     });
   }
 

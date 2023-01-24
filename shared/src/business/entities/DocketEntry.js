@@ -75,6 +75,8 @@ DocketEntry.prototype.init = function init(
   rawDocketEntry,
   { applicationContext, petitioners = [], filtered = false },
 ) {
+  this.entityVersion = rawDocketEntry.entityVersion;
+
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }

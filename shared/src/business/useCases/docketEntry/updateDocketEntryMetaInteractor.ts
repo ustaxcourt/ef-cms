@@ -2,7 +2,7 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
+import { Case, isLeadCase } from '../../entities/cases/Case';
 import { DocketEntry, isServed } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -29,6 +29,55 @@ export const shouldGenerateCoversheetForDocketEntry = ({
       documentTitleUpdated) &&
     (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
     !originalDocketEntry.isMinuteEntry
+  );
+};
+
+const updateNumberOfPagesForConsolidatedGroup = async ({
+  applicationContext,
+  calculatePageNumber,
+  caseEntity,
+  docketEntryId,
+  transaction,
+}) => {
+  const rawConsolidatedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesMetaByLeadDocketNumber({
+      applicationContext,
+      leadDocketNumber: caseEntity.docketNumber,
+    });
+
+  await Promise.all(
+    rawConsolidatedCases
+      .filter(({ docketNumber }) => docketNumber !== caseEntity.docketNumber)
+      .map(async rawConsolidatedCase => {
+        const consolidatedCaseEntity = new Case(rawConsolidatedCase, {
+          applicationContext,
+        });
+
+        const docketEntry = await applicationContext
+          .getPersistenceGateway()
+          .getDocketEntry({
+            applicationContext,
+            docketEntryId,
+            docketNumber: consolidatedCaseEntity.docketNumber,
+          });
+
+        const consolidatedDocketEntryEntity = new DocketEntry(docketEntry, {
+          applicationContext,
+        });
+
+        consolidatedDocketEntryEntity.setNumberOfPages(
+          calculatePageNumber(consolidatedDocketEntryEntity.numberOfPages),
+        );
+
+        await applicationContext.getPersistenceGateway().updateDocketEntry({
+          applicationContext,
+          docketEntryId,
+          docketNumber: consolidatedCaseEntity.docketNumber,
+          document: consolidatedDocketEntryEntity.validate().toRawObject(),
+          transaction,
+        });
+      }),
   );
 };
 
@@ -167,52 +216,73 @@ export const updateDocketEntryMetaInteractor = async (
     { applicationContext, petitioners: caseEntity.petitioners },
   ).validate();
 
-  caseEntity.updateDocketEntry(docketEntryEntity);
-
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+  const transaction = applicationContext
+    .getPersistenceGateway()
+    .createTransaction();
 
   if (shouldGenerateCoversheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
+    docketEntryEntity.setNumberOfPages(docketEntryEntity.numberOfPages + 1);
 
-    const updatedDocketEntry = await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId: originalDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        filingDateUpdated,
+    if (isLeadCase(caseEntity)) {
+      updateNumberOfPagesForConsolidatedGroup({
+        applicationContext,
+        calculatePageNumber: currentNumberOfPages => currentNumberOfPages + 1,
+        caseEntity,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        transaction,
       });
-
-    caseEntity.updateDocketEntry(updatedDocketEntry);
+    }
   } else if (shouldRemoveExistingCoverSheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
-    const updatedDocketEntry = await applicationContext
-      .getUseCaseHelpers()
-      .removeCoversheet(applicationContext, {
-        docketEntryId: originalDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        filingDateUpdated,
+    docketEntryEntity.setNumberOfPages(docketEntryEntity.numberOfPages - 1);
+
+    if (isLeadCase(caseEntity)) {
+      updateNumberOfPagesForConsolidatedGroup({
+        applicationContext,
+        calculatePageNumber: currentNumberOfPages => currentNumberOfPages - 1,
+        caseEntity,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        transaction,
       });
-    caseEntity.updateDocketEntry(updatedDocketEntry);
+    }
   }
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
+    applicationContext,
+    docketEntryId: docketEntryEntity.docketEntryId,
+    docketNumber: docketEntryEntity.docketNumber,
+    document: docketEntryEntity.validate().toRawObject(),
+    transaction,
+  });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  caseEntity.updateDocketEntry(docketEntryEntity);
+
+  await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({ applicationContext, caseEntity, transaction });
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+    transaction,
+  });
+
+  await transaction.commit({ applicationContext });
+
+  if (shouldGenerateCoversheet) {
+    await applicationContext
+      .getUseCaseHelpers()
+      .generateAndAddCoversheetToDocketEntry(applicationContext, {
+        caseEntity,
+        docketEntryId: originalDocketEntry.docketEntryId,
+        filingDateUpdated,
+      });
+  } else if (shouldRemoveExistingCoverSheet) {
+    await applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheetFromDocketEntry(applicationContext, {
+        docketEntry: docketEntryEntity,
+      });
+  }
+
+  return caseEntity.validate().toRawObject();
 };

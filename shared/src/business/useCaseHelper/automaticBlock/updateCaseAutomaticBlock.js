@@ -9,6 +9,7 @@
 exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
+  transaction,
 }) => {
   if (caseEntity.trialDate || caseEntity.highPriority) {
     return caseEntity;
@@ -28,6 +29,7 @@ exports.updateCaseAutomaticBlock = async ({
       .deleteCaseTrialSortMappingRecords({
         applicationContext,
         docketNumber: caseEntity.docketNumber,
+        transaction,
       });
   } else if (caseEntity.isReadyForTrial()) {
     await applicationContext
@@ -36,6 +38,7 @@ exports.updateCaseAutomaticBlock = async ({
         applicationContext,
         caseSortTags: caseEntity.generateTrialSortTags(),
         docketNumber: caseEntity.docketNumber,
+        transaction,
       });
   }
 

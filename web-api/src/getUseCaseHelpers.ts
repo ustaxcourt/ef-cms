@@ -15,6 +15,7 @@ import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCa
 import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatAndSortConsolidatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
+import { generateAndAddCoversheetToDocketEntry } from '../../shared/src/business/useCaseHelper/documents/generateAndAddCoversheetToDocketEntry';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
@@ -27,6 +28,7 @@ import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelp
 import { processUserAssociatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/processUserAssociatedCases';
 import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
+import { removeCoversheetFromDocketEntry } from '../../shared/src/business/useCaseHelper/documents/removeCoversheetFromDocketEntry';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
 import { savePaperServicePdf } from '../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
@@ -66,6 +68,7 @@ const useCaseHelpers = {
   fileAndServeDocumentOnOneCase,
   formatAndSortConsolidatedCases,
   formatConsolidatedCaseCoversheetData,
+  generateAndAddCoversheetToDocketEntry,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,
@@ -78,6 +81,7 @@ const useCaseHelpers = {
   processUserAssociatedCases,
   removeCounselFromRemovedPetitioner,
   removeCoversheet,
+  removeCoversheetFromDocketEntry,
   saveFileAndGenerateUrl,
   savePaperServicePdf,
   sealInLowerEnvironment,

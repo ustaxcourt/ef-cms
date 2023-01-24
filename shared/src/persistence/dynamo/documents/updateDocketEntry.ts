@@ -1,3 +1,4 @@
+import { TransactionBuilder } from '../createTransaction';
 import { omit } from 'lodash';
 import { put } from '../../dynamodbClientService';
 
@@ -6,11 +7,13 @@ export const updateDocketEntry = ({
   docketEntryId,
   docketNumber,
   document,
+  transaction,
 }: {
   applicationContext: IApplicationContext;
   docketEntryId: string;
   docketNumber: string;
   document: any;
+  transaction?: TransactionBuilder;
 }) =>
   put({
     Item: {
@@ -19,4 +22,5 @@ export const updateDocketEntry = ({
       ...omit(document, 'workItem'),
     },
     applicationContext,
+    transaction,
   });
