@@ -18,8 +18,14 @@ export const Messages = connect(
     messagesHelper: state.messagesHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.messageBoxToDisplay.queue,
+    section: state.messageBoxToDisplay.section,
   },
-  function Messages({ messagesHelper, navigateToPathSequence, queue }) {
+  function Messages({
+    messagesHelper,
+    navigateToPathSequence,
+    queue,
+    section,
+  }) {
     return (
       <>
         <div className="big-blue-header">
@@ -59,7 +65,7 @@ export const Messages = connect(
             bind="messageBoxToDisplay.box"
             onSelect={box => {
               navigateToPathSequence({
-                path: `/messages/${queue}/${box}`,
+                path: `/messages/${queue}/${box}/selectedSection?section=${section}`,
               });
             }}
           >
