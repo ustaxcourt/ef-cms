@@ -20,7 +20,10 @@ describe('setMultiDocketingCheckboxesAction', () => {
       props: {
         consolidatedCases: [
           MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          MOCK_CASE_WITH_SECONDARY_OTHERS,
+          {
+            ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+            leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          },
         ],
       },
       state: {
@@ -49,15 +52,19 @@ describe('setMultiDocketingCheckboxesAction', () => {
         checkboxDisabled: true,
         checked: true,
         docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        docketNumberWithSuffix:
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
         formattedPetitioners: mockCaseSinglePetitioner,
-        isLeadCase: true,
+        leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       },
       {
         checkboxDisabled: true,
         checked: true,
         docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+        docketNumberWithSuffix:
+          MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumberWithSuffix,
         formattedPetitioners: mockCaseMultiplePetitioners,
-        isLeadCase: false,
+        leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       },
     ]);
     expect(state.modal.form.consolidatedCaseAllCheckbox).toEqual(true);

@@ -1,5 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { getFormattedDocketEntriesForTest } from '../helpers';
+import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
@@ -51,6 +51,11 @@ export const docketClerkEditsDocketEntryNonstandardB = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     ({ formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest));
