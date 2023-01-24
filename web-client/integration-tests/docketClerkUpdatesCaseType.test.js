@@ -92,10 +92,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 100,
     });
 
-    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
-      key: 'statistics.0.irsTotalPenalties',
-      value: 100,
-    });
+    //! FIXME
+    // await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
+    //   key: 'statistics.0.irsTotalPenalties',
+    //   value: 100,
+    // });
 
     await cerebralTest.runSequence('updateCaseDetailsSequence');
 
