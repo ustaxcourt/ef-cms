@@ -1,3 +1,4 @@
+import { DOCKET_SECTION } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getNotificationsAction } from './getNotificationsAction';
 import { presenter } from '../presenter-mock';
@@ -11,7 +12,7 @@ describe('getNotificationsAction', () => {
       .getNotificationsInteractor.mockReturnValue({});
   });
 
-  it('calls the user case for fetching the notifications map', async () => {
+  it('makes a call to fetch notifications', async () => {
     await runAction(getNotificationsAction, {
       modules: {
         presenter,
@@ -23,7 +24,7 @@ describe('getNotificationsAction', () => {
     ).toHaveBeenCalled();
   });
 
-  it('calls the user case for fetching the notifications map with a judgeUserId if a judgeUser is set on state', async () => {
+  it('makes a call to fetch notifications with a judgeUserId when state.judgeUser is defined', async () => {
     await runAction(getNotificationsAction, {
       modules: {
         presenter,
@@ -39,5 +40,26 @@ describe('getNotificationsAction', () => {
       applicationContext.getUseCases().getNotificationsInteractor.mock
         .calls[0][1].judgeUserId,
     ).toEqual('123');
+  });
+
+  it('makes a call to fetch notifications with case services supervisor information when state.messageBoxToDisplay.section is defined', async () => {
+    await runAction(getNotificationsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        messageBoxToDisplay: {
+          section: DOCKET_SECTION,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getNotificationsInteractor.mock
+        .calls[0][1].caseServicesSupervisorInfo,
+    ).toEqual({
+      section: 'docket',
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    });
   });
 });

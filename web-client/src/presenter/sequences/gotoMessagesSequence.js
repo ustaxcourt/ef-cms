@@ -27,10 +27,11 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   setDefaultTableSortAction,
+  setSectionForMessageBoxAction,
+
   parallel([
     [fetchUserNotificationsSequence, setMessageCountsAction],
     [
-      setSectionForMessageBoxAction,
       chooseMessageBoxAction,
       {
         mycompleted: [getCompletedMessagesForUserAction],

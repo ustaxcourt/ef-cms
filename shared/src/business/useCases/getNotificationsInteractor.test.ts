@@ -1,5 +1,10 @@
-import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import {
+  CHIEF_JUDGE,
+  PETITIONS_SECTION,
+  ROLES,
+} from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { caseServicesSupervisorUser } from '../../test/mockUsers';
 import { getNotificationsInteractor } from './getNotificationsInteractor';
 
 const workItems = [
@@ -226,6 +231,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -272,6 +278,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -336,6 +343,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -369,6 +377,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -390,6 +399,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: undefined,
       judgeUserId: 'docketclerk',
     });
 
@@ -400,6 +410,7 @@ describe('getNotificationsInteractor', () => {
 
   it('should fetch the qc section items for the provided judgeUserId', async () => {
     await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -436,5 +447,29 @@ describe('getNotificationsInteractor', () => {
     ).toMatchObject({
       judgeUserName: CHIEF_JUDGE,
     });
+  });
+
+  it('should fetch messages for the selected section and case services supervisor user when', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.adc,
+      userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
+    });
+
+    await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: {
+        section: PETITIONS_SECTION,
+        userId: caseServicesSupervisorUser.userId,
+      },
+      judgeUserId: undefined,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getUserInboxMessages.mock
+        .calls[0][0].userId,
+    ).toEqual(caseServicesSupervisorUser.userId);
+    expect(
+      applicationContext.getPersistenceGateway().getSectionInboxMessages.mock
+        .calls[0][0].section,
+    ).toEqual(PETITIONS_SECTION);
   });
 });
