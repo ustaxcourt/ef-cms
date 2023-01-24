@@ -31,7 +31,7 @@ describe('calculatePenaltiesAction', () => {
         .DETERMINATION_PENALTY_AMOUNT,
   };
 
-  describe('listOfAllPenalties', () => {
+  describe('allPenalties', () => {
     it('aggregates the lists of penalties and excludedInitialPenalties', async () => {
       const result = await runAction(calculatePenaltiesAction, {
         state: {
@@ -51,7 +51,7 @@ describe('calculatePenaltiesAction', () => {
           },
         },
       });
-      expect(result.output.listOfAllPenalties).toMatchObject([
+      expect(result.output.allPenalties).toMatchObject([
         irsPenalty1,
         irsPenalty2,
         irsPenalty3,
@@ -75,7 +75,7 @@ describe('calculatePenaltiesAction', () => {
           },
         },
       });
-      expect(result.output.listOfAllPenalties).toMatchObject([]);
+      expect(result.output.allPenalties).toMatchObject([]);
     });
 
     it('aggregates empty arrays and returns an empty array when statisticIndex is NOT defined', async () => {
@@ -91,7 +91,7 @@ describe('calculatePenaltiesAction', () => {
           },
         },
       });
-      expect(result.output.listOfAllPenalties).toMatchObject([]);
+      expect(result.output.allPenalties).toMatchObject([]);
     });
   });
 

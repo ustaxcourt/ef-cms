@@ -5,7 +5,7 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
   const key = 'irsTotalPenalties';
   const statisticIndex = 0;
   const sumOfPenalties = '$112.99';
-  const penalties = [
+  const allPenalties = [
     {
       irsTotalPenalties: '$1.00',
     },
@@ -22,7 +22,7 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
       setTotalPenaltiesAmountForStatisticAction,
       {
         props: {
-          penalties,
+          allPenalties,
           sumOfPenalties,
         },
         state: {
@@ -35,7 +35,9 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
       },
     );
 
-    expect(state.form.statistics[statisticIndex].penalties).toEqual(penalties);
+    expect(state.form.statistics[statisticIndex].penalties).toEqual(
+      allPenalties,
+    );
     expect(state.form.statistics[statisticIndex][key]).toEqual(sumOfPenalties);
   });
 
@@ -44,7 +46,7 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
       setTotalPenaltiesAmountForStatisticAction,
       {
         props: {
-          penalties,
+          allPenalties,
           sumOfPenalties,
         },
         state: {
@@ -57,7 +59,7 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
       },
     );
 
-    expect(state.form.penalties).toEqual(penalties);
+    expect(state.form.penalties).toEqual(allPenalties);
     expect(state.form[key]).toEqual(sumOfPenalties);
   });
 });

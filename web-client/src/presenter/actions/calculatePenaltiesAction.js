@@ -40,11 +40,11 @@ export const calculatePenaltiesAction = ({ get }) => {
     ? parseCurrency(penalties.reduce(penaltyAggregator, 0))
     : undefined;
 
-  const listOfAllPenalties = [...penalties, ...excludedInitialPenalties];
+  const allPenalties = [...penalties, ...excludedInitialPenalties];
 
   return {
+    allPenalties,
     itemizedPenaltiesOfCurrentType: penalties,
-    listOfAllPenalties,
     sumOfPenalties,
   };
 };

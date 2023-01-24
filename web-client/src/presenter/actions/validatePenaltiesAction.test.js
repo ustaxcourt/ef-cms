@@ -59,7 +59,7 @@ describe('validatePenaltiesAction', () => {
       modules: {
         presenter,
       },
-      props: { itemizedPenaltiesOfCurrentType: [], listOfAllPenalties: [] },
+      props: { allPenalties: [], itemizedPenaltiesOfCurrentType: [] },
       state: {},
     });
 
@@ -74,18 +74,18 @@ describe('validatePenaltiesAction', () => {
     });
   });
 
-  it('should call the error path when listOfAllPenalties has penalties with validation errors', async () => {
+  it('should call the error path when allPenalties has penalties with validation errors', async () => {
     await runAction(validatePenaltiesAction, {
       modules: {
         presenter,
       },
       props: {
-        itemizedPenaltiesOfCurrentType: [validCourtPenalty1Mock],
-        listOfAllPenalties: [
+        allPenalties: [
           validCourtPenalty1Mock,
           invalidIrsPenalty1Mock,
           invalidIrsPenalty2Mock,
         ],
+        itemizedPenaltiesOfCurrentType: [validCourtPenalty1Mock],
       },
       state: {},
     });
@@ -105,12 +105,12 @@ describe('validatePenaltiesAction', () => {
 
   it('should call the success path when there are no errors in the errors object', async () => {
     const props = {
-      itemizedPenaltiesOfCurrentType: [
+      allPenalties: [
+        validCourtPenalty1Mock,
         validIrsPenalty1Mock,
         validIrsPenalty2Mock,
       ],
-      listOfAllPenalties: [
-        validCourtPenalty1Mock,
+      itemizedPenaltiesOfCurrentType: [
         validIrsPenalty1Mock,
         validIrsPenalty2Mock,
       ],
