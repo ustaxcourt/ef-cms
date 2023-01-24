@@ -66,6 +66,7 @@ describe('Petitions clerk case journey', () => {
   petitionsClerkAddsDeficiencyStatisticToCase(cerebralTest);
   petitionsClerkCancelsAddingDeficiencyStatisticToCase(cerebralTest);
   petitionsClerkEditsDeficiencyStatistic(cerebralTest);
+  // TODO: create new test for checking itemized penalties modal on the case statistics tab
   petitionsClerkDeleteDeficiencyStatistic(cerebralTest);
 
   petitionsClerkAddsOtherStatisticsToCase(cerebralTest);
