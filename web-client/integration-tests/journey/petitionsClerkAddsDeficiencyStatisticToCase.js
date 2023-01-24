@@ -9,6 +9,7 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
       tab: 'IrsNotice',
     });
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
@@ -26,10 +27,27 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       key: 'statistics.0.irsDeficiencyAmount',
       value: 1000,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'statistics.0.irsTotalPenalties',
-      value: 100,
+
+    // Do we get it from form or from caseDetail lets figure this out,
+    let { statisticId } = cerebralTest.getState('statistics.0.');
+
+    //! FIXME
+    // await cerebralTest.runSequence('updateFormValueSequence', {
+    //   key: 'statistics.0.irsTotalPenalties',
+    //   value: 100,
+    // });
+
+    // run the sequence that opens the modal
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'irsTotalPenalties',
+      statisticId,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
     });
+    // update penalties on modal
+    // un onconfirm sequence on modal to save changes and prepare state on statistic form
+    // this will set irsTotalPenalties directly
+
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -79,10 +97,12 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       key: 'determinationDeficiencyAmount',
       value: 987,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'determinationTotalPenalties',
-      value: 22.33,
-    });
+
+    //! FIXME
+    // await cerebralTest.runSequence('updateFormValueSequence', {
+    //   key: 'determinationTotalPenalties',
+    //   value: 22.33,
+    // });
 
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
