@@ -253,12 +253,6 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
       value: '$100',
     });
 
-    //! FIXME
-    // await cerebralTest.runSequence('updateFormValueSequence', {
-    //   key: 'statistics.0.irsTotalPenalties',
-    //   value: '1,000',
-    // });
-
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     errors = cerebralTest.getState('validationErrors.statistics');
@@ -282,6 +276,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     // Fill out all statistics values except the last one and submit
     // -- the last one should be removed from the form because it was not filled in
+    // TODO: fix this for loop block
     for (let i = 0; i < 11; i++) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.year`,
@@ -293,10 +288,23 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
         value: 1000 + i,
       });
 
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: `statistics.${i}.irsTotalPenalties`,
+      let statisticId = cerebralTest.getState(
+        `form.statistics.${i}.statisticId`,
+      );
+
+      await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+        key: 'irsTotalPenalties',
+        statisticId,
+        subkey: 'irsPenaltyAmount',
+        title: 'Calculate Penalties on IRS Notice',
+      });
+
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'penalties.0.penaltyAmount',
         value: 100 + i,
       });
+
+      await cerebralTest.runSequence('calculatePenaltiesSequence');
     }
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');

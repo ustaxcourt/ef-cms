@@ -100,6 +100,20 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       value: 200,
     });
 
+    await cerebralTest.runSequence('addPenaltyInputSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.1.penaltyAmount',
+      value: '',
+    });
+
+    await cerebralTest.runSequence('addPenaltyInputSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.2.penaltyAmount',
+      value: 800,
+    });
+
     await cerebralTest.runSequence('calculatePenaltiesSequence');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -123,6 +137,28 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
 
     await cerebralTest.runSequence('calculatePenaltiesSequence');
 
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'irsTotalPenalties',
+      statisticId,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
+    });
+
+    expect(cerebralTest.getState('modal.penalties')).toEqual([
+      {
+        name: 'Penalty 1 (IRS)',
+        penaltyAmount: 200,
+        penaltyType: 'irsPenaltyAmount',
+        statisticId: cerebralTest.getState('form.statisticId'),
+      },
+      {
+        name: 'Penalty 3 (IRS)',
+        penaltyAmount: 800,
+        penaltyType: 'irsPenaltyAmount',
+        statisticId: cerebralTest.getState('form.statisticId'),
+      },
+    ]);
+
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -135,9 +171,6 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     ).toEqual('statistics');
 
     const statisticsAfter = cerebralTest.getState('caseDetail.statistics');
-
-    console.log('statisticsBefore:', statisticsBefore);
-    console.log('statisticsAfter:', statisticsAfter);
 
     expect(statisticsAfter.length).toEqual(statisticsBefore.length + 1);
   });
