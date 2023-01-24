@@ -48,12 +48,26 @@ export const DocumentQCMenu = connect(
               </Button>
             </li>
             <li className="usa-nav__submenu-item">
-              <a href="/" id="docket-section-qc" onClick={() => {}}>
+              <a
+                href="/"
+                id="docket-section-qc"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
                 Docket Section QC
               </a>
             </li>
             <li className="usa-nav__submenu-item">
-              <a href="/" id="petitions-section-qc" onClick={() => {}}>
+              <a
+                href="/"
+                id="petitions-section-qc"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
                 Petitions Section QC
               </a>
             </li>
