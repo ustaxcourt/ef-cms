@@ -48,7 +48,7 @@ type DocketEntry = {
   isMinuteEntry: boolean;
   isOnDocketRecord: boolean;
   isPaper?: boolean;
-  isPendingService: boolean;
+  isPendingService?: boolean;
   isStricken: boolean;
   lodged?: boolean;
   mailingDate?: string;
@@ -66,7 +66,7 @@ type DocketEntry = {
   sk: string;
   stampData: object;
   userId: string;
-  workItem: WorkItem;
+  workItem?: WorkItem;
 };
 
 type TDocketEntryEntity = {
