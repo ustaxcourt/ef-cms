@@ -17,5 +17,5 @@ if [ -z "${CLEAN_ONLY}" ]; then
   # removes all modules, reinstalls
   rm -rf node_modules
   npm update
-  npm i --legacy-peer-deps
+  npm i
 fi

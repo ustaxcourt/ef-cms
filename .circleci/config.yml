@@ -15,7 +15,7 @@ commands:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
-              npm ci --legacy-peer-deps
+              npm ci
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
@@ -48,7 +48,7 @@ commands:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
-              npm ci --legacy-peer-deps
+              npm ci
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
