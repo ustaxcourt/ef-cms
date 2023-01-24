@@ -62,10 +62,6 @@ export const CalculatePenaltiesModal = connect(
                     key: `penalties.${index}.penaltyAmount`,
                     value: values.value,
                   });
-                  // updateModalValueSequence({
-                  //   key: `penalties.${index}.inProgress`,
-                  //   value: true,
-                  // });
                 }}
               />
             </div>
