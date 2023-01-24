@@ -60,6 +60,10 @@ export const MessagesMenu = connect(
               <a
                 href="/messages/section/inbox/selectedSection?section=docket"
                 id="docket-section-messages"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
               >
                 Docket Section Messages
               </a>
@@ -68,6 +72,10 @@ export const MessagesMenu = connect(
               <a
                 href="/messages/section/inbox/selectedSection?section=petitions"
                 id="petitions-section-messages"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
               >
                 Petitions Section Messages
               </a>

@@ -238,4 +238,39 @@ describe('messagesHelper', () => {
 
     expect(showIndividualMessages).toBe(true);
   });
+
+  describe('messagesTabNavigationPath', () => {
+    it('should construct a path based on the queue and box values passed in', () => {
+      const { messagesTabNavigationPath } = runCompute(messagesHelper, {
+        state: {
+          messageBoxToDisplay: {
+            queue: 'my',
+          },
+        },
+      });
+
+      expect(messagesTabNavigationPath({ box: 'outbox', queue: 'my' })).toEqual(
+        '/messages/my/outbox',
+      );
+    });
+
+    it('should construct a path based on the queue box, and section values when section is defined', () => {
+      const { messagesTabNavigationPath } = runCompute(messagesHelper, {
+        state: {
+          messageBoxToDisplay: {
+            queue: 'my',
+            section: DOCKET_SECTION,
+          },
+        },
+      });
+
+      expect(
+        messagesTabNavigationPath({
+          box: 'outbox',
+          queue: 'my',
+          section: DOCKET_SECTION,
+        }),
+      ).toEqual('/messages/my/outbox/selectedSection?section=docket');
+    });
+  });
 });

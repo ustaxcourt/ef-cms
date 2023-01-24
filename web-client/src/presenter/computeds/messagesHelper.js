@@ -30,6 +30,11 @@ export const messagesHelper = (get, applicationContext) => {
   const showSwitchToMyMessagesButton =
     showSectionMessages && !isCaseServicesSupervisor;
 
+  const messagesTabNavigationPath = ({ box, queue, section }) =>
+    section
+      ? `/messages/${queue}/${box}/selectedSection?section=${section}`
+      : `/messages/${queue}/${box}`;
+
   if (isCaseServicesSupervisor) {
     showSectionMessages = !!selectedSection;
     showIndividualMessages = !selectedSection;
@@ -37,6 +42,7 @@ export const messagesHelper = (get, applicationContext) => {
 
   return {
     inboxCount,
+    messagesTabNavigationPath,
     messagesTitle,
     showIndividualMessages,
     showSectionMessages,
