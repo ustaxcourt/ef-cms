@@ -22,3 +22,4 @@
 ./scripts/dynamo/setup-add-docket-numbers-to-orders-flag.sh
 ./scripts/dynamo/setup-multi-docketable-paper-filings-feature-flag.sh
 ./scripts/dynamo/setup-updated-trial-session-types-flag.sh
+./scripts/dynamo/setup-consolidated-cases-group-access-petitioner-flag.sh
