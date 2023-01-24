@@ -173,6 +173,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     // Select calculate penalties for the first statistic
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',
+      statisticId: applicationContext.getUniqueId(),
       statisticIndex: 0,
       subkey: 'irsPenaltyAmount',
       title: 'Calculate Penalties on IRS Notice',
@@ -185,7 +186,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     let modal = cerebralTest.getState('modal');
 
     expect(modal.statisticIndex).toEqual(0);
-    expect(modal.penalties).toMatchObject([{ irsPenaltyAmount: '' }]);
+    expect(modal.penalties).toMatchObject([{ penaltyAmount: '' }]);
     expect(modal.showModal).toEqual('CalculatePenaltiesModal');
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(true);
 
@@ -212,7 +213,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     // Add some penalties and calculate the sum
     await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.0.irsPenaltyAmount',
+      key: 'penalties.0.penaltyAmount',
       value: '1',
     });
     await cerebralTest.runSequence('updateModalValueSequence', {
@@ -221,7 +222,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     });
 
     await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.1.irsPenaltyAmount',
+      key: 'penalties.1.penaltyAmount',
       value: '2',
     });
     await cerebralTest.runSequence('updateModalValueSequence', {
@@ -230,7 +231,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     });
 
     await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.2.irsPenaltyAmount',
+      key: 'penalties.2.penaltyAmount',
       value: '3.01',
     });
     await cerebralTest.runSequence('updateModalValueSequence', {
