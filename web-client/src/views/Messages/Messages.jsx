@@ -65,7 +65,11 @@ export const Messages = connect(
             bind="messageBoxToDisplay.box"
             onSelect={box => {
               navigateToPathSequence({
-                path: `/messages/${queue}/${box}/selectedSection?section=${section}`,
+                path: messagesHelper.messagesTabNavigationPath({
+                  box,
+                  queue,
+                  section,
+                }),
               });
             }}
           >
