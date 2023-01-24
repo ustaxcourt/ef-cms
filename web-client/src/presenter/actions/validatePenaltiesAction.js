@@ -12,7 +12,7 @@ export const validatePenaltiesAction = ({
   path,
   props,
 }) => {
-  const { itemizedPenaltiesOfCurrentType, listOfAllPenalties } = props;
+  const { allPenalties, itemizedPenaltiesOfCurrentType } = props;
 
   let errors = {};
 
@@ -22,11 +22,10 @@ export const validatePenaltiesAction = ({
     };
   }
 
-  listOfAllPenalties.forEach(penalty => {
+  allPenalties.forEach(penalty => {
     let error = applicationContext
       .getUseCases()
       .validatePenaltiesInteractor(applicationContext, { rawPenalty: penalty });
-
     error && (errors = { ...errors, ...error });
   });
 
