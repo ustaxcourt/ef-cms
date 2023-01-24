@@ -93,10 +93,23 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
 
     //! FIXME
-    // await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
-    //   key: 'statistics.0.irsTotalPenalties',
-    //   value: 100,
-    // });
+
+    let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
+
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'irsTotalPenalties',
+      statisticId,
+      statisticIndex: 0,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
+      value: 100,
+    });
+
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
 
     await cerebralTest.runSequence('updateCaseDetailsSequence');
 
