@@ -44,7 +44,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       },
     );
 
-    expect(trialSessionFormatted.computedStatus).toEqual('Open');
+    expect(trialSessionFormatted.sessionStatus).toEqual('Open');
   });
 
   describe('Create cases', () => {

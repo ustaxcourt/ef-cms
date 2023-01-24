@@ -26,6 +26,7 @@ const {
   getPetitionerById,
   getPractitionersRepresenting,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
@@ -72,7 +73,6 @@ const {
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatCase: formatCaseForTrialSession,
-  formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
   formatJudgeName,
@@ -124,6 +124,9 @@ const {
 const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
+const {
+  getFormattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   getSealedDocketEntryTooltip,
 } = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
@@ -322,9 +325,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
-    formattedTrialSessionDetails: jest
-      .fn()
-      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
       .fn()
@@ -353,6 +353,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedPartiesNameAndTitle: jest
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
+    getFormattedTrialSessionDetails: jest
+      .fn()
+      .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearInETObj: jest
       .fn()
@@ -381,6 +384,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
+    isPetitionerPartOfGroup: jest
+      .fn()
+      .mockImplementation(isPetitionerPartOfGroup),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
       .fn()

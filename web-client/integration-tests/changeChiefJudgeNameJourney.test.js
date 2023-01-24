@@ -23,8 +23,10 @@ describe('Chief Judge feature flag configuration', () => {
     await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     cerebralTest.closeSocket();
+    await setJudgeTitle(judgeFoleyUserId, 'Chief Judge');
+    await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -75,7 +77,7 @@ describe('Chief Judge feature flag configuration', () => {
   });
 
   describe('Update judgeTitle', () => {
-    loginAs(cerebralTest, 'judgeFoley@example.com');
+    loginAs(cerebralTest, 'judgefoley@example.com');
 
     it('should retrieve correct judgeTitle before and after being updated in dynamo', async () => {
       const { docketEntryId } = cerebralTest.draftOrders[0];

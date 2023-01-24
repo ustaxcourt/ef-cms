@@ -23,7 +23,9 @@ describe('lambdaWrapper', () => {
       redirect: jest.fn(),
       send: jest.fn(),
       set: jest.fn(),
-      status: jest.fn(),
+      status: jest.fn().mockReturnValue({
+        send: jest.fn(),
+      }),
     };
     JSON.parse = jest.fn();
   });
@@ -154,5 +156,24 @@ describe('lambdaWrapper', () => {
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
+  });
+
+  it('returns 204 when it is simulating an async function', async () => {
+    getCurrentInvoke.mockReturnValue({
+      event: { requestContext: { authorizer: { isTerminalUser: 'false' } } },
+    });
+    await lambdaWrapper(
+      () => {
+        return {
+          body: 'hello world',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+      },
+      { isAsync: true },
+    )(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(204);
   });
 });

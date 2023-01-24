@@ -16,7 +16,9 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
   hasPartyWithServiceType,
+  isClosed,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -110,7 +112,7 @@ import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users
 import {
   compareCasesByDocketNumber,
   formatCase as formatCaseForTrialSession,
-  formattedTrialSessionDetails,
+  getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
@@ -728,7 +730,6 @@ const applicationContext = {
       formatJudgeName,
       formatNow,
       formatPhoneNumber,
-      formattedTrialSessionDetails,
       generateCourtIssuedDocumentTitle,
       generateExternalDocumentTitle,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
@@ -743,6 +744,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getFormattedPartiesNameAndTitle,
+      getFormattedTrialSessionDetails,
       getJudgeLastName,
       getMonthDayYearInETObj,
       getOtherFilers,
@@ -756,11 +758,13 @@ const applicationContext = {
       getStandaloneRemoteDocumentTitle,
       getWorkQueueFilters,
       hasPartyWithServiceType,
+      isClosed,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
+      isPetitionerPartOfGroup,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,

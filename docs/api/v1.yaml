@@ -6,7 +6,7 @@ servers:
     description: IRS test server (v1)
 info:
   description: This API enables access to the data found in Dawson, and is currently limited access. Contact Dawson support for feature requests.
-  version: "1"
+  version: '1'
   title: Dawson API
   contact:
     name: Dawson support
@@ -230,7 +230,7 @@ components:
           $ref: '#/components/schemas/Contact'
         email:
           type: string
-          example: privatePractitioner1@example.com
+          example: privatepractitioner1@example.com
         name:
           type: string
           example: Test private practitioner1

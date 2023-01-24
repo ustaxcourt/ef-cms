@@ -1034,9 +1034,30 @@ export const waitForExpectedItemToExist = async ({
   console.log(`Waited ${waitTime}ms for ${currentItem}`);
 };
 
+// will run the cb every second until it returns true
+const waitUntil = cb => {
+  return new Promise(resolve => {
+    const waitUntilInternal = async () => {
+      const value = await cb();
+      if (value === false) {
+        setTimeout(waitUntilInternal, 1000);
+      } else {
+        resolve();
+      }
+    };
+    waitUntilInternal();
+  });
+};
+
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
+  await waitUntil(async () => {
+    const value = await axios
+      .get('http://localhost:5005/isDone')
+      .then(response => response.data);
+    return value === true;
+  });
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
   return await wait(time);
