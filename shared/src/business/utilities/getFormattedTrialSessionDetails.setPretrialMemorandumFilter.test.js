@@ -3,7 +3,7 @@ import { PARTIES_CODES } from '../entities/EntityConstants';
 const { applicationContext } = require('../test/createTestApplicationContext');
 import { setPretrialMemorandumFiler } from './getFormattedTrialSessionDetails';
 
-describe('formattedTrialSessionDetails', () => {
+describe('getFormattedTrialSessionDetails', () => {
   describe('setPretrialMemorandumFiler', () => {
     const mockPretrialMemorandumDocketEntry = {
       createdAt: '2018-11-21T20:49:28.192Z',

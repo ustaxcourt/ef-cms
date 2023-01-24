@@ -7,7 +7,7 @@ export const updateUserRecords = async ({
 }: {
   applicationContext: IApplicationContext;
   updatedUser: any;
-  userId: String;
+  userId: string;
 }) => {
   await put({
     Item: {
