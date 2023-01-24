@@ -39,7 +39,7 @@ describe('Bench opinion advanced search journey', () => {
   });
 
   describe('Create a bench opinion, sign as Judge Buch, and serve the document', () => {
-    loginAs(cerebralTest, 'buchsChambers@example.com');
+    loginAs(cerebralTest, 'buchschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);
     chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'Ronald L. Buch');
@@ -51,7 +51,7 @@ describe('Bench opinion advanced search journey', () => {
   });
 
   describe('Create a bench opinion, sign as Judge Ashford, and serve the document', () => {
-    loginAs(cerebralTest, 'ashfordsChambers@example.com');
+    loginAs(cerebralTest, 'ashfordschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);
     chambersUserAppliesSignatureToDraftDocument(
@@ -103,7 +103,7 @@ describe('Bench opinion advanced search journey', () => {
   });
 
   describe('Create a bench opinion, sign as Judge Ashford, and serve the document', () => {
-    loginAs(cerebralTest, 'ashfordsChambers@example.com');
+    loginAs(cerebralTest, 'ashfordschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);
     chambersUserAppliesSignatureToDraftDocument(
