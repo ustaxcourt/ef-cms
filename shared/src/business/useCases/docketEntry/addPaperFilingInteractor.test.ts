@@ -495,15 +495,12 @@ describe('addPaperFilingInteractor', () => {
   });
 
   describe('consolidated groups', () => {
-    it('should create a work item and add it to the outbox for each case', async () => {
-      const mockConsolidatedGroup = [
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ];
+    let mockConsolidatedGroupRequest;
 
-      await addPaperFilingInteractor(applicationContext, {
+    beforeEach(() => {
+      mockConsolidatedGroupRequest = {
         clientConnectionId: mockClientConnectionId,
-        consolidatedGroupDocketNumbers: mockConsolidatedGroup,
+        consolidatedGroupDocketNumbers: ['101-90'],
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -515,15 +512,24 @@ describe('addPaperFilingInteractor', () => {
           isPaper: true,
         },
         isSavingForLater: true,
-      });
+      };
+    });
 
-      const casesDocketEntryWasFiledOn = [
-        ...mockConsolidatedGroup,
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ];
+    it('should create a work item and add it to the document qc in progress box when the docket entry is being saved for later', async () => {
+      mockConsolidatedGroupRequest.isSavingForLater = true;
+      mockConsolidatedGroupRequest.consolidatedGroupDocketNumbers = ['101-90'];
+
+      await addPaperFilingInteractor(
+        applicationContext,
+        mockConsolidatedGroupRequest,
+      );
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      ).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
-      ).toHaveBeenCalledTimes(casesDocketEntryWasFiledOn.length);
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('should still save only one copy of the document to s3', async () => {
@@ -531,22 +537,14 @@ describe('addPaperFilingInteractor', () => {
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
       ];
+      mockConsolidatedGroupRequest.isSavingForLater = false;
+      mockConsolidatedGroupRequest.consolidatedGroupDocketNumbers =
+        mockConsolidatedGroup;
 
-      await addPaperFilingInteractor(applicationContext, {
-        clientConnectionId: mockClientConnectionId,
-        consolidatedGroupDocketNumbers: mockConsolidatedGroup,
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentMetadata: {
-          docketNumber: MOCK_CASE.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-          isPaper: true,
-        },
-        isSavingForLater: false,
-      });
+      await addPaperFilingInteractor(
+        applicationContext,
+        mockConsolidatedGroupRequest,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
