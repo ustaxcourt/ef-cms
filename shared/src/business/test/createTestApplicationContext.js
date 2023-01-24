@@ -188,9 +188,6 @@ const {
   uploadDocumentAndMakeSafeInteractor,
 } = require('../useCases/uploadDocumentAndMakeSafeInteractor');
 const {
-  validatePenaltiesInteractor,
-} = require('../useCases/validatePenaltiesInteractor');
-const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -438,9 +435,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
-    validatePenaltiesInteractor: jest
-      .fn()
-      .mockImplementation(validatePenaltiesInteractor),
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
