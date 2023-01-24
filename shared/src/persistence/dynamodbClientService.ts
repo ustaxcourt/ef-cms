@@ -93,23 +93,36 @@ export const put = ({
   applicationContext: IApplicationContext;
   transaction?: TransactionBuilder;
 }): Promise<any> => {
+  const version = Item.entityVersion ?? 0;
+
+  const conditionExpressions = {
+    ConditionExpression:
+      'attribute_not_exists(#entityVersion) OR #entityVersion = :entityVersion',
+    ExpressionAttributeNames: {
+      '#entityVersion': 'entityVersion',
+    },
+    ExpressionAttributeValues: {
+      ':entityVersion': version,
+    },
+  };
+
+  const params = {
+    Item: filterEmptyStrings({
+      ...Item,
+      entityVersion: version + 1,
+    }),
+    TableName: getTableName({
+      applicationContext,
+    }),
+  };
+
   return transaction
     ? transaction.add({
-        Put: {
-          Item: filterEmptyStrings(Item),
-          TableName: getTableName({
-            applicationContext,
-          }),
-        },
+        Put: { ...conditionExpressions, ...params },
       })
     : applicationContext
         .getDocumentClient()
-        .put({
-          Item: filterEmptyStrings(Item),
-          TableName: getTableName({
-            applicationContext,
-          }),
-        })
+        .put(params)
         .promise()
         .then(() => Item);
 };
@@ -245,6 +258,43 @@ export const query = ({
       result.Items.forEach(removeAWSGlobalFields);
       return result.Items;
     });
+};
+
+/**
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
+ */
+export const update = ({
+  applicationContext,
+  ConditionExpression,
+  ExpressionAttributeNames,
+  ExpressionAttributeValues,
+  Key,
+  UpdateExpression,
+}: {
+  ConditionExpression?: string;
+  ExpressionAttributeNames: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string | boolean>;
+  Key: Record<string, string>;
+  UpdateExpression: string;
+  applicationContext: IApplicationContext;
+}): Promise<TDynamoRecord[]> => {
+  const filteredValues = filterEmptyStrings(ExpressionAttributeValues);
+  return applicationContext
+    .getDocumentClient()
+    .update({
+      ConditionExpression,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues: filteredValues,
+      Key,
+      TableName: getTableName({
+        applicationContext,
+      }),
+      UpdateExpression,
+    })
+    .promise()
+    .then(() => undefined);
 };
 
 export const scan = async params => {

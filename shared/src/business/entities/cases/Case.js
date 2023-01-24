@@ -156,6 +156,7 @@ Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
 ) {
+  this.entityVersion = rawCase.entityVersion;
   caseDecorator(this, rawCase, { applicationContext, filtered });
 };
 

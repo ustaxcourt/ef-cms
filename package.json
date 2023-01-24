@@ -246,6 +246,7 @@
     "@babel/register": "^7.18.9",
     "@faker-js/faker": "^7.6.0",
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
+    "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^29.2.5",
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.11.18",

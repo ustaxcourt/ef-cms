@@ -1,8 +1,6 @@
 export type TTransactionMethod = 'Update' | 'Put' | 'Delete';
 
-export type TTransactionItem = {
-  [key: TTransactionMethod]: any;
-};
+export type TTransactionItem = Partial<Record<TTransactionMethod, any>>;
 
 export const createTransaction = () => {
   const transaction: TTransactionItem[] = [];
