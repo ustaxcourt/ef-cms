@@ -64,7 +64,7 @@ export const addPaperFilingInteractor = async (
       featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
     });
 
-  if (!isCaseConsolidationFeatureOn) {
+  if (!isCaseConsolidationFeatureOn || isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
     consolidatedGroupDocketNumbers = [
