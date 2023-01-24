@@ -6,6 +6,7 @@ import { validatePenaltiesAction } from './validatePenaltiesAction';
 describe('validatePenaltiesAction', () => {
   let successStub;
   let errorStub;
+
   const statisticId = applicationContext.getUniqueId();
   const validIrsPenalty1Mock = {
     name: 'Penalty 1 (IRS)',
