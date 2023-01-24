@@ -14,7 +14,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     checked: true,
     docketNumber: MOCK_CASE.docketNumber,
     formattedPetitioners: [],
-    isLeadCase: true,
+    leadDocketNumber: MOCK_CASE.docketNumber,
   };
   const mockMemberCaseDocketNumber = '1337-42';
   const mockMemberCaseCheckbox = {
@@ -22,7 +22,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     checked: false,
     docketNumber: mockMemberCaseDocketNumber,
     formattedPetitioners: [],
-    isLeadCase: false,
+    leadDocketNumber: MOCK_CASE.docketNumber,
   };
 
   it("should flip the non-lead cases' checked states", async () => {

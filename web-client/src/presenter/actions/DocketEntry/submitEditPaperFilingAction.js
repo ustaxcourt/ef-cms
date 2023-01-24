@@ -38,7 +38,7 @@ export const submitEditPaperFilingAction = async ({
     receivedAt: formDataWithoutPdf.dateReceived,
   };
 
-  const { paperServicePdfUrl } = await applicationContext
+  await applicationContext
     .getUseCases()
     .editPaperFilingInteractor(applicationContext, {
       consolidatedGroupDocketNumbers,
@@ -50,6 +50,5 @@ export const submitEditPaperFilingAction = async ({
   return {
     docketEntryId,
     generateCoversheet: isFileAttached && !isSavingForLater,
-    pdfUrl: paperServicePdfUrl,
   };
 };

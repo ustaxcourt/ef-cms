@@ -659,8 +659,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(editPaperFilingLambda),
+    '/async/case-documents/:docketNumber/paper-filing',
+    lambdaWrapper(editPaperFilingLambda, { isAsync: true }),
   );
   app.put(
     '/case-documents/:docketNumber/docket-entry-meta',
