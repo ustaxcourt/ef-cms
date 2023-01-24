@@ -36,6 +36,8 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
         presenter,
       },
       props: {
+        determinationTotalPenalties: '$0.00',
+        irsTotalPenalties: '$2,000.15',
         penalties: [
           irsPenalty1,
           courtDetermination1,
@@ -48,12 +50,12 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
 
     expect(result.state.modal.itemizedPenalties).toEqual([
       {
-        courtDeterminationAmount: courtDetermination1.penaltyAmount,
-        irsPenaltyAmount: irsPenalty1.penaltyAmount,
+        courtDeterminationAmount: '$0.00',
+        irsPenaltyAmount: '$2,000.15',
       },
       {
-        courtDeterminationAmount: courtDetermination2.penaltyAmount,
-        irsPenaltyAmount: irsPenalty2.penaltyAmount,
+        courtDeterminationAmount: '$200.77',
+        irsPenaltyAmount: '$0.00',
       },
     ]);
   });
@@ -64,6 +66,8 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
         presenter,
       },
       props: {
+        determinationTotalPenalties: '$0.00',
+        irsTotalPenalties: '$2,000.15',
         penalties: [irsPenalty1, courtDetermination1, irsPenalty2],
       },
       state: {},
@@ -71,11 +75,11 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
 
     expect(result.state.modal.itemizedPenalties).toEqual([
       {
-        courtDeterminationAmount: courtDetermination1.penaltyAmount,
-        irsPenaltyAmount: irsPenalty1.penaltyAmount,
+        courtDeterminationAmount: '$0.00',
+        irsPenaltyAmount: '$2,000.15',
       },
       {
-        irsPenaltyAmount: irsPenalty2.penaltyAmount,
+        irsPenaltyAmount: '$0.00',
       },
     ]);
   });
@@ -86,6 +90,8 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
         presenter,
       },
       props: {
+        determinationTotalPenalties: '',
+        irsTotalPenalties: '$2,000.15',
         penalties: [irsPenalty1, irsPenalty2],
       },
       state: {},
@@ -93,10 +99,10 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
 
     expect(result.state.modal.itemizedPenalties).toEqual([
       {
-        irsPenaltyAmount: irsPenalty1.penaltyAmount,
+        irsPenaltyAmount: '$2,000.15',
       },
       {
-        irsPenaltyAmount: irsPenalty2.penaltyAmount,
+        irsPenaltyAmount: '$0.00',
       },
     ]);
   });
@@ -107,6 +113,8 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
         presenter,
       },
       props: {
+        determinationTotalPenalties: '',
+        irsTotalPenalties: '',
         penalties: [],
       },
       state: {},
