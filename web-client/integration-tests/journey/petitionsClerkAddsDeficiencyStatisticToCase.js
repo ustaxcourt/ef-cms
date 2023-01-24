@@ -29,7 +29,8 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     });
 
     // Do we get it from form or from caseDetail lets figure this out,
-    let { statisticId } = cerebralTest.getState('statistics.0.');
+    let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
+    console.log('statistic', statisticId);
 
     //! FIXME
     // await cerebralTest.runSequence('updateFormValueSequence', {
@@ -41,12 +42,25 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',
       statisticId,
+      statisticIndex: 0,
       subkey: 'irsPenaltyAmount',
       title: 'Calculate Penalties on IRS Notice',
     });
-    // update penalties on modal
-    // un onconfirm sequence on modal to save changes and prepare state on statistic form
+
+    // update penalties on modal to set irsTotalPenalties on Statistic form as it is a disabled
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
+      value: 100,
+    });
+    // I don't think we need this anymore?
+    // await cerebralTest.runSequence('updateModalValueSequence', {
+    //   key: 'penalties.0.inProgress',
+    //   value: true,
+    // });
+
+    // on onconfirm sequence on modal to save changes and prepare state on statistic form
     // this will set irsTotalPenalties directly
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
@@ -60,9 +74,12 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       'AddDeficiencyStatistics',
     );
 
+    statisticId = cerebralTest.getState('form.statisticId');
     const statisticsBefore = cerebralTest.getState('caseDetail.statistics');
 
     expect(cerebralTest.getState('form')).toEqual({
+      penalties: [],
+      statisticId,
       yearOrPeriod: 'Year',
     });
 
@@ -74,25 +91,42 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsDeficiencyAmount:
-        Statistic.VALIDATION_ERROR_MESSAGES.irsDeficiencyAmount,
-      irsTotalPenalties: Statistic.VALIDATION_ERROR_MESSAGES.irsTotalPenalties,
-      penalties: [
-        {
-          index: 0,
-          irsPenaltyAmount: Penalty.VALIDATION_ERROR_MESSAGES.irsPenaltyAmount,
-        },
-      ],
+      irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
+      irsTotalPenalties:
+        'Use IRS Penalty Calculator to calculate total penalties.',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDeficiencyAmount',
       value: 1234,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
+
+    // Do here what we did above
+    // Do we get it from form or from caseDetail lets figure this out,
+    statisticId = cerebralTest.getState('form.statisticId');
+    console.log('statistic', statisticId);
+    // run the sequence that opens the modal
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',
-      value: 0,
+      statisticId,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
     });
+
+    // update penalties on modal to set irsTotalPenalties on Statistic form as it is a disabled
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
+      value: 200,
+    });
+
+    // on onconfirm sequence on modal to save changes and prepare state on statistic form
+    // this will set irsTotalPenalties directly
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
+
+    // await cerebralTest.runSequence('updateFormValueSequence', {
+    //   key: 'irsTotalPenalties',
+    //   value: 0,
+    // });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'determinationDeficiencyAmount',
       value: 987,
@@ -103,6 +137,19 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     //   key: 'determinationTotalPenalties',
     //   value: 22.33,
     // });
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'determinationTotalPenalties',
+      statisticId,
+      subkey: 'determinationPenaltyAmount',
+      title: 'Calculate Penalties as determined by Court',
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
+      value: 22.33,
+    });
+
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
 
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
