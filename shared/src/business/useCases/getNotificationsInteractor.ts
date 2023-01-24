@@ -10,7 +10,10 @@ import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
  */
 export const getNotificationsInteractor = async (
   applicationContext: IApplicationContext,
-  { judgeUserId }: { judgeUserId: string },
+  {
+    caseServicesSupervisorInfo,
+    judgeUserId,
+  }: { judgeUserId: string; caseServicesSupervisorInfo: any },
 ) => {
   const appContextUser = applicationContext.getCurrentUser();
   const currentUser = await applicationContext
@@ -29,7 +32,8 @@ export const getNotificationsInteractor = async (
     };
   }
 
-  const { section, userId } = currentUser;
+  const { section, userId } = caseServicesSupervisorInfo || currentUser;
+
   const sectionToShow = applicationContext
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
@@ -40,11 +44,17 @@ export const getNotificationsInteractor = async (
 
   const userInbox = await applicationContext
     .getPersistenceGateway()
-    .getUserInboxMessages({ applicationContext, userId });
+    .getUserInboxMessages({
+      applicationContext,
+      userId,
+    });
 
   const sectionInbox = await applicationContext
     .getPersistenceGateway()
-    .getSectionInboxMessages({ applicationContext, section });
+    .getSectionInboxMessages({
+      applicationContext,
+      section,
+    });
 
   const documentQCIndividualInbox = await applicationContext
     .getPersistenceGateway()

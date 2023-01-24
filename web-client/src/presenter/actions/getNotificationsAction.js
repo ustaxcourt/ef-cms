@@ -10,10 +10,20 @@ import { state } from 'cerebral';
  */
 export const getNotificationsAction = async ({ applicationContext, get }) => {
   const judgeUserId = get(state.judgeUser.userId);
+  const selectedSection = get(state.messageBoxToDisplay.section);
+  let caseServicesSupervisorInfo;
+
+  if (selectedSection) {
+    caseServicesSupervisorInfo = {
+      section: selectedSection,
+      userId: applicationContext.getCurrentUser().userId,
+    };
+  }
 
   const notifications = await applicationContext
     .getUseCases()
     .getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo,
       judgeUserId,
     });
 
