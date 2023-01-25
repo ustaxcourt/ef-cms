@@ -3,12 +3,9 @@ import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -26,10 +23,8 @@ export const gotoEditPaperFiling = [
   clearScreenMetadataAction,
   stopShowValidationAction,
   setFromPageAction,
-  parallel([
-    [getCaseAction, setCaseAction],
-    [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
-  ]),
+  getCaseAction,
+  setCaseAction,
   setDocketEntryIdAction,
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
