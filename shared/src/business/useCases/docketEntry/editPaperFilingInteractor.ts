@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { cloneDeep } from 'lodash';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -261,7 +262,7 @@ const serveDocketEntry = async ({
         applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
           applicationContext,
           caseEntity: aCase,
-          docketEntryEntity: updatedDocketEntryEntity,
+          docketEntryEntity: cloneDeep(updatedDocketEntryEntity),
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         }),
