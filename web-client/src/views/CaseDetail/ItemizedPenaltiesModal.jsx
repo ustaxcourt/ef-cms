@@ -9,6 +9,7 @@ export const ItemizedPenaltiesModal = connect(
     statistic: state.modal,
   },
   function ItemizedPenaltiesModal({ clearModalSequence, statistic }) {
+    console.log('statistic.itemizedPenalties', statistic.itemizedPenalties);
     return (
       <ModalDialog
         cancelSequence={clearModalSequence}
