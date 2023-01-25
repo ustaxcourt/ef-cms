@@ -48,9 +48,13 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
 
   let parties;
   if (showConsolidatedCasesForService) {
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
-        if (!aCase.checked) {
+        const caseCheckbox = consolidatedCasesToMultiDocketOn.find(
+          checkboxCase => checkboxCase.docketNumber === aCase.docketNumber,
+        );
+        if (!caseCheckbox.checked) {
           return aggregatedParties;
         }
         aggregatedParties.petitioners = aggregatedParties.petitioners.concat(
@@ -108,11 +112,16 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
 
   let caseOrGroup = 'case';
 
-  if (
-    showConsolidatedCasesForService &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
-  ) {
-    caseOrGroup = 'group';
+  if (showConsolidatedCasesForService) {
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
+
+    const checkedBoxes = consolidatedCasesToMultiDocketOn.filter(
+      c => c.checked,
+    ).length;
+
+    if (checkedBoxes > 1) {
+      caseOrGroup = 'group';
+    }
   }
 
   return {

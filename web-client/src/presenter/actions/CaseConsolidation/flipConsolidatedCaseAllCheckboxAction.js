@@ -8,10 +8,17 @@ import { state } from 'cerebral';
  *   sets tooltip on lead case if non-lead cases are enabled
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the Cerebral get object
  * @param {object} providers.store the Cerebral store object
  */
-export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
+export const flipConsolidatedCaseAllCheckboxAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
+  const { isLeadCase } = applicationContext.getUtilities();
+
   const allCheckboxPreviousState = get(
     state.modal.form.consolidatedCaseAllCheckbox,
   );
@@ -21,7 +28,7 @@ export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
   );
 
   consolidatedCaseCheckBoxes = consolidatedCaseCheckBoxes.map(aCase => {
-    if (aCase.isLeadCase) {
+    if (isLeadCase(aCase)) {
       const LEAD_CASE_TOOLTIP = 'The lead case cannot be unselected';
       const displayedTooltip = allCheckboxPreviousState
         ? LEAD_CASE_TOOLTIP
