@@ -25,7 +25,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/base/tags?page=1&name=16.) if an update is available for the current node version the project is using.
+    - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in our project
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node) if an update is available for the current node version the project is using.
 
    To publish a new ECR docker image:
 
@@ -35,13 +36,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-5. PDF Testing
-   1. Check `./Dockerfile-pdf-testing` for our versions of the following scripts:
-      1. `ghostscript`: check to make sure support has not fallen off; our version should be listed on the [Debian Package Tracker](https://tracker.debian.org/pkg/ghostscript) on the _Versions_ table
-      2. `graphicsmagick`: check to make sure support has not fallen off; our version should be listed on the [Debian Package Tracker](https://tracker.debian.org/pkg/graphicsmagick) on the _Versions_ table
-   2. If support for either package has fallen off, we need to update
-      1. Replace the version in the Dockerfile with one of the listed stable versions
-      2. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
 6. Check through the list of caveats to see if any of the documented issues have been resolved.
 7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 

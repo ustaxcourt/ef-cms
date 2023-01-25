@@ -1,34 +1,32 @@
 # Note: this is debian 11 (bullseye)
 
-FROM cypress/browsers:node16.17.1-chrome106-ff105-edge
+FROM cypress/browsers:node-16.18.1-chrome-109.0.5414.74-1-ff-109.0-edge-109.0.1518.52-1
 
 WORKDIR /home/app
 
-RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'
-RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/apt/sources.list
+# needed to install jre successfully
+RUN mkdir -p /usr/share/man/man1
 
-RUN apt-get -o Acquire::Check-Valid-Until=false update
-RUN apt-get install -y -t \
-  stretch-backports \
-  openjdk-11-jre-headless=11.0.16+8-1~deb11u1 \
-  openjdk-11-jdk-headless=11.0.16+8-1~deb11u1 \
-  openjdk-11-jre=11.0.16+8-1~deb11u1 \
-  openjdk-11-jdk=11.0.16+8-1~deb11u1 \
+RUN apt-get update
+
+RUN apt-get install -y \
+  openjdk-11-jre-headless \
+  openjdk-11-jdk-headless \
+  openjdk-11-jre \
+  openjdk-11-jdk \
   zip \
   curl \
   wget \
   git \
-  less=551-2 \
+  less \
   python \
   python-dev \
   python3-pip \
-  jq=1.6-2.1 \
+  jq \
   graphicsmagick=1.4+really1.3.36+hg16481-2+deb11u1 \
   ghostscript=9.53.3~dfsg-7+deb11u2 \
   chromium \
-  sudo \
-  -V
-
+  sudo
 
 # These are needed to prevent node canvas from failing during node-gyp build steps
 RUN apt-get install -y build-essential 
@@ -36,7 +34,7 @@ RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev libr
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.8.9.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.9.17.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
