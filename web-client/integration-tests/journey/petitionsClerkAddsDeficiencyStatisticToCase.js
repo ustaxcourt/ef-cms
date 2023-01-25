@@ -49,6 +49,8 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    // Setup second statistic
+
     await cerebralTest.runSequence('gotoAddDeficiencyStatisticsSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -84,10 +86,6 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       value: 1234,
     });
 
-    statisticId = cerebralTest.getState('form.statisticId');
-
-    // Setup second statistic - irsPenaltyAmount
-
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',
       statisticId,
@@ -120,8 +118,6 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       key: 'determinationDeficiencyAmount',
       value: 987,
     });
-
-    // setup second statistic - adding a determinationPenaltyAmount
 
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'determinationTotalPenalties',
@@ -158,6 +154,14 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
         statisticId: cerebralTest.getState('form.statisticId'),
       },
     ]);
+
+    const irsTotalPenalties = cerebralTest.getState('form.irsTotalPenalties');
+    const determinationTotalPenalties = cerebralTest.getState(
+      'form.determinationTotalPenalties',
+    );
+
+    expect(irsTotalPenalties).toEqual('1000.00');
+    expect(determinationTotalPenalties).toEqual('22.33');
 
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
