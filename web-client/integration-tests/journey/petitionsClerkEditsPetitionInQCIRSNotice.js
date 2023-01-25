@@ -170,10 +170,12 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
       'Enter year, deficiency amount, and total penalties',
     );
 
+    let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
+
     // Select calculate penalties for the first statistic
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',
-      statisticId: applicationContext.getUniqueId(),
+      statisticId,
       statisticIndex: 0,
       subkey: 'irsPenaltyAmount',
       title: 'Calculate Penalties on IRS Notice',
@@ -186,7 +188,14 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     let modal = cerebralTest.getState('modal');
 
     expect(modal.statisticIndex).toEqual(0);
-    expect(modal.penalties).toMatchObject([{ penaltyAmount: '' }]);
+    expect(modal.penalties).toMatchObject([
+      {
+        name: 'Penalty 1 (IRS)',
+        penaltyAmount: '',
+        penaltyType:
+          applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+      },
+    ]);
     expect(modal.showModal).toEqual('CalculatePenaltiesModal');
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(true);
 
@@ -201,7 +210,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     modal = cerebralTest.getState('modal');
 
-    expect(modal.penalties.length).toEqual(10); // contains 5 additional elements in penalties array
+    expect(modal.penalties.length).toEqual(10); // contains 9 additional elements in penalties array
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(false); // UI should not allow additional to be created
 
     // Attempt to add penalty inputs in modal after max is reached
@@ -216,27 +225,15 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
       key: 'penalties.0.penaltyAmount',
       value: '1',
     });
-    await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.0.name',
-      value: 'Penalty 1 (IRS)',
-    });
 
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.1.penaltyAmount',
       value: '2',
     });
-    await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.1.name',
-      value: 'Penalty 2 (IRS)',
-    });
 
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.2.penaltyAmount',
       value: '3.01',
-    });
-    await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'penalties.2.name',
-      value: 'Penalty 3 (IRS)',
     });
 
     await cerebralTest.runSequence('calculatePenaltiesSequence');
@@ -288,13 +285,12 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
         value: 1000 + i,
       });
 
-      let statisticId = cerebralTest.getState(
-        `form.statistics.${i}.statisticId`,
-      );
+      statisticId = cerebralTest.getState(`form.statistics.${i}.statisticId`);
 
       await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
         key: 'irsTotalPenalties',
         statisticId,
+        statisticIndex: i,
         subkey: 'irsPenaltyAmount',
         title: 'Calculate Penalties on IRS Notice',
       });
@@ -306,6 +302,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
       await cerebralTest.runSequence('calculatePenaltiesSequence');
     }
+
+    statistics = cerebralTest.getState('form.statistics');
+    console.log('statistics', statistics);
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 

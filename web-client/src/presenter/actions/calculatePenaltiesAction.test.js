@@ -78,6 +78,25 @@ describe('calculatePenaltiesAction', () => {
       expect(result.output.allPenalties).toMatchObject([]);
     });
 
+    it('aggregates empty arrays and returns an empty array when statisticIndex is defined and statistic on form is undefined', async () => {
+      const result = await runAction(calculatePenaltiesAction, {
+        state: {
+          form: {
+            statistics: undefined,
+          },
+          modal: {
+            penalties: [],
+            statisticId,
+            statisticIndex: 1,
+            subkey:
+              applicationContext.getConstants().PENALTY_TYPES
+                .IRS_PENALTY_AMOUNT,
+          },
+        },
+      });
+      expect(result.output.allPenalties).toMatchObject([]);
+    });
+
     it('aggregates empty arrays and returns an empty array when statisticIndex is NOT defined', async () => {
       const result = await runAction(calculatePenaltiesAction, {
         state: {

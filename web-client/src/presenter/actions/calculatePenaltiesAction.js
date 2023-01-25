@@ -20,11 +20,6 @@ export const calculatePenaltiesAction = ({ get }) => {
 
   const statisticId = get(state.modal.statisticId);
 
-  console.log('initialPenalties', initialPenalties);
-  console.log('statisticId', statisticId);
-  console.log('penalties', penalties);
-  console.log('statisticIndex', statisticIndex);
-
   const excludedInitialPenalties = initialPenalties.filter(penalty => {
     return penalty.penaltyType !== modalPenaltyType;
   });
