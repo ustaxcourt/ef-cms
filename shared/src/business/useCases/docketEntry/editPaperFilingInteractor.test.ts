@@ -361,7 +361,7 @@ describe('editPaperFilingInteractor', () => {
             message: {
               action: 'serve_document_complete',
               alertSuccess: {
-                message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+                message: DOCUMENT_SERVED_MESSAGES.GENERIC,
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
@@ -502,7 +502,7 @@ describe('editPaperFilingInteractor', () => {
             message: {
               action: 'serve_document_complete',
               alertSuccess: {
-                message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+                message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
@@ -560,7 +560,7 @@ describe('editPaperFilingInteractor', () => {
             message: {
               action: 'serve_document_complete',
               alertSuccess: {
-                message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+                message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
