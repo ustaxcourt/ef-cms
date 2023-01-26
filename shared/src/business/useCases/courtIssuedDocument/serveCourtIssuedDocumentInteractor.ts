@@ -124,16 +124,14 @@ export const serveCourtIssuedDocumentInteractor = async (
 
   try {
     for (const docketNumber of docketNumbers) {
-      if (docketNumber !== subjectCaseDocketNumber) {
-        const caseToUpdate = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber,
-          });
+      const caseToUpdate = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
 
-        caseEntities.push(new Case(caseToUpdate, { applicationContext }));
-      }
+      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
     }
 
     caseEntities = await Promise.all(
@@ -196,7 +194,7 @@ export const serveCourtIssuedDocumentInteractor = async (
   });
 
   const successMessage =
-    docketNumbers.length > 1
+    docketNumbers.length > 0
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
