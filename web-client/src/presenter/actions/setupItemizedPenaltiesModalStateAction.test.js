@@ -17,7 +17,7 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
   };
   const courtDetermination1 = {
     name: 'Penalty 1 (USTC)',
-    penaltyAmount: 0,
+    penaltyAmount: 0.0,
     penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
   };
   const courtDetermination2 = {
@@ -84,7 +84,7 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
     ]);
   });
 
-  it('should set itemized penalties on state when court type penalties are greater in number', async () => {
+  it('should set itemized penalties on state when court determination type penalties are greater in number', async () => {
     const result = await runAction(setupItemizedPenaltiesModalStateAction, {
       modules: {
         presenter,
