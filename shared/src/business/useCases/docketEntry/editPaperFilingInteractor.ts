@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { cloneDeep } from 'lodash';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -177,6 +178,7 @@ const multiDocketServeStrategy = async ({
     clientConnectionId: request.clientConnectionId,
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
+    message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
@@ -207,6 +209,7 @@ const singleDocketServeStrategy = async ({
     clientConnectionId: request.clientConnectionId,
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
+    message: DOCUMENT_SERVED_MESSAGES.GENERIC,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
@@ -219,6 +222,7 @@ const serveDocketEntry = async ({
   clientConnectionId,
   docketEntryEntity,
   documentMetadata,
+  message,
   subjectCaseEntity,
   userId,
 }: {
@@ -229,6 +233,7 @@ const serveDocketEntry = async ({
   documentMetadata: any;
   userId: string;
   subjectCaseEntity: TCaseEntity;
+  message: string;
 }) => {
   await applicationContext
     .getPersistenceGateway()
@@ -257,7 +262,7 @@ const serveDocketEntry = async ({
         applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
           applicationContext,
           caseEntity: aCase,
-          docketEntryEntity: updatedDocketEntryEntity,
+          docketEntryEntity: cloneDeep(updatedDocketEntryEntity),
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         }),
@@ -280,7 +285,7 @@ const serveDocketEntry = async ({
       message: {
         action: 'serve_document_complete',
         alertSuccess: {
-          message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
+          message,
           overwritable: false,
         },
         docketEntryId: docketEntryEntity.docketEntryId,
