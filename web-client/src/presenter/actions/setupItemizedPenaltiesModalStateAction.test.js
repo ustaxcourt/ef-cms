@@ -50,11 +50,11 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
 
     expect(result.state.modal.itemizedPenalties).toEqual([
       {
-        courtDeterminationAmount: '$0.00',
+        determinationPenaltyAmount: '$0.00',
         irsPenaltyAmount: '$2,000.15',
       },
       {
-        courtDeterminationAmount: '$200.77',
+        determinationPenaltyAmount: '$200.77',
         irsPenaltyAmount: '$0.00',
       },
     ]);
@@ -75,7 +75,7 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
 
     expect(result.state.modal.itemizedPenalties).toEqual([
       {
-        courtDeterminationAmount: '$0.00',
+        determinationPenaltyAmount: '$0.00',
         irsPenaltyAmount: '$2,000.15',
       },
       {
@@ -99,11 +99,11 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
 
     expect(result.state.modal.itemizedPenalties).toEqual([
       {
-        courtDeterminationAmount: '$0.00',
+        determinationPenaltyAmount: '$0.00',
         irsPenaltyAmount: '$2,000.15',
       },
       {
-        courtDeterminationAmount: '$200.77',
+        determinationPenaltyAmount: '$200.77',
       },
     ]);
   });

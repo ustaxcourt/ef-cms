@@ -15,13 +15,7 @@ export const setupItemizedPenaltiesModalStateAction = ({
   store,
 }) => {
   const { determinationTotalPenalties, irsTotalPenalties, penalties } = props;
-
   let itemizedPenalties = [];
-  let combinedPenalty = {};
-
-  const formatDollars = preFormattedDollars => {
-    return applicationContext.getUtilities().formatDollars(preFormattedDollars);
-  };
 
   const formattedDeterminationTotalPenalties = determinationTotalPenalties
     ? formatDollars(applicationContext, determinationTotalPenalties)
@@ -33,34 +27,31 @@ export const setupItemizedPenaltiesModalStateAction = ({
   ]);
 
   const irsAmountPenalties = partitionedPenalties[0];
-  const courtDeterminationAmounts = partitionedPenalties[1];
+  const courtDeterminationPenalties = partitionedPenalties[1];
+  const irsPenaltyType =
+    applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT;
+  const courtDeterminationPenaltyType =
+    applicationContext.getConstants().PENALTY_TYPES
+      .DETERMINATION_PENALTY_AMOUNT;
 
-  if (irsAmountPenalties.length >= courtDeterminationAmounts.length) {
-    itemizedPenalties = irsAmountPenalties.map((irsAmountPenalty, index) => {
-      combinedPenalty = {
-        irsPenaltyAmount: formatDollars(irsAmountPenalty.penaltyAmount),
-      };
-      if (courtDeterminationAmounts[index]) {
-        combinedPenalty.courtDeterminationAmount = formatDollars(
-          courtDeterminationAmounts[index].penaltyAmount,
-        );
-      }
-      return combinedPenalty;
-    });
+  if (irsAmountPenalties.length >= courtDeterminationPenalties.length) {
+    itemizedPenalties = combinePenaltyAmountsForItemization(
+      applicationContext,
+      {
+        primaryPenaltiesArray: irsAmountPenalties,
+        primaryPenaltyType: irsPenaltyType,
+        secondaryPenaltiesArray: courtDeterminationPenalties,
+        secondaryPenaltyType: courtDeterminationPenaltyType,
+      },
+    );
   } else {
-    itemizedPenalties = courtDeterminationAmounts.map(
-      (courtDeterminationAmount, index) => {
-        combinedPenalty = {
-          courtDeterminationAmount: formatDollars(
-            courtDeterminationAmount.penaltyAmount,
-          ),
-        };
-        if (irsAmountPenalties[index]) {
-          combinedPenalty.irsPenaltyAmount = formatDollars(
-            irsAmountPenalties[index].penaltyAmount,
-          );
-        }
-        return combinedPenalty;
+    itemizedPenalties = combinePenaltyAmountsForItemization(
+      applicationContext,
+      {
+        primaryPenaltiesArray: courtDeterminationPenalties,
+        primaryPenaltyType: courtDeterminationPenaltyType,
+        secondaryPenaltiesArray: irsAmountPenalties,
+        secondaryPenaltyType: irsPenaltyType,
       },
     );
   }
@@ -72,28 +63,31 @@ export const setupItemizedPenaltiesModalStateAction = ({
   });
 };
 
-// const formatDollars = (applicationContext, preFormattedDollars) => {
-//   return applicationContext.getUtilities().formatDollars(preFormattedDollars);
-// };
+const formatDollars = (applicationContext, preFormattedDollars) => {
+  return applicationContext.getUtilities().formatDollars(preFormattedDollars);
+};
 
-// const combinePenaltyAmountsForItemization = (
-//   primaryPenaltiesArray,
-//   secondaryPenaltiesArray,
-//   applicationContext,
-// ) => {
-//   return primaryPenaltiesArray.map((irsAmountPenalty, index) => {
-//     let combinedPenalty = {
-//       irsPenaltyAmount: formatDollars(
-//         applicationContext,
-//         irsAmountPenalty.penaltyAmount,
-//       ),
-//     };
-//     if (secondaryPenaltiesArray[index]) {
-//       combinedPenalty.courtDeterminationAmount = formatDollars(
-//         applicationContext,
-//         secondaryPenaltiesArray[index].penaltyAmount,
-//       );
-//     }
-//     return combinedPenalty;
-//   });
-// };
+const combinePenaltyAmountsForItemization = (
+  applicationContext,
+  {
+    primaryPenaltiesArray,
+    primaryPenaltyType,
+    secondaryPenaltiesArray,
+    secondaryPenaltyType,
+  },
+) => {
+  return primaryPenaltiesArray.map((penalty, index) => {
+    return {
+      [primaryPenaltyType]: formatDollars(
+        applicationContext,
+        penalty.penaltyAmount,
+      ),
+      ...(secondaryPenaltiesArray[index] && {
+        [secondaryPenaltyType]: formatDollars(
+          applicationContext,
+          secondaryPenaltiesArray[index].penaltyAmount,
+        ),
+      }),
+    };
+  });
+};

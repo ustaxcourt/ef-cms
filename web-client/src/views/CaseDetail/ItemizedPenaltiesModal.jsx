@@ -9,7 +9,6 @@ export const ItemizedPenaltiesModal = connect(
     statistic: state.modal,
   },
   function ItemizedPenaltiesModal({ clearModalSequence, statistic }) {
-    console.log('statistic.itemizedPenalties', statistic.itemizedPenalties);
     return (
       <ModalDialog
         cancelSequence={clearModalSequence}
@@ -37,7 +36,7 @@ export const ItemizedPenaltiesModal = connect(
                       <b>{`Penalty ${index + 1}`}</b>
                     </td>
                     <td>{penaltyObject.irsPenaltyAmount}</td>
-                    <td>{penaltyObject.courtDeterminationAmount || ''}</td>
+                    <td>{penaltyObject.determinationPenaltyAmount || ''}</td>
                   </tr>
                 );
               })}
