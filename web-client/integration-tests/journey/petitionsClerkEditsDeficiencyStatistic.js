@@ -63,6 +63,42 @@ export const petitionsClerkEditsDeficiencyStatistic = cerebralTest => {
 
     await cerebralTest.runSequence('submitEditDeficiencyStatisticSequence');
 
+    await cerebralTest.runSequence('openItemizedPenaltiesModalSequence', {
+      determinationTotalPenalties: 22.33,
+      irsTotalPenalties: 200.0,
+      penalties: [
+        {
+          entityName: 'Penalty',
+          name: 'Penalty 1 (USTC)',
+          penaltyAmount: 22.33,
+          penaltyId: 'e2034a55-c2b3-4965-88c6-a8a2c2dfc57c',
+          penaltyType: 'determinationPenaltyAmount',
+          statisticId: '4c329b46-c0ef-4f75-8727-276c38a0a7ee',
+        },
+        {
+          entityName: 'Penalty',
+          name: 'Penalty 1 (IRS)',
+          penaltyAmount: 200,
+          penaltyId: '7fa8f8c6-de72-4b6c-bdca-e0814ffcbc6c',
+          penaltyType: 'irsPenaltyAmount',
+          statisticId: '4c329b46-c0ef-4f75-8727-276c38a0a7ee',
+        },
+      ],
+    });
+
+    const modalState = cerebralTest.getState('modal');
+
+    expect(modalState.itemizedPenalties).toEqual([
+      {
+        determinationPenaltyAmount: '$22.33',
+        irsPenaltyAmount: '$200.00',
+      },
+    ]);
+    expect(modalState.irsTotalPenalties).toEqual('$200.00');
+    expect(modalState.determinationTotalPenalties).toEqual('$22.33');
+
+    await cerebralTest.runSequence('clearModalSequence');
+
     expect(
       cerebralTest.getState('caseDetail.statistics')[0].irsDeficiencyAmount,
     ).toEqual(1000);
