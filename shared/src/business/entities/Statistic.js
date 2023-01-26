@@ -105,7 +105,6 @@ Statistic.VALIDATION_RULES = joi.object().keys({
       then: joi.required(),
     })
     .description('Last date of the statistics period.'),
-  //TODO: consider validating all penalties here (.items())
   penalties: joi
     .array()
     .has(
