@@ -16,6 +16,9 @@ export const setupItemizedPenaltiesModalStateAction = ({
 }) => {
   const { determinationTotalPenalties, irsTotalPenalties, penalties } = props;
 
+  let itemizedPenalties = [];
+  let combinedPenalty = {};
+
   const formatDollars = preFormattedDollars => {
     return applicationContext.getUtilities().formatDollars(preFormattedDollars);
   };
@@ -32,9 +35,9 @@ export const setupItemizedPenaltiesModalStateAction = ({
   const irsAmountPenalties = partitionedPenalties[0];
   const courtDeterminationAmounts = partitionedPenalties[1];
 
-  const itemizedPenalties = irsAmountPenalties.map(
-    (irsAmountPenalty, index) => {
-      let combinedPenalty = {
+  if (irsAmountPenalties.length >= courtDeterminationAmounts.length) {
+    itemizedPenalties = irsAmountPenalties.map((irsAmountPenalty, index) => {
+      combinedPenalty = {
         irsPenaltyAmount: formatDollars(irsAmountPenalty.penaltyAmount),
       };
       if (courtDeterminationAmounts[index]) {
@@ -43,8 +46,24 @@ export const setupItemizedPenaltiesModalStateAction = ({
         );
       }
       return combinedPenalty;
-    },
-  );
+    });
+  } else {
+    itemizedPenalties = courtDeterminationAmounts.map(
+      (courtDeterminationAmount, index) => {
+        combinedPenalty = {
+          courtDeterminationAmount: formatDollars(
+            courtDeterminationAmount.penaltyAmount,
+          ),
+        };
+        if (irsAmountPenalties[index]) {
+          combinedPenalty.irsPenaltyAmount = formatDollars(
+            irsAmountPenalties[index].penaltyAmount,
+          );
+        }
+        return combinedPenalty;
+      },
+    );
+  }
 
   store.set(state.modal, {
     determinationTotalPenalties: formattedDeterminationTotalPenalties,

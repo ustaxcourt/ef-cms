@@ -17,7 +17,7 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
   };
   const courtDetermination1 = {
     name: 'Penalty 1 (USTC)',
-    penaltyAmount: 0,
+    penaltyAmount: 0.0,
     penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
   };
   const courtDetermination2 = {
@@ -80,6 +80,30 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
       },
       {
         irsPenaltyAmount: '$0.00',
+      },
+    ]);
+  });
+
+  it('should set itemized penalties on state when court determine type penalties are greater in number', async () => {
+    const result = await runAction(setupItemizedPenaltiesModalStateAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        determinationTotalPenalties: '$0.00',
+        irsTotalPenalties: '$2,000.15',
+        penalties: [irsPenalty1, courtDetermination1, courtDetermination2],
+      },
+      state: {},
+    });
+
+    expect(result.state.modal.itemizedPenalties).toEqual([
+      {
+        courtDeterminationAmount: '$0.00',
+        irsPenaltyAmount: '$2,000.15',
+      },
+      {
+        courtDeterminationAmount: '$200.77',
       },
     ]);
   });
