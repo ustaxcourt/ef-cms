@@ -273,7 +273,6 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     // Fill out all statistics values except the last one and submit
     // -- the last one should be removed from the form because it was not filled in
-    // TODO: fix this for loop block
     for (let i = 0; i < 11; i++) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.year`,
