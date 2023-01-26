@@ -2,20 +2,28 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
 import { isInternalUserAction } from '../actions/isInternalUserAction';
 import { parallel } from 'cerebral';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const fetchFeatureFlag = flagName => {
+const fetchFeatureFlagAndSetAlert = flagName => {
   return [
-    getFeatureFlagValueFactoryAction(
+    getFeatureFlagFactoryAction(
+      getConstants().ALLOWLIST_FEATURE_FLAGS[flagName].key,
+    ),
+    setFeatureFlagFactoryAction(
+      getConstants().ALLOWLIST_FEATURE_FLAGS[flagName].key,
+    ),
+    isFeatureFlagEnabledFactoryAction(
       getConstants().ALLOWLIST_FEATURE_FLAGS[flagName],
     ),
     {
@@ -42,14 +50,14 @@ export const gotoAdvancedSearchSequence =
         {
           no: [
             parallel([
-              fetchFeatureFlag('EXTERNAL_ORDER_SEARCH'),
-              fetchFeatureFlag('EXTERNAL_OPINION_SEARCH'),
+              fetchFeatureFlagAndSetAlert('EXTERNAL_ORDER_SEARCH'),
+              fetchFeatureFlagAndSetAlert('EXTERNAL_OPINION_SEARCH'),
             ]),
           ],
           yes: [
             parallel([
-              fetchFeatureFlag('INTERNAL_ORDER_SEARCH'),
-              fetchFeatureFlag('INTERNAL_OPINION_SEARCH'),
+              fetchFeatureFlagAndSetAlert('INTERNAL_ORDER_SEARCH'),
+              fetchFeatureFlagAndSetAlert('INTERNAL_OPINION_SEARCH'),
             ]),
           ],
         },
