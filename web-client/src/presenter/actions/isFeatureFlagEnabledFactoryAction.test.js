@@ -3,7 +3,7 @@ import { isFeatureFlagEnabledFactoryAction } from './isFeatureFlagEnabledFactory
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getFeatureFlagValueFactoryAction', () => {
+describe('isFeatureFlagEnabledFactoryAction', () => {
   let pathYesStub;
   let pathNoStub;
 
