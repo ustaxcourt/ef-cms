@@ -9,6 +9,12 @@ type TCaseDeadline = {
   sortableDocketNumber: string;
 };
 
+type TRawPenalty = {
+  name: string;
+  penaltyAmount: number;
+  penaltyType: string;
+};
+
 type TPractitionerDocument = {
   categoryType: string;
   categoryName: string;

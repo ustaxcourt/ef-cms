@@ -20,13 +20,13 @@ export const submitAddDeficiencyStatisticsAction = async ({
     irsDeficiencyAmount,
     irsTotalPenalties,
     lastDateOfPeriod,
+    penalties,
     year,
     yearOrPeriod,
   } = combineLastDateOfPeriodFields({
     applicationContext,
     form: get(state.form),
   });
-
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
@@ -39,6 +39,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
         irsDeficiencyAmount,
         irsTotalPenalties,
         lastDateOfPeriod,
+        penalties,
         year,
         yearOrPeriod,
       });

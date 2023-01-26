@@ -56,6 +56,24 @@ table,
 }
 
 .ustc-table {
+  &.itemized-penalties-modal {
+    thead {
+      th {
+        background-color: white;
+      }
+    }
+
+    tr {
+      border: none;
+
+      &.total-subsection {
+        border-top: 2px solid color($theme-color-base-lighter);
+      }
+    }
+
+    border: none;
+  }
+
   th {
     border: 0;
 
