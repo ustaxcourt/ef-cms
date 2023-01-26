@@ -7,7 +7,7 @@ import React from 'react';
 
 export const ConfirmInitiatePaperFilingServiceModal = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.clearModalFormSequence,
     confirmInitiatePaperFilingServiceModalHelper:
       state.confirmInitiatePaperFilingServiceModalHelper,
     confirmSequence: props.confirmSequence,
