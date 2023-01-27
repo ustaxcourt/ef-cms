@@ -1,4 +1,4 @@
-const { requireEnvVars } = require('./util');
+const { requireEnvVars } = require('../util');
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
   'ELASTICSEARCH_ENDPOINT',
