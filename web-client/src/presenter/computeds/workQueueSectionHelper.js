@@ -39,6 +39,6 @@ export const workQueueSectionHelper = (get, applicationContext) => {
     chambersDisplay,
     chambersSections,
     sectionDisplay,
-    toSectionList: sectionListWithoutSupervisorRole,
+    sectionListWithoutSupervisorRole,
   };
 };
