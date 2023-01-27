@@ -1,5 +1,3 @@
-import { omit } from 'lodash';
-
 export const workQueueSectionHelper = (get, applicationContext) => {
   const CHAMBERS_SECTIONS_LABELS = applicationContext
     .getPersistenceGateway()
@@ -8,9 +6,16 @@ export const workQueueSectionHelper = (get, applicationContext) => {
   const { CASE_SERVICES_SUPERVISOR_SECTION, SECTIONS } =
     applicationContext.getConstants();
   //move to create message modal helper eventually
-  const toSectionList = omit(SECTIONS, [CASE_SERVICES_SUPERVISOR_SECTION]);
-  console.log(SECTIONS, 'SECTIONS--');
-  console.log(toSectionList, 'toSectionList--');
+  console.log(
+    'CASE_SERVICES_SUPERVISOR_SECTION',
+    CASE_SERVICES_SUPERVISOR_SECTION,
+  );
+  const sectionListWithoutSupervisorRole = SECTIONS.filter(
+    section => section !== CASE_SERVICES_SUPERVISOR_SECTION,
+  );
+
+  console.log('SECTIONS', SECTIONS);
+  console.log('toSectionList', sectionListWithoutSupervisorRole);
 
   const sectionDisplay = key => {
     return (
@@ -35,12 +40,11 @@ export const workQueueSectionHelper = (get, applicationContext) => {
   const chambersSections = applicationContext
     .getPersistenceGateway()
     .getChambersSections();
-  console.log(toSectionList, '----toSectionList');
 
   return {
     chambersDisplay,
     chambersSections,
     sectionDisplay,
-    toSectionList,
+    toSectionList: sectionListWithoutSupervisorRole,
   };
 };
