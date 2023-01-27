@@ -11,6 +11,7 @@ const { post } = require('../requests');
  * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
  * @param {number} providers.irsTotalPenalties total penalties amount from the IRS
  * @param {string} providers.lastDateOfPeriod last date of the period for the statistic
+ * @param {Array} providers.penalties an array of the penalty objects for the statistic
  * @param {number} providers.year year for the statistic
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {Promise<*>} the promise of the api call
@@ -24,6 +25,7 @@ exports.addDeficiencyStatisticInteractor = (
     irsDeficiencyAmount,
     irsTotalPenalties,
     lastDateOfPeriod,
+    penalties,
     year,
     yearOrPeriod,
   },
@@ -36,6 +38,7 @@ exports.addDeficiencyStatisticInteractor = (
       irsDeficiencyAmount,
       irsTotalPenalties,
       lastDateOfPeriod,
+      penalties,
       year,
       yearOrPeriod,
     },

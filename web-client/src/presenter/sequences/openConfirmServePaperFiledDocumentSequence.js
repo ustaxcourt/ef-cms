@@ -1,24 +1,27 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
+import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
+import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
-import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation/shouldSetupConsolidatedCasesAction';
 
 export const openConfirmServePaperFiledDocumentSequence = [
   setRedirectUrlAction,
-  getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS,
-    true,
+  getFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
   ),
   setDocketEntryIdAction,
   clearModalStateAction,
-  shouldSetupConsolidatedCasesAction,
+  isDocketEntryMultiDocketableAction,
   {
     no: [],
-    yes: [setupConsolidatedCasesAction],
+    yes: [setMultiDocketingCheckboxesAction],
   },
   setShowModalFactoryAction('ConfirmInitiatePaperFilingServiceModal'),
 ];

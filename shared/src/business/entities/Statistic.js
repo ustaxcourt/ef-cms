@@ -4,6 +4,8 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
+const { Penalty } = require('./Penalty');
+const { PENALTY_TYPES } = require('../entities/EntityConstants');
 
 /**
  * Statistic constructor
@@ -30,13 +32,31 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
+  this.penalties = [];
+  if (
+    rawStatistic.penalties &&
+    rawStatistic.penalties.length > 0 &&
+    rawStatistic.irsTotalPenalties
+  ) {
+    assignPenalties(this, {
+      applicationContext,
+      rawPenalties: rawStatistic.penalties,
+      statisticId: this.statisticId,
+    });
+  } else if (rawStatistic.irsTotalPenalties) {
+    itemizeTotalPenalties(this, {
+      applicationContext,
+      determinationTotalPenalties: this.determinationTotalPenalties,
+      irsTotalPenalties: this.irsTotalPenalties,
+    });
+  }
 };
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
-  determinationDeficiencyAmount: 'Enter deficiency as determined by Court',
-  determinationTotalPenalties: 'Enter total penalties as determined by Court',
-  irsDeficiencyAmount: 'Enter deficiency on IRS Notice',
-  irsTotalPenalties: 'Enter total penalties on IRS Notice',
+  determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
+  determinationTotalPenalties: 'Enter total penalties as determined by Court.',
+  irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
+  irsTotalPenalties: 'Enter total penalties on IRS Notice.',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
@@ -44,7 +64,8 @@ Statistic.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter last date of period',
   ],
-  year: 'Enter a valid year',
+  penalties: 'Enter at least one IRS penalty.',
+  year: 'Enter a valid year.',
 };
 
 Statistic.VALIDATION_RULES = joi.object().keys({
@@ -84,6 +105,15 @@ Statistic.VALIDATION_RULES = joi.object().keys({
       then: joi.required(),
     })
     .description('Last date of the statistics period.'),
+  penalties: joi
+    .array()
+    .has(
+      joi.object().keys({
+        penaltyType: joi.string().valid(PENALTY_TYPES.IRS_PENALTY_AMOUNT),
+      }),
+    )
+    .required()
+    .description('List of Penalty Entities for the statistic.'),
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
   ),
@@ -102,5 +132,75 @@ joiValidationDecorator(
   Statistic.VALIDATION_RULES,
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
+
+const assignPenalties = (
+  obj,
+  { applicationContext, rawPenalties, statisticId },
+) => {
+  rawPenalties.forEach(penalty => {
+    penalty.statisticId
+      ? obj.addPenalty({ applicationContext, rawPenalty: penalty })
+      : obj.addPenalty({
+          applicationContext,
+          rawPenalty: { ...penalty, statisticId },
+        });
+  });
+};
+
+/**
+ *  adds a Penalty object to the Statistic's penalties array
+ *
+ * @param {Object} penalty  the Penalty object to add
+ * @returns {void} modifies the penalties array on the Statistic
+ */
+Statistic.prototype.addPenalty = function ({ applicationContext, rawPenalty }) {
+  const rawPenaltyCopy = { ...rawPenalty };
+  if (!rawPenaltyCopy.statisticId) {
+    rawPenaltyCopy.statisticId = this.statisticId;
+  }
+  const penalty = new Penalty(rawPenaltyCopy, { applicationContext });
+  this.penalties.push(penalty);
+};
+
+/**
+ * updates a Penalty on the Statistic's penalties array
+ *
+ * @param {string} updatedPenalty the penaltyToUpdate Penalty object with updated info
+ * @returns {void} modifies the penalties array on the Statistic
+ */
+Statistic.prototype.updatePenalty = function (updatedPenalty) {
+  const foundPenalty = this.penalties.find(
+    penalty => penalty.penaltyId === updatedPenalty.penaltyId,
+  );
+
+  Object.assign(foundPenalty, updatedPenalty);
+};
+
+const itemizeTotalPenalties = function (
+  obj,
+  { applicationContext, determinationTotalPenalties, irsTotalPenalties },
+) {
+  obj.addPenalty({
+    applicationContext,
+    rawPenalty: {
+      name: 'Penalty 1 (IRS)',
+      penaltyAmount: irsTotalPenalties,
+      penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+      statisticId: obj.statisticId,
+    },
+  });
+
+  if (determinationTotalPenalties) {
+    obj.addPenalty({
+      applicationContext,
+      rawPenalty: {
+        name: 'Penalty 1 (Court)',
+        penaltyAmount: determinationTotalPenalties,
+        penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+        statisticId: obj.statisticId,
+      },
+    });
+  }
+};
 
 exports.Statistic = validEntityDecorator(Statistic);

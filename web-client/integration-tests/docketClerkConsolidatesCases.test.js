@@ -11,7 +11,12 @@ import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServes
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  setupTest,
+  uploadPetition,
+  waitForExpectedItemToExist,
+} from './helpers';
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
@@ -210,6 +215,11 @@ describe('Case Consolidation Journey', () => {
   });
 
   it('should verify that document is served on only the lead case when the feature flag is disabled', async () => {
+    await waitForExpectedItemToExist({
+      cerebralTest,
+      currentItem: 'caseDetail.consolidatedCases',
+    });
+
     const consolidatedCases = cerebralTest.getState(
       'caseDetail.consolidatedCases',
     );

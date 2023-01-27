@@ -1,5 +1,4 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { Statistic } from '../../../shared/src/business/entities/Statistic';
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
   return it('petitions clerk adds deficiency statistic to case after QCing', async () => {
@@ -8,6 +7,7 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
       tab: 'IrsNotice',
     });
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
@@ -25,13 +25,31 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       key: 'statistics.0.irsDeficiencyAmount',
       value: 1000,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'statistics.0.irsTotalPenalties',
+
+    let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
+
+    // setup first statistic - adding a irsPenaltyAmount
+
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'irsTotalPenalties',
+      statisticId,
+      statisticIndex: 0,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
       value: 100,
     });
+
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
+
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    // Setup second statistic
 
     await cerebralTest.runSequence('gotoAddDeficiencyStatisticsSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -41,9 +59,12 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
       'AddDeficiencyStatistics',
     );
 
+    statisticId = cerebralTest.getState('form.statisticId');
     const statisticsBefore = cerebralTest.getState('caseDetail.statistics');
 
     expect(cerebralTest.getState('form')).toEqual({
+      penalties: [],
+      statisticId,
       yearOrPeriod: 'Year',
     });
 
@@ -55,27 +76,92 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsDeficiencyAmount:
-        Statistic.VALIDATION_ERROR_MESSAGES.irsDeficiencyAmount,
-      irsTotalPenalties: Statistic.VALIDATION_ERROR_MESSAGES.irsTotalPenalties,
+      irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
+      irsTotalPenalties:
+        'Use IRS Penalty Calculator to calculate total penalties.',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDeficiencyAmount',
       value: 1234,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
+
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',
-      value: 0,
+      statisticId,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
     });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
+      value: 200,
+    });
+
+    await cerebralTest.runSequence('addPenaltyInputSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.1.penaltyAmount',
+      value: '',
+    });
+
+    await cerebralTest.runSequence('addPenaltyInputSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.2.penaltyAmount',
+      value: 800,
+    });
+
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'determinationDeficiencyAmount',
       value: 987,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
+
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'determinationTotalPenalties',
+      statisticId,
+      subkey: 'determinationPenaltyAmount',
+      title: 'Calculate Penalties as determined by Court',
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'penalties.0.penaltyAmount',
       value: 22.33,
     });
+
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
+
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      key: 'irsTotalPenalties',
+      statisticId,
+      subkey: 'irsPenaltyAmount',
+      title: 'Calculate Penalties on IRS Notice',
+    });
+
+    expect(cerebralTest.getState('modal.penalties')).toEqual([
+      {
+        name: 'Penalty 1 (IRS)',
+        penaltyAmount: 200,
+        penaltyType: 'irsPenaltyAmount',
+        statisticId: cerebralTest.getState('form.statisticId'),
+      },
+      {
+        name: 'Penalty 3 (IRS)',
+        penaltyAmount: 800,
+        penaltyType: 'irsPenaltyAmount',
+        statisticId: cerebralTest.getState('form.statisticId'),
+      },
+    ]);
+
+    const irsTotalPenalties = cerebralTest.getState('form.irsTotalPenalties');
+    const determinationTotalPenalties = cerebralTest.getState(
+      'form.determinationTotalPenalties',
+    );
+
+    expect(irsTotalPenalties).toEqual('1000.00');
+    expect(determinationTotalPenalties).toEqual('22.33');
 
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 

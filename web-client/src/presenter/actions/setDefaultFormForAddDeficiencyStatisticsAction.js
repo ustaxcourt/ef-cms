@@ -5,9 +5,15 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
+ * @param {object} providers.applicationContext the application context
  */
-export const setDefaultFormForAddDeficiencySatisticsAction = ({ store }) => {
+export const setDefaultFormForAddDeficiencyStatisticsAction = ({
+  applicationContext,
+  store,
+}) => {
   store.set(state.form, {
+    penalties: [],
+    statisticId: applicationContext.getUniqueId(),
     yearOrPeriod: 'Year',
   });
 };

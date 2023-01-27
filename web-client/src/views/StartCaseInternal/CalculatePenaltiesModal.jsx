@@ -2,17 +2,19 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CalculatePenaltiesModal = connect(
   {
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
-    confirmSequenceOverride: props.confirmSequenceOverride,
+    errors: state.modal.error,
+    nameAcronym: state.modal.nameAcronym,
     penalties: state.modal.penalties,
-    statisticsFormHelper: state.statisticsFormHelper,
+    showAddAnotherPenaltyButton:
+      state.statisticsFormHelper.showAddAnotherPenaltyButton,
     title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
@@ -20,9 +22,10 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence,
     cancelSequence,
     confirmSequence,
-    confirmSequenceOverride,
+    errors,
+    nameAcronym,
     penalties,
-    statisticsFormHelper,
+    showAddAnotherPenaltyButton,
     title,
     updateModalValueSequence,
   }) {
@@ -30,36 +33,40 @@ export const CalculatePenaltiesModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        confirmLabel="Calculate"
-        confirmSequence={() => {
-          confirmSequenceOverride
-            ? confirmSequenceOverride()
-            : confirmSequence();
-        }}
+        confirmLabel="Calculate and Save"
+        confirmSequence={confirmSequence}
         title={title}
       >
+        {errors &&
+          Object.keys(errors).map(key => {
+            return (
+              <div key={errors[key]}>
+                <span className="usa-error-message">{errors[key]}</span>
+              </div>
+            );
+          })}
         {penalties &&
           penalties.map((penalty, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <div className="margin-top-3" key={index}>
               <label className="usa-label" htmlFor={`penalty_${index}`}>
-                Penalty {index + 1} (IRS)
+                Penalty {index + 1} {nameAcronym}
               </label>
               <DollarsInput
                 className="usa-input"
                 id={`penalty_${index}`}
                 name={`penalties.${index}`}
-                value={penalties[index]}
+                value={penalties[index].penaltyAmount}
                 onValueChange={values => {
                   updateModalValueSequence({
-                    key: `penalties.${index}`,
+                    key: `penalties.${index}.penaltyAmount`,
                     value: values.value,
                   });
                 }}
               />
             </div>
           ))}
-        {statisticsFormHelper.showAddAnotherPenaltyButton && (
+        {showAddAnotherPenaltyButton && (
           <Button
             link
             className="margin-top-2 modal-button-link"

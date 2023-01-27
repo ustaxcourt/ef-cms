@@ -8,15 +8,43 @@ import { state } from 'cerebral';
  * @returns {number} total computed value from penalty values
  */
 export const calculatePenaltiesAction = ({ get }) => {
-  const { penalties } = get(state.modal);
+  let {
+    penalties,
+    statisticIndex,
+    subkey: modalPenaltyType,
+  } = get(state.modal);
 
-  const parseCurrency = value => `$${Number(value).toFixed(2)}`;
+  let initialPenalties = statisticIndex
+    ? get(state.form.statistics[statisticIndex].penalties) || []
+    : get(state.form.penalties) || [];
 
-  const penaltyAggregator = (sum, stepValue) => Number(sum) + Number(stepValue);
+  const statisticId = get(state.modal.statisticId);
 
-  const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));
+  const excludedInitialPenalties = initialPenalties.filter(penalty => {
+    return penalty.penaltyType !== modalPenaltyType;
+  });
+
+  penalties.forEach(penalty => {
+    penalty.penaltyType = modalPenaltyType;
+    penalty.statisticId = statisticId;
+  });
+
+  penalties = penalties.filter(penalty => penalty.penaltyAmount !== '');
+
+  const parseCurrency = value => Number(value).toFixed(2);
+
+  const penaltyAggregator = (sum, penalty) =>
+    Number(sum) + Number(penalty.penaltyAmount);
+
+  const sumOfPenalties = penalties.length
+    ? parseCurrency(penalties.reduce(penaltyAggregator, 0))
+    : undefined;
+
+  const allPenalties = [...penalties, ...excludedInitialPenalties];
 
   return {
-    totalPenalties: total,
+    allPenalties,
+    itemizedPenaltiesOfCurrentType: penalties,
+    sumOfPenalties,
   };
 };
