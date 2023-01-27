@@ -26,7 +26,10 @@ export const validatePenaltiesAction = ({
     let error = applicationContext
       .getUseCases()
       .validatePenaltiesInteractor(applicationContext, { rawPenalty: penalty });
-    error && (errors = { ...errors, ...error });
+
+    if (error) {
+      errors = { ...errors, ...error };
+    }
   });
 
   if (Object.keys(errors).length < 1) {
