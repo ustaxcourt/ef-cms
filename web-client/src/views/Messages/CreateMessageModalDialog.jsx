@@ -22,7 +22,6 @@ export const CreateMessageModalDialog = connect(
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   function CreateMessageModalDialog({
-    constants,
     createMessageModalHelper,
     form,
     onConfirmSequence = 'createMessageSequence',
@@ -65,11 +64,13 @@ export const CreateMessageModalDialog = connect(
             }}
           >
             <option value="">- Select -</option>
-            {workQueueSectionHelper.toSectionList.map(section => (
-              <option key={section} value={section}>
-                {workQueueSectionHelper.sectionDisplay(section)}
-              </option>
-            ))}
+            {workQueueSectionHelper.sectionListWithoutSupervisorRole.map(
+              section => (
+                <option key={section} value={section}>
+                  {workQueueSectionHelper.sectionDisplay(section)}
+                </option>
+              ),
+            )}
           </select>
         </FormGroup>
 
