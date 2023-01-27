@@ -65,7 +65,7 @@ export const CreateMessageModalDialog = connect(
             }}
           >
             <option value="">- Select -</option>
-            {constants.SECTIONS.map(section => (
+            {workQueueSectionHelper.toSectionList.map(section => (
               <option key={section} value={section}>
                 {workQueueSectionHelper.sectionDisplay(section)}
               </option>
