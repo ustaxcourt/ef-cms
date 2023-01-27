@@ -11,8 +11,8 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
     errors: state.modal.error,
-    nameAcronym: state.modal.nameAcronym,
     penalties: state.modal.penalties,
+    penaltyTypeLabel: state.modal.penaltyTypeLabel,
     showAddAnotherPenaltyButton:
       state.statisticsFormHelper.showAddAnotherPenaltyButton,
     title: state.modal.title,
@@ -23,8 +23,8 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence,
     confirmSequence,
     errors,
-    nameAcronym,
     penalties,
+    penaltyTypeLabel,
     showAddAnotherPenaltyButton,
     title,
     updateModalValueSequence,
@@ -50,7 +50,7 @@ export const CalculatePenaltiesModal = connect(
             // eslint-disable-next-line react/no-array-index-key
             <div className="margin-top-3" key={index}>
               <label className="usa-label" htmlFor={`penalty_${index}`}>
-                Penalty {index + 1} {nameAcronym}
+                Penalty {index + 1} {penaltyTypeLabel}
               </label>
               <DollarsInput
                 className="usa-input"
