@@ -6,16 +6,10 @@ export const workQueueSectionHelper = (get, applicationContext) => {
   const { CASE_SERVICES_SUPERVISOR_SECTION, SECTIONS } =
     applicationContext.getConstants();
   //move to create message modal helper eventually
-  console.log(
-    'CASE_SERVICES_SUPERVISOR_SECTION',
-    CASE_SERVICES_SUPERVISOR_SECTION,
-  );
+
   const sectionListWithoutSupervisorRole = SECTIONS.filter(
     section => section !== CASE_SERVICES_SUPERVISOR_SECTION,
   );
-
-  console.log('SECTIONS', SECTIONS);
-  console.log('toSectionList', sectionListWithoutSupervisorRole);
 
   const sectionDisplay = key => {
     return (

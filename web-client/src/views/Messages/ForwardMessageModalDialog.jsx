@@ -22,7 +22,6 @@ export const ForwardMessageModalDialog = connect(
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   function ForwardMessageModalDialog({
-    constants,
     createMessageModalHelper,
     form,
     showChambersSelect,
@@ -62,11 +61,13 @@ export const ForwardMessageModalDialog = connect(
             }}
           >
             <option value="">- Select -</option>
-            {workQueueSectionHelper.toSectionList.map(section => (
-              <option key={section} value={section}>
-                {workQueueSectionHelper.sectionDisplay(section)}
-              </option>
-            ))}
+            {workQueueSectionHelper.sectionListWithoutSupervisorRole.map(
+              section => (
+                <option key={section} value={section}>
+                  {workQueueSectionHelper.sectionDisplay(section)}
+                </option>
+              ),
+            )}
           </select>
         </FormGroup>
         {showChambersSelect && (
