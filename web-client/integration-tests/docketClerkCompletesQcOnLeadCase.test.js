@@ -1,33 +1,16 @@
-import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
-import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
-import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
+import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import {
   fakeFile,
   getFormattedDocumentQCSectionInProgress,
-  loginAs,
   refreshElasticsearchIndex,
   setupTest,
-  uploadPetition,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('Complete QC on lead case docket entry', () => {
+describe('Docket clerk multi-dockets court issued document journey', () => {
   const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
-  const overrides = {
-    preferredTrialCity: trialLocation,
-    trialLocation,
-  };
-
-  let leadDocketNumber;
-  let caseDetail;
-
-  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
   beforeAll(() => {
     cerebralTest.draftOrders = [];
@@ -37,152 +20,182 @@ describe('Complete QC on lead case docket entry', () => {
     cerebralTest.closeSocket();
   });
 
-  it('login as a petitioner and create the lead case', async () => {
-    caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
-      caseDetail.docketNumber;
-    leadDocketNumber = caseDetail.docketNumber;
+  describe('Create a consolidated group', () => {
+    createConsolidatedGroup(cerebralTest);
   });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  describe('Create a court issued document, serve and multi-docket', () => {
+    it('Docket Clerk uploads a court issued document', async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.leadDocketNumber,
+      });
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+      await cerebralTest.runSequence('gotoUploadCourtIssuedDocumentSequence');
 
-  it('Docket Clerk adds a docket entry and saves without serving', async () => {
-    let caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: cerebralTest.getState(),
-      },
-    );
+      await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');
 
-    const { docketEntryId } = cerebralTest.draftOrders[0];
+      expect(cerebralTest.getState('validationErrors')).toEqual({
+        freeText: 'Enter a description',
+        primaryDocumentFile: 'Upload a document',
+      });
 
-    const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
+      await cerebralTest.runSequence('updateFormValueSequence', {
+        key: 'freeText',
+        value: 'Some order content',
+      });
 
-    expect(draftOrderDocument).toBeTruthy();
+      await cerebralTest.runSequence('updateFormValueSequence', {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      });
+      await cerebralTest.runSequence(
+        'validateUploadCourtIssuedDocumentSequence',
+      );
 
-    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: cerebralTest.docketNumber,
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');
+
+      const caseDetailFormatted = runCompute(
+        withAppContextDecorator(formattedCaseDetail),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      const caseDraftDocuments = caseDetailFormatted.draftDocuments;
+      const newDraftOrder = caseDraftDocuments.reduce((prev, current) =>
+        prev.createdAt > current.createdAt ? prev : current,
+      );
+
+      cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
+
+      expect(newDraftOrder).toBeTruthy();
+      cerebralTest.draftOrders = [
+        ...(cerebralTest.draftOrders || []),
+        newDraftOrder,
+      ];
     });
 
-    expect(cerebralTest.getState('form.eventCode')).toBeUndefined();
-    expect(cerebralTest.getState('form.documentType')).toBeUndefined();
+    it('Docket Clerk adds a docket entry and saves without serving', async () => {
+      let caseDetailFormatted = runCompute(
+        withAppContextDecorator(formattedCaseDetail),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
 
-    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: 'Select a document type',
+      const { docketEntryId } = cerebralTest.draftOrders[0];
+      const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
+
+      expect(draftOrderDocument).toBeTruthy();
+
+      await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+        docketEntryId: draftOrderDocument.docketEntryId,
+        docketNumber: cerebralTest.leadDocketNumber,
+      });
+
+      expect(cerebralTest.getState('form.eventCode')).toBeUndefined();
+      expect(cerebralTest.getState('form.documentType')).toBeUndefined();
+
+      await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({
+        documentType: 'Select a document type',
+      });
+
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'eventCode',
+          value: 'MISC',
+        },
+      );
+
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'documentType',
+          value: 'Miscellaneous',
+        },
+      );
+
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'documentTitle',
+          value: '[anything]',
+        },
+      );
+
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'scenario',
+          value: 'Type A',
+        },
+      );
+
+      await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
     });
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'MISC',
-      },
-    );
+    it('edits a docket entry in document QC and serves on all consolidated cases in the group', async () => {
+      await refreshElasticsearchIndex();
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'documentType',
-        value: 'Miscellaneous',
-      },
-    );
+      const documentQCSectionInProcess =
+        await getFormattedDocumentQCSectionInProgress(cerebralTest);
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'documentTitle',
-        value: '[anything]',
-      },
-    );
+      const savedDocument = documentQCSectionInProcess.find(
+        item => item.docketNumber === cerebralTest.leadDocketNumber,
+      );
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'scenario',
-        value: 'Type A',
-      },
-    );
+      await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+        docketEntryId: savedDocument.docketEntry.docketEntryId,
+        docketNumber: cerebralTest.leadDocketNumber,
+      });
 
-    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-  });
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'CourtIssuedDocketEntry',
+      );
 
-  it('login as a petitioner and create a case to consolidate with', async () => {
-    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-  });
+      await cerebralTest.runSequence(
+        'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
+      );
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-  docketClerkOpensCaseConsolidateModal(cerebralTest);
-  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest, 2);
+      expect(cerebralTest.getState('modal.showModal')).toEqual(
+        'ConfirmInitiateCourtIssuedFilingServiceModal',
+      );
 
-  it('edits a docket entry in document QC and serves on all consolidated cases in the group', async () => {
-    const documentQCSectionInProcess =
-      await getFormattedDocumentQCSectionInProgress(cerebralTest);
+      expect(
+        cerebralTest.getState('modal.form.consolidatedCaseAllCheckbox'),
+      ).toBe(true);
 
-    const savedDocument = documentQCSectionInProcess.find(
-      item => item.docketNumber === leadDocketNumber,
-    );
+      await cerebralTest.runSequence(
+        'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
+      );
 
-    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: savedDocument.docketEntry.docketEntryId,
-      docketNumber: cerebralTest.leadDocketNumber,
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
     });
 
-    expect(cerebralTest.getState('currentPage')).toEqual(
-      'CourtIssuedDocketEntry',
-    );
+    it('case in consolidated group that is NOT the lead case should also have served docket entry', async () => {
+      await refreshElasticsearchIndex();
 
-    await cerebralTest.runSequence(
-      'openConfirmInitiateCourtIssuedFilingServiceModalSequence',
-    );
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+      const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+      const foundDocketEntry = docketEntries.find(
+        doc => doc.eventCode === 'MISC',
+      );
 
-    expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiateCourtIssuedFilingServiceModal',
-    );
-
-    expect(
-      cerebralTest.getState('modal.form.consolidatedCaseAllCheckbox'),
-    ).toBe(true);
-
-    await cerebralTest.runSequence(
-      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
-    );
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-  });
-
-  it('case in consolidated group that is NOT the lead case should also have served docket entry', async () => {
-    await refreshElasticsearchIndex();
-
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      expect(foundDocketEntry.servedAt).toBeDefined();
     });
-
-    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
-    const foundDocketEntry = docketEntries.find(
-      doc => doc.eventCode === 'MISC',
-    );
-
-    expect(foundDocketEntry.servedAt).toBeDefined();
   });
 });

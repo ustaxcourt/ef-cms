@@ -1,20 +1,15 @@
+import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase } from './journey/docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase';
 import { docketClerkAddsDocketEntryForTrialExhibit } from './journey/docketClerkAddsDocketEntryForTrialExhibit';
-import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
-import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
-import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
+import { fakeFile, loginAs, setupTest } from './helpers';
 
 describe('Case Consolidation Coversheets Journey', () => {
-  let case2DocketNumber, case3DocketNumber;
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
-
   const cerebralTest = setupTest();
-  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
+  let firstMemberCaseDocketNumber, secondMemberCaseDocketNumber;
+
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,
@@ -24,10 +19,12 @@ describe('Case Consolidation Coversheets Journey', () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber,
     });
-    let caseDetails = cerebralTest.getState('caseDetail');
-    const record = caseDetails.docketEntries.find(
+
+    const { docketEntries } = cerebralTest.getState('caseDetail');
+    const record = docketEntries.find(
       docketEntry => docketEntry.eventCode === eventCode,
     );
+
     return record;
   };
 
@@ -39,111 +36,87 @@ describe('Case Consolidation Coversheets Journey', () => {
     cerebralTest.closeSocket();
   });
 
-  it('login as a petitioner and create the lead case', async () => {
-    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
-    expect(docketNumber).toBeDefined();
-
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber = docketNumber;
+  describe('Create a consolidated group', () => {
+    createConsolidatedGroup({
+      caseOverrides: overrides,
+      cerebralTest,
+      numberOfMemberCases: 2,
+    });
   });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  describe('Create a hearing exhibit, serve and multi-docket', () => {
+    it('test setup', () => {
+      firstMemberCaseDocketNumber =
+        cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries[1];
+      secondMemberCaseDocketNumber =
+        cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries[2];
+      cerebralTest.docketNumber = cerebralTest.leadDocketNumber;
+    });
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+    docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase(
+      cerebralTest,
+      {
+        draftOrderIndex: 0,
+        getDocketNumbersToUncheck: () => [secondMemberCaseDocketNumber],
+        getLeadCaseDocketNumber: () => cerebralTest.leadDocketNumber,
+      },
+    );
+    it('verify the HE docket entries exist on both cases docket record', async () => {
+      const leadCaseHERecord = await getRecordByEventCode(
+        cerebralTest.leadDocketNumber,
+        'HE',
+      );
+      expect(leadCaseHERecord).toBeDefined();
 
-  it('login as a petitioner and create case 2 to consolidate with the lead case', async () => {
-    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+      const heRecordCase2 = await getRecordByEventCode(
+        firstMemberCaseDocketNumber,
+        'HE',
+      );
+      expect(heRecordCase2).not.toBeDefined();
 
-    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
-    expect(docketNumber).toBeDefined();
+      const heRecordCase3 = await getRecordByEventCode(
+        secondMemberCaseDocketNumber,
+        'HE',
+      );
+      expect(heRecordCase3).toBeDefined();
 
-    cerebralTest.docketNumber = docketNumber;
-    case2DocketNumber = docketNumber;
+      expect(heRecordCase3.docketEntryId).toEqual(
+        leadCaseHERecord.docketEntryId,
+      );
+    });
   });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  describe('Create a trial exhibit, serve and multi-docket', () => {
+    it('test setup', () => {
+      cerebralTest.docketNumber = firstMemberCaseDocketNumber;
+      cerebralTest.draftOrders = [];
+    });
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-  docketClerkOpensCaseConsolidateModal(cerebralTest);
-  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest, 2);
-
-  it('login as a petitioner and create case 3 to consolidate with the lead case', async () => {
-    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-
-    const { docketNumber } = await uploadPetition(cerebralTest, overrides);
-    expect(docketNumber).toBeDefined();
-
-    cerebralTest.docketNumber = docketNumber;
-    case3DocketNumber = docketNumber;
-  });
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-  docketClerkOpensCaseConsolidateModal(cerebralTest);
-  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest, 3);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  it('set up docket number', () => {
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber;
-  });
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
-  docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase(
-    cerebralTest,
-    {
+    docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+    docketClerkAddsDocketEntryForTrialExhibit(cerebralTest, {
       draftOrderIndex: 0,
-      getDocketNumbersToUncheck: () => [case3DocketNumber],
-      getLeadCaseDocketNumber: () => cerebralTest.leadDocketNumber,
-    },
-  );
+    });
 
-  it('verify the HE docket entries exist on both cases docket record', async () => {
-    const leadCaseHERecord = await getRecordByEventCode(
-      cerebralTest.leadDocketNumber,
-      'HE',
-    );
-    expect(leadCaseHERecord).toBeDefined();
+    it('verify the TE docket entry does not exist on other cases in the consolidated group', async () => {
+      const case2TERecord = await getRecordByEventCode(
+        cerebralTest.case2DocketNumber,
+        'TE',
+      );
+      expect(case2TERecord).toBeDefined();
 
-    const heRecordCase2 = await getRecordByEventCode(case2DocketNumber, 'HE');
-    expect(heRecordCase2).not.toBeDefined();
+      const teRecordLeadCase = await getRecordByEventCode(
+        cerebralTest.leadDocketNumber,
+        'TE',
+      );
+      expect(teRecordLeadCase).not.toBeDefined();
 
-    const heRecordCase3 = await getRecordByEventCode(case3DocketNumber, 'HE');
-    expect(heRecordCase3).toBeDefined();
-
-    expect(heRecordCase3.docketEntryId).toEqual(leadCaseHERecord.docketEntryId);
-  });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  it('set up docket number', () => {
-    cerebralTest.docketNumber = case2DocketNumber;
-    cerebralTest.draftOrders = [];
-  });
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
-  docketClerkAddsDocketEntryForTrialExhibit(cerebralTest, {
-    draftOrderIndex: 0,
-  });
-
-  it('verify the TE docket entry does not exist on other cases in the consolidated group', async () => {
-    const case2TERecord = await getRecordByEventCode(
-      cerebralTest.case2DocketNumber,
-      'TE',
-    );
-    expect(case2TERecord).toBeDefined();
-
-    const teRecordLeadCase = await getRecordByEventCode(
-      cerebralTest.leadDocketNumber,
-      'TE',
-    );
-    expect(teRecordLeadCase).not.toBeDefined();
-
-    const teRecordCase3 = await getRecordByEventCode(case3DocketNumber, 'TE');
-    expect(teRecordCase3).not.toBeDefined();
+      const teRecordCase3 = await getRecordByEventCode(
+        secondMemberCaseDocketNumber,
+        'TE',
+      );
+      expect(teRecordCase3).not.toBeDefined();
+    });
   });
 });
