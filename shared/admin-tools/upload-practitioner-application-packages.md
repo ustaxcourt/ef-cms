@@ -42,6 +42,6 @@ npx ts-node shared/admin-tools/upload-practitioner-application-packages.js > "$H
 
 ## Evaluate the results
 
-Any files that could not be uploaded will remain in the `to-upload` directory. A `results.json` file will have been written to the `upload` directory, as well as a `stats.txt` file. Ensure that the total number of files uploaded to S3 matches the total number of documents inserted in DynamoDB.
+Any files that could not be uploaded will remain in the `to-upload` directory. A `results.json` file will have been written to the `upload` directory, as well as a `stats.txt` file. Inspect the `results.json` file and ensure that the total number of files uploaded to S3 matches the total number of documents inserted in DynamoDB.
 
 Lastly, as an admissions clerk, log in to the DAWSON environment into which you just imported the practitioners' application packages, navigate to a practitioner's documents, and ensure you see the imported application package.
