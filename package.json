@@ -210,6 +210,7 @@
     "test:pa11y": "npm run test:pa11y:1 && npm run test:pa11y:2 && npm run test:pa11y:3 && npm run test:pa11y:4",
     "test:pdf-output": "npm run build:assets && PDF_OUTPUT=true jest --config jest-browser.config.js --runInBand shared/src/business/utilities/documentGenerators/*.test.js",
     "test:pdf:file": "npm run build:assets && PDF_OUTPUT=true jest --config shared/jest.config.js --runInBand",
+    "test:zc-imge": "jest --runInBand --config jest.config.js image-compare-pdfs.test.js",
     "test:shared:ci": "npm run build:assets && jest --runInBand --detectOpenHandles --config shared/jest.config.js",
     "test:shared": "npm run build:assets && node --trace-warnings --unhandled-rejections=strict ./node_modules/.bin/jest --maxWorkers=50% --config shared/jest.config.js",
     "test:watch": "jest --watch .*test\\.js$",
