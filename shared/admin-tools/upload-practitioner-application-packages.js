@@ -15,12 +15,33 @@ const { searchAll } = require('../src/persistence/elasticsearch/searchClient');
 const { v4: uuidv4 } = require('uuid');
 
 const INPUT_DIR = `${process.env.HOME}/Documents/upload`;
+const MAX_TRIES = 5;
+const DYNAMODB_CHUNK_SIZE = 25;
 
-const getAllPractitioners = async ({ applicationContext }) => {
+const ddbEntities = {};
+const output = {
+  completed: {
+    conversion: {},
+    dynamoDocument: {},
+    uploadToS3: {},
+  },
+  failed: {
+    conversion: {},
+    practitionerNotFound: [],
+    uploadToS3: {},
+    writeToDynamoDB: {
+      error: [],
+      unprocessed: [],
+    },
+  },
+};
+
+const getAllBarNumbers = async ({ applicationContext }) => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
       body: {
+        _source: ['barNumber.S'],
         query: {
           bool: {
             filter: {
@@ -34,7 +55,7 @@ const getAllPractitioners = async ({ applicationContext }) => {
       index: 'efcms-user',
     },
   });
-  return results;
+  return results.map(practitioner => practitioner.barNumber);
 };
 
 const uploadDocumentToS3 = async ({ applicationContext, fileId, filePath }) => {
@@ -111,17 +132,9 @@ const batchUploadPractitionerApplicationPackages = async ({
     return;
   }
   const { dynamoDbTableName } = applicationContext.environment;
-  const ddbEntities = [];
-  const completed = { conversion: {}, dynamoDocument: {}, uploadToS3: {} };
-  const failed = {
-    conversion: {},
-    dynamoDocument: { error: [], unprocessed: [] },
-    practitionerNotFound: [],
-    uploadToS3: {},
-  };
 
   console.time('Duration of retrieval of practitioner records');
-  const allPractitioners = await getAllPractitioners({ applicationContext });
+  const allBarNumbers = await getAllBarNumbers({ applicationContext });
   console.timeEnd('Duration of retrieval of practitioner records');
 
   console.time('Duration of conversion from .tif to .pdf');
@@ -134,19 +147,19 @@ const batchUploadPractitionerApplicationPackages = async ({
     if (extname(fileName).toLowerCase() === '.tif') {
       const convertedFileName = await convertTifToPdf({ fileName });
       if (!convertedFileName) {
-        failed.conversion[barNumber] = fileName;
+        output.failed.conversion[barNumber] = fileName;
         continue;
       }
       fileName = convertedFileName;
       filePath = `${uploadDir}/${fileName}`;
-      completed.conversion[barNumber] = fileName;
+      output.completed.conversion[barNumber] = fileName;
     }
-    if (!allPractitioners.filter(p => p.barNumber === barNumber).length) {
-      failed.practitionerNotFound.push(barNumber);
+    if (!allBarNumbers.includes(barNumber)) {
+      output.failed.practitionerNotFound.push(barNumber);
       continue;
     }
     const practitionerDocumentFileId = uuidv4();
-    ddbEntities.push({
+    ddbEntities[barNumber] = {
       PutRequest: {
         Item: {
           categoryName: 'Application Package',
@@ -160,15 +173,19 @@ const batchUploadPractitionerApplicationPackages = async ({
           uploadDate: createISODateString(),
         },
       },
-    });
+    };
   }
   console.timeEnd('Duration of conversion from .tif to .pdf');
 
   console.time('Duration of file upload and document creation');
-  const ddbChunkSize = 25;
-  for (let i = 0; i < ddbEntities.length; i += ddbChunkSize) {
-    const chunk = ddbEntities.slice(i, i + ddbChunkSize);
-    const chunkItems = `${i}-${i + chunk.length}`;
+
+  for (
+    let i = 0;
+    i < Object.keys(ddbEntities).length;
+    i += DYNAMODB_CHUNK_SIZE
+  ) {
+    let chunk = Object.values(ddbEntities).slice(i, i + DYNAMODB_CHUNK_SIZE);
+    const chunkItems = `${i + 1}-${i + chunk.length}`;
     console.time(`Duration of upload of items ${chunkItems} to S3`);
     for (const practitionerDocument of chunk) {
       const barNumber = getBarNumberFromPractitionerDocumentPk({
@@ -176,19 +193,30 @@ const batchUploadPractitionerApplicationPackages = async ({
       });
       const { fileName, practitionerDocumentFileId: fileId } =
         practitionerDocument.PutRequest.Item;
-      const uploaded = await uploadDocumentToS3({
-        applicationContext,
-        fileId,
-        filePath: `${uploadDir}/${fileName}`,
-      });
+      let uploaded = false;
+      let tries = 0;
+      while (!uploaded && tries < MAX_TRIES) {
+        try {
+          uploaded = await uploadDocumentToS3({
+            applicationContext,
+            fileId,
+            filePath: `${uploadDir}/${fileName}`,
+          });
+        } catch (err) {
+          if (err && 'retryable' in err && !err.retryable) {
+            tries = MAX_TRIES;
+          }
+        }
+        tries++;
+      }
       if (!uploaded) {
-        failed.uploadToS3[barNumber] = {
+        output.failed.uploadToS3[barNumber] = {
           fileId,
           fileName,
         };
         continue;
       }
-      completed.uploadToS3[barNumber] = {
+      output.completed.uploadToS3[barNumber] = {
         fileId,
         fileName,
       };
@@ -197,67 +225,67 @@ const batchUploadPractitionerApplicationPackages = async ({
         oldPath: `${uploadDir}/${fileName}`,
       });
     }
+    const failedUploads = Object.values(output.failed.uploadToS3).map(
+      f => f.fileId,
+    );
+    chunk = chunk.filter(
+      doc =>
+        !failedUploads.includes(doc.PutRequest.Item.practitionerDocumentFileId),
+    );
     console.timeEnd(`Duration of upload of items ${chunkItems} to S3`);
     console.time(`Duration of creation of documents ${chunkItems} in dynamodb`);
-    const batchWriteParams = {
-      RequestItems: {
-        [dynamoDbTableName]: chunk,
-      },
-    };
-    await applicationContext
-      .getDocumentClient()
-      .batchWrite(batchWriteParams, async (err, data) => {
-        if (err) {
-          failed.dynamoDocument.error.push(chunk);
-        } else {
-          if (
-            data &&
-            'UnprocessedItems' in data &&
-            Object.keys(data.UnprocessedItems).length > 0
-          ) {
-            let unprocessedItems = data.UnprocessedItems;
-            const maxRetries = 5;
-            let retries = 0;
-            while (
-              unprocessedItems &&
-              Object.keys(unprocessedItems).length > 0 &&
-              retries < maxRetries
-            ) {
-              const retryParams = { RequestItems: unprocessedItems };
-              const retryOutput = await applicationContext
-                .getDocumentClient()
-                .batchWrite(retryParams)
-                .promise();
-              unprocessedItems = retryOutput.UnprocessedItems;
-              retries++;
-            }
-            if (unprocessedItems && dynamoDbTableName in unprocessedItems) {
-              failed.dynamoDocument.unprocessed.push(
-                unprocessedItems[dynamoDbTableName],
-              );
-            }
-          }
-          for (const doc of chunk) {
-            const barNumber = getBarNumberFromPractitionerDocumentPk({
-              pk: doc.PutRequest.Item.pk,
-            });
-            const { fileName, practitionerDocumentFileId: fileId } =
-              doc.PutRequest.Item;
-            completed.dynamoDocument[barNumber] = {
-              fileId,
-              fileName,
-            };
-          }
-        }
-      })
-      .promise();
+    let unprocessedItems = { [dynamoDbTableName]: chunk };
+    let tries = 0;
+    while (
+      unprocessedItems &&
+      Object.keys(unprocessedItems).length > 0 &&
+      tries < MAX_TRIES
+    ) {
+      try {
+        const batchWriteParams = { RequestItems: unprocessedItems };
+        const res = await applicationContext
+          .getDocumentClient()
+          .batchWrite(batchWriteParams)
+          .promise();
+        unprocessedItems = res.UnprocessedItems;
+      } catch (err) {
+        output.failed.dynamoDocument.error.push(chunk);
+      }
+      tries++;
+    }
+    if (unprocessedItems && dynamoDbTableName in unprocessedItems) {
+      output.failed.dynamoDocument.unprocessed.push(
+        unprocessedItems[dynamoDbTableName],
+      );
+    }
+    const failedWrites = output.failed.dynamoDocument.error.map(
+      doc => doc.PutRequest.Item.practitionerDocumentFileId,
+    );
+    const unprocessedWrites = output.failed.dynamoDocument.unprocessed.map(
+      doc => doc.PutRequest.Item.practitionerDocumentFileId,
+    );
+    for (const doc of chunk) {
+      const barNumber = getBarNumberFromPractitionerDocumentPk({
+        pk: doc.PutRequest.Item.pk,
+      });
+      const { fileName, practitionerDocumentFileId: fileId } =
+        doc.PutRequest.Item;
+      if (
+        !failedWrites.includes(fileId) &&
+        !unprocessedWrites.includes(fileId)
+      ) {
+        output.completed.dynamoDocument[barNumber] = {
+          fileId,
+          fileName,
+        };
+      }
+    }
     console.timeEnd(
       `Duration of creation of documents ${chunkItems} in dynamodb`,
     );
   }
   console.timeEnd('Duration of file upload and document creation');
 
-  const output = { completed, failed };
   const now = DateTime.now().toUnixInteger();
   const outputFilePath = `${INPUT_DIR}/results-${now}.json`;
   fs.writeFileSync(outputFilePath, JSON.stringify(output));
@@ -266,40 +294,40 @@ const batchUploadPractitionerApplicationPackages = async ({
   console.log('');
   console.log(
     `Number of files converted from .tif to .pdf: ${
-      Object.keys(completed.conversion).length
+      Object.keys(output.completed.conversion).length
     }`,
   );
   console.log(
     `Number of files that failed to convert from .tif to .pdf: ${
-      Object.keys(failed.conversion).length
+      Object.keys(output.failed.conversion).length
     }`,
   );
   console.log(
     'Number of files not uploaded because the bar number could not ' +
-      `be found: ${failed.practitionerNotFound.length}`,
+      `be found: ${output.failed.practitionerNotFound.length}`,
   );
   console.log(
     `Number of files uploaded to S3: ${
-      Object.keys(completed.uploadToS3).length
+      Object.keys(output.completed.uploadToS3).length
     }`,
   );
   console.log(
     `Number of files that failed to upload to S3: ${
-      Object.keys(failed.uploadToS3).length
+      Object.keys(output.failed.uploadToS3).length
     }`,
   );
   console.log(
     `Number of documents inserted into DynamoDB: ${
-      Object.keys(completed.dynamoDocument).length
+      Object.keys(output.completed.dynamoDocument).length
     }`,
   );
   console.log(
     'Number of documents that could not be inserted into DynamoDB due to ' +
-      `error: ${failed.dynamoDocument.error.length}`,
+      `error: ${output.failed.dynamoDocument.error.length}`,
   );
   console.log(
     'Number of documents that could not be inserted into DynamoDB due to ' +
-      `exceeding maximum tries: ${failed.dynamoDocument.unprocessed.length}`,
+      `exceeding maximum tries: ${output.failed.dynamoDocument.unprocessed.length}`,
   );
 };
 
