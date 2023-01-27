@@ -122,14 +122,12 @@ const saveForLaterStrategy = async ({
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'serve_document_complete',
+      action: 'save_document_for_qc',
       alertSuccess: {
         message: 'Entry updated.',
         overwritable: false,
       },
       docketEntryId,
-      generateCoversheet: false,
-      pdfUrl: undefined,
     },
     userId: user.userId,
   });

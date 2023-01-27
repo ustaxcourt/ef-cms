@@ -258,14 +258,12 @@ describe('editPaperFilingInteractor', () => {
           applicationContext: expect.anything(),
           clientConnectionId,
           message: {
-            action: 'serve_document_complete',
+            action: 'save_document_for_qc',
             alertSuccess: {
               message: 'Entry updated.',
               overwritable: false,
             },
             docketEntryId: mockDocketEntryId,
-            generateCoversheet: false,
-            pdfUrl: undefined,
           },
           userId: docketClerkUser.userId,
         });
