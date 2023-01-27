@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 const noop = () => {};
 
 export const socketRouter = (app, onMessageCallbackFn) => {
@@ -81,6 +82,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
           maintenanceMode: false,
           path: '/',
+        });
+        break;
+      case 'save_document_for_qc':
+        await app.getSequence('saveDocumentForQCSequence')({
+          ...message,
         });
         break;
       case 'serve_document_complete':
