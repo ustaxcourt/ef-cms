@@ -8,11 +8,14 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for getting the props.user
  */
 export const saveSelectedDocketNumbersAction = ({ get, store }) => {
-  const consolidatedCases = get(state.caseDetail.consolidatedCases);
+  const consolidatedCases = get(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+  );
 
   const checkedCases = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);
 
+  // TODO: This is derived state and probably should not exist.
   store.set(state.addedDocketNumbers, checkedCases);
 };
