@@ -5,10 +5,12 @@ import { generateTitleForPaperFilingAction } from '../actions/FileDocument/gener
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
+import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -18,11 +20,10 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
+const multiDocketablePaperFilings =
+  getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS;
+
 export const openConfirmPaperServiceModalSequence = [
-  getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS,
-    true,
-  ),
   clearAlertsAction,
   clearModalStateAction,
   startShowValidationAction,
@@ -34,7 +35,18 @@ export const openConfirmPaperServiceModalSequence = [
   isDocketEntryMultiDocketableAction,
   {
     no: [],
-    yes: [getConsolidatedCasesByCaseAction, setMultiDocketingCheckboxesAction],
+    yes: [
+      getFeatureFlagFactoryAction(multiDocketablePaperFilings.key),
+      setFeatureFlagFactoryAction(multiDocketablePaperFilings.key),
+      isFeatureFlagEnabledFactoryAction(multiDocketablePaperFilings),
+      {
+        no: [],
+        yes: [
+          getConsolidatedCasesByCaseAction,
+          setMultiDocketingCheckboxesAction,
+        ],
+      },
+    ],
   },
   setDocumentIsRequiredAction,
   generateTitleForPaperFilingAction,
