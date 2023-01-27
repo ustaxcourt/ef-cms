@@ -9,7 +9,7 @@ If you already have a directory called `$HOME/Documents/upload`, this will renam
 ```bash
 [ -d "$HOME/Documents/upload" ] && mv "$HOME/Documents/upload" "$HOME/Documents/upload-bak-$(date +%s)"
 mkdir -p "$HOME/Documents/upload/to-upload"
-mkdir -p "$HOME/Documents/upload/done/converted"
+mkdir -p "$HOME/Documents/upload/done/original"
 mkdir "$HOME/Documents/upload/done/uploaded"
 ```
 
@@ -37,20 +37,11 @@ cd "$HOME/path/to/ef-cms"
 In the same shell session, run the `upload-practitioner-application-packages` script.
 
 ```bash
-npx ts-node shared/admin-tools/upload-practitioner-application-packages.js
+npx ts-node shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
 ```
 
 ## Evaluate the results
 
-Any files that could not be uploaded will remain in the `to-upload` directory. Errors during execution will have been output to `stderr`.
-
-```bash
-find "$HOME/Documents/upload" -name ".DS_Store" -exec rm {} \;
-find "$HOME/Documents/upload" -name "__MACOSX" -exec rm {} \;
-echo "Converted: $(find "$HOME/Documents/upload/done/converted" -name "*.tif" | wc -l)"
-echo "Uploaded: $(ls -1 "$HOME/Documents/upload/done/uploaded" | wc -l)"
-echo "Failed to convert: $(find "$HOME/Documents/upload/to-upload" -iname "*.tif" | wc -l)"
-echo "Failed to upload: $(find "$HOME/Documents/upload/to-upload" -iname "*.pdf" | wc -l)"
-```
+Any files that could not be uploaded will remain in the `to-upload` directory. A `results.json` file will have been written to the `upload` directory, as well as a `stats.txt` file. Ensure that the total number of files uploaded to S3 matches the total number of documents inserted in DynamoDB.
 
 Lastly, as an admissions clerk, log in to the DAWSON environment into which you just imported the practitioners' application packages, navigate to a practitioner's documents, and ensure you see the imported application package.
