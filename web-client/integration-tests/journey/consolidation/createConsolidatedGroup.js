@@ -5,12 +5,19 @@ import { docketClerkUpdatesCaseStatusToReadyForTrial } from '../docketClerkUpdat
 import { loginAs, uploadPetition } from '../../helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../petitionsClerkServesElectronicCaseToIrs';
 
-export const createConsolidatedGroup = cerebralTest => {
-  return describe('create a consolidated group of cases', () => {
+export const createConsolidatedGroup = ({
+  caseOverrides = {},
+  numberOfMemberCases = 1,
+  cerebralTest,
+}) => {
+  return describe('Create a consolidated group of cases', () => {
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
     it('login as a petitioner and create the lead case', async () => {
-      const { docketNumber } = await uploadPetition(cerebralTest);
+      const { docketNumber } = await uploadPetition(
+        cerebralTest,
+        caseOverrides,
+      );
 
       expect(docketNumber).toBeDefined();
 
@@ -26,24 +33,29 @@ export const createConsolidatedGroup = cerebralTest => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
-    it('login as a petitioner and create a case to consolidate with', async () => {
-      const { docketNumber } = await uploadPetition(cerebralTest);
+    for (let index = 1; index <= numberOfMemberCases; index++) {
+      it('login as a petitioner and create a case to consolidate with', async () => {
+        const { docketNumber } = await uploadPetition(
+          cerebralTest,
+          caseOverrides,
+        );
 
-      expect(docketNumber).toBeDefined();
+        expect(docketNumber).toBeDefined();
 
-      cerebralTest.docketNumber = docketNumber;
-      cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
-        cerebralTest.docketNumber,
-      );
-    });
+        cerebralTest.docketNumber = docketNumber;
+        cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
+          cerebralTest.docketNumber,
+        );
+      });
 
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-    docketClerkOpensCaseConsolidateModal(cerebralTest);
-    docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-    docketClerkConsolidatesCases(cerebralTest, 2);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+      docketClerkOpensCaseConsolidateModal(cerebralTest);
+      docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+      docketClerkConsolidatesCases(cerebralTest, index + 1);
+    }
   });
 };
