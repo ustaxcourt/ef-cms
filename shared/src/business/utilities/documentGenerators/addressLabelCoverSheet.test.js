@@ -1,46 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
 const { addressLabelCoverSheet } = require('./addressLabelCoverSheet');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
+const { generateAndVerifyPdfDiff } = require('./generateAndVerifyPdfDiff');
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('addressLabelCoverSheet', () => {
-    it('generates an Address Label Cover Sheet document with a country included', async () => {
-      const pdf = await addressLabelCoverSheet({
+describe('addressLabelCoverSheet', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Address_Label_Cover_Sheet.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      addressLabelCoverSheet({
         applicationContext,
         data: {
           address1: '123 Some Street',
@@ -51,19 +20,8 @@ describe('documentGenerators', () => {
           postalCode: '89890',
           state: 'ZZ',
         },
-      });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Address_Label_Cover_Sheet', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+      }),
+    testDescription:
+      'generates an Address Label Cover Sheet document with a country included',
   });
 });
