@@ -21,49 +21,52 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
+// TODO: rename to TDocketEntry
 type DocketEntry = {
-  privatePractitioners?: object[];
   additionalInfo?: string;
   addToCoversheet: boolean;
+  caseCaption?: string;
   certificateOfService?: string;
   createdAt: string;
   descriptionDisplay?: string;
   docketEntryId: string;
   docketNumber: string;
+  documentContentsId?: string;
   documentTitle: string;
   documentType: string;
-  eventCode: string;
   draftOrderState?: object;
+  editState?: object;
   entityName: string;
-  filers: string[];
-  isMinuteEntry: boolean;
-  isOnDocketRecord: boolean;
-  isStricken: boolean;
-  numberOfPages?: number;
-  pending: boolean;
-  servedParties?: object[];
-  servedPartiesCode?: string;
-  caseCaption?: string;
-  stampData: object;
-  isDraft: boolean;
+  eventCode: string;
   filedBy?: string;
+  filers: string[];
   filingDate: string;
   index?: number;
+  isDraft: boolean;
   isFileAttached?: boolean;
+  isLegacyServed?: boolean;
+  isMinuteEntry: boolean;
+  isOnDocketRecord: boolean;
   isPaper?: boolean;
-  documentContentsId?: string;
+  isPendingService?: boolean;
+  isStricken: boolean;
   lodged?: boolean;
   mailingDate?: string;
+  numberOfPages?: number;
   otherFilingParty?: string;
-  editState?: object;
-  isLegacyServed?: boolean;
-  processingStatus: string;
+  pending: boolean;
   pk: string;
+  privatePractitioners?: object[];
+  processingStatus: string;
   receivedAt: string;
   sentBy?: string;
   servedAt?: string;
+  servedParties?: object[];
+  servedPartiesCode?: string;
   sk: string;
+  stampData: object;
   userId: string;
+  workItem?: WorkItem;
 };
 
 type TDocketEntryEntity = {
@@ -72,7 +75,29 @@ type TDocketEntryEntity = {
 
   validate(): TDocketEntryEntity;
   toRawObject(): DocketEntry;
+
+  workItem: TWorkItemEntity;
 } & DocketEntry;
+
+type TWorkItemEntity = {
+  assignToUser: ({
+    assigneeId,
+    assigneeName,
+    section,
+    sentBy,
+    sentBySection,
+    sentByUserId,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    section: string;
+    sentBy: string;
+    sentBySection: string;
+    sentByUserId: string;
+  }) => TWorkItemEntity;
+  toRawObject(): WorkItem;
+  validate(): TWorkItemEntity;
+} & WorkItem;
 
 type WorkItem = {
   createdAt: string;
@@ -89,24 +114,13 @@ type WorkItem = {
   entityName: string;
   highPriority: boolean;
   isInitializeCase: boolean;
-  docketEntry: {
-    createdAt: string;
-    docketEntryId: string;
-    documentTitle: string;
-    documentType: string;
-    eventCode: string;
-    filedBy: string;
-    isFileAttached: boolean;
-    isPaper: boolean;
-    receivedAt: string;
-    servedAt: string;
-    userId: string;
-  };
+  docketEntry: DocketEntry;
   docketNumber: string;
   workItemId: string;
   completedAt: string;
   updatedAt: string;
   gsi1pk: string;
+  inProgress: boolean;
 };
 
 type TOutboxItem = {
@@ -296,6 +310,7 @@ type TCaseEntity = {
     docketEntryId: string;
   }) => TDocketEntryEntity;
   addDocketEntry: (docketEntry: TDocketEntryEntity) => void;
+  updateDocketEntry: (docketEntry: TDocketEntryEntity) => void;
   isUserIdRepresentedByPrivatePractitioner: (id: string) => boolean;
 } & TCase;
 
