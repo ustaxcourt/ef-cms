@@ -30,6 +30,11 @@ describe('createOrUpdateUser', () => {
     role: ROLES.privatePractitioner,
     section: 'privatePractitioner',
   };
+  const caseServicesSupervisorUser = {
+    name: 'Test Case Services Supervisor',
+    role: ROLES.caseServicesSupervisor,
+    section: 'caseServicesSupervisor',
+  };
 
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
@@ -367,6 +372,47 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'privatePractitioner|PT1234',
+          sk: `user|${userId}`,
+        },
+      });
+    });
+
+    it('should persist a case services supervisor user with docket and petitions section user mapping records', async () => {
+      await createUserRecords({
+        applicationContext,
+        user: caseServicesSupervisorUser,
+        userId,
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          pk: `section|${caseServicesSupervisorUser.section}`,
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'section|docket',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'section|petitions',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[3][0],
+      ).toMatchObject({
+        Item: {
+          pk: `user|${userId}`,
           sk: `user|${userId}`,
         },
       });
