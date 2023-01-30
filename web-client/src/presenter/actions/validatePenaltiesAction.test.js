@@ -98,7 +98,7 @@ describe('validatePenaltiesAction', () => {
       },
       error: {
         penaltyAmount: 'Enter penalty amount.',
-        penaltyType: 'Type of penalty is required.',
+        penaltyType: 'Penalty type is required.',
         statisticId: 'Statistic ID is required.',
       },
     });

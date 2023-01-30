@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  */
 export const calculatePenaltiesAction = ({ get }) => {
   let {
-    penalties,
+    penalties: currentPenalties,
     statisticIndex,
     subkey: modalPenaltyType,
   } = get(state.modal);
@@ -24,27 +24,29 @@ export const calculatePenaltiesAction = ({ get }) => {
     return penalty.penaltyType !== modalPenaltyType;
   });
 
-  penalties.forEach(penalty => {
+  currentPenalties.forEach(penalty => {
     penalty.penaltyType = modalPenaltyType;
     penalty.statisticId = statisticId;
   });
 
-  penalties = penalties.filter(penalty => penalty.penaltyAmount !== '');
+  currentPenalties = currentPenalties.filter(
+    penalty => penalty.penaltyAmount !== '',
+  );
 
   const parseCurrency = value => Number(value).toFixed(2);
 
   const penaltyAggregator = (sum, penalty) =>
     Number(sum) + Number(penalty.penaltyAmount);
 
-  const sumOfPenalties = penalties.length
-    ? parseCurrency(penalties.reduce(penaltyAggregator, 0))
+  const sumOfPenalties = currentPenalties.length
+    ? parseCurrency(currentPenalties.reduce(penaltyAggregator, 0))
     : undefined;
 
-  const allPenalties = [...penalties, ...excludedInitialPenalties];
+  const allPenalties = [...currentPenalties, ...excludedInitialPenalties];
 
   return {
     allPenalties,
-    itemizedPenaltiesOfCurrentType: penalties,
+    itemizedPenaltiesOfCurrentType: currentPenalties,
     sumOfPenalties,
   };
 };
