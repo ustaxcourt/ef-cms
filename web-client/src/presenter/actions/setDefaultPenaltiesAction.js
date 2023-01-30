@@ -21,18 +21,18 @@ export const setDefaultPenaltiesAction = ({ get, props, store }) => {
     penalty => penalty.penaltyType === penaltyType,
   );
 
-  const penaltyTypeAcronym =
+  const penaltyNameLabel =
     penaltyType === 'irsPenaltyAmount' ? '(IRS)' : '(Court)';
 
   if (initialPenalties.length < 1) {
     initialPenalties.push({
-      name: `Penalty 1 ${penaltyTypeAcronym}`,
+      name: `Penalty 1 ${penaltyNameLabel}`,
       penaltyAmount: '',
       penaltyType,
     });
   }
 
   store.set(state.modal.penalties, initialPenalties);
-  store.set(state.modal.penaltyTypeAcronym, penaltyTypeAcronym);
+  store.set(state.modal.penaltyNameLabel, penaltyNameLabel);
   store.set(state.modal.statisticId, statisticId);
 };

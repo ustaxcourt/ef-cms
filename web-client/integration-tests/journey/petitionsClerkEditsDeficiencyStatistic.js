@@ -69,7 +69,7 @@ export const petitionsClerkEditsDeficiencyStatistic = cerebralTest => {
       penalties: [
         {
           entityName: 'Penalty',
-          name: 'Penalty 1 (USTC)',
+          name: 'Penalty 1 (Court)',
           penaltyAmount: 22.33,
           penaltyId: 'e2034a55-c2b3-4965-88c6-a8a2c2dfc57c',
           penaltyType: 'determinationPenaltyAmount',
