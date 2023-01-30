@@ -428,7 +428,7 @@ describe('messageModalHelper', () => {
       });
     });
 
-    it('returns the expected state when set', () => {
+    it('should display the associated section', () => {
       const { chambersDisplay, sectionDisplay } = runCompute(
         messageModalHelper,
         {
@@ -483,5 +483,24 @@ describe('messageModalHelper', () => {
 
       expect(sectionDisplay('something')).toBeUndefined();
     });
+  });
+
+  it('should return the sectionListWithoutSupervisorRole as SECTIONS without the CASE_SERVICES_SUPERVISOR_SECTION', () => {
+    applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+      correspondence: [],
+      draftDocuments: [],
+      formattedDocketEntries: [mockDocketEntryWithFileAttachedOnDocketRecord],
+    });
+
+    const { sectionListWithoutSupervisorRole } = runCompute(
+      messageModalHelper,
+      {
+        state: baseState,
+      },
+    );
+
+    expect(sectionListWithoutSupervisorRole).not.toContain(
+      CASE_SERVICES_SUPERVISOR_SECTION,
+    );
   });
 });
