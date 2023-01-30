@@ -6,6 +6,9 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('messageModalHelper', () => {
   const mockDocketEntryIdOnDocketRecord = '123';
   const mockDocketEntryIdAlsoOnDocketRecord = '234';
+  const JUDGES_CHAMBERS = applicationContext
+    .getPersistenceGateway()
+    .getJudgesChambers();
 
   const mockDocketEntryWithFileAttachedOnDocketRecord = {
     descriptionDisplay: 'Hello with additional info',
@@ -391,5 +394,37 @@ describe('messageModalHelper', () => {
 
       expect(showMessageAttachments).toEqual(false);
     });
+  });
+
+  it('returns the expected state when set', () => {
+    const { chambersDisplay, sectionDisplay } = runCompute(messageModalHelper);
+
+    expect(sectionDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section)).toBe(
+      JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label,
+    );
+    expect(
+      chambersDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section),
+    ).toBe(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label);
+  });
+
+  it.only('returns the chambers display for section display if the section is a chambers', () => {
+    const { chambersDisplay, sectionDisplay } = runCompute(messageModalHelper, {
+      state: baseState,
+    });
+
+    expect(sectionDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section)).toBe(
+      JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label,
+    );
+    expect(
+      chambersDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section),
+    ).toBe(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label);
+  });
+
+  it('returns undefined for sectionDisplay if the section is not a regular section or a chambers', () => {
+    const { sectionDisplay } = runCompute(messageModalHelper, {
+      state: baseState,
+    });
+
+    expect(sectionDisplay('something')).toBeUndefined();
   });
 });

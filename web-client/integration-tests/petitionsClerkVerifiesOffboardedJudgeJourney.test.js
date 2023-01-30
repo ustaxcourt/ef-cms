@@ -3,9 +3,9 @@ import { caseDeadlineReportHelper as caseDeadlineReportComputed } from '../src/p
 import { caseInventoryReportHelper as caseInventoryReportComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
 import { formattedPendingItems as formattedPendingItemsComputed } from '../src/presenter/computeds/formattedPendingItems';
 import { loginAs, setupTest } from './helpers';
+import { messageModalHelper as messageModalHelperComputed } from '../src/presenter/computeds/messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import { workQueueSectionHelper as workQueueSectionHelperComputed } from '../src/presenter/computeds/workQueueSectionHelper';
 
 describe('Petitions clerk verifies offboarded judge journey', () => {
   const cerebralTest = setupTest();
@@ -75,15 +75,13 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, () => {
-      const workQueueSection = withAppContextDecorator(
-        workQueueSectionHelperComputed,
-      );
+      const messageModal = withAppContextDecorator(messageModalHelperComputed);
 
-      const workQueueSectionHelper = runCompute(workQueueSection, {
+      const messageModalHelper = runCompute(messageModal, {
         state: cerebralTest.getState(),
       });
 
-      expect(workQueueSectionHelper.chambersSections).not.toContain(judgeName);
+      expect(messageModalHelper.chambersSections).not.toContain(judgeName);
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the edit trial session judge drop down`, async () => {
