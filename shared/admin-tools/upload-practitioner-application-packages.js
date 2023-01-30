@@ -246,13 +246,13 @@ const writeChunkToDynamoDb = async ({ applicationContext, chunk }) => {
         .promise();
       unprocessedItems = res.UnprocessedItems;
     } catch (err) {
-      output.failed.writeToDynamoDB.error.push(chunk);
+      output.failed.writeToDynamoDB.error.push(...chunk);
     }
     tries++;
   }
   if (unprocessedItems && dynamoDbTableName in unprocessedItems) {
     output.failed.writeToDynamoDB.unprocessed.push(
-      unprocessedItems[dynamoDbTableName],
+      ...unprocessedItems[dynamoDbTableName],
     );
   }
   const failedWrites = output.failed.writeToDynamoDB.error.map(
