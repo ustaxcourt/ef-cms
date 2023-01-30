@@ -124,8 +124,7 @@ jobs:
       - run:
           name: Verify PDFs
           command: |
-            npm run test:pdf-output
-            node image-compare-pdfs.js
+            npm run test:document-generation
 
   build-ts-api:
     docker:
