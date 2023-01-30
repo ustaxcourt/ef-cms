@@ -5,11 +5,11 @@ import { docketClerkUpdatesCaseStatusToReadyForTrial } from '../docketClerkUpdat
 import { loginAs, uploadPetition } from '../../helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../petitionsClerkServesElectronicCaseToIrs';
 
-export const createConsolidatedGroup = ({
+export const createConsolidatedGroup = (
+  cerebralTest,
   caseOverrides = {},
   numberOfMemberCases = 1,
-  cerebralTest,
-}) => {
+) => {
   return describe('Create a consolidated group of cases', () => {
     cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
@@ -33,7 +33,7 @@ export const createConsolidatedGroup = ({
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
-    for (let index = 1; index <= numberOfMemberCases; index++) {
+    for (let i = 1; i <= numberOfMemberCases; i++) {
       it('login as a petitioner and create a case to consolidate with', async () => {
         const { docketNumber } = await uploadPetition(
           cerebralTest,
@@ -55,7 +55,7 @@ export const createConsolidatedGroup = ({
       docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
       docketClerkOpensCaseConsolidateModal(cerebralTest);
       docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-      docketClerkConsolidatesCases(cerebralTest, index + 1);
+      docketClerkConsolidatesCases(cerebralTest, i + 1);
     }
   });
 };
