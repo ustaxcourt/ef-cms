@@ -8,7 +8,7 @@ describe('Statistic', () => {
     );
   });
   describe('validation', () => {
-    it('fails validation if a yearOrPeriod is not 'year' or 'period'', () => {
+    it("fails validation if a yearOrPeriod is not 'year' or 'period'", () => {
       const statistic = new Statistic(
         {
           penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
