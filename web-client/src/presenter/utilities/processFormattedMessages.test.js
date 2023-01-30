@@ -1,8 +1,4 @@
 /* eslint-disable max-lines */
-import {
-  DOCKET_SECTION,
-  PETITIONS_SECTION,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   applyFiltersToCompletedMessages,
@@ -20,7 +16,13 @@ describe('processFormattedMessages', () => {
 
   const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
-  const { ASCENDING, DESCENDING } = applicationContext.getConstants();
+  const {
+    ASCENDING,
+    CASE_SERVICES_SUPERVISOR_SECTION,
+    DESCENDING,
+    DOCKET_SECTION,
+    PETITIONS_SECTION,
+  } = applicationContext.getConstants();
 
   const mockMessage = {
     caseStatus: 'Ready for trial',
@@ -298,6 +300,17 @@ describe('processFormattedMessages', () => {
   });
 
   describe('getFormattedMessages', () => {
+    it('should format from section for CASE_SERVICES_SUPERVISOR_SECTION', () => {
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          { ...mockMessage, fromSection: CASE_SERVICES_SUPERVISOR_SECTION },
+        ],
+      });
+
+      expect(result.messages[0].fromSectionFormatted).toEqual('Case Services');
+    });
+
     it('returns formatted date strings', () => {
       const result = getFormattedMessages({
         applicationContext,
