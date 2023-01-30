@@ -9,6 +9,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Petitions clerk verifies offboarded judge journey', () => {
   const cerebralTest = setupTest();
+  const seededDocketNumber = '104-20';
 
   const OFFBOARDED_JUDGE_NAMES = ['Guy'];
 
@@ -76,7 +77,7 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
+        docketNumber: seededDocketNumber,
       });
 
       await cerebralTest.runSequence('openCreateMessageModalSequence');
