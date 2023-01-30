@@ -261,7 +261,7 @@ describe('Statistic', () => {
       expect(statistic.penalties[0]).toEqual(MOCK_UPDATED_PENALTY);
     });
 
-    it('should itemize penalties created prior to penalty itemization', () => {
+    it('should itemize both determinationTotalPenalties and irsTotalPenalties created prior to penalty itemization', () => {
       const preItemizationStatistic = new Statistic(
         {
           determinationTotalPenalties: 3000,
@@ -296,7 +296,7 @@ describe('Statistic', () => {
       ]);
     });
 
-    it('should itemize penalties created prior to penalty itemization', () => {
+    it('should itemize only irsTotalPenalties created prior to penalty itemization, if determinationTotalPenalties does not exist', () => {
       const preItemizationStatistic = new Statistic(
         {
           irsDeficiencyAmount: 1,
@@ -314,13 +314,6 @@ describe('Statistic', () => {
           name: 'Penalty 1 (IRS)',
           penaltyAmount: 2000,
           penaltyType: 'irsPenaltyAmount',
-          statisticId,
-        },
-        {
-          entityName: 'Penalty',
-          name: 'Penalty 1 (Court)',
-          penaltyAmount: 3000,
-          penaltyType: 'determinationPenaltyAmount',
           statisticId,
         },
       ];

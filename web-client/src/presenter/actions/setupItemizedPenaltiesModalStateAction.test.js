@@ -16,12 +16,12 @@ describe('setupItemizedPenaltiesModalStateAction', () => {
     penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
   };
   const courtDetermination1 = {
-    name: 'Penalty 1 (USTC)',
+    name: 'Penalty 1 (Court)',
     penaltyAmount: 0.0,
     penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
   };
   const courtDetermination2 = {
-    name: 'Penalty 2 (USTC)',
+    name: 'Penalty 2 (Court)',
     penaltyAmount: 200.77,
     penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
   };
