@@ -7,6 +7,7 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
+const { DateTime } = require('luxon');
 const { fromPath } = require('pdf2pic');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { PNG } = require('pngjs');
@@ -75,6 +76,12 @@ export const generateAndVerifyPdfDiff = ({
       .generatePdfFromHtmlInteractor.mockImplementation(
         generatePdfFromHtmlInteractor,
       );
+
+    const mockDate = DateTime.fromISO(
+      '2017-01-30T19:13:37.708Z',
+    ).toUnixInteger();
+    jest.useFakeTimers({ advanceTimers: true });
+    jest.setSystemTime(mockDate);
   });
 
   it(`${testDescription}`, async () => {
