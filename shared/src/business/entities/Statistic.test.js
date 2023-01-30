@@ -239,7 +239,7 @@ describe('Statistic', () => {
       expect(statistic.penalties[1]).toEqual(MOCK_PENALTY_WITH_STATISTIC_ID);
     });
 
-    it('should add a penalty without a statistics id to the penalties array', () => {
+    it('should add a penalty without a statistics id to the penalties array and add the parent statisticId to the penalty', () => {
       statistic.addPenalty({
         applicationContext,
         rawPenalty: MOCK_PENALTY_WITHOUT_STATISTIC_ID,
