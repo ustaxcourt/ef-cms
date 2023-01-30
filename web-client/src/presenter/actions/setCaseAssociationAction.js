@@ -9,5 +9,9 @@ import { state } from 'cerebral';
  */
 export const setCaseAssociationAction = ({ props, store }) => {
   store.set(state.screenMetadata.isAssociated, props.isAssociated);
+  store.set(
+    state.screenMetadata.isDirectlyAssociated,
+    props.isDirectlyAssociated,
+  );
   store.set(state.screenMetadata.pendingAssociation, props.pendingAssociation);
 };
