@@ -74,7 +74,13 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
       expect(cerebralTest.getState('judges')).not.toContain(judgeName);
     });
 
-    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, () => {
+    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      await cerebralTest.runSequence('openCreateMessageModalSequence');
+
       const messageModal = withAppContextDecorator(messageModalHelperComputed);
 
       const messageModalHelper = runCompute(messageModal, {
