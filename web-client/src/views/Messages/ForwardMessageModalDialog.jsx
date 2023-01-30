@@ -10,6 +10,7 @@ export const ForwardMessageModalDialog = connect(
     constants: state.constants,
     createMessageModalHelper: state.createMessageModalHelper,
     form: state.modal.form,
+    messageModalHelper: state.messageModalHelper,
     showChambersSelect: state.modal.showChambersSelect,
     updateChambersInCreateMessageModalSequence:
       sequences.updateChambersInCreateMessageModalSequence,
@@ -19,18 +20,17 @@ export const ForwardMessageModalDialog = connect(
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
-    workQueueSectionHelper: state.workQueueSectionHelper,
   },
   function ForwardMessageModalDialog({
     createMessageModalHelper,
     form,
+    messageModalHelper,
     showChambersSelect,
     updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence,
     updateSectionInCreateMessageModalSequence,
     validateCreateMessageInModalSequence,
     validationErrors,
-    workQueueSectionHelper,
   }) {
     return (
       <ConfirmModal
@@ -61,10 +61,10 @@ export const ForwardMessageModalDialog = connect(
             }}
           >
             <option value="">- Select -</option>
-            {workQueueSectionHelper.sectionListWithoutSupervisorRole.map(
+            {messageModalHelper.sectionListWithoutSupervisorRole.map(
               section => (
                 <option key={section} value={section}>
-                  {workQueueSectionHelper.sectionDisplay(section)}
+                  {messageModalHelper.sectionDisplay(section)}
                 </option>
               ),
             )}
@@ -90,9 +90,9 @@ export const ForwardMessageModalDialog = connect(
               }}
             >
               <option value="">- Select -</option>
-              {workQueueSectionHelper.chambersSections.map(section => (
+              {messageModalHelper.chambersSections.map(section => (
                 <option key={section} value={section}>
-                  {workQueueSectionHelper.chambersDisplay(section)}
+                  {messageModalHelper.chambersDisplay(section)}
                 </option>
               ))}
             </select>
