@@ -377,7 +377,7 @@ describe('createOrUpdateUser', () => {
       });
     });
 
-    it('should persist a case services supervisor user with docket and petitions section user mapping records', async () => {
+    it('should persist a case services supervisor user with 3 section user mapping records (docket, petitions, and case services)', async () => {
       await createUserRecords({
         applicationContext,
         user: caseServicesSupervisorUser,
