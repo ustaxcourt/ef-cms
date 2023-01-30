@@ -224,7 +224,7 @@ export const DeficiencyStatisticsForm = connect(
                       key: 'determinationTotalPenalties',
                       statisticId: form.statisticId,
                       subkey: 'determinationPenaltyAmount',
-                      title: 'Calculate Penalties as determined by Court',
+                      title: 'Calculate Penalties as Determined by Court',
                     })
                   }
                 >
