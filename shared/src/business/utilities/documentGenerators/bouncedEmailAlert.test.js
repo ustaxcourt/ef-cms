@@ -8,8 +8,8 @@ describe('bouncedEmailAlert', () => {
   generateAndVerifyPdfDiff({
     fileName: 'Bounced_Email_Alert.pdf',
     pageNumber: 1,
-    pdfGenerateFunction: () =>
-      bouncedEmailAlert({
+    pdfGenerateFunction: () => {
+      return bouncedEmailAlert({
         applicationContext,
         data: {
           bounceRecipient: 'someone@example.com',
@@ -20,7 +20,8 @@ describe('bouncedEmailAlert', () => {
           errorMessage: 'Message Undeliverable',
           subject: 'We are attempting to serve you',
         },
-      }),
+      });
+    },
     testDescription: 'generates a Bounced Email Alert document',
   });
 });
