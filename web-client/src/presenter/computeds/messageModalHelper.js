@@ -7,7 +7,6 @@ export const messageModalHelper = (get, applicationContext) => {
     SECTIONS,
   } = applicationContext.getConstants();
 
-  console.log('SECTIONS', SECTIONS);
   const sectionListWithoutSupervisorRole = SECTIONS.filter(
     section => section !== CASE_SERVICES_SUPERVISOR_SECTION,
   );
