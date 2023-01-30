@@ -47,6 +47,7 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
           documentClient: dynamoDbDocumentClient,
           items: results.Items,
           ranMigrations,
+          segment,
         });
       });
   }
@@ -83,7 +84,12 @@ exports.migrateRecords = async ({
   return items;
 };
 
-exports.processItems = async ({ documentClient, items, ranMigrations }) => {
+exports.processItems = async ({
+  documentClient,
+  items,
+  ranMigrations,
+  segment,
+}) => {
   try {
     items = await exports.migrateRecords({
       documentClient,
@@ -139,6 +145,7 @@ exports.processItems = async ({ documentClient, items, ranMigrations }) => {
               {
                 pk: item.pk,
                 recordSizeInBytes: recordSize,
+                segment,
                 sk: item.sk,
               },
             );
