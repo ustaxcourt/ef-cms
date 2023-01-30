@@ -1,4 +1,7 @@
-import { CASE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  PENALTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { statisticsFormHelper as statisticsFormHelperComputed } from './statisticsFormHelper';
@@ -135,26 +138,24 @@ describe('case detail edit computed', () => {
   });
 
   it('sets penaltyAmountType to the string irsPenaltyAmount if state.modal.key is irsTotalPenalties', () => {
-    const expectedPenaltyAmountType = 'irsPenaltyAmount';
-
     const result = runCompute(statisticsFormHelper, {
       state: {
         form: {},
         modal: { key: 'irsTotalPenalties' },
       },
     });
-    expect(result.penaltyAmountType).toBe(expectedPenaltyAmountType);
+    expect(result.penaltyAmountType).toBe(PENALTY_TYPES.IRS_PENALTY_AMOUNT);
   });
 
   it('sets penaltyAmountType to the string determinationPenaltyAmount if state.modal.key is not irsTotalPenalties', () => {
-    const expectedPenaltyAmountType = 'determinationPenaltyAmount';
-
     const result = runCompute(statisticsFormHelper, {
       state: {
         form: {},
         modal: { key: 'I am a Key. I think.' },
       },
     });
-    expect(result.penaltyAmountType).toBe(expectedPenaltyAmountType);
+    expect(result.penaltyAmountType).toBe(
+      PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+    );
   });
 });
