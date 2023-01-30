@@ -37,11 +37,7 @@ describe('Case Consolidation Coversheets Journey', () => {
   });
 
   describe('Create a consolidated group', () => {
-    createConsolidatedGroup({
-      caseOverrides: overrides,
-      cerebralTest,
-      numberOfMemberCases: 2,
-    });
+    createConsolidatedGroup(cerebralTest, overrides, 2);
   });
 
   describe('Create a hearing exhibit, serve and multi-docket', () => {

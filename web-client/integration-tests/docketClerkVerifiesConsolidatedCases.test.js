@@ -22,7 +22,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
   cerebralTest.createdTrialSessions = [];
 
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
-  const overrides = {
+  const caseOverrides = {
     caseCaption: 'Mona Schultz, Petitioner',
     docketNumberSuffix: 'L',
     preferredTrialCity: trialLocation,
@@ -34,10 +34,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
   });
 
   describe('Create a consolidated group', () => {
-    createConsolidatedGroup({
-      caseOverrides: overrides,
-      cerebralTest,
-    });
+    createConsolidatedGroup(cerebralTest, caseOverrides);
   });
 
   describe('Verify consolidated group functionality', () => {
@@ -74,7 +71,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
+    petitionsClerkBlocksCase(cerebralTest, trialLocation, caseOverrides);
 
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkVerifiesConsolidatedCases(cerebralTest);
