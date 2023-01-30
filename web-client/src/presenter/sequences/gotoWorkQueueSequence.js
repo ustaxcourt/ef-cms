@@ -10,6 +10,7 @@ import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -21,6 +22,7 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
+  setSectionForWorkQueueAction,
   parallel([
     [
       runPathForUserRoleAction,

@@ -6,6 +6,7 @@ export const workQueueHelper = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { USER_ROLES } = applicationContext.getConstants();
   const isJudge = user.role === USER_ROLES.judge;
+  const selectedSection = workQueueToDisplay.section;
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';
@@ -24,6 +25,12 @@ export const workQueueHelper = (get, applicationContext) => {
   const workQueueTitle = `${
     showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
   }Document QC`;
+
+  const documentQCNavigationPath = ({ box, queue, section }) =>
+    section
+      ? `/document-qc/${queue}/${box}/selectedSection?section=${section}`
+      : `/document-qc/${queue}/${box}`;
+
   const permissions = get(state.permissions);
 
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
@@ -32,6 +39,7 @@ export const workQueueHelper = (get, applicationContext) => {
 
   return {
     currentBoxView: workQueueToDisplay.box,
+    documentQCNavigationPath,
     getQueuePath: ({ box, queue }) => {
       return `/document-qc/${queue}/${box}`;
     },
