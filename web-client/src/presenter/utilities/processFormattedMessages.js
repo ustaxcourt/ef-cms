@@ -2,7 +2,7 @@ import { formatDateIfToday } from '../computeds/formattedWorkQueue';
 import { getConstants } from '../../getConstants';
 import { map, uniq } from 'lodash';
 
-const { DESCENDING } = getConstants();
+const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
 export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
@@ -83,6 +83,10 @@ export const getFormattedMessages = ({
       } = applicationContext
         .getUtilities()
         .setConsolidationFlagsForDisplay(message);
+
+      if (message.fromSection === CASE_SERVICES_SUPERVISOR_SECTION) {
+        message.fromSectionFormatted = 'Case Services';
+      }
 
       return {
         ...message,
