@@ -2,6 +2,10 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
+  createISODateString,
+  dateStringsCompared,
+} = require('../../../../shared/src/business/utilities/DateHandler');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -163,16 +167,24 @@ exports.handler = async event => {
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
 
-  applicationContext.logger.info(
-    `about to process ${segment} of ${totalSegments}`,
-  );
+  const start = createISODateString();
+
+  applicationContext.logger.info('about to process segment', {
+    segment,
+    totalSegments,
+  });
   const ranMigrations = {};
   for (let { key } of migrationsToRun) {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
-  applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);
+  const finish = createISODateString();
+  applicationContext.logger.info('finishing segment', {
+    duration: dateStringsCompared(start, finish),
+    segment,
+    totalSegments,
+  });
   await sqs
     .deleteMessage({
       QueueUrl: process.env.SEGMENTS_QUEUE_URL,
