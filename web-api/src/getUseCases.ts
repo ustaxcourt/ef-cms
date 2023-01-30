@@ -199,6 +199,9 @@ const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
+  generateTrialSessionPaperServicePdfInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor');
+const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
 const {
@@ -647,6 +650,7 @@ const useCases = {
   generateStandingPretrialOrderForSmallCaseInteractor,
   generateStandingPretrialOrderInteractor,
   generateTrialCalendarPdfInteractor,
+  generateTrialSessionPaperServicePdfInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
