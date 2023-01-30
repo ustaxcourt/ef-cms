@@ -31,9 +31,9 @@ describe('validatePenaltiesInteractor', () => {
     });
 
     expect(errors).toEqual({
-      name: 'Name is required.',
-      penaltyAmount: 'Enter penalty amount.',
-      penaltyType: 'Type of penalty is required.',
+      name: 'Penalty name is required.',
+      penaltyAmount: 'Penalty amount is required.',
+      penaltyType: 'Penalty type is required.',
       statisticId: 'Statistic ID is required.',
     });
   });
