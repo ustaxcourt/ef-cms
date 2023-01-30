@@ -190,15 +190,16 @@ const getJudgeUsersByName = async applicationContext => {
       };
     }
 
-    switch (emailDomain) {
-      case 'ef-cms.ustaxcourt.gov':
-        judgeUsers[judge.name].gluedUserId = judge.userId;
-        break;
-      case 'example.com':
-      case 'dawson.ustaxcourt.gov':
-        judgeUsers[judge.name].bulkImportedUserId = judge.userId;
-        break;
+    let sourceOfUser = emailDomain;
+    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+      sourceOfUser = 'gluedUserId';
+    } else if (
+      emailDomain === 'example.com' ||
+      emailDomain === 'dawson.ustaxcourt.gov'
+    ) {
+      sourceOfUser = 'bulkImportedUserId';
     }
+    judgeUsers[judge.name][sourceOfUser] = judge.userId;
   }
   return judgeUsers;
 };
