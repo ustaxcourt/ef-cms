@@ -6,18 +6,16 @@ requireEnvVars([
   'REGION',
 ]);
 
-const connectionClass = require('http-aws-es');
-const elasticsearch = require('elasticsearch');
-const {
-  CognitoIdentityServiceProvider,
-  Config,
-  DynamoDB,
-  EnvironmentCredentials,
-} = require('aws-sdk');
+const createApplicationContext = require('../../../web-api/src/applicationContext');
 const {
   MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../src/business/entities/EntityConstants');
+const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
 const { getUserPoolId, getVersion } = require('../util');
+const { search } = require('../../src/persistence/elasticsearch/searchClient');
+
+const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+const dynamo = new DynamoDB({ region: process.env.REGION });
 
 /**
  * Creates a cognito user
@@ -29,8 +27,7 @@ const { getUserPoolId, getVersion } = require('../util');
  * @param {string} userId             the cognito user's userId
  * @returns {Promise<void>}
  */
-const createCognitoUser = async ({
-  cognito,
+const createOrUpdateCognitoUser = async ({
   email,
   name,
   role,
@@ -39,10 +36,12 @@ const createCognitoUser = async ({
 }) => {
   let userExists = false;
   try {
-    await cognito.getUser({
-      UserPoolId: userPoolId,
-      Username: email,
-    });
+    await cognito
+      .adminGetUser({
+        UserPoolId: userPoolId,
+        Username: email,
+      })
+      .promise();
 
     userExists = true;
   } catch (err) {
@@ -87,9 +86,8 @@ const createCognitoUser = async ({
   } else {
     await updateCognitoUserId({
       bulkImportedUserId: email,
-      cognito,
       gluedUserId: userId,
-      judge: name,
+      name,
       userPoolId,
     });
   }
@@ -109,7 +107,6 @@ const createCognitoUser = async ({
  */
 const deleteDuplicateImportedJudgeUser = async ({
   bulkImportedUserId,
-  dynamo,
   name,
   section,
   version,
@@ -157,53 +154,31 @@ const deleteDuplicateImportedJudgeUser = async ({
  * @returns {object} object containing all users for each judge
  */
 
-const getJudgeUsers = async () => {
-  const getSearchClient = new elasticsearch.Client({
-    amazonES: {
-      credentials: new EnvironmentCredentials('AWS'),
-      region: process.env.REGION,
-    },
-    apiVersion: '7.7',
-    awsConfig: new Config({ region: 'us-east-1' }),
-    connectionClass,
-    host: process.env.ELASTICSEARCH_ENDPOINT,
-    log: 'warning',
-    port: 443,
-    protocol: 'https',
-  });
-
-  const results = await getSearchClient.search({
-    body: {
-      from: 0,
-      query: {
-        bool: {
-          must: {
-            term: {
-              'role.S': {
-                value: 'judge',
+const getJudgeUsersByName = async applicationContext => {
+  const { results } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        from: 0,
+        query: {
+          bool: {
+            must: {
+              term: {
+                'role.S': {
+                  value: 'judge',
+                },
               },
             },
           },
         },
+        size: MAX_SEARCH_CLIENT_RESULTS,
       },
-      size: MAX_SEARCH_CLIENT_RESULTS,
+      index: 'efcms-user',
     },
-    index: 'efcms-user',
-  });
-
-  const judgeUsersFromElasticsearch = results.hits.hits.map(hit => {
-    return {
-      email: hit['_source']['email'].S,
-      judgeTitle: hit['_source']['judgeTitle'].S,
-      name: hit['_source']['name'].S,
-      role: hit['_source']['role'].S,
-      section: hit['_source']['section'].S,
-      userId: hit['_source']['userId'].S,
-    };
   });
 
   let judgeUsers = {};
-  for (const judge of judgeUsersFromElasticsearch) {
+  for (const judge of results) {
     const emailDomain = judge.email.split('@')[1];
     if (!(judge.name in judgeUsers)) {
       judgeUsers[judge.name] = {
@@ -214,16 +189,16 @@ const getJudgeUsers = async () => {
         section: judge.section,
       };
     }
-    let sourceOfUser = emailDomain;
-    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
-      sourceOfUser = 'gluedUserId';
-    } else if (
-      emailDomain === 'example.com' ||
-      emailDomain === 'dawson.ustaxcourt.gov'
-    ) {
-      sourceOfUser = 'bulkImportedUserId';
+
+    switch (emailDomain) {
+      case 'ef-cms.ustaxcourt.gov':
+        judgeUsers[judge.name].gluedUserId = judge.userId;
+        break;
+      case 'example.com':
+      case 'dawson.ustaxcourt.gov':
+        judgeUsers[judge.name].bulkImportedUserId = judge.userId;
+        break;
     }
-    judgeUsers[judge.name][sourceOfUser] = judge.userId;
   }
   return judgeUsers;
 };
@@ -239,7 +214,6 @@ const getJudgeUsers = async () => {
  */
 const updateCognitoUserId = async ({
   bulkImportedUserId,
-  cognito,
   gluedUserId,
   name,
   userPoolId,
@@ -257,7 +231,7 @@ const updateCognitoUserId = async ({
         Username: bulkImportedUserId,
       })
       .promise();
-    console.log(`Enabled login for ${name}`);
+    console.log(`Updated user attributes for login for ${name}`);
   } catch (err) {
     console.error(`ERROR updating custom:userId for ${name}:`, err);
   }
@@ -265,49 +239,43 @@ const updateCognitoUserId = async ({
 
 (async () => {
   const version = await getVersion();
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-  const dynamo = new DynamoDB({ region: process.env.REGION });
+  const applicationContext = createApplicationContext({});
   const userPoolId = await getUserPoolId();
 
-  const judgeUsers = await getJudgeUsers();
+  const judgeUsers = await getJudgeUsersByName(applicationContext);
 
   for (const judge in judgeUsers) {
-    if ('gluedUserId' in judgeUsers[judge]) {
-      const { email, gluedUserId, name } = judgeUsers[judge];
-      if ('bulkImportedUserId' in judgeUsers[judge]) {
-        const { bulkImportedUserId, section } = judgeUsers[judge];
-        await deleteDuplicateImportedJudgeUser({
-          bulkImportedUserId,
-          dynamo,
-          name,
-          section,
-          version,
-        });
+    if (!judgeUsers[judge].gluedUserId) {
+      continue;
+    }
 
-        await updateCognitoUserId({
-          bulkImportedUserId,
-          cognito,
-          gluedUserId,
-          name,
-          userPoolId,
-        });
-      } else {
-        await createCognitoUser({
-          cognito,
-          email,
-          name,
-          role: 'judge',
-          userId: gluedUserId,
-          userPoolId,
-        });
-      }
+    const { bulkImportedUserId, email, gluedUserId, name, section } =
+      judgeUsers[judge];
 
-      await cognito.adminSetUserPassword({
+    if (bulkImportedUserId) {
+      await deleteDuplicateImportedJudgeUser({
+        bulkImportedUserId,
+        name,
+        section,
+        version,
+      });
+    }
+
+    await createOrUpdateCognitoUser({
+      email,
+      name,
+      role: 'judge',
+      userId: gluedUserId,
+      userPoolId,
+    });
+
+    await cognito
+      .adminSetUserPassword({
         Password: process.env.DEFAULT_ACCOUNT_PASS,
         Permanent: true,
         UserPoolId: userPoolId,
         Username: email,
-      });
-    }
+      })
+      .promise();
   }
 })();
