@@ -1,50 +1,19 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const {
   PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { noticeOfChangeOfTrialJudge } = require('./noticeOfChangeOfTrialJudge');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('noticeOfChangeOfTrialJudge', () => {
-    it('generates a Notice of Change of Trial Judge document', async () => {
-      const pdf = await noticeOfChangeOfTrialJudge({
+describe('noticeOfChangeOfTrialJudge', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Notice_Of_Change_Of_Trial_Judge.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return noticeOfChangeOfTrialJudge({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -64,21 +33,7 @@ describe('documentGenerators', () => {
           },
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Of_Change_Of_Trial_Judge', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-        const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(1);
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription: 'generates a Notice of Change of Trial Judge document',
   });
 });

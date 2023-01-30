@@ -1,46 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { noticeOfReceiptOfPetition } = require('./noticeOfReceiptOfPetition');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('noticeOfReceiptOfPetition', () => {
-    it('generates a Notice of Receipt of Petition document with a country included', async () => {
-      const pdf = await noticeOfReceiptOfPetition({
+describe('noticeOfReceiptOfPetition', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Notice_Receipt_Petition.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return noticeOfReceiptOfPetition({
         applicationContext,
         data: {
           address: {
@@ -59,18 +28,8 @@ describe('documentGenerators', () => {
           servedDate: 'June 3, 2020',
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Receipt_Petition', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription:
+      'generates a Notice of Receipt of Petition document with a country included',
   });
 });

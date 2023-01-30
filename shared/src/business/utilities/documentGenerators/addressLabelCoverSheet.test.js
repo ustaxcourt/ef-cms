@@ -2,14 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { addressLabelCoverSheet } = require('./addressLabelCoverSheet');
-const { generateAndVerifyPdfDiff } = require('./generateAndVerifyPdfDiff');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('addressLabelCoverSheet', () => {
   generateAndVerifyPdfDiff({
     fileName: 'Address_Label_Cover_Sheet.pdf',
     pageNumber: 1,
-    pdfGenerateFunction: () =>
-      addressLabelCoverSheet({
+    pdfGenerateFunction: () => {
+      return addressLabelCoverSheet({
         applicationContext,
         data: {
           address1: '123 Some Street',
@@ -20,7 +20,8 @@ describe('addressLabelCoverSheet', () => {
           postalCode: '89890',
           state: 'ZZ',
         },
-      }),
+      });
+    },
     testDescription:
       'generates an Address Label Cover Sheet document with a country included',
   });
