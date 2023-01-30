@@ -33,6 +33,20 @@ const getVersion = async () => {
   return result.Item.current.S;
 };
 
+const requireEnvVars = requiredEnvVars => {
+  const envVars = Object.keys(process.env);
+  let missing = '';
+  for (const key of requiredEnvVars) {
+    if (!envVars.includes(key) || !process.env[key]) {
+      missing += `${missing.length > 0 ? ', ' : ''}${key}`;
+    }
+  }
+  if (missing) {
+    console.error(`Missing environment variable(s): ${missing}`);
+    process.exit();
+  }
+};
+
 /**
  * Simple function to help ensure that a value is truthy before allowing the process to continue
  *
@@ -153,3 +167,4 @@ exports.generatePassword = generatePassword;
 exports.getUserPoolId = getUserPoolId;
 exports.getClientId = getClientId;
 exports.getVersion = getVersion;
+exports.requireEnvVars = requireEnvVars;

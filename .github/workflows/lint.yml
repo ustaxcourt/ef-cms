@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: NPM Install
-        run: npm ci --legacy-peer-deps
+        run: npm ci
       - name: Lint
         run: npm run lint
       - name: Shellcheck
