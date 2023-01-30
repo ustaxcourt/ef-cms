@@ -9,14 +9,10 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const addPenaltyInputAction = ({ get, store }) => {
-  const {
-    penalties,
-    penaltyTypeAcronym,
-    subkey: penaltyType,
-  } = get(state.modal);
+  const { penalties, penaltyNameLabel, subkey: penaltyType } = get(state.modal);
   if (penalties.length < 10) {
     penalties.push({
-      name: `Penalty ${penalties.length + 1} ${penaltyTypeAcronym}`,
+      name: `Penalty ${penalties.length + 1} ${penaltyNameLabel}`,
       penaltyAmount: '',
       penaltyType,
     });

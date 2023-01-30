@@ -115,7 +115,7 @@ describe('Penalty', () => {
     it('should pass with valid values and determinationPenaltyAmount type', () => {
       const penalty = new Penalty(
         {
-          name: 'Penalty 1 (USTC)',
+          name: 'Penalty 1 (Court)',
           penaltyAmount: 100.0,
           penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
           statisticId,
