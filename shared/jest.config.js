@@ -26,5 +26,6 @@ module.exports = {
       statements: 98.25,
     },
   },
+  testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   verbose: false,
 };

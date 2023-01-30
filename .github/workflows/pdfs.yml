@@ -16,7 +16,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install -o Acquire::Retries=3 -y graphicsmagick ghostscript
           npm ci && npm rebuild
-      - name: Generate PDFs
-        run: npm run test:pdf-output
-      - name: Compare Images
-        run: node image-compare-pdfs.js
+      - name: Generate and Test PDFs
+        run: npm run test:document-generation
