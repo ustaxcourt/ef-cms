@@ -168,7 +168,7 @@ export const MessagesIndividualInbox = connect(
                   )}
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
-                    {message.fromSection}
+                    {message.fromSectionFormatted || message.fromSection}
                   </td>
                 </tr>
               </tbody>
