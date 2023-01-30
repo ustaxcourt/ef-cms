@@ -116,7 +116,6 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
-import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
@@ -236,7 +235,6 @@ const helpers = {
   viewAllDocumentsHelper,
   viewCounselHelper,
   workQueueHelper,
-  workQueueSectionHelper,
 };
 
 export const baseState = {
