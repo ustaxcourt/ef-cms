@@ -42,7 +42,7 @@ export const petitionsClerkEditsDeficiencyStatistic = cerebralTest => {
       key: 'determinationTotalPenalties',
       statisticId,
       subkey: 'determinationPenaltyAmount',
-      title: 'Calculate Penalties as determined by Court',
+      title: 'Calculate Penalties as Determined by Court',
     });
 
     await cerebralTest.runSequence('updateModalValueSequence', {
