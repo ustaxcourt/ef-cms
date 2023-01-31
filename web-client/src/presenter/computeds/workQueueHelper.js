@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 export const workQueueHelper = (get, applicationContext) => {
@@ -26,9 +27,15 @@ export const workQueueHelper = (get, applicationContext) => {
     USER_ROLES.petitionsClerk,
     USER_ROLES.caseServicesSupervisor,
   ].includes(user.role);
-  const workQueueTitle = `${
+  let workQueueTitle = `${
     showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
   }Document QC`;
+
+  if (isCaseServicesSupervisor) {
+    workQueueTitle = selectedSection
+      ? `${capitalize(selectedSection)} Section QC`
+      : 'My Document QC';
+  }
 
   const documentQCNavigationPath = ({ box, queue, section }) => {
     return section
@@ -53,6 +60,7 @@ export const workQueueHelper = (get, applicationContext) => {
     hideIconColumn: userIsOther,
     individualInProgressCount,
     individualInboxCount,
+    isCaseServicesSupervisor,
     outboxFiledByColumnLabel,
     sectionInProgressCount,
     sectionInboxCount,

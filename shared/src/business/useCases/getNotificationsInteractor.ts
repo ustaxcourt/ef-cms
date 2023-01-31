@@ -1,4 +1,5 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import { isEmpty } from 'lodash';
 
 /**
  * getNotificationsInteractor
@@ -16,7 +17,7 @@ export const getNotificationsInteractor = async (
   }: { judgeUserId: string; caseServicesSupervisorInfo: any },
 ) => {
   const appContextUser = applicationContext.getCurrentUser();
-  const currentUser = await applicationContext
+  let currentUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: appContextUser.userId });
 
@@ -34,9 +35,13 @@ export const getNotificationsInteractor = async (
 
   const { section, userId } = caseServicesSupervisorInfo || currentUser;
 
-  const sectionToShow = applicationContext
+  let sectionToShow = applicationContext
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
+
+  if (!isEmpty(caseServicesSupervisorInfo)) {
+    sectionToShow = caseServicesSupervisorInfo.section;
+  }
 
   const filters = applicationContext
     .getUtilities()
