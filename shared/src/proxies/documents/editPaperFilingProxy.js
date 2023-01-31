@@ -5,6 +5,7 @@ const { put } = require('../requests');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {Array} providers.clientConnectionId the UUID of the websocket connection for the current tab
  * @param {Array} providers.consolidatedGroupDocketNumbers list of member cases to multi-docket paper filing on
  * @param {string} providers.docketEntryId the docket entry id
  * @param {object} providers.documentMetadata the document metadata
@@ -14,6 +15,7 @@ const { put } = require('../requests');
 exports.editPaperFilingInteractor = (
   applicationContext,
   {
+    clientConnectionId,
     consolidatedGroupDocketNumbers,
     docketEntryId,
     documentMetadata,
@@ -24,6 +26,7 @@ exports.editPaperFilingInteractor = (
   return put({
     applicationContext,
     body: {
+      clientConnectionId,
       consolidatedGroupDocketNumbers,
       docketEntryId,
       documentMetadata,
