@@ -137,6 +137,7 @@ describe('migration-segments', () => {
       {
         pk: 'case|101-20',
         recordSizeInBytes: mockRecordSize,
+        segment: 0,
         sk: 'case|101-20',
       },
     );
@@ -157,6 +158,7 @@ describe('migration-segments', () => {
       {
         pk: 'case|101-20',
         recordSizeInBytes: undefined,
+        segment: 0,
         sk: 'case|101-20',
       },
     );
@@ -201,5 +203,19 @@ describe('migration-segments', () => {
     await handler(mockLambdaEvent);
 
     expect(deleteMessageMock).toHaveBeenCalled();
+  });
+
+  it('should log the duration a segment took to process', async () => {
+    await handler(mockLambdaEvent);
+
+    expect(mockLogger.info).toHaveBeenCalledWith('about to process segment', {
+      segment: 0,
+      totalSegments: 1,
+    });
+    expect(mockLogger.info).toHaveBeenCalledWith('finishing segment', {
+      duration: expect.anything(),
+      segment: 0,
+      totalSegments: 1,
+    });
   });
 });
