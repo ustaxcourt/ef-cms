@@ -1,7 +1,5 @@
 
 #!/bin/bash -e
-./check-env-variables.sh \
-  "CIRCLE_BRANCH"
 
 # 1. set ENV
 case $CIRCLE_BRANCH in
