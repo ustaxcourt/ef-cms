@@ -8,7 +8,6 @@ import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import {
-  fakeFile,
   getFormattedDocketEntriesForTest,
   loginAs,
   setupTest,
@@ -37,7 +36,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
     cerebralTest.closeSocket();
   });
 
-  it('login as a petitioner and create the lead case', async () => {
+  it('login as a petitioner and create an electronic case', async () => {
     const { docketNumber } = await uploadPetition(cerebralTest, overrides);
 
     expect(docketNumber).toBeDefined();
@@ -53,14 +52,12 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(
-    cerebralTest,
-    fakeFile,
-    overrides.trialLocation,
-    false,
-    overrides,
-  );
+  petitionsClerkCreatesNewCase(cerebralTest, true, overrides);
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
+
+  it('add paper case docket number to tracked consolidated cases', () => {
+    cerebralTest.consolidatedCases.push(cerebralTest.docketNumber);
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
@@ -74,14 +71,13 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(cerebralTest);
   docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
 
-  it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
+  it('serve and multi-dockets court issued docket entry on group with paper service', async () => {
     const { docketEntryId } = cerebralTest.draftOrders[0];
+
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
@@ -119,6 +115,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
         name: 'Daenerys Stormborn, Petitioner',
       },
     ]);
+    expect(modalHelper.showConsolidatedCasesForService).toEqual(true);
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
@@ -131,5 +128,19 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
 
     expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
     expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
+  });
+
+  it('verify multi-docketed docket entry has been filed on every case in the consolidated group', async () => {
+    for (const docketNumber of cerebralTest.consolidatedCases) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
+
+      const multiDocketedDocketEntry = cerebralTest
+        .getState('caseDetail.docketEntries')
+        .find(doc => doc.docketEntryId === cerebralTest.docketEntryId);
+
+      expect(multiDocketedDocketEntry).toBeDefined();
+    }
   });
 });
