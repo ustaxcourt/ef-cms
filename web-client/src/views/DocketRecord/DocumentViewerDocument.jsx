@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmInitiateCourtIssuedFilingServiceModal } from '../ConfirmInitiateCourtIssuedFilingServiceModal';
 import { ConfirmInitiatePaperFilingServiceModal } from '../ConfirmInitiatePaperFilingServiceModal';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
@@ -203,7 +203,7 @@ export const DocumentViewerDocument = connect(
               />
             )}
             {showModal == 'ConfirmInitiateCourtIssuedFilingServiceModal' && (
-              <ConfirmInitiateCourtIssuedFilingServiceModal
+              <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
