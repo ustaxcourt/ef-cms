@@ -122,7 +122,7 @@ const saveForLaterStrategy = async ({
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'save_docket_entry_for_later',
+      action: 'save_docket_entry_for_later_complete',
       alertSuccess: {
         message: 'Entry updated.',
         overwritable: false,
