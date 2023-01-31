@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
@@ -16,7 +16,7 @@ describe('View and manage the deadlines of a case', () => {
 
   describe('Create a case', () => {
     loginAs(cerebralTest, 'petitionsclerk1@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
+    petitionsClerkCreatesNewCase(cerebralTest, false);
     petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
   });
 

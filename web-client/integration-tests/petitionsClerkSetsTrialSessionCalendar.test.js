@@ -3,8 +3,8 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
@@ -63,7 +63,7 @@ describe('petitions clerk sets a trial session calendar', () => {
     describe('case #5 - manually added to session', () => {
       loginAs(cerebralTest, 'petitionsclerk@example.com');
       cerebralTest.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+      petitionsClerkCreatesNewCase(cerebralTest, true, { trialLocation });
       petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
     });
   });

@@ -3,7 +3,6 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -23,10 +22,6 @@ import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petiti
 describe('Blocking a Case', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -37,7 +32,7 @@ describe('Blocking a Case', () => {
   };
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+  petitionsClerkCreatesNewCase(cerebralTest, true, { trialLocation });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
