@@ -6,8 +6,8 @@ const {
   getCaseByDocketNumber,
 } = require('../src/persistence/dynamo/cases/getCaseByDocketNumber');
 
-const docketNumber = process.argv[2];
-const OUTPUT_DIR = `${process.env.HOME}/Downloads/${docketNumber}`;
+const DOCKET_NUMBER = process.argv[2];
+const OUTPUT_DIR = `${process.env.HOME}/Downloads/${DOCKET_NUMBER}`;
 
 const downloadPdf = async ({
   applicationContext,
@@ -31,6 +31,19 @@ const downloadPdf = async ({
   console.log(`COMPLETE --- ${filename}`);
 };
 
+const generateFilename = ({
+  caseCaption,
+  docketEntry: { docketNumber, documentType, index },
+}) => {
+  const MAX_OVERALL_FILE_LENGTH = 64;
+  const EXT = '.pdf';
+
+  const filename =
+    `${docketNumber} - ${index} - ` + `${documentType} - ${caseCaption}`;
+
+  return `${filename.substring(0, MAX_OVERALL_FILE_LENGTH)}${EXT}`;
+};
+
 (async () => {
   const applicationContext = createApplicationContext({});
 
@@ -44,12 +57,16 @@ const downloadPdf = async ({
   }
   const caseEntity = await getCaseByDocketNumber({
     applicationContext,
-    docketNumber,
+    docketNumber: DOCKET_NUMBER,
   });
   let numSealed = 0;
   let numError = 0;
   for (const docketEntry of caseEntity.docketEntries) {
-    if (!docketEntry.isFileAttached) {
+    if (
+      !docketEntry.isFileAttached ||
+      !docketEntry.index ||
+      !docketEntry.servedAt
+    ) {
       continue;
     }
     const sealed =
@@ -60,11 +77,11 @@ const downloadPdf = async ({
     if (sealed) {
       numSealed++;
     }
-    const docketEntryIndex = docketEntry.index || 'draft';
     try {
-      const filename =
-        `${docketEntry.docketNumber} - ${docketEntryIndex} - ` +
-        `${docketEntry.documentType} - ${caseEntity.caseCaption}.pdf`;
+      const filename = generateFilename({
+        caseCaption: caseEntity.caseCaption,
+        docketEntry,
+      });
       await downloadPdf({
         applicationContext,
         docketEntryId: docketEntry.docketEntryId,
