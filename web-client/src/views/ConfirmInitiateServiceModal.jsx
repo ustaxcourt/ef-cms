@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
+export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateCourtIssuedFilingServiceModalHelper:
@@ -16,7 +16,7 @@ export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
       sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateCourtIssuedFilingServiceModal({
+  function ConfirmInitiateServiceModal({
     cancelSequence,
     confirmInitiateCourtIssuedFilingServiceModalHelper,
     confirmSequence,
@@ -79,5 +79,4 @@ export const ConfirmInitiateCourtIssuedFilingServiceModal = connect(
   },
 );
 
-ConfirmInitiateCourtIssuedFilingServiceModal.displayName =
-  'ConfirmInitiateCourtIssuedFilingServiceModal';
+ConfirmInitiateServiceModal.displayName = 'ConfirmInitiateServiceModal';
