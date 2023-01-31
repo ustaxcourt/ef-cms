@@ -440,7 +440,10 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
+            echo "export ENV=$(./scripts/env/env-for-circle.sh)" >> $BASH_ENV
+            ./scripts/load-environment-from-secrets.sh
+            sed -i 's/^/export /g' .env
+            cat .env >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
       - run:
