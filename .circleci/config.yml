@@ -440,8 +440,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
       - run:
@@ -559,7 +558,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
+            # maybe do not need? already here from develop? ./scripts/env/env-for-circle.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -623,8 +623,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Disable Check Reindex Status Cron
@@ -647,8 +646,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
@@ -678,8 +676,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Create and Enable Test User
@@ -715,8 +712,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
@@ -736,8 +732,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
       - run:
           name: Disable Switch Colors Cron
           command: |
@@ -756,8 +751,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
@@ -778,8 +772,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export TABLE_NAME=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
@@ -802,8 +795,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Delete Source API Gateway Mappings
@@ -823,8 +815,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            . ./scripts/load-environment-from-secrets.sh
-            source $BASH_ENV
+            ./scripts/env/env-for-circle.sh >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
