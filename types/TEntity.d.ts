@@ -1,4 +1,9 @@
 /* eslint-disable no-unused-vars */
+
+/*
+  The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
+*/
+
 type TCaseDeadline = {
   associatedJudge: string;
   caseDeadlineId: number;
