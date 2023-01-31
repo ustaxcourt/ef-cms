@@ -1,4 +1,7 @@
-import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  DOCUMENT_SERVED_MESSAGES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { confirmInitiatePaperFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiatePaperFilingServiceModalHelper';
 import {
   contactPrimaryFromState,
@@ -8,6 +11,7 @@ import {
   waitForCondition,
 } from './helpers';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
+import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -23,6 +27,11 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
   });
 
   describe('Create a paper filing, save for later, then serve and multi-docket', () => {
+    docketClerkEditsServiceIndicatorForPetitioner(
+      cerebralTest,
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+
     it('create a paper-filed docket entry on the lead case', async () => {
       await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
         docketNumber: cerebralTest.leadDocketNumber,
@@ -112,6 +121,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
         },
       );
 
+      expect(modalHelper.showPaperAlert).toBe(true);
       expect(modalHelper.showConsolidatedCasesForService).toBe(true);
       expect(cerebralTest.getState('modal.showModal')).toEqual(
         'ConfirmInitiatePaperFilingServiceModal',
@@ -123,12 +133,10 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
 
       await waitForCondition({
         booleanExpressionCondition: () =>
-          cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+          cerebralTest.getState('currentPage') === 'PrintPaperService',
       });
 
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'CaseDetailInternal',
-      );
+      expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
       expect(cerebralTest.getState('alertSuccess')).toEqual({
         message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
         overwritable: false,
