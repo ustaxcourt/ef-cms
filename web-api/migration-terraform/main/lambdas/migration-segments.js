@@ -42,9 +42,11 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
       })
       .promise()
       .then(async results => {
-        applicationContext.logger.info(
-          `${segment}/${totalSegments} got ${results.Items.length} results`,
-        );
+        applicationContext.logger.info('scanned table segment', {
+          numberOfItems: results.Items.length,
+          segment,
+          totalSegments,
+        });
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await exports.processItems({
