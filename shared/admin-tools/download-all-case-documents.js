@@ -6,14 +6,14 @@ const {
   getCaseByDocketNumber,
 } = require('../src/persistence/dynamo/cases/getCaseByDocketNumber');
 
-const docketNumber = process.argv[3] || '453-17';
+const docketNumber = process.argv[2];
 const OUTPUT_DIR = `${process.env.HOME}/Downloads/${docketNumber}`;
 
 const downloadPdf = async ({
   applicationContext,
   docketEntryId,
   filename,
-  outputDir,
+  path,
 }) => {
   console.log(`BEGIN --- ${filename}`);
 
@@ -26,7 +26,7 @@ const downloadPdf = async ({
     })
     .promise();
 
-  await fs.promises.writeFile(`${outputDir}/${filename}`, data.Body);
+  await fs.promises.writeFile(`${path}/${filename}`, data.Body);
 
   console.log(`COMPLETE --- ${filename}`);
 };
@@ -63,13 +63,13 @@ const downloadPdf = async ({
     const docketEntryIndex = docketEntry.index || 'draft';
     try {
       const filename =
-        `${docketEntry.docketNumberWithSuffix} - ${docketEntryIndex} - ` +
+        `${docketEntry.docketNumber} - ${docketEntryIndex} - ` +
         `${docketEntry.documentType} - ${caseEntity.caseCaption}.pdf`;
       await downloadPdf({
         applicationContext,
         docketEntryId: docketEntry.docketEntryId,
         filename,
-        path: `${OUTPUT_DIR}/${sealed ? '' : 'un'}sealed`,
+        path: sealed ? sealedDir : unsealedDir,
       });
     } catch (e) {
       numError++;
