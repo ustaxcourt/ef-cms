@@ -45,9 +45,8 @@ export const updateDeficiencyStatisticInteractor = async (
     penalties: {
       penaltyId?: string;
       name: string;
-      irsPenaltyAmount: number;
+      penaltyAmount: number;
       statisticId?: string;
-      determinationPenaltyAmount?: number;
     }[];
     statisticId: string;
     year: string;

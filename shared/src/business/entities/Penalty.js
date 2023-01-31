@@ -29,9 +29,9 @@ Penalty.prototype.init = function init(rawProps, { applicationContext }) {
 };
 
 Penalty.VALIDATION_ERROR_MESSAGES = {
-  name: 'Name is required.',
+  name: 'Penalty name is required.',
   penaltyAmount: 'Enter penalty amount.',
-  penaltyType: 'Type of penalty is required.',
+  penaltyType: 'Penalty type is required.',
   statisticId: 'Statistic ID is required.',
 };
 

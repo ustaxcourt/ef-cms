@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const setStatisticIndexAction = ({ props, store }) => {
   const { key, statisticIndex, subkey } = props;
 
+  // this is a null check (since when statisticIndex = 0 it is still falsy)
   if (typeof statisticIndex === 'number') {
     store.set(state.modal.statisticIndex, statisticIndex);
   }

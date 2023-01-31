@@ -8,13 +8,13 @@ import { state } from 'cerebral';
  * @returns {object} statistics form helper fields
  */
 export const statisticsFormHelper = (get, applicationContext) => {
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
+  const { CASE_TYPES_MAP, PENALTY_TYPES } = applicationContext.getConstants();
   const form = get(state.form);
 
   const penaltyAmountType =
     get(state.modal.key) === 'irsTotalPenalties'
-      ? 'irsPenaltyAmount'
-      : 'determinationPenaltyAmount';
+      ? PENALTY_TYPES.IRS_PENALTY_AMOUNT
+      : PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT;
 
   const showStatisticsForm =
     form.caseType === CASE_TYPES_MAP.deficiency && form.hasVerifiedIrsNotice;

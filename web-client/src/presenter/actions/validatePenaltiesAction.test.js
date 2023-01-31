@@ -36,7 +36,7 @@ describe('validatePenaltiesAction', () => {
   };
 
   const validCourtPenalty1Mock = {
-    name: 'Penalty 1 (USTC)',
+    name: 'Penalty 1 (Court)',
     penaltyAmount: '3.00',
     penaltyType:
       applicationContext.getConstants().PENALTY_TYPES
@@ -98,7 +98,7 @@ describe('validatePenaltiesAction', () => {
       },
       error: {
         penaltyAmount: 'Enter penalty amount.',
-        penaltyType: 'Type of penalty is required.',
+        penaltyType: 'Penalty type is required.',
         statisticId: 'Statistic ID is required.',
       },
     });

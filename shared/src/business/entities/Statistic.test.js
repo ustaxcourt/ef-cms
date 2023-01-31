@@ -8,7 +8,7 @@ describe('Statistic', () => {
     );
   });
   describe('validation', () => {
-    it('fails validation if a yearOrPeriod is an invalid value', () => {
+    it("fails validation if a yearOrPeriod is not 'year' or 'period'", () => {
       const statistic = new Statistic(
         {
           penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
@@ -239,7 +239,7 @@ describe('Statistic', () => {
       expect(statistic.penalties[1]).toEqual(MOCK_PENALTY_WITH_STATISTIC_ID);
     });
 
-    it('should add a penalty without a statistics id to the penalties array', () => {
+    it('should add a penalty without a statistics id to the penalties array and add the parent statisticId to the penalty', () => {
       statistic.addPenalty({
         applicationContext,
         rawPenalty: MOCK_PENALTY_WITHOUT_STATISTIC_ID,
@@ -261,7 +261,7 @@ describe('Statistic', () => {
       expect(statistic.penalties[0]).toEqual(MOCK_UPDATED_PENALTY);
     });
 
-    it('should itemize penalties created prior to penalty itemization', () => {
+    it('should itemize both determinationTotalPenalties and irsTotalPenalties created prior to penalty itemization', () => {
       const preItemizationStatistic = new Statistic(
         {
           determinationTotalPenalties: 3000,
@@ -296,7 +296,7 @@ describe('Statistic', () => {
       ]);
     });
 
-    it('should itemize penalties created prior to penalty itemization', () => {
+    it('should itemize only irsTotalPenalties created prior to penalty itemization, if determinationTotalPenalties does not exist', () => {
       const preItemizationStatistic = new Statistic(
         {
           irsDeficiencyAmount: 1,
@@ -314,13 +314,6 @@ describe('Statistic', () => {
           name: 'Penalty 1 (IRS)',
           penaltyAmount: 2000,
           penaltyType: 'irsPenaltyAmount',
-          statisticId,
-        },
-        {
-          entityName: 'Penalty',
-          name: 'Penalty 1 (Court)',
-          penaltyAmount: 3000,
-          penaltyType: 'determinationPenaltyAmount',
           statisticId,
         },
       ];
