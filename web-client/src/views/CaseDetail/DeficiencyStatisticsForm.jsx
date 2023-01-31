@@ -30,7 +30,7 @@ export const DeficiencyStatisticsForm = connect(
       <>
         <div className="margin-bottom-0">
           <label className="usa-label" htmlFor="year-or-period">
-            Select Year or period
+            Select year or period
           </label>
 
           <FormGroup id="year-or-period">
