@@ -180,8 +180,9 @@ exports.handler = async event => {
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
   const finish = createISODateString();
+  const duration = dateStringsCompared(finish, start, { exact: true });
   applicationContext.logger.info('finishing segment', {
-    duration: dateStringsCompared(start, finish),
+    duration,
     segment,
     totalSegments,
   });
