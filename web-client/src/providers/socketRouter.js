@@ -85,7 +85,7 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'save_docket_entry_for_later_complete':
-        await app.getSequence('saveDocumentForQCSequence')({
+        await app.getSequence('saveDocketEntryForLaterCompleteSequence')({
           ...message,
         });
         break;
