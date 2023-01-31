@@ -9,7 +9,6 @@ export const openConfirmServeCourtIssuedDocumentSequence = [
   setRedirectUrlAction,
   setDocketEntryIdAction,
   clearModalStateAction,
-  // if we are NOT on message-detail, event code is multidocketable, and is lead case, setup checkboxes
   isDocketEntryMultiDocketableAction,
   {
     no: [],
