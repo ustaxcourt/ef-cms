@@ -4,7 +4,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const saveDocumentForQCSequence = [
+export const saveDocketEntryForLaterCompleteSequence = [
   clearModalAction,
   unsetWaitingForResponseAction,
   setAlertSuccessAction,
