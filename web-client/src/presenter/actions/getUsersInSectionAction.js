@@ -15,8 +15,15 @@ export const getUsersInSectionAction =
    * @param {object} providers.applicationContext the cerebral get function used for getting the state.user
    * @returns {object} the list of users in a section
    */
-  async ({ applicationContext }) => {
+  async ({ applicationContext, props }) => {
+    const { CASE_SERVICES_SUPERVISOR_SECTION } =
+      applicationContext.getConstants();
+
     let sectionToGet = section;
+
+    if (section === CASE_SERVICES_SUPERVISOR_SECTION && props.section) {
+      sectionToGet = props.section;
+    }
 
     if (!sectionToGet) {
       const user = applicationContext.getCurrentUser();
