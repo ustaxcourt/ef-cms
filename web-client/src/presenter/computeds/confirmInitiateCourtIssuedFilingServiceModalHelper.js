@@ -38,13 +38,6 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     !isOnMessageDetailPage;
 
-  console.log(
-    formattedCaseDetail.isLeadCase,
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode),
-    !isOnMessageDetailPage,
-    '****',
-  );
-
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
