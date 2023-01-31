@@ -1,3 +1,4 @@
+#!/bin/bash -e
 ./check-env-variables.sh \
   "CIRCLE_BRANCH"
 
@@ -56,10 +57,10 @@ esac
 echo $ENV
 
 # 2. call load from secrets
-. ./scripts/load-environment-from-secrets.sh
+./scripts/load-environment-from-secrets.sh
 
 # 3. echo out the .env file it created?
-# for macOS sed -i '' -e 's/^/export /g' .env
+# for macOS: sed -i '' -e 's/^/export /g' .env
 sed -i 's/^/export /g' .env
 
 cat .env
