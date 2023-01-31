@@ -239,6 +239,8 @@ const formatNow = formatStr => {
 /**
  * @param {string} a the first date to be compared
  * @param {string} b the second date to be compared
+ * @param {object} options options provider
+ * @param {boolean} options.exact whether to return the exact number of ms between a and b (default false)
  * @returns {number} difference between date a and date b
  */
 const dateStringsCompared = (a, b, options = { exact: false }) => {
