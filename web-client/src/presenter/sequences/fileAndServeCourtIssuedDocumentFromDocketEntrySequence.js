@@ -35,7 +35,6 @@ export const fileAndServeCourtIssuedDocumentFromDocketEntrySequence = [
       generateCourtIssuedDocumentTitleAction,
       getDocketNumbersForConsolidatedServiceAction,
       fileAndServeCourtIssuedDocumentAction,
-      // don't call unset waiting for response action, waiting for websocket response
     ],
   },
 ];
