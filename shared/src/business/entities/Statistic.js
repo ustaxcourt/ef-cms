@@ -145,9 +145,9 @@ const assignPenalties = (
     penalty.statisticId
       ? obj.addPenalty({ applicationContext, rawPenalty: penalty })
       : obj.addPenalty({
-        applicationContext,
-        rawPenalty: { ...penalty, statisticId },
-      });
+          applicationContext,
+          rawPenalty: { ...penalty, statisticId },
+        });
   });
 };
 
