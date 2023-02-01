@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -32,7 +33,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
   }: {
     filters: TPrintableTableFilters;
     formattedCases: TCase[];
-    formattedTrialSession: TTrialSessionData;
+    formattedTrialSession: TRawTrialSession;
     sessionNotes: string;
     showCaseNotes: boolean;
     sort: string;
