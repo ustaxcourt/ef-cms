@@ -37,7 +37,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, false);
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   it('verifies docket entries exist for petition for an unserved case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -100,7 +100,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, false);
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkFilesRQTBeforePetitionIsServed(cerebralTest, fakeFile);
