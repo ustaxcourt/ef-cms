@@ -88,7 +88,7 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
       );
 
       expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ConfirmInitiateServiceModal',
+        'ConfirmInitiatePaperFilingServiceModal',
       );
 
       await cerebralTest.runSequence('servePaperFiledDocumentSequence');
