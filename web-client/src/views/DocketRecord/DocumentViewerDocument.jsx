@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmInitiatePaperFilingServiceModal } from '../ConfirmInitiatePaperFilingServiceModal';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
@@ -209,7 +208,7 @@ export const DocumentViewerDocument = connect(
               />
             )}
             {showModal == 'ConfirmInitiatePaperFilingServiceModal' && (
-              <ConfirmInitiatePaperFilingServiceModal
+              <ConfirmInitiateServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
