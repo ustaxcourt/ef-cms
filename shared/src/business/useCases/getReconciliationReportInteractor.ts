@@ -84,7 +84,7 @@ export const getReconciliationReportInteractor = async (
  */
 const assignCaseCaptionFromPersistence = async (
   applicationContext: IApplicationContext,
-  docketEntries: DocketEntry[],
+  docketEntries: DocketEntryDynamoRecord,
 ) => {
   const docketNumbers = docketEntries.map(e => {
     const docketNumber = e.docketNumber || e.pk.substr(e.pk.indexOf('|') + 1);
