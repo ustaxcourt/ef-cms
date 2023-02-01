@@ -1,3 +1,4 @@
+import { TRawTrialSession } from '../../../business/entities/trialSessions/TrialSession';
 import { put } from '../../dynamodbClientService';
 
 export const updateCaseHearing = ({
@@ -7,7 +8,7 @@ export const updateCaseHearing = ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  hearingToUpdate: TTrialSessionEntity;
+  hearingToUpdate: TRawTrialSession;
 }) =>
   put({
     Item: {
