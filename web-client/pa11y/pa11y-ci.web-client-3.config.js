@@ -1,4 +1,4 @@
-const { getOnly } = require('./helpers');
+const { getOnly, setTimeouts } = require('./helpers');
 
 const adc = require('./pa11y-adc');
 const admissionsClerk = require('./pa11y-admissionsclerk');
@@ -12,5 +12,5 @@ const urls = [...petitioner, ...adc, ...irsSuperuser, ...admissionsClerk].map(
 
 module.exports = {
   defaults,
-  urls: getOnly(urls),
+  urls: setTimeouts()(getOnly(urls)),
 };
