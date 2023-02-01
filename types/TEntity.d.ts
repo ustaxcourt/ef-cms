@@ -1,4 +1,9 @@
 /* eslint-disable no-unused-vars */
+
+/*
+  The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
+*/
+
 type TCaseDeadline = {
   associatedJudge: string;
   caseDeadlineId: number;
@@ -27,64 +32,6 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
-// TODO: rename to TDocketEntry
-type DocketEntry = {
-  additionalInfo?: string;
-  addToCoversheet: boolean;
-  caseCaption?: string;
-  certificateOfService?: string;
-  createdAt: string;
-  descriptionDisplay?: string;
-  docketEntryId: string;
-  docketNumber: string;
-  documentContentsId?: string;
-  documentTitle: string;
-  documentType: string;
-  draftOrderState?: object;
-  editState?: object;
-  entityName: string;
-  eventCode: string;
-  filedBy?: string;
-  filers: string[];
-  filingDate: string;
-  index?: number;
-  isDraft: boolean;
-  isFileAttached?: boolean;
-  isLegacyServed?: boolean;
-  isMinuteEntry: boolean;
-  isOnDocketRecord: boolean;
-  isPaper?: boolean;
-  isPendingService?: boolean;
-  isStricken: boolean;
-  lodged?: boolean;
-  mailingDate?: string;
-  numberOfPages?: number;
-  otherFilingParty?: string;
-  pending: boolean;
-  pk: string;
-  privatePractitioners?: object[];
-  processingStatus: string;
-  receivedAt: string;
-  sentBy?: string;
-  servedAt?: string;
-  servedParties?: object[];
-  servedPartiesCode?: string;
-  sk: string;
-  stampData: object;
-  userId: string;
-  workItem?: WorkItem;
-};
-
-type TDocketEntryEntity = {
-  setAsProcessingStatusAsCompleted: () => void;
-  setNumberOfPages: (numberOfPages: number) => void;
-
-  validate(): TDocketEntryEntity;
-  toRawObject(): DocketEntry;
-
-  workItem: TWorkItemEntity;
-} & DocketEntry;
-
 type TWorkItemEntity = {
   assignToUser: ({
     assigneeId,
@@ -103,11 +50,13 @@ type TWorkItemEntity = {
   }) => TWorkItemEntity;
   toRawObject(): WorkItem;
   validate(): TWorkItemEntity;
+  setAsCompleted(options: any): TWorkItemEntity;
 } & WorkItem;
 
 type WorkItem = {
   createdAt: string;
   assigneeId: string;
+  docketEntry: Partial<RawDocketEntry>;
   assigneeName: string;
   associatedJudge: string;
   caseIsInProgress: boolean;
@@ -120,13 +69,13 @@ type WorkItem = {
   entityName: string;
   highPriority: boolean;
   isInitializeCase: boolean;
-  docketEntry: DocketEntry;
   docketNumber: string;
   workItemId: string;
   completedAt: string;
   updatedAt: string;
   gsi1pk: string;
   inProgress: boolean;
+  section: string;
 };
 
 type TOutboxItem = {
@@ -135,7 +84,7 @@ type TOutboxItem = {
   completedAt: string;
   completedBy: string;
   caseIsInProgress: boolean;
-  docketEntry: DocketEntry;
+  docketEntry: RawDocketEntry;
   docketNumber: string;
   highPriority: boolean;
   inProgress: boolean;
@@ -160,10 +109,11 @@ type TDynamoRecord = {
 };
 
 type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
+type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
 
 type TSectionWorkItem = {
   createdAt: string;
-  docketEntry: DocketEntry[];
+  docketEntry: RawDocketEntry[];
   docketNumber: string;
   docketNumberSuffix: string;
   messages: any;
@@ -245,45 +195,6 @@ type TUser = {
   contact?: TUserContact;
 };
 
-type TTrialSessionData = {
-  address1: string;
-  address2: string;
-  caseOrder: any;
-  chambersPhoneNumber: string;
-  city: string;
-  courtReporter: string;
-  courthouseName: string;
-  createdAt: string;
-  sessionStatus: string;
-  estimatedEndDate: string;
-  irsCalendarAdministrator: string;
-  isCalendared: boolean;
-  joinPhoneNumber: string;
-  maxCases: number;
-  meetingId: string;
-  notes: string;
-  noticeIssuedDate: string;
-  password: string;
-  postalCode: string;
-  sessionScope: string;
-  sessionType: string;
-  startDate: string;
-  startTime: string;
-  state: string;
-  swingSession: boolean;
-  swingSessionId: string;
-  term: string;
-  termYear: string;
-  trialLocation: string;
-  proceedingType: string;
-  trialSessionId: string;
-  judge: {
-    name: string;
-    userId: string;
-  };
-  trialClerk: string;
-};
-
 type TTrialSessionWorkingCopyData = {
   caseMetadata: any;
   filters: {
@@ -310,13 +221,9 @@ type TTrialSessionWorkingCopyData = {
 };
 
 type TCaseEntity = {
-  getDocketEntryById: ({
-    docketEntryId,
-  }: {
-    docketEntryId: string;
-  }) => TDocketEntryEntity;
-  addDocketEntry: (docketEntry: TDocketEntryEntity) => void;
-  updateDocketEntry: (docketEntry: TDocketEntryEntity) => void;
+  getDocketEntryById: ({ docketEntryId }: { docketEntryId: string }) => any;
+  addDocketEntry: (docketEntry: any) => void;
+  updateDocketEntry: (docketEntry: any) => void;
   isUserIdRepresentedByPrivatePractitioner: (id: string) => boolean;
 } & TCase;
 
@@ -330,7 +237,7 @@ type TCase = {
   isSealed: boolean;
   blockedDate?: string;
   blockedReason?: string;
-  docketEntries?: DocketEntry[];
+  docketEntries?: RawDocketEntry[];
   canAllowDocumentService?: boolean;
   caseTitle?: string;
   canAllowPrintableDocketRecord?: boolean;
@@ -445,24 +352,6 @@ interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];
 }
 
-type TTrialSessionEntity = {
-  isCaseAlreadyCalendared(caseEntity: TCase): boolean;
-  deleteCaseFromCalendar({
-    docketNumber,
-  }: {
-    docketNumber: string;
-  }): TTrialSessionEntity;
-  manuallyAddCaseToCalendar({
-    calendarNotes,
-    caseEntity,
-  }: {
-    calendarNotes: string;
-    caseEntity: TCase;
-  });
-  validate(): TTrialSessionEntity;
-  toRawObject(): TTrialSessionData;
-} & TTrialSessionData;
-
 type TCorrespondence = {
   correspondenceId: string;
 };
@@ -513,3 +402,19 @@ type TPrintableTableFilters = {
   statusUnassigned: boolean;
   takenUnderAdvisement: boolean;
 };
+
+type SubType<Base, Condition> = Pick<
+  Base,
+  {
+    [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
+  }[keyof Base]
+>;
+
+type KeyOfType<Base, Types> = {
+  [Key in keyof Base]: Base[Key] extends Types ? Key : never;
+}[keyof Base];
+
+type ExcludeMethods<T> = Pick<
+  T,
+  { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
+>;
