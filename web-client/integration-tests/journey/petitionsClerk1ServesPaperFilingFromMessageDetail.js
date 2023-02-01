@@ -19,7 +19,7 @@ export const petitionsClerk1ServesPaperFilingFromMessageDetail =
       );
 
       expect(cerebralTest.getState('modal.showModal')).toBe(
-        'ConfirmInitiateServiceModal',
+        'ConfirmInitiatePaperFilingServiceModal',
       );
 
       await cerebralTest.setState('iframeSrc', undefined);
