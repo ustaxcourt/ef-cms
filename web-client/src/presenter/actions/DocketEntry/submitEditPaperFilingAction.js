@@ -8,8 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
- * @returns {object} docketEntryId of the paper filing, boolean if a coversheet needs to be generated,
- *   url of paper service pdf if applicable
  */
 export const submitEditPaperFilingAction = async ({
   applicationContext,
@@ -22,6 +20,7 @@ export const submitEditPaperFilingAction = async ({
   const formData = get(state.form);
   const docketEntryId = get(state.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
+  const clientConnectionId = get(state.clientConnectionId);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
 
   const isFileAttached = !!(
@@ -41,14 +40,10 @@ export const submitEditPaperFilingAction = async ({
   await applicationContext
     .getUseCases()
     .editPaperFilingInteractor(applicationContext, {
+      clientConnectionId,
       consolidatedGroupDocketNumbers,
       docketEntryId,
       documentMetadata,
       isSavingForLater,
     });
-
-  return {
-    docketEntryId,
-    generateCoversheet: isFileAttached && !isSavingForLater,
-  };
 };

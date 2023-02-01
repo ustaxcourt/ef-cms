@@ -44,9 +44,13 @@ export const confirmInitiateCourtIssuedFilingServiceModalHelper = (
 
   let parties;
   if (showConsolidatedCasesForService) {
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
-        if (!aCase.checked) {
+        const caseCheckbox = consolidatedCasesToMultiDocketOn.find(
+          checkboxCase => checkboxCase.docketNumber === aCase.docketNumber,
+        );
+        if (!caseCheckbox.checked) {
           return aggregatedParties;
         }
         aggregatedParties.petitioners = aggregatedParties.petitioners.concat(

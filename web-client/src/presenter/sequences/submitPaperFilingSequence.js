@@ -25,18 +25,6 @@ import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPa
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const addPaperFilingMultiDocketableFlow = [
-  setWaitingForResponseAction,
-  getDocketNumbersForConsolidatedServiceAction,
-  submitAddPaperFilingAction,
-];
-
-const editPaperFilingMultiDocketableFlow = [
-  setWaitingForResponseAction,
-  getDocketNumbersForConsolidatedServiceAction,
-  submitEditPaperFilingAction,
-];
-
 export const submitPaperFilingSequence = [
   checkForActiveBatchesAction,
   {
@@ -66,15 +54,19 @@ export const submitPaperFilingSequence = [
           isEditingDocketEntryAction,
           {
             no: [
+              setWaitingForResponseAction,
+              getDocketNumbersForConsolidatedServiceAction,
               isFileAttachedAction,
               {
-                no: addPaperFilingMultiDocketableFlow,
+                no: [submitAddPaperFilingAction],
                 yes: docketEntryFileUploadSequenceDecorator([
-                  addPaperFilingMultiDocketableFlow,
+                  submitAddPaperFilingAction,
                 ]),
               },
             ],
             yes: [
+              setWaitingForResponseAction,
+              getDocketNumbersForConsolidatedServiceAction,
               getCaseAction,
               setCaseAction,
               isWorkItemAlreadyCompletedAction,
@@ -82,9 +74,9 @@ export const submitPaperFilingSequence = [
                 no: [
                   isFileAttachedAction,
                   {
-                    no: editPaperFilingMultiDocketableFlow,
+                    no: [submitEditPaperFilingAction],
                     yes: docketEntryFileUploadSequenceDecorator([
-                      editPaperFilingMultiDocketableFlow,
+                      submitEditPaperFilingAction,
                     ]),
                   },
                 ],

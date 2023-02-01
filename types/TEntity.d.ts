@@ -221,10 +221,10 @@ type TTrialSessionWorkingCopyData = {
 };
 
 type TCaseEntity = {
-  getDocketEntryById: ({ docketEntryId }: { docketEntryId: string }) => any;
-  addDocketEntry: (docketEntry: any) => void;
-  updateDocketEntry: (docketEntry: any) => void;
+  getDocketEntryById: (options: { docketEntryId: string }) => any;
+  addDocketEntry: (docketEntry: any) => unknown;
   isUserIdRepresentedByPrivatePractitioner: (id: string) => boolean;
+  updateDocketEntry: (docketEntry: any) => void;
 } & TCase;
 
 type TCase = {
