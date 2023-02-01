@@ -12,8 +12,6 @@ export const ConfirmInitiateServiceModal = connect(
       state.confirmInitiateCourtIssuedFilingServiceModalHelper,
     confirmSequence: props.confirmSequence,
     documentTitle: props.documentTitle,
-    fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
-      sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
@@ -21,7 +19,6 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateCourtIssuedFilingServiceModalHelper,
     confirmSequence,
     documentTitle,
-    fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse,
   }) {
     let isSubmitDebounced = false;
@@ -42,9 +39,7 @@ export const ConfirmInitiateServiceModal = connect(
         confirmLabel="Yes, Serve"
         confirmSequence={() => {
           debounceSubmit(200);
-          confirmSequence
-            ? confirmSequence()
-            : fileAndServeCourtIssuedDocumentFromDocketEntrySequence();
+          confirmSequence();
         }}
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
