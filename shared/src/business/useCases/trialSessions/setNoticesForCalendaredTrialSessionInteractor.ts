@@ -34,7 +34,6 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
   { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
-  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
@@ -47,12 +46,15 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       trialSessionId,
     });
 
+  let trialNoticePdfsKeys = [];
+
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'notice_generation_complete',
         hasPaper: false,
+        trialNoticePdfsKeys,
       },
       userId: user.userId,
     });
@@ -138,8 +140,6 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  const paperServiceDocumentsPdf = await PDFDocument.create();
-
   for (let calendaredCase of calendaredCases) {
     const casePdfDocumentsExistsInS3 = await applicationContext
       .getPersistenceGateway()
@@ -153,46 +153,14 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       continue;
     }
 
-    const calendaredCasePdfData = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        key: `${jobId}-${calendaredCase.docketNumber}`,
-        protocol: 'S3',
-        useTempBucket: true,
-      });
-
-    const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
-
-    await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
-      copyFrom: calendaredCasePdf,
-      copyInto: paperServiceDocumentsPdf,
-    });
-  }
-
-  const { docketEntryId, hasPaper, url } = await applicationContext
-    .getUseCaseHelpers()
-    .savePaperServicePdf({
-      applicationContext,
-      document: paperServiceDocumentsPdf,
-    });
-
-  if (url) {
-    applicationContext.logger.info(
-      `generated the printable paper service pdf at ${url}`,
-      {
-        url,
-      },
-    );
+    trialNoticePdfsKeys.push(`${jobId}-${calendaredCase.docketNumber}`);
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      docketEntryId,
-      hasPaper,
-      pdfUrl: url || null,
+      trialNoticePdfsKeys,
     },
     userId: user.userId,
   });
