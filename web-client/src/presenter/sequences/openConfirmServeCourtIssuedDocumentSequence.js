@@ -8,9 +8,9 @@ import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openConfirmServeCourtIssuedDocumentSequence = [
+  clearModalStateAction,
   setRedirectUrlAction,
   setDocketEntryIdAction,
-  clearModalStateAction,
   isDocketEntryMultiDocketableAction,
   {
     no: [],

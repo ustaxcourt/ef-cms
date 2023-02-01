@@ -23,7 +23,7 @@ export const ConfirmInitiateServiceModal = connect(
   }) {
     let isSubmitDebounced = false;
 
-    const debounceSubmit = (timeout = 100) => {
+    const debounceSubmit = timeout => {
       isSubmitDebounced = true;
 
       setTimeout(() => {
