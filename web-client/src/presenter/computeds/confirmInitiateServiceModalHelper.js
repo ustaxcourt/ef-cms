@@ -11,11 +11,11 @@ import { uniqBy } from 'lodash';
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const {
     CONTACT_TYPE_TITLES,
-    COURT_ISSUED_EVENT_CODES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
+  const { isCourtIssued } = applicationContext.getUtilities();
 
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
@@ -31,16 +31,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     ));
   }
 
-  const isCourtIssued = COURT_ISSUED_EVENT_CODES.map(
-    ({ eventCode: anEventCode }) => anEventCode,
-  ).includes(eventCode);
-
   let showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     !isOnMessageDetailPage;
 
-  if (!isCourtIssued) {
+  if (!isCourtIssued(eventCode)) {
     const { areMultiDocketablePaperFilingsEnabled } = get(
       state.featureFlagHelper,
     );
