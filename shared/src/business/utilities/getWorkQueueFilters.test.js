@@ -17,8 +17,8 @@ describe('getWorkQueueFilters', () => {
       );
     });
 
-    it('returns the docket section if the user is in any section other than petitions', () => {
-      expect(getDocQcSectionForUser({ section: 'adc' })).toEqual(
+    it('returns the docket section if the user is not in the petitions or case services section', () => {
+      expect(getDocQcSectionForUser({ section: DOCKET_SECTION })).toEqual(
         DOCKET_SECTION,
       );
     });
