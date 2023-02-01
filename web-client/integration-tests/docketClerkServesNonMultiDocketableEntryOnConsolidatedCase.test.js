@@ -56,7 +56,7 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
       );
 
       expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ConfirmInitiatePaperFilingServiceModal',
+        'ConfirmInitiateServiceModal',
       );
     });
 

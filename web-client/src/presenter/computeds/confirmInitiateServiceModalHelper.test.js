@@ -344,6 +344,9 @@ describe('confirmInitiateServiceModalHelper', () => {
         confirmInitiateServiceModalHelper,
         {
           state: {
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
             form: {
               eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
             },
@@ -387,6 +390,9 @@ describe('confirmInitiateServiceModalHelper', () => {
         {
           state: {
             currentPage: 'MessageDetail',
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
             form: {
               eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
             },
@@ -442,6 +448,9 @@ describe('confirmInitiateServiceModalHelper', () => {
         confirmInitiateServiceModalHelper,
         {
           state: {
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: true,
+            },
             form: {
               eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
             },
