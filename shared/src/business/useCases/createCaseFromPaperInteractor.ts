@@ -1,6 +1,6 @@
 import { Case } from '../entities/cases/Case';
 import { CaseInternal } from '../entities/cases/CaseInternal';
-import { DocketEntry } from '../entities/DocketEntry';
+import { DocketEntry, DocketEntryClass } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -18,7 +18,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 }: {
   applicationContext: IApplicationContext;
   caseToAdd: TCaseEntity;
-  docketEntryEntity: DocketEntry;
+  docketEntryEntity: DocketEntryClass;
   user: TUser;
 }) => {
   const workItemEntity = new WorkItem(
