@@ -8,15 +8,14 @@ import React from 'react';
 export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmInitiateCourtIssuedFilingServiceModalHelper:
-      state.confirmInitiateCourtIssuedFilingServiceModalHelper,
+    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: props.confirmSequence,
     documentTitle: props.documentTitle,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
     cancelSequence,
-    confirmInitiateCourtIssuedFilingServiceModalHelper,
+    confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
     waitingForResponse,
@@ -45,19 +44,18 @@ export const ConfirmInitiateServiceModal = connect(
         title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">
-          {confirmInitiateCourtIssuedFilingServiceModalHelper.confirmationText}
+          {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
-        {confirmInitiateCourtIssuedFilingServiceModalHelper.showPaperAlert && (
+        {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint exclamation fullWidth className="block">
             <div className="margin-bottom-1">
-              This{' '}
-              {confirmInitiateCourtIssuedFilingServiceModalHelper.caseOrGroup}{' '}
-              has parties receiving paper service:
+              This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
+              receiving paper service:
             </div>
-            {confirmInitiateCourtIssuedFilingServiceModalHelper.contactsNeedingPaperService.map(
+            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
               contact => (
                 <div className="margin-bottom-1" key={contact.name}>
                   {contact.name}
@@ -66,7 +64,7 @@ export const ConfirmInitiateServiceModal = connect(
             )}
           </Hint>
         )}
-        {confirmInitiateCourtIssuedFilingServiceModalHelper.showConsolidatedCasesForService && (
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes />
         )}
       </ModalDialog>
