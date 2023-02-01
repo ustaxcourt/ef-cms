@@ -219,7 +219,15 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
           state: {
             form: { eventCode: 'O' },
             formattedCaseDetail,
-            modal: { showModal: 'ConfirmInitiateServiceModal' },
+            modal: {
+              form: {
+                consolidatedCasesToMultiDocketOn: [
+                  { checked: true, docketNumber: LEAD_CASE.docketNumber },
+                  { checked: false, docketNumber: nonLeadCase.docketNumber },
+                ],
+              },
+              showModal: 'ConfirmInitiateServiceModal',
+            },
           },
         },
       );
@@ -251,7 +259,22 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
           state: {
             form: { eventCode: 'OSC' },
             formattedCaseDetail,
-            modal: { showModal: 'ConfirmInitiateServiceModal' },
+            modal: {
+              form: {
+                consolidatedCasesToMultiDocketOn: [
+                  { checked: true, docketNumber: LEAD_CASE.docketNumber },
+                  {
+                    checked: false,
+                    docketNumber: firstNonLeadCase.docketNumber,
+                  },
+                  {
+                    checked: true,
+                    docketNumber: secondNonLeadCase.docketNumber,
+                  },
+                ],
+              },
+              showModal: 'ConfirmInitiateServiceModal',
+            },
           },
         },
       );
@@ -308,6 +331,19 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
             form: { eventCode: 'OSC' },
             formattedCaseDetail,
             modal: {
+              form: {
+                consolidatedCasesToMultiDocketOn: [
+                  { checked: true, docketNumber: LEAD_CASE.docketNumber },
+                  {
+                    checked: false,
+                    docketNumber: firstNonLeadCase.docketNumber,
+                  },
+                  {
+                    checked: true,
+                    docketNumber: secondNonLeadCase.docketNumber,
+                  },
+                ],
+              },
               showModal: 'ConfirmInitiateCourtIssuedFilingServiceModal',
             },
           },
@@ -431,6 +467,11 @@ describe('confirmInitiateCourtIssuedFilingServiceModalHelper', () => {
               isLeadCase: true,
               petitioners: [],
               privatePractitioners: [],
+            },
+            modal: {
+              form: {
+                consolidatedCasesToMultiDocketOn: [],
+              },
             },
           },
         },
