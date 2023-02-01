@@ -2,7 +2,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { confirmInitiatePaperFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiatePaperFilingServiceModalHelper';
+import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -115,7 +115,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
       });
 
       const modalHelper = runCompute(
-        withAppContextDecorator(confirmInitiatePaperFilingServiceModalHelper),
+        withAppContextDecorator(confirmInitiateServiceModalHelper),
         {
           state: cerebralTest.getState(),
         },

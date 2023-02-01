@@ -2,29 +2,24 @@ import { state } from 'cerebral';
 import { uniqBy } from 'lodash';
 
 /**
- * Returns computed values for the confirm initiate paper filing service modal
+ * Returns computed values for the confirm initiate court issued filing service modal
  *
  * @param {Function} get the cerebral get function used
  * @param {object} applicationContext the application context
  * @returns {object} the computed values
  */
-export const confirmInitiatePaperFilingServiceModalHelper = (
-  get,
-  applicationContext,
-) => {
+export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const {
     CONTACT_TYPE_TITLES,
+    COURT_ISSUED_EVENT_CODES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
-  const formattedCaseDetail = get(state.formattedCaseDetail);
   const docketEntryId = get(state.docketEntryId);
+  const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-  const { areMultiDocketablePaperFilingsEnabled } = get(
-    state.featureFlagHelper,
-  );
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
 
@@ -36,11 +31,23 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
     ));
   }
 
-  const showConsolidatedCasesForService =
-    areMultiDocketablePaperFilingsEnabled &&
+  const isCourtIssued = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode: anEventCode }) => anEventCode,
+  ).includes(eventCode);
+
+  let showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     !isOnMessageDetailPage;
+
+  if (!isCourtIssued) {
+    const { areMultiDocketablePaperFilingsEnabled } = get(
+      state.featureFlagHelper,
+    );
+
+    showConsolidatedCasesForService =
+      showConsolidatedCasesForService && areMultiDocketablePaperFilingsEnabled;
+  }
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
@@ -112,16 +119,11 @@ export const confirmInitiatePaperFilingServiceModalHelper = (
 
   let caseOrGroup = 'case';
 
-  if (showConsolidatedCasesForService) {
-    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
-
-    const checkedBoxes = consolidatedCasesToMultiDocketOn.filter(
-      c => c.checked,
-    ).length;
-
-    if (checkedBoxes > 1) {
-      caseOrGroup = 'group';
-    }
+  if (
+    showConsolidatedCasesForService &&
+    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
+  ) {
+    caseOrGroup = 'group';
   }
 
   return {
