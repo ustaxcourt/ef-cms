@@ -9,8 +9,10 @@ import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
-  shouldServe = true,
-  overrides = { trialLocation: 'Birmingham, Alabama' },
+  {
+    shouldServe = true,
+    overrides = { trialLocation: 'Birmingham, Alabama' },
+  } = {},
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 

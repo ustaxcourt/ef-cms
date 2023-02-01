@@ -22,7 +22,7 @@ describe('Docket Record Filter Journey', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, false);
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
