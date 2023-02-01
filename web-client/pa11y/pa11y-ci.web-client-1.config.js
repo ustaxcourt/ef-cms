@@ -1,4 +1,4 @@
-const { getOnly } = require('./helpers');
+const { getOnly, setTimeouts } = require('./helpers');
 
 const chambers = require('./pa11y-chambers');
 const floater = require('./pa11y-floater');
@@ -25,5 +25,5 @@ const urls = [...initialUrls, ...userUrls].map(jsCheckDecorator);
 
 module.exports = {
   defaults,
-  urls: getOnly(urls),
+  urls: setTimeouts()(getOnly(urls)),
 };
