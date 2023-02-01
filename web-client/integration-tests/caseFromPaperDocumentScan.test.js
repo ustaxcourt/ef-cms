@@ -66,7 +66,7 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkCreatesScannedPDF(cerebralTest);
-  petitionsClerkCreatesNewCase(cerebralTest, false);
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
