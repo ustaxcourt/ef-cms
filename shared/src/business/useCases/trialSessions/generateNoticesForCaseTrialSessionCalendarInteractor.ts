@@ -4,7 +4,10 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import {
+  TRawTrialSession,
+  TrialSession,
+} from '../../entities/trialSessions/TrialSession';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { copyPagesAndAppendToTargetPdf } from '../../utilities/copyPagesAndAppendToTargetPdf';
 import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
@@ -333,7 +336,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   }: {
     docketNumber: string;
     jobId: string;
-    trialSession: TTrialSessionData;
+    trialSession: TRawTrialSession;
     userId: string;
   },
 ) => {
