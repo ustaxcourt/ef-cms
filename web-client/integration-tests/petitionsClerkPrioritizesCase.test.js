@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
@@ -13,7 +13,9 @@ describe('Prioritize a Case', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, 'Lubbock, Texas');
+  petitionsClerkCreatesNewCase(cerebralTest, true, {
+    trialLocation: 'Lubbock, Texas',
+  });
   petitionsClerkPrioritizesCase(cerebralTest);
   petitionsClerkVerifyEligibleCase(cerebralTest);
   petitionsClerkUnprioritizesCase(cerebralTest);

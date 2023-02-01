@@ -38,6 +38,7 @@ export const createConsolidatedGroup = (
         const { docketNumber } = await uploadPetition(
           cerebralTest,
           caseOverrides,
+          'petitioner1@example.com',
         );
 
         expect(docketNumber).toBeDefined();
