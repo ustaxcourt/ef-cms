@@ -28,6 +28,8 @@ export const CourtIssuedDocketEntry = connect(
     confirmWorkItemAlreadyCompleteSequence:
       sequences.confirmWorkItemAlreadyCompleteSequence,
     constants: state.constants,
+    fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
+      sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     form: state.form,
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
@@ -47,6 +49,7 @@ export const CourtIssuedDocketEntry = connect(
     addCourtIssuedDocketEntryHelper,
     confirmWorkItemAlreadyCompleteSequence,
     constants,
+    fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     form,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
@@ -284,6 +287,9 @@ export const CourtIssuedDocketEntry = connect(
         </section>
         {showModal === 'ConfirmInitiateCourtIssuedFilingServiceModal' && (
           <ConfirmInitiateServiceModal
+            confirmSequence={
+              fileAndServeCourtIssuedDocumentFromDocketEntrySequence
+            }
             documentTitle={
               addCourtIssuedDocketEntryHelper.formattedDocumentTitle
             }
