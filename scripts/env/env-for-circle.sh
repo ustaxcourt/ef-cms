@@ -1,4 +1,3 @@
-
 #!/bin/bash -e
 
 # 1. set ENV
@@ -49,8 +48,20 @@ case $CIRCLE_BRANCH in
     ;;
 
   *)
-    ENV="unknown"
+    exit 1
     ;;
 esac
 
-echo $ENV
+ENV=$ENV ./scripts/load-environment-from-secrets.sh
+
+sed -i 's/^/export /g' .env
+cat .env >> "${BASH_ENV}"
+
+{
+  echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" 
+  echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" 
+  echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" 
+  echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" 
+  echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" 
+  echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)"
+} >> "${BASH_ENV}"

@@ -440,12 +440,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            echo "export ENV=$(./scripts/env/env-for-circle.sh)" >> $BASH_ENV
-            ./scripts/load-environment-from-secrets.sh
-            sed -i 's/^/export /g' .env
-            cat .env >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Build Docker Image
           command: |
@@ -561,12 +556,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            # maybe do not need? already here from develop? ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            source $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Deploy Migration Cron Lambda
           command: |
@@ -626,8 +616,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Disable Check Reindex Status Cron
           command: |
@@ -649,8 +638,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: 'Disable Maintenance Mode'
           command: npm run maintenance:disengage $ENV
@@ -679,8 +667,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Create and Enable Test User
           command: node ./scripts/create-and-enable-smoketest-user.js
@@ -715,9 +702,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Deploy Switch Colors Cron
           command: |
@@ -735,7 +720,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Disable Switch Colors Cron
           command: |
@@ -754,10 +739,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
@@ -775,14 +757,12 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export TABLE_NAME=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Backup Source DynamoDB table
           command: |
             if [ $MIGRATE_FLAG == true ]; then
-              npm run backup:dynamo-table -- $TABLE_NAME
+              npm run backup:dynamo-table -- $SOURCE_TABLE
             fi
 
   delete-api-mappings:
@@ -798,8 +778,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Delete Source API Gateway Mappings
           command: |
@@ -818,11 +797,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
+            ./scripts/env/env-for-circle.sh            
       - run:
           name: Destroy Migration Infrastructure
           command: |
