@@ -15,7 +15,7 @@ export const saveWorkItemForDocketClerkFilingExternalDocument = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: TOutboxItem;
+  workItem: WorkItem;
 }) =>
   Promise.all([
     createSectionOutboxRecords({
