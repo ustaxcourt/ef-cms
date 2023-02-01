@@ -24,7 +24,7 @@ const getWorkQueueFilters = ({ section, user }) => {
   let sectionToMatch;
 
   if (isCaseServicesSupervisor) {
-    sectionToMatch = section;
+    sectionToMatch = section || docQCUserSection;
   } else {
     sectionToMatch = user.section;
   }
@@ -35,13 +35,13 @@ const getWorkQueueFilters = ({ section, user }) => {
         return (
           // DocketClerks
           (item.assigneeId === user.userId &&
-            user.role === ROLES.docketClerk &&
+            (user.role === ROLES.docketClerk || isCaseServicesSupervisor) &&
             !item.completedAt &&
             item.section === sectionToMatch &&
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (item.assigneeId === user.userId &&
-            user.role === ROLES.petitionsClerk &&
+            (user.role === ROLES.petitionsClerk || isCaseServicesSupervisor) &&
             ((item.caseStatus === CASE_STATUS_TYPES.new &&
               item.caseIsInProgress === true) || // caseIsInProgress only looked at for petitions clerks
               item.inProgress === true))
@@ -59,7 +59,9 @@ const getWorkQueueFilters = ({ section, user }) => {
       },
       outbox: item => {
         return (
-          (user.role === ROLES.petitionsClerk ? !!item.section : true) &&
+          (user.role === ROLES.petitionsClerk || isCaseServicesSupervisor
+            ? !!item.section
+            : true) &&
           item.completedByUserId &&
           item.completedByUserId === user.userId &&
           !!item.completedAt
