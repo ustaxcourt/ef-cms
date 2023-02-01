@@ -449,7 +449,7 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('should fetch messages for the selected section and case services supervisor user when', async () => {
+  it('should fetch messages for the selected section when caseServicesSupervisorInfo is not empty', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.adc,
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
@@ -471,5 +471,27 @@ describe('getNotificationsInteractor', () => {
       applicationContext.getPersistenceGateway().getSectionInboxMessages.mock
         .calls[0][0].section,
     ).toEqual(PETITIONS_SECTION);
+  });
+
+  it('should fetch the document QC inbox for the selected section when caseServicesSupervisorInfo is not empty', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.adc,
+      userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
+    });
+
+    const mockCaseServicesSupervisorInfo = {
+      section: PETITIONS_SECTION,
+      userId: caseServicesSupervisorUser.userId,
+    };
+
+    await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorInfo: mockCaseServicesSupervisorInfo,
+      judgeUserId: undefined,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0].section,
+    ).toEqual(mockCaseServicesSupervisorInfo.section);
   });
 });
