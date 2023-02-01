@@ -27,5 +27,5 @@ export const openConfirmServePaperFiledDocumentSequence = [
       setMultiDocketingCheckboxesAction,
     ],
   },
-  setShowModalFactoryAction('ConfirmInitiateServiceModal'),
+  setShowModalFactoryAction('ConfirmInitiatePaperFilingServiceModal'),
 ];
