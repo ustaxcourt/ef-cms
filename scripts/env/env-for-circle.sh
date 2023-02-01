@@ -48,6 +48,7 @@ case $CIRCLE_BRANCH in
     ;;
 
   *)
+    echo "ERROR - Unknown Circle Branch: '${CIRCLE_BRANCH}'"
     exit 1
     ;;
 esac
