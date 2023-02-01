@@ -1,12 +1,7 @@
 import { blockedCasesReportHelper as blockedCasesReportHelperComputed } from '../src/presenter/computeds/blockedCasesReportHelper';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import {
-  fakeFile,
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-} from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from 'cerebral/test';
@@ -24,8 +19,9 @@ const createAndBlockCase = (
   blockedCases,
 ) => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
+  petitionsClerkCreatesNewCase(cerebralTest, true, {
     procedureType,
+    trialLocation,
   });
   it('track the docket number', () => {
     blockedCases.push({

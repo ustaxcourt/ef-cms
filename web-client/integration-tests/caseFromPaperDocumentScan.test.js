@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsScannedBatch } from './journey/petitionsClerkAddsScannedBatch';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkCreatesScannedPDF } from './journey/petitionsClerkCreatesScannedPDF';
@@ -66,7 +66,7 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkCreatesScannedPDF(cerebralTest);
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
+  petitionsClerkCreatesNewCase(cerebralTest, false);
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
