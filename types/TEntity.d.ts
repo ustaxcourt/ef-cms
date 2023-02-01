@@ -14,6 +14,12 @@ type TCaseDeadline = {
   sortableDocketNumber: string;
 };
 
+type TRawPenalty = {
+  name: string;
+  penaltyAmount: number;
+  penaltyType: string;
+};
+
 type TPractitionerDocument = {
   categoryType: string;
   categoryName: string;
@@ -25,6 +31,27 @@ type TPractitionerDocumentEntity = {
   validate(): TPractitionerDocumentEntity;
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
+
+type TWorkItemEntity = {
+  assignToUser: ({
+    assigneeId,
+    assigneeName,
+    section,
+    sentBy,
+    sentBySection,
+    sentByUserId,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    section: string;
+    sentBy: string;
+    sentBySection: string;
+    sentByUserId: string;
+  }) => TWorkItemEntity;
+  toRawObject(): WorkItem;
+  validate(): TWorkItemEntity;
+  setAsCompleted(options: any): TWorkItemEntity;
+} & WorkItem;
 
 type WorkItem = {
   createdAt: string;
@@ -48,6 +75,7 @@ type WorkItem = {
   updatedAt: string;
   gsi1pk: string;
   inProgress: boolean;
+  section: string;
 };
 
 type TOutboxItem = {
