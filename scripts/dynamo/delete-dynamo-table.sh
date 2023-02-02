@@ -13,31 +13,34 @@
 
 TABLE_NAME=$1
 
-aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-west-1 | jq -r ".TableDescription.TableStatus"
-aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1
+aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1 2> /dev/null
 CODE=$?
 
-while [[ "${CODE}" == "0" ]]
-do  
-  echo "${TABLE_NAME} in region us-west-1 is still being deleted. Waiting for 30 seconds then checking again."
-  sleep 30
-  aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1
-  CODE=$?
-done
+if [[ "${CODE}" == "0" ]]; then
+  aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-west-1 | jq -r ".TableDescription.TableStatus"
+
+  while [[ "${CODE}" == "0" ]]; do  
+    echo "${TABLE_NAME} in region us-west-1 is still being deleted. Waiting for 30 seconds then checking again."
+    sleep 30
+    aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1 2> /dev/null
+    CODE=$?
+  done
+fi
 
 echo "${TABLE_NAME} in region us-west-1 is deleted."
 
-aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 | jq -r ".TableDescription.TableStatus"
-aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1
+aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1 2> /dev/null
 CODE=$?
 
-while [[ ${CODE} == 0 ]]
-do  
-  echo "${TABLE_NAME} in region us-east-1 is still being deleted. Waiting for 30 seconds then checking again."
-  sleep 30
-  aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 
-  aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1
-  CODE=$?
-done
+if [[ "${CODE}" == "0" ]]; then
+  aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 | jq -r ".TableDescription.TableStatus"
+  while [[ "${CODE}" == "0" ]]; do  
+    echo "${TABLE_NAME} in region us-east-1 is still being deleted. Waiting for 30 seconds then checking again."
+    sleep 30
+    aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1 2> /dev/null
+    CODE=$?
+  done
+
+fi
 
 echo "${TABLE_NAME} in region us-east-1 is deleted."
