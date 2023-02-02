@@ -231,7 +231,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: undefined,
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -278,7 +278,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: undefined,
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -343,7 +343,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: undefined,
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -377,7 +377,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: undefined,
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -399,7 +399,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: undefined,
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'docketclerk',
     });
 
@@ -410,7 +410,7 @@ describe('getNotificationsInteractor', () => {
 
   it('should fetch the qc section items for the provided judgeUserId', async () => {
     await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: undefined,
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -449,14 +449,14 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('should fetch messages for the selected section when caseServicesSupervisorInfo is not empty', async () => {
+  it('should fetch messages for the selected section when caseServicesSupervisorData is not empty', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.adc,
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
     });
 
     await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: {
+      caseServicesSupervisorData: {
         section: PETITIONS_SECTION,
         userId: caseServicesSupervisorUser.userId,
       },
@@ -473,13 +473,13 @@ describe('getNotificationsInteractor', () => {
     ).toEqual(PETITIONS_SECTION);
   });
 
-  it('should fetch the filtered document QC inbox for the selected section when caseServicesSupervisorInfo is not empty', async () => {
+  it('should fetch the filtered document QC inbox for the selected section when caseServicesSupervisorData is not empty', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.adc,
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
     });
 
-    const mockCaseServicesSupervisorInfo = {
+    const mockcaseServicesSupervisorData = {
       section: PETITIONS_SECTION,
       userId: caseServicesSupervisorUser.userId,
     };
@@ -500,14 +500,14 @@ describe('getNotificationsInteractor', () => {
       .getDocumentQCInboxForSection.mockReturnValue([filteredWorkItem]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo: mockCaseServicesSupervisorInfo,
+      caseServicesSupervisorData: mockcaseServicesSupervisorData,
       judgeUserId: undefined,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
         .mock.calls[0][0].section,
-    ).toEqual(mockCaseServicesSupervisorInfo.section);
+    ).toEqual(mockcaseServicesSupervisorData.section);
 
     expect(result.qcSectionInboxCount).toEqual(1);
   });

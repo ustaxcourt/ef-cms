@@ -13,10 +13,10 @@ export const getNotificationsAction = async ({ applicationContext, get }) => {
   const selectedSection =
     get(state.messageBoxToDisplay.section) ||
     get(state.workQueueToDisplay.section);
-  let caseServicesSupervisorInfo;
+  let caseServicesSupervisorData;
 
   if (selectedSection) {
-    caseServicesSupervisorInfo = {
+    caseServicesSupervisorData = {
       section: selectedSection,
       userId: applicationContext.getCurrentUser().userId,
     };
@@ -25,7 +25,7 @@ export const getNotificationsAction = async ({ applicationContext, get }) => {
   const notifications = await applicationContext
     .getUseCases()
     .getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorInfo,
+      caseServicesSupervisorData,
       judgeUserId,
     });
 
