@@ -16,19 +16,24 @@ export const getUsersInSectionAction =
    * @returns {object} the list of users in a section
    */
   async ({ applicationContext, props }) => {
+    const caseServicesSupervisorSelectedSection = props.section;
     const { CASE_SERVICES_SUPERVISOR_SECTION } =
       applicationContext.getConstants();
 
     let sectionToGet = section;
 
-    if (section === CASE_SERVICES_SUPERVISOR_SECTION && props.section) {
-      sectionToGet = props.section;
+    if (
+      section === CASE_SERVICES_SUPERVISOR_SECTION &&
+      caseServicesSupervisorSelectedSection
+    ) {
+      sectionToGet = caseServicesSupervisorSelectedSection;
     }
 
     if (!sectionToGet) {
       const user = applicationContext.getCurrentUser();
       sectionToGet = user.section;
     }
+
     const users = await applicationContext
       .getUseCases()
       .getUsersInSectionInteractor(applicationContext, {
