@@ -56,7 +56,6 @@ export const workQueueHelper = (get, applicationContext) => {
       return `/document-qc/${queue}/${box}`;
     },
     hideCaseStatusColumn: userIsPetitionsClerk || isCaseServicesSupervisor,
-    hideFiledByColumn: !userIsDocketClerk && !isCaseServicesSupervisor,
     hideIconColumn: userIsOther,
     individualInProgressCount,
     individualInboxCount,
@@ -71,6 +70,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showCaseStatusColumn: isJudge || userIsChambers,
     showDocketClerkFilter: userIsDocketClerk || isCaseServicesSupervisor,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
+    showFiledByColumn: userIsDocketClerk || isCaseServicesSupervisor,
     showFromColumn: isJudge || userIsChambers,
     showInProgressTab:
       userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor,
