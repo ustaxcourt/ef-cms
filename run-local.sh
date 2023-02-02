@@ -13,11 +13,11 @@ if [[ -z "$CIRCLECI" ]]; then
 
   echo "killing elasticsearch if already running"
   pkill -f elasticsearch
-
-  echo "starting elasticsearch"
-  ./web-api/start-elasticsearch.sh &
-  ESEARCH_PID=$!
 fi
+
+echo "starting elasticsearch"
+./web-api/start-elasticsearch.sh &
+ESEARCH_PID=$!
 
 URL=http://localhost:8000/shell ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
