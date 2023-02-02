@@ -296,7 +296,7 @@ describe('workQueueHelper', () => {
     });
 
     expect(result.hideCaseStatusColumn).toEqual(true);
-    expect(result.hideFiledByColumn).toEqual(false); //TODO: rethink how this is set and flip it to showFiledByColumn?
+    expect(result.showFiledByColumn).toEqual(true);
     expect(result.sentTitle).toEqual('Processed');
     expect(result.showDocketClerkFilter).toEqual(true);
     expect(result.showMyQueueToggle).toEqual(true);
