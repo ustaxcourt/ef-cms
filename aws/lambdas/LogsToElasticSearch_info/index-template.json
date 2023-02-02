@@ -45,17 +45,9 @@
         }
       },
       "metadata": {
-        "type": "object",
-        "dynamic": false,
-        "enabled": false
-      },
-      "context": {
         "properties": {
-          "docketNumber": {
-            "type": "keyword"
-          },
-          "docketEntryId": {
-            "type": "keyword"
+          "numberOfItems": {
+            "type": "integer"
           },
           "pk": {
             "type": "keyword"
@@ -65,6 +57,16 @@
           },
           "segment": {
             "type": "integer"
+          }
+        }
+      },
+      "context": {
+        "properties": {
+          "docketNumber": {
+            "type": "keyword"
+          },
+          "docketEntryId": {
+            "type": "keyword"
           },
           "trialSessionId": {
             "type": "keyword"
