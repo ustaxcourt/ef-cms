@@ -17,7 +17,7 @@ set +e
 function check_opensearch_domain_exists() {
   OPENSEARCH_DOMAIN=$1
 
-  aws es describe-elasticsearch-domain --domain-name "${OPENSEARCH_DOMAIN}" --region us-east-1 > /dev/null
+  aws es describe-elasticsearch-domain --domain-name "${OPENSEARCH_DOMAIN}" --region us-east-1 > /dev/null 2>&1
   CODE=$?
   if [[ "${CODE}" == "0" ]]; then
     echo 1
@@ -30,7 +30,7 @@ function check_dynamo_table_exists() {
   TABLE_NAME=$1
   REGION=$2
 
-  aws dynamodb describe-table --table-name "${TABLE_NAME}" --region "${REGION}" > /dev/null
+  aws dynamodb describe-table --table-name "${TABLE_NAME}" --region "${REGION}" > /dev/null 2>&1 
   CODE=$?
   if [[ "${CODE}" == "0" ]]; then
     echo 1
