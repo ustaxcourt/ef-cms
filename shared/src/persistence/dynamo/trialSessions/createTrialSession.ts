@@ -1,3 +1,4 @@
+import { TRawTrialSession } from '../../../business/entities/trialSessions/TrialSession';
 import { put } from '../../dynamodbClientService';
 
 /**
@@ -13,7 +14,7 @@ export const createTrialSession = ({
   trialSession,
 }: {
   applicationContext: IApplicationContext;
-  trialSession: TTrialSessionData;
+  trialSession: TRawTrialSession;
 }) =>
   put({
     Item: {
