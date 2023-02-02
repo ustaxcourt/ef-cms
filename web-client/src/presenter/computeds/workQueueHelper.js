@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
@@ -48,6 +47,12 @@ export const workQueueHelper = (get, applicationContext) => {
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
 
   const showStartPetitionButton = permissions.START_PAPER_CASE;
+  const userIsAllowed =
+    userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor;
+  const userIsPetitionsOrCaseServices =
+    userIsPetitionsClerk || isCaseServicesSupervisor;
+  const userIsDocketOrCaseServices =
+    userIsDocketClerk || isCaseServicesSupervisor;
 
   return {
     currentBoxView: workQueueToDisplay.box,
@@ -55,7 +60,7 @@ export const workQueueHelper = (get, applicationContext) => {
     getQueuePath: ({ box, queue }) => {
       return `/document-qc/${queue}/${box}`;
     },
-    hideCaseStatusColumn: userIsPetitionsClerk || isCaseServicesSupervisor,
+    hideCaseStatusColumn: userIsPetitionsOrCaseServices,
     hideIconColumn: userIsOther,
     individualInProgressCount,
     individualInboxCount,
@@ -63,27 +68,23 @@ export const workQueueHelper = (get, applicationContext) => {
     outboxFiledByColumnLabel,
     sectionInProgressCount,
     sectionInboxCount,
-    sentTitle:
-      userIsDocketClerk || isCaseServicesSupervisor ? 'Processed' : 'Served',
+    sentTitle: userIsDocketOrCaseServices ? 'Processed' : 'Served',
     showAssignedToColumn:
       !showIndividualWorkQueue && (showInbox || showInProgress) && !userIsOther,
     showCaseStatusColumn: isJudge || userIsChambers,
-    showDocketClerkFilter: userIsDocketClerk || isCaseServicesSupervisor,
+    showDocketClerkFilter: userIsDocketOrCaseServices,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
-    showFiledByColumn: userIsDocketClerk || isCaseServicesSupervisor,
+    showFiledByColumn: userIsDocketOrCaseServices,
     showFromColumn: isJudge || userIsChambers,
-    showInProgressTab:
-      userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor,
+    showInProgressTab: userIsAllowed,
     showInbox,
     showIndividualWorkQueue,
-    showMyQueueToggle:
-      userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor,
+    showMyQueueToggle: userIsAllowed,
     showOutbox,
     showProcessedByColumn:
-      ((userIsDocketClerk || isCaseServicesSupervisor) && showOutbox) ||
-      ((userIsPetitionsClerk || isCaseServicesSupervisor) && showInProgress),
-    showSectionSentTab:
-      userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor,
+      (userIsDocketOrCaseServices && showOutbox) ||
+      (userIsPetitionsOrCaseServices && showInProgress),
+    showSectionSentTab: userIsAllowed,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSelectAllCheckbox: permissions.ASSIGN_ALL_WORK_ITEMS,
     showSelectColumn: permissions.ASSIGN_WORK_ITEM,
