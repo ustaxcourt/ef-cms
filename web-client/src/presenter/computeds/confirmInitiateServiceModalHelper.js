@@ -9,12 +9,8 @@ import { uniqBy } from 'lodash';
  * @returns {object} the computed values
  */
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const {
-    CONTACT_TYPE_TITLES,
-    NON_MULTI_DOCKETABLE_EVENT_CODES,
-    SERVICE_INDICATOR_TYPES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { CONTACT_TYPE_TITLES, NON_MULTI_DOCKETABLE_EVENT_CODES, USER_ROLES } =
+    applicationContext.getConstants();
   const { isCourtIssued } = applicationContext.getUtilities();
 
   const docketEntryId = get(state.docketEntryId);
@@ -24,7 +20,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
 
   let { eventCode } = form;
-
   if (!eventCode) {
     ({ eventCode } = formattedCaseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -52,44 +47,39 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   let parties;
   if (showConsolidatedCasesForService) {
     const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
-    parties = [
-      ...formattedCaseDetail.consolidatedCases,
-      formattedCaseDetail,
-    ].reduce(
-      (aggregatedParties, aCase) => {
-        const caseCheckbox = consolidatedCasesToMultiDocketOn.find(
+
+    const paperServiceParties = [];
+
+    consolidatedCasesToMultiDocketOn.forEach(aCase => {
+      if (aCase.checked) {
+        const caseDetail = [
+          ...formattedCaseDetail.consolidatedCases,
+          formattedCaseDetail,
+        ].find(
           checkboxCase => checkboxCase.docketNumber === aCase.docketNumber,
         );
 
-        if (!caseCheckbox.checked) {
-          return aggregatedParties;
-        }
-        aggregatedParties.petitioners = aggregatedParties.petitioners.concat(
-          aCase.petitioners,
+        const checkboxPaperServiceParties = getPaperServiceParties(
+          applicationContext,
+          caseDetail,
         );
-        aggregatedParties.privatePractitioners =
-          aggregatedParties.privatePractitioners.concat(
-            aCase.privatePractitioners,
-          );
-        aggregatedParties.irsPractitioners =
-          aggregatedParties.irsPractitioners.concat(aCase.irsPractitioners);
+        paperServiceParties.push(...checkboxPaperServiceParties);
+      }
+    });
 
-        return aggregatedParties;
-      },
-      { irsPractitioners: [], petitioners: [], privatePractitioners: [] },
+    const paperServicePetitioners = paperServiceParties.filter(
+      party => party.contactId,
     );
-    parties.petitioners = uniqBy(parties.petitioners, 'contactId');
-    parties.privatePractitioners = uniqBy(
-      parties.privatePractitioners,
-      'userId',
+    const paperServicePractitioners = paperServiceParties.filter(
+      party => party.userId,
     );
-    parties.irsPractitioners = uniqBy(parties.irsPractitioners, 'userId');
+
+    parties = [
+      ...uniqBy(paperServicePetitioners, 'contactId'),
+      ...uniqBy(paperServicePractitioners, 'userId'),
+    ];
   } else {
-    parties = {
-      irsPractitioners: formattedCaseDetail.irsPractitioners,
-      petitioners: formattedCaseDetail.petitioners,
-      privatePractitioners: formattedCaseDetail.privatePractitioners,
-    };
+    parties = getPaperServiceParties(applicationContext, formattedCaseDetail);
   }
 
   const contactsNeedingPaperService = [];
@@ -104,21 +94,13 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     }
   };
 
-  Object.keys(parties).forEach(key => {
-    parties[key].forEach(party => {
-      if (
-        party &&
-        party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
-      ) {
-        contactsNeedingPaperService.push({
-          name: `${party.name}, ${roleToDisplay(party)}`,
-        });
-      }
+  parties.forEach(party => {
+    contactsNeedingPaperService.push({
+      name: `${party.name}, ${roleToDisplay(party)}`,
     });
   });
 
   let caseOrGroup = 'case';
-
   if (showConsolidatedCasesForService) {
     const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
 
@@ -134,4 +116,22 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
+};
+
+const getPaperServiceParties = (applicationContext, rawCase) => {
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+
+  const { irsPractitioners, petitioners, privatePractitioners } = rawCase;
+
+  const allParties = [
+    ...(irsPractitioners || []),
+    ...(petitioners || []),
+    ...(privatePractitioners || []),
+  ];
+
+  const paperServiceParties = allParties.filter(
+    person => person.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+  );
+
+  return paperServiceParties;
 };
