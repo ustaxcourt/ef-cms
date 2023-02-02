@@ -3,21 +3,22 @@
 # Usage
 #   used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
-if [[ -z "$CIRCLECI" ]]; then
-  echo "killing dynamo if already running"
-  pkill -f DynamoDBLocal
+# if [[ -z "$CIRCLECI" ]]; then
+echo "killing dynamo if already running"
+pkill -f DynamoDBLocal
 
-  echo "starting dynamo"
-  ./web-api/start-dynamo.sh &
-  DYNAMO_PID=$!
+echo "starting dynamo"
+./web-api/start-dynamo.sh &
+DYNAMO_PID=$!
 
-  echo "killing elasticsearch if already running"
-  pkill -f elasticsearch
-fi
+echo "killing elasticsearch if already running"
+pkill -f elasticsearch
 
 echo "starting elasticsearch"
 ./web-api/start-elasticsearch.sh &
 ESEARCH_PID=$!
+# fi
+
 
 URL=http://localhost:8000/shell ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
