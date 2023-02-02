@@ -14,6 +14,33 @@ set -e
   "AWS_SECRET_ACCESS_KEY"
 set +e
 
+function check_opensearch_domain_exists() {
+  ENV=$1
+  NEXT_VERSION=$1
+
+  aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1 > /dev/null
+  CODE=$?
+  if [[ "${CODE}" == "0" ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+function check_dynamo_table_exists() {
+  ENV=$1
+  NEXT_VERSION=$2
+  REGION=$3
+
+  aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region "${REGION}" > /dev/null
+  CODE=$?
+  if [[ "${CODE}" == "0" ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
 node web-api/is-migration-needed.js
 SKIP_MIGRATION="$?"
 
@@ -39,25 +66,33 @@ fi
 
 if [[ $FORCE_MIGRATION == "--force" ]]; then
   ./scripts/dynamo/delete-dynamo-table.sh "efcms-${ENV}-${NEXT_VERSION}"
+  
+  EXISTS=$(check_opensearch_domain_exists "${ENV}" "${NEXT_VERSION}")
+  if [[ "${EXISTS}" == "1" ]]; then
+    aws es delete-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1
+    while [[ "${EXISTS}" == "1" ]]; do
+      echo "efcms-search-${ENV}-${NEXT_VERSION} is still being deleted. Waiting 30 seconds then checking again."
+      sleep 30
+      EXISTS=$(check_opensearch_domain_exists "${ENV}" "${NEXT_VERSION}")
+    done  
+  fi
 fi
 
-aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
-CODE=$?
-if [[ "${CODE}" == "0" ]]; then
+
+EXISTS=$(check_dynamo_table_exists "${ENV}" "${NEXT_VERSION}" us-east-1)
+if [[ "${EXISTS}" == "1" ]]; then
   echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-east-1 before running migration"
   exit 1
 fi
 
-aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
-CODE=$?
-if [[ "${CODE}" == "0" ]]; then
+EXISTS=$(check_dynamo_table_exists "${ENV}" "${NEXT_VERSION}" us-west-1)
+if [[ "${EXISTS}" == "1" ]]; then
   echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-west-1 before running migration"
   exit 1
 fi
 
-aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1
-CODE=$?
-if [[ "${CODE}" == "0" ]]; then
+EXISTS=$(check_opensearch_domain_exists "${ENV}" "${NEXT_VERSION}")
+if [[ "${EXISTS}" == "1" ]]; then
   echo "error: expected the efcms-search-${ENV}-${NEXT_VERSION} elasticsearch cluster to have been deleted from us-east-1 before running migration"
   exit 1
 fi
