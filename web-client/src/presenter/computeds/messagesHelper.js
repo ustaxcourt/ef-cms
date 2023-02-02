@@ -1,3 +1,4 @@
+import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 export const messagesHelper = (get, applicationContext) => {
@@ -18,9 +19,7 @@ export const messagesHelper = (get, applicationContext) => {
 
   const selectedSection = messageBoxToDisplay.section;
   const sectionTitle = selectedSection
-    ? `${
-        selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1)
-      } Section Messages`
+    ? `${capitalize(selectedSection)} Section Messages`
     : 'Section Messages';
 
   let messagesTitle = showIndividualMessages ? 'My Messages' : sectionTitle;
