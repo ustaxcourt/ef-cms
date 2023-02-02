@@ -11,11 +11,13 @@ export const SectionWorkQueue = connect(
   {
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.workQueueToDisplay.queue,
+    section: state.workQueueToDisplay.section,
     workQueueHelper: state.workQueueHelper,
   },
   function SectionWorkQueue({
     navigateToPathSequence,
     queue,
+    section,
     workQueueHelper,
   }) {
     return (
@@ -24,9 +26,10 @@ export const SectionWorkQueue = connect(
         className="classic-horizontal-header3 tab-border"
         onSelect={box => {
           navigateToPathSequence({
-            path: workQueueHelper.getQueuePath({
+            path: workQueueHelper.documentQCNavigationPath({
               box,
               queue,
+              section,
             }),
           });
         }}

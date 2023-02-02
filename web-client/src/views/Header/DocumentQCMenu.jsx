@@ -38,6 +38,7 @@ export const DocumentQCMenu = connect(
             <li className="usa-nav__submenu-item">
               <Button
                 link
+                href="/document-qc/my/inbox"
                 id="my-qc-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
@@ -49,7 +50,7 @@ export const DocumentQCMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
-                href="/"
+                href="/document-qc/section/inbox/selectedSection?section=docket"
                 id="docket-section-qc"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
@@ -61,7 +62,7 @@ export const DocumentQCMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
-                href="/"
+                href="/document-qc/section/inbox/selectedSection?section=petitions"
                 id="petitions-section-qc"
                 onClick={() => {
                   resetHeaderAccordionsSequence();

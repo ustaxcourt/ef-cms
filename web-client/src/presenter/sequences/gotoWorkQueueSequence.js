@@ -1,3 +1,4 @@
+import { CASE_SERVICES_SUPERVISOR_SECTION } from '../../../../shared/src/business/entities/EntityConstants';
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
@@ -10,6 +11,7 @@ import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -21,6 +23,7 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
+  setSectionForWorkQueueAction,
   parallel([
     [
       runPathForUserRoleAction,
@@ -40,6 +43,12 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
           ],
           [],
         ),
+        caseServicesSupervisor: [
+          getUsersInSectionAction({
+            section: CASE_SERVICES_SUPERVISOR_SECTION,
+          }),
+          setUsersAction,
+        ],
         clerkofcourt: [
           getUsersInSectionAction({ section: DOCKET_SECTION }),
           setUsersAction,
