@@ -52,11 +52,15 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   let parties;
   if (showConsolidatedCasesForService) {
     const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
-    parties = formattedCaseDetail.consolidatedCases.reduce(
+    parties = [
+      ...formattedCaseDetail.consolidatedCases,
+      formattedCaseDetail,
+    ].reduce(
       (aggregatedParties, aCase) => {
         const caseCheckbox = consolidatedCasesToMultiDocketOn.find(
           checkboxCase => checkboxCase.docketNumber === aCase.docketNumber,
         );
+
         if (!caseCheckbox.checked) {
           return aggregatedParties;
         }
@@ -115,11 +119,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   let caseOrGroup = 'case';
 
-  if (
-    showConsolidatedCasesForService &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
-  ) {
-    caseOrGroup = 'group';
+  if (showConsolidatedCasesForService) {
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
+
+    if (consolidatedCasesToMultiDocketOn.filter(c => c.checked).length > 1) {
+      caseOrGroup = 'group';
+    }
   }
 
   return {
