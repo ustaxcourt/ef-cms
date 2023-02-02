@@ -1,3 +1,4 @@
+import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 export const workQueueHelper = (get, applicationContext) => {
@@ -6,6 +7,7 @@ export const workQueueHelper = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { USER_ROLES } = applicationContext.getConstants();
   const isJudge = user.role === USER_ROLES.judge;
+  const selectedSection = workQueueToDisplay.section;
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';
@@ -17,48 +19,72 @@ export const workQueueHelper = (get, applicationContext) => {
   const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
+  const isCaseServicesSupervisor =
+    user.role === USER_ROLES.caseServicesSupervisor;
   const userIsOther = ![
     USER_ROLES.docketClerk,
     USER_ROLES.petitionsClerk,
+    USER_ROLES.caseServicesSupervisor,
   ].includes(user.role);
-  const workQueueTitle = `${
+  let workQueueTitle = `${
     showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
   }Document QC`;
+
+  if (isCaseServicesSupervisor) {
+    workQueueTitle = selectedSection
+      ? `${capitalize(selectedSection)} Section QC`
+      : 'My Document QC';
+  }
+
+  const documentQCNavigationPath = ({ box, queue, section }) => {
+    return section
+      ? `/document-qc/${queue}/${box}/selectedSection?section=${section}`
+      : `/document-qc/${queue}/${box}`;
+  };
+
   const permissions = get(state.permissions);
 
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
 
   const showStartPetitionButton = permissions.START_PAPER_CASE;
+  const userIsAllowed =
+    userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor;
+  const userIsPetitionsOrCaseServices =
+    userIsPetitionsClerk || isCaseServicesSupervisor;
+  const userIsDocketOrCaseServices =
+    userIsDocketClerk || isCaseServicesSupervisor;
 
   return {
     currentBoxView: workQueueToDisplay.box,
+    documentQCNavigationPath,
     getQueuePath: ({ box, queue }) => {
       return `/document-qc/${queue}/${box}`;
     },
-    hideCaseStatusColumn: userIsPetitionsClerk,
-    hideFiledByColumn: !userIsDocketClerk,
+    hideCaseStatusColumn: userIsPetitionsOrCaseServices,
     hideIconColumn: userIsOther,
     individualInProgressCount,
     individualInboxCount,
+    isCaseServicesSupervisor,
     outboxFiledByColumnLabel,
     sectionInProgressCount,
     sectionInboxCount,
-    sentTitle: userIsDocketClerk ? 'Processed' : 'Served',
+    sentTitle: userIsDocketOrCaseServices ? 'Processed' : 'Served',
     showAssignedToColumn:
       !showIndividualWorkQueue && (showInbox || showInProgress) && !userIsOther,
     showCaseStatusColumn: isJudge || userIsChambers,
-    showDocketClerkFilter: userIsDocketClerk,
+    showDocketClerkFilter: userIsDocketOrCaseServices,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
+    showFiledByColumn: userIsDocketOrCaseServices,
     showFromColumn: isJudge || userIsChambers,
-    showInProgressTab: userIsDocketClerk || userIsPetitionsClerk,
+    showInProgressTab: userIsAllowed,
     showInbox,
     showIndividualWorkQueue,
-    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
+    showMyQueueToggle: userIsAllowed,
     showOutbox,
     showProcessedByColumn:
-      (userIsDocketClerk && showOutbox) ||
-      (userIsPetitionsClerk && showInProgress),
-    showSectionSentTab: userIsDocketClerk || userIsPetitionsClerk,
+      (userIsDocketOrCaseServices && showOutbox) ||
+      (userIsPetitionsOrCaseServices && showInProgress),
+    showSectionSentTab: userIsAllowed,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSelectAllCheckbox: permissions.ASSIGN_ALL_WORK_ITEMS,
     showSelectColumn: permissions.ASSIGN_WORK_ITEM,

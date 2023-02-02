@@ -58,7 +58,28 @@ describe('getNotificationsAction', () => {
       applicationContext.getUseCases().getNotificationsInteractor.mock
         .calls[0][1].caseServicesSupervisorInfo,
     ).toEqual({
-      section: 'docket',
+      section: DOCKET_SECTION,
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+  });
+
+  it('makes a call to fetch notifications with case services supervisor information when state.workQueueToDisplay.section is defined', async () => {
+    await runAction(getNotificationsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        workQueueToDisplay: {
+          section: DOCKET_SECTION,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getNotificationsInteractor.mock
+        .calls[0][1].caseServicesSupervisorInfo,
+    ).toEqual({
+      section: DOCKET_SECTION,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });

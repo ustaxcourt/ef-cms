@@ -10,7 +10,9 @@ import { state } from 'cerebral';
  */
 export const getNotificationsAction = async ({ applicationContext, get }) => {
   const judgeUserId = get(state.judgeUser.userId);
-  const selectedSection = get(state.messageBoxToDisplay.section);
+  const selectedSection =
+    get(state.messageBoxToDisplay.section) ||
+    get(state.workQueueToDisplay.section);
   let caseServicesSupervisorInfo;
 
   if (selectedSection) {
