@@ -16,7 +16,7 @@ set +e
 
 function check_opensearch_domain_exists() {
   ENV=$1
-  NEXT_VERSION=$1
+  NEXT_VERSION=$2
 
   aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1 > /dev/null
   CODE=$?
