@@ -15,10 +15,9 @@ set -e
 set +e
 
 function check_opensearch_domain_exists() {
-  ENV=$1
-  NEXT_VERSION=$2
+  OPENSEARCH_DOMAIN=$1
 
-  aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1 > /dev/null
+  aws es describe-elasticsearch-domain --domain-name "${OPENSEARCH_DOMAIN}" --region us-east-1 > /dev/null
   CODE=$?
   if [[ "${CODE}" == "0" ]]; then
     echo 1
@@ -28,11 +27,10 @@ function check_opensearch_domain_exists() {
 }
 
 function check_dynamo_table_exists() {
-  ENV=$1
-  NEXT_VERSION=$2
-  REGION=$3
+  TABLE_NAME=$1
+  REGION=$2
 
-  aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region "${REGION}" > /dev/null
+  aws dynamodb describe-table --table-name "${TABLE_NAME}" --region "${REGION}" > /dev/null
   CODE=$?
   if [[ "${CODE}" == "0" ]]; then
     echo 1
@@ -64,35 +62,39 @@ else
   aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
 fi
 
+NEXT_TABLE="efcms-${ENV}-${NEXT_VERSION}"
+NEXT_OPENSEARCH_DOMAIN="efcms-search-${ENV}-${NEXT_VERSION}"
+
 if [[ $FORCE_MIGRATION == "--force" ]]; then
-  ./scripts/dynamo/delete-dynamo-table.sh "efcms-${ENV}-${NEXT_VERSION}"
+  ./scripts/dynamo/delete-dynamo-table.sh "${NEXT_TABLE}"
   
-  EXISTS=$(check_opensearch_domain_exists "${ENV}" "${NEXT_VERSION}")
+  EXISTS=$(check_opensearch_domain_exists "${NEXT_OPENSEARCH_DOMAIN}")
   if [[ "${EXISTS}" == "1" ]]; then
-    aws es delete-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1
+    aws es delete-elasticsearch-domain --domain-name "${NEXT_OPENSEARCH_DOMAIN}}" --region us-east-1
     while [[ "${EXISTS}" == "1" ]]; do
-      echo "efcms-search-${ENV}-${NEXT_VERSION} is still being deleted. Waiting 30 seconds then checking again."
+      echo "${NEXT_OPENSEARCH_DOMAIN} is still being deleted. Waiting 30 seconds then checking again."
       sleep 30
-      EXISTS=$(check_opensearch_domain_exists "${ENV}" "${NEXT_VERSION}")
+      EXISTS=$(check_opensearch_domain_exists "${NEXT_OPENSEARCH_DOMAIN}")
     done  
   fi
 fi
 
 
-EXISTS=$(check_dynamo_table_exists "${ENV}" "${NEXT_VERSION}" us-east-1)
+
+EXISTS=$(check_dynamo_table_exists "${NEXT_TABLE}" us-east-1)
 if [[ "${EXISTS}" == "1" ]]; then
-  echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-east-1 before running migration"
+  echo "error: expected the ${NEXT_TABLE} table to have been deleted from us-east-1 before running migration"
   exit 1
 fi
 
-EXISTS=$(check_dynamo_table_exists "${ENV}" "${NEXT_VERSION}" us-west-1)
+EXISTS=$(check_dynamo_table_exists "${NEXT_TABLE}" us-west-1)
 if [[ "${EXISTS}" == "1" ]]; then
-  echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-west-1 before running migration"
+  echo "error: expected the ${NEXT_TABLE} table to have been deleted from us-west-1 before running migration"
   exit 1
 fi
 
-EXISTS=$(check_opensearch_domain_exists "${ENV}" "${NEXT_VERSION}")
+EXISTS=$(check_opensearch_domain_exists "${NEXT_OPENSEARCH_DOMAIN}")
 if [[ "${EXISTS}" == "1" ]]; then
-  echo "error: expected the efcms-search-${ENV}-${NEXT_VERSION} elasticsearch cluster to have been deleted from us-east-1 before running migration"
+  echo "error: expected the ${NEXT_OPENSEARCH_DOMAIN} elasticsearch cluster to have been deleted from us-east-1 before running migration"
   exit 1
 fi
