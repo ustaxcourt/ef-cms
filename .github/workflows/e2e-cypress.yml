@@ -33,11 +33,11 @@ jobs:
       #   with:
       #     stack-version: 7.10.2
       #     security-enabled: false
-      - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
-        with:
-          port: 8000
-          cors: '*'
+      # - name: Setup DynamoDB Local
+      #   uses: rrainn/dynamodb-action@v2.0.1
+      #   with:
+      #     port: 8000
+      #     cors: '*'
       - name: Run E2E Cypress
         run: |
           npm ci
