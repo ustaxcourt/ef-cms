@@ -58,7 +58,7 @@ const case105_23: TCase & TDynamoRecord = {
   status: 'General Docket - At Issue (Ready for Trial)',
 };
 
-const case105_23_petition: DocketEntry = {
+const case105_23_petition: TDynamoRecord & RawDocketEntry = {
   addToCoversheet: false,
   createdAt: '2023-01-02T05:00:00.000Z',
   docketEntryId: '38b33b7b-2017-41fe-9453-e9732ebf28f7',
@@ -97,7 +97,7 @@ const case105_23_petition: DocketEntry = {
   userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const case105_23_order: DocketEntry = {
+const case105_23_order: TDynamoRecord & RawDocketEntry = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:33:13.835Z',
   docketEntryId: '5157315b-1116-465e-9fa9-f81be578d6b8',
@@ -128,7 +128,7 @@ const case105_23_order: DocketEntry = {
   userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const case105_23_place_of_trial: DocketEntry = {
+const case105_23_place_of_trial: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-02T05:00:00.000Z',
   docketEntryId: '86018db0-2fb6-4783-8027-3f85204da186',
@@ -229,7 +229,7 @@ const case106_23: TCase & TDynamoRecord = {
   status: 'General Docket - At Issue (Ready for Trial)',
 };
 
-const case106_23_stin: DocketEntry = {
+const case106_23_stin: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:34:19.389Z',
   docketEntryId: '1fdbd670-febb-44e6-a257-bb3b6e3f6b15',
@@ -308,7 +308,7 @@ const case105_23_petition_work_item: WorkItem & TDynamoRecord = {
   workItemId: 'da03efd1-a7d5-4cf6-ad71-aa1d7c65e0f1',
 };
 
-const case105_23_notr: DocketEntry = {
+const case105_23_notr: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:33:18.437Z',
   docketEntryId: 'a8c259e6-b6ec-4f0d-b07e-2db3c9c55737',
@@ -369,7 +369,7 @@ const case106_23_place_of_trial = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
 };
 
-const case106_23_notr: DocketEntry = {
+const case106_23_notr: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:34:42.962Z',
   docketEntryId: 'a0f13802-5eae-43cb-b886-797e322917d6',
@@ -443,7 +443,7 @@ const case106_23_petition = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
 };
 
-const case106_23_order_for_filing_fee: DocketEntry = {
+const case106_23_order_for_filing_fee: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:34:39.129Z',
   docketEntryId: 'fe45bb45-f32d-4bba-ba1f-eb8178655f2b',
