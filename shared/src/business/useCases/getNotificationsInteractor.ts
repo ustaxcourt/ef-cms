@@ -49,17 +49,17 @@ export const getNotificationsInteractor = async (
 
   const { section, userId } = caseServicesSupervisorData || currentUser;
 
-  let sectionToDsiplay = applicationContext
+  let sectionToDisplay = applicationContext
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
 
   if (!isEmpty(caseServicesSupervisorData)) {
-    sectionToDsiplay = caseServicesSupervisorData.section;
+    sectionToDisplay = caseServicesSupervisorData.section;
   }
 
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ section: sectionToDsiplay, user: currentUser });
+    .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
 
   const userInbox = await applicationContext
     .getPersistenceGateway()
@@ -87,7 +87,7 @@ export const getNotificationsInteractor = async (
     .getDocumentQCInboxForSection({
       applicationContext,
       judgeUserName: judgeUser ? judgeUser.name : null,
-      section: sectionToDsiplay,
+      section: sectionToDisplay,
     });
 
   const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
