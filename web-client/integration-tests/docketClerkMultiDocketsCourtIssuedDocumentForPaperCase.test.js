@@ -1,4 +1,4 @@
-import { confirmInitiateCourtIssuedFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
+import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -99,9 +99,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
     );
 
     const modalHelper = runCompute(
-      withAppContextDecorator(
-        confirmInitiateCourtIssuedFilingServiceModalHelper,
-      ),
+      withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
         state: cerebralTest.getState(),
       },

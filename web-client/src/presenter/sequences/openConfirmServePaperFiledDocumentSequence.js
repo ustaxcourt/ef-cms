@@ -9,19 +9,23 @@ import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openConfirmServePaperFiledDocumentSequence = [
-  setRedirectUrlAction,
-  getFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-  ),
-  setFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-  ),
-  setDocketEntryIdAction,
   clearModalStateAction,
+  setRedirectUrlAction,
+  setDocketEntryIdAction,
   isDocketEntryMultiDocketableAction,
   {
     no: [],
-    yes: [setMultiDocketingCheckboxesAction],
+    yes: [
+      getFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS
+          .key,
+      ),
+      setFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS
+          .key,
+      ),
+      setMultiDocketingCheckboxesAction,
+    ],
   },
   setShowModalFactoryAction('ConfirmInitiatePaperFilingServiceModal'),
 ];
