@@ -2,6 +2,8 @@
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
+FORCE_MIGRATION=$1
+
 set -e
 ./check-env-variables.sh \
   "ENV" \
@@ -15,7 +17,7 @@ set +e
 node web-api/is-migration-needed.js
 SKIP_MIGRATION="$?"
 
-if [[ "${SKIP_MIGRATION}" == "1" ]]; then
+if [[ "${SKIP_MIGRATION}" == "1" ]] && [[ $FORCE_MIGRATION != "--force" ]]; then
   exit 0
 fi
 
@@ -33,6 +35,10 @@ else
   echo "setting destination table to beta"
   NEXT_VERSION="beta"
   aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
+fi
+
+if [[ $FORCE_MIGRATION == "--force" ]]; then
+  ./scripts/dynamo/delete-dynamo-table.sh "efcms-${ENV}-${NEXT_VERSION}"
 fi
 
 aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
