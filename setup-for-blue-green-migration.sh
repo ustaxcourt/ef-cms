@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# call this script with the --force tag to ready the environment for a blue-green migration
+
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
 FORCE_MIGRATION=$1
