@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+# shellcheck disable=SC1091
 source "./scripts/helpers/suppress-output.sh"
 
 {
@@ -14,12 +15,11 @@ else
 fi
 
 quiet=$(should_suppress_output "$@")
-[[ "$quiet" -eq 1 ]] && QUIET=" --quiet"
 
-"./check-env-variables.sh${QUIET}" \
-    "ENV" \
-    "AWS_SECRET_ACCESS_KEY" \
-    "AWS_ACCESS_KEY_ID"
+CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
+[[ "$quiet" -eq 1 ]] && CHECK_PARAMS+=("--quiet")
+
+./check-env-variables.sh "${CHECK_PARAMS[@]}"
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
@@ -33,6 +33,5 @@ REGION=us-east-1
 content=$(aws secretsmanager get-secret-value --region "${REGION}" --secret-id "${ENV}_deploy" --query "SecretString" --output text)
 echo "${content}" | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
 set -o allexport
-# shellcheck disable=SC1091
 source .env
 set +o allexport
