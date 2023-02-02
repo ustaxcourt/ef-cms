@@ -45,7 +45,7 @@ export const getNotificationsInteractor = async (
 
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ user: currentUser });
+    .getWorkQueueFilters({ section: sectionToShow, user: currentUser });
 
   const userInbox = await applicationContext
     .getPersistenceGateway()

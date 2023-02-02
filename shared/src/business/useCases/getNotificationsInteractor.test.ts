@@ -473,7 +473,7 @@ describe('getNotificationsInteractor', () => {
     ).toEqual(PETITIONS_SECTION);
   });
 
-  it('should fetch the document QC inbox for the selected section when caseServicesSupervisorInfo is not empty', async () => {
+  it('should fetch the filtered document QC inbox for the selected section when caseServicesSupervisorInfo is not empty', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.adc,
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
@@ -484,7 +484,22 @@ describe('getNotificationsInteractor', () => {
       userId: caseServicesSupervisorUser.userId,
     };
 
-    await getNotificationsInteractor(applicationContext, {
+    const filteredWorkItem = {
+      associatedJudge: 'Judge Barker',
+      caseIsInProgress: false,
+      docketEntry: {
+        isFileAttached: true,
+      },
+      inProgress: false,
+      isRead: true,
+      section: 'petitions',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForSection.mockReturnValue([filteredWorkItem]);
+
+    const result = await getNotificationsInteractor(applicationContext, {
       caseServicesSupervisorInfo: mockCaseServicesSupervisorInfo,
       judgeUserId: undefined,
     });
@@ -493,5 +508,7 @@ describe('getNotificationsInteractor', () => {
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
         .mock.calls[0][0].section,
     ).toEqual(mockCaseServicesSupervisorInfo.section);
+
+    expect(result.qcSectionInboxCount).toEqual(1);
   });
 });
