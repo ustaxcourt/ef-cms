@@ -5,28 +5,24 @@ import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ConfirmInitiatePaperFilingServiceModal = connect(
+export const ConfirmInitiateServiceModal = connect(
   {
-    cancelSequence: sequences.clearModalFormSequence,
-    confirmInitiatePaperFilingServiceModalHelper:
-      state.confirmInitiatePaperFilingServiceModalHelper,
+    cancelSequence: sequences.dismissModalSequence,
+    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: props.confirmSequence,
     documentTitle: props.documentTitle,
-    fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
-      sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiatePaperFilingServiceModal({
+  function ConfirmInitiateServiceModal({
     cancelSequence,
-    confirmInitiatePaperFilingServiceModalHelper,
+    confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
-    fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse,
   }) {
     let isSubmitDebounced = false;
 
-    const debounceSubmit = (timeout = 100) => {
+    const debounceSubmit = timeout => {
       isSubmitDebounced = true;
 
       setTimeout(() => {
@@ -42,26 +38,24 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
         confirmLabel="Yes, Serve"
         confirmSequence={() => {
           debounceSubmit(200);
-          confirmSequence
-            ? confirmSequence()
-            : fileAndServeCourtIssuedDocumentFromDocketEntrySequence();
+          confirmSequence();
         }}
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">
-          {confirmInitiatePaperFilingServiceModalHelper.confirmationText}
+          {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
-        {confirmInitiatePaperFilingServiceModalHelper.showPaperAlert && (
+        {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint exclamation fullWidth className="block">
             <div className="margin-bottom-1">
-              This {confirmInitiatePaperFilingServiceModalHelper.caseOrGroup}{' '}
-              has parties receiving paper service:
+              This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
+              receiving paper service:
             </div>
-            {confirmInitiatePaperFilingServiceModalHelper.contactsNeedingPaperService.map(
+            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
               contact => (
                 <div className="margin-bottom-1" key={contact.name}>
                   {contact.name}
@@ -70,7 +64,7 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
             )}
           </Hint>
         )}
-        {confirmInitiatePaperFilingServiceModalHelper.showConsolidatedCasesForService && (
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes />
         )}
       </ModalDialog>
@@ -78,5 +72,4 @@ export const ConfirmInitiatePaperFilingServiceModal = connect(
   },
 );
 
-ConfirmInitiatePaperFilingServiceModal.displayName =
-  'ConfirmInitiatePaperFilingServiceModal';
+ConfirmInitiateServiceModal.displayName = 'ConfirmInitiateServiceModal';
