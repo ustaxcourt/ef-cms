@@ -11,10 +11,10 @@ const { get } = require('../requests');
  */
 exports.getNotificationsInteractor = (
   applicationContext,
-  { caseServicesSupervisorInfo, judgeUserId },
+  { caseServicesSupervisorData, judgeUserId },
 ) => {
   const queryString = qs.stringify({
-    caseServicesSupervisorInfo,
+    caseServicesSupervisorData,
     judgeUserId,
   });
 

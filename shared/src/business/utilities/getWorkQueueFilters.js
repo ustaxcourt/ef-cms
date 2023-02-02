@@ -7,14 +7,11 @@ const {
 } = require('../entities/EntityConstants');
 
 const getDocQcSectionForUser = user => {
-  if (
+  const showDocketSectionQC =
     user.section !== PETITIONS_SECTION &&
-    user.section !== CASE_SERVICES_SUPERVISOR_SECTION
-  ) {
-    return DOCKET_SECTION;
-  } else {
-    return user.section;
-  }
+    user.section !== CASE_SERVICES_SUPERVISOR_SECTION;
+
+  return showDocketSectionQC ? DOCKET_SECTION : user.section;
 };
 
 const getWorkQueueFilters = ({ section, user }) => {
