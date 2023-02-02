@@ -39,8 +39,8 @@ const createManyAccounts = async ([num, role, section]) => {
       section,
     };
     await createDawsonUser({
+      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
       setPermanentPassword: true,
-      urlOverride: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
       user,
     });
   }
@@ -130,7 +130,11 @@ const setupPractitioners = async () => {
         role,
         section: role,
       };
-      return createDawsonUser({ setPermanentPassword: true, user });
+      return createDawsonUser({
+        deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+        setPermanentPassword: true,
+        user,
+      });
     });
     await Promise.all(promises);
   }
