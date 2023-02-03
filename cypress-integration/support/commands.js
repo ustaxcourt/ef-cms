@@ -27,6 +27,7 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 Cypress.Commands.add('login', (username, route = '/') => {
   const url = `/log-in?code=${username}@example.com&path=${route}`;
   cy.visit(url);
+  cy.waitUntilSettled(50);
   cy.url().should('include', route);
   cy.showsErrorMessage(false);
   cy.url().should('not.include', '/mock-login');
