@@ -1,17 +1,13 @@
 #!/bin/bash -e
 
+# shellcheck disable=SC1091
 source "./scripts/helpers/suppress-output.sh"
 
 {
   [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] ||
   [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null);
 } && sourced=1 || sourced=0
-
-if [[ $sourced -eq 0 ]]; then
-    exit="exit"
-else
-    exit="return"
-fi
+[[ $sourced -eq 0 ]] && exit="exit" || exit="return"
 
 quiet=$(should_suppress_output "$@")
 
