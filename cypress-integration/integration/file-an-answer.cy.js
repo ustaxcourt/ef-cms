@@ -3,11 +3,8 @@ const {
 } = require('../support/pages/dashboard');
 
 describe('Filing an Answer', function () {
-  before(() => {
-    cy.login('irspractitioner', '/case-detail/104-18');
-  });
-
   it('should have a file first IRS document button', () => {
+    cy.login('irspractitioner', '/case-detail/104-18');
     cy.get('#button-first-irs-document').click();
   });
 

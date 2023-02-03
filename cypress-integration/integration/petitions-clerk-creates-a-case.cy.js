@@ -11,13 +11,10 @@ const {
 } = require('../support/pages/unchecks-orders-and-notices-boxes-in-case');
 
 describe('Create case and submit to IRS', function () {
-  before(() => {
+  it('should display parties tab when user navigates to create a case', () => {
     navigateToDocumentQC('petitionsclerk');
 
     getCreateACaseButton().click();
-  });
-
-  it('should display parties tab when user navigates to create a case', () => {
     cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');
 
     fillInCreateCaseFromPaperForm();
