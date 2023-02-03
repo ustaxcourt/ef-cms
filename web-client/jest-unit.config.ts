@@ -1,8 +1,5 @@
 import type { Config } from 'jest';
 
-// console.log('I AM JSWITH TS regex thing: ', JSON.stringify(jsWithTs));
-// console.log('I AM JSWITHBABEL regex thing: ', JSON.stringify(jsWithBabel));
-
 const config: Config = {
   clearMocks: true,
   collectCoverage: false,
@@ -35,24 +32,13 @@ const config: Config = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  // preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
   testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'],
-  // testRegex: 'web-client/src/.*\\.test\\.tsx',
   testSequencer: `${__dirname}/../jestSequencer.js`,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
   },
-  // transform: {
-  //   '^.+\\.[tj]sx?$': [
-  //     'ts-jest',
-  //     {
-  //       diagnostics: false,
-  //       tsconfig: 'web-client/tsconfig.json',
-  //     },
-  //   ],
-  // },
   verbose: false,
 };
 
