@@ -47,11 +47,6 @@ jobs:
           URL=http://localhost:4000/api/swagger ./wait-until.sh
           sleep 5
           npm run cypress:integration
-      - name: Store Video Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-videos
-          path: ${{ github.workspace }}/cypress/videos/
       - name: Store Logs
         uses: actions/upload-artifact@v3
         with:
