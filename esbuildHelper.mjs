@@ -113,7 +113,7 @@ export default function ({
         }),
         babel({
           config: {
-            ignore: ['node_modules', 'shared', 'web-api'],
+            ignore: ['node_modules'],
             plugins: [
               'babel-plugin-cerebral',
               'transform-html-import-require-to-string',
@@ -137,7 +137,7 @@ export default function ({
             sourceType: 'unambiguous',
             targets: 'defaults',
           },
-          filter: /\.(js|jsx|tsx)$/,
+          filter: /\.(js|ts|jsx|tsx)$/,
         }),
         copy({
           assets: [
