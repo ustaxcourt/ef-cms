@@ -1,46 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { noticeOfDocketChange } = require('./noticeOfDocketChange');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('noticeOfDocketChange', () => {
-    it('generates a Notice of Docket Change document', async () => {
-      const pdf = await noticeOfDocketChange({
+describe('noticeOfDocketChange', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Notice_Of_Docket_Change.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return noticeOfDocketChange({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -53,18 +22,7 @@ describe('documentGenerators', () => {
           },
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Of_Docket_Change', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription: 'generates a Notice of Docket Change document',
   });
 });

@@ -1,47 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { CHIEF_JUDGE } = require('../../entities/EntityConstants');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
-const { pendingReport } = require('./pendingReport');
+import { CHIEF_JUDGE } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { pendingReport } from './pendingReport';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('pendingReport', () => {
-    it('generates a Pending Report document', async () => {
-      const pdf = await pendingReport({
+describe('pendingReport', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Pending_Report.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      pendingReport({
         applicationContext,
         data: {
           pendingItems: [
@@ -80,19 +47,7 @@ describe('documentGenerators', () => {
           ],
           subtitle: 'Chief Judge',
         },
-      });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Pending_Report', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+      }),
+    testDescription: 'generates a Pending Report document',
   });
 });
