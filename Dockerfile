@@ -26,6 +26,7 @@ RUN apt-get install -y \
   graphicsmagick=1.4+really1.3.36+hg16481-2+deb11u1 \
   ghostscript=9.53.3~dfsg-7+deb11u2 \
   chromium \
+  openssh-client \
   sudo
 
 # These are needed to prevent node canvas from failing during node-gyp build steps
