@@ -56,7 +56,7 @@ describe('getNotificationsAction', () => {
 
     expect(
       applicationContext.getUseCases().getNotificationsInteractor.mock
-        .calls[0][1].caseServicesSupervisorInfo,
+        .calls[0][1].caseServicesSupervisorData,
     ).toEqual({
       section: DOCKET_SECTION,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -77,7 +77,7 @@ describe('getNotificationsAction', () => {
 
     expect(
       applicationContext.getUseCases().getNotificationsInteractor.mock
-        .calls[0][1].caseServicesSupervisorInfo,
+        .calls[0][1].caseServicesSupervisorData,
     ).toEqual({
       section: DOCKET_SECTION,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
