@@ -121,12 +121,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 const getPaperServiceParties = (applicationContext, rawCase) => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-  const { irsPractitioners, petitioners, privatePractitioners } = rawCase;
-
   const allParties = [
-    ...(irsPractitioners || []),
-    ...(petitioners || []),
-    ...(privatePractitioners || []),
+    ...(rawCase.irsPractitioners || []),
+    ...(rawCase.petitioners || []),
+    ...(rawCase.privatePractitioners || []),
   ];
 
   const paperServiceParties = allParties.filter(

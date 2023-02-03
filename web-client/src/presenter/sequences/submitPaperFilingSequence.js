@@ -1,5 +1,6 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
@@ -26,6 +27,7 @@ import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/sugg
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const submitPaperFilingSequence = [
+  clearModalAction,
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
