@@ -30,7 +30,7 @@ export const DeficiencyStatisticsForm = connect(
       <>
         <div className="margin-bottom-0">
           <label className="usa-label" htmlFor="year-or-period">
-            Select Year or period
+            Select year or period
           </label>
 
           <FormGroup id="year-or-period">
@@ -142,16 +142,13 @@ export const DeficiencyStatisticsForm = connect(
                   Total penalties (IRS Notice)
                 </label>
                 <DollarsInput
+                  disabled
                   className="usa-input usa-input-inline input-medium"
                   id="irs-total-penalties"
                   name="irsTotalPenalties"
                   value={form.irsTotalPenalties || ''}
-                  onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  onValueChange={values => {
-                    updateFormValueSequence({
-                      key: 'irsTotalPenalties',
-                      value: values.value,
-                    });
+                  onInput={() => {
+                    validateAddDeficiencyStatisticsSequence();
                   }}
                 />
                 <Button
@@ -161,6 +158,8 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'irsTotalPenalties',
+                      statisticId: form.statisticId,
+                      subkey: 'irsPenaltyAmount',
                       title: 'Calculate Penalties on IRS Notice',
                     })
                   }
@@ -209,17 +208,12 @@ export const DeficiencyStatisticsForm = connect(
                   Total penalties (Determination)
                 </label>
                 <DollarsInput
+                  disabled
                   className="usa-input usa-input-inline input-medium"
                   id="determination-total-penalties"
                   name="determinationTotalPenalties"
                   value={form.determinationTotalPenalties || ''}
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  onValueChange={values => {
-                    updateFormValueSequence({
-                      key: 'determinationTotalPenalties',
-                      value: values.value,
-                    });
-                  }}
                 />
                 <Button
                   link
@@ -228,7 +222,9 @@ export const DeficiencyStatisticsForm = connect(
                   onClick={() =>
                     showCalculatePenaltiesModalSequence({
                       key: 'determinationTotalPenalties',
-                      title: 'Calculate Penalties as determined by Court',
+                      statisticId: form.statisticId,
+                      subkey: 'determinationPenaltyAmount',
+                      title: 'Calculate Penalties as Determined by Court',
                     })
                   }
                 >
