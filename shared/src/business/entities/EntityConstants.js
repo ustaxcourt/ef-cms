@@ -923,6 +923,7 @@ const ROLES = {
   adc: 'adc',
   admin: 'admin',
   admissionsClerk: 'admissionsclerk',
+  caseServicesSupervisor: 'caseServicesSupervisor',
   chambers: 'chambers',
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
@@ -1237,6 +1238,7 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabyte
 
 const ADC_SECTION = 'adc';
 const ADMISSIONS_SECTION = 'admissions';
+const CASE_SERVICES_SUPERVISOR_SECTION = 'caseServicesSupervisor';
 const CHAMBERS_SECTION = 'chambers';
 const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 const DOCKET_SECTION = 'docket';
@@ -1249,6 +1251,7 @@ const TRIAL_CLERKS_SECTION = 'trialClerks';
 const SECTIONS = sortBy([
   ADC_SECTION,
   ADMISSIONS_SECTION,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CHAMBERS_SECTION,
   CLERK_OF_COURT_SECTION,
   DOCKET_SECTION,
@@ -1496,6 +1499,7 @@ module.exports = deepFreeze({
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
   CASE_SEARCH_MIN_YEAR,
   CASE_SEARCH_PAGE_SIZE,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CASE_STATUS_TYPES,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,

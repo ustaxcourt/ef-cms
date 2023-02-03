@@ -9,8 +9,14 @@ const { get } = require('../requests');
  * @param {string} providers.judgeUserId optional judge user id to filter on
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getNotificationsInteractor = (applicationContext, { judgeUserId }) => {
-  const queryString = qs.stringify({ judgeUserId });
+exports.getNotificationsInteractor = (
+  applicationContext,
+  { caseServicesSupervisorData, judgeUserId },
+) => {
+  const queryString = qs.stringify({
+    caseServicesSupervisorData,
+    judgeUserId,
+  });
 
   return get({
     applicationContext,

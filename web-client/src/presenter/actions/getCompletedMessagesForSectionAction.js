@@ -1,3 +1,4 @@
+import { state } from 'cerebral';
 /**
  * fetches the completed messages for the section
  *
@@ -6,11 +7,14 @@
  */
 export const getCompletedMessagesForSectionAction = async ({
   applicationContext,
+  get,
 }) => {
+  const selectedSection = get(state.messageBoxToDisplay.section);
+
   const messages = await applicationContext
     .getUseCases()
     .getCompletedMessagesForSectionInteractor(applicationContext, {
-      section: applicationContext.getCurrentUser().section,
+      section: selectedSection || applicationContext.getCurrentUser().section,
     });
 
   return { messages };

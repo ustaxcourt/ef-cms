@@ -21,25 +21,27 @@ export const HeaderDashboardInternal = connect(
             aria-label="unread work item count"
             className="unread margin-right-2"
           ></span>
-          {workQueueHelper.showIndividualWorkQueue && (
-            <Button
-              link
-              className="button-switch-box"
-              onClick={() => {
-                navigateToPathSequence({
-                  path: workQueueHelper.getQueuePath({
-                    box: 'inbox',
-                    queue: 'section',
-                  }),
-                });
-              }}
-            >
-              <FontAwesomeIcon icon={['far', 'clone']} />
-              Switch to Section Document QC
-            </Button>
-          )}
+          {workQueueHelper.showIndividualWorkQueue &&
+            !workQueueHelper.isCaseServicesSupervisor && (
+              <Button
+                link
+                className="button-switch-box"
+                onClick={() => {
+                  navigateToPathSequence({
+                    path: workQueueHelper.getQueuePath({
+                      box: 'inbox',
+                      queue: 'section',
+                    }),
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'clone']} />
+                Switch to Section Document QC
+              </Button>
+            )}
           {workQueueHelper.showSectionWorkQueue &&
-            workQueueHelper.showMyQueueToggle && (
+            workQueueHelper.showMyQueueToggle &&
+            !workQueueHelper.isCaseServicesSupervisor && (
               <Button
                 link
                 className="button-switch-box"

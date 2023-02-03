@@ -68,6 +68,29 @@ describe('Authorization client service', () => {
     });
   });
 
+  describe('case services supervisor role', () => {
+    it('should be authorized to perform both docket clerk and petitions clerk specific actions', () => {
+      expect(
+        isAuthorized(
+          {
+            role: ROLES.caseServicesSupervisor,
+            userId: 'caseServicesSupervisor1',
+          },
+          ROLE_PERMISSIONS.ADD_EDIT_STATISTICS,
+        ),
+      ).toBeTruthy();
+      expect(
+        isAuthorized(
+          {
+            role: ROLES.caseServicesSupervisor,
+            userId: 'caseServicesSupervisor1',
+          },
+          ROLE_PERMISSIONS.QC_PETITION,
+        ),
+      ).toBeTruthy();
+    });
+  });
+
   describe('docketClerk role', () => {
     it('should be authorized for the WORK_ITEM permission', () => {
       expect(
