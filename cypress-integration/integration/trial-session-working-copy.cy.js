@@ -132,7 +132,7 @@ describe.skip('Petitions Clerk', () => {
 
 describe.skip('Judge', () => {
   it('should be able to login', () => {
-    cy.login('judgeCohen');
+    cy.login('judgecohen');
   });
 
   it('views trial session working copy', () => {

@@ -26,6 +26,7 @@ const {
   getPetitionerById,
   getPractitionersRepresenting,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
@@ -189,6 +190,9 @@ const {
 const {
   uploadDocumentAndMakeSafeInteractor,
 } = require('../useCases/uploadDocumentAndMakeSafeInteractor');
+const {
+  validatePenaltiesInteractor,
+} = require('../useCases/validatePenaltiesInteractor');
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
@@ -380,6 +384,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
+    isPetitionerPartOfGroup: jest
+      .fn()
+      .mockImplementation(isPetitionerPartOfGroup),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
       .fn()
@@ -437,6 +444,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
+    validatePenaltiesInteractor: jest
+      .fn()
+      .mockImplementation(validatePenaltiesInteractor),
   });
 
   const mockGetUseCaseHelpers = appContextProxy({

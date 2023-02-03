@@ -32,7 +32,7 @@ describe('a user signs and serves a stipulated decision', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentUploadsProposedStipulatedDecision(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

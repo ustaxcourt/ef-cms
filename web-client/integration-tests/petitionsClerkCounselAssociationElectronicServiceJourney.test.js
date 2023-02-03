@@ -32,8 +32,8 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'petitioner4@example.com');
-  const loginUsername = 'petitioner4@example.com';
+  loginAs(cerebralTest, 'petitioner7@example.com');
+  const loginUsername = 'petitioner7@example.com';
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(
       cerebralTest,
@@ -85,12 +85,12 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
-      value: 'petitioner2@example.com',
+      value: 'petitioner8@example.com',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
-      value: 'petitioner2@example.com',
+      value: 'petitioner8@example.com',
     });
 
     await cerebralTest.runSequence('submitEditPetitionerSequence');
@@ -113,7 +113,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
     contactSecondary = contactSecondaryFromState(cerebralTest);
 
-    expect(contactSecondary.email).toEqual('petitioner2@example.com');
+    expect(contactSecondary.email).toEqual('petitioner8@example.com');
     expect(contactSecondary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );

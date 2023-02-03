@@ -40,7 +40,7 @@ describe('Respondent requests access to a case', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentSearchesForNonexistentCase(cerebralTest);
   respondentViewsDashboard(cerebralTest);
   respondentSearchesForCase(cerebralTest);
@@ -50,13 +50,13 @@ describe('Respondent requests access to a case', () => {
   respondentViewsCaseDetailOfAssociatedCase(cerebralTest);
   respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'irsPractitioner1@example.com');
+  loginAs(cerebralTest, 'irspractitioner1@example.com');
   respondentSearchesForCase(cerebralTest);
   respondentViewsCaseDetailOfUnassociatedCase(cerebralTest);
   respondentRequestsAccessToCase(cerebralTest, fakeFile);
   respondent1ViewsCaseDetailOfAssociatedCase(cerebralTest);
   respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'irsPractitioner3@example.com');
+  loginAs(cerebralTest, 'irspractitioner3@example.com');
   practitionerSearchesForUnassociatedSealedCase(cerebralTest);
 });

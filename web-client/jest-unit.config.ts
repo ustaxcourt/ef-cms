@@ -4,7 +4,7 @@ const config: Config = {
   clearMocks: true,
   collectCoverage: false,
   collectCoverageFrom: [
-    'src/**/*.js',
+    'src/**/*.{js,ts}',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
     '!src/applicationContext.js',

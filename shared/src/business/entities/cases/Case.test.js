@@ -801,6 +801,23 @@ describe('Case entity', () => {
       });
     });
 
+    it('should be invalid when case status is "Closed - Dismissed" and closed date is undefined', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.closedDismissed,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        closedDate: expect.anything(),
+      });
+    });
+
     it('Creates a valid case with closed status and a closed date', () => {
       const myCase = new Case(
         {

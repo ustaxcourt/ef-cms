@@ -7,6 +7,8 @@ import { loginAs, setupTest } from './helpers';
 
 describe('Docket Clerk Creates A Trial', () => {
   const cerebralTest = setupTest();
+  const previouslyCreatedTrialSessionId =
+    '159c4338-0fac-42eb-b0eb-d53b8d0195cc';
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -14,9 +16,14 @@ describe('Docket Clerk Creates A Trial', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, {
+    swingSession: true,
+    swingSessionId: previouslyCreatedTrialSessionId,
     trialLocation: 'Peoria, Illinois',
   });
-  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsTrialSessionList(cerebralTest, {
+    expectSwingSession: true,
+    expectedSwingSessionId: previouslyCreatedTrialSessionId,
+  });
   docketClerkEditsTrialSession(cerebralTest);
 
   const trialLocation = `San Diego, California, ${Date.now()}`;

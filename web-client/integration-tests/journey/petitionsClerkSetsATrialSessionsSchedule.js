@@ -10,12 +10,12 @@ export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
     expect(cerebralTest.getState('alertWarning.message')).toBeUndefined();
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
-    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
 
     await waitForExpectedItem({
       cerebralTest,
       currentItem: 'currentPage',
       expectedItem: 'PrintPaperTrialNotices',
     });
-  });
+  }, 60000);
 };

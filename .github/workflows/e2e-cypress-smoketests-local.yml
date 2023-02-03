@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - dependency-updates
-      - test
 
 jobs:
   e2e_cypress_smoketests_local:
@@ -41,7 +40,7 @@ jobs:
           cors: '*'
       - name: Run E2E Cypress Smoketests
         run: |
-          npm ci --legacy-peer-deps
+          npm ci
           mkdir -p /tmp/cypress/
           npm run start:all >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh

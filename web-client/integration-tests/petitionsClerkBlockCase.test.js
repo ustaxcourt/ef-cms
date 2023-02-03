@@ -84,7 +84,7 @@ describe('Blocking a Case', () => {
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
   //automatic block with a pending item
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
 
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
     await viewCaseDetail({

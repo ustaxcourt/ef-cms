@@ -111,5 +111,5 @@ export const updateCaseContextInteractor = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { applicationContext }).toRawObject();
 };

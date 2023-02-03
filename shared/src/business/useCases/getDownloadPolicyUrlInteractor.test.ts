@@ -58,7 +58,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  describe('when the user is a petitioner not associated with case', () => {
+  describe('when the user is a petitioner not associated with case or the consolidated group', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       applicationContext
@@ -711,6 +711,38 @@ describe('getDownloadPolicyUrlInteractor', () => {
           key: baseDocketEntry.docketEntryId,
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');
+    });
+  });
+
+  describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
+    const leadMockCase = {
+      ...MOCK_CASE,
+      leadDocketNumber: MOCK_CASE.docketNumber,
+      petitioners: [{ ...petitionerUser, contactId: petitionerUser.userId }],
+    };
+
+    beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
+      applicationContext
+        .getUseCases()
+        .getConsolidatedCasesByCaseInteractor.mockReturnValue([leadMockCase]);
+    });
+
+    it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
+      applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce(leadMockCase);
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: baseDocketEntry.docketEntryId,
+      });
+      expect(url).toEqual('localhost');
     });
   });
 });

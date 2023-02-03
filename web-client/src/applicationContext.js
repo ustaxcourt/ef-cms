@@ -16,7 +16,9 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
   hasPartyWithServiceType,
+  isClosed,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -161,6 +163,7 @@ import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxi
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
+import { generateTrialSessionPaperServicePdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialSessionPaperServicePdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
@@ -318,6 +321,7 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
+import { validatePenaltiesInteractor } from '../../shared/src/business/useCases/validatePenaltiesInteractor';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
@@ -419,6 +423,7 @@ const allUseCases = {
   generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
+  generateTrialSessionPaperServicePdfInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -565,6 +570,7 @@ const allUseCases = {
   validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
+  validatePenaltiesInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
   validatePetitionerInformationFormInteractor,
@@ -754,11 +760,13 @@ const applicationContext = {
       getStandaloneRemoteDocumentTitle,
       getWorkQueueFilters,
       hasPartyWithServiceType,
+      isClosed,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
+      isPetitionerPartOfGroup,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,

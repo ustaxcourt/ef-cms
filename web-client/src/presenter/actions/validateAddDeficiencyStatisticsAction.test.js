@@ -44,9 +44,7 @@ describe('validateAddDeficiencyStatisticsAction', () => {
       });
 
     await runAction(validateAddDeficiencyStatisticsAction, {
-      form: {
-        irsTotalPenalties: 3,
-      },
+      form: {},
       modules: {
         presenter,
       },
@@ -57,6 +55,32 @@ describe('validateAddDeficiencyStatisticsAction', () => {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
       errors: { irsTotalPenalties: 'Enter total penalties on IRS Notice' },
+    });
+  });
+
+  it('should reformat error messages when errors.irsTotalPenalties & errors.penalties both exist', async () => {
+    applicationContext
+      .getUseCases()
+      .validateAddDeficiencyStatisticsInteractor.mockReturnValue({
+        irsTotalPenalties: 'Enter total penalties on IRS Notice',
+        penalties: 'Enter at least one IRS penalty.',
+      });
+
+    await runAction(validateAddDeficiencyStatisticsAction, {
+      form: {},
+      modules: {
+        presenter,
+      },
+    });
+
+    expect(errorMock.mock.calls[0][0]).toEqual({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
+      errors: {
+        irsTotalPenalties:
+          'Use IRS Penalty Calculator to calculate total penalties.',
+      },
     });
   });
 });

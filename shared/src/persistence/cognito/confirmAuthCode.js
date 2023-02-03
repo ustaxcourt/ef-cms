@@ -1,6 +1,6 @@
 const { getClientId } = require('./getClientId');
 
-exports.confirmAuthCode = async (applicationContext, { code }) => {
+exports.confirmAuthCode = async ({ applicationContext, code }) => {
   const { COGNITO_SUFFIX, EFCMS_DOMAIN, STAGE } = process.env;
 
   const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });

@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - dependency-updates
-      - test
 
 jobs:
   test_pdfs:
@@ -16,7 +15,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -o Acquire::Retries=3 -y graphicsmagick ghostscript
-          npm ci --legacy-peer-deps && npm rebuild
+          npm ci && npm rebuild
       - name: Generate PDFs
         run: npm run test:pdf-output
       - name: Compare Images

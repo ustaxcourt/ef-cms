@@ -56,22 +56,16 @@ export const StatisticsForm = connect(
           Total penalties
         </label>
         <DollarsInput
+          disabled
           className="usa-input usa-input-inline"
           id={`total-penalties-${index}`}
           name={`statistics.${index}.irsTotalPenalties`}
           value={form.statistics[index].irsTotalPenalties || ''}
-          onBlur={() => validatePetitionFromPaperSequence()}
-          onValueChange={values => {
-            updateStatisticsFormValueSequence({
-              key: `statistics.${index}.irsTotalPenalties`,
-              value: values.value,
-            });
-          }}
         />
       </>
     );
 
-    const getSingleStatisticForm = index => (
+    const getSingleStatisticForm = (index, statistic) => (
       <div className="statistic-form" key={index}>
         <FormGroup>
           {['Year', 'Period'].map(option => (
@@ -167,14 +161,16 @@ export const StatisticsForm = connect(
             </>
           )}
         </FormGroup>
-
         <Button
           link
           className="padding-0 calculate-penalties"
           icon="calculator"
           onClick={() =>
             showCalculatePenaltiesModalSequence({
+              key: 'irsTotalPenalties',
+              statisticId: statistic.statisticId,
               statisticIndex: index,
+              subkey: 'irsPenaltyAmount',
               title: 'Calculate Penalties on IRS Notice',
             })
           }
@@ -191,7 +187,7 @@ export const StatisticsForm = connect(
         <h4>Statistics Proposed By IRS</h4>
 
         {form.statistics.map((statistic, index) =>
-          getSingleStatisticForm(index),
+          getSingleStatisticForm(index, statistic),
         )}
 
         {statisticsFormHelper.showAddMoreStatisticsButton && (

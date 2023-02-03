@@ -3,7 +3,7 @@ module.exports = {
   ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
-    '**/*.js',
+    '**/*.{js,ts}',
     '!jest-scripts.config.js',
     '!coverage/**',
     '!set-maintenance-mode-locally.js',

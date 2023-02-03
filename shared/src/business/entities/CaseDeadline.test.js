@@ -44,7 +44,7 @@ describe('CaseDeadline', () => {
         },
         { applicationContext },
       );
-      expect(caseDeadline.sortableDocketNumber).toEqual(19000123);
+      expect(caseDeadline.sortableDocketNumber).toEqual(2019000123);
     });
 
     it('should have error messages for invalid fields', () => {

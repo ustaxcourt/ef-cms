@@ -1,3 +1,5 @@
+import { TRawTrialSession } from '../entities/trialSessions/TrialSession';
+
 export class TrialSessionInfoDto {
   public estimatedEndDate: string;
   public isCalendared: boolean;
@@ -16,8 +18,9 @@ export class TrialSessionInfoDto {
   public noticeIssuedDate: string;
   public sessionScope: string;
   public sessionStatus: string;
+  public swingSession: boolean;
 
-  constructor(rawTrialSession: TTrialSessionData) {
+  constructor(rawTrialSession: TRawTrialSession) {
     this.estimatedEndDate = rawTrialSession.estimatedEndDate;
     this.isCalendared = rawTrialSession.isCalendared;
     this.judge = rawTrialSession.judge;
@@ -32,5 +35,6 @@ export class TrialSessionInfoDto {
     this.trialSessionId = rawTrialSession.trialSessionId;
     this.noticeIssuedDate = rawTrialSession.noticeIssuedDate;
     this.sessionStatus = rawTrialSession.sessionStatus;
+    this.swingSession = rawTrialSession.swingSession;
   }
 }

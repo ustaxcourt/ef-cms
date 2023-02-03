@@ -15,7 +15,7 @@ describe('irsSuperuser case search', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'irsSuperuser@example.com');
+  loginAs(cerebralTest, 'irssuperuser@example.com');
   irsSuperuserSearchForCase(cerebralTest);
   irsSuperuserAdvancedSearchForCase(cerebralTest);
   irsSuperuserAdvancedSearchForCaseDocketNumber(cerebralTest);
@@ -27,6 +27,6 @@ describe('irsSuperuser case search', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(cerebralTest, 'irsSuperuser@example.com');
+  loginAs(cerebralTest, 'irssuperuser@example.com');
   irsSuperuserSearchForUnservedCase(cerebralTest);
 });

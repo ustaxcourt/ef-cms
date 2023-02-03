@@ -21,7 +21,7 @@ jest.mock(
 describe('sendServedPartiesEmails', () => {
   beforeAll(() => {
     applicationContext.getIrsSuperuserEmail.mockReturnValue(
-      'irsSuperuser@example.com',
+      'irssuperuser@example.com',
     );
   });
 
@@ -66,7 +66,7 @@ describe('sendServedPartiesEmails', () => {
     ).toMatchObject([
       { email: '1@example.com' },
       { email: '2@example.com' },
-      { email: 'irsSuperuser@example.com' },
+      { email: 'irssuperuser@example.com' },
     ]);
   });
 
@@ -186,7 +186,7 @@ describe('sendServedPartiesEmails', () => {
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
         .calls[0][0].destinations,
-    ).toMatchObject([{ email: 'irsSuperuser@example.com' }]);
+    ).toMatchObject([{ email: 'irssuperuser@example.com' }]);
   });
 
   it('should use docketNumberSuffix if a docketNumberSuffix is present', async () => {
