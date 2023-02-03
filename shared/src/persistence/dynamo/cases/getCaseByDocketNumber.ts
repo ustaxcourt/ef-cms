@@ -1,5 +1,5 @@
 import { aggregateCaseItems } from '../helpers/aggregateCaseItems';
-import { queryFull } from '../../dynamodbClientService';
+import { query, queryFull } from '../../dynamodbClientService';
 
 /**
  * getCaseByDocketNumber
@@ -28,5 +28,17 @@ export const getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  return aggregateCaseItems(caseItems);
+  const consolidatedCases = await query({
+    ExpressionAttributeNames: {
+      '#gsi1pk': 'gsi1pk',
+    },
+    ExpressionAttributeValues: {
+      ':gsi1pk': `case|${docketNumber}`,
+    },
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk',
+    applicationContext,
+  });
+
+  return aggregateCaseItems(caseItems, consolidatedCases);
 };

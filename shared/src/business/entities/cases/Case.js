@@ -186,6 +186,7 @@ const caseDecorator = (
   // assignContacts needs to come first before assignDocketEntries
   assignContacts(params);
   assignDocketEntries(params);
+  assignConsolidatedCases(params);
   assignHearings(params);
   assignPractitioners(params);
   assignFieldsForAllUsers(params);
@@ -367,6 +368,17 @@ const assignContacts = ({ applicationContext, obj, rawCase }) => {
   }
 };
 
+const assignConsolidatedCases = ({ obj, rawCase }) => {
+  if (Array.isArray(rawCase.consolidatedCases)) {
+    const consolidatedCaseList = rawCase.consolidatedCases.map(memberCase => ({
+      caseCaption: memberCase.caseCaption,
+      docketNumber: memberCase.docketNumber,
+    }));
+
+    obj.consolidatedCases = Case.sortByDocketNumber(consolidatedCaseList);
+  }
+};
+
 const assignPractitioners = ({ obj, rawCase }) => {
   if (Array.isArray(rawCase.privatePractitioners)) {
     obj.privatePractitioners = rawCase.privatePractitioners.map(
@@ -498,6 +510,7 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional(),
     then: joi.required(),
   }),
+  consolidatedCases: joi.array().optional(),
   correspondence: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)

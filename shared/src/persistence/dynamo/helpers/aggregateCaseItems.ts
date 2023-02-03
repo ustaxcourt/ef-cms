@@ -34,7 +34,7 @@ const isIrsPractitionerItem = item => item.sk.startsWith('irsPractitioner|');
 const isPrivatePractitionerItem = item =>
   item.sk.startsWith('privatePractitioner|');
 
-const aggregateCaseItems = caseAndCaseItems => {
+const aggregateCaseItems = (caseAndCaseItems, consolidatedCaseItems?) => {
   let archivedCorrespondences = [];
   let archivedDocketEntries = [];
   let caseRecords = [];
@@ -98,6 +98,7 @@ const aggregateCaseItems = caseAndCaseItems => {
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocketEntries: sortedArchivedDocketEntries,
     associatedJudge: getAssociatedJudge(theCase, caseAndCaseItems),
+    consolidatedCases: consolidatedCaseItems,
     correspondence: sortedCorrespondences,
     docketEntries: sortedDocketEntries,
     hearings,
