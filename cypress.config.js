@@ -25,7 +25,7 @@ module.exports = defineConfig({
     toConsole: true,
   },
   requestTimeout: 60000,
-  retries: 4,
+  retries: 0,
   screenshotsFolder: 'cypress-integration/screenshots',
   video: false,
   videosFolder: 'cypress-integration/videos',
