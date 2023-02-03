@@ -1,6 +1,6 @@
-/* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
@@ -25,7 +25,6 @@ import { submitAddPaperFilingAction } from '../actions/DocketEntry/submitAddPape
 import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
-import { clearModalAction } from '../actions/clearModalAction';
 
 export const submitPaperFilingSequence = [
   clearModalAction,
