@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import {
+  TRawTrialSession,
   TrialSession,
   isStandaloneRemoteSession,
 } from '../../entities/trialSessions/TrialSession';
@@ -18,7 +19,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const createTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: TTrialSessionData },
+  { trialSession }: { trialSession: TRawTrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
