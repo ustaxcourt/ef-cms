@@ -6,7 +6,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
     '!src/index.js',
-    '!src/index-public.js',
+    '!src/index-public.ts',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
     '!src/applicationContext.js',
