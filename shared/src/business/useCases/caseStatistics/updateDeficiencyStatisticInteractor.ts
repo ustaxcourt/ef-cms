@@ -31,6 +31,7 @@ export const updateDeficiencyStatisticInteractor = async (
     irsDeficiencyAmount,
     irsTotalPenalties,
     lastDateOfPeriod,
+    penalties,
     statisticId,
     year,
     yearOrPeriod,
@@ -41,6 +42,12 @@ export const updateDeficiencyStatisticInteractor = async (
     irsDeficiencyAmount: number;
     irsTotalPenalties: number;
     lastDateOfPeriod: string;
+    penalties: {
+      penaltyId?: string;
+      name: string;
+      penaltyAmount: number;
+      statisticId?: string;
+    }[];
     statisticId: string;
     year: string;
     yearOrPeriod: string;
@@ -63,6 +70,7 @@ export const updateDeficiencyStatisticInteractor = async (
       irsDeficiencyAmount,
       irsTotalPenalties,
       lastDateOfPeriod,
+      penalties,
       statisticId,
       year,
       yearOrPeriod,
