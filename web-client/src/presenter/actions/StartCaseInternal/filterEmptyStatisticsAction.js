@@ -35,6 +35,7 @@ export const filterEmptyStatisticsAction = ({
     statistics.length === 0
   ) {
     statistics.push({
+      statisticId: applicationContext.getUniqueId(),
       yearOrPeriod: 'Year',
     });
   }
