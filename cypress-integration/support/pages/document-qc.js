@@ -1,6 +1,5 @@
 exports.navigateTo = username => {
   cy.login(username, '/document-qc');
-  cy.waitUntilSettled(50);
 };
 
 exports.getCreateACaseButton = () => {
