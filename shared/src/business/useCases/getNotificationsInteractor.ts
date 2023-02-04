@@ -25,6 +25,7 @@ const setJudgeUser = async (
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} providers.caseServicesSupervisorData optional caseServicesSupervisorData containing section
  * @param {object} providers.judgeUser optional judgeUser for additional filtering
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
