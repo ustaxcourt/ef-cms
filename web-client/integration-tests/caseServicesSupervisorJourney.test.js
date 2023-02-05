@@ -14,7 +14,7 @@ const docketSectionMessage = 'To CSS under Docket Section';
 const petitionsSectionMessage = 'To CSS under Petitions Section';
 const seedCaseServicesSupervisorUserid = '35959d1a-0981-40b2-a93d-f65c7977db52';
 const seededDocketNumber = '105-20';
-const seededDocketNumberWithDocumentQC = '103-20';
+const seededDocketNumberWithDocumentQC = '101-21';
 
 describe('Case Services Supervisor Messages Journey', () => {
   const cerebralTest = setupTest();
@@ -143,7 +143,7 @@ describe('Case Services Supervisor Messages Journey', () => {
   it('assign petitions section work item to self', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       cerebralTest,
-      { selectedSection: 'petitions' },
+      'petitions',
     );
     const workItem = documentQCSectionInbox.filter(
       workItemToAssign =>
