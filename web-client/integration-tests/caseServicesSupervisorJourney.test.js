@@ -2,13 +2,19 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../shared/src/business/entities/EntityConstants';
+import {
+  assignWorkItems,
+  getFormattedDocumentQCSectionInbox,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
-import { loginAs, setupTest } from './helpers';
 
 const docketSectionMessage = 'To CSS under Docket Section';
 const petitionsSectionMessage = 'To CSS under Petitions Section';
 const seedCaseServicesSupervisorUserid = '35959d1a-0981-40b2-a93d-f65c7977db52';
 const seededDocketNumber = '105-20';
+const seededDocketNumberWithDocumentQC = '103-20';
 
 describe('Case Services Supervisor Messages Journey', () => {
   const cerebralTest = setupTest();
@@ -98,5 +104,68 @@ describe('Case Services Supervisor Messages Journey', () => {
     );
 
     expect(foundMessageToDocketSection).toBeUndefined();
+  });
+
+  it('case services supervisor views docket section document QC', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+      section: 'docket',
+    });
+
+    const workItem = cerebralTest
+      .getState('workQueue')
+      .find(
+        workItemInQueue =>
+          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+      );
+
+    expect(workItem).toBeDefined();
+  });
+
+  it('case services supervisor views petitions section document QC', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+      section: 'petitions',
+    });
+
+    const workItem = cerebralTest
+      .getState('workQueue')
+      .find(
+        workItemInQueue =>
+          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+      );
+
+    expect(workItem).toBeDefined();
+  });
+
+  it('assign petitions section work item to self', async () => {
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      cerebralTest,
+      { selectedSection: 'petitions' },
+    );
+    const workItem = documentQCSectionInbox.filter(
+      workItemToAssign =>
+        workItemToAssign.docketNumber === seededDocketNumberWithDocumentQC,
+    );
+
+    await assignWorkItems(cerebralTest, 'caseservicessupervisor', workItem);
+  });
+
+  it('case services supervisor views my document QC', async () => {
+    await cerebralTest.runSequence('gotoWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'my',
+    });
+
+    const workItem = cerebralTest
+      .getState('workQueue')
+      .find(
+        workItemInQueue =>
+          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+      );
+
+    expect(workItem).toBeDefined();
   });
 });
