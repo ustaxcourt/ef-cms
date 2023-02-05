@@ -1,12 +1,13 @@
 import { FORMATS, formatNow } from '../../utilities/DateHandler';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
 
 describe('validateTrialSessionInteractor', () => {
   it('returns a list of errors when the trial session is invalid', () => {
     const errors = validateTrialSessionInteractor(applicationContext, {
-      trialSession: {} as TTrialSessionData,
+      trialSession: {} as TRawTrialSession,
     });
 
     expect(Object.keys(errors).length).toBeGreaterThan(0);
@@ -25,7 +26,7 @@ describe('validateTrialSessionInteractor', () => {
     };
 
     const errors = validateTrialSessionInteractor(applicationContext, {
-      trialSession: { ...MOCK_TRIAL } as TTrialSessionData,
+      trialSession: { ...MOCK_TRIAL } as TRawTrialSession,
     });
 
     expect(errors).toEqual(null);

@@ -32,7 +32,7 @@ export const submitEditDeficiencyStatisticSequence = [
             setSaveAlertsForNavigationAction,
             setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
-            navigateToCaseDetailCaseInformationActionFactory(),
+            navigateToCaseDetailCaseInformationActionFactory('statistics'),
           ],
         },
       ]),
