@@ -398,10 +398,14 @@ export const setFeatureFlag = async (isEnabled, key) => {
   });
 };
 
-export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
+export const getFormattedDocumentQCSectionInbox = async (
+  cerebralTest,
+  { selectedSection = null },
+) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
+    section: selectedSection,
   });
   return runCompute(formattedWorkQueue, {
     state: cerebralTest.getState(),
@@ -584,6 +588,10 @@ export const assignWorkItems = async (cerebralTest, to, workItems) => {
     adc: {
       name: 'test ADC',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+    caseservicessupervisor: {
+      name: 'Test Case Services Supervisor',
+      userId: '35959d1a-0981-40b2-a93d-f65c7977db52',
     },
     docketclerk: {
       name: 'test Docketclerk',
