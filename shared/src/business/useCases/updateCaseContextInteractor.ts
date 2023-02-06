@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
+import { CaseDeadline } from '../entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -57,6 +58,59 @@ export const updateCaseContextInteractor = async (
   const transaction = applicationContext
     .getPersistenceGateway()
     .createTransaction();
+
+  // TODO: is there a way we can do this without having to loop over EVERY work item on the case just
+  // because we updated the judge?
+  if (associatedJudge !== oldCase.associatedJudge) {
+    const workItems = await applicationContext
+      .getPersistenceGateway()
+      .getWorkItemsByDocketNumber({
+        applicationContext,
+        docketNumber: oldCase.docketNumber,
+      });
+
+    await Promise.all(
+      workItems.map(workItem =>
+        applicationContext
+          .getUseCaseHelpers()
+          .updateAssociatedJudgeOnWorkItems({
+            applicationContext,
+            associatedJudge,
+            workItemId: workItem.workItemid,
+          }),
+      ),
+    );
+  }
+
+  if (associatedJudge !== oldCase.associatedJudge) {
+    const deadlines = await applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByDocketNumber({
+        applicationContext,
+        docketNumber: oldCase.docketNumber,
+      });
+
+    const updatedDeadlines = deadlines.map(deadline => ({
+      ...deadline,
+      associatedJudge,
+    }));
+
+    const validCaseDeadlines = CaseDeadline.validateRawCollection(
+      updatedDeadlines,
+      {
+        applicationContext,
+      },
+    );
+
+    await Promise.all(
+      validCaseDeadlines.map(caseDeadline =>
+        applicationContext.getPersistenceGateway().createCaseDeadline({
+          applicationContext,
+          caseDeadline,
+        }),
+      ),
+    );
+  }
 
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
