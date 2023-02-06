@@ -60,7 +60,7 @@ export const updateCaseContextInteractor = async (
     .createTransaction();
 
   // TODO: is there a way we can do this without having to loop over EVERY work item on the case just
-  // because we updated the judge?
+  // because we updated the judge???
   if (
     oldCase.associatedJudge !== associatedJudge ||
     oldCase.status !== caseStatus ||
