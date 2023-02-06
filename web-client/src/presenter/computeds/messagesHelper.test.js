@@ -73,7 +73,7 @@ describe('messagesHelper', () => {
       state: {
         messageBoxToDisplay: {
           queue: 'section',
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       },
     });

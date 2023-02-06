@@ -29,7 +29,7 @@ describe('getCompletedMessagesForSectionAction', () => {
     expect(results.output.messages).toEqual([message]);
   });
 
-  it('retrieves completes messages for the section from state when it is defined', async () => {
+  it('retrieves completed messages for the section from state when it is defined', async () => {
     await runAction(getCompletedMessagesForSectionAction, {
       modules: {
         presenter,
@@ -44,7 +44,7 @@ describe('getCompletedMessagesForSectionAction', () => {
     expect(
       applicationContext.getUseCases().getCompletedMessagesForSectionInteractor
         .mock.calls[0][1],
-    ).toEqual({ section: 'docket' });
+    ).toEqual({ section: DOCKET_SECTION });
     expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 

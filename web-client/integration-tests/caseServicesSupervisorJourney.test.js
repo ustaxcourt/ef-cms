@@ -110,7 +110,7 @@ describe('Case Services Supervisor Messages Journey', () => {
     await cerebralTest.runSequence('gotoWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
 
     const workItem = cerebralTest
