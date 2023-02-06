@@ -4,6 +4,7 @@ import {
   getPetitionerById,
   isPetitionerPartOfGroup,
 } from '../entities/cases/Case';
+import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
 import { User } from '../entities/User';
 import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPublicCase';
 
@@ -18,7 +19,7 @@ import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPubli
 export const getConsolidatedCasesByCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
-) => {
+): Promise<ConsolidatedCaseDTO[]> => {
   const isConsolidatedGroupAccessEnabled = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -74,5 +75,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
       validatedConsolidatedCases.push(formattedPublicCase);
     }
   }
-  return validatedConsolidatedCases;
+  return validatedConsolidatedCases.map(
+    aCase => new ConsolidatedCaseDTO(aCase),
+  );
 };

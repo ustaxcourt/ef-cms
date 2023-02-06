@@ -14,6 +14,6 @@ exports.getConsolidatedCasesByCaseInteractor = (
 ) => {
   return get({
     applicationContext,
-    endpoint: `/cases/${docketNumber}/consolidated-cases?fields=docketNumber,caseCaption,petitioners`,
+    endpoint: `/cases/${docketNumber}/consolidated-cases`,
   });
 };
