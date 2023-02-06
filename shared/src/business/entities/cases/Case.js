@@ -373,6 +373,7 @@ const assignConsolidatedCases = ({ obj, rawCase }) => {
     const consolidatedCaseList = rawCase.consolidatedCases.map(memberCase => ({
       caseCaption: memberCase.caseCaption,
       docketNumber: memberCase.docketNumber,
+      petitioners: memberCase.petitioners,
     }));
 
     obj.consolidatedCases = Case.sortByDocketNumber(consolidatedCaseList);
