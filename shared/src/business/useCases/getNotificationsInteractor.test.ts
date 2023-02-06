@@ -34,7 +34,7 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
   },
   {
     associatedJudge: 'Judge Barker',
@@ -62,7 +62,7 @@ const workItems = [
       isFileAttached: false,
     },
     isRead: true,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
   },
 ];
 
@@ -308,7 +308,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: true,
           isRead: true,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         {
           associatedJudge: 'Some Judge',
@@ -373,7 +373,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: true,
           isRead: true,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
       ]);
 
