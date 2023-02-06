@@ -16,28 +16,28 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditPaperFiling = startWebSocketConnectionSequenceDecorator([
+export const gotoEditPaperFiling = [
   setCurrentPageAction('Interstitial'),
-  setFromPageAction,
-  stopShowValidationAction,
   clearScansAction,
   clearFormAction,
   clearScreenMetadataAction,
+  stopShowValidationAction,
+  setFromPageAction,
   getCaseAction,
   setCaseAction,
+  setDocketEntryIdAction,
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
-  setDocketEntryIdAction,
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
   setCurrentPageAction('PaperFiling'),
-]);
+];
 
 export const gotoEditPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoEditPaperFiling,
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
     unauthorized: [redirectToCognitoAction],
   },
 ];
