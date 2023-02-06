@@ -1,7 +1,7 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
 import { isEmpty } from 'lodash';
 
-const setJudgeUser = async (
+const getJudgeUser = async (
   judgeUserId: string,
   applicationContext: IApplicationContext,
   currentUser: any,
@@ -42,7 +42,7 @@ export const getNotificationsInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: appContextUser.userId });
 
-  const judgeUser = await setJudgeUser(
+  const judgeUser = await getJudgeUser(
     judgeUserId,
     applicationContext,
     currentUser,
