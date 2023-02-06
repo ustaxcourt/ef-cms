@@ -1,50 +1,19 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
 const {
   PARTIES_CODES,
   PARTY_TYPES,
 } = require('../../entities/EntityConstants');
 const { docketRecord } = require('./docketRecord');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('docketRecord', () => {
-    it('Generates a Printable Docket Record document', async () => {
-      const pdf = await docketRecord({
+describe('docketRecord', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Docket_Record.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return docketRecord({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -120,18 +89,7 @@ describe('documentGenerators', () => {
           ],
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Docket_Record', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription: 'Generates a Printable Docket Record document',
   });
 });
