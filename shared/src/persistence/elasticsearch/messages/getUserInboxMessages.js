@@ -30,5 +30,10 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
     searchParameters: query,
   });
 
-  return results;
+  const joinedResults = results.map(result => ({
+    ...result,
+    caseStatus: result.status,
+  }));
+
+  return joinedResults;
 };

@@ -110,9 +110,6 @@ export const updateCaseContextInteractor = async (
         });
     }
   }
-
-  await new Promise(resolve => setTimeout(resolve, 10000));
-
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: newCase.validate().toRawObject(),

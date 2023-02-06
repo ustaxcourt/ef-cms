@@ -36,6 +36,8 @@ const GET_PARENT_CASE = {
           'docketNumber',
           'trialDate',
           'trialLocation',
+          'status',
+          'caseTitle',
         ],
       },
       name: 'case-mappings',
