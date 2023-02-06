@@ -4,6 +4,7 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { log } = require('console');
 const { Message } = require('../../entities/Message');
 const { pick } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
@@ -523,6 +524,7 @@ exports.updateCaseAndAssociations = async ({
   applicationContext,
   caseToUpdate,
 }) => {
+  console.log('CASE TO UPDATE******', caseToUpdate);
   const caseEntity = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, { applicationContext });
@@ -536,10 +538,13 @@ exports.updateCaseAndAssociations = async ({
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
+  // console.log('CASE TO UPDATE******', caseToUpdate);
+
   const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
     .validate()
     .toRawObject();
 
+  // TODO: change name of function for `updateCaseDeadlines`
   const RELATED_CASE_OPERATIONS = [
     updateCaseDeadlines,
     updateCaseDocketEntries,
