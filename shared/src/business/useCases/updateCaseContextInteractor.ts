@@ -7,6 +7,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../errors/errors';
+import { WorkItem } from '../entities/WorkItem';
 
 /**
  * updateCaseContextInteractor
@@ -73,16 +74,26 @@ export const updateCaseContextInteractor = async (
         docketNumber: oldCase.docketNumber,
       });
 
+    const rawWorkItems = workItems
+      .map(
+        workItem =>
+          new WorkItem(
+            {
+              ...workItem,
+              associatedJudge,
+              caseStatus,
+              caseTitle: Case.getCaseTitle(caseCaption),
+            },
+            { applicationContext },
+          ),
+      )
+      .map(workItemEntity => workItemEntity.validate().toRawObject());
+
     await Promise.all(
-      workItems.map(workItem =>
+      rawWorkItems.map(rawWorkItem =>
         applicationContext.getPersistenceGateway().saveWorkItem({
           applicationContext,
-          workItem: {
-            ...workItem,
-            associatedJudge,
-            caseStatus,
-            caseTitle: Case.getCaseTitle(caseCaption),
-          },
+          workItem: rawWorkItem,
         }),
       ),
     );
