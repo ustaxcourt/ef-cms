@@ -12,7 +12,6 @@
 [ -z "$1" ] && echo "The cluster to delete must be provided as the \$1 argument." && exit 1
 
 DOMAIN_NAME=$1
-echo "Domain name is ${DOMAIN_NAME}"
 REQUEST_TO_DELETE_DOMAIN=$(aws es delete-elasticsearch-domain --domain "${DOMAIN_NAME}" --region us-east-1 | jq -r ".DomainStatus.Deleted")
 
 if [[ $REQUEST_TO_DELETE_DOMAIN == false ]] ; then
@@ -23,9 +22,9 @@ else
 fi
 
 # Set the interval at which to check the status of the domain (in seconds)
-CHECK_INTERVAL=20
-# 75 retries is 25 minutes at this interval 
-MAX_RETRIES=75
+CHECK_INTERVAL=30
+# 50 retries is 25 minutes at this interval 
+MAX_RETRIES=50
 CURRENT_TRY=0
 
 # Keep checking the status of the domain until it has been confirmed to be deleted
