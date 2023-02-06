@@ -1,5 +1,6 @@
 import {
   CHIEF_JUDGE,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
@@ -15,7 +16,7 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
-    section: 'docket',
+    section: DOCKET_SECTION,
   },
   {
     associatedJudge: 'Judge Carey',
@@ -24,7 +25,7 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
-    section: 'docket',
+    section: DOCKET_SECTION,
   },
   {
     associatedJudge: CHIEF_JUDGE,
@@ -42,7 +43,7 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
-    section: 'docket',
+    section: DOCKET_SECTION,
   },
   {
     associatedJudge: 'Judge Barker',
@@ -52,7 +53,7 @@ const workItems = [
     },
     inProgress: true,
     isRead: true,
-    section: 'docket',
+    section: DOCKET_SECTION,
   },
   {
     associatedJudge: 'Judge Barker',
@@ -104,7 +105,7 @@ describe('getNotificationsInteractor', () => {
         if (userId === 'e8577e31-d6d5-4c4a-adc6-520075f3dde5') {
           return {
             role: ROLES.docketClerk,
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
           };
         } else if (userId === 'ff377e31-d6d5-4c4a-adc6-520075f3dde5') {
@@ -144,7 +145,7 @@ describe('getNotificationsInteractor', () => {
           caseIsInProgress: false,
           docketEntry: { isFileAttached: true },
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       ]);
 
@@ -204,7 +205,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: true,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -215,7 +216,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -226,7 +227,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       ]);
 
@@ -251,7 +252,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -262,7 +263,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -273,7 +274,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: true,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       ]);
 
@@ -297,7 +298,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           associatedJudge: 'Judge Barker',
@@ -317,7 +318,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -328,7 +329,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: true,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           associatedJudge: 'Some Judge',
@@ -338,7 +339,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: true,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       ]);
 
@@ -362,7 +363,7 @@ describe('getNotificationsInteractor', () => {
           },
           inProgress: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         {
           associatedJudge: 'Judge Barker',

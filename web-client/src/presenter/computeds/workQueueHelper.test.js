@@ -138,7 +138,7 @@ describe('workQueueHelper', () => {
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       },
     });
