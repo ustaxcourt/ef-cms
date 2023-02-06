@@ -393,6 +393,7 @@ const updateCaseWorkItems = async ({
         }),
       );
     }
+
     if (previousCase.trialDate !== updatedCase.trialDate) {
       workItemRequestFunctions.push(() =>
         applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems({

@@ -18,4 +18,4 @@ export const getWorkItemsByDocketNumber = ({
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-  });
+  }) as Promise<(WorkItem & TDynamoRecord)[]>;
