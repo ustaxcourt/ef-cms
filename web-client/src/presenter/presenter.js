@@ -28,7 +28,6 @@ import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequen
 import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
 import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
 import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
-import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
@@ -261,6 +260,7 @@ import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadl
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
+import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
@@ -555,7 +555,6 @@ export const presenter = {
     broadcastIdleStatusActiveSequence,
     broadcastLogoutSequence,
     broadcastStayLoggedInSequence,
-    calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
     canEditContactInformationSequence,
     cancelAddDraftDocumentSequence,
@@ -787,6 +786,7 @@ export const presenter = {
     openEditOrderTitleModalSequence,
     openForwardMessageModalSequence,
     openGainElectronicAccessToCaseModalSequence,
+    openItemizedPenaltiesModalSequence,
     openPdfPreviewModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
     openPrintableTrialSessionWorkingCopyModalSequence,

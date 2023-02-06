@@ -1,3 +1,4 @@
+import { TRawTrialSession } from '../../../business/entities/trialSessions/TrialSession';
 import { TransactionBuilder } from '../createTransaction';
 import { put } from '../../dynamodbClientService';
 
@@ -7,7 +8,7 @@ export const updateTrialSession = ({
   trialSessionToUpdate,
 }: {
   applicationContext: IApplicationContext;
-  trialSessionToUpdate: TTrialSessionData;
+  trialSessionToUpdate: TRawTrialSession;
   transaction?: TransactionBuilder;
 }) =>
   put({

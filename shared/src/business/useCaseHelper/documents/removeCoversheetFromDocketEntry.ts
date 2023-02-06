@@ -1,3 +1,4 @@
+import { DocketEntryClass } from '../../entities/DocketEntry';
 import { removeCoverFromPdf } from '../coverSheets/removeCoversheet';
 
 /**
@@ -11,7 +12,7 @@ import { removeCoverFromPdf } from '../coverSheets/removeCoversheet';
  */
 export const removeCoversheetFromDocketEntry = async (
   applicationContext: IApplicationContext,
-  { docketEntry }: { docketEntry: TDocketEntryEntity },
+  { docketEntry }: { docketEntry: DocketEntryClass },
 ) => {
   let pdfData;
   try {
