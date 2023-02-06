@@ -1,4 +1,4 @@
-const { getOnly } = require('./helpers');
+const { getOnly, setTimeouts } = require('./helpers');
 
 const irsPractitioner = require('./pa11y-irs-practitioner');
 const petitionsclerk = require('./pa11y-petitionsclerk');
@@ -13,5 +13,5 @@ const urls = [
 
 module.exports = {
   defaults,
-  urls: getOnly(urls),
+  urls: setTimeouts()(getOnly(urls)),
 };

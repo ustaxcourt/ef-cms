@@ -1,48 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const {
-  noticeOfTrialIssuedInPerson,
-} = require('./noticeOfTrialIssuedInPerson');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfTrialIssuedInPerson } from './noticeOfTrialIssuedInPerson';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('noticeOfTrialIssuedInPerson', () => {
-    it('generates a Notice of Trial Issued document', async () => {
-      const pdf = await noticeOfTrialIssuedInPerson({
+describe('noticeOfTrialIssuedInPerson', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Notice_Trial_Issued_In_Person.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      noticeOfTrialIssuedInPerson({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -61,22 +26,7 @@ describe('documentGenerators', () => {
             trialLocation: 'Birmingham, Alabama',
           },
         },
-      });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Trial_Issued_In_Person', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-        const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(1);
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+      }),
+    testDescription: 'generates a Notice of Trial Issued document',
   });
 });
