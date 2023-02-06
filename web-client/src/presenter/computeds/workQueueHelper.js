@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
@@ -54,6 +55,12 @@ export const workQueueHelper = (get, applicationContext) => {
   const userIsDocketOrCaseServices =
     userIsDocketClerk || isCaseServicesSupervisor;
 
+  const showSectionWorkQueue = workQueueToDisplay.queue === 'section';
+  const showMyQueueToggle = userIsAllowed;
+
+  const showSwitchToMyDocQCLink =
+    !isCaseServicesSupervisor && showSectionWorkQueue && showMyQueueToggle;
+
   return {
     currentBoxView: workQueueToDisplay.box,
     documentQCNavigationPath,
@@ -85,11 +92,12 @@ export const workQueueHelper = (get, applicationContext) => {
       (userIsDocketOrCaseServices && showOutbox) ||
       (userIsPetitionsOrCaseServices && showInProgress),
     showSectionSentTab: userIsAllowed,
-    showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showSectionWorkQueue,
     showSelectAllCheckbox: permissions.ASSIGN_ALL_WORK_ITEMS,
     showSelectColumn: permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
     showStartPetitionButton,
+    showSwitchToMyDocQCLink,
     workQueueTitle,
   };
 };
