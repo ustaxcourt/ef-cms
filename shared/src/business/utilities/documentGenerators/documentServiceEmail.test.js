@@ -1,46 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
 const { documentServiceEmail } = require('./documentServiceEmail');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('documentServiceEmail', () => {
-    it('generates a DocumentServiceEmail document', async () => {
-      const pdf = await documentServiceEmail({
+describe('documentServiceEmail', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Document_Service_Email.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return documentServiceEmail({
         applicationContext,
         data: {
           caseDetail: {
@@ -60,18 +29,7 @@ describe('documentGenerators', () => {
           taxCourtLoginUrl: 'http://example.com/login',
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Document_Service_Email', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription: 'generates a DocumentServiceEmail document',
   });
 });
