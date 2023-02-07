@@ -122,6 +122,7 @@ export class DocketEntryClass {
     }: { applicationContext: IApplicationContext; petitioners?: any[] },
   ) {
     this.entityName = 'DocketEntry';
+    this.entityVersion = rawDocketEntry.entityVersion;
   }
 
   init(
@@ -139,7 +140,6 @@ export class DocketEntryClass {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    this.entityVersion = rawDocketEntry.entityVersion;
 
     if (
       !filtered ||
