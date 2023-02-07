@@ -12,8 +12,9 @@ const { JoiValidationConstants } = require('./JoiValidationConstants');
  * @param {object} rawMessage the raw message data
  * @constructor
  */
-function Message() {
+function Message(rawMessage) {
   this.entityName = 'Message';
+  this.entityVersion = rawMessage.entityVersion;
 }
 
 Message.prototype.init = function init(rawMessage, { applicationContext }) {
@@ -29,7 +30,6 @@ const messageDecorator = (
     throw new TypeError('applicationContext must be defined');
   }
 
-  messageEntity.entityVersion = rawMessage.entityVersion;
   messageEntity.attachments = (rawMessage.attachments || []).map(
     attachment => ({
       documentId: attachment.documentId,

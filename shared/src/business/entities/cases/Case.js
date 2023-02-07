@@ -148,15 +148,15 @@ Case.VALIDATION_ERROR_MESSAGES = {
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case() {
+function Case(rawCase) {
   this.entityName = 'Case';
+  this.entityVersion = rawCase.entityVersion;
 }
 
 Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
 ) {
-  this.entityVersion = rawCase.entityVersion;
   caseDecorator(this, rawCase, { applicationContext, filtered });
 };
 
