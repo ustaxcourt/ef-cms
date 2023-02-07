@@ -18,4 +18,8 @@ export class ConsolidatedCaseDTO {
     this.petitioners = rawCase.petitioners;
     this.privatePractitioners = rawCase.privatePractitioners || [];
   }
+
+  public static getPickFields() {
+    return Object.getOwnPropertyNames.call(Object, new ConsolidatedCaseDTO({}));
+  }
 }

@@ -12,6 +12,7 @@ export const getConsolidatedCasesByCaseAction = async ({
   applicationContext,
   get,
 }) => {
+  const { ConsolidatedCaseDTO } = applicationContext.getDTOs();
   const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
   let consolidatedCases = [];
 
@@ -20,6 +21,7 @@ export const getConsolidatedCasesByCaseAction = async ({
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor(applicationContext, {
         docketNumber: leadDocketNumber,
+        pickFields: ConsolidatedCaseDTO.getPickFields(),
       });
 
     consolidatedCases = unsortedConsolidatedCases.sort(
