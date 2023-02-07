@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - dependency-updates
-      - devex-1126
 
 jobs:
   test_pdfs:
