@@ -11,7 +11,7 @@ const {
 } = require('../support/pages/petition-qc');
 
 describe('change the case caption via the petition qc page', () => {
-  before(() => {
+  it('updates the case title header', () => {
     navigateToPetitionQc('petitionsclerk', '102-20');
     getCaseInfoTab().click();
     getCaseTitleTextArea().clear().type('hello world');
@@ -19,9 +19,6 @@ describe('change the case caption via the petition qc page', () => {
     getHasIrsNoticeYesRadioButton().click();
     getReviewPetitionButton().click();
     getSaveForLaterButton().click();
-  });
-
-  it('updates the case title header', () => {
     navigateToCase('petitionsclerk', '102-20');
     getCaseTitleContaining(
       'hello world v. Commissioner of Internal Revenue, Respondent',
