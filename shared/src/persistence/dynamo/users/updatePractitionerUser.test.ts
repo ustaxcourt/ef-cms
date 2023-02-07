@@ -5,13 +5,21 @@ import { updatePractitionerUser } from './updatePractitionerUser';
 describe('updatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
   const updatedEmail = 'test@example.com';
+  const pendingEmail = 'pendingEmailExample@example.com';
 
-  const updatedUser = {
+  const updatedUser: {
+    barNumber: string;
+    email: string;
+    role: string;
+    name: string;
+    section: string;
+    pendingEmail?: string;
+  } = {
     barNumber: 'PT1234',
     email: updatedEmail,
     name: 'Test Practitioner',
-    role: ROLES.inactivePractitioner,
-    section: 'inactivePractitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
   };
 
   beforeEach(() => {
@@ -24,12 +32,6 @@ describe('updatePractitionerUser', () => {
     applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
       promise: () => Promise.reject(new Error('User not found')),
     });
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Item: updatedUser,
-        }),
-    });
 
     await expect(
       updatePractitionerUser({
@@ -41,13 +43,6 @@ describe('updatePractitionerUser', () => {
   });
 
   it('should return updated practitioner data when the update was successful', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Item: { ...updatedUser, userId },
-        }),
-    });
-
     const results = await updatePractitionerUser({
       applicationContext,
       user: { ...updatedUser, userId } as any,
@@ -63,7 +58,26 @@ describe('updatePractitionerUser', () => {
     });
   });
 
-  it("should not log an error when updating an existing practitioner user's Cognito attributes", async () => {
+  it("should update an existing practitioner user's Cognito attributes using the users email", async () => {
+    await updatePractitionerUser({
+      applicationContext,
+      user: updatedUser as any,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        Username: updatedEmail,
+      }),
+    );
+  });
+
+  it("should update an existing practitioner user's Cognito attributes using the users pending email", async () => {
+    updatedUser.email = undefined;
+    updatedUser.pendingEmail = pendingEmail;
+
     applicationContext.getDocumentClient().get.mockReturnValue({
       promise: () =>
         Promise.resolve({
@@ -81,7 +95,7 @@ describe('updatePractitionerUser', () => {
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).toHaveBeenCalledWith(
       expect.objectContaining({
-        Username: updatedEmail,
+        Username: pendingEmail,
       }),
     );
   });
