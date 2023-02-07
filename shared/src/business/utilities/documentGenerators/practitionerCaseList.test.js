@@ -1,47 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
-const { practitionerCaseList } = require('./practitionerCaseList');
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { practitionerCaseList } from './practitionerCaseList';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('practitionerCaseList', () => {
-    it('generates a Pending Report document', async () => {
-      const pdf = await practitionerCaseList({
+describe('practitionerCaseList', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Practitioner_Case_List.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      practitionerCaseList({
         applicationContext,
         data: {
           barNumber: 'PT1234',
@@ -66,19 +33,7 @@ describe('documentGenerators', () => {
           ],
           practitionerName: 'Ben Matlock',
         },
-      });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Practitioner_Case_List', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+      }),
+    testDescription: 'generates a Petitioner case list document',
   });
 });
