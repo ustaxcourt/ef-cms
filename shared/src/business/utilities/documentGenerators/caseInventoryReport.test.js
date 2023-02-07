@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -7,44 +5,15 @@ const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
 } = require('../../entities/EntityConstants');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
 const { caseInventoryReport } = require('./caseInventoryReport');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('caseInventoryReport', () => {
-    it('generates a Case Inventory Report document', async () => {
-      const pdf = await caseInventoryReport({
+describe('caseInventoryReport', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Case_Inventory_Report.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return caseInventoryReport({
         applicationContext,
         data: {
           formattedCases: [
@@ -61,18 +30,7 @@ describe('documentGenerators', () => {
           showStatusColumn: true,
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Case_Inventory_Report', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription: 'generates a Case Inventory Report document',
   });
 });
