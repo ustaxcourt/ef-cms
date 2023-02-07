@@ -5,61 +5,16 @@ import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByCaseAction', () => {
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .getConsolidatedCasesByCaseInteractor.mockResolvedValue([
-        {
-          docketNumber: '100-19',
-          leadDocketNumber: '100-19',
-        },
-        {
-          docketNumber: '102-19',
-          leadDocketNumber: '100-19',
-        },
-        {
-          docketNumber: '111-19',
-          leadDocketNumber: '100-19',
-        },
-      ]);
-
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it("gets the consolidated cases by the case's lead case", async () => {
-    const { output } = await runAction(getConsolidatedCasesByCaseAction, {
-      modules: { presenter },
-      state: {
-        caseDetail: {
-          leadDocketNumber: '100-19',
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor.mock
-        .calls.length,
-    ).toEqual(1);
-    expect(output.consolidatedCases).toEqual([
-      {
-        docketNumber: '100-19',
-        leadDocketNumber: '100-19',
-      },
-      {
-        docketNumber: '102-19',
-        leadDocketNumber: '100-19',
-      },
-      {
-        docketNumber: '111-19',
-        leadDocketNumber: '100-19',
-      },
-    ]);
-  });
-
-  it('does not try to retrieve consolidated cases if it has no lead case', async () => {
+  it('should NOT retrieve consolidated cases when the case is NOT consolidated', async () => {
     await runAction(getConsolidatedCasesByCaseAction, {
       modules: { presenter },
       state: {
-        caseDetail: {},
+        caseDetail: {
+          leadDocketNumber: undefined,
+        },
       },
     });
 
@@ -67,5 +22,46 @@ describe('getConsolidatedCasesByCaseAction', () => {
       applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor.mock
         .calls.length,
     ).toEqual(0);
+  });
+
+  it("should retrieve consolidated cases, picking out specific fields, using the case's lead docket number", async () => {
+    const mockLeadDocketNumber = '100-19';
+    const mockConsolidatedCases = [
+      {
+        docketNumber: '100-19',
+        leadDocketNumber: mockLeadDocketNumber,
+      },
+      {
+        docketNumber: '102-19',
+        leadDocketNumber: mockLeadDocketNumber,
+      },
+      {
+        docketNumber: '111-19',
+        leadDocketNumber: mockLeadDocketNumber,
+      },
+    ];
+    applicationContext
+      .getUseCases()
+      .getConsolidatedCasesByCaseInteractor.mockResolvedValue(
+        mockConsolidatedCases,
+      );
+
+    const { output } = await runAction(getConsolidatedCasesByCaseAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          leadDocketNumber: mockLeadDocketNumber,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor.mock
+        .calls[0][1],
+    ).toEqual({
+      docketNumber: mockLeadDocketNumber,
+      pickFields: expect.anything(),
+    });
+    expect(output.consolidatedCases).toEqual(mockConsolidatedCases);
   });
 });

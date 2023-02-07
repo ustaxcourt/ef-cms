@@ -196,6 +196,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -267,6 +268,10 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetReduceImageBlobValue = {
     toBlob: jest.fn(),
+  };
+
+  const mockGetDTOs = {
+    ConsolidatedCaseDTO,
   };
 
   const mockGetUtilities = appContextProxy({
@@ -678,6 +683,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
+    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
