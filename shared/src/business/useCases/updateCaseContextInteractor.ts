@@ -38,6 +38,10 @@ export const updateCaseContextInteractor = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
+  await applicationContext
+    .getPersistenceGateway()
+    .acquireLock({ applicationContext, lockName: docketNumber });
+
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
@@ -110,6 +114,10 @@ export const updateCaseContextInteractor = async (
       applicationContext,
       caseToUpdate: newCase,
     });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .deleteLock({ applicationContext, lockName: docketNumber });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };

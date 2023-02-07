@@ -285,6 +285,7 @@ import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
+import { reloadPageSequence } from './sequences/reloadPageSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
@@ -351,6 +352,7 @@ import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDr
 import { setupConfigSequence } from './sequences/setupConfigSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showModalSequence } from './sequences/showModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -811,6 +813,7 @@ export const presenter = {
     redirectToLoginSequence,
     refreshPdfSequence,
     refreshStatisticsSequence,
+    reloadPageSequence,
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
@@ -876,6 +879,7 @@ export const presenter = {
     setupConfigSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
+    showModalSequence,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
     showMoreResultsSequence,

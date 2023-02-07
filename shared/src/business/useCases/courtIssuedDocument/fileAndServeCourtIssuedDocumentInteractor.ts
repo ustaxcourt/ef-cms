@@ -58,6 +58,23 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  await applicationContext
+    .getPersistenceGateway()
+    .acquireLock({ applicationContext, lockName: subjectCaseDocketNumber })
+    .catch(async error => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'failed_lock_error',
+          error: error.message,
+        },
+        userId: user.userId,
+      });
+
+      throw error;
+    });
+
   const subjectCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -235,6 +252,10 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     docketNumbers.length > 1
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
+
+  await applicationContext
+    .getPersistenceGateway()
+    .deleteLock({ applicationContext, lockName: subjectCaseDocketNumber });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

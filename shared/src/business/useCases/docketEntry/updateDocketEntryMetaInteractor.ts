@@ -53,12 +53,18 @@ export const updateDocketEntryMetaInteractor = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
+  await applicationContext
+    .getPersistenceGateway()
+    .acquireLock({ applicationContext, lockName: docketNumber });
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
+
+  await new Promise(resolve => setTimeout(resolve, 7000));
 
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -213,6 +219,10 @@ export const updateDocketEntryMetaInteractor = async (
       applicationContext,
       caseToUpdate: caseEntity,
     });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .deleteLock({ applicationContext, lockName: docketNumber });
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };

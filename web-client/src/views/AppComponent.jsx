@@ -12,6 +12,7 @@ import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadPr
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
+import { CaseCurrentlyBeingUpdatedModal } from './CaseCurrentlyBeingUpdatedModal';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
@@ -262,6 +263,9 @@ export const AppComponent = connect(
         )}
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
+        {showModal === 'CaseCurrentlyBeingUpdatedModal' && (
+          <CaseCurrentlyBeingUpdatedModal />
+        )}
       </>
     );
   },

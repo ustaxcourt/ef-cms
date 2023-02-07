@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 const noop = () => {};
 
 export const socketRouter = (app, onMessageCallbackFn) => {
@@ -32,6 +33,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
       case 'batch_download_error':
         await app.getSequence('batchDownloadErrorSequence')({
           ...message,
+        });
+        break;
+      case 'failed_lock_error':
+        await app.getSequence('showModalSequence')({
+          showModal: 'CaseCurrentlyBeingUpdatedModal',
         });
         break;
       case 'user_contact_initial_update_complete':
