@@ -796,7 +796,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./scripts/env/env-for-circle.sh            
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Destroy Migration Infrastructure
           command: |
