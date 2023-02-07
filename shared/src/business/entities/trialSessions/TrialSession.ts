@@ -63,6 +63,7 @@ export type TCaseOrder = {
 
 export class TrialSessionClass {
   public entityName: string;
+  public entityVersion: string;
   public address1: string;
   public address2: string;
   public alternateTrialClerkName: string;
@@ -247,6 +248,7 @@ export class TrialSessionClass {
       throw new TypeError('applicationContext must be defined');
     }
     this.entityName = 'TrialSession';
+    this.entityVersion = rawSession.entityVersion;
 
     this.address1 = rawSession.address1;
     this.address2 = rawSession.address2;

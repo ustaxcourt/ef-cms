@@ -29,6 +29,7 @@ const messageDecorator = (
     throw new TypeError('applicationContext must be defined');
   }
 
+  messageEntity.entityVersion = rawMessage.entityVersion;
   messageEntity.attachments = (rawMessage.attachments || []).map(
     attachment => ({
       documentId: attachment.documentId,

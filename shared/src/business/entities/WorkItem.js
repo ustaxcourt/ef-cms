@@ -21,6 +21,7 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityVersion = rawWorkItem.entityVersion;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
   this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
