@@ -16,19 +16,19 @@ export const refreshStatisticsAction = ({ applicationContext, get, store }) => {
 
   if (caseType !== CASE_TYPES_MAP.deficiency || !hasVerifiedIrsNotice) {
     statistics.splice(0, statistics.length);
-  } else {
-    if (statistics && statistics.length < 12) {
-      statistics.push({
-        yearOrPeriod: 'Year',
-      });
-      store.set(state.form.statistics, statistics);
-    } else if (!statistics) {
-      statistics = [
-        {
-          yearOrPeriod: 'Year',
-        },
-      ];
-      store.set(state.form.statistics, statistics);
-    }
+    return;
   }
+
+  const newStatisticWithId = {
+    statisticId: applicationContext.getUniqueId(),
+    yearOrPeriod: 'Year',
+  };
+
+  if (statistics && statistics.length < 12) {
+    statistics.push(newStatisticWithId);
+  } else if (!statistics) {
+    statistics = [newStatisticWithId];
+  }
+
+  store.set(state.form.statistics, statistics);
 };

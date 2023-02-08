@@ -4,7 +4,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDefaultFormForAddDeficiencySatisticsAction } from '../actions/setDefaultFormForAddDeficiencySatisticsAction';
+import { setDefaultFormForAddDeficiencyStatisticsAction } from '../actions/setDefaultFormForAddDeficiencyStatisticsAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
@@ -17,7 +17,7 @@ export const gotoAddDeficiencyStatisticsSequence = [
       clearFormAction,
       getCaseAction,
       setCaseAction,
-      setDefaultFormForAddDeficiencySatisticsAction,
+      setDefaultFormForAddDeficiencyStatisticsAction,
       setCurrentPageAction('AddDeficiencyStatistics'),
     ]),
     unauthorized: [redirectToCognitoAction],
