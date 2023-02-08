@@ -1,6 +1,3 @@
-import { getUserById } from './getUserById';
-import { updateUserRecords } from './updateUserRecords';
-
 export const updatePractitionerUser = async ({
   applicationContext,
   user,
@@ -10,7 +7,7 @@ export const updatePractitionerUser = async ({
 }) => {
   const { userId } = user;
 
-  const oldUser = await getUserById({
+  const oldUser = await applicationContext.getPersistenceGateway().getUserById({
     applicationContext,
     userId,
   });
@@ -34,12 +31,14 @@ export const updatePractitionerUser = async ({
     throw error;
   }
 
-  const updatedUser = await updateUserRecords({
-    applicationContext,
-    oldUser,
-    updatedUser: user,
-    userId,
-  });
+  const updatedUser = await applicationContext
+    .getPersistenceGateway()
+    .updateUserRecords({
+      applicationContext,
+      oldUser,
+      updatedUser: user,
+      userId,
+    });
 
   return updatedUser;
 };
