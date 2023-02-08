@@ -14,18 +14,28 @@ describe('updatePractitionerUser', () => {
     name: string;
     section: string;
     pendingEmail?: string;
+    userId: string;
   } = {
     barNumber: 'PT1234',
     email: updatedEmail,
     name: 'Test Practitioner',
     role: ROLES.privatePractitioner,
     section: 'privatePractitioner',
+    userId,
   };
 
   beforeEach(() => {
     applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
       promise: () => null,
     });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(updatedUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateUserRecords.mockReturnValue(updatedUser);
   });
 
   it("should log an error when an error occurs while updating the user's cognito attributes", async () => {
@@ -45,7 +55,7 @@ describe('updatePractitionerUser', () => {
   it('should return updated practitioner data when the update was successful', async () => {
     const results = await updatePractitionerUser({
       applicationContext,
-      user: { ...updatedUser, userId } as any,
+      user: updatedUser as any,
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
@@ -77,13 +87,6 @@ describe('updatePractitionerUser', () => {
   it("should update an existing practitioner user's Cognito attributes using the users pending email", async () => {
     updatedUser.email = undefined;
     updatedUser.pendingEmail = pendingEmail;
-
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Item: updatedUser,
-        }),
-    });
 
     await updatePractitionerUser({
       applicationContext,
