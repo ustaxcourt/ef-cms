@@ -61,8 +61,12 @@ export const caseDetailHelper = (get, applicationContext) => {
   const hasIrsPractitioners =
     !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
 
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseDetail);
+
   const userCanViewCase =
-    (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed;
+    (isExternalUser && userAssociatedWithCase) || isSealedCase;
 
   const isPractitioner =
     user.role === USER_ROLES.irsPractitioner ||

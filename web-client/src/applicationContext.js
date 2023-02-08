@@ -19,6 +19,7 @@ import {
   isClosed,
   isLeadCase,
   isPetitionerPartOfGroup,
+  isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -767,6 +768,7 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isPetitionerPartOfGroup,
+      isSealedCase,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
