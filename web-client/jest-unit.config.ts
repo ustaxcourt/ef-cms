@@ -2,22 +2,21 @@ import type { Config } from 'jest';
 
 const config: Config = {
   clearMocks: true,
-  collectCoverage: false,
+  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
-    '!src/applicationContext.js',
-    '!src/applicationContextPublic.js',
-    '!src/router.js',
-    '!src/routerPublic.js',
-    '!src/index.dev.js',
-    '!src/index.prod.js',
-    '!src/index-public.dev.js',
-    '!src/index-public.prod.js',
-    '!src/views/Messages/sortConstants.js',
+    '!src/applicationContext.ts',
+    '!src/applicationContextPublic.ts',
+    '!src/router.ts',
+    '!src/index.ts',
+    '!src/routerPublic.ts',
+    '!src/index-public.ts',
+    '!src/index-public.prod.ts',
   ],
   coverageDirectory: './coverage-unit',
+  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 94.56,
