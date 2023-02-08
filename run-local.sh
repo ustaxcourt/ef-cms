@@ -19,6 +19,7 @@ if [[ -z "$CIRCLECI" ]]; then
   ESEARCH_PID=$!
 fi
 
+
 URL=http://localhost:8000/shell ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
 
@@ -53,7 +54,7 @@ else
   exitCode=$?
 fi
 
-if [ ${exitCode} != 0 ]; then                   
+if [ "${exitCode}" != 0 ]; then                   
   echo "Seed data is invalid!". 1>&2 && exit 1
 fi
 
@@ -69,8 +70,8 @@ nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ign
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
-  pkill -P $DYNAMO_PID
-  pkill -P $ESEARCH_PID
+  pkill -P "$DYNAMO_PID"
+  pkill -P "$ESEARCH_PID"
 fi
 
 pkill -P $S3RVER_PID

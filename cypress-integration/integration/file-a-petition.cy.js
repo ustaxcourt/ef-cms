@@ -1,11 +1,8 @@
 let createdDocketNumber;
 
 describe('File a petition', function () {
-  before(() => {
-    cy.login('petitioner');
-  });
-
   it('finds footer element', () => {
+    cy.login('petitioner');
     cy.get('footer').should('exist');
   });
 
