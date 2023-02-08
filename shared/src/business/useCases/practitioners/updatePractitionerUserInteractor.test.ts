@@ -113,7 +113,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).toMatchObject({ user: mockPractitioner });
   });
 
-  it('updates the practitioner users pending email and does NOT override a bar number or pendingEmail when the original user had pending email', async () => {
+  it('updates the practitioner user and does NOT override a bar number when the original user has a pending email', async () => {
     mockPractitioner.email = undefined;
     mockPractitioner.pendingEmail = 'pendingEmail@example.com';
 
