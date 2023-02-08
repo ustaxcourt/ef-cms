@@ -140,19 +140,6 @@ describe('Case Services Supervisor Messages Journey', () => {
     expect(workItem).toBeDefined();
   });
 
-  it('assign petitions section work item to self', async () => {
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-      'petitions',
-    );
-    const workItem = documentQCSectionInbox.filter(
-      workItemToAssign =>
-        workItemToAssign.docketNumber === seededDocketNumberWithDocumentQC,
-    );
-
-    await assignWorkItems(cerebralTest, 'caseservicessupervisor', workItem);
-  });
-
   it('case services supervisor views my document QC', async () => {
     await cerebralTest.runSequence('gotoWorkQueueSequence', {
       box: 'inbox',
@@ -167,5 +154,18 @@ describe('Case Services Supervisor Messages Journey', () => {
       );
 
     expect(workItem).toBeDefined();
+  });
+
+  it('assign petitions section work item to Test Petitions Clerk 1', async () => {
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      cerebralTest,
+      'petitions',
+    );
+    const workItem = documentQCSectionInbox.filter(
+      workItemToAssign =>
+        workItemToAssign.docketNumber === seededDocketNumberWithDocumentQC,
+    );
+
+    await assignWorkItems(cerebralTest, 'caseservicessupervisor', workItem);
   });
 });

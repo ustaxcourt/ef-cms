@@ -56,11 +56,14 @@ export const assignWorkItemsInteractor = async (
   });
 
   const assignedByCaseServicesUser =
-    user.section === CASE_SERVICES_SUPERVISOR_SECTION;
+    user.section === CASE_SERVICES_SUPERVISOR_SECTION ||
+    userBeingAssigned.section === CASE_SERVICES_SUPERVISOR_SECTION;
 
-  let sectionToAssignTo = assignedByCaseServicesUser
-    ? userBeingAssigned.section
-    : user.section;
+  let sectionToAssignTo = user.section;
+
+  if (assignedByCaseServicesUser) {
+    sectionToAssignTo = userBeingAssigned.section;
+  }
 
   workItemEntity.assignToUser({
     assigneeId,
