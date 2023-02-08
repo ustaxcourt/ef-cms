@@ -21,7 +21,7 @@ export const getConsolidatedCasesByCaseAction = async ({
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor(applicationContext, {
         docketNumber: leadDocketNumber,
-        pickFields: ConsolidatedCaseDTO.getPickFields(),
+        pickFields: ConsolidatedCaseDTO.getFields(),
       });
 
     consolidatedCases = unsortedConsolidatedCases.sort(

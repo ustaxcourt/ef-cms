@@ -4,9 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByCaseAction', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   it('should NOT retrieve consolidated cases when the case is NOT consolidated', async () => {
     await runAction(getConsolidatedCasesByCaseAction, {
@@ -24,7 +22,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
     ).toEqual(0);
   });
 
-  it("should retrieve consolidated cases, picking out specific fields, using the case's lead docket number", async () => {
+  it("should retrieve consolidated cases, picking out fields specified by the ConsolidatedCaseDTO, using the case's lead docket number", async () => {
     const mockLeadDocketNumber = '100-19';
     const mockConsolidatedCases = [
       {
@@ -60,7 +58,16 @@ describe('getConsolidatedCasesByCaseAction', () => {
         .calls[0][1],
     ).toEqual({
       docketNumber: mockLeadDocketNumber,
-      pickFields: expect.anything(),
+      pickFields: [
+        'caseCaption',
+        'docketNumber',
+        'docketNumberWithSuffix',
+        'entityName',
+        'irsPractitioners',
+        'leadDocketNumber',
+        'petitioners',
+        'privatePractitioners',
+      ],
     });
     expect(output.consolidatedCases).toEqual(mockConsolidatedCases);
   });
