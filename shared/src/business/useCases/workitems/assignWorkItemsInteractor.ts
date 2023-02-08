@@ -1,3 +1,4 @@
+import { CASE_SERVICES_SUPERVISOR_SECTION } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -36,6 +37,13 @@ export const assignWorkItemsInteractor = async (
     userId: authorizedUser.userId,
   });
 
+  const userBeingAssigned = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({
+      applicationContext,
+      userId: assigneeId,
+    });
+
   const workItemRecord = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
@@ -47,10 +55,17 @@ export const assignWorkItemsInteractor = async (
     applicationContext,
   });
 
+  const assignedByCaseServicesUser =
+    user.section === CASE_SERVICES_SUPERVISOR_SECTION;
+
+  let sectionToAssignTo = assignedByCaseServicesUser
+    ? userBeingAssigned.section
+    : user.section;
+
   workItemEntity.assignToUser({
     assigneeId,
     assigneeName,
-    section: user.section,
+    section: sectionToAssignTo,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
