@@ -46,11 +46,11 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: 1,
     },
     {
-      key: 'odsFile',
+      key: 'cdsFile',
       value: fakeFile,
     },
     {
-      key: 'odsFileSize',
+      key: 'cdsFileSize',
       value: 1,
     },
     {

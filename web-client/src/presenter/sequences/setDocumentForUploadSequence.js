@@ -4,8 +4,8 @@ import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequ
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
 import { setIsScanningFalseAction } from '../actions/setIsScanningFalseAction';
 import { updateFormValueSequence } from './updateFormValueSequence';
+import { updateOrderForCdsAction } from '../actions/StartCaseInternal/updateOrderForCdsAction';
 import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
-import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 
 export const setDocumentForUploadSequence = [
@@ -16,7 +16,7 @@ export const setDocumentForUploadSequence = [
       getFormValueDocumentAction,
       updateFormValueSequence,
       updateOrderForDesignatingPlaceOfTrialAction,
-      updateOrderForOdsAction,
+      updateOrderForCdsAction,
       getFormValueDocumentSizeAction,
       updateFormValueSequence,
       selectDocumentForPreviewSequence,

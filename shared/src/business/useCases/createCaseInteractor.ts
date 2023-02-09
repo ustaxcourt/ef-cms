@@ -214,7 +214,7 @@ export const createCaseInteractor = async (
   caseToAdd.addDocketEntry(stinDocketEntryEntity);
 
   if (corporateDisclosureFileId) {
-    const odsDocketEntryEntity = new DocketEntry(
+    const cdsDocketEntryEntity = new DocketEntry(
       {
         contactPrimary: caseToAdd.getContactPrimary(),
         contactSecondary: caseToAdd.getContactSecondary(),
@@ -232,7 +232,7 @@ export const createCaseInteractor = async (
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
-    caseToAdd.addDocketEntry(odsDocketEntryEntity);
+    caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({

@@ -48,7 +48,7 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   if (this.orderDesignatingPlaceOfTrial === false) {
     this.orderDesignatingPlaceOfTrial = undefined;
   }
-  this.orderForOds = rawCase.orderForOds;
+  this.orderForCds = rawCase.orderForCds;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition;
   this.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee;
@@ -189,8 +189,8 @@ const paperRequirements = joi
     orderForAmendedPetition: Case.VALIDATION_RULES.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
       Case.VALIDATION_RULES.orderForAmendedPetitionAndFilingFee,
+    orderForCds: Case.VALIDATION_RULES.orderForCds,
     orderForFilingFee: Case.VALIDATION_RULES.orderForFilingFee,
-    orderForOds: Case.VALIDATION_RULES.orderForOds,
     orderForRatification: Case.VALIDATION_RULES.orderForRatification,
     orderToShowCause: Case.VALIDATION_RULES.orderToShowCause,
     partyType: JoiValidationConstants.STRING.valid(

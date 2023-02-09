@@ -76,13 +76,13 @@ describe('filePetitionFromPaperInteractor', () => {
     });
 
     await filePetitionFromPaperInteractor(applicationContext, {
-      corporateDisclosureFile: 'this ods file',
+      corporateDisclosureFile: 'this cds file',
     } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
-    ).toEqual('this ods file');
+    ).toEqual('this cds file');
   });
 
   it('calls upload on a STIN file', async () => {

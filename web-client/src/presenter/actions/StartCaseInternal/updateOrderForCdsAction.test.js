@@ -2,15 +2,15 @@ import { PARTY_TYPES } from '../../../../../shared/src/business/entities/EntityC
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { updateOrderForOdsAction } from './updateOrderForOdsAction';
+import { updateOrderForCdsAction } from './updateOrderForCdsAction';
 
-describe('updateOrderForOdsAction', () => {
+describe('updateOrderForCdsAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
   it('should set state.form.orderForOds true if state.form.partyType is Corporation and an corporate disclosure file has not been uploaded', async () => {
-    const result = await runAction(updateOrderForOdsAction, {
+    const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
       },
@@ -26,7 +26,7 @@ describe('updateOrderForOdsAction', () => {
   });
 
   it('should set state.form.orderForOds false if state.form.partyType is Petitioner', async () => {
-    const result = await runAction(updateOrderForOdsAction, {
+    const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
       },
@@ -42,7 +42,7 @@ describe('updateOrderForOdsAction', () => {
   });
 
   it('should set state.form.orderForOds false if state.form.partyType is Corporation and an corporate disclosure file has been uploaded', async () => {
-    const result = await runAction(updateOrderForOdsAction, {
+    const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
       },
@@ -59,7 +59,7 @@ describe('updateOrderForOdsAction', () => {
   });
 
   it('should not update orderForOds if props.key is not partyType or corporateDisclosureFile', async () => {
-    const result = await runAction(updateOrderForOdsAction, {
+    const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
       },

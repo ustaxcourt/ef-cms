@@ -377,7 +377,7 @@ export const StartCaseStep3 = connect(
               >
                 <label
                   className={classNames(
-                    'ustc-upload-ods usa-label with-hint',
+                    'ustc-upload-cds usa-label with-hint',
                     startCaseHelper.showCorporateDisclosureValid && 'validated',
                   )}
                   htmlFor="corporate-disclosure-file"

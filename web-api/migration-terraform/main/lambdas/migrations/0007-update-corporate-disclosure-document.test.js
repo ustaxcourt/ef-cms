@@ -40,7 +40,7 @@ describe('migrateItems', () => {
     });
   });
 
-  it('should return and modify records that are ODS docket entries', async () => {
+  it('should return and modify records that are CDS docket entries', async () => {
     const mockItem = {
       documentTitle: 'Ownership Disclosure Statement',
       documentType: 'Ownership Disclosure Statement',
