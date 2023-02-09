@@ -84,9 +84,12 @@ export const getFormattedMessages = ({
         .getUtilities()
         .setConsolidationFlagsForDisplay(message);
 
-      if (message.fromSection === CASE_SERVICES_SUPERVISOR_SECTION) {
-        message.fromSectionFormatted = 'Case Services';
-      }
+      const messageFromCaseServices =
+        message.fromSection === CASE_SERVICES_SUPERVISOR_SECTION;
+
+      message.fromSectionFormatted = messageFromCaseServices
+        ? 'Case Services'
+        : message.fromSection;
 
       return {
         ...message,
