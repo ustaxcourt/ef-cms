@@ -20,12 +20,20 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const updateCaseDocketEntries = ({
   applicationContext,
   caseToUpdate,
+  changedDocketEntryIds,
   oldCase,
 }) => {
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries,
     caseToUpdate.docketEntries,
     'docketEntryId',
+  );
+
+  const docketEntriesChangedInInteractor = updatedDocketEntries.filter(
+    docketEntry =>
+      changedDocketEntryIds
+        ? changedDocketEntryIds.includes(docketEntry.docketEntryId)
+        : true,
   );
 
   const {
@@ -37,12 +45,19 @@ const updateCaseDocketEntries = ({
     'docketEntryId',
   );
 
+  const archivedDocketEntriesChangedInInteractor =
+    updatedArchivedDocketEntries.filter(docketEntry =>
+      changedDocketEntryIds
+        ? changedDocketEntryIds.includes(docketEntry.docketEntryId)
+        : true,
+    );
+
   const validDocketEntries = DocketEntry.validateRawCollection(
     [
       ...addedDocketEntries,
-      ...updatedDocketEntries,
+      ...docketEntriesChangedInInteractor,
       ...addedArchivedDocketEntries,
-      ...updatedArchivedDocketEntries,
+      ...archivedDocketEntriesChangedInInteractor,
     ],
     { applicationContext, petitioners: caseToUpdate.petitioners },
   );
@@ -522,6 +537,7 @@ const updateCaseDeadlines = async ({
 exports.updateCaseAndAssociations = async ({
   applicationContext,
   caseToUpdate,
+  changedDocketEntryIds,
 }) => {
   const caseEntity = caseToUpdate.validate
     ? caseToUpdate
@@ -542,7 +558,7 @@ exports.updateCaseAndAssociations = async ({
 
   const RELATED_CASE_OPERATIONS = [
     updateCaseDeadlines,
-    updateCaseDocketEntries,
+    options => updateCaseDocketEntries({ ...options, changedDocketEntryIds }),
     updateCaseMessages,
     updateCaseWorkItems,
     updateCorrespondence,

@@ -60,6 +60,8 @@ export const updateDocketEntryMetaInteractor = async (
       docketNumber,
     });
 
+  await new Promise(resolve => setTimeout(resolve, 10000));
+
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
@@ -212,6 +214,7 @@ export const updateDocketEntryMetaInteractor = async (
     .updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: caseEntity,
+      changedDocketEntryIds: [docketEntryEntity.docketEntryId], // we only want to modify this single docket entry
     });
 
   return new Case(result, { applicationContext }).validate().toRawObject();
