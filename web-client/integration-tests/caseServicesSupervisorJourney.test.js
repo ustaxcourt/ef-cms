@@ -229,7 +229,7 @@ describe('Case Services Supervisor Messages Journey', () => {
   // Issue:  Neither Section QC display shows In Progress work by the CSS.
   it('in progress work item displays in "In Progress" tab in my box and docket section box', async () => {
     // go to seeded case
-    cerebralTest.docketNumber = seededDocketNumber;
+    cerebralTest.docketNumber = seededDocketNumberWithDocumentQC;
 
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -320,9 +320,13 @@ describe('Case Services Supervisor Messages Journey', () => {
       queue: 'section',
       section: DOCKET_SECTION,
     });
-    console.log('cerebralTest.docketEntryId', cerebralTest.docketEntryId);
+    console.log('11cerebralTest.docketEntryId', cerebralTest.docketEntryId);
     // item from seeded case exists
     let inProgressQueue = cerebralTest.getState('workQueue');
+    console.log(
+      'inProgressQueue',
+      inProgressQueue.map(item => item.docketEntry.docketEntryId),
+    );
     let inProgressWorkItem = inProgressQueue.find(
       workItem =>
         workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
