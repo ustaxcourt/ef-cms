@@ -17,7 +17,6 @@ describe('isSealedCase', () => {
   it('returns false if isSealedDate is undefined', () => {
     const result = isSealedCase({
       docketEntries: [],
-      isSealed: false,
       name: 'Johnny Appleseed',
       sealedDate: undefined,
     });
