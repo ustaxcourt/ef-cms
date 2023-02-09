@@ -86,11 +86,11 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         value: 1,
       },
       {
-        key: 'odsFile',
+        key: 'cdsFile',
         value: fakeFile,
       },
       {
-        key: 'odsFileSize',
+        key: 'cdsFileSize',
         value: 1,
       },
       {

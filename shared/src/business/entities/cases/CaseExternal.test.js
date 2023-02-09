@@ -230,7 +230,7 @@ describe('CaseExternal entity', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: new File([], 'odsFile.pdf'),
+          corporateDisclosureFile: new File([], 'cdsFile.pdf'),
           corporateDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
           filingType: 'Myself',
           hasIrsNotice: true,

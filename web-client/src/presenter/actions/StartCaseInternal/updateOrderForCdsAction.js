@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets state.form.orderForOds based on the partyType and whether an CDS file has been uploaded
+ * sets state.form.orderForCds based on the partyType and whether an CDS file has been uploaded
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const updateOrderForOdsAction = ({
+export const updateOrderForCdsAction = ({
   applicationContext,
   get,
   props,
@@ -28,9 +28,9 @@ export const updateOrderForOdsAction = ({
       ].includes(partyType) &&
       !corporateDisclosureFile
     ) {
-      store.set(state.form.orderForOds, true);
+      store.set(state.form.orderForCds, true);
     } else {
-      store.set(state.form.orderForOds, false);
+      store.set(state.form.orderForCds, false);
     }
   }
 };

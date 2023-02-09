@@ -2,7 +2,7 @@ import { formatStatistic } from './statisticsHelper';
 import { state } from 'cerebral';
 
 export const ordersAndNoticesNeededCodes = {
-  orderForOds: 'Order for Corporate Disclosure Statement',
+  orderForCds: 'Order for Corporate Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
 };
 

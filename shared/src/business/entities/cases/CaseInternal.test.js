@@ -132,7 +132,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(true);
     });
 
-    it('creates a valid petition with partyType Corporation and an ods file', () => {
+    it('creates a valid petition with partyType Corporation and an cds file', () => {
       const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
@@ -170,7 +170,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(true);
     });
 
-    it('creates a valid petition with partyType Corporation and an order for ods instead of an ods file', () => {
+    it('creates a valid petition with partyType Corporation and an order for cds instead of an cds file', () => {
       const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
@@ -178,7 +178,7 @@ describe('CaseInternal entity', () => {
           caseType: CASE_TYPES_MAP.other,
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
-          orderForOds: true,
+          orderForCds: true,
           partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
@@ -251,7 +251,7 @@ describe('CaseInternal entity', () => {
       ).toEqual(VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFile);
     });
 
-    it('fails validation if partyType is Corporation and orderForOds is undefined', () => {
+    it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
       const caseInternal = new CaseInternal(
         {
           partyType: PARTY_TYPES.corporation,
@@ -264,10 +264,10 @@ describe('CaseInternal entity', () => {
       ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
-    it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForOds is false', () => {
+    it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
       const caseInternal = new CaseInternal(
         {
-          orderForOds: false,
+          orderForCds: false,
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         { applicationContext },

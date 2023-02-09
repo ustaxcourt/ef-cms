@@ -52,13 +52,13 @@ describe('filePetitionInteractor', () => {
 
   it('calls upload on an CDS file', async () => {
     await filePetitionInteractor(applicationContext, {
-      corporateDisclosureFile: 'this ods file',
+      corporateDisclosureFile: 'this cds file',
     } as any);
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
         .calls[1][0].document,
-    ).toEqual('this ods file');
+    ).toEqual('this cds file');
   });
 
   it('calls upload on a STIN file', async () => {

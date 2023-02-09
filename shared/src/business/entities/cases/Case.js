@@ -214,7 +214,7 @@ const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
   obj.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee || false;
   obj.orderForFilingFee = rawCase.orderForFilingFee || false;
-  obj.orderForOds = rawCase.orderForOds || false;
+  obj.orderForCds = rawCase.orderForCds || false;
   obj.orderForRatification = rawCase.orderForRatification || false;
   obj.orderToShowCause = rawCase.orderToShowCause || false;
 
@@ -615,14 +615,14 @@ Case.VALIDATION_RULES = {
     .description(
       'Reminder for clerks to review the order for amended Petition And filing fee.',
     ),
+  orderForCds: joi
+    .boolean()
+    .optional()
+    .description('Reminder for clerks to review the order for CDS.'),
   orderForFilingFee: joi
     .boolean()
     .optional()
     .description('Reminder for clerks to review the order for filing fee.'),
-  orderForOds: joi
-    .boolean()
-    .optional()
-    .description('Reminder for clerks to review the order for CDS.'),
   orderForRatification: joi
     .boolean()
     .optional()

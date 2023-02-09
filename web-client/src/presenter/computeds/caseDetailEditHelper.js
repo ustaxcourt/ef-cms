@@ -30,12 +30,12 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     ].includes(caseDetail.partyType) &&
     caseDetail.docketEntries
   ) {
-    const odsDocs = caseDetail.docketEntries.filter(doc => {
+    const cdsDocs = caseDetail.docketEntries.filter(doc => {
       return doc.documentType === 'Corporate Disclosure Statement';
     });
     showCorporateDisclosureStatement = true;
-    if (odsDocs[0]) {
-      corporateDisclosureStatementDocumentId = odsDocs[0].docketEntryId;
+    if (cdsDocs[0]) {
+      corporateDisclosureStatementDocumentId = cdsDocs[0].docketEntryId;
     }
   }
 

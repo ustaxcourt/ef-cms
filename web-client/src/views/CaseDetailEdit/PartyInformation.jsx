@@ -53,10 +53,10 @@ export const PartyInformation = connect(
             <FormGroup>
               <div className="order-checkbox">
                 <input
-                  checked={form.orderForOds}
+                  checked={form.orderForCds}
                   className="usa-checkbox__input"
-                  id="order-for-ods"
-                  name="orderForOds"
+                  id="order-for-cds"
+                  name="orderForCds"
                   type="checkbox"
                   onChange={e => {
                     updateFormValueSequence({
@@ -65,7 +65,7 @@ export const PartyInformation = connect(
                     });
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="order-for-ods">
+                <label className="usa-checkbox__label" htmlFor="order-for-cds">
                   Order for Corporate Disclosure Statement
                 </label>
               </div>

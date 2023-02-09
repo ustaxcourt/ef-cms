@@ -159,7 +159,7 @@ export const StartCaseStep5 = connect(
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
                                     file={form.corporateDisclosureFile}
-                                    id="ods-preview-button"
+                                    id="cds-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
                                     title="corporate Disclosure Statement"

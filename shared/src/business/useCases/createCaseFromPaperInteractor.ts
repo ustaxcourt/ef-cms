@@ -240,7 +240,7 @@ export const createCaseFromPaperInteractor = async (
   }
 
   if (corporateDisclosureFileId) {
-    const odsDocketEntryEntity = new DocketEntry(
+    const cdsDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         docketEntryId: corporateDisclosureFileId,
@@ -258,7 +258,7 @@ export const createCaseFromPaperInteractor = async (
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
-    caseToAdd.addDocketEntry(odsDocketEntryEntity);
+    caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
   await Promise.all([

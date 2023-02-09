@@ -1,7 +1,7 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const petitionsClerkVerifiesOrderForOdsCheckbox = (
+export const petitionsClerkVerifiesOrderForCdsCheckbox = (
   cerebralTest,
   fakeFile,
 ) => {
