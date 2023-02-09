@@ -9,7 +9,7 @@ describe('updateOrderForOdsAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should set state.form.orderForOds true if state.form.partyType is Corporation and an ownership disclosure file has not been uploaded', async () => {
+  it('should set state.form.orderForOds true if state.form.partyType is Corporation and an corporate disclosure file has not been uploaded', async () => {
     const result = await runAction(updateOrderForOdsAction, {
       modules: {
         presenter,
@@ -41,15 +41,15 @@ describe('updateOrderForOdsAction', () => {
     expect(result.state.form.orderForOds).toEqual(false);
   });
 
-  it('should set state.form.orderForOds false if state.form.partyType is Corporation and an ownership disclosure file has been uploaded', async () => {
+  it('should set state.form.orderForOds false if state.form.partyType is Corporation and an corporate disclosure file has been uploaded', async () => {
     const result = await runAction(updateOrderForOdsAction, {
       modules: {
         presenter,
       },
-      props: { key: 'ownershipDisclosureFile' },
+      props: { key: 'corporateDisclosureFile' },
       state: {
         form: {
-          ownershipDisclosureFile: 'the file!',
+          corporateDisclosureFile: 'the file!',
           partyType: PARTY_TYPES.corporation,
         },
       },
@@ -58,7 +58,7 @@ describe('updateOrderForOdsAction', () => {
     expect(result.state.form.orderForOds).toEqual(false);
   });
 
-  it('should not update orderForOds if props.key is not partyType or ownershipDisclosureFile', async () => {
+  it('should not update orderForOds if props.key is not partyType or corporateDisclosureFile', async () => {
     const result = await runAction(updateOrderForOdsAction, {
       modules: {
         presenter,

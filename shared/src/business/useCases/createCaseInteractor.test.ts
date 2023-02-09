@@ -165,7 +165,7 @@ describe('createCaseInteractor', () => {
     });
 
     const result = await createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -217,7 +217,7 @@ describe('createCaseInteractor', () => {
     });
 
     const result = await createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -281,7 +281,7 @@ describe('createCaseInteractor', () => {
     });
 
     const result = await createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,

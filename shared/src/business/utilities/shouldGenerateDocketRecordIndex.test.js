@@ -147,7 +147,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     };
     const docketEntry = {
       docketEntryId: '123',
-      documentType: 'Ownership Disclosure Statement',
+      documentType: 'Corporate Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:56.415Z', // 10 seconds
     };
@@ -178,7 +178,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     };
     const docketEntry = {
       docketEntryId: '123',
-      documentType: 'Ownership Disclosure Statement',
+      documentType: 'Corporate Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:57.415Z',
     };
@@ -203,7 +203,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     };
     const docketEntry = {
       docketEntryId: '123',
-      documentType: 'Ownership Disclosure Statement',
+      documentType: 'Corporate Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:57.415Z',
       isPaper: true,
