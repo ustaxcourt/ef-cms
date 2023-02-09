@@ -182,8 +182,6 @@ describe('Case Services Supervisor Messages Journey', () => {
     await assignWorkItems(cerebralTest, 'caseservicessupervisor', workItem);
   });
 
-  // Issue: items processed by CSS are not showing on the Processed view for Section Document QC.
-  // but, petitions processed by CSS do appear in the Processed view for Section Petitions QC.
   it('completed work items should appear in the "Processed" tab of the docket section inbox', async () => {
     await cerebralTest.runSequence('gotoWorkQueueSequence', {
       box: 'inbox',
@@ -220,18 +218,5 @@ describe('Case Services Supervisor Messages Journey', () => {
           workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
       );
     expect(workItem).toBeDefined();
-  });
-
-  // Issue:  Neither Section QC display shows In Progress work by the CSS.
-  it.skip('in progress work item displays in "In Progress" tab in my box and docket section box', async () => {
-    // go to seeded case
-    // add paper filing - admin record
-    // save for later
-    // go to my inbox, doc qc
-    // go to in progress tab
-    // item from seeded case exists
-    // go to docket section inbox, doc qc
-    // go to in progress tab
-    // item from seeded case exists
   });
 });
