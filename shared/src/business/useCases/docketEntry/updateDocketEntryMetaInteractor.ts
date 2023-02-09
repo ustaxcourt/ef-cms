@@ -60,8 +60,6 @@ export const updateDocketEntryMetaInteractor = async (
       docketNumber,
     });
 
-  await new Promise(resolve => setTimeout(resolve, 10000));
-
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
