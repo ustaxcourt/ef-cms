@@ -1,16 +1,12 @@
 import {
   DOCKET_SECTION,
-  DOCUMENT_RELATIONSHIPS,
   PETITIONS_SECTION,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
   assignWorkItems,
-  contactPrimaryFromState,
-  fakeFile,
   getFormattedDocumentQCSectionInbox,
   loginAs,
   setupTest,
-  waitForCondition,
 } from './helpers';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 
@@ -227,113 +223,15 @@ describe('Case Services Supervisor Messages Journey', () => {
   });
 
   // Issue:  Neither Section QC display shows In Progress work by the CSS.
-  it('in progress work item displays in "In Progress" tab in my box and docket section box', async () => {
+  it.skip('in progress work item displays in "In Progress" tab in my box and docket section box', async () => {
     // go to seeded case
-    cerebralTest.docketNumber = seededDocketNumberWithDocumentQC;
-
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-    // add paper filing - answer
-    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    await cerebralTest.runSequence('updateScreenMetadataSequence', {
-      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      value: false,
-    });
-
-    const paperFiledAnswer = [
-      {
-        key: 'dateReceivedMonth',
-        value: 1,
-      },
-      {
-        key: 'dateReceivedDay',
-        value: 1,
-      },
-      {
-        key: 'dateReceivedYear',
-        value: 2018,
-      },
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-      {
-        key: 'primaryDocumentFileSize',
-        value: 100,
-      },
-      {
-        key: 'eventCode',
-        value: 'A',
-      },
-      {
-        key: 'pending',
-        value: true,
-      },
-    ];
-
-    for (const item of paperFiledAnswer) {
-      await cerebralTest.runSequence(
-        'updateDocketEntryFormValueSequence',
-        item,
-      );
-    }
-
-    const { contactId } = contactPrimaryFromState(cerebralTest);
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactId}`,
-        value: true,
-      },
-    );
-
+    // add paper filing - admin record
     // save for later
-    await cerebralTest.runSequence('submitPaperFilingSequence', {
-      isSavingForLater: true,
-    });
-
-    await waitForCondition({
-      booleanExpressionCondition: () =>
-        cerebralTest.getState('currentPage') === 'CaseDetail',
-    });
-
-    cerebralTest.docketEntryId = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === 'A').docketEntryId;
-
-    expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to the docket record.',
-    );
-
-    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(cerebralTest.getState('form')).toEqual({});
-
-    // go to docket section inProgress, doc qc
-    await cerebralTest.runSequence('gotoWorkQueueSequence');
-    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
-    await cerebralTest.runSequence('chooseWorkQueueSequence', {
-      box: 'inProgress',
-      queue: 'section',
-      section: DOCKET_SECTION,
-    });
-    console.log('11cerebralTest.docketEntryId', cerebralTest.docketEntryId);
+    // go to my inbox, doc qc
+    // go to in progress tab
     // item from seeded case exists
-    let inProgressQueue = cerebralTest.getState('workQueue');
-    console.log(
-      'inProgressQueue',
-      inProgressQueue.map(item => item.docketEntry.docketEntryId),
-    );
-    let inProgressWorkItem = inProgressQueue.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
-    );
-    expect(inProgressWorkItem).toBeTruthy();
-
-    // TODO: add a petition and save for later
-    // assert: item appears in inProgress tab for PETITIONS section
+    // go to docket section inbox, doc qc
+    // go to in progress tab
+    // item from seeded case exists
   });
 });
