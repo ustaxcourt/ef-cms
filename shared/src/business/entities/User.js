@@ -150,6 +150,10 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
+User.prototype.isChambersUser = function () {
+  return this.section.includes('Chambers');
+};
+
 User.isExternalUser = function (role) {
   const externalRoles = [
     ROLES.petitioner,
@@ -178,12 +182,8 @@ User.isInternalUser = function (role) {
   return internalRoles.includes(role);
 };
 
-User.prototype.isChambersUser = function () {
-  return this.section.includes('Chambers');
-};
-
-User.prototype.isCaseServicesUser = function () {
-  return this.section.includes(CASE_SERVICES_SUPERVISOR_SECTION);
+User.isCaseServicesUser = function ({ section }) {
+  return section === CASE_SERVICES_SUPERVISOR_SECTION;
 };
 
 module.exports = {
