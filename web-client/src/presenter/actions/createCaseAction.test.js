@@ -105,7 +105,7 @@ describe('createCaseAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an ODS form) with the petition metadata and files and call the success path  finished', async () => {
+  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files and call the success path  finished', async () => {
     filePetitionInteractor.mockReturnValue({
       caseDetail: {
         ...MOCK_CASE,
@@ -202,7 +202,7 @@ describe('createCaseAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and ODS
+    expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
     expect(successStub).toHaveBeenCalled();
   });
 

@@ -260,7 +260,7 @@ describe('case detail edit computed', () => {
     );
   });
 
-  it('sets showCorporateDisclosureStatement true if partyType is corporation but there is no document for ODS', () => {
+  it('sets showCorporateDisclosureStatement true if partyType is corporation but there is no document for CDS', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {

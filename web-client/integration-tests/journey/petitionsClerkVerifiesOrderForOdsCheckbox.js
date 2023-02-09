@@ -5,7 +5,7 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
   cerebralTest,
   fakeFile,
 ) => {
-  return it('Petitions clerk verifies that the Order for ODS checkbox is correctly checked and unchecked', async () => {
+  return it('Petitions clerk verifies that the Order for CDS checkbox is correctly checked and unchecked', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
@@ -15,14 +15,14 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
       value: PARTY_TYPES.petitioner,
     });
 
-    expect(cerebralTest.getState('form.orderForOds')).toBeFalsy();
+    expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();
 
     await cerebralTest.runSequence('updateStartCaseInternalPartyTypeSequence', {
       key: 'partyType',
       value: PARTY_TYPES.corporation,
     });
 
-    expect(cerebralTest.getState('form.orderForOds')).toBeTruthy();
+    expect(cerebralTest.getState('form.orderForCds')).toBeTruthy();
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
@@ -31,7 +31,7 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
     ).toBeUndefined();
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'orderForOds',
+      key: 'orderForCds',
       value: false,
     });
 
@@ -42,11 +42,11 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
     ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'orderForOds',
+      key: 'orderForCds',
       value: true,
     });
 
-    // simulate switching to ODS document tab
+    // simulate switching to CDS document tab
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'corporateDisclosureFile',
@@ -62,7 +62,7 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
       file: fakeFile,
     });
 
-    expect(cerebralTest.getState('form.orderForOds')).toBeFalsy();
+    expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();
 
     await cerebralTest.runSequence('openConfirmDeletePDFModalSequence');
 
@@ -75,10 +75,10 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
     expect(
       cerebralTest.getState('form.corporateDisclosureFile'),
     ).toBeUndefined();
-    expect(cerebralTest.getState('form.orderForOds')).toBeTruthy();
+    expect(cerebralTest.getState('form.orderForCds')).toBeTruthy();
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'orderForOds',
+      key: 'orderForCds',
       value: false,
     });
 
@@ -97,6 +97,6 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (
       file: fakeFile,
     });
 
-    expect(cerebralTest.getState('form.orderForOds')).toBeFalsy();
+    expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();
   });
 };

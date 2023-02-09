@@ -15,7 +15,7 @@ export const initialFilingDocumentTabs = [
   },
   {
     documentType: 'corporateDisclosureFile',
-    title: 'ODS',
+    title: 'CDS',
   },
   {
     documentType: 'applicationForWaiverOfFilingFeeFile',
@@ -28,7 +28,7 @@ export const petitionQcHelper = (get, applicationContext) => {
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
 
-  const hasODS = !!documents.find(
+  const hasCDS = !!documents.find(
     doc =>
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
@@ -57,9 +57,9 @@ export const petitionQcHelper = (get, applicationContext) => {
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
-      if (tab.title === 'ODS') {
-        // Do not display ODS tab if one wasn't filed electronically
-        return hasODS;
+      if (tab.title === 'CDS') {
+        // Do not display CDS tab if one wasn't filed electronically
+        return hasCDS;
       } else {
         // Do not display APW and RQT tabs for electronic filing
         return tab.title !== 'APW' && tab.title !== 'RQT';

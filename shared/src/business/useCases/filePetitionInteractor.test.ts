@@ -50,7 +50,7 @@ describe('filePetitionInteractor', () => {
     ).toEqual('this petition file');
   });
 
-  it('calls upload on an ODS file', async () => {
+  it('calls upload on an CDS file', async () => {
     await filePetitionInteractor(applicationContext, {
       corporateDisclosureFile: 'this ods file',
     } as any);

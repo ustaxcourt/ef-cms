@@ -20,8 +20,8 @@ module.exports = [
       'check field #party-type',
       'wait for #order-for-ods to be visible',
     ],
-    notes: 'checks a11y of Create Case with inputs revealed - Order for ODS',
-    url: 'http://localhost:1234/log-in?code=petitionsclerk@example.com&path=/file-a-petition/step-1&info=order-for-ods',
+    notes: 'checks a11y of Create Case with inputs revealed - Order for CDS',
+    url: 'http://localhost:1234/log-in?code=petitionsclerk@example.com&path=/file-a-petition/step-1&info=order-for-cds',
   },
   {
     actions: [

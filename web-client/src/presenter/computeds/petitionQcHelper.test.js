@@ -113,11 +113,11 @@ describe('petitionQcHelper', () => {
       expect(documentTabsToDisplay).toEqual([
         initialFilingDocumentTabs[0], // Petition
         initialFilingDocumentTabs[1], // STIN
-        initialFilingDocumentTabs[3], // ODS
+        initialFilingDocumentTabs[3], // CDS
       ]);
     });
 
-    it('hides ODS tab for electronic filings if one was NOT initially filed', () => {
+    it('hides CDS tab for electronic filings if one was NOT initially filed', () => {
       mockState = {
         caseDetail: {
           docketEntries: [],
