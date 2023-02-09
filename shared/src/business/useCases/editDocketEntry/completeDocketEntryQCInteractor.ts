@@ -1,6 +1,5 @@
 import {
   CASE_CAPTION_POSTFIX,
-  CASE_SERVICES_SUPERVISOR_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -13,6 +12,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { User } from '../../entities/User';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
@@ -207,7 +207,7 @@ export const completeDocketEntryQCInteractor = async (
     user,
   });
 
-  const userIsCaseServices = user.section === CASE_SERVICES_SUPERVISOR_SECTION;
+  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
 
   let sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
