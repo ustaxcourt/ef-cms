@@ -393,7 +393,7 @@ export const StartCaseStep3 = connect(
                   <Button
                     link
                     className="usa-link--external text-left  mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form_6.pdf"
+                    href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
                     icon="file-pdf"
                     iconColor="blue"
                     overrideMargin="margin-right-1"
