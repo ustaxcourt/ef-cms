@@ -221,7 +221,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       state: cerebralTest.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.shoCorporateDisclosure).toBeTruthy();
+    expect(result.showCorporateDisclosure).toBeTruthy();
 
     // Partnership tax matters party type primary contact
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
