@@ -11,12 +11,10 @@ const { Case } = require('../../entities/cases/Case');
 exports.formatAndSortConsolidatedCases = ({
   consolidatedCases,
   leadDocketNumber,
-  userAssociatedDocketNumbersMap,
 }) => {
   const caseConsolidatedCases = [];
   consolidatedCases.forEach(consolidatedCase => {
-    consolidatedCase.isRequestingUserAssociated =
-      !!userAssociatedDocketNumbersMap[consolidatedCase.docketNumber];
+    consolidatedCase.isRequestingUserAssociated = true;
 
     if (consolidatedCase.docketNumber !== leadDocketNumber) {
       caseConsolidatedCases.push(consolidatedCase);
