@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   ROLES,
   STATE_NOT_AVAILABLE,
@@ -179,6 +180,10 @@ User.isInternalUser = function (role) {
 
 User.prototype.isChambersUser = function () {
   return this.section.includes('Chambers');
+};
+
+User.prototype.isCaseServicesUser = function () {
+  return this.section.includes(CASE_SERVICES_SUPERVISOR_SECTION);
 };
 
 module.exports = {
