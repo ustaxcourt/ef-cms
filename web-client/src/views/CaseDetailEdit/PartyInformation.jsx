@@ -48,7 +48,7 @@ export const PartyInformation = connect(
             </select>
           </div>
         </div>
-        {caseDetailEditHelper.showOwnershipDisclosureStatement && (
+        {caseDetailEditHelper.showCorporateDisclosureStatement && (
           <div className="subsection">
             <FormGroup>
               <div className="order-checkbox">
@@ -66,7 +66,7 @@ export const PartyInformation = connect(
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="order-for-ods">
-                  Order for Ownership Disclosure Statement
+                  Order for Corporate Disclosure Statement
                 </label>
               </div>
             </FormGroup>

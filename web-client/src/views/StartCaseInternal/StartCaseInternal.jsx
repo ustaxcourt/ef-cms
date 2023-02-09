@@ -82,7 +82,7 @@ export const StartCaseInternal = connect(
                       title: 'RQT',
                     },
                     {
-                      documentType: 'ownershipDisclosureFile',
+                      documentType: 'corporateDisclosureFile',
                       title: 'ODS',
                     },
                     {

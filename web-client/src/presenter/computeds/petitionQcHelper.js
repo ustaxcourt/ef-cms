@@ -14,7 +14,7 @@ export const initialFilingDocumentTabs = [
     title: 'RQT',
   },
   {
-    documentType: 'ownershipDisclosureFile',
+    documentType: 'corporateDisclosureFile',
     title: 'ODS',
   },
   {
@@ -30,7 +30,7 @@ export const petitionQcHelper = (get, applicationContext) => {
 
   const hasODS = !!documents.find(
     doc =>
-      doc.eventCode === INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+      doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
 
   let documentTabsToDisplay = [...initialFilingDocumentTabs];
@@ -38,8 +38,8 @@ export const petitionQcHelper = (get, applicationContext) => {
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-    ownershipDisclosureFile:
-      INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+    corporateDisclosureFile:
+      INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
     requestForPlaceOfTrialFile:
       INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,

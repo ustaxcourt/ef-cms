@@ -2,7 +2,7 @@ import { formatStatistic } from './statisticsHelper';
 import { state } from 'cerebral';
 
 export const ordersAndNoticesNeededCodes = {
-  orderForOds: 'Order for Ownership Disclosure Statement',
+  orderForOds: 'Order for Corporate Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
 };
 
@@ -106,8 +106,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     documentsByType[INITIAL_DOCUMENT_TYPES.petition.documentType];
   const requestForPlaceOfTrialFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType];
-  const ownershipDisclosureFile =
-    documentsByType[INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType];
+  const corporateDisclosureFile =
+    documentsByType[INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType];
   const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
   const applicationForWaiverOfFilingFeeFile =
     documentsByType[
@@ -127,12 +127,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   return {
     applicationForWaiverOfFilingFeeFile,
+    corporateDisclosureFile,
     formattedStatistics,
     hasIrsNoticeFormatted,
     irsNoticeDateFormatted,
     ordersAndNoticesInDraft,
     ordersAndNoticesNeeded,
-    ownershipDisclosureFile,
     petitionFile,
     petitionPaymentStatusFormatted,
     preferredTrialCityFormatted,
