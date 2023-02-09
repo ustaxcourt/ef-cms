@@ -18,5 +18,4 @@ jobs:
           npm ci && npm rebuild
       - name: Generate and Test PDFs
         run: |
-          npm run build:assets
           npm run test:document-generation
