@@ -4,6 +4,8 @@ export const unauthedUserViewsCaseDetailForSealedCase = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
+    // TESTS CHECKING FOR isSealed being true but sealedDate being undefined
+
     expect(cerebralTest.getState('currentPage')).toEqual('PublicCaseDetail');
 
     expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
