@@ -23,7 +23,20 @@ describe('migrateItems', () => {
     expect(results).toEqual(mockItems);
   });
 
-  it('should return and not modify items that are docket entries but are NOT CDS', async () => {
+  it('should NOT modify docket entry items that do NOT have documentType "Ownership Disclosure Statement"', async () => {
+    const mockItem = {
+      documentTitle: 'Answer',
+      documentType: 'Answer',
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual(mockItem);
+  });
+
+  it('should modify docket entry items with documentType "Ownership Disclosure Statement", updating documentTitle and documentType', async () => {
     const mockItem = {
       documentTitle: 'Ownership Disclosure Statement',
       documentType: 'Ownership Disclosure Statement',
@@ -40,20 +53,44 @@ describe('migrateItems', () => {
     });
   });
 
-  it('should return and modify records that are CDS docket entries', async () => {
+  it('should modify case items that have property "orderForOds"', async () => {
     const mockItem = {
-      documentTitle: 'Ownership Disclosure Statement',
-      documentType: 'Ownership Disclosure Statement',
+      orderForOds: true,
       pk: `case|${MOCK_CASE.docketNumber}`,
-      sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+      sk: `case|${MOCK_CASE.docketNumber}`,
     };
 
     const results = await migrateItems([mockItem], documentClient);
 
     expect(results[0]).toEqual({
       ...mockItem,
-      documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentTitle,
-      documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+      orderForCds: true,
     });
+  });
+
+  it('should modify case items that have property "orderForOds", updating the property name to "orderForCds" and retaining the original value', async () => {
+    const mockItem = {
+      orderForOds: false,
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `case|${MOCK_CASE.docketNumber}`,
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual({
+      ...mockItem,
+      orderForCds: false,
+    });
+  });
+
+  it('should NOT modify case items that do not have property "orderForOds"', async () => {
+    const mockItem = {
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `case|${MOCK_CASE.docketNumber}`,
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual(mockItem);
   });
 });
