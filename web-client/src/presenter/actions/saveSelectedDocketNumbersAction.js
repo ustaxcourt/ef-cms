@@ -16,6 +16,5 @@ export const saveSelectedDocketNumbersAction = ({ get, store }) => {
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);
 
-  // TODO: This is derived state and probably should not exist.
   store.set(state.addedDocketNumbers, checkedCases);
 };

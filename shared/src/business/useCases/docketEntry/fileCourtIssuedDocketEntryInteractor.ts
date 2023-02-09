@@ -136,8 +136,6 @@ export const fileCourtIssuedDocketEntryInteractor = async (
         { applicationContext },
       );
 
-      console.log('new work item!', caseEntity.docketNumber);
-
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
