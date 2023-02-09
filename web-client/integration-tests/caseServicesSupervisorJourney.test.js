@@ -172,7 +172,7 @@ describe('Case Services Supervisor Messages Journey', () => {
   it('assign docket section work item to Test Docket Clerk 1', async () => {
     let documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       cerebralTest,
-      'docket',
+      DOCKET_SECTION,
     );
     const workItem = documentQCSectionInbox.filter(
       workItemToAssign =>
