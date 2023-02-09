@@ -159,7 +159,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
         <td className="message-queue-row to">{message.to}</td>
         <td className="message-queue-row from">{message.from}</td>
         <td className="message-queue-row small">
-          {message.fromSectionFormatted || message.fromSection}
+          {message.fromSectionFormatted}
         </td>
       </tr>
     </tbody>
