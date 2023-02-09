@@ -169,17 +169,32 @@ describe('Case Services Supervisor Messages Journey', () => {
     expect(workItem).toBeDefined();
   });
 
-  it('assign petitions section work item to Test Petitions Clerk 1', async () => {
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+  it('assign docket section work item to Test Docket Clerk 1', async () => {
+    let documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       cerebralTest,
-      'petitions',
+      'docket',
     );
     const workItem = documentQCSectionInbox.filter(
       workItemToAssign =>
         workItemToAssign.docketNumber === seededDocketNumberWithDocumentQC,
     );
 
-    await assignWorkItems(cerebralTest, 'caseservicessupervisor', workItem);
+    await assignWorkItems(cerebralTest, 'docketclerk', workItem);
+
+    await cerebralTest.runSequence('gotoWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+      section: DOCKET_SECTION,
+    });
+
+    const assignedWorkItem = cerebralTest
+      .getState('workQueue')
+      .find(
+        workItemInQueue =>
+          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+      );
+
+    expect(assignedWorkItem.section).toBe(DOCKET_SECTION);
   });
 
   it('completed work items should appear in the "Processed" tab of the docket section inbox', async () => {
