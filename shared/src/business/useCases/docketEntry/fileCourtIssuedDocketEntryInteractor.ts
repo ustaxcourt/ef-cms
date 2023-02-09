@@ -77,7 +77,7 @@ export const fileCourtIssuedDocketEntryInteractor = async (
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 
   await Promise.all(
-    docketNumbers.map(async docketNumber => {
+    [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
@@ -135,6 +135,8 @@ export const fileCourtIssuedDocketEntryInteractor = async (
         },
         { applicationContext },
       );
+
+      console.log('new work item!', caseEntity.docketNumber);
 
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });

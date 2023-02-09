@@ -106,7 +106,7 @@ export class DocketEntryClass {
   public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: any;
+  public workItem?: TWorkItemEntity;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -462,9 +462,13 @@ and contact info from the raw docket entry
    * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
    */
   isCourtIssued() {
-    return COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
-      this.eventCode,
-    );
+    return DocketEntryClass.isCourtIssued(this.eventCode);
+  }
+
+  static isCourtIssued(eventCode: string): boolean {
+    return COURT_ISSUED_EVENT_CODES.map(
+      ({ eventCode: courtIssuedEventCode }) => courtIssuedEventCode,
+    ).includes(eventCode);
   }
 
   /**

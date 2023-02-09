@@ -66,7 +66,6 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     });
 
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
-
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
@@ -130,7 +129,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   let serviceResults;
 
   try {
-    for (const docketNumber of docketNumbers) {
+    for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
@@ -232,7 +231,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
   });
 
   const successMessage =
-    docketNumbers.length > 1
+    docketNumbers.length > 0
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
 

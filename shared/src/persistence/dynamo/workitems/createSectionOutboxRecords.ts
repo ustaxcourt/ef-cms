@@ -89,7 +89,7 @@ const createSectionOutboxRecords = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-  workItem: TOutboxItem;
+  workItem: WorkItem;
 }) => {
   const Item: any = {
     ...workItem,
