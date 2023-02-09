@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets state.form.orderForOds based on the partyType and whether an ODS file has been uploaded
+ * sets state.form.orderForOds based on the partyType and whether an CDS file has been uploaded
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

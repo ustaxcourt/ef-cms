@@ -622,7 +622,7 @@ Case.VALIDATION_RULES = {
   orderForOds: joi
     .boolean()
     .optional()
-    .description('Reminder for clerks to review the order for ODS.'),
+    .description('Reminder for clerks to review the order for CDS.'),
   orderForRatification: joi
     .boolean()
     .optional()

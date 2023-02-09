@@ -5,19 +5,7 @@ const { migrateItems } = require('./0007-update-corporate-disclosure-document');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
-  let mockCaseItem;
   let documentClient;
-
-  beforeEach(() => {
-    mockCaseItem = {
-      ...MOCK_CASE,
-      docketNumber: '1050-20',
-      hasSealedDocuments: true,
-      pk: `case|${MOCK_CASE.docketNumber}`,
-      sk: `case|${MOCK_CASE.docketNumber}`,
-      sortableDocketNumber: 20001050,
-    };
-  });
 
   it('should return and not modify records that are NOT docket records', async () => {
     const mockItems = [
@@ -35,7 +23,7 @@ describe('migrateItems', () => {
     expect(results).toEqual(mockItems);
   });
 
-  it('should return and not modify items that are docket entries but are NOT ODS', async () => {
+  it('should return and not modify items that are docket entries but are NOT CDS', async () => {
     const mockItem = {
       documentTitle: 'Ownership Disclosure Statement',
       documentType: 'Ownership Disclosure Statement',

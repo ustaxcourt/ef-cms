@@ -35,7 +35,7 @@
 
 **Order for Corporate Disclosure Statement**
 * If party type = Corporation, Partnership (as the Tax Matters Partner), Partnership (as a partnership representative under BBA regime), or Partnership (as a partner other than Tax Matters Partner) - check box is displayed and auto-checked
-* If user uploads ODS PDF, checkbox is auto-unchecked
+* If user uploads CDS PDF, checkbox is auto-unchecked
 
 #### Case Info tab
 
@@ -138,7 +138,7 @@
 * Is required IF Trial location field is selected
 * Is optional IF Trial location field is blank
 
-**ODS**
+**CDS**
 * Is required if party type = Corporation, Partnership (as the Tax Matters Partner), Partnership (as a partnership representative under BBA regime), or Partnership (as a partner other than Tax Matters Partner) AND Order for Corporate Disclosure Statement is unchecked
 * If uploaded, Order for Corporate Disclosure Statement is auto-unchecked  
 

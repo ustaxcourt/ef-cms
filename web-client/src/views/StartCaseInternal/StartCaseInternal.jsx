@@ -83,7 +83,7 @@ export const StartCaseInternal = connect(
                     },
                     {
                       documentType: 'corporateDisclosureFile',
-                      title: 'ODS',
+                      title: 'CDS',
                     },
                     {
                       documentType: 'applicationForWaiverOfFilingFeeFile',

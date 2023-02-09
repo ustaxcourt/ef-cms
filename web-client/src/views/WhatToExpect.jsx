@@ -110,7 +110,7 @@ export const WhatToExpect = () => (
               Download Petition form (T.C. Form 2)
             </Button>
           </p>
-          <p className="label">3. Corporate Disclosure Statement (ODS)</p>
+          <p className="label">3. Corporate Disclosure Statement (CDS)</p>
           <p>
             If you’re filing on behalf of a business (this includes a
             corporation, partnership, and LLC), you’ll need to complete this to

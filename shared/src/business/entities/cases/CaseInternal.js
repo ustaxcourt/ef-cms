@@ -113,7 +113,7 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = {
     'Upload or scan an Application for Waiver of Filing Fee (APW)',
   chooseAtLeastOneValue:
     'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
-  corporateDisclosureFile: 'Upload or scan Corporate Disclosure Statement(ODS)',
+  corporateDisclosureFile: 'Upload or scan Corporate Disclosure Statement(CDS)',
   petitionFile: 'Upload or scan a Petition',
   petitionPaymentDate: [
     {
@@ -161,7 +161,7 @@ const paperRequirements = joi
           PARTY_TYPES.partnershipOtherThanTaxMatters,
         ),
       otherwise: joi.optional().allow(null),
-      then: joi.when('orderForOds', {
+      then: joi.when('orderForCds', {
         is: joi.not(true),
         otherwise: joi.optional().allow(null),
         then: joi.required(),

@@ -69,7 +69,7 @@ describe('filePetitionFromPaperInteractor', () => {
     ).toEqual('this APW file');
   });
 
-  it('calls upload on an ODS file', async () => {
+  it('calls upload on an CDS file', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
