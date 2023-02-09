@@ -9,7 +9,7 @@ describe('updateOrderForCdsAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should set state.form.orderForOds true if state.form.partyType is Corporation and an corporate disclosure file has not been uploaded', async () => {
+  it('should set state.form.orderForCds true if state.form.partyType is Corporation and an corporate disclosure file has not been uploaded', async () => {
     const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
@@ -22,10 +22,10 @@ describe('updateOrderForCdsAction', () => {
       },
     });
 
-    expect(result.state.form.orderForOds).toEqual(true);
+    expect(result.state.form.orderForCds).toEqual(true);
   });
 
-  it('should set state.form.orderForOds false if state.form.partyType is Petitioner', async () => {
+  it('should set state.form.orderForCds false if state.form.partyType is Petitioner', async () => {
     const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
@@ -38,10 +38,10 @@ describe('updateOrderForCdsAction', () => {
       },
     });
 
-    expect(result.state.form.orderForOds).toEqual(false);
+    expect(result.state.form.orderForCds).toEqual(false);
   });
 
-  it('should set state.form.orderForOds false if state.form.partyType is Corporation and an corporate disclosure file has been uploaded', async () => {
+  it('should set state.form.orderForCds false if state.form.partyType is Corporation and a corporate disclosure file has been uploaded', async () => {
     const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
@@ -55,10 +55,10 @@ describe('updateOrderForCdsAction', () => {
       },
     });
 
-    expect(result.state.form.orderForOds).toEqual(false);
+    expect(result.state.form.orderForCds).toEqual(false);
   });
 
-  it('should not update orderForOds if props.key is not partyType or corporateDisclosureFile', async () => {
+  it('should not update orderForCds if props.key is not partyType or corporateDisclosureFile', async () => {
     const result = await runAction(updateOrderForCdsAction, {
       modules: {
         presenter,
@@ -66,12 +66,12 @@ describe('updateOrderForCdsAction', () => {
       props: { key: 'anotherField' },
       state: {
         form: {
-          orderForOds: false,
+          orderForCds: false,
           partyType: PARTY_TYPES.corporation,
         },
       },
     });
 
-    expect(result.state.form.orderForOds).toEqual(false);
+    expect(result.state.form.orderForCds).toEqual(false);
   });
 });
