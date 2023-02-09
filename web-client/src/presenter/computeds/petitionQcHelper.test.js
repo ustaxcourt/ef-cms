@@ -90,7 +90,7 @@ describe('petitionQcHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+              eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
             },
           ],
         },

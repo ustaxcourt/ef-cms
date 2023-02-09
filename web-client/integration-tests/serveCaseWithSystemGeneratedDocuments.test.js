@@ -94,11 +94,11 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         value: 1,
       },
       {
-        key: 'ownershipDisclosureFile',
+        key: 'corporateDisclosureFile',
         value: fakeFile,
       },
       {
-        key: 'ownershipDisclosureFileSize',
+        key: 'corporateDisclosureFileSize',
         value: 1,
       },
       {

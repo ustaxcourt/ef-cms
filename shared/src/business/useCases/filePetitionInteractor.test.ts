@@ -52,7 +52,7 @@ describe('filePetitionInteractor', () => {
 
   it('calls upload on an ODS file', async () => {
     await filePetitionInteractor(applicationContext, {
-      ownershipDisclosureFile: 'this ods file',
+      corporateDisclosureFile: 'this ods file',
     } as any);
 
     expect(
@@ -82,15 +82,15 @@ describe('filePetitionInteractor', () => {
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
-      ownershipDisclosureFileId: undefined,
+      corporateDisclosureFileId: undefined,
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
-  it('uploads an Ownership Disclosure Statement file', async () => {
+  it('uploads an Corporate Disclosure Statement file', async () => {
     await filePetitionInteractor(applicationContext, {
-      ownershipDisclosureFile: 'something',
+      corporateDisclosureFile: 'something',
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
@@ -99,7 +99,7 @@ describe('filePetitionInteractor', () => {
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
-      ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      corporateDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
