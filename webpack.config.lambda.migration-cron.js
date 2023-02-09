@@ -4,12 +4,14 @@ module.exports = {
   ...config,
   entry: {
     'reindex-status':
-      './web-api/migration-cron-terraform/main/lambdas/reindex-status.js',
+      './web-api/workflow-terraform/migration-cron/main/lambdas/reindex-status.js',
   },
   externals: ['aws-sdk'],
   output: {
     clean: true,
     libraryTarget: 'umd',
-    path: __dirname + '/web-api/migration-cron-terraform/main/lambdas/dist',
+    path:
+      __dirname +
+      '/web-api/workflow-terraform/migration-cron/main/lambdas/dist',
   },
 };
