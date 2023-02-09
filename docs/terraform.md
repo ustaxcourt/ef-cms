@@ -14,8 +14,10 @@ Terraform code in Dawson is separated into different directories to help reduce 
 - `./web-client/terraform/` (For the UI, CloudFront, etc)
 - `./iam/terraform/environment-specific` (For environment-specific IAM roles) 
 - `./iam/terraform/account-specific` (For account-specific IAM roles) 
-- `./web-api/migration-terraform` (For the migration setup)
-- `./web-api/migration-cron-terraform` (For the migration cron setup)
+- `./web-api/workflow-terraform/migration` (For the migration setup)
+- `./web-api/workflow-terraform/migration-cron` (For the migration cron setup)
+- `./web-api/workflow-terraform/reindex-cron` (For the reindex cron setup)
+- `./web-api/workflow-terraform/switch-colors-cron` (For the color switch cron setup)
 
 and each of these directories are deployed via the following npm scripts:
 
@@ -23,8 +25,10 @@ and each of these directories are deployed via the following npm scripts:
 - `npm run deploy:ui exp1` (runs terraform in `./web-client/terraform/`)
 - `npm run deploy:environment-specific exp1` (runs terraform in `./iam/terraform/environment-specific/`)
 - `npm run deploy:account-specific` (runs terraform in `./iam/terraform/account-specific/`)
-- `npm run deploy:migration` (runs terraform in `./web-api/migration-terraform/`)
-- `npm run deploy:migration-cron` (runs terraform in `./web-api/migration-cron-terraform/`)
+- `npm run deploy:migration` (runs terraform in `./web-api/workflow-terraform/migration/`)
+- `npm run deploy:migration-cron` (runs terraform in `./web-api/workflow-terraform/migration-cron/`)
+- `npm run deploy:reindex-cron` (runs terraform in `./web-api/workflow-terraform/reindex-cron/`)
+- `npm run deploy:switch-colors-cron` (runs terraform in `./web-api/workflow-terraform/switch-colors-cron/`)
 
 These various terraform deployment will be explained in detail later in the following sections, but for right now we should note that our terraform directories extend a common directory / file structure:
 
@@ -41,7 +45,7 @@ These various terraform deployment will be explained in detail later in the foll
 │   ├── variables.tf // a definition of all variables of this terraform directory
 ```
 
-The `variables.tf` file is used to defined the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
+The `variables.tf` file is used to define the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
 
 The `outputs.tf` is useful to understand because we often define certain outputs from modules that are pass around throughout the terraform code.  For example, assume the `outputs.tf` contains the following code:
 

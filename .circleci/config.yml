@@ -557,9 +557,9 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Migration Cron Lambda
+          name: Deploy Reindex Cron Lambda
           command: |
-            npm run deploy:migration-cron -- $ENV
+            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Setup Migration Infrastructure
           command: |
@@ -804,10 +804,10 @@ jobs:
               npm run destroy:migration -- $ENV
             fi
       - run:
-          name: Destroy Migration Cron Infrastructure
+          name: Destroy Reindex Cron Infrastructure
           command: |
             if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration-cron -- $ENV
+              npm run destroy:reindex-cron -- $ENV
             fi
       - run:
           name: Delete Source ElasticSearch cluster
