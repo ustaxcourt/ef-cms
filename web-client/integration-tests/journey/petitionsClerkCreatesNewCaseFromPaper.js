@@ -54,11 +54,11 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: 1,
     },
     {
-      key: 'ownershipDisclosureFile',
+      key: 'corporateDisclosureFile',
       value: fakeFile,
     },
     {
-      key: 'ownershipDisclosureFileSize',
+      key: 'corporateDisclosureFileSize',
       value: 1,
     },
     {

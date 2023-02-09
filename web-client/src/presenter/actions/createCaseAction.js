@@ -17,7 +17,7 @@ export const createCaseAction = async ({
   path,
   store,
 }) => {
-  const { ownershipDisclosureFile, petitionFile, stinFile } = get(state.form);
+  const { corporateDisclosureFile, petitionFile, stinFile } = get(state.form);
 
   const form = omit(
     {
@@ -31,7 +31,7 @@ export const createCaseAction = async ({
 
   const progressFunctions = setupPercentDone(
     {
-      ownership: ownershipDisclosureFile,
+      corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
     },
@@ -43,8 +43,8 @@ export const createCaseAction = async ({
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
-        ownershipDisclosureFile,
-        ownershipDisclosureUploadProgress: progressFunctions.ownership,
+        corporateDisclosureFile,
+        corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,
         petitionMetadata: form,
         petitionUploadProgress: progressFunctions.petition,

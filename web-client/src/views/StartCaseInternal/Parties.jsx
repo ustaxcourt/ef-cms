@@ -54,7 +54,7 @@ export const Parties = connect(
           </select>
         </FormGroup>
 
-        {startCaseInternalHelper.showOrderForOwnershipDisclosureStatement && (
+        {startCaseInternalHelper.showOrderForCorporateDisclosureStatement && (
           <div className="subsection order-checkbox">
             <input
               checked={form.orderForOds}
@@ -70,7 +70,7 @@ export const Parties = connect(
               }}
             />
             <label className="usa-checkbox__label" htmlFor="order-for-ods">
-              Order for Ownership Disclosure Statement
+              Order for Corporate Disclosure Statement
             </label>
           </div>
         )}

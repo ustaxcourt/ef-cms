@@ -359,31 +359,31 @@ export const StartCaseStep3 = connect(
           onChange="updateFormValueSequence"
         />
 
-        {startCaseHelper.showOwnershipDisclosure && (
+        {startCaseHelper.showCorporateDisclosure && (
           <>
-            <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
+            <h2 className="margin-top-4">Corporate Disclosure Statement</h2>
             <Hint>
               Tax Court Rules of Practice and Procedure (Rule 60) requires a
               corporation, partnership, or limited liability company, filing a
-              Petition with the Court to also file an Ownership Disclosure
+              Petition with the Court to also file an Corporate Disclosure
               Statement (ODS).
             </Hint>
             <div className="blue-container">
               <FormGroup
                 errorText={
-                  validationErrors.ownershipDisclosureFile ||
-                  validationErrors.ownershipDisclosureFileSize
+                  validationErrors.corporateDisclosureFile ||
+                  validationErrors.corporateDisclosureFileSize
                 }
               >
                 <label
                   className={classNames(
                     'ustc-upload-ods usa-label with-hint',
-                    startCaseHelper.showOwnershipDisclosureValid && 'validated',
+                    startCaseHelper.showCorporateDisclosureValid && 'validated',
                   )}
-                  htmlFor="ownership-disclosure-file"
-                  id="ownership-disclosure-file-label"
+                  htmlFor="corporate-disclosure-file"
+                  id="corporate-disclosure-file-label"
                 >
-                  Upload your Ownership Disclosure Statement
+                  Upload your Corporate Disclosure Statement
                 </label>
                 <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
@@ -400,16 +400,16 @@ export const StartCaseStep3 = connect(
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    Download Ownership Disclosure Statement (T.C. Form 6)
+                    Download Corporate Disclosure Statement (T.C. Form 6)
                   </Button>
                   <span className="margin-top-0">
                     if you haven’t already done so
                   </span>
                 </p>
                 <StateDrivenFileInput
-                  aria-describedby="ownership-disclosure-file-label"
-                  id="ownership-disclosure-file"
-                  name="ownershipDisclosureFile"
+                  aria-describedby="corporate-disclosure-file-label"
+                  id="corporate-disclosure-file"
+                  name="corporateDisclosureFile"
                   updateFormValueSequence="updateStartCaseFormValueSequence"
                   validationSequence="validateStartCaseWizardSequence"
                 />

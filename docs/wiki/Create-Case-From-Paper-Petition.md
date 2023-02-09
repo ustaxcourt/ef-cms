@@ -33,7 +33,7 @@
 * If edit is made to primary contact field when checked, edit should copy to secondary contact form
 * If edit is made to secondary (spouse) contact field when checked, edit should not copy to primary contact form
 
-**Order for Ownership Disclosure Statement**
+**Order for Corporate Disclosure Statement**
 * If party type = Corporation, Partnership (as the Tax Matters Partner), Partnership (as a partnership representative under BBA regime), or Partnership (as a partner other than Tax Matters Partner) - check box is displayed and auto-checked
 * If user uploads ODS PDF, checkbox is auto-unchecked
 
@@ -139,8 +139,8 @@
 * Is optional IF Trial location field is blank
 
 **ODS**
-* Is required if party type = Corporation, Partnership (as the Tax Matters Partner), Partnership (as a partnership representative under BBA regime), or Partnership (as a partner other than Tax Matters Partner) AND Order for Ownership Disclosure Statement is unchecked
-* If uploaded, Order for Ownership Disclosure Statement is auto-unchecked  
+* Is required if party type = Corporation, Partnership (as the Tax Matters Partner), Partnership (as a partnership representative under BBA regime), or Partnership (as a partner other than Tax Matters Partner) AND Order for Corporate Disclosure Statement is unchecked
+* If uploaded, Order for Corporate Disclosure Statement is auto-unchecked  
 
 #### On click of Create Case button
 * Case is created in system

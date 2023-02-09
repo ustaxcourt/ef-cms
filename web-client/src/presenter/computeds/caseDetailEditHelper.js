@@ -9,15 +9,15 @@ import { state } from 'cerebral';
  * for getting state.form.partyType and state.constants
  * @param {object} applicationContext the application context
  * @returns {object} partyTypes constant, showPrimary/SecondaryContact,
- * showOwnershipDisclosureStatement, and ownershipDisclosureStatementDocumentId
+ * showCorporateDisclosureStatement, and corporateDisclosureStatementDocumentId
  */
 export const caseDetailEditHelper = (get, applicationContext) => {
   const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const caseDetail = get(state.form);
   const showContacts = showContactsHelper(caseDetail.partyType, PARTY_TYPES);
 
-  let showOwnershipDisclosureStatement = false;
-  let ownershipDisclosureStatementDocumentId,
+  let showCorporateDisclosureStatement = false;
+  let corporateDisclosureStatementDocumentId,
     requestForPlaceOfTrialDocumentId,
     requestForPlaceOfTrialDocumentTitle;
 
@@ -31,11 +31,11 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     caseDetail.docketEntries
   ) {
     const odsDocs = caseDetail.docketEntries.filter(doc => {
-      return doc.documentType === 'Ownership Disclosure Statement';
+      return doc.documentType === 'Corporate Disclosure Statement';
     });
-    showOwnershipDisclosureStatement = true;
+    showCorporateDisclosureStatement = true;
     if (odsDocs[0]) {
-      ownershipDisclosureStatementDocumentId = odsDocs[0].docketEntryId;
+      corporateDisclosureStatementDocumentId = odsDocs[0].docketEntryId;
     }
   }
 
@@ -54,15 +54,15 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     .formatDateString(caseDetail.receivedAt, 'MMDDYYYY');
 
   return {
-    ownershipDisclosureStatementDocumentId,
+    corporateDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
     receivedAtFormatted,
     requestForPlaceOfTrialDocumentId,
     requestForPlaceOfTrialDocumentTitle,
     shouldShowIrsNoticeDate: caseDetail.hasVerifiedIrsNotice,
+    showCorporateDisclosureStatement,
     showOrderForFilingFee:
       caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
-    showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showRQTDocumentLink: caseDetail.isPaper && requestForPlaceOfTrialDocumentId,
     showReadOnlyTrialLocation:

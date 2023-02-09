@@ -758,8 +758,8 @@ export const uploadPetition = async (
     stinFileId,
   };
 
-  if (overrides.ownershipDisclosureFileId) {
-    data.ownershipDisclosureFileId = overrides.ownershipDisclosureFileId;
+  if (overrides.corporateDisclosureFileId) {
+    data.corporateDisclosureFileId = overrides.corporateDisclosureFileId;
   }
 
   const response = await axios.post('http://localhost:4000/cases', data, {
