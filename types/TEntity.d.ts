@@ -32,6 +32,27 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
+type TWorkItemEntity = {
+  assignToUser: ({
+    assigneeId,
+    assigneeName,
+    section,
+    sentBy,
+    sentBySection,
+    sentByUserId,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    section: string;
+    sentBy: string;
+    sentBySection: string;
+    sentByUserId: string;
+  }) => TWorkItemEntity;
+  toRawObject(): WorkItem;
+  validate(): TWorkItemEntity;
+  setAsCompleted(options: any): TWorkItemEntity;
+} & WorkItem;
+
 type WorkItem = {
   createdAt: string;
   assigneeId: string;
@@ -53,6 +74,8 @@ type WorkItem = {
   completedAt: string;
   updatedAt: string;
   gsi1pk: string;
+  inProgress: boolean;
+  section: string;
 };
 
 type TOutboxItem = {
@@ -201,6 +224,7 @@ type TCaseEntity = {
   getDocketEntryById: (options: { docketEntryId: string }) => any;
   addDocketEntry: (docketEntry: any) => unknown;
   isUserIdRepresentedByPrivatePractitioner: (id: string) => boolean;
+  updateDocketEntry: (docketEntry: any) => void;
 } & TCase;
 
 type TCase = {

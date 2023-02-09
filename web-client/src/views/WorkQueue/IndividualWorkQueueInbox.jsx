@@ -30,7 +30,7 @@ export const IndividualWorkQueueInbox = connect(
                 &nbsp;
               </th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {workQueueHelper.showFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
             </tr>
           </thead>
@@ -97,7 +97,7 @@ export const IndividualWorkQueueInbox = connect(
                       </a>
                     </div>
                   </td>
-                  {!workQueueHelper.hideFiledByColumn && (
+                  {workQueueHelper.showFiledByColumn && (
                     <td className="message-queue-row">
                       {item.docketEntry.filedBy}
                     </td>

@@ -28,6 +28,7 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
         USER_ROLES.docketClerk,
+        USER_ROLES.caseServicesSupervisor,
         USER_ROLES.floater,
         USER_ROLES.general,
         USER_ROLES.petitionsClerk,

@@ -21,6 +21,7 @@ exports.MOCK_CASE = {
   filingType: 'Myself',
   hearings: [],
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
+  irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
   petitioners: [
     {
@@ -39,11 +40,13 @@ exports.MOCK_CASE = {
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
+  privatePractitioners: [],
   procedureType: 'Regular',
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
+
 exports.MOCK_CASE_WITHOUT_PENDING = {
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
@@ -211,6 +214,7 @@ exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   docketNumber: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
+  irsPractitioners: [],
   leadDocketNumber: '109-19',
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
@@ -245,6 +249,7 @@ exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
+  privatePractitioners: [],
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };

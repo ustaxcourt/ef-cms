@@ -1,4 +1,4 @@
-import { confirmInitiateCourtIssuedFilingServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
+import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -32,9 +32,7 @@ export const docketClerkServesOrderWithPaperService = (
     );
 
     const modalHelper = runCompute(
-      withAppContextDecorator(
-        confirmInitiateCourtIssuedFilingServiceModalHelper,
-      ),
+      withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
         state: cerebralTest.getState(),
       },

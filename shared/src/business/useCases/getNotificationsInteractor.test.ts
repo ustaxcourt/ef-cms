@@ -1,5 +1,10 @@
-import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import {
+  CHIEF_JUDGE,
+  PETITIONS_SECTION,
+  ROLES,
+} from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { caseServicesSupervisorUser } from '../../test/mockUsers';
 import { getNotificationsInteractor } from './getNotificationsInteractor';
 
 const workItems = [
@@ -226,6 +231,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -272,6 +278,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -336,6 +343,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -369,6 +377,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -390,6 +399,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'docketclerk',
     });
 
@@ -400,6 +410,7 @@ describe('getNotificationsInteractor', () => {
 
   it('should fetch the qc section items for the provided judgeUserId', async () => {
     await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: undefined,
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -436,5 +447,68 @@ describe('getNotificationsInteractor', () => {
     ).toMatchObject({
       judgeUserName: CHIEF_JUDGE,
     });
+  });
+
+  it('should fetch messages for the selected section when caseServicesSupervisorData is not empty', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.adc,
+      userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
+    });
+
+    await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: {
+        section: PETITIONS_SECTION,
+        userId: caseServicesSupervisorUser.userId,
+      },
+      judgeUserId: undefined,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getUserInboxMessages.mock
+        .calls[0][0].userId,
+    ).toEqual(caseServicesSupervisorUser.userId);
+    expect(
+      applicationContext.getPersistenceGateway().getSectionInboxMessages.mock
+        .calls[0][0].section,
+    ).toEqual(PETITIONS_SECTION);
+  });
+
+  it('should fetch the filtered document QC inbox for the selected section when caseServicesSupervisorData is not empty', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.adc,
+      userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
+    });
+
+    const mockcaseServicesSupervisorData = {
+      section: PETITIONS_SECTION,
+      userId: caseServicesSupervisorUser.userId,
+    };
+
+    const filteredWorkItem = {
+      associatedJudge: 'Judge Barker',
+      caseIsInProgress: false,
+      docketEntry: {
+        isFileAttached: true,
+      },
+      inProgress: false,
+      isRead: true,
+      section: 'petitions',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForSection.mockReturnValue([filteredWorkItem]);
+
+    const result = await getNotificationsInteractor(applicationContext, {
+      caseServicesSupervisorData: mockcaseServicesSupervisorData,
+      judgeUserId: undefined,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0].section,
+    ).toEqual(mockcaseServicesSupervisorData.section);
+
+    expect(result.qcSectionInboxCount).toEqual(1);
   });
 });

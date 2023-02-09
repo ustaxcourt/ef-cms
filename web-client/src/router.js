@@ -919,6 +919,20 @@ const router = {
     );
 
     registerRoute(
+      '/document-qc/*/*/selectedSection?..',
+      ifHasAccess({ app }, (queue, box) => {
+        const { section } = route.query();
+
+        setPageTitle('Document QC');
+        return app.getSequence('gotoWorkQueueSequence')({
+          box,
+          queue,
+          section,
+        });
+      }),
+    );
+
+    registerRoute(
       '/document-qc/section/inbox',
       ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
@@ -1168,6 +1182,20 @@ const router = {
         return app.getSequence('gotoMessagesSequence')({
           box,
           queue,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/messages/*/*/selectedSection?..',
+      ifHasAccess({ app }, (queue, box) => {
+        const { section } = route.query();
+
+        setPageTitle('Messages');
+        return app.getSequence('gotoMessagesSequence')({
+          box,
+          queue,
+          section,
         });
       }),
     );
