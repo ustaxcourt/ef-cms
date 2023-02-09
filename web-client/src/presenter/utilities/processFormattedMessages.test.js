@@ -311,6 +311,15 @@ describe('processFormattedMessages', () => {
       expect(result.messages[0].fromSectionFormatted).toEqual('Case Services');
     });
 
+    it('should not format from section for non-CASE_SERVICES_SUPERVISOR_SECTION', () => {
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [{ ...mockMessage, fromSection: DOCKET_SECTION }],
+      });
+
+      expect(result.messages[0].fromSectionFormatted).toEqual(DOCKET_SECTION);
+    });
+
     it('returns formatted date strings', () => {
       const result = getFormattedMessages({
         applicationContext,
