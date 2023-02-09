@@ -138,7 +138,7 @@ describe('workQueueHelper', () => {
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
       },
     });
@@ -433,6 +433,28 @@ describe('workQueueHelper', () => {
           section: DOCKET_SECTION,
         }),
       ).toEqual('/document-qc/my/outbox/selectedSection?section=docket');
+    });
+
+    it('showSwitchToMyDocQCLink should be false when the user is a case services supervisor', () => {
+      user = {
+        role: ROLES.caseServicesSupervisor,
+        userId: '117c6e9c-3940-4693-8bc8-0b2a7ed59b06',
+      };
+
+      const { showSwitchToMyDocQCLink } = runCompute(workQueueHelper, {
+        state: {
+          ...getBaseState(user),
+          sectionInProgressCount: 10,
+          selectedWorkItems: [],
+          workQueueToDisplay: {
+            box: 'outbox',
+            queue: 'my',
+            section: DOCKET_SECTION,
+          },
+        },
+      });
+
+      expect(showSwitchToMyDocQCLink).toBe(false);
     });
   });
 });

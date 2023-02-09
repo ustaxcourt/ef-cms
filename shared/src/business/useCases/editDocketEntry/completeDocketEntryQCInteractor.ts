@@ -1,5 +1,6 @@
 import {
   CASE_CAPTION_POSTFIX,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -74,6 +75,7 @@ export const completeDocketEntryQCInteractor = async (
     docketNumber,
     leadDocketNumber,
     overridePaperServiceAddress,
+    selectedSection,
   } = entryMetadata;
 
   const user = await applicationContext
@@ -205,10 +207,15 @@ export const completeDocketEntryQCInteractor = async (
     user,
   });
 
+  const userIsCaseServices = user.section === CASE_SERVICES_SUPERVISOR_SECTION;
+
+  let sectionToAssignTo =
+    userIsCaseServices && selectedSection ? selectedSection : user.section;
+
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: sectionToAssignTo,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

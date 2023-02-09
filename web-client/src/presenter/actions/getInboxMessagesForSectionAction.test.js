@@ -44,7 +44,7 @@ describe('getInboxMessagesForSectionAction', () => {
     expect(
       applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
         .calls[0][1],
-    ).toEqual({ section: 'docket' });
+    ).toEqual({ section: DOCKET_SECTION });
     expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 
