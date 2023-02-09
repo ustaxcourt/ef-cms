@@ -2416,7 +2416,7 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
   );
 };
 
-const isSealedCase = rawCase => rawCase.isSealed && !!rawCase.sealedDate;
+const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
 const isLeadCase = rawCase => rawCase.docketNumber === rawCase.leadDocketNumber;
 
