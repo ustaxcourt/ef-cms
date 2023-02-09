@@ -207,12 +207,10 @@ export const completeDocketEntryQCInteractor = async (
     user,
   });
 
-  // if CSS user completes a docket section QC item
-  // then no assignee
-  // normally they would say the work item's section matches the user
-  // but in this case we have to grab it from the route for CSS
   const userIsCaseServices = user.section === CASE_SERVICES_SUPERVISOR_SECTION;
-  let sectionToAssignTo = userIsCaseServices ? selectedSection : user.section;
+
+  let sectionToAssignTo =
+    userIsCaseServices && selectedSection ? selectedSection : user.section;
 
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
