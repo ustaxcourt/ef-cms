@@ -1,4 +1,3 @@
-import { some } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -25,24 +24,64 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   );
 
   if (user.role === USER_ROLES.privatePractitioner) {
-    const caseDetailPractitioners = get(state.caseDetail.privatePractitioners);
-    const docketNumber = get(state.caseDetail.docketNumber);
+    const caseDetail = get(state.caseDetail);
+    if (caseDetail.leadDocketNumber) {
+      if (isConsolidatedGroupAccessEnabled) {
+        isAssociated = applicationContext
+          .getUtilities()
+          .isPetitionerPartOfGroup({
+            consolidatedCases: caseDetail.consolidatedCases,
+            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
+            userId: user.userId,
+          });
+      } else {
+        isAssociated = caseDetail.privatePractitioners.some(
+          practitioner => practitioner.userId === user.userId,
+        );
+      }
+      isDirectlyAssociated = caseDetail.privatePractitioners.some(
+        practitioner => practitioner.userId === user.userId,
+      );
+    } else {
+      isAssociated = caseDetail.privatePractitioners.some(
+        practitioner => practitioner.userId === user.userId,
+      );
+      isDirectlyAssociated = isAssociated;
+    }
 
-    isAssociated = some(caseDetailPractitioners, { userId: user.userId });
-    isDirectlyAssociated = isAssociated;
     if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
         .verifyPendingCaseForUserInteractor(applicationContext, {
-          docketNumber,
+          docketNumber: caseDetail.docketNumber,
           userId: user.userId,
         });
     }
   } else if (user.role === USER_ROLES.irsPractitioner) {
-    const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
-
-    isAssociated = some(caseDetailRespondents, { userId: user.userId });
-    isDirectlyAssociated = isAssociated;
+    const caseDetail = get(state.caseDetail);
+    if (caseDetail.leadDocketNumber) {
+      if (isConsolidatedGroupAccessEnabled) {
+        isAssociated = applicationContext
+          .getUtilities()
+          .isPetitionerPartOfGroup({
+            consolidatedCases: caseDetail.consolidatedCases,
+            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
+            userId: user.userId,
+          });
+      } else {
+        isAssociated = caseDetail.irsPractitioners.some(
+          practitioner => practitioner.userId === user.userId,
+        );
+      }
+      isDirectlyAssociated = caseDetail.irsPractitioners.some(
+        practitioner => practitioner.userId === user.userId,
+      );
+    } else {
+      isAssociated = caseDetail.irsPractitioners.some(
+        practitioner => practitioner.userId === user.userId,
+      );
+      isDirectlyAssociated = isAssociated;
+    }
   } else if (user.role === USER_ROLES.petitioner) {
     const caseDetail = get(state.caseDetail);
     if (caseDetail.leadDocketNumber) {
