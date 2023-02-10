@@ -14,7 +14,7 @@ echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="migrations-cron-${ENVIRONMENT}.tfstate"
+KEY="reindex-cron-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
@@ -36,7 +36,7 @@ fi
 npm run build:assets
 
 set -eo pipefail
-npm run build:lambda:migration-cron
+npm run build:lambda:reindex-cron
 
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 

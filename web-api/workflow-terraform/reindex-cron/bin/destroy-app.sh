@@ -10,7 +10,7 @@ echo "  - ENVIRONMENT=${ENVIRONMENT}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="migrations-cron-${ENVIRONMENT}.tfstate"
+KEY="reindex-cron-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
@@ -32,7 +32,7 @@ fi
 npm run build:assets
 
 set -eo pipefail
-npm run build:lambda:migration-cron
+npm run build:lambda:reindex-cron
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
