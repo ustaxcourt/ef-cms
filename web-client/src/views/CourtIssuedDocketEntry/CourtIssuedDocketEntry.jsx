@@ -146,7 +146,7 @@ export const CourtIssuedDocketEntry = connect(
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
-                {!addCourtIssuedDocketEntryHelper.docketEntriesWithoutAttachments && (
+                {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <FormGroup errorText={validationErrors.attachments}>
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Inclusions</legend>
@@ -211,7 +211,7 @@ export const CourtIssuedDocketEntry = connect(
                   </FormGroup>
                 )}
 
-                {!addCourtIssuedDocketEntryHelper.docketEntriesWithoutAttachments && (
+                {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <>
                     <div className="usa-label" htmlFor="service-parties">
                       Service parties
