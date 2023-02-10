@@ -1,20 +1,20 @@
-const { getUnassociatedLeadCase } = require('./getUnassociatedLeadCase');
+const { getAssociatedLeadCase } = require('./getAssociatedLeadCase');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('getUnassociatedLeadCase', () => {
+describe('getAssociatedLeadCase', () => {
   it('should set the found case isRequestingUserAssociated to false', () => {
-    const result = getUnassociatedLeadCase({
+    const result = getAssociatedLeadCase({
       consolidatedCases: [MOCK_CASE],
       leadDocketNumber: MOCK_CASE.docketNumber,
     });
 
-    expect(result.isRequestingUserAssociated).toBe(false);
+    expect(result.isRequestingUserAssociated).toBe(true);
   });
 
   it('should return the found lead case', () => {
     let casesAssociatedWithUserOrLeadCaseMap = {};
 
-    const result = getUnassociatedLeadCase({
+    const result = getAssociatedLeadCase({
       casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases: [MOCK_CASE],
       leadDocketNumber: MOCK_CASE.docketNumber,
