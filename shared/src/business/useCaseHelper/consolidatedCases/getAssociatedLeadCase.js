@@ -9,7 +9,7 @@ exports.getAssociatedLeadCase = ({ consolidatedCases, leadDocketNumber }) => {
   const leadCase = consolidatedCases.find(
     consolidatedCase => consolidatedCase.docketNumber === leadDocketNumber,
   );
-  leadCase.isRequestingUserAssociated = true;
+  leadCase.isRequestingUserAssociated = false;
 
   return leadCase;
 };
