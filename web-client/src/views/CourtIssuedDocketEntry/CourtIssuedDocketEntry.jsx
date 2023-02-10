@@ -146,33 +146,35 @@ export const CourtIssuedDocketEntry = connect(
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
-                <FormGroup errorText={validationErrors.attachments}>
-                  <fieldset className="usa-fieldset">
-                    <legend className="usa-legend">Inclusions</legend>
-                    <div className="usa-checkbox">
-                      <input
-                        checked={form.attachments}
-                        className="usa-checkbox__input"
-                        id="attachments"
-                        name="attachments"
-                        type="checkbox"
-                        onChange={e => {
-                          updateCourtIssuedDocketEntryFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.checked,
-                          });
-                          validateCourtIssuedDocketEntrySequence();
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor="attachments"
-                      >
-                        Attachment(s)
-                      </label>
-                    </div>
-                  </fieldset>
-                </FormGroup>
+                {!addCourtIssuedDocketEntryHelper.docketEntriesWithoutAttachments && (
+                  <FormGroup errorText={validationErrors.attachments}>
+                    <fieldset className="usa-fieldset">
+                      <legend className="usa-legend">Inclusions</legend>
+                      <div className="usa-checkbox">
+                        <input
+                          checked={form.attachments}
+                          className="usa-checkbox__input"
+                          id="attachments"
+                          name="attachments"
+                          type="checkbox"
+                          onChange={e => {
+                            updateCourtIssuedDocketEntryFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                            validateCourtIssuedDocketEntrySequence();
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="attachments"
+                        >
+                          Attachment(s)
+                        </label>
+                      </div>
+                    </fieldset>
+                  </FormGroup>
+                )}
 
                 {addCourtIssuedDocketEntryHelper.showServiceStamp && (
                   <FormGroup errorText={validationErrors.serviceStamp}>
@@ -209,21 +211,30 @@ export const CourtIssuedDocketEntry = connect(
                   </FormGroup>
                 )}
 
-                <div className="usa-label" htmlFor="service-parties">
-                  Service parties
-                </div>
-
-                <div id="service-parties">
-                  {addCourtIssuedDocketEntryHelper.serviceParties.map(party => (
-                    <div className="margin-bottom-2" key={party.displayName}>
-                      {party.displayName}
-                      <div className="float-right">
-                        <b>Service: </b>
-                        {party.serviceIndicator}
-                      </div>
+                {!addCourtIssuedDocketEntryHelper.docketEntriesWithoutAttachments && (
+                  <>
+                    <div className="usa-label" htmlFor="service-parties">
+                      Service parties
                     </div>
-                  ))}
-                </div>
+
+                    <div id="service-parties">
+                      {addCourtIssuedDocketEntryHelper.serviceParties.map(
+                        party => (
+                          <div
+                            className="margin-bottom-2"
+                            key={party.displayName}
+                          >
+                            {party.displayName}
+                            <div className="float-right">
+                              <b>Service: </b>
+                              {party.serviceIndicator}
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </>
+                )}
 
                 {addCourtIssuedDocketEntryHelper.showReceivedDate && (
                   <DateInput
