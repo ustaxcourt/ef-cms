@@ -1,7 +1,6 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -19,7 +18,7 @@ describe('admissions clerk adds petitioner with existing cognito account to case
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');

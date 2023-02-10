@@ -4,16 +4,17 @@ import React from 'react';
 
 export const ConsolidatedCasesCheckboxes = connect(
   {
-    consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
+    consolidatedCaseAllCheckbox: state.modal.form.consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange:
       sequences.consolidatedCaseCheckboxAllChangeSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
+    consolidatedCasesToMultiDocketOn:
+      state.modal.form.consolidatedCasesToMultiDocketOn,
     updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
   },
   function ConsolidatedCasesCheckboxes({
     consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange,
-    formattedCaseDetail,
+    consolidatedCasesToMultiDocketOn,
     updateCaseCheckbox,
   }) {
     return (
@@ -36,7 +37,7 @@ export const ConsolidatedCasesCheckboxes = connect(
           </label>
         </div>
 
-        {formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
+        {consolidatedCasesToMultiDocketOn.map(consolidatedCase => (
           <div
             className="usa-checkbox"
             key={consolidatedCase.docketNumber}
