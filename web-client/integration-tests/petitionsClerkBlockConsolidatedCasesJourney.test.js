@@ -4,7 +4,7 @@ import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesC
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from 'cerebral/test';
@@ -28,8 +28,11 @@ describe('Manually block consolidated cases', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
-    procedureType: 'Regular',
+  petitionsClerkCreatesNewCase(cerebralTest, {
+    overrides: {
+      procedureType: 'Regular',
+      trialLocation,
+    },
   });
 
   it('creates lead case', () => {
@@ -43,8 +46,11 @@ describe('Manually block consolidated cases', () => {
   docketClerkSetsCaseReadyForTrial(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
-    procedureType: 'Regular',
+  petitionsClerkCreatesNewCase(cerebralTest, {
+    overrides: {
+      procedureType: 'Regular',
+      trialLocation,
+    },
   });
 
   it('should set member case docket number', () => {

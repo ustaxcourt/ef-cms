@@ -761,6 +761,7 @@ const applicationContext = {
       getWorkQueueFilters,
       hasPartyWithServiceType,
       isClosed,
+      isCourtIssued: DocketEntry.isCourtIssued,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
