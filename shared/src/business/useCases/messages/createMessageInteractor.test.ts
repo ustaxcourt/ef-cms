@@ -1,5 +1,6 @@
 import {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
@@ -20,7 +21,7 @@ describe('createMessageInteractor', () => {
         docketNumber: '101-20',
         message: 'hello world',
         subject: 'what is up',
-        toSection: 'docket',
+        toSection: DOCKET_SECTION,
         toUserId: 'abc',
       }),
     ).rejects.toThrow(UnauthorizedError);
