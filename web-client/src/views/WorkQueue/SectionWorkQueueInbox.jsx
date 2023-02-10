@@ -10,10 +10,10 @@ const SectionWorkQueueTable = connect(
   {
     FROM_PAGES: state.constants.FROM_PAGES,
     formattedWorkQueue: state.formattedWorkQueue,
-    hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
     hideIconColumn: state.workQueueHelper.hideIconColumn,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
+    showFiledByColumn: state.workQueueHelper.showFiledByColumn,
     showSelectAllCheckbox: state.workQueueHelper.showSelectAllCheckbox,
     showSelectColumn: state.workQueueHelper.showSelectColumn,
     toggleAllWorkItemCheckboxChangeSequence:
@@ -23,10 +23,10 @@ const SectionWorkQueueTable = connect(
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
     FROM_PAGES,
-    hideFiledByColumn,
     hideIconColumn,
     selectWorkItemSequence,
     showAssignedToColumn,
+    showFiledByColumn,
     showSelectAllCheckbox,
     showSelectColumn,
     toggleAllWorkItemCheckboxChangeSequence,
@@ -73,7 +73,7 @@ const SectionWorkQueueTable = connect(
               <th aria-label="Status Icon" className="padding-right-0" />
             )}
             <th>Document</th>
-            {!hideFiledByColumn && <th>Filed By</th>}
+            {showFiledByColumn && <th>Filed By</th>}
             <th>Case Status</th>
             {showAssignedToColumn && <th className="no-wrap">Assigned To</th>}
           </tr>
@@ -82,12 +82,12 @@ const SectionWorkQueueTable = connect(
           return (
             <SectionWorkQueueTable.Row
               FROM_PAGES={FROM_PAGES}
-              hideFiledByColumn={hideFiledByColumn}
               hideIconColumn={hideIconColumn}
               item={formattedWorkItem}
               key={formattedWorkItem.workItemId}
               selectWorkItemSequence={selectWorkItemSequence}
               showAssignedToColumn={showAssignedToColumn}
+              showFiledByColumn={showFiledByColumn}
               showSelectColumn={showSelectColumn}
             />
           );
@@ -99,11 +99,11 @@ const SectionWorkQueueTable = connect(
 
 SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
-    hideFiledByColumn,
     hideIconColumn,
     item,
     selectWorkItemSequence,
     showAssignedToColumn,
+    showFiledByColumn,
     showSelectColumn,
   }) {
     return (
@@ -184,7 +184,7 @@ SectionWorkQueueTable.Row = React.memo(
               </a>
             </div>
           </td>
-          {!hideFiledByColumn && (
+          {showFiledByColumn && (
             <td className="message-queue-row">{item.docketEntry.filedBy}</td>
           )}
           <td className="message-queue-row">{item.caseStatus}</td>

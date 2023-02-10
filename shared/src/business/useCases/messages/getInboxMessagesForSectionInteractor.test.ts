@@ -1,5 +1,6 @@
 import {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
@@ -17,7 +18,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
 
     await expect(
       getInboxMessagesForSectionInteractor(applicationContext, {
-        section: 'docket',
+        section: DOCKET_SECTION,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -58,7 +59,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
     const returnedMessages = await getInboxMessagesForSectionInteractor(
       applicationContext,
       {
-        section: 'docket',
+        section: DOCKET_SECTION,
       },
     );
 

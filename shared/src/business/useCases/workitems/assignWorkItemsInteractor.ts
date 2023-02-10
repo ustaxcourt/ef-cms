@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 import { WorkItem } from '../../entities/WorkItem';
 
 /**
@@ -36,6 +37,13 @@ export const assignWorkItemsInteractor = async (
     userId: authorizedUser.userId,
   });
 
+  const userBeingAssigned = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({
+      applicationContext,
+      userId: assigneeId,
+    });
+
   const workItemRecord = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
@@ -46,11 +54,24 @@ export const assignWorkItemsInteractor = async (
   const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
     applicationContext,
   });
+  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
+  const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
+    section: userBeingAssigned.section,
+  });
+
+  const assignedByCaseServicesUser =
+    userIsCaseServices || userBeingAssignedIsCaseServices;
+
+  let sectionToAssignTo = user.section;
+
+  if (assignedByCaseServicesUser) {
+    sectionToAssignTo = userBeingAssigned.section;
+  }
 
   workItemEntity.assignToUser({
     assigneeId,
     assigneeName,
-    section: user.section,
+    section: sectionToAssignTo,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
