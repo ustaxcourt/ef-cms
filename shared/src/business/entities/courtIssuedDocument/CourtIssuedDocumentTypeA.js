@@ -35,7 +35,7 @@ CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
 CourtIssuedDocumentTypeA.schema = {
   ...CourtIssuedDocumentDefault.schema,
   freeText: JoiValidationConstants.STRING.max(1000).when('documentType', {
-    is: joi.valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
+    is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
