@@ -3,7 +3,7 @@ const {
 } = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
 const { handler } = require('./reindex-status');
 jest.mock(
-  '../../../../shared/admin-tools/elasticsearch/check-reindex-complete',
+  '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete',
   () => ({
     isReindexComplete: jest.fn(),
   }),

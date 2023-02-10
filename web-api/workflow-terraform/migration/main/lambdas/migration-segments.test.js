@@ -58,7 +58,7 @@ const mockApplicationContext = {
   logger: mockLogger,
 };
 jest.mock(
-  '../../../src/applicationContext',
+  '../../../../src/applicationContext',
   () => () => mockApplicationContext,
 );
 const { handler } = require('./migration-segments');
