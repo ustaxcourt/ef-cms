@@ -74,5 +74,6 @@ export const getConsolidatedCasesByCaseInteractor = async (
       validatedConsolidatedCases.push(formattedPublicCase);
     }
   }
+
   return validatedConsolidatedCases;
 };

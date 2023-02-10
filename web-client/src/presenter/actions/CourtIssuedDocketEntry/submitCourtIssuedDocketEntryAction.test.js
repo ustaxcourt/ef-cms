@@ -46,7 +46,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      docketNumbers: [mockDocketNumber],
+      docketNumbers: [],
       documentMeta: { ...mockForm, docketEntryId: mockDocketEntryId },
       subjectDocketNumber: mockDocketNumber,
     });

@@ -3,7 +3,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -13,6 +13,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -46,13 +47,17 @@ export const gotoCreateOrderSequence = [
               getConsolidatedCasesByCaseAction,
               setConsolidatedCasesForCaseAction,
             ],
-            getFeatureFlagValueFactoryAction(
-              getConstants().ALLOWLIST_FEATURE_FLAGS
-                .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS,
-              true,
-            ),
+            [
+              getFeatureFlagFactoryAction(
+                getConstants().ALLOWLIST_FEATURE_FLAGS
+                  .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key,
+              ),
+              setFeatureFlagFactoryAction(
+                getConstants().ALLOWLIST_FEATURE_FLAGS
+                  .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key,
+              ),
+            ],
           ]),
-
           setCurrentPageAction('CreateOrder'),
         ],
       },

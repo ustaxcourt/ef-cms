@@ -1,5 +1,5 @@
-import { fakeFile, loginAs, setupTest, viewCaseDetail } from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { loginAs, setupTest, viewCaseDetail } from './helpers';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
@@ -18,7 +18,11 @@ describe('Petitions Clerk Views Draft Documents', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, 'Lubbock, Texas');
+  petitionsClerkCreatesNewCase(cerebralTest, {
+    overrides: {
+      trialLocation: 'Lubbock, Texas',
+    },
+  });
 
   it('views case detail', async () => {
     await viewCaseDetail({
