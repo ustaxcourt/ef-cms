@@ -5,11 +5,11 @@
  * @param {object} arguments.leadDocketNumber the leadDocketNumber
  * @returns {object} the lead case
  */
-exports.getUnassociatedLeadCase = ({ consolidatedCases, leadDocketNumber }) => {
+exports.getAssociatedLeadCase = ({ consolidatedCases, leadDocketNumber }) => {
   const leadCase = consolidatedCases.find(
     consolidatedCase => consolidatedCase.docketNumber === leadDocketNumber,
   );
-  leadCase.isRequestingUserAssociated = false;
+  leadCase.isRequestingUserAssociated = true;
 
   return leadCase;
 };

@@ -49,7 +49,7 @@ export const getCasesForUserInteractor = async (
 
     if (!casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber]) {
       casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber] =
-        applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
+        applicationContext.getUseCaseHelpers().getAssociatedLeadCase({
           consolidatedCases,
           leadDocketNumber,
         });
