@@ -1663,7 +1663,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * @param {String} userId the user's id
  * @returns {boolean} true if the user is a party of the case
  */
-const isPetitionerPartOfGroup = function ({ consolidatedCases, userId }) {
+const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
   return consolidatedCases.some(aCase => {
     const userIsPartyToCase = [
       ...aCase.petitioners,
@@ -2491,9 +2491,9 @@ module.exports = {
   isClosed,
   isClosedStatus,
   isLeadCase,
-  isPetitionerPartOfGroup,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  isUserPartOfGroup,
   shouldGenerateNoticesForCase,
   updatePetitioner,
 };

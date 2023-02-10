@@ -27,13 +27,10 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const caseDetail = get(state.caseDetail);
     if (caseDetail.leadDocketNumber) {
       if (isConsolidatedGroupAccessEnabled) {
-        isAssociated = applicationContext
-          .getUtilities()
-          .isPetitionerPartOfGroup({
-            consolidatedCases: caseDetail.consolidatedCases,
-            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
-            userId: user.userId,
-          });
+        isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
+          consolidatedCases: caseDetail.consolidatedCases,
+          userId: user.userId,
+        });
       } else {
         isAssociated = caseDetail.privatePractitioners.some(
           practitioner => practitioner.userId === user.userId,
@@ -61,13 +58,10 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const caseDetail = get(state.caseDetail);
     if (caseDetail.leadDocketNumber) {
       if (isConsolidatedGroupAccessEnabled) {
-        isAssociated = applicationContext
-          .getUtilities()
-          .isPetitionerPartOfGroup({
-            consolidatedCases: caseDetail.consolidatedCases,
-            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
-            userId: user.userId,
-          });
+        isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
+          consolidatedCases: caseDetail.consolidatedCases,
+          userId: user.userId,
+        });
       } else {
         isAssociated = caseDetail.irsPractitioners.some(
           practitioner => practitioner.userId === user.userId,
@@ -86,13 +80,10 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const caseDetail = get(state.caseDetail);
     if (caseDetail.leadDocketNumber) {
       if (isConsolidatedGroupAccessEnabled) {
-        isAssociated = applicationContext
-          .getUtilities()
-          .isPetitionerPartOfGroup({
-            consolidatedCases: caseDetail.consolidatedCases,
-            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
-            userId: user.userId,
-          });
+        isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
+          consolidatedCases: caseDetail.consolidatedCases,
+          userId: user.userId,
+        });
       } else {
         isAssociated = !!applicationContext
           .getUtilities()
