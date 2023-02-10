@@ -40,6 +40,13 @@
     "requiresSignature": false
   },
   {
+    "eventCode": "TCRP",
+    "documentType": "Tax Court Report Pamphlet",
+    "documentTitle": "Tax Court Report Pamphlet",
+    "scenario": "Type A",
+    "isUnservable": true
+  },
+  {
     "eventCode": "OAL",
     "documentType": "Order that the letter \"L\" is added to Docket number",
     "documentTitle": "Order that the letter \"L\" is added to Docket number [Anything]",
