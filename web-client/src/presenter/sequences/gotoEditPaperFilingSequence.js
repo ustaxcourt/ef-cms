@@ -3,11 +3,9 @@ import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -18,30 +16,28 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditPaperFiling = startWebSocketConnectionSequenceDecorator([
+export const gotoEditPaperFiling = [
   setCurrentPageAction('Interstitial'),
-  setFromPageAction,
-  stopShowValidationAction,
   clearScansAction,
   clearFormAction,
   clearScreenMetadataAction,
+  stopShowValidationAction,
+  setFromPageAction,
   getCaseAction,
   setCaseAction,
-  getConsolidatedCasesByCaseAction,
-  setConsolidatedCasesForCaseAction,
+  setDocketEntryIdAction,
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
-  setDocketEntryIdAction,
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
   setCurrentPageAction('PaperFiling'),
-]);
+];
 
 export const gotoEditPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoEditPaperFiling,
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
     unauthorized: [redirectToCognitoAction],
   },
 ];

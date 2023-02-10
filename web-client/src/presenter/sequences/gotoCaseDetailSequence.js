@@ -8,7 +8,7 @@ import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
@@ -26,6 +26,7 @@ import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTa
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
@@ -83,10 +84,13 @@ export const gotoCaseDetailSequence = [
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
-  getFeatureFlagValueFactoryAction(
+  getFeatureFlagFactoryAction(
     getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER,
-    true,
+      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS
+      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
   ),
   getCaseAction,
   setCaseAction,

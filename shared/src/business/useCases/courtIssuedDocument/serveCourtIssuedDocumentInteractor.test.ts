@@ -259,7 +259,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [MOCK_CASE.docketNumber, '200-21', '300-33'],
+      docketNumbers: ['200-21', '300-33'],
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     });
 
