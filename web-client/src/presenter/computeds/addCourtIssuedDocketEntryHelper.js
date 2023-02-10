@@ -53,7 +53,10 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     form.eventCode,
   );
 
-  const docketEntriesWithoutAttachments = [selectedEventCode === 'TCRP'];
+  const eventCodesNotRequiringAttachmentsAndService = ['TCRP'];
+
+  const showAttachmentAndServiceFields =
+    !eventCodesNotRequiringAttachmentsAndService.includes(selectedEventCode);
 
   const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
@@ -68,10 +71,10 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode;
 
   return {
-    docketEntriesWithoutAttachments,
     documentTypes,
     formattedDocumentTitle,
     serviceParties,
+    showAttachmentAndServiceFields,
     showDocumentTypeDropdown,
     showReceivedDate,
     showSaveAndServeButton,
