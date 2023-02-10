@@ -25,6 +25,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
 
   if (user.role === USER_ROLES.privatePractitioner) {
     const caseDetail = get(state.caseDetail);
+    const privatePractitioners = caseDetail.privatePractitioners ?? [];
     if (caseDetail.leadDocketNumber) {
       if (isConsolidatedGroupAccessEnabled) {
         isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
@@ -32,15 +33,15 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
           userId: user.userId,
         });
       } else {
-        isAssociated = caseDetail.privatePractitioners.some(
+        isAssociated = privatePractitioners.some(
           practitioner => practitioner.userId === user.userId,
         );
       }
-      isDirectlyAssociated = caseDetail.privatePractitioners.some(
+      isDirectlyAssociated = privatePractitioners.some(
         practitioner => practitioner.userId === user.userId,
       );
     } else {
-      isAssociated = caseDetail.privatePractitioners.some(
+      isAssociated = privatePractitioners.some(
         practitioner => practitioner.userId === user.userId,
       );
       isDirectlyAssociated = isAssociated;
@@ -56,6 +57,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     }
   } else if (user.role === USER_ROLES.irsPractitioner) {
     const caseDetail = get(state.caseDetail);
+    const irsPractitioners = caseDetail.irsPractitioners ?? [];
     if (caseDetail.leadDocketNumber) {
       if (isConsolidatedGroupAccessEnabled) {
         isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
@@ -63,15 +65,15 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
           userId: user.userId,
         });
       } else {
-        isAssociated = caseDetail.irsPractitioners.some(
+        isAssociated = irsPractitioners.some(
           practitioner => practitioner.userId === user.userId,
         );
       }
-      isDirectlyAssociated = caseDetail.irsPractitioners.some(
+      isDirectlyAssociated = irsPractitioners.some(
         practitioner => practitioner.userId === user.userId,
       );
     } else {
-      isAssociated = caseDetail.irsPractitioners.some(
+      isAssociated = irsPractitioners.some(
         practitioner => practitioner.userId === user.userId,
       );
       isDirectlyAssociated = isAssociated;
