@@ -1,4 +1,9 @@
-const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
+const {
+  CASE_SERVICES_SUPERVISOR_SECTION,
+  COUNTRY_TYPES,
+  DOCKET_SECTION,
+  ROLES,
+} = require('./EntityConstants');
 const { User, userDecorator } = require('./User');
 
 describe('User entity', () => {
@@ -233,6 +238,30 @@ describe('User entity', () => {
     });
     it('should return true when the user role is caseServicesSupervisor', () => {
       expect(User.isInternalUser(ROLES.caseServicesSupervisor)).toEqual(true);
+    });
+  });
+
+  describe('isCaseServicesUser', () => {
+    it(`should return true when the user section is ${CASE_SERVICES_SUPERVISOR_SECTION}`, () => {
+      expect(
+        User.isCaseServicesUser({ section: CASE_SERVICES_SUPERVISOR_SECTION }),
+      ).toBe(true);
+    });
+
+    it(`should return false when the user section is NOT ${CASE_SERVICES_SUPERVISOR_SECTION}`, () => {
+      expect(User.isCaseServicesUser({ section: DOCKET_SECTION })).toBe(false);
+    });
+  });
+
+  describe('isChambersUser', () => {
+    it('should return true when the user section includes the word chambers', () => {
+      const user = new User({ ...mockValidUser, section: "Buch's Chambers" });
+      expect(user.isChambersUser()).toBe(true);
+    });
+
+    it('should return false when the user section does not include the word chambers', () => {
+      const user = new User({ ...mockValidUser, section: DOCKET_SECTION });
+      expect(user.isChambersUser()).toBe(false);
     });
   });
 

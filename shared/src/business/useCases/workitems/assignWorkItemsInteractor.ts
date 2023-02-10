@@ -1,9 +1,9 @@
-import { CASE_SERVICES_SUPERVISOR_SECTION } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 import { WorkItem } from '../../entities/WorkItem';
 
 /**
@@ -54,10 +54,13 @@ export const assignWorkItemsInteractor = async (
   const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
     applicationContext,
   });
+  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
+  const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
+    section: userBeingAssigned.section,
+  });
 
   const assignedByCaseServicesUser =
-    user.section === CASE_SERVICES_SUPERVISOR_SECTION ||
-    userBeingAssigned.section === CASE_SERVICES_SUPERVISOR_SECTION;
+    userIsCaseServices || userBeingAssignedIsCaseServices;
 
   let sectionToAssignTo = user.section;
 
