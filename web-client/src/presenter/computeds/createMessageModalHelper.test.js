@@ -3,7 +3,7 @@ import { createMessageModalHelper as createMessageModalHelperComputed } from './
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('workQueueSectionHelper', () => {
+describe('createMessageModalHelper', () => {
   const createMessageModalHelper = withAppContextDecorator(
     createMessageModalHelperComputed,
     applicationContext,

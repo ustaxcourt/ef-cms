@@ -1,5 +1,6 @@
 const {
   ADC_SECTION,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -11,6 +12,14 @@ const {
 } = require('../persistence/dynamo/chambers/getJudgesChambers');
 
 const JUDGES_CHAMBERS = getJudgesChambers();
+
+const caseServicesSupervisorUser = {
+  name: 'CaseServicesSupervisor',
+  role: ROLES.caseServicesSupervisor,
+  section: CASE_SERVICES_SUPERVISOR_SECTION,
+  userId: '4562df8a-5c98-49a0-9c53-d8e4ff3b76bb',
+};
+exports.caseServicesSupervisorUser = caseServicesSupervisorUser;
 
 const docketClerkUser = {
   name: 'Docketclerk',
