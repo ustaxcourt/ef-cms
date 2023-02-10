@@ -1,22 +1,11 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import { isEmpty } from 'lodash';
 
-/**
- * getNotificationsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.judgeUser optional judgeUser for additional filtering
- * @returns {object} inbox unread message counts for the individual and section inboxes
- */
-export const getNotificationsInteractor = async (
+const getJudgeUser = async (
+  judgeUserId: string,
   applicationContext: IApplicationContext,
-  { judgeUserId }: { judgeUserId: string },
+  currentUser: any,
 ) => {
-  const appContextUser = applicationContext.getCurrentUser();
-  const currentUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: appContextUser.userId });
-
   let judgeUser = null;
 
   if (judgeUserId) {
@@ -28,23 +17,64 @@ export const getNotificationsInteractor = async (
       name: CHIEF_JUDGE,
     };
   }
+  return judgeUser;
+};
 
-  const { section, userId } = currentUser;
-  const sectionToShow = applicationContext
+/**
+ * getNotificationsInteractor
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.caseServicesSupervisorData optional caseServicesSupervisorData containing section
+ * @param {object} providers.judgeUser optional judgeUser for additional filtering
+ * @returns {object} inbox unread message counts for the individual and section inboxes
+ */
+export const getNotificationsInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    caseServicesSupervisorData,
+    judgeUserId,
+  }: { judgeUserId: string; caseServicesSupervisorData: any },
+) => {
+  const appContextUser = applicationContext.getCurrentUser();
+
+  const currentUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: appContextUser.userId });
+
+  const judgeUser = await getJudgeUser(
+    judgeUserId,
+    applicationContext,
+    currentUser,
+  );
+
+  const { section, userId } = caseServicesSupervisorData || currentUser;
+
+  let sectionToDisplay = applicationContext
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
 
+  if (!isEmpty(caseServicesSupervisorData)) {
+    sectionToDisplay = caseServicesSupervisorData.section;
+  }
+
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ user: currentUser });
+    .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
 
   const userInbox = await applicationContext
     .getPersistenceGateway()
-    .getUserInboxMessages({ applicationContext, userId });
+    .getUserInboxMessages({
+      applicationContext,
+      userId,
+    });
 
   const sectionInbox = await applicationContext
     .getPersistenceGateway()
-    .getSectionInboxMessages({ applicationContext, section });
+    .getSectionInboxMessages({
+      applicationContext,
+      section,
+    });
 
   const documentQCIndividualInbox = await applicationContext
     .getPersistenceGateway()
@@ -58,7 +88,7 @@ export const getNotificationsInteractor = async (
     .getDocumentQCInboxForSection({
       applicationContext,
       judgeUserName: judgeUser ? judgeUser.name : null,
-      section: sectionToShow,
+      section: sectionToDisplay,
     });
 
   const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
