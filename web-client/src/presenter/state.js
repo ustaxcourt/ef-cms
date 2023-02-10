@@ -24,8 +24,7 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
-import { confirmInitiateCourtIssuedFilingServiceModalHelper } from './computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
-import { confirmInitiatePaperFilingServiceModalHelper } from './computeds/confirmInitiatePaperFilingServiceModalHelper';
+import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
@@ -147,8 +146,7 @@ const helpers = {
   caseSearchNoMatchesHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
-  confirmInitiateCourtIssuedFilingServiceModalHelper,
-  confirmInitiatePaperFilingServiceModalHelper,
+  confirmInitiateServiceModalHelper,
   contactsHelper,
   correspondenceViewerHelper,
   createMessageModalHelper,

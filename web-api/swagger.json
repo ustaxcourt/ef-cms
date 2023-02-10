@@ -2071,7 +2071,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/paper-filing": {
+    "/async/case-documents/{docketNumber}/paper-filing": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2106,10 +2106,7 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
+            "description": "200 response"
           }
         },
         "security": [
