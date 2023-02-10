@@ -62,7 +62,7 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 
 ### pdfjs-dist
 
-`pdfjs-dist` has a major version update to ^3.x,x, but currently has issues in test environment as of 11/11/2022. Skipping updating it this week.
+`pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 
 ### Incrementing the Node Cache Key Version
 
