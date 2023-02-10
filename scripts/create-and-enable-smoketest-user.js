@@ -43,8 +43,8 @@ const createAndEnableSmoketestUser = async () => {
 
     console.log('About to create test user!');
     await createDawsonUser({
+      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
       setPermanentPassword: true,
-      urlOverride: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
       user,
     });
     console.log('Successfully created test user!');

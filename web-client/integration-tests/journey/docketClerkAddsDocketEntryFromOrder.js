@@ -34,7 +34,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    // default
     expect(cerebralTest.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
