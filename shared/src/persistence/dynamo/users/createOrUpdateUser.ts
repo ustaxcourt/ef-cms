@@ -1,5 +1,9 @@
 import * as client from '../../dynamodbClientService';
-import { ROLES } from '../../../business/entities/EntityConstants';
+import {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+  ROLES,
+} from '../../../business/entities/EntityConstants';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -39,6 +43,23 @@ export const createUserRecords = async ({
       await client.put({
         Item: {
           pk: 'section|judge',
+          sk: `user|${userId}`,
+        },
+        applicationContext,
+      });
+    }
+
+    if (user.role === ROLES.caseServicesSupervisor) {
+      await client.put({
+        Item: {
+          pk: `section|${DOCKET_SECTION}`,
+          sk: `user|${userId}`,
+        },
+        applicationContext,
+      });
+      await client.put({
+        Item: {
+          pk: `section|${PETITIONS_SECTION}`,
           sk: `user|${userId}`,
         },
         applicationContext,

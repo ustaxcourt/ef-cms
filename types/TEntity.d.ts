@@ -53,6 +53,7 @@ type WorkItem = {
   completedAt: string;
   updatedAt: string;
   gsi1pk: string;
+  inProgress: boolean;
 };
 
 type TOutboxItem = {
@@ -201,6 +202,7 @@ type TCaseEntity = {
   getDocketEntryById: (options: { docketEntryId: string }) => any;
   addDocketEntry: (docketEntry: any) => unknown;
   isUserIdRepresentedByPrivatePractitioner: (id: string) => boolean;
+  updateDocketEntry: (docketEntry: any) => void;
 } & TCase;
 
 type TCase = {
