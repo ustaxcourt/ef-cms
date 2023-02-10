@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { TrialSessionInfoDto } from '../../dto/TrialSessionInfoDto';
+import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -40,6 +40,6 @@ export const getTrialSessionsForJudgeInteractor = async (
   );
 
   return validatedSessions.map(
-    trialSession => new TrialSessionInfoDto(trialSession as any),
+    trialSession => new TrialSessionInfoDTO(trialSession as any),
   );
 };
