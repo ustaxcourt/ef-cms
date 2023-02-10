@@ -65,7 +65,7 @@ exports.failOnSegmentsErrorCount = async () => {
     );
     const failurePercentage = (errorTotal * 100) / invocationTotal;
     console.log(
-      `There were ${failurePercentage}% errors in the last 15 minutes`,
+      `There were ${failurePercentage}% errors in the last 15 minutes.`,
     );
     if (failurePercentage > 50) {
       const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
