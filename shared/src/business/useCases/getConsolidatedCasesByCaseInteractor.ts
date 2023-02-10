@@ -1,9 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../entities/EntityConstants';
-import {
-  Case,
-  getPetitionerById,
-  isPetitionerPartOfGroup,
-} from '../entities/cases/Case';
+import { Case, isUserPartOfGroup } from '../entities/cases/Case';
 import { User } from '../entities/User';
 import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPublicCase';
 
@@ -42,9 +38,8 @@ export const getConsolidatedCasesByCaseInteractor = async (
   }
 
   const validatedConsolidatedCases = [];
-  const isAssociatedWithGroup = isPetitionerPartOfGroup({
+  const isAssociatedWithGroup = isUserPartOfGroup({
     consolidatedCases,
-    isPartyOfCase: getPetitionerById,
     userId: user.userId,
   });
 

@@ -26,8 +26,8 @@ const {
   getPetitionerById,
   getPractitionersRepresenting,
   isLeadCase,
-  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
+  isUserPartOfGroup,
 } = require('../entities/cases/Case');
 const {
   combineTwoPdfs,
@@ -384,9 +384,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
-    isPetitionerPartOfGroup: jest
-      .fn()
-      .mockImplementation(isPetitionerPartOfGroup),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
       .fn()
@@ -397,6 +394,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
+    isUserPartOfGroup: jest.fn().mockImplementation(isUserPartOfGroup),
     isValidDateString: jest
       .fn()
       .mockImplementation(DateHandler.isValidDateString),

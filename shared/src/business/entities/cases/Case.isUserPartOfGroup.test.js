@@ -1,8 +1,8 @@
-const { isPetitionerPartOfGroup } = require('./Case');
+const { isUserPartOfGroup } = require('./Case');
 
-describe('isPetitionerPartOfGroup', () => {
+describe('isUserPartOfGroup', () => {
   it('should return true when the userId exists in the petitioners', () => {
-    const isPartOfCase = isPetitionerPartOfGroup({
+    const isPartOfCase = isUserPartOfGroup({
       consolidatedCases: [
         {
           irsPractitioners: [],
@@ -17,7 +17,7 @@ describe('isPetitionerPartOfGroup', () => {
   });
 
   it('should return false when the userId does not exist in a consolidated cases parties array', () => {
-    const isPartOfCase = isPetitionerPartOfGroup({
+    const isPartOfCase = isUserPartOfGroup({
       consolidatedCases: [
         {
           irsPractitioners: [],
@@ -37,7 +37,7 @@ describe('isPetitionerPartOfGroup', () => {
   });
 
   it('should return true when the userId exists in the privatePractitioners', () => {
-    const isPartOfCase = isPetitionerPartOfGroup({
+    const isPartOfCase = isUserPartOfGroup({
       consolidatedCases: [
         {
           irsPractitioners: [],
@@ -52,7 +52,7 @@ describe('isPetitionerPartOfGroup', () => {
   });
 
   it('should return true when the userId exists in the irsPractitioners', () => {
-    const isPartOfCase = isPetitionerPartOfGroup({
+    const isPartOfCase = isUserPartOfGroup({
       consolidatedCases: [
         {
           irsPractitioners: [],

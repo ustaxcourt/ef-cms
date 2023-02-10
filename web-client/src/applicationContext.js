@@ -18,8 +18,8 @@ import {
   hasPartyWithServiceType,
   isClosed,
   isLeadCase,
-  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
+  isUserPartOfGroup,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -766,11 +766,11 @@ const applicationContext = {
       isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
-      isPetitionerPartOfGroup,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
       isUserIdRepresentedByPrivatePractitioner,
+      isUserPartOfGroup,
       isValidDateString,
       openUrlInNewTab,
       prepareDateFromString,
