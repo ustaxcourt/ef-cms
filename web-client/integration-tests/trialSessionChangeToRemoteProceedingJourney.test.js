@@ -19,11 +19,10 @@ import {
   waitForLoadingComponentToHide,
 } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const cerebralTest = setupTest();

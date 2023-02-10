@@ -64,6 +64,9 @@ const {
   testPdfDoc,
 } = require('./getFakeFile');
 const {
+  fileAndServeDocumentOnOneCase,
+} = require('../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase');
+const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
@@ -456,6 +459,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    fileAndServeDocumentOnOneCase: jest
+      .fn()
+      .mockImplementation(fileAndServeDocumentOnOneCase),
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
