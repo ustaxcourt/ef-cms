@@ -93,6 +93,7 @@
     "build:lambda:api": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.api.js",
     "build:lambda:migration": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration.js",
     "build:lambda:migration-cron": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration-cron.js",
+    "build:lambda:reindex-cron": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.reindex-cron.js",
     "build:lambda:switch-colors-cron": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.switch-colors-cron.js",
     "build:lambda:rotate-info-indices": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.rotate-info-indices.js",
     "build:public": "USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.public.config.mjs",
