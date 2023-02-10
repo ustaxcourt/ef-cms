@@ -66,7 +66,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     .isSealedCase(caseDetail);
 
   const userCanViewCase =
-    (isExternalUser && userAssociatedWithCase) || isSealedCase;
+    (isExternalUser && userAssociatedWithCase) || !isSealedCase;
 
   const isPractitioner =
     user.role === USER_ROLES.irsPractitioner ||
@@ -76,7 +76,7 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const showSealedCaseView =
     (isPractitioner || isPetitioner) &&
-    !!caseDetail.isSealed &&
+    !!isSealedCase &&
     !userAssociatedWithCase;
 
   const showConsolidatedCasesCard =
