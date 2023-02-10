@@ -8,7 +8,7 @@ import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionsClerkServesPaperCaseToIRS } from './userFlows/petitionsClerkServesPaperCaseToIRS';
+import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperCaseToIRS';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 const { faker } = require('@faker-js/faker');

@@ -25,7 +25,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
   await applicationContext
     .getUseCases()
     .fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [docketNumber],
+      docketNumbers: [],
       documentMeta,
       subjectDocketNumber: docketNumber,
     });
