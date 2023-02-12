@@ -8,48 +8,42 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
- * @returns {Promise} async action
  */
 export const submitEditPaperFilingAction = async ({
   applicationContext,
   get,
   props,
 }) => {
-  const { isSavingForLater } = props;
+  const { docketNumbers: consolidatedGroupDocketNumbers, isSavingForLater } =
+    props;
+
+  const formData = get(state.form);
   const docketEntryId = get(state.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
+  const clientConnectionId = get(state.clientConnectionId);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
+
   const isFileAttached = !!(
     get(state.form.isFileAttached) || isFileAttachedNow
   );
+  const formDataWithoutPdf = omit(formData, ['primaryDocumentFile']);
 
-  let documentMetadata = omit(
-    {
-      ...get(state.form),
-    },
-    ['primaryDocumentFile'],
-  );
-
-  documentMetadata = {
-    ...documentMetadata,
-    createdAt: documentMetadata.dateReceived,
+  const documentMetadata = {
+    ...formDataWithoutPdf,
+    createdAt: formDataWithoutPdf.dateReceived,
     docketNumber,
     isFileAttached,
     isPaper: true,
-    receivedAt: documentMetadata.dateReceived,
+    receivedAt: formDataWithoutPdf.dateReceived,
   };
 
-  const { paperServicePdfUrl } = await applicationContext
+  await applicationContext
     .getUseCases()
     .editPaperFilingInteractor(applicationContext, {
+      clientConnectionId,
+      consolidatedGroupDocketNumbers,
+      docketEntryId,
       documentMetadata,
       isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
     });
-
-  return {
-    docketEntryId,
-    generateCoversheet: isFileAttached && !isSavingForLater,
-    pdfUrl: paperServicePdfUrl,
-  };
 };

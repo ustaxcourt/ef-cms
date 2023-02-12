@@ -73,11 +73,12 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
-        docketNumbers: [caseRecord.docketNumber],
+        docketNumbers: [],
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           documentType: 'Memorandum in Support',
         },
+        subjectDocketNumber: caseRecord.docketNumber,
       } as any),
     ).rejects.toThrow('Unauthorized');
   });
@@ -87,9 +88,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-          docketNumbers: [caseRecord.docketNumber],
+          docketNumbers: [],
           documentType: 'Order',
         },
+        subjectDocketNumber: caseRecord.docketNumber,
       } as any),
     ).rejects.toThrow('Docket entry not found');
   });
@@ -99,18 +101,19 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
-        docketNumbers: [caseRecord.docketNumber],
+        docketNumbers: [],
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           documentType: 'Order',
         },
+        subjectDocketNumber: caseRecord.docketNumber,
       } as any),
     ).rejects.toThrow('Docket entry has already been added to docket record');
   });
 
   it('should call countPagesInDocument, updateCase, and saveWorkItem', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [caseRecord.docketNumber],
+      docketNumbers: [],
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         documentTitle: 'Order',
@@ -118,6 +121,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         eventCode: 'O',
         generatedDocumentTitle: 'Generated Order Document Title',
       },
+      subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
     expect(
@@ -130,7 +134,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should call putWorkItemInUsersOutbox with correct leadDocketNumber when documentType is unservable', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [caseRecord.docketNumber],
+      docketNumbers: [],
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         documentTitle: 'Hearing Exhibits for [anything]',
@@ -138,6 +142,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         eventCode: 'HE',
         generatedDocumentTitle: 'Hearing Exhibits for meeeeeee',
       },
+      subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
     expect(
@@ -154,7 +159,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [caseRecord.docketNumber],
+      docketNumbers: [],
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[1].docketEntryId,
         documentTitle: 'Order to Show Cause',
@@ -163,6 +168,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         filingDate: '2011-03-01T21:40:46.415Z',
         generatedDocumentTitle: 'Generated Order Document Title',
       },
+      subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
     expect(
@@ -182,7 +188,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [caseRecord.docketNumber],
+      docketNumbers: [],
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: caseRecord.docketEntries[2].docketEntryId,
@@ -193,6 +199,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
         isDraft: true,
       },
+      subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
     const lastDocumentIndex =
@@ -211,7 +218,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   it('should delete the draftOrderState from the docketEntry', async () => {
     const docketEntryToUpdate = caseRecord.docketEntries[2];
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [caseRecord.docketNumber],
+      docketNumbers: [],
       documentMeta: {
         docketEntryId: docketEntryToUpdate.docketEntryId,
         documentTitle: docketEntryToUpdate.documentTitle,
@@ -222,6 +229,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         },
         eventCode: docketEntryToUpdate.eventCode,
       },
+      subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
     const updatedDocketEntry = applicationContext
@@ -235,7 +243,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should use original case caption to create case title when creating work item', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [caseRecord.docketNumber],
+      docketNumbers: [],
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
@@ -246,6 +254,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
         serviceStamp: 'Served',
       },
+      subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
     expect(
@@ -288,10 +297,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
 
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: [
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        LEAD_CASE.docketNumber,
-      ],
+      docketNumbers: [MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber],
       documentMeta: {
         docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
 
