@@ -429,7 +429,8 @@ describe('confirmInitiateServiceModalHelper', () => {
 
     it('should be false when the docket entry is a paper filing and the feature flag is off', () => {
       baseState.state.formattedCaseDetail.isLeadCase = true;
-      baseState.state.featureFlagHelper.areMultiDocketablePaperFilingsEnabled = false;
+      baseState.state.featureFlagHelper.areMultiDocketablePaperFilingsEnabled =
+        false;
 
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,

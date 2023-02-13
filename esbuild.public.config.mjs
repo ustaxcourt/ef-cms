@@ -21,7 +21,7 @@ const replaceHtmlFile = () => {
 };
 
 esbuildHelper({
-  entryPoint: 'index-public.js',
+  entryPoint: 'index-public.ts',
   hostPort: 5678,
   indexName: 'index-public.html',
   jsRegex: /^\/index-public\.[A-Z0-9]+\.js$/,
