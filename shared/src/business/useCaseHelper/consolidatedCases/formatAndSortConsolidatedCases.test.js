@@ -7,6 +7,7 @@ describe('formatAndSortConsolidatedCases', () => {
     const result = await formatAndSortConsolidatedCases({
       consolidatedCases: [{ docketNumber: '123-20' }],
       leadDocketNumber: '456-20',
+      userAssociatedDocketNumbersMap: { '123-20': true },
     });
 
     expect(result[0].isRequestingUserAssociated).toBe(true);
@@ -19,6 +20,7 @@ describe('formatAndSortConsolidatedCases', () => {
         { docketNumber: '456-20' },
       ],
       leadDocketNumber: '456-20',
+      userAssociatedDocketNumbersMap: { '123-20': true, '456-20': true },
     });
 
     expect(result.length).toBe(1);
@@ -32,6 +34,7 @@ describe('formatAndSortConsolidatedCases', () => {
         { docketNumber: '123-20' },
       ],
       leadDocketNumber: '456-20',
+      userAssociatedDocketNumbersMap: { '123-20': true, '999-20': true },
     });
 
     expect(result.length).toBe(2);

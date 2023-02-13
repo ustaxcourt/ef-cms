@@ -96,6 +96,36 @@ describe('getCaseAssociation', () => {
     });
   });
 
+  it('should return that practitioner not associated because there are no practitioners on the case', async () => {
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: '1234',
+    });
+
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: {
+          petitioners: {
+            contactId: 'abc123',
+          },
+        },
+      },
+    });
+
+    expect(results.output).toEqual({
+      isAssociated: false,
+      isDirectlyAssociated: false,
+      pendingAssociation: false,
+    });
+  });
+
   it('should return that respondent is associated', async () => {
     applicationContext
       .getUseCases()
