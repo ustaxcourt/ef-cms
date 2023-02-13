@@ -1,4 +1,5 @@
 import {
+  CASE_SERVICES_SUPERVISOR_SECTION,
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
@@ -9,8 +10,11 @@ import {
   applicationContext,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
+import {
+  caseServicesSupervisorUser,
+  docketClerkUser,
+} from '../../../test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -536,5 +540,53 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(caseDetail.docketEntries[0].receivedAt).toEqual(
       '2021-01-01T05:00:00.000Z',
     );
+  });
+
+  it('sets the assigned users section from the selected section when it is defined and the user is a case services user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      caseServicesSupervisorUser,
+    );
+
+    await applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(caseServicesSupervisorUser);
+
+    await completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        selectedSection: DOCKET_SECTION,
+      },
+    });
+
+    const assignedWorkItem =
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+        .workItem;
+
+    expect(assignedWorkItem.section).toEqual(DOCKET_SECTION);
+  });
+
+  it('sets the section as Case Services when selected section is NOT defined and the user is a case services user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      caseServicesSupervisorUser,
+    );
+
+    await applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(caseServicesSupervisorUser);
+
+    await completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        selectedSection: undefined,
+      },
+    });
+
+    const assignedWorkItem =
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+        .workItem;
+
+    expect(assignedWorkItem.section).toEqual(CASE_SERVICES_SUPERVISOR_SECTION);
   });
 });

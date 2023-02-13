@@ -25,7 +25,7 @@ export const IndividualWorkQueueOutbox = connect(
               </th>
               <th>Case Title</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && (
+              {workQueueHelper.showFiledByColumn && (
                 <th>{workQueueHelper.outboxFiledByColumnLabel} By</th>
               )}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
@@ -71,7 +71,7 @@ export const IndividualWorkQueueOutbox = connect(
                     </a>
                   </div>
                 </td>
-                {!workQueueHelper.hideFiledByColumn && (
+                {workQueueHelper.showFiledByColumn && (
                   <td className="message-queue-row">
                     {item.docketEntry.filedBy}
                   </td>

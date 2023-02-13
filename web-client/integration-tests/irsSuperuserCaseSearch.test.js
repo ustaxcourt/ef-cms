@@ -1,8 +1,8 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { irsSuperuserAdvancedSearchForCase } from './journey/irsSuperuserAdvancedSearchForCase';
 import { irsSuperuserAdvancedSearchForCaseDocketNumber } from './journey/irsSuperuserAdvancedSearchForCaseDocketNumber';
 import { irsSuperuserSearchForCase } from './journey/irsSuperuserSearchForCase';
 import { irsSuperuserSearchForUnservedCase } from './journey/irsSuperuserSearchForUnservedCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 describe('irsSuperuser case search', () => {
@@ -13,7 +13,7 @@ describe('irsSuperuser case search', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'irssuperuser@example.com');
   irsSuperuserSearchForCase(cerebralTest);
