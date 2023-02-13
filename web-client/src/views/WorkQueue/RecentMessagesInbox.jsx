@@ -85,7 +85,7 @@ export const RecentMessagesInbox = connect(
                     <td className="message-queue-row">{item.caseStatus}</td>
                   )}
                   <td>{item.from}</td>
-                  <td>{item.fromSection}</td>
+                  <td>{item.fromSectionFormatted}</td>
                 </tr>
               </tbody>
             );

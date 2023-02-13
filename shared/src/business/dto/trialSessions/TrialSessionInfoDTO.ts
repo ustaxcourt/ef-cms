@@ -1,6 +1,6 @@
-import { TRawTrialSession } from '../entities/trialSessions/TrialSession';
+import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
 
-export class TrialSessionInfoDto {
+export class TrialSessionInfoDTO {
   public estimatedEndDate: string;
   public isCalendared: boolean;
   public judge: {

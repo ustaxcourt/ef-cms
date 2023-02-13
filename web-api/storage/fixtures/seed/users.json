@@ -24,6 +24,14 @@
     "entityName": "User"
   },
   {
+    "role": "caseServicesSupervisor",
+    "name": "Test Case Services Supervisor",
+    "section": "caseServicesSupervisor",
+    "userId": "35959d1a-0981-40b2-a93d-f65c7977db52",
+    "email": "caseservicessupervisor@example.com",
+    "entityName": "User"
+  },
+  {
     "role": "legacyJudge",
     "name": "Fieri",
     "section": "legacyJudgesChambers",
