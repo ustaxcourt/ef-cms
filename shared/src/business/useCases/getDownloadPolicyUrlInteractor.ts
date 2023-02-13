@@ -1,11 +1,16 @@
-import { Case } from '../entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
+import {
+  Case,
+  getPetitionerById,
+  isPetitionerPartOfGroup,
+} from '../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -111,6 +116,13 @@ export const getDownloadPolicyUrlInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber, key }: { docketNumber: string; key: string },
 ) => {
+  const isConsolidatedGroupAccessEnabled = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+    });
+
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
@@ -146,13 +158,28 @@ export const getDownloadPolicyUrlInteractor = async (
   } else if (isIrsSuperuser) {
     handleIrsSuperUser({ docketEntryEntity, key, petitionDocketEntry });
   } else {
-    const userAssociatedWithCase = await applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
+    let userAssociatedWithCase;
+    if (isConsolidatedGroupAccessEnabled && caseEntity.leadDocketNumber) {
+      const consolidatedCases = await applicationContext
+        .getUseCases()
+        .getConsolidatedCasesByCaseInteractor(applicationContext, {
+          docketNumber: caseEntity.leadDocketNumber,
+        });
+
+      userAssociatedWithCase = isPetitionerPartOfGroup({
+        consolidatedCases,
+        isPartyOfCase: getPetitionerById,
         userId: user.userId,
       });
+    } else {
+      userAssociatedWithCase = await applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser({
+          applicationContext,
+          docketNumber: caseEntity.docketNumber,
+          userId: user.userId,
+        });
+    }
 
     if (key.includes('.pdf')) {
       if (

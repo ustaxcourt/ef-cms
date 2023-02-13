@@ -115,6 +115,8 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   if (!consolidateCaseDuplicateDocketEntries) {
     docketNumbers = [subjectCaseDocketNumber];
+  } else {
+    docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
   }
 
   try {

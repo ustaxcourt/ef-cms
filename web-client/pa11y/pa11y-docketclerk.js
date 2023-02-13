@@ -68,6 +68,7 @@ module.exports = [
       'wait for element table.case-inventory to be visible',
     ],
     notes: 'checks a11y of case inventory report builder',
+    timeout: 60000,
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/case-inventory-report',
   },
   {

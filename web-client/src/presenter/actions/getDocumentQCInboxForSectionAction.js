@@ -4,12 +4,15 @@ import { state } from 'cerebral';
  * fetched the document qc inbox items for a section.
  *
  * @param {object} applicationContext object that contains all the context specific methods
+ * @param {Function} providers.get the cerebral get helper function
  * @returns {Promise<{workItems: Array}>} a list of work items
  */
 export const getDocumentQCInboxForSectionAction = async ({
   applicationContext,
   get,
 }) => {
+  const selectedSection = get(state.workQueueToDisplay.section);
+
   const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   let judgeUser = get(state.judgeUser);
@@ -22,7 +25,7 @@ export const getDocumentQCInboxForSectionAction = async ({
     .getUseCases()
     .getDocumentQCInboxForSectionInteractor(applicationContext, {
       judgeUser,
-      section: user.section,
+      section: selectedSection || user.section,
     });
 
   return { workItems };
