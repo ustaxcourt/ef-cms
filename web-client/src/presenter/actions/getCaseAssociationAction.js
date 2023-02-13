@@ -26,21 +26,20 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     ],
   );
 
-  if (user.role === USER_ROLES.irsSuperuser) {
-    const canAllowDocumentServiceForCase = applicationContext
-      .getUtilities()
-      .canAllowDocumentServiceForCase(caseDetail);
-
-    isAssociated = canAllowDocumentServiceForCase;
-    return {
-      isAssociated,
-      isDirectlyAssociated: isConsolidatedGroupAccessEnabled
-        ? isDirectlyAssociated
-        : isAssociated,
-      pendingAssociation,
-    };
-  } else if (applicationContext.getUtilities().isInternalUser(user.role)) {
+  if (
+    user.role === USER_ROLES.irsSuperuser ||
+    applicationContext.getUtilities().isInternalUser(user.role)
+  ) {
     isAssociated = true;
+
+    if (user.role === USER_ROLES.irsSuperuser) {
+      const canAllowDocumentServiceForCase = applicationContext
+        .getUtilities()
+        .canAllowDocumentServiceForCase(caseDetail);
+
+      isAssociated = canAllowDocumentServiceForCase;
+    }
+
     return {
       isAssociated,
       isDirectlyAssociated: isConsolidatedGroupAccessEnabled
@@ -48,7 +47,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
         : isAssociated,
       pendingAssociation,
     };
-  } else if (user.role === USER_ROLES.privatePractitioner) {
+  }
+
+  if (user.role === USER_ROLES.privatePractitioner) {
     caseParties = caseDetail.privatePractitioners || [];
   } else if (user.role === USER_ROLES.irsPractitioner) {
     caseParties = caseDetail.irsPractitioners || [];
