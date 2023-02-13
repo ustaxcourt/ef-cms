@@ -23,7 +23,6 @@ export const petitionerSearchesForUnassociatedSealedCase = cerebralTest => {
     });
 
     expect(helper.showSealedCaseView).toBeTruthy();
-    // TESTS CHECKING FOR isSealed being true but sealedDate being undefined
 
     expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
     expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
