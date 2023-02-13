@@ -4,7 +4,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 
 describe('getCasesForUserInteractor', () => {
-  it('should return the expected cases for a user', async () => {
+  it('should return the expected associated cases combined with the consolidated group cases for 111-19', async () => {
     applicationContext.getCurrentUser.mockResolvedValue({
       userId: '1',
     });
@@ -104,6 +104,41 @@ describe('getCasesForUserInteractor', () => {
         }),
         expect.objectContaining({
           docketNumber: '103-19',
+          isRequestingUserAssociated: true,
+        }),
+      ],
+    });
+  });
+
+  it('should return the expected associated cases with NO consolidated groups or lead cases', async () => {
+    applicationContext.getCurrentUser.mockResolvedValue({
+      userId: '1',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          createdAt: '2020-01-21T16:41:39.474Z',
+          docketNumber: '102-20',
+        },
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-08-16T17:29:10.132Z',
+          docketNumber: '107-19',
+        },
+      ]);
+
+    const userCases = await getCasesForUserInteractor(applicationContext);
+    expect(userCases).toMatchObject({
+      closedCaseList: [],
+      openCaseList: [
+        expect.objectContaining({
+          docketNumber: '102-20',
+          isRequestingUserAssociated: true,
+        }),
+        expect.objectContaining({
+          docketNumber: '107-19',
           isRequestingUserAssociated: true,
         }),
       ],
