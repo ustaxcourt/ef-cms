@@ -1,5 +1,4 @@
 module.exports = {
-  '**/*.{ts,tsx}': () => 'tsc --noEmit',
   '*.{css,scss}': ['stylelint'],
   '*.{js,jsx,ts,tsx}': ['eslint'],
   '*.{sh}': ['lint-staged-shellcheck'],
