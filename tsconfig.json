@@ -8,7 +8,9 @@
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
-    "target": "es6"
+    "target": "es6",
+    "allowJs": true,
+    "jsx": "react"
   },
   "ts-node": {
     "files": true
