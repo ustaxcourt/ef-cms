@@ -49,9 +49,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
       pendingAssociation,
     };
   } else if (user.role === USER_ROLES.privatePractitioner) {
-    caseParties = caseDetail.privatePractitioners;
+    caseParties = caseDetail.privatePractitioners || [];
   } else if (user.role === USER_ROLES.irsPractitioner) {
-    caseParties = caseDetail.irsPractitioners;
+    caseParties = caseDetail.irsPractitioners || [];
   } else if (user.role === USER_ROLES.petitioner) {
     idName = 'contactId';
     caseParties = caseDetail.petitioners;
