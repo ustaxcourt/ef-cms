@@ -42,6 +42,26 @@ describe('getDocumentQCServedForSectionAction', () => {
     ).toMatchObject({ section: mockSection });
   });
 
+  it('should call getDocumentQCServedForSectionInteractor with the selectedSection when section exists off workQueueToDisplay', async () => {
+    const mockSelectedSection = 'a selected section';
+    await runAction(getDocumentQCServedForSectionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        workQueueToDisplay: {
+          section: mockSelectedSection,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getDocumentQCServedForSectionInteractor
+        .mock.calls[0][1],
+    ).toMatchObject({
+      section: mockSelectedSection,
+    });
+  });
   it('should return the retrieved work items as props', async () => {
     const { output } = await runAction(getDocumentQCServedForSectionAction, {
       modules: {

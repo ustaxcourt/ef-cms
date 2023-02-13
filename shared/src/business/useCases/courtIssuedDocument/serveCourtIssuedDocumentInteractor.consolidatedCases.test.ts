@@ -139,7 +139,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
       ],
@@ -190,7 +189,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         clientConnectionId,
         docketEntryId: leadCaseDocketEntries[0].docketEntryId,
         docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
         ],
@@ -238,7 +236,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         clientConnectionId,
         docketEntryId: leadCaseDocketEntries[0].docketEntryId,
         docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
         ],
@@ -257,7 +254,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
       ],

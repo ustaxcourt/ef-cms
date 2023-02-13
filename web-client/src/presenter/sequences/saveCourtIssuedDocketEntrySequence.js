@@ -2,13 +2,13 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
 import { shouldSaveToConsolidatedGroupAction } from '../actions/shouldSaveToConsolidatedGroupAction';
-import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation/shouldSetupConsolidatedCasesAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitCourtIssuedDocketEntrySequence } from './submitCourtIssuedDocketEntrySequence';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
@@ -31,10 +31,10 @@ export const saveCourtIssuedDocketEntrySequence = [
         ],
         success: [
           clearModalStateAction,
-          shouldSetupConsolidatedCasesAction,
+          isDocketEntryMultiDocketableAction,
           {
             no: [],
-            yes: [setupConsolidatedCasesAction],
+            yes: [setMultiDocketingCheckboxesAction],
           },
           setShowModalFactoryAction('ConfirmInitiateSaveModal'),
         ],
