@@ -3,7 +3,7 @@ import {
   DOCUMENT_RELATIONSHIPS,
   OBJECTIONS_OPTIONS_MAP,
 } from '../../shared/src/business/entities/EntityConstants';
-import { confirmInitiatePaperFilingServiceModalHelper } from '../src/presenter/computeds/confirmInitiatePaperFilingServiceModalHelper';
+import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -213,7 +213,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     );
 
     const modalHelper = runCompute(
-      withAppContextDecorator(confirmInitiatePaperFilingServiceModalHelper),
+      withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
         state: cerebralTest.getState(),
       },
