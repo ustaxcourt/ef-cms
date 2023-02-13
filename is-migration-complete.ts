@@ -4,7 +4,7 @@ import {
 } from '@aws-sdk/client-cloudwatch';
 import { DateTime } from 'luxon';
 import { GetQueueAttributesCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { failPendingJob } from './shared/admin-tools/circleci/interact-with-pending-job';
+import { cancelWorkflow } from './shared/admin-tools/circleci/interact-with-pending-job';
 
 const sqsClient = new SQSClient({ region: 'us-east-1' });
 const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
@@ -71,7 +71,7 @@ exports.failOnSegmentsErrorCount = async () => {
       const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
       const workflowId = process.env.CIRCLE_WORKFLOW_ID;
 
-      await failPendingJob({ apiToken, workflowId });
+      await cancelWorkflow({ apiToken, workflowId });
     }
   }
 };
