@@ -29,11 +29,15 @@ export const headerHelper = (get, applicationContext) => {
   const pageIsHome =
     isDashboard ||
     ([
+      USER_ROLES.caseServicesSupervisor,
       USER_ROLES.docketClerk,
       USER_ROLES.petitionsClerk,
       USER_ROLES.adc,
     ].includes(userRole) &&
       pageIsMessages);
+
+  const isCaseServicesSupervisor =
+    userRole === USER_ROLES.caseServicesSupervisor;
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
@@ -47,9 +51,13 @@ export const headerHelper = (get, applicationContext) => {
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
     pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
-    showDocumentQC: isInternalUser,
+    showDocumentQC: isInternalUser && !isCaseServicesSupervisor,
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
-    showMessages: isInternalUser && userRole !== USER_ROLES.general,
+    showMessages:
+      isInternalUser &&
+      userRole !== USER_ROLES.general &&
+      !isCaseServicesSupervisor,
+    showMessagesAndQCDropDown: isCaseServicesSupervisor,
     showMyAccount: [
       USER_ROLES.privatePractitioner,
       USER_ROLES.irsPractitioner,
