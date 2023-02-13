@@ -155,6 +155,9 @@ describe('getCaseAssociation', () => {
       modules: {
         presenter,
       },
+      state: {
+        caseDetail: {},
+      },
     });
 
     expect(results.output).toEqual({
