@@ -19,9 +19,9 @@ import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHe
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
-import { getAssociatedLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getAssociatedLeadCase';
 import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
+import { getUnassociatedLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { processUserAssociatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/processUserAssociatedCases';
@@ -70,9 +70,9 @@ const useCaseHelpers = {
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,
   generateStampedCoversheetInteractor,
-  getAssociatedLeadCase,
   getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,
+  getUnassociatedLeadCase,
   getUserIdForNote,
   parseAndScrapePdfContents,
   processUserAssociatedCases,
