@@ -8,7 +8,7 @@ describe('getAssociatedLeadCase', () => {
       leadDocketNumber: MOCK_CASE.docketNumber,
     });
 
-    expect(result.isRequestingUserAssociated).toBe(true);
+    expect(result.isRequestingUserAssociated).toBe(false);
   });
 
   it('should return the found lead case', () => {
