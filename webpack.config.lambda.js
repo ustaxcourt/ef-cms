@@ -20,7 +20,14 @@ module.exports = {
         exclude: /node_modules/,
         // eslint-disable-next-line
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
       },
     ],
   },
