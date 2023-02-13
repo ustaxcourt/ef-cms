@@ -17,37 +17,49 @@ function Message() {
 }
 
 Message.prototype.init = function init(rawMessage, { applicationContext }) {
+  messageDecorator(this, rawMessage, { applicationContext });
+};
+
+const messageDecorator = (
+  messageEntity,
+  rawMessage,
+  { applicationContext },
+) => {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.attachments = (rawMessage.attachments || []).map(attachment => ({
-    documentId: attachment.documentId,
-  }));
-  this.caseStatus = rawMessage.caseStatus;
-  this.caseTitle = rawMessage.caseTitle;
-  this.completedAt = rawMessage.completedAt;
-  this.completedBy = rawMessage.completedBy;
-  this.completedBySection = rawMessage.completedBySection;
-  this.completedByUserId = rawMessage.completedByUserId;
-  this.completedMessage = rawMessage.completedMessage;
-  this.createdAt = rawMessage.createdAt || createISODateString();
-  this.leadDocketNumber = rawMessage.leadDocketNumber;
-  this.docketNumber = rawMessage.docketNumber;
-  this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
-  this.from = rawMessage.from;
-  this.fromSection = rawMessage.fromSection;
-  this.fromUserId = rawMessage.fromUserId;
-  this.isCompleted = rawMessage.isCompleted || false;
-  this.isRead = rawMessage.isRead || false;
-  this.isRepliedTo = rawMessage.isRepliedTo || false;
-  this.message = rawMessage.message;
-  this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
-  this.parentMessageId = rawMessage.parentMessageId || this.messageId;
-  this.subject = rawMessage.subject;
-  this.to = rawMessage.to;
-  this.toSection = rawMessage.toSection;
-  this.toUserId = rawMessage.toUserId;
+  messageEntity.attachments = (rawMessage.attachments || []).map(
+    attachment => ({
+      documentId: attachment.documentId,
+    }),
+  );
+  messageEntity.caseStatus = rawMessage.caseStatus;
+  messageEntity.caseTitle = rawMessage.caseTitle;
+  messageEntity.completedAt = rawMessage.completedAt;
+  messageEntity.completedBy = rawMessage.completedBy;
+  messageEntity.completedBySection = rawMessage.completedBySection;
+  messageEntity.completedByUserId = rawMessage.completedByUserId;
+  messageEntity.completedMessage = rawMessage.completedMessage;
+  messageEntity.createdAt = rawMessage.createdAt || createISODateString();
+  messageEntity.leadDocketNumber = rawMessage.leadDocketNumber;
+  messageEntity.docketNumber = rawMessage.docketNumber;
+  messageEntity.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
+  messageEntity.from = rawMessage.from;
+  messageEntity.fromSection = rawMessage.fromSection;
+  messageEntity.fromUserId = rawMessage.fromUserId;
+  messageEntity.isCompleted = rawMessage.isCompleted || false;
+  messageEntity.isRead = rawMessage.isRead || false;
+  messageEntity.isRepliedTo = rawMessage.isRepliedTo || false;
+  messageEntity.message = rawMessage.message;
+  messageEntity.messageId =
+    rawMessage.messageId || applicationContext.getUniqueId();
+  messageEntity.parentMessageId =
+    rawMessage.parentMessageId || messageEntity.messageId;
+  messageEntity.subject = rawMessage.subject;
+  messageEntity.to = rawMessage.to;
+  messageEntity.toSection = rawMessage.toSection;
+  messageEntity.toUserId = rawMessage.toUserId;
 };
 
 Message.VALIDATION_ERROR_MESSAGES = {
@@ -205,4 +217,7 @@ Message.prototype.addAttachment = function (attachmentToAdd) {
   return this;
 };
 
-exports.Message = validEntityDecorator(Message);
+module.exports = {
+  Message: validEntityDecorator(Message),
+  messageDecorator,
+};

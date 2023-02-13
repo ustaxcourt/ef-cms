@@ -9,7 +9,9 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const updateCaseCheckboxAction = ({ get, props, store }) => {
-  let consolidatedCases = get(state.caseDetail.consolidatedCases);
+  let consolidatedCases = get(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+  );
 
   consolidatedCases = consolidatedCases.map(consolidatedCase => {
     if (
@@ -25,5 +27,8 @@ export const updateCaseCheckboxAction = ({ get, props, store }) => {
     return consolidatedCase;
   });
 
-  store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+  store.set(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+    consolidatedCases,
+  );
 };

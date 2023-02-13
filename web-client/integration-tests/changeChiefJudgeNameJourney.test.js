@@ -11,6 +11,7 @@ import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitions
 
 describe('Chief Judge feature flag configuration', () => {
   const cerebralTest = setupTest();
+
   cerebralTest.draftOrders = [];
 
   const judgeFoleyUserId = '659789b4-acc5-40b7-9318-3354e7eb8604';
@@ -18,13 +19,14 @@ describe('Chief Judge feature flag configuration', () => {
   const foleyFullName = 'Maurice B. Foley';
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
     await setJudgeTitle(judgeFoleyUserId, 'Chief Judge');
     await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     cerebralTest.closeSocket();
+    await setJudgeTitle(judgeFoleyUserId, 'Chief Judge');
+    await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -75,7 +77,7 @@ describe('Chief Judge feature flag configuration', () => {
   });
 
   describe('Update judgeTitle', () => {
-    loginAs(cerebralTest, 'judgeFoley@example.com');
+    loginAs(cerebralTest, 'judgefoley@example.com');
 
     it('should retrieve correct judgeTitle before and after being updated in dynamo', async () => {
       const { docketEntryId } = cerebralTest.draftOrders[0];

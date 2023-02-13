@@ -11,20 +11,15 @@ import { petitionsClerkVerifiesAssignedWorkItem } from './journey/petitionsClerk
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk Document QC Journey', () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const createdCases = [];
+  const caseCreationCount = 3;
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const createdCases = [];
-
-  const caseCreationCount = 3;
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsSectionDocumentQC(cerebralTest, true);

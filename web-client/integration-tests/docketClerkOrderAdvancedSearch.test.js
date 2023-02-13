@@ -52,10 +52,6 @@ describe('Docket clerk advanced order search', () => {
     signedJudgeName: 'Maurice B. Foley',
   };
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];

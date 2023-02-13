@@ -48,9 +48,9 @@ const version = process.argv[3] || 'alpha';
     size: 10000,
   });
 
-  results.hits.hits.forEach(hit => {
+  results.body.hits.hits.forEach(hit => {
     console.log(hit['_source']);
   });
 
-  console.log(`total hits: ${results.hits.hits.length}`);
+  console.log(`total hits: ${results.body.hits.hits.length}`);
 })();

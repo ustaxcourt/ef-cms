@@ -1,4 +1,4 @@
-import { camelCase, partition, pickBy } from 'lodash';
+import { omitBy, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -11,7 +11,7 @@ const compareCasesByPractitioner = (a, b) => {
 };
 
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
-  const { STATUS_TYPES, TRIAL_STATUS_TYPES } =
+  const { ALLOWLIST_FEATURE_FLAGS, TRIAL_STATUS_TYPES } =
     applicationContext.getConstants();
 
   const trialSession = get(state.trialSession);
@@ -26,7 +26,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     .slice()
     .filter(
       calendaredCase =>
-        calendaredCase.status !== STATUS_TYPES.closed &&
+        !applicationContext.getUtilities().isClosed(calendaredCase) &&
         calendaredCase.removedFromTrial !== true,
     )
     .filter(
@@ -113,15 +113,60 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     casesAssociatedWithTrialSession.reverse();
   }
 
-  const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
-    key: camelCase(value),
-    value,
-  }));
+  const updatedTrialSessionTypesEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key],
+  );
+
+  const unassignedLabel = updatedTrialSessionTypesEnabled
+    ? 'Unassigned'
+    : 'Trial Status';
+
+  const trialStatusOptions = omitBy(TRIAL_STATUS_TYPES, statusType => {
+    if (updatedTrialSessionTypesEnabled !== true) {
+      return statusType.new === true;
+    }
+  });
+
+  const trialStatusFilters = Object.keys(trialStatusOptions)
+    .filter(option => {
+      if (updatedTrialSessionTypesEnabled) {
+        return !trialStatusOptions[option].deprecated;
+      }
+      return option;
+    })
+    .sort((a, b) => {
+      if (updatedTrialSessionTypesEnabled) {
+        return (
+          trialStatusOptions[a].displayOrder -
+          trialStatusOptions[b].displayOrder
+        );
+      }
+      return 0;
+    })
+    .map(option => {
+      return {
+        key: option,
+        label:
+          !updatedTrialSessionTypesEnabled &&
+          trialStatusOptions[option].legacyLabel
+            ? trialStatusOptions[option].legacyLabel
+            : trialStatusOptions[option].label,
+      };
+    })
+    .concat({
+      key: 'statusUnassigned',
+      label: updatedTrialSessionTypesEnabled
+        ? 'Unassigned'
+        : 'Status unassigned',
+    });
 
   return {
     casesShownCount: formattedCases.length,
     formattedCases: casesAssociatedWithTrialSession,
     showPrintButton: formattedCases.length > 0,
+    trialStatusFilters,
     trialStatusOptions,
+    unassignedLabel,
+    updatedTrialSessionTypesEnabled,
   };
 };

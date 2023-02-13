@@ -6,12 +6,8 @@ import { petitionsClerkSelectsFirstPetitionOnMyDocumentQC } from './journey/peti
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 
-const cerebralTest = setupTest();
-
 describe('Entry of Statistics in Petition QC', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

@@ -178,7 +178,7 @@ describe('cognito-triggers', () => {
           postalCode: '61234',
           state: 'IL',
         },
-        email: 'privatePractitioner@example.com',
+        email: 'privatepractitioner@example.com',
         employer: 'Private',
         entityName: 'PrivatePractitioner',
         firstName: 'Bob',

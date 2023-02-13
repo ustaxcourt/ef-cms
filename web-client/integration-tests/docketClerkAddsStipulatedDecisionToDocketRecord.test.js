@@ -16,10 +16,6 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
 
   cerebralTest.draftOrders = [];
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -56,7 +52,7 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   it('unassociated privatePractitioner views Stipulated Decision on docket record', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);

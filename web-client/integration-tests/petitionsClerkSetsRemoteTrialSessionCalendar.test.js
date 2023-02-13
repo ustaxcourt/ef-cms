@@ -1,9 +1,9 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs.js';
@@ -11,10 +11,9 @@ import { petitionsClerkViewsOpenTrialSession } from './journey/petitionsClerkVie
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-
 describe('petitions clerk sets a remote trial session calendar', () => {
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
+
   const trialLocation = `Denver, Colorado, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
@@ -22,10 +21,6 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     sessionType: 'Small',
     trialLocation,
   };
-
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -49,7 +44,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       },
     );
 
-    expect(trialSessionFormatted.computedStatus).toEqual('Open');
+    expect(trialSessionFormatted.sessionStatus).toEqual('Open');
   });
 
   describe('Create cases', () => {
@@ -79,7 +74,9 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     describe('case #5 - manually added to session', () => {
       loginAs(cerebralTest, 'petitionsclerk@example.com');
       cerebralTest.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+      petitionsClerkCreatesNewCase(cerebralTest, {
+        overrides: { trialLocation },
+      });
       manuallyAddCaseToTrial(cerebralTest);
     });
   });

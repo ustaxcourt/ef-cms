@@ -6,14 +6,10 @@ import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyU
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 
 describe('admissions clerk adds an email to a petitioner who already exists in the system and has a separate efile petition', () => {
-  const OLD_EMAIL = 'petitioner2@example.com';
-  const NEW_EMAIL = 'petitioner5@example.com';
-
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const OLD_EMAIL = 'petitioner3@example.com';
+  const NEW_EMAIL = 'petitioner5@example.com';
 
   afterAll(() => {
     cerebralTest.closeSocket();

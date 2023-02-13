@@ -19,16 +19,20 @@ TrialSessionWorkingCopy.prototype.init = function init(rawSession) {
 
   this.caseMetadata = rawSession.caseMetadata || {};
   this.filters = rawSession.filters || {
-    aBasisReached: true,
+    basisReached: true,
     continued: true,
+    definiteTrial: true,
     dismissed: true,
+    motionToDismiss: true,
+    probableSettlement: true,
+    probableTrial: true,
     recall: true,
     rule122: true,
     setForTrial: true,
     settled: true,
     showAll: true,
     statusUnassigned: true,
-    takenUnderAdvisement: true,
+    submittedCAV: true,
   };
   this.sessionNotes = rawSession.sessionNotes;
   this.sort = rawSession.sort;
@@ -55,16 +59,20 @@ TrialSessionWorkingCopy.validationRules = {
   filters: joi
     .object()
     .keys({
-      aBasisReached: joi.boolean().required(),
+      basisReached: joi.boolean().required(),
       continued: joi.boolean().required(),
+      definiteTrial: joi.boolean().required(),
       dismissed: joi.boolean().required(),
+      motionToDismiss: joi.boolean().required(),
+      probableSettlement: joi.boolean().required(),
+      probableTrial: joi.boolean().required(),
       recall: joi.boolean().required(),
       rule122: joi.boolean().required(),
       setForTrial: joi.boolean().required(),
       settled: joi.boolean().required(),
       showAll: joi.boolean().required(),
       statusUnassigned: joi.boolean().required(),
-      takenUnderAdvisement: joi.boolean().required(),
+      submittedCAV: joi.boolean().required(),
     })
     .required(),
   sessionNotes: JoiValidationConstants.STRING.optional(),

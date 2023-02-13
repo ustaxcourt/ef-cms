@@ -1,5 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkAddsStipulatedDecisionDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsStipulatedDecisionDocketEntryFromOrder';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
@@ -20,16 +22,11 @@ import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDeta
 import { unauthedUserViewsFilteredDocketRecord } from './journey/unauthedUserViewsFilteredDocketRecord';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const cerebralTest = setupTest();
-const testClient = setupTestClient();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
-testClient.draftOrders = [];
-
 describe('unauthed user searches for case', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+  const testClient = setupTestClient();
+
+  testClient.draftOrders = [];
 
   afterAll(() => {
     testClient.closeSocket();
@@ -108,13 +105,13 @@ describe('unauthed user searches for case', () => {
     docketClerkAddsStipulatedDecisionDocketEntryFromOrder(testClient, 3);
     docketClerkServesDocument(testClient, 3);
   });
-});
 
-describe('Unauthed user searches for a case and views a case detail page', () => {
-  unauthedUserNavigatesToPublicSite(cerebralTest);
-  unauthedUserSearchesByMeta(cerebralTest);
-  unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
-  unauthedUserViewsCaseDetail(cerebralTest);
-  unauthedUserViewsFilteredDocketRecord(cerebralTest);
-  unauthedUserViewsPrintableDocketRecord(cerebralTest);
+  describe('Unauthed user searches for a case and views a case detail page', () => {
+    unauthedUserNavigatesToPublicSite(cerebralTest);
+    unauthedUserSearchesByMeta(cerebralTest);
+    unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
+    unauthedUserViewsCaseDetail(cerebralTest);
+    unauthedUserViewsFilteredDocketRecord(cerebralTest);
+    unauthedUserViewsPrintableDocketRecord(cerebralTest);
+  });
 });

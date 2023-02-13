@@ -2,12 +2,8 @@ import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetiti
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-
 describe('docket clerk adds petitioner to case', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

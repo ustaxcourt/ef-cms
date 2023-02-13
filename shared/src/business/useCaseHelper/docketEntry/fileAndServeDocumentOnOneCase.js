@@ -80,6 +80,7 @@ exports.fileAndServeDocumentOnOneCase = async ({
       .closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
         applicationContext,
         caseEntity,
+        eventCode: docketEntryEntity.eventCode,
       });
   }
 

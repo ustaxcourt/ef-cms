@@ -1,29 +1,20 @@
-import {
-  contactPrimaryFromState,
-  fakeFile,
-  loginAs,
-  setupTest,
-} from './helpers';
+import { contactPrimaryFromState, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 const { faker } = require('@faker-js/faker');
 
-const cerebralTest = setupTest();
-
-const validEmail = `${faker.internet.userName()}_no_error@example.com`;
-
 describe('admissions clerk creates user for case', () => {
-  let petitionerContactId;
+  const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const validEmail = `${faker.internet.userName()}_no_error@example.com`;
+
+  let petitionerContactId;
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk verifies petitioner on case has no email', async () => {

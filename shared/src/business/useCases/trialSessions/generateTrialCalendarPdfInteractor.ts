@@ -22,7 +22,7 @@ export const generateTrialCalendarPdfInteractor = async (
 
   const formattedTrialSession = applicationContext
     .getUtilities()
-    .formattedTrialSessionDetails({
+    .getFormattedTrialSessionDetails({
       applicationContext,
       trialSession,
     });

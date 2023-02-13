@@ -183,7 +183,6 @@ const printableDocketRecordVisible = async () => {
 
 describe('Case permissions test', () => {
   beforeEach(() => {
-    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {
@@ -219,7 +218,7 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(cerebralTest, 'irsSuperuser@example.com');
+  loginAs(cerebralTest, 'irssuperuser@example.com');
   it('IRS Super User views case detail when the case has NOT been served', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -233,7 +232,7 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   it('Unassociated private practitioner views case detail', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -247,7 +246,7 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   it('Unassociated IRS practitioner views case detail', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -332,7 +331,7 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(cerebralTest, 'irsSuperuser@example.com');
+  loginAs(cerebralTest, 'irssuperuser@example.com');
   it('IRS Super User views case detail when the case has been served', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -360,7 +359,7 @@ describe('Case permissions test', () => {
     });
   });
 
-  loginAs(cerebralTest, 'reportersOffice@example.com');
+  loginAs(cerebralTest, 'reportersoffice@example.com');
   it('allows access to the reportersOffice user to view the case detail', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,

@@ -12,12 +12,14 @@ export const IndividualWorkQueue = connect(
   {
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.workQueueToDisplay.queue,
+    section: state.workQueueToDisplay.section,
     showModal: state.modal.showModal,
     workQueueHelper: state.workQueueHelper,
   },
   function IndividualWorkQueue({
     navigateToPathSequence,
     queue,
+    section,
     showModal,
     workQueueHelper,
   }) {
@@ -27,9 +29,10 @@ export const IndividualWorkQueue = connect(
           bind="workQueueToDisplay.box"
           onSelect={box => {
             navigateToPathSequence({
-              path: workQueueHelper.getQueuePath({
+              path: workQueueHelper.documentQCNavigationPath({
                 box,
                 queue,
+                section,
               }),
             });
           }}

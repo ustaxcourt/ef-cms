@@ -2,7 +2,7 @@
  * formats a 10-digit phone number with hyphens
  *
  * @param {string} phone the phone number to format
- * @returns {string} the formatted string
+ * @returns {string|void} the formatted string
  */
 exports.formatPhoneNumber = function (phone) {
   if (!phone) return;

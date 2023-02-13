@@ -1,10 +1,7 @@
 describe('Docket clerk views consolidated case', function () {
-  before(() => {
-    cy.login('docketclerk');
-  });
-
   describe('case detail header', () => {
     it('should display lead case tag on the lead case in a consolidated group', () => {
+      cy.login('docketclerk');
       cy.visit('/case-detail/111-19');
       cy.get('#lead-case-tag').should('exist');
     });

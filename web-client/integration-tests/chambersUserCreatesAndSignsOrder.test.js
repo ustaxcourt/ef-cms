@@ -7,14 +7,10 @@ import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraf
 import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Chambers dashboard', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
+  cerebralTest.draftOrders = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -26,7 +22,7 @@ describe('Chambers dashboard', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  loginAs(cerebralTest, 'colvinschambers@example.com');
   chambersUserViewsCaseDetail(cerebralTest, 2);
   chambersUserViewsDraftDocuments(cerebralTest);
   chambersUserAddsOrderToCase(cerebralTest);

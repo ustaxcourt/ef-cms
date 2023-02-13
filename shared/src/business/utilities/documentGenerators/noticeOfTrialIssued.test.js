@@ -1,46 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { noticeOfTrialIssued } = require('./noticeOfTrialIssued');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('noticeOfTrialIssued', () => {
-    it('generates a Notice of Trial Issued document', async () => {
-      const pdf = await noticeOfTrialIssued({
+  generateAndVerifyPdfDiff({
+    fileName: 'Notice_Trial_Issued.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return noticeOfTrialIssued({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -58,21 +27,7 @@ describe('documentGenerators', () => {
           },
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Trial_Issued', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-        const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(1);
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription: 'generates a Notice of Trial Issued document',
   });
 });

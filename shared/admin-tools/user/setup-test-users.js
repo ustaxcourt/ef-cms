@@ -4,7 +4,8 @@ const {
   deactivateAdminAccount,
 } = require('./admin');
 
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
+
 const baseUser = {
   birthYear: '1950',
   contact: {
@@ -37,7 +38,11 @@ const createManyAccounts = async ([num, role, section]) => {
       role,
       section,
     };
-    await createDawsonUser({ setPermanentPassword: true, user });
+    await createDawsonUser({
+      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+      setPermanentPassword: true,
+      user,
+    });
   }
 };
 
@@ -52,12 +57,15 @@ const setupCourtUsers = async () => {
     [10, 'docketclerk', 'docket'],
     [10, 'petitionsclerk', 'petitions'],
     [10, 'trialclerk', 'trialClerks'],
+    [5, 'caseServicesSupervisor', 'caseServicesSupervisor'],
     [2, 'floater', 'floater'],
     [2, 'general', 'general'],
     [2, 'reportersOffice', 'reportersOffice'],
     [5, 'chambers', 'ashfordsChambers'],
     [5, 'chambers', 'buchsChambers'],
     [5, 'chambers', 'cohensChambers'],
+    [5, 'chambers', 'foleysChambers'],
+    [5, 'chambers', 'kerrigansChambers'],
   ];
 
   const promises = userSet.map(createManyAccounts);
@@ -122,7 +130,11 @@ const setupPractitioners = async () => {
         role,
         section: role,
       };
-      return createDawsonUser({ setPermanentPassword: true, user });
+      return createDawsonUser({
+        deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+        setPermanentPassword: true,
+        user,
+      });
     });
     await Promise.all(promises);
   }

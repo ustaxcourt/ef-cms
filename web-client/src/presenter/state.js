@@ -24,8 +24,7 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
-import { confirmInitiateCourtIssuedFilingServiceModalHelper } from './computeds/confirmInitiateCourtIssuedFilingServiceModalHelper';
-import { confirmInitiatePaperFilingServiceModalHelper } from './computeds/confirmInitiatePaperFilingServiceModalHelper';
+import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
@@ -116,7 +115,6 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
-import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
@@ -147,8 +145,7 @@ const helpers = {
   caseSearchNoMatchesHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
-  confirmInitiateCourtIssuedFilingServiceModalHelper,
-  confirmInitiatePaperFilingServiceModalHelper,
+  confirmInitiateServiceModalHelper,
   contactsHelper,
   correspondenceViewerHelper,
   createMessageModalHelper,
@@ -236,7 +233,6 @@ const helpers = {
   viewAllDocumentsHelper,
   viewCounselHelper,
   workQueueHelper,
-  workQueueSectionHelper,
 };
 
 export const baseState = {
@@ -360,6 +356,9 @@ export const baseState = {
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
+  },
+  trialSessionJudge: {
+    name: '',
   },
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases

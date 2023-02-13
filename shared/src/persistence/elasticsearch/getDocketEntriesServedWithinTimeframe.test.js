@@ -9,6 +9,9 @@ describe('getDocketEntriesServedWithinTimeframe', () => {
   it('performs a valid elasticsearch request', async () => {
     const startTimestamp = '2022-01-01T05:00:00.000Z';
     const endTimestamp = '2022-01-01T05:30:00.000Z';
+    applicationContext.getSearchClient().search.mockReturnValue({
+      body: {},
+    });
 
     await getDocketEntriesServedWithinTimeframe({
       applicationContext,
@@ -17,8 +20,9 @@ describe('getDocketEntriesServedWithinTimeframe', () => {
     });
 
     expect(
-      // eslint-disable-next-line no-underscore-dangle
-      applicationContext.getSearchClient().search.mock.calls[0][0].body._source,
+      applicationContext.getSearchClient().search.mock.calls[0][0].body[
+        '_source'
+      ],
     ).toEqual(['docketEntryId.S', 'docketNumber.S']);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,

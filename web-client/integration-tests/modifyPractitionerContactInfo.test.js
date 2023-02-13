@@ -8,26 +8,23 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
-const cerebralTest = setupTest();
-
 describe('Modify Practitioner Contact Information', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  cerebralTest.createdDocketNumbers = [];
+
+  let caseDetail;
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  let caseDetail;
-  cerebralTest.createdDocketNumbers = [];
-
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   it('login as a practitioner and creates a case that will be served', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
       {},
-      'privatePractitioner2@example.com',
+      'privatepractitioner2@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -36,12 +33,12 @@ describe('Modify Practitioner Contact Information', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   it('login as a practitioner and creates a case that will not be served', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
       {},
-      'privatePractitioner2@example.com',
+      'privatepractitioner2@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -52,7 +49,7 @@ describe('Modify Practitioner Contact Information', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   practitionerViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, 0, true);

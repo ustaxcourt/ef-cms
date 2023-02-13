@@ -8,12 +8,9 @@ import {
   setOrderSearchEnabled,
   setupTest,
 } from './helpers';
-const cerebralTest = setupTest();
 
 describe('Order search feature flags', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(async () => {
     cerebralTest.closeSocket();
@@ -61,7 +58,7 @@ describe('Order search feature flags', () => {
   });
 
   describe('external', () => {
-    loginAs(cerebralTest, 'privatePractitioner1@example.com');
+    loginAs(cerebralTest, 'privatepractitioner1@example.com');
 
     it('should display a warning message when the feature is disabled', async () => {
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');

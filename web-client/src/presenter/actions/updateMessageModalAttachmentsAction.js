@@ -26,11 +26,9 @@ export const updateMessageModalAttachmentsAction = ({
         documentId,
       });
 
-    const generatedDocumentTitle = applicationContext
+    const documentTitle = applicationContext
       .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: document });
-
-    const documentTitle = generatedDocumentTitle || document.documentType;
+      .getDescriptionDisplay(document);
 
     if (attachments.length === 0) {
       // This is the first attachment, so we should update the subject

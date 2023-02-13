@@ -16,13 +16,13 @@ import {
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { updateACaseCaption } from './journey/updateACaseCaption';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-cerebralTest.createdCases = [];
-
 describe('order search journey for case caption', () => {
+  const cerebralTest = setupTest();
+
+  cerebralTest.draftOrders = [];
+  cerebralTest.createdCases = [];
+
   beforeEach(() => {
-    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {

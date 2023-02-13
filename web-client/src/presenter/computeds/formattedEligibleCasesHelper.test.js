@@ -6,70 +6,70 @@ import { formattedEligibleCasesHelper as formattedEligibleCasesHelperComputed } 
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const MOCK_ELIGIBLE_CASES = [
-  {
-    caseCaption: 'testPetitioner1, Petitioner',
-    caseTitle: 'testPetitioner1',
-    caseType: 'CDP (Lien/Levy)',
-    docketNumber: '103-20',
-    docketNumberSuffix: 'L',
-    docketNumberWithSuffix: '103-20L',
-    entityName: 'EligibleCase',
-    inConsolidatedGroup: false,
-    irsPractitioners: [],
-    isDocketSuffixHighPriority: true,
-    leadCase: false,
-    privatePractitioners: [],
-    qcCompleteForTrial: {},
-  },
-  {
-    caseCaption: 'testPetitioner2, Petitioner',
-    caseTitle: 'testPetitioner2',
-    caseType: 'Worker Classification',
-    docketNumber: '108-19',
-    docketNumberSuffix: null,
-    docketNumberWithSuffix: '108-19',
-    entityName: 'EligibleCase',
-    inConsolidatedGroup: false,
-    irsPractitioners: [],
-    isDocketSuffixHighPriority: false,
-    leadCase: false,
-    privatePractitioners: [],
-    qcCompleteForTrial: {},
-  },
-  {
-    caseCaption: 'testPetitioner3, Petitioner',
-    caseTitle: 'testPetitioner3',
-    caseType: 'Deficiency',
-    docketNumber: '101-20',
-    docketNumberSuffix: 'S',
-    docketNumberWithSuffix: '101-20S',
-    entityName: 'EligibleCase',
-    inConsolidatedGroup: false,
-    irsPractitioners: [],
-    isDocketSuffixHighPriority: true,
-    leadCase: false,
-    privatePractitioners: [],
-    qcCompleteForTrial: {},
-  },
-  {
-    caseCaption: 'testPetitioner4, Petitioner',
-    caseTitle: 'testPetitioner4',
-    caseType: 'CDP (Lien/Levy)',
-    docketNumber: '110-20',
-    docketNumberSuffix: 'SL',
-    docketNumberWithSuffix: '110-20SL',
-    entityName: 'EligibleCase',
-    inConsolidatedGroup: false,
-    irsPractitioners: [],
-    isDocketSuffixHighPriority: true,
-    leadCase: false,
-    privatePractitioners: [],
-    qcCompleteForTrial: {},
-  },
-];
-
 describe('formattedEligibleCasesHelper', () => {
+  const MOCK_ELIGIBLE_CASES = [
+    {
+      caseCaption: 'testPetitioner1, Petitioner',
+      caseTitle: 'testPetitioner1',
+      caseType: 'CDP (Lien/Levy)',
+      docketNumber: '103-20',
+      docketNumberSuffix: 'L',
+      docketNumberWithSuffix: '103-20L',
+      entityName: 'EligibleCase',
+      inConsolidatedGroup: false,
+      irsPractitioners: [],
+      isDocketSuffixHighPriority: true,
+      leadCase: false,
+      privatePractitioners: [],
+      qcCompleteForTrial: {},
+    },
+    {
+      caseCaption: 'testPetitioner2, Petitioner',
+      caseTitle: 'testPetitioner2',
+      caseType: 'Worker Classification',
+      docketNumber: '108-19',
+      docketNumberSuffix: null,
+      docketNumberWithSuffix: '108-19',
+      entityName: 'EligibleCase',
+      inConsolidatedGroup: false,
+      irsPractitioners: [],
+      isDocketSuffixHighPriority: false,
+      leadCase: false,
+      privatePractitioners: [],
+      qcCompleteForTrial: {},
+    },
+    {
+      caseCaption: 'testPetitioner3, Petitioner',
+      caseTitle: 'testPetitioner3',
+      caseType: 'Deficiency',
+      docketNumber: '101-20',
+      docketNumberSuffix: 'S',
+      docketNumberWithSuffix: '101-20S',
+      entityName: 'EligibleCase',
+      inConsolidatedGroup: false,
+      irsPractitioners: [],
+      isDocketSuffixHighPriority: true,
+      leadCase: false,
+      privatePractitioners: [],
+      qcCompleteForTrial: {},
+    },
+    {
+      caseCaption: 'testPetitioner4, Petitioner',
+      caseTitle: 'testPetitioner4',
+      caseType: 'CDP (Lien/Levy)',
+      docketNumber: '110-20',
+      docketNumberSuffix: 'SL',
+      docketNumberWithSuffix: '110-20SL',
+      entityName: 'EligibleCase',
+      inConsolidatedGroup: false,
+      irsPractitioners: [],
+      isDocketSuffixHighPriority: true,
+      leadCase: false,
+      privatePractitioners: [],
+      qcCompleteForTrial: {},
+    },
+  ];
+
   const TRIAL_SESSION = {
     caseOrder: [],
     city: 'Hartford',
@@ -88,9 +88,7 @@ describe('formattedEligibleCasesHelper', () => {
 
   const formattedEligibleCasesHelper = withAppContextDecorator(
     formattedEligibleCasesHelperComputed,
-    {
-      ...applicationContext,
-    },
+    applicationContext,
   );
 
   it('formats docket numbers with suffixes and case caption names without postfix on eligible cases', () => {
@@ -130,6 +128,7 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
+
     expect(result.length).toEqual(5);
     expect(result).toMatchObject([
       {

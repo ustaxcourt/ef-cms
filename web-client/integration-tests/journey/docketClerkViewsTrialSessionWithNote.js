@@ -15,7 +15,7 @@ export const docketClerkViewsTrialSessionWithNote = cerebralTest => {
       },
     );
 
-    expect(trialSessionFormatted.computedStatus).toEqual('New');
+    expect(trialSessionFormatted.sessionStatus).toEqual('New');
 
     const foundCase = trialSessionFormatted.caseOrder.find(
       _case => _case.docketNumber == cerebralTest.docketNumber,

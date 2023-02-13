@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   loginAs,
@@ -10,16 +13,12 @@ import { docketClerkUpdatesSealedContactAddress } from './journey/docketClerkUpd
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkViewsCaseWithSealedContact } from './journey/petitionsClerkViewsCaseWithSealedContact';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('Docket Clerk seals a case contact information', () => {
-  let contactType;
+  const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  cerebralTest.draftOrders = [];
+
+  let contactType;
 
   afterAll(() => {
     cerebralTest.closeSocket();

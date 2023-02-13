@@ -5,11 +5,8 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsCaseDetailAfterAddingNotice } from './journey/petitionsClerkViewsCaseDetailAfterAddingNotice';
 import { petitionsClerkViewsDraftDocumentsForNotice } from './journey/petitionsClerkViewsDraftDocumentsForNotice';
 
-const cerebralTest = setupTest();
 describe('Petitions Clerk Create Notice Journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();

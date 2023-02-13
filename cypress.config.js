@@ -5,7 +5,7 @@ const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
     setupNodeEvents(on) {
@@ -17,14 +17,15 @@ module.exports = defineConfig({
     },
     specPattern: 'cypress-integration/integration/*.cy.js',
     supportFile: 'cypress-integration/support/index.js',
+    testIsolation: false,
   },
   fixturesFolder: 'cypress-integration/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
   },
-  requestTimeout: 12000,
-  retries: 3,
+  requestTimeout: 60000,
+  retries: 4,
   screenshotsFolder: 'cypress-integration/screenshots',
   video: false,
   videosFolder: 'cypress-integration/videos',

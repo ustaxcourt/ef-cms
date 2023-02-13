@@ -26,7 +26,7 @@ const getCounts = async ({ indexName, version }) => {
 
   console.log(info);
 
-  return info.count;
+  return info.body.count;
 };
 
 (async () => {

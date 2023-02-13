@@ -218,11 +218,11 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   describe('showFileDocumentButton', () => {
-    it('should be true when the user has FILE_EXTERNAL_DOCUMENT permission and they are associated with the case', () => {
+    it('should be true when the petitioner user has FILE_EXTERNAL_DOCUMENT permission and they are directly associated with the case', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(petitionerUser),
-          screenMetadata: { isAssociated: true },
+          screenMetadata: { isDirectlyAssociated: true },
         },
       });
 
@@ -237,11 +237,11 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showFileDocumentButton).toEqual(false);
     });
 
-    it('should be false when the user has FILE_EXTERNAL_DOCUMENT permission but they are not associated with the case', () => {
+    it('should be false when the petitioner user has FILE_EXTERNAL_DOCUMENT permission but they are not directly associated with the case', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(petitionerUser),
-          screenMetadata: { isAssociated: false },
+          screenMetadata: { isDirectlyAssociated: false },
         },
       });
 

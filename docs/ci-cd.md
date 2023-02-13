@@ -73,7 +73,7 @@ This first image is where job steps will execute and the other two images are us
 
 ### Permissions
 
-In order to allow CircleCi to access and modify resources in our AWS account, we needed to set up and manage an IAM user with the correct permissions and store the access tokens as CircleCI environment variables.  The roles and policies for this CircleCI user are managed via Terraform. More specificly they are configured in this [iam/terraform/account-specific/main/circleci.tf](https://github.com/ustaxcourt/ef-cms/blob/staging/iam/terraform/account-specific/main/circle-ci.tf) file.
+In order to allow CircleCi to access and modify resources in our AWS account, we needed to set up and manage an IAM user with the correct permissions and store the access tokens as CircleCI environment variables.  The roles and policies for this CircleCI user are managed via Terraform. More specifically they are configured in this [iam/terraform/account-specific/main/circleci.tf](https://github.com/ustaxcourt/ef-cms/blob/staging/iam/terraform/account-specific/main/circle-ci.tf) file.
 
 When an admin runs the `npm run deploy:account-specific` command, these permissions will be created and updated.  If you find there is a new resource that CircleCI needs access to modify, you will need to update this circle-ci.tf file and then re-run Terraform locally on your machine.
 

@@ -174,11 +174,11 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.subject).toEqual('Testing');
   });
 
-  it('calls getDocumentTitleWithAdditionalInfo and returns a generated document title', async () => {
+  it('calls getDescriptionDisplay and returns a generated document title', async () => {
     const mockDocumentTitle = 'I was generated';
     applicationContext
       .getUtilities()
-      .getDocumentTitleWithAdditionalInfo.mockReturnValue(mockDocumentTitle);
+      .getDescriptionDisplay.mockReturnValue(mockDocumentTitle);
 
     const { state } = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
@@ -197,14 +197,11 @@ describe('updateMessageModalAttachmentsAction', () => {
     });
 
     expect(
-      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+      applicationContext.getUtilities().getDescriptionDisplay,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo.mock
-        .calls[0][0],
-    ).toMatchObject({
-      docketEntry: { docketEntryId: '123', documentType: 'Petition' },
-    });
+      applicationContext.getUtilities().getDescriptionDisplay.mock.calls[0][0],
+    ).toMatchObject({ docketEntryId: '123', documentType: 'Petition' });
     expect(state.modal.form.attachments[1].documentTitle).toEqual(
       mockDocumentTitle,
     );

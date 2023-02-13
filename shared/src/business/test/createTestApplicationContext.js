@@ -26,6 +26,7 @@ const {
   getPetitionerById,
   getPractitionersRepresenting,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
@@ -63,8 +64,8 @@ const {
   testPdfDoc,
 } = require('./getFakeFile');
 const {
-  filterWorkItemsForUser,
-} = require('../../../src/business/utilities/filterWorkItemsForUser');
+  fileAndServeDocumentOnOneCase,
+} = require('../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase');
 const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
@@ -74,15 +75,15 @@ const {
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatCase: formatCaseForTrialSession,
+} = require('../utilities/getFormattedTrialSessionDetails');
+const {
   formatJudgeName,
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formatPhoneNumber,
 } = require('../../../src/business/utilities/formatPhoneNumber');
-const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
@@ -115,9 +116,6 @@ const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
-  getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
-const {
   getDocumentTitleWithAdditionalInfo,
 } = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
 const {
@@ -129,6 +127,9 @@ const {
 const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
+const {
+  getFormattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   getSealedDocketEntryTooltip,
 } = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
@@ -193,8 +194,12 @@ const {
   uploadDocumentAndMakeSafeInteractor,
 } = require('../useCases/uploadDocumentAndMakeSafeInteractor');
 const {
+  validatePenaltiesInteractor,
+} = require('../useCases/validatePenaltiesInteractor');
+const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -203,6 +208,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getCropBox } = require('../../../src/business/utilities/getCropBox');
+const { getDescriptionDisplay } = require('../utilities/getDescriptionDisplay');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
@@ -267,6 +273,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     toBlob: jest.fn(),
   };
 
+  const mockGetDTOs = {
+    ConsolidatedCaseDTO,
+  };
+
   const mockGetUtilities = appContextProxy({
     aggregatePartiesForService: jest
       .fn()
@@ -309,11 +319,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterWorkItemsForUser: jest
-      .fn()
-      .mockImplementation(filterWorkItemsForUser),
+    filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseForTrialSession: jest
+      .fn()
+      .mockImplementation(formatCaseForTrialSession),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
@@ -322,9 +333,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
-    formattedTrialSessionDetails: jest
-      .fn()
-      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
       .fn()
@@ -336,6 +344,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
+    getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
@@ -352,6 +361,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedPartiesNameAndTitle: jest
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
+    getFormattedTrialSessionDetails: jest
+      .fn()
+      .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearInETObj: jest
       .fn()
@@ -380,6 +392,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
+    isPetitionerPartOfGroup: jest
+      .fn()
+      .mockImplementation(isPetitionerPartOfGroup),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
       .fn()
@@ -437,6 +452,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
+    validatePenaltiesInteractor: jest
+      .fn()
+      .mockImplementation(validatePenaltiesInteractor),
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
@@ -446,6 +464,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    fileAndServeDocumentOnOneCase: jest
+      .fn()
+      .mockImplementation(fileAndServeDocumentOnOneCase),
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
@@ -538,12 +559,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDocumentQCInboxForUser: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForUserPersistence),
+    getDocumentQCInboxForSection: jest.fn(),
+    getDocumentQCInboxForUser: jest.fn(),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
@@ -672,6 +689,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
+    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),

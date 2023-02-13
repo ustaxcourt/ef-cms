@@ -29,10 +29,6 @@ describe('docket clerk interacts with pending items', () => {
 
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -91,7 +87,7 @@ describe('docket clerk interacts with pending items', () => {
   });
 
   let yearBeforeEarliestPendingItem = '';
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
     pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     const firstPendingItemDate = pendingItems[0].receivedAt;

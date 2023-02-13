@@ -13,12 +13,8 @@ import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journe
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const cerebralTest = setupTest();
-
 describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -28,7 +24,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   let judgeDocketSectionQCInboxCountBefore;
   let adcDocketSectionQCInboxCountBefore;
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgecohen@example.com');
   it("Get judge's document qc section inbox before", async () => {
     await getFormattedDocumentQCSectionInbox(cerebralTest);
     judgeDocketSectionQCInboxCountBefore = getSectionInboxCount(cerebralTest);
@@ -64,7 +60,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(cerebralTest, 0);
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(cerebralTest, 1);
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgecohen@example.com');
   it("Get judge's document qc section inbox after", async () => {
     await getFormattedDocumentQCSectionInbox(cerebralTest);
     const judgeDocketSectionQCInboxCountAfter =

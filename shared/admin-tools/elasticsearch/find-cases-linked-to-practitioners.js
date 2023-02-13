@@ -2,43 +2,37 @@
 // node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
 
 const AWS = require('aws-sdk');
-const connectionClass = require('http-aws-es');
-const elasticsearch = require('elasticsearch');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+const { Client } = require('@opensearch-project/opensearch');
 const { get } = require('lodash');
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
-const esEndpoint = process.argv[4];
-// const cognitoPoolId = process.argv[5];
-
-// const { CognitoIdentityServiceProvider } = AWS;
-
-const { EnvironmentCredentials } = AWS;
+const openSearchEndpoint = process.argv[4];
+const TABLE_NAME = `efcms-${environmentName}-${version}`;
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
 
-const esClient = new elasticsearch.Client({
-  amazonES: {
-    credentials: new EnvironmentCredentials('AWS'),
+const esClient = new Client({
+  ...AwsSigv4Signer({
+    getCredentials: () =>
+      new Promise((resolve, reject) => {
+        AWS.config.getCredentials((err, credentials) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(credentials);
+          }
+        });
+      }),
+
     region: 'us-east-1',
-  },
-  apiVersion: '7.7',
-  awsConfig: new AWS.Config({ region: 'us-east-1' }),
-  connectionClass,
-  host: esEndpoint,
-  log: 'warning',
-  port: 443,
-  protocol: 'https',
+  }),
+  node: `https://${openSearchEndpoint}:443`,
 });
-
-const TABLE_NAME = `efcms-${environmentName}-${version}`;
-
-// const cognito = new CognitoIdentityServiceProvider({
-//   region: 'us-east-1',
-// });
 
 const getOpenCases = async () => {
   let results = await esClient.search({

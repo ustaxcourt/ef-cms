@@ -2071,7 +2071,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/paper-filing": {
+    "/async/case-documents/{docketNumber}/paper-filing": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2106,10 +2106,7 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
+            "description": "200 response"
           }
         },
         "security": [
@@ -4760,6 +4757,35 @@
             }
           }
         }
+      }
+    },
+    "/judges/{judgeId}/trial-sessions": {
+      "parameters": [
+        {
+          "name": "judgeId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets all trial sessions for a judge",
+        "description": "gets all trial sessions for a judge.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       }
     },
     "/trial-sessions": {
@@ -8319,13 +8345,25 @@
             "continued": {
               "type": "boolean"
             },
-            "aBasisReached": {
+            "basisReached": {
               "type": "boolean"
             },
-            "takenUnderAdvisement": {
+            "submittedCAV": {
               "type": "boolean"
             },
             "statusUnassigned": {
+              "type": "boolean"
+            },
+            "definiteTrial": {
+              "type": "boolean"
+            },
+            "motionToDismiss": {
+              "type": "boolean"
+            },
+            "probableSettlement": {
+              "type": "boolean"
+            },
+            "probableTrial": {
               "type": "boolean"
             }
           }
@@ -8481,7 +8519,7 @@
         "formattedTrialSession": {
           "type": "object",
           "properties": {
-            "computedStatus": {
+            "sessionStatus": {
               "type": "string"
             },
             "formattedJudge": {

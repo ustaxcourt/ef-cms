@@ -18,10 +18,6 @@ import { practitionerRequestsAccessToCase } from './journey/practitionerRequests
 describe('Docket Clerk Document QC Journey', () => {
   const cerebralTest = setupTest();
 
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -61,7 +57,7 @@ describe('Docket Clerk Document QC Journey', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerRequestsAccessToCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

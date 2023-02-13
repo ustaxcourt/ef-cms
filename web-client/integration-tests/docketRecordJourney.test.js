@@ -31,22 +31,13 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('Docket Clerk Verifies Docket Record Display', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(
-    cerebralTest,
-    fakeFile,
-    'Birmingham, Alabama',
-    false,
-  );
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   it('verifies docket entries exist for petition for an unserved case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -109,12 +100,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(
-    cerebralTest,
-    fakeFile,
-    'Birmingham, Alabama',
-    false,
-  );
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkFilesRQTBeforePetitionIsServed(cerebralTest, fakeFile);

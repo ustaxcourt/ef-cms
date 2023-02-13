@@ -1,10 +1,3 @@
-jest.mock('jwk-to-pem', () => jest.fn());
-jest.mock('../../../src/createLogger', () => {
-  return { createLogger: jest.fn() };
-});
-const { createLogger: actualCreateLogger } = jest.requireActual(
-  '../../../src/createLogger',
-);
 const authorizer = require('./cognito-authorizer');
 const axios = require('axios');
 const fs = require('fs');
@@ -13,57 +6,55 @@ const jwkToPem = require('jwk-to-pem');
 const { createLogger } = require('../../../src/createLogger');
 const { handler } = authorizer;
 const { transports } = require('winston');
-
-const TOKEN_VALUE =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
-
-const setupHappyPath = verifyObject => {
-  axios.get.mockImplementation(() => {
-    return Promise.resolve({
-      data: { keys: [{ kid: 'key-identifier' }] },
-    });
-  });
-
-  jwkToPem.mockImplementation(key => {
-    if (key.kid !== 'key-identifier') {
-      throw new Error('wrong key was given');
-    }
-
-    return 'test-pem';
-  });
-
-  jwk.verify.mockImplementation((token, pem, options, callback) => {
-    if (token !== TOKEN_VALUE || pem !== 'test-pem') {
-      throw new Error('wrong token or pem was passed to verification');
-    }
-
-    expect(options.issuer).toBeDefined();
-    callback(null, verifyObject);
-  });
-};
+const { createLogger: actualCreateLogger } = jest.requireActual(
+  '../../../src/createLogger',
+);
+jest.mock('jwk-to-pem', () => jest.fn());
+jest.mock('../../../src/createLogger', () => {
+  return { createLogger: jest.fn() };
+});
+jest.mock('jsonwebtoken', () => {
+  return {
+    decode: jest.fn(),
+    verify: jest.fn(),
+  };
+});
 
 describe('cognito-authorizer', () => {
+  const TOKEN_VALUE =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
+
+  const setupHappyPath = verifyObject => {
+    axios.get.mockImplementation(() => {
+      return Promise.resolve({
+        data: { keys: [{ kid: 'key-identifier' }] },
+      });
+    });
+
+    jwkToPem.mockImplementation(key => {
+      if (key.kid !== 'key-identifier') {
+        throw new Error('wrong key was given');
+      }
+
+      return 'test-pem';
+    });
+
+    jwk.verify.mockImplementation((token, pem, options, callback) => {
+      if (token !== TOKEN_VALUE || pem !== 'test-pem') {
+        throw new Error('wrong token or pem was passed to verification');
+      }
+
+      expect(options.issuer).toBeDefined();
+      callback(null, verifyObject);
+    });
+  };
+
   let event, context, transport;
 
   beforeEach(() => {
-    jest.spyOn(axios, 'get').mockImplementation(() => {});
-    jest.spyOn(jwk, 'decode').mockImplementation(token => {
-      // This test code does not need to be resistant to timing attacks.
-      // eslint-disable-next-line security/detect-possible-timing-attacks
-      if (token === TOKEN_VALUE) {
-        return {
-          header: { kid: 'key-identifier' },
-          payload: { iss: `issuer-url-${Math.random()}` },
-        };
-      } else {
-        throw new Error('token not passed to jek.decode');
-      }
-    });
-    jest.spyOn(jwk, 'verify').mockImplementation(() => {});
     transport = new transports.Stream({
       stream: fs.createWriteStream('/dev/null'),
     });
-    jest.spyOn(transport, 'log').mockImplementation(() => {});
     createLogger.mockImplementation(opts => {
       opts.transports = [transport];
       return actualCreateLogger(opts);
@@ -81,10 +72,14 @@ describe('cognito-authorizer', () => {
       awsRequestId: 'request-id',
       logLevel: 'debug',
     };
-  });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
+    jwk.decode.mockReturnValue({
+      header: { kid: 'key-identifier' },
+      payload: { iss: `issuer-url-${Math.random()}` },
+    });
+
+    jest.spyOn(axios, 'get');
+    jest.spyOn(transport, 'log');
   });
 
   it('returns unauthorized when token is missing', async () => {
@@ -297,6 +292,7 @@ describe('cognito-authorizer', () => {
     jest.spyOn(jwk, 'decode').mockImplementation(() => {
       throw new Error();
     });
+
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
@@ -309,17 +305,19 @@ describe('cognito-authorizer', () => {
         },
       },
     );
+
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
   it('should return a policy if the authorization token is provided', async () => {
     setupHappyPath({ sub: 'test-sub' });
-
     event = {
       authorizationToken: `Bearer ${TOKEN_VALUE}`,
       methodArn: 'a/b/c',
     };
+
     const policy = await handler(event, context);
+
     expect(policy).toBeDefined();
   });
 });

@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsScannedBatch } from './journey/petitionsClerkAddsScannedBatch';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkCreatesScannedPDF } from './journey/petitionsClerkCreatesScannedPDF';
@@ -11,15 +11,13 @@ import { petitionsClerkViewsCreateNewCase } from './journey/petitionsClerkViewsC
 import { petitionsClerkViewsScanView } from './journey/petitionsClerkViewsScanView';
 import { practitionerViewsCaseDetailWithPaperService } from './journey/practitionerViewsCaseDetailWithPaperService';
 
-const cerebralTest = setupTest();
-
 describe('Case from Paper Document Scan journey', () => {
+  const cerebralTest = setupTest();
+
   let scannerSourceIndex = 0;
   let scannerSourceName = 'scanner A';
 
   beforeEach(() => {
-    jest.setTimeout(30000);
-
     global.window.localStorage.getItem = key => {
       if (key === 'scannerSourceIndex') {
         return `"${scannerSourceIndex}"`;
@@ -68,9 +66,9 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkCreatesScannedPDF(cerebralTest);
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   practitionerViewsCaseDetailWithPaperService(cerebralTest);
 });

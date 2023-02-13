@@ -2,12 +2,8 @@ import { chambersUserViewsDashboard } from './journey/chambersUserViewsDashboard
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 
-const cerebralTest = setupTest();
-
 describe('Chambers dashboard', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -23,6 +19,6 @@ describe('Chambers dashboard', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesMessageToChambers(cerebralTest);
 
-  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  loginAs(cerebralTest, 'colvinschambers@example.com');
   chambersUserViewsDashboard(cerebralTest);
 });

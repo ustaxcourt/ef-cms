@@ -18,10 +18,6 @@ describe('admissions clerk adds secondary petitioner without existing cognito ac
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

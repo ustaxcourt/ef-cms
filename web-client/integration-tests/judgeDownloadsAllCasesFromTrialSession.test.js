@@ -1,22 +1,17 @@
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
-
 import { loginAs, setupTest, waitForExpectedItemToExist } from './helpers';
 const AdmZip = require('adm-zip');
-
-const cerebralTest = setupTest();
 const fs = require('fs');
 const http = require('http');
 
 describe('Judge downloads all cases from trial session', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'judgeColvin@example.com');
+  loginAs(cerebralTest, 'judgecolvin@example.com');
   it('set the trial session', () => {
     cerebralTest.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195cc';
   });

@@ -8,19 +8,15 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const cerebralTest = setupTest();
-
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
 describe('docket clerk update case journey', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
 
   afterAll(() => {
     cerebralTest.closeSocket();

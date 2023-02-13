@@ -23,12 +23,20 @@ exports.getDynamoEndpoints = ({
   masterRegion,
   useMasterRegion,
 }) => {
+  const baseConfig = {
+    httpOptions: {
+      timeout: 5000,
+    },
+    maxRetries: 3,
+  };
   const mainRegionDB = new DynamoDB.DocumentClient({
+    ...baseConfig,
     endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
     region: useMasterRegion ? masterRegion : mainRegion,
   });
 
   const fallbackRegionDB = new DynamoDB.DocumentClient({
+    ...baseConfig,
     endpoint: useMasterRegion ? fallbackRegionEndpoint : masterDynamoDbEndpoint,
     region: useMasterRegion ? fallbackRegion : masterRegion,
   });

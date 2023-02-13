@@ -53,10 +53,6 @@ caseCaptionNames.forEach(createCaseWithCaption);
  */
 function createCaseWithCaption(captionString) {
   describe(`Create and serve a case with "${captionString}" in the case caption`, () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
-
     afterAll(() => {
       testClient.closeSocket();
     });

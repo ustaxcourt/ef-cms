@@ -1,28 +1,28 @@
-import { fakeFile, loginAs, setupTest, viewCaseDetail } from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { loginAs, setupTest, viewCaseDetail } from './helpers';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('Petitions Clerk Views Draft Documents', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, 'Lubbock, Texas');
+  petitionsClerkCreatesNewCase(cerebralTest, {
+    overrides: {
+      trialLocation: 'Lubbock, Texas',
+    },
+  });
 
   it('views case detail', async () => {
     await viewCaseDetail({

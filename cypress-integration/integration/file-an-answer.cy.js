@@ -3,11 +3,8 @@ const {
 } = require('../support/pages/dashboard');
 
 describe('Filing an Answer', function () {
-  before(() => {
-    cy.login('irsPractitioner', '/case-detail/104-18');
-  });
-
   it('should have a file first IRS document button', () => {
+    cy.login('irspractitioner', '/case-detail/104-18');
     cy.get('#button-first-irs-document').click();
   });
 
@@ -46,7 +43,7 @@ describe('Filing an Answer', function () {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(SLEEP);
 
-    navigateToDashboard('irsPractitioner');
+    navigateToDashboard('irspractitioner');
     cy.get('table#case-list').find('a').should('contain', '104-18');
   });
 });

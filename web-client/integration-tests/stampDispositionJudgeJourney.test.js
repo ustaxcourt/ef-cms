@@ -23,10 +23,6 @@ describe('Stamp disposition judge journey test', () => {
   const grantedMotionDocketEntryTitle = 'Motion GRANTED';
   const signedJudgeName = 'Mary Ann Cohen';
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -140,7 +136,7 @@ describe('Stamp disposition judge journey test', () => {
     judgeCohenUserId,
   );
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgecohen@example.com');
   it('apply a stamp disposition on the motion from case detail', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,

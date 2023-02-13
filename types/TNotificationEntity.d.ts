@@ -19,3 +19,14 @@ type TNotification = {
     bounceType: any;
   };
 };
+
+interface NotificationError extends Error {
+  statusCode?: number;
+}
+
+type TConnection = {
+  connectionId: string;
+  endpoint: string;
+  pk: string;
+  sk: string;
+};

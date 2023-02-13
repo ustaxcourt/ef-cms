@@ -12,7 +12,6 @@ describe('Chambers dashboard', () => {
   const cerebralTest = setupTest();
 
   beforeAll(() => {
-    jest.setTimeout(30000);
     cerebralTest.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195cc';
   });
 
@@ -20,7 +19,7 @@ describe('Chambers dashboard', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  loginAs(cerebralTest, 'colvinschambers@example.com');
   chambersViewsTrialSessionWorkingCopy(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -56,7 +55,7 @@ describe('Chambers dashboard', () => {
     filedByPractitioner: true,
   });
 
-  loginAs(cerebralTest, 'cohensChambers@example.com');
+  loginAs(cerebralTest, 'cohenschambers@example.com');
   it('chambers user verifies PTM column and value for cases', async () => {
     await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: cerebralTest.trialSessionId,

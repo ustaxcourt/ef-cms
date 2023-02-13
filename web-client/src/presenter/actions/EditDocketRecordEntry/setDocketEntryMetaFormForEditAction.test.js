@@ -116,7 +116,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     });
   });
 
-  it('returns an empty string for servedPartiesCode if the document has no served parties and is not being overwritten by the docketRecordEntry', async () => {
+  it('returns undefined for servedPartiesCode if the document has no served parties and is not being overwritten by the docketRecordEntry', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
       props: {
@@ -127,7 +127,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
       },
     });
 
-    expect(result.state.form.servedPartiesCode).toEqual('');
+    expect(result.state.form.servedPartiesCode).toBeUndefined();
   });
 
   it('computes the servedPartiesCode from documentDetail when NOT present on docketRecordEntry', async () => {

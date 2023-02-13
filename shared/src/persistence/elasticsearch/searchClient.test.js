@@ -12,6 +12,7 @@ const {
   mockOpenCasesReceivedOnJulyFourthSearchResult1,
   mockOpenCasesReceivedOnJulyFourthSearchResult2,
   mockOpenCasesReceivedOnJulyFourthSearchResults,
+  mockWorkItemSearchResult,
   openCasesReceivedOnJulyFourthSearchParameters,
 } = require('./searchClient.test.constants');
 const {
@@ -98,7 +99,7 @@ describe('searchClient', () => {
     expect(formatMessageResult).toHaveBeenCalledTimes(1);
   });
 
-  it('searchAll should not perform a search query if the count query is malformed', async () => {
+  it('searchAll should not perform a search query when the count query is malformed', async () => {
     applicationContext
       .getSearchClient()
       .count.mockReturnValue(mockMalformedQueryResult);
@@ -179,7 +180,7 @@ describe('searchClient', () => {
       2,
     );
     expect(openCasesReceivedOnJulyFourthSearchAllResults).toEqual({
-      ...mockOpenCasesReceivedOnJulyFourthFormattedResults,
+      ...mockOpenCasesReceivedOnJulyFourthFormattedResults.body,
       expected: 7,
     });
     expect(openCasesReceivedOnJulyFourthSearchAllResults.total).toEqual(
@@ -219,7 +220,7 @@ describe('searchClient', () => {
       2,
     );
     expect(openCasesReceivedOnJulyFourthSearchAllResults).toEqual({
-      ...mockOpenCasesReceivedOnJulyFourthFormattedResults,
+      ...mockOpenCasesReceivedOnJulyFourthFormattedResults.body,
       expected: 7,
     });
     expect(openCasesReceivedOnJulyFourthSearchAllResults.total).toEqual(
@@ -240,7 +241,7 @@ describe('searchClient', () => {
     });
 
     expect(openCasesReceivedOnJulyFourthSearchResults).toEqual(
-      mockOpenCasesReceivedOnJulyFourthFormattedResults,
+      mockOpenCasesReceivedOnJulyFourthFormattedResults.body,
     );
 
     // 3 - compare the results
@@ -251,66 +252,6 @@ describe('searchClient', () => {
   });
 
   it('should format and return the list of results when they are work item search results', async () => {
-    const mockWorkItemSearchResult = {
-      _shards: {
-        failed: 0,
-        skipped: 0,
-        successful: 1,
-        total: 1,
-      },
-      hits: {
-        hits: [
-          {
-            _id: 'case|312-work-item|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-            _index: 'efcms-work-item',
-            _routing: 'case|312-21_case|312-21|mapping',
-            _score: null,
-            _source: {
-              messageId: {
-                S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-                docketNumber: {
-                  S: '312-21',
-                },
-              },
-            },
-            _type: '_doc',
-            inner_hits: {
-              'case-mappings': {
-                hits: {
-                  hits: [
-                    {
-                      _id: 'case|312-21_case|312-21|mapping',
-                      _index: 'efcms-message',
-                      _score: 1,
-                      _source: {
-                        leadDocketNumber: {
-                          S: '312-21',
-                        },
-                      },
-                      _type: '_doc',
-                    },
-                  ],
-                  max_score: 1,
-                  total: {
-                    relation: 'eq',
-                    value: 1,
-                  },
-                },
-              },
-            },
-            sort: [1629483399420],
-          },
-        ],
-        max_score: null,
-        total: {
-          relation: 'eq',
-          value: 1,
-        },
-      },
-      timed_out: false,
-      took: 5,
-    };
-
     applicationContext
       .getSearchClient()
       .search.mockReturnValue(mockWorkItemSearchResult);

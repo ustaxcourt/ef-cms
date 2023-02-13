@@ -20,11 +20,10 @@ import { respondentAddsMotionWithBrief } from './journey/respondentAddsMotionWit
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-const cerebralTest = setupTest();
-
 describe('Case journey', () => {
+  const cerebralTest = setupTest();
+
   beforeEach(() => {
-    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {
@@ -57,7 +56,7 @@ describe('Case journey', () => {
   petitionsClerkUpdatesCaseDetail(cerebralTest);
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentViewsDashboard(cerebralTest);
   const documentCountPreStipDecision = 6;
   respondentAddsAnswer(cerebralTest, fakeFile, {

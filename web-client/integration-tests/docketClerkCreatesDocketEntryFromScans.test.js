@@ -19,8 +19,6 @@ describe('Create Docket Entry From Scans', () => {
   let scannerSourceName = 'scanner A';
 
   beforeEach(() => {
-    jest.setTimeout(30000);
-
     global.window.localStorage.getItem = key => {
       if (key === 'scannerSourceIndex') {
         return `"${scannerSourceIndex}"`;

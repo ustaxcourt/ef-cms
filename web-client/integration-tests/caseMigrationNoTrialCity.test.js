@@ -3,16 +3,16 @@ import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('migrated case that is missing a preferred trial city journey', () => {
+  const cerebralTest = setupTest();
+
+  const caseDetailHeaderHelper = withAppContextDecorator(
+    caseDetailHeaderHelperComputed,
+  );
+
   let seededDocketNumber;
+
   beforeAll(() => {
-    jest.setTimeout(30000);
     seededDocketNumber = '1338-20';
   });
 

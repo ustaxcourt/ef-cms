@@ -11,8 +11,8 @@ module.exports = [
   },
   {
     actions: ['wait for .modal-screen to be visible'],
-    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/320-21/documents/6b2bcbcc-bc95-4103-b5fd-3e999395c2d3/edit',
     notes: 'verify the work item already completed modal',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/320-21/documents/6b2bcbcc-bc95-4103-b5fd-3e999395c2d3/edit',
   },
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-19',
   {
@@ -68,6 +68,7 @@ module.exports = [
       'wait for element table.case-inventory to be visible',
     ],
     notes: 'checks a11y of case inventory report builder',
+    timeout: 60000,
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/case-inventory-report',
   },
   {

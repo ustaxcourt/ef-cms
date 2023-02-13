@@ -1,7 +1,6 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -10,16 +9,11 @@ import {
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const cerebralTest = setupTest();
-
 describe('admissions clerk adds an email to a petitioner who already exists in the system and has a separate efile petition', () => {
-  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
   const EMAIL_TO_ADD = 'petitioner3@example.com';
-  let originalDocketNumber;
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  let originalDocketNumber;
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -40,7 +34,7 @@ describe('admissions clerk adds an email to a petitioner who already exists in t
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {

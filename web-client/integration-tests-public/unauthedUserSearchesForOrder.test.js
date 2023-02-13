@@ -1,5 +1,8 @@
-import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  ADVANCED_SEARCH_TABS,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
@@ -21,13 +24,9 @@ import { unauthedUserSearchesForSealedCaseOrderByKeyword } from './journey/unaut
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
-testClient.draftOrders = [];
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitioner creates case', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  testClient.draftOrders = [];
 
   afterAll(() => {
     testClient.closeSocket();

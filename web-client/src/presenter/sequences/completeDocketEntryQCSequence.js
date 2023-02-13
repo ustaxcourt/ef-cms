@@ -15,6 +15,7 @@ import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFa
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
+import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -56,6 +57,7 @@ export const completeDocketEntryQCSequence = [
         success: showProgressSequenceDecorator([
           stopShowValidationAction,
           refreshExternalDocumentTitleFromEventCodeAction,
+          setPreviousDocumentDocketEntryAction,
           generateTitleAction,
           completeDocketEntryQCAction,
           setPdfPreviewUrlAction,

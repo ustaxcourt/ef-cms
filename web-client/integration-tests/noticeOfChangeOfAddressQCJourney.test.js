@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService } from './journey/docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService';
 import { docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner } from './journey/docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner';
 import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
@@ -10,15 +13,10 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('noticeOfChangeOfAddressQCJourney', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  cerebralTest.draftOrders = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -54,14 +52,14 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService(cerebralTest);
   docketClerkEditsServiceIndicatorForPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

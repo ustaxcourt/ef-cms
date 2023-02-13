@@ -1,6 +1,3 @@
-import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
-import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
-import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
 
 const groupKeySymbol = Symbol('group');
@@ -74,7 +71,6 @@ const getFullSortString = (theCase, cases) => {
 
 const compareTrialSessionEligibleCases = eligibleCases => {
   const groups = getPriorityGroups(eligibleCases);
-
   return (a, b) => {
     const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
     const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
@@ -82,7 +78,11 @@ const compareTrialSessionEligibleCases = eligibleCases => {
   };
 };
 
-exports.formattedEligibleCasesHelper = (get, applicationContext) => {
+export const formattedEligibleCasesHelper = (get, applicationContext) => {
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  const { formatCaseForTrialSession, setConsolidationFlagsForDisplay } =
+    applicationContext.getUtilities();
+
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
   const filter = get(
@@ -90,7 +90,7 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
   );
 
   const formattedCases = eligibleCases.map(caseItem =>
-    formatCase({ applicationContext, caseItem, eligibleCases }),
+    formatCaseForTrialSession({ applicationContext, caseItem, eligibleCases }),
   );
 
   const groups = getPriorityGroups(formattedCases);

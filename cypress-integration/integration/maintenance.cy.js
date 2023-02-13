@@ -10,19 +10,12 @@ const {
 } = require('../support/pages/maintenance');
 
 describe('Maintenance mode', () => {
-  before(() => {
-    loginAs('petitionsclerk');
-  });
-
   after(() => {
     disengageMaintenance();
   });
 
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('refreshToken');
-  });
-
   it('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
+    loginAs('petitionsclerk');
     engageMaintenance();
     getMaintenanceModal().should('exist');
   });

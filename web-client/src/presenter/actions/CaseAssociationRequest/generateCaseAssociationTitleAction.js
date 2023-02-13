@@ -30,8 +30,8 @@ export const generateCaseAssociationTitleAction = ({
       documentType: caseAssociationRequest.documentType,
     };
     documentTitle = applicationContext
-      .getUseCases()
-      .generateDocumentTitleInteractor(applicationContext, {
+      .getUtilities()
+      .generateExternalDocumentTitle(applicationContext, {
         documentMetadata: caseAssociationRequest.supportingDocumentMetadata,
       });
     store.set(

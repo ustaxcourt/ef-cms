@@ -2,6 +2,7 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { extractUserNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractUserNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getConstants } from '../../getConstants';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
@@ -18,6 +19,7 @@ import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/
 import { setCaseNotesOntoCalendaredCasesAction } from '../actions/TrialSession/setCaseNotesOntoCalendaredCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopyValuesAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
@@ -34,6 +36,12 @@ const checkUserAssociationAndProceed = [
     yes: [
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
+      getFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key,
+      ),
+      setFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key,
+      ),
       setDefaultWorkingCopyValuesAction,
       isTrialSessionCalendaredAction,
       {
@@ -67,6 +75,7 @@ const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
         USER_ROLES.adc,
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
+        USER_ROLES.caseServicesSupervisor,
         USER_ROLES.docketClerk,
         USER_ROLES.petitionsClerk,
       ],

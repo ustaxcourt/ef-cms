@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -12,15 +15,11 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 const { faker } = require('@faker-js/faker');
 
-const cerebralTest = setupTest();
-
 describe('admissions clerk practitioner journey', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
   beforeAll(() => {
     cerebralTest.barNumber = 'SC2222'; //privatePractitioner3
-
-    jest.setTimeout(30000);
   });
 
   afterAll(() => {
@@ -64,17 +63,17 @@ describe('admissions clerk practitioner journey', () => {
   it('admissions clerk updates practitioner email but it already exists', async () => {
     expect(cerebralTest.getState('form.pendingEmail')).toBeUndefined();
     expect(cerebralTest.getState('form.originalEmail')).toBe(
-      'privatePractitioner3@example.com',
+      'privatepractitioner3@example.com',
     );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
-      value: 'privatePractitioner99@example.com',
+      value: 'privatepractitioner99@example.com',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'privatePractitioner99@example.com',
+      value: 'privatepractitioner99@example.com',
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
@@ -123,17 +122,17 @@ describe('admissions clerk practitioner journey', () => {
 
     expect(cerebralTest.getState('form.pendingEmail')).toBe(validEmail);
     expect(cerebralTest.getState('form.originalEmail')).toBe(
-      'privatePractitioner3@example.com',
+      'privatepractitioner3@example.com',
     );
     expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
     expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
   });
 
   describe('private practitioner logs in and verifies email address', () => {
-    loginAs(cerebralTest, 'privatePractitioner3@example.com');
+    loginAs(cerebralTest, 'privatepractitioner3@example.com');
     userVerifiesUpdatedEmailAddress(cerebralTest, 'practitioner');
 
-    loginAs(cerebralTest, 'privatePractitioner3@example.com');
+    loginAs(cerebralTest, 'privatepractitioner3@example.com');
     userLogsInAndChecksVerifiedEmailAddress(
       cerebralTest,
       'practitioner',

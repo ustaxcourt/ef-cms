@@ -19,10 +19,6 @@ describe('Stamp disposition clerk of the court journey test', () => {
   const grantedMotionDocketEntryTitle = 'Motion GRANTED';
   const signedJudgeName = 'Maurice B. Foley';
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -242,7 +238,7 @@ describe('Stamp disposition clerk of the court journey test', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
-  it('verify the second auto-generated draft stamp order', async () => {
+  it('verify the second auto-generated draft stamp order', () => {
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
 
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');

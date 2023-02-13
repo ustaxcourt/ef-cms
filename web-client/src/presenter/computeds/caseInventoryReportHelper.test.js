@@ -1,14 +1,19 @@
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  CLOSED_CASE_STATUSES,
+  DOCKET_NUMBER_SUFFIXES,
+  USER_ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-import { without } from 'lodash';
 
 describe('caseInventoryReportHelper', () => {
-  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, STATUS_TYPES, USER_ROLES } =
-    applicationContext.getConstants();
   const testCaseInventoryPageSize = 25;
-  const constants = {
+
+  const mockConstants = {
     ...applicationContext.getConstants(),
     CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
   };
@@ -17,25 +22,13 @@ describe('caseInventoryReportHelper', () => {
     caseInventoryReportHelperComputed,
     {
       ...applicationContext,
-      getConstants: () => constants,
+      getConstants: () => mockConstants,
     },
   );
 
   applicationContext.getCurrentUser = () => ({
     role: USER_ROLES.docketClerk,
     userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
-  });
-
-  it('should return all case statuses except Closed', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        screenMetadata: {},
-      },
-    });
-
-    expect(result.caseStatuses).toEqual(
-      without(Object.values(STATUS_TYPES), 'Closed'),
-    );
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
@@ -76,7 +69,7 @@ describe('caseInventoryReportHelper', () => {
       state: {
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
-          status: STATUS_TYPES.new,
+          status: CASE_STATUS_TYPES.new,
         },
       },
     });
@@ -273,5 +266,19 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeTruthy();
     expect(result.showSelectFilterMessage).toBeFalsy();
     expect(result.showNoResultsMessage).toBeFalsy();
+  });
+
+  describe('caseStatuses', () => {
+    it('should NOT include any of the "closed" statuses', () => {
+      const result = runCompute(caseInventoryReportHelper, {
+        state: {
+          screenMetadata: {},
+        },
+      });
+
+      expect(result.caseStatuses).toEqual(
+        expect.not.arrayContaining(CLOSED_CASE_STATUSES),
+      );
+    });
   });
 });

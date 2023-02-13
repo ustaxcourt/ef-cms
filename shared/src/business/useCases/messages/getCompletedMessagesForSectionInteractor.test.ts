@@ -1,5 +1,6 @@
 import {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
@@ -17,7 +18,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
 
     await expect(
       getCompletedMessagesForSectionInteractor(applicationContext, {
-        section: 'docket',
+        section: DOCKET_SECTION,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -34,7 +35,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
-      entityName: 'Message',
+      entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
@@ -61,7 +62,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     const returnedMessages = await getCompletedMessagesForSectionInteractor(
       applicationContext,
       {
-        section: 'docket',
+        section: DOCKET_SECTION,
       },
     );
 

@@ -1,139 +1,210 @@
 exports.emptyResults = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: [],
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 0,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
     },
+    hits: {
+      hits: [],
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 0,
+      },
+    },
+    timed_out: false,
+    took: 66,
   },
-  timed_out: false,
-  took: 66,
 };
+
 exports.mockDocketEntrySearchResult = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: [
-      {
-        _id: 'case|312-21_docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-        _index: 'efcms-docket-entry',
-        _routing: 'case|312-21_case|312-21|mapping',
-        _score: null,
-        _source: {
-          messageId: {
-            S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-            docketNumber: {
-              S: '312-21',
-            },
-          },
-        },
-        _type: '_doc',
-        inner_hits: {
-          'case-mappings': {
-            hits: {
-              hits: [
-                {
-                  _id: 'case|312-21_case|312-21|mapping',
-                  _index: 'efcms-message',
-                  _score: 1,
-                  _source: {
-                    docketNumber: {
-                      S: '312-21',
-                    },
-                  },
-                  _type: '_doc',
-                },
-              ],
-              max_score: 1,
-              total: {
-                relation: 'eq',
-                value: 1,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    hits: {
+      hits: [
+        {
+          _id: 'case|312-21_docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          _index: 'efcms-docket-entry',
+          _routing: 'case|312-21_case|312-21|mapping',
+          _score: null,
+          _source: {
+            messageId: {
+              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+              docketNumber: {
+                S: '312-21',
               },
             },
           },
+          _type: '_doc',
+          inner_hits: {
+            'case-mappings': {
+              hits: {
+                hits: [
+                  {
+                    _id: 'case|312-21_case|312-21|mapping',
+                    _index: 'efcms-message',
+                    _score: 1,
+                    _source: {
+                      docketNumber: {
+                        S: '312-21',
+                      },
+                    },
+                    _type: '_doc',
+                  },
+                ],
+                max_score: 1,
+                total: {
+                  relation: 'eq',
+                  value: 1,
+                },
+              },
+            },
+          },
+          sort: [1629483399420],
         },
-        sort: [1629483399420],
+      ],
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 1,
       },
-    ],
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 1,
     },
+    timed_out: false,
+    took: 5,
   },
-  timed_out: false,
-  took: 5,
 };
+
 exports.mockMessageSearchResult = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: [
-      {
-        _id: 'case|312-21_message|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-        _index: 'efcms-message',
-        _routing: 'case|312-21_case|312-21|mapping',
-        _score: null,
-        _source: {
-          messageId: {
-            S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-            docketNumber: {
-              S: '312-21',
-            },
-          },
-        },
-        _type: '_doc',
-        inner_hits: {
-          'case-mappings': {
-            hits: {
-              hits: [
-                {
-                  _id: 'case|312-21_case|312-21|mapping',
-                  _index: 'efcms-message',
-                  _score: 1,
-                  _source: {
-                    leadDocketNumber: {
-                      S: '312-21',
-                    },
-                  },
-                  _type: '_doc',
-                },
-              ],
-              max_score: 1,
-              total: {
-                relation: 'eq',
-                value: 1,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    hits: {
+      hits: [
+        {
+          _id: 'case|312-21_message|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          _index: 'efcms-message',
+          _routing: 'case|312-21_case|312-21|mapping',
+          _score: null,
+          _source: {
+            messageId: {
+              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+              docketNumber: {
+                S: '312-21',
               },
             },
           },
+          _type: '_doc',
+          inner_hits: {
+            'case-mappings': {
+              hits: {
+                hits: [
+                  {
+                    _id: 'case|312-21_case|312-21|mapping',
+                    _index: 'efcms-message',
+                    _score: 1,
+                    _source: {
+                      leadDocketNumber: {
+                        S: '312-21',
+                      },
+                    },
+                    _type: '_doc',
+                  },
+                ],
+                max_score: 1,
+                total: {
+                  relation: 'eq',
+                  value: 1,
+                },
+              },
+            },
+          },
+          sort: [1629483399420],
         },
-        sort: [1629483399420],
+      ],
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 1,
       },
-    ],
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 1,
     },
+    timed_out: false,
+    took: 5,
   },
-  timed_out: false,
-  took: 5,
 };
+
+exports.mockWorkItemSearchResult = {
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    hits: {
+      hits: [
+        {
+          _id: 'case|312-work-item|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          _index: 'efcms-work-item',
+          _routing: 'case|312-21_case|312-21|mapping',
+          _score: null,
+          _source: {
+            messageId: {
+              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+              docketNumber: {
+                S: '312-21',
+              },
+            },
+          },
+          _type: '_doc',
+          inner_hits: {
+            'case-mappings': {
+              hits: {
+                hits: [
+                  {
+                    _id: 'case|312-21_case|312-21|mapping',
+                    _index: 'efcms-message',
+                    _score: 1,
+                    _source: {
+                      leadDocketNumber: {
+                        S: '312-21',
+                      },
+                    },
+                    _type: '_doc',
+                  },
+                ],
+                max_score: 1,
+                total: {
+                  relation: 'eq',
+                  value: 1,
+                },
+              },
+            },
+          },
+          sort: [1629483399420],
+        },
+      ],
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 1,
+      },
+    },
+    timed_out: false,
+    took: 5,
+  },
+};
+
 exports.mockMalformedQueryResult = {
   error: {
     reason: 'query malformed, empty clause found at [5:3]',
@@ -147,24 +218,28 @@ exports.mockMalformedQueryResult = {
   },
   status: 400,
 };
+
 exports.mockNonexistentDocumentCountResult = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: [],
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 0,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
     },
+    hits: {
+      hits: [],
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 0,
+      },
+    },
+    timed_out: false,
+    took: 24,
   },
-  timed_out: false,
-  took: 24,
 };
+
 exports.openCasesReceivedOnJulyFourthSearchParameters = {
   body: {
     _source: ['docketNumber.S', 'receivedAt.S'],
@@ -199,6 +274,7 @@ exports.openCasesReceivedOnJulyFourthSearchParameters = {
   },
   index: 'efcms-case',
 };
+
 const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   {
     _id: 'case|14811-22_case|14811-22',
@@ -278,106 +354,121 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
     sort: [22014817],
   },
 ];
+
 exports.mockOpenCasesReceivedOnJulyFourthCountResult = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    count: 7,
   },
-  count: 7,
 };
+
 exports.mockOpenCasesReceivedOnJulyFourthSearchResults = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: mockOpenCasesReceivedOnJulyFourthSearchHits,
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 7,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
     },
+    hits: {
+      hits: mockOpenCasesReceivedOnJulyFourthSearchHits,
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 7,
+      },
+    },
+    timed_out: false,
+    took: 12,
   },
-  timed_out: false,
-  took: 12,
 };
+
 exports.mockOpenCasesReceivedOnJulyFourthSearchResult1 = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: mockOpenCasesReceivedOnJulyFourthSearchHits.slice(0, 5),
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 7,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
     },
+    hits: {
+      hits: mockOpenCasesReceivedOnJulyFourthSearchHits.slice(0, 5),
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 7,
+      },
+    },
+    timed_out: false,
+    took: 11,
   },
-  timed_out: false,
-  took: 11,
 };
+
 exports.mockOpenCasesReceivedOnJulyFourthSearchResult2 = {
-  _shards: {
-    failed: 0,
-    skipped: 0,
-    successful: 1,
-    total: 1,
-  },
-  hits: {
-    hits: mockOpenCasesReceivedOnJulyFourthSearchHits.slice(5),
-    max_score: null,
-    total: {
-      relation: 'eq',
-      value: 7,
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
     },
+    hits: {
+      hits: mockOpenCasesReceivedOnJulyFourthSearchHits.slice(5),
+      max_score: null,
+      total: {
+        relation: 'eq',
+        value: 7,
+      },
+    },
+    timed_out: false,
+    took: 4,
   },
-  timed_out: false,
-  took: 4,
 };
+
 exports.mockOpenCasesReceivedOnJulyFourthFormattedResults = {
-  results: [
-    {
-      _score: null,
-      docketNumber: '14811-22',
-      receivedAt: '2022-07-04T08:01:19.428Z',
-    },
-    {
-      _score: null,
-      docketNumber: '14812-22',
-      receivedAt: '2022-07-04T14:38:28.897Z',
-    },
-    {
-      _score: null,
-      docketNumber: '14813-22',
-      receivedAt: '2022-07-04T15:37:03.358Z',
-    },
-    {
-      _score: null,
-      docketNumber: '14814-22',
-      receivedAt: '2022-07-04T20:09:51.618Z',
-    },
-    {
-      _score: null,
-      docketNumber: '14815-22',
-      receivedAt: '2022-07-04T20:12:17.759Z',
-    },
-    {
-      _score: null,
-      docketNumber: '14816-22',
-      receivedAt: '2022-07-04T22:55:34.927Z',
-    },
-    {
-      _score: null,
-      docketNumber: '14817-22',
-      receivedAt: '2022-07-05T00:47:46.367Z',
-    },
-  ],
-  total: 7,
+  body: {
+    results: [
+      {
+        _score: null,
+        docketNumber: '14811-22',
+        receivedAt: '2022-07-04T08:01:19.428Z',
+      },
+      {
+        _score: null,
+        docketNumber: '14812-22',
+        receivedAt: '2022-07-04T14:38:28.897Z',
+      },
+      {
+        _score: null,
+        docketNumber: '14813-22',
+        receivedAt: '2022-07-04T15:37:03.358Z',
+      },
+      {
+        _score: null,
+        docketNumber: '14814-22',
+        receivedAt: '2022-07-04T20:09:51.618Z',
+      },
+      {
+        _score: null,
+        docketNumber: '14815-22',
+        receivedAt: '2022-07-04T20:12:17.759Z',
+      },
+      {
+        _score: null,
+        docketNumber: '14816-22',
+        receivedAt: '2022-07-04T22:55:34.927Z',
+      },
+      {
+        _score: null,
+        docketNumber: '14817-22',
+        receivedAt: '2022-07-05T00:47:46.367Z',
+      },
+    ],
+    total: 7,
+  },
 };

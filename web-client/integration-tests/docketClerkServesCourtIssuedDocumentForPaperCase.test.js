@@ -5,22 +5,18 @@ import { docketClerkServesOrderWithPaperService } from './journey/docketClerkSer
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   const cerebralTest = setupTest();
-
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {

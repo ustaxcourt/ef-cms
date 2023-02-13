@@ -18,5 +18,8 @@ documentClient
   })
   .promise()
   .then(documents => {
+    documents.Items.sort((a, b) => {
+      return `${a.pk}-${a.sk}`.localeCompare(`${b.pk}-${b.sk}`);
+    });
     console.log(JSON.stringify(documents.Items, null, 2));
   });

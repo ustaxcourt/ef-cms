@@ -19,10 +19,6 @@ import { unassociatedUserViewsCaseDetailForUnsealedCase } from './journey/unasso
 describe('Docket Clerk unseals a case', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
@@ -71,7 +67,7 @@ describe('Docket Clerk unseals a case', () => {
   associatedUserAdvancedSearchForCase(cerebralTest);
 
   //unassociated user can still find the case
-  loginAs(cerebralTest, 'privatePractitioner3@example.com');
+  loginAs(cerebralTest, 'privatepractitioner3@example.com');
   unassociatedUserViewsCaseDetailForUnsealedCase(cerebralTest);
   unassociatedUserAdvancedSearchForUnsealedCase(cerebralTest);
 });

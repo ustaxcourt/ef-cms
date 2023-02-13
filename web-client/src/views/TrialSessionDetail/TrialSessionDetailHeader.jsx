@@ -18,7 +18,7 @@ export const TrialSessionDetailHeader = connect(
               <span className="usa-tag">
                 <span aria-hidden="true">
                   {formattedTrialSessionDetails.formattedTerm}:{' '}
-                  {formattedTrialSessionDetails.computedStatus}
+                  {formattedTrialSessionDetails.sessionStatus}
                 </span>
               </span>
             </div>

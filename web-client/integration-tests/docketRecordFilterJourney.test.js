@@ -16,22 +16,13 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('Docket Record Filter Journey', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(
-    cerebralTest,
-    fakeFile,
-    'Birmingham, Alabama',
-    false,
-  );
+  petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

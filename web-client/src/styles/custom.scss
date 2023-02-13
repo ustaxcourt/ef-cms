@@ -1039,6 +1039,11 @@ header.usa-header {
   border-bottom: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
 
+  /* little screens */
+  @media only screen and (max-width: $medium-screen) {
+    margin-bottom: 10px;
+  }
+
   h1 {
     position: relative;
     top: 2px;
@@ -1798,6 +1803,13 @@ button.change-scanner-button {
   font-size: 20px;
 }
 
+#docket-record-filter-label {
+  /* little screens */
+  @media only screen and (max-width: $medium-screen) {
+    line-height: 1.6em;
+  }
+}
+
 .narrow-hr {
   width: 30%;
   margin: 10px auto;
@@ -2048,4 +2060,14 @@ button.change-scanner-button {
 
 .align-items-baseline {
   align-items: baseline;
+}
+
+.padding-y-075-rem {
+  padding: 0.75rem 0;
+}
+
+.docket-record-header {
+  .docket-record-filter {
+    max-width: 175px;
+  }
 }

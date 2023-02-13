@@ -52,6 +52,7 @@ module.exports =
 
       req.locals.logger.info(`Request ended: ${req.method} ${req.url}`, {
         response: {
+          responseSize: parseInt(res.get('content-length') ?? '0'),
           responseTimeMs,
           statusCode: res.statusCode,
         },

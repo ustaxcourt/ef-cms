@@ -2,7 +2,7 @@ const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   e2e: {
     setupNodeEvents(on) {
       on('task', {
@@ -15,14 +15,15 @@ module.exports = defineConfig({
     },
     specPattern: 'cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress-smoketests/support/index.js',
+    testIsolation: false,
   },
   fixturesFolder: 'cypress-smoketests/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
   },
-  requestTimeout: 20000,
-  retries: 3,
+  requestTimeout: 60000,
+  retries: 0,
   screenshotsFolder: 'cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,

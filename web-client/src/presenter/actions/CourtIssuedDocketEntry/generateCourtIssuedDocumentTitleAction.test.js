@@ -6,10 +6,8 @@ import { runAction } from 'cerebral/test';
 describe('generateCourtIssuedDocumentTitleAction', () => {
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned', async () => {
     applicationContext
-      .getUseCases()
-      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(
-        'Order for something',
-      );
+      .getUtilities()
+      .generateCourtIssuedDocumentTitle.mockReturnValue('Order for something');
     presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
@@ -30,13 +28,12 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases()
-        .generateCourtIssuedDocumentTitleInteractor.mock.calls.length,
+      applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
+        .calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases()
-        .generateCourtIssuedDocumentTitleInteractor.mock.calls[0][0]
-        .documentMetadata,
+      applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
+        .calls[0][0].documentMetadata,
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',
@@ -49,10 +46,8 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
 
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned with Attachments added if it is true on the form', async () => {
     applicationContext
-      .getUseCases()
-      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(
-        'Order for something',
-      );
+      .getUtilities()
+      .generateCourtIssuedDocumentTitle.mockReturnValue('Order for something');
     presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
@@ -73,13 +68,12 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases()
-        .generateCourtIssuedDocumentTitleInteractor.mock.calls.length,
+      applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
+        .calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases()
-        .generateCourtIssuedDocumentTitleInteractor.mock.calls[0][0]
-        .documentMetadata,
+      applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
+        .calls[0][0].documentMetadata,
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',
@@ -91,8 +85,8 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
 
   it('should call generateCourtIssuedDocumentTitle with correct data and unset state.form.generatedDocumentTitle if a document title is not returned', async () => {
     applicationContext
-      .getUseCases()
-      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(null);
+      .getUtilities()
+      .generateCourtIssuedDocumentTitle.mockReturnValue(null);
     presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
@@ -113,13 +107,12 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases()
-        .generateCourtIssuedDocumentTitleInteractor.mock.calls.length,
+      applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
+        .calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases()
-        .generateCourtIssuedDocumentTitleInteractor.mock.calls[0][0]
-        .documentMetadata,
+      applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
+        .calls[0][0].documentMetadata,
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',

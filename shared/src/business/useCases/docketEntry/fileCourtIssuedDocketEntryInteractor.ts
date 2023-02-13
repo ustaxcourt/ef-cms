@@ -77,7 +77,7 @@ export const fileCourtIssuedDocketEntryInteractor = async (
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 
   await Promise.all(
-    docketNumbers.map(async docketNumber => {
+    [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
@@ -128,6 +128,7 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           hideFromPendingMessages: true,
           inProgress: true,
+          leadDocketNumber: caseEntity.leadDocketNumber,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,

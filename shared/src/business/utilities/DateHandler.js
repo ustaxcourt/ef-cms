@@ -121,8 +121,8 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
 };
 
 /**
- * @param {string} dateString a date string to be sent to persistence
- * @param {string} inputFormat optional parameter containing hints on how to parse dateString
+ * @param {string?} dateString a date string to be sent to persistence
+ * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
 const createISODateString = (dateString, inputFormat) => {
@@ -199,7 +199,7 @@ const createISODateStringFromObject = options => {
 /**
  * @param {string} dateString a date string like YYYY-MM-DD or an ISO date retrieved from persistence
  * @param {string} formatArg the desired formatting as specified by the luxon library
- * @returns {string} a formatted date string
+ * @returns {string|void} a formatted date string
  */
 const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   if (!dateString) return;
@@ -451,7 +451,7 @@ const computeDate = ({ day, month, year }) => {
  * Formats date object into ISO string only if date is valid
  *
  * @param {object} date the date object containing year, month, day
- * @returns {string} a formatted ISO date string if date object is valid
+ * @returns {string|void} a formatted ISO date string if date object is valid
  */
 const validateDateAndCreateISO = date => {
   if (isValidDateString(`${date.month}-${date.day}-${date.year}`)) {

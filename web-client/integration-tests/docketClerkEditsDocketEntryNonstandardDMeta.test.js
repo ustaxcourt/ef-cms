@@ -5,14 +5,10 @@ import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesANonstardardDDocumentForCase } from './journey/petitionerFilesANonstardardDDocumentForCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
+  cerebralTest.draftOrders = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });

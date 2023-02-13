@@ -7,18 +7,14 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkEditsPetitionInQCPartyType } from './journey/petitionsClerkEditsPetitionInQCPartyType';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-
 describe('petitions clerk removes petitioner during petition QC', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   it('Create test case with a primary and secondary petitioner', async () => {
     const caseDetail = await uploadPetition(
       cerebralTest,
@@ -34,7 +30,7 @@ describe('petitions clerk removes petitioner during petition QC', () => {
         },
         partyType: PARTY_TYPES.petitionerSpouse,
       },
-      'privatePractitioner@example.com',
+      'privatepractitioner@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;

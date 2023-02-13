@@ -16,7 +16,9 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
   hasPartyWithServiceType,
+  isClosed,
   isLeadCase,
+  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -52,6 +54,7 @@ import { generatePrintablePendingReportInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
+import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
@@ -66,7 +69,9 @@ const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
+import { ConsolidatedCaseDTO } from '../../shared/src/business/dto/cases/ConsolidatedCaseDTO';
 import { User } from '../../shared/src/business/entities/User';
+import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
@@ -108,8 +113,7 @@ import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users
 import {
   compareCasesByDocketNumber,
   formatCase as formatCaseForTrialSession,
-  formattedTrialSessionDetails,
-  getTrialSessionStatus,
+  getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
@@ -150,16 +154,17 @@ import {
 import { formatPhoneNumber } from '../../shared/src/business/utilities/formatPhoneNumber';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
-import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
+import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
-import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
+import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
+import { generateTrialSessionPaperServicePdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialSessionPaperServicePdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
@@ -175,6 +180,7 @@ import {
 import { getChiefJudgeNameForSigningInteractor } from '../../shared/src/proxies/getChiefJudgeNameForSigningProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
+import { getConstants } from './getConstants';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
@@ -209,6 +215,7 @@ import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
+import { getTrialSessionsForJudgeInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsForJudgeProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserByIdInteractor } from '../../shared/src/proxies/users/getUserByIdProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
@@ -316,6 +323,7 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
+import { validatePenaltiesInteractor } from '../../shared/src/business/useCases/validatePenaltiesInteractor';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
@@ -329,11 +337,8 @@ import { validateUpdateUserEmailInteractor } from '../../shared/src/business/use
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
-
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
-
-import { getConstants } from './getConstants';
 
 let user;
 let broadcastChannel;
@@ -407,9 +412,7 @@ const allUseCases = {
   filePetitionInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
-  generateCourtIssuedDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
-  generateDocumentTitleInteractor,
   generateDraftStampOrderInteractor,
   generatePDFFromJPGDataInteractor,
   generatePractitionerCaseListPdfInteractor,
@@ -419,6 +422,7 @@ const allUseCases = {
   generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
+  generateTrialSessionPaperServicePdfInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -465,6 +469,7 @@ const allUseCases = {
       : getStatusOfVirusScanInteractor(applicationContext, args),
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
+  getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,
@@ -564,6 +569,7 @@ const allUseCases = {
   validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
+  validatePenaltiesInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
   validatePetitionerInformationFormInteractor,
@@ -620,6 +626,9 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
+  getDTOs: () => ({
+    ConsolidatedCaseDTO,
+  }),
   getEnvironment,
   getError: e => {
     return ErrorFactory.getError(e);
@@ -692,11 +701,13 @@ const applicationContext = {
       process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
     );
   },
+  getTrialSessionsForJudgeInteractor,
   getUniqueId,
   getUseCases: () => allUseCases,
   getUserPermissions,
   getUtilities: () => {
     return {
+      abbreviateState,
       aggregatePartiesForService,
       calculateISODate,
       canAllowDocumentServiceForCase,
@@ -723,18 +734,21 @@ const applicationContext = {
       formatJudgeName,
       formatNow,
       formatPhoneNumber,
-      formattedTrialSessionDetails,
+      generateCourtIssuedDocumentTitle,
+      generateExternalDocumentTitle,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getClinicLetterKey,
       getContactPrimary,
       getContactSecondary,
       getCropBox,
+      getDescriptionDisplay,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getFormattedPartiesNameAndTitle,
+      getFormattedTrialSessionDetails,
       getJudgeLastName,
       getMonthDayYearInETObj,
       getOtherFilers,
@@ -746,14 +760,16 @@ const applicationContext = {
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,
       getStandaloneRemoteDocumentTitle,
-      getTrialSessionStatus,
       getWorkQueueFilters,
       hasPartyWithServiceType,
+      isClosed,
+      isCourtIssued: DocketEntry.isCourtIssued,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
+      isPetitionerPartOfGroup,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,

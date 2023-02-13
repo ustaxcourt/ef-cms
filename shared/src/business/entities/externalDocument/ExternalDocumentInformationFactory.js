@@ -20,7 +20,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
+const { isEqual, reduce, some, sortBy, values } = require('lodash');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -275,10 +275,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h'
   ) {
     if (
-      includes(
-        documentMetadata.documentType,
-        'Motion for Leave to File Out of Time',
-      )
+      documentMetadata.documentType === 'Motion for Leave to File Out of Time'
     ) {
       makeRequired('secondaryDocumentFile');
     }

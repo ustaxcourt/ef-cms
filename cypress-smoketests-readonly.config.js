@@ -5,6 +5,7 @@ module.exports = defineConfig({
   e2e: {
     specPattern: 'cypress-readonly/integration/*.cy.js',
     supportFile: 'cypress-readonly/support/index.js',
+    testIsolation: false,
   },
   fixturesFolder: 'cypress-readonly/fixtures',
   reporter: 'spec',

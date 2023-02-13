@@ -57,11 +57,9 @@ export const formatDocketEntryOnDocketRecord = (
       .getSealedDocketEntryTooltip(applicationContext, record);
   }
 
-  if (entry.eventCode === 'OCS' && record.freeText) {
-    record.descriptionDisplay = `${record.freeText} - ${record.descriptionDisplay}`;
-  } else {
-    record.descriptionDisplay = record.documentTitle || record.description;
-  }
+  record.descriptionDisplay = applicationContext
+    .getUtilities()
+    .getDescriptionDisplay(record);
 
   return {
     action: record.action,

@@ -14,10 +14,6 @@ import {
 describe('Docket clerk opinion advanced search', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

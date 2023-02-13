@@ -1,18 +1,16 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
-const cerebralTest = setupTest();
-let userToken;
-
 describe('View and manage the deadlines of a case', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
+  const cerebralTest = setupTest();
 
-    const loginUsername = 'irsSuperuser@example.com';
+  let userToken;
+
+  beforeAll(() => {
+    const loginUsername = 'irssuperuser@example.com';
     if (!userMap[loginUsername]) {
       throw new Error(`Unable to log into test as ${loginUsername}`);
     }
@@ -30,8 +28,7 @@ describe('View and manage the deadlines of a case', () => {
 
   describe('Create a case', () => {
     loginAs(cerebralTest, 'petitionsclerk1@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
-    petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
+    petitionsClerkCreatesNewCase(cerebralTest);
   });
 
   it('gets a v1 case', async () => {

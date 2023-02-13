@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetitionerToCase';
 import { docketClerkRemovesIntervenorFromCase } from './journey/docketClerkRemovesIntervenorFromCase';
 import { docketClerkRemovesPetitionerFromCase } from './journey/docketClerkRemovesPetitionerFromCase';
@@ -7,15 +10,10 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk removes petitioners journey', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  cerebralTest.draftOrders = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

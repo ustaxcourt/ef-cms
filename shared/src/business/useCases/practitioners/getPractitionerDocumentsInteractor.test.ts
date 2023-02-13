@@ -38,7 +38,7 @@ describe('getPractitionersDocumentsInteractor', () => {
           description: 'this is a test',
           fileName: 'my-file.pdf',
           practitionerDocumentFileId: '8190d648-e643-4964-988e-141e4e0db861',
-          uploadDate: new Date().toISOString(),
+          uploadDate: '2019-08-25T05:00:00.000Z',
         },
       ]);
 

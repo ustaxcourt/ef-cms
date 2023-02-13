@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { practitionerSearchesForUnassociatedSealedCase } from './journey/practitionerSearchesForUnassociatedSealedCase';
 import { respondent1ViewsCaseDetailOfAssociatedCase } from './journey/respondent1ViewsCaseDetailOfAssociatedCase';
@@ -12,14 +15,8 @@ import { respondentViewsCaseDetailOfAssociatedCase } from './journey/respondentV
 import { respondentViewsCaseDetailOfUnassociatedCase } from './journey/respondentViewsCaseDetailOfUnassociatedCase';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-const cerebralTest = setupTest();
-
 describe('Respondent requests access to a case', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -43,7 +40,7 @@ describe('Respondent requests access to a case', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentSearchesForNonexistentCase(cerebralTest);
   respondentViewsDashboard(cerebralTest);
   respondentSearchesForCase(cerebralTest);
@@ -53,13 +50,13 @@ describe('Respondent requests access to a case', () => {
   respondentViewsCaseDetailOfAssociatedCase(cerebralTest);
   respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'irsPractitioner1@example.com');
+  loginAs(cerebralTest, 'irspractitioner1@example.com');
   respondentSearchesForCase(cerebralTest);
   respondentViewsCaseDetailOfUnassociatedCase(cerebralTest);
   respondentRequestsAccessToCase(cerebralTest, fakeFile);
   respondent1ViewsCaseDetailOfAssociatedCase(cerebralTest);
   respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'irsPractitioner3@example.com');
+  loginAs(cerebralTest, 'irspractitioner3@example.com');
   practitionerSearchesForUnassociatedSealedCase(cerebralTest);
 });

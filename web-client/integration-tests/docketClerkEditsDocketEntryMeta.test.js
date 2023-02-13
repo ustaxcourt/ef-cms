@@ -27,10 +27,6 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

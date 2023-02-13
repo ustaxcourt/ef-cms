@@ -1,4 +1,5 @@
 import { FormGroup } from '../FormGroup/FormGroup';
+import { getComputedInputValue } from './DatePickerComponentHelper';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
@@ -50,8 +51,13 @@ export const DatePickerComponent = ({
     if (!datePickerRef.current) return;
     const input = datePickerRef.current.querySelector('input');
     if (!input) return;
-    if (values.month && values.day && values.year) {
-      input.value = `${values.month}/${values.day}/${values.year}`;
+    const dateString = getComputedInputValue({
+      day: values.day,
+      month: values.month,
+      year: values.year,
+    });
+    if (dateString) {
+      input.value = dateString;
     } else {
       if (shouldClearHiddenInput) {
         // a hack because the inputRef points to the hidden input instead of the visible input on the page

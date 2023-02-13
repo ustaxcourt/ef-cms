@@ -12,6 +12,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { User } from '../../entities/User';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
@@ -20,11 +21,11 @@ import {
 } from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getDocumentTitle } from '../../utilities/getDocumentTitle';
-import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-export const getNeedsNewCoversheet = ({
+export const needsNewCoversheet = ({
+  applicationContext,
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -37,8 +38,12 @@ export const getNeedsNewCoversheet = ({
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
   const documentTitleUpdated =
-    getDocumentTitleWithAdditionalInfo({ docketEntry: currentDocketEntry }) !==
-    getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: currentDocketEntry,
+    }) !==
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: updatedDocketEntry,
+    });
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
@@ -70,6 +75,7 @@ export const completeDocketEntryQCInteractor = async (
     docketNumber,
     leadDocketNumber,
     overridePaperServiceAddress,
+    selectedSection,
   } = entryMetadata;
 
   const user = await applicationContext
@@ -141,17 +147,18 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitle({
+  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
 
-  let currentDocumentTitle = getDocumentTitle({
+  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
 
-  const needsNewCoversheet = getNeedsNewCoversheet({
+  const isNewCoverSheetNeeded = needsNewCoversheet({
+    applicationContext,
     currentDocketEntry,
     updatedDocketEntry,
   });
@@ -200,10 +207,15 @@ export const completeDocketEntryQCInteractor = async (
     user,
   });
 
+  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
+
+  let sectionToAssignTo =
+    userIsCaseServices && selectedSection ? selectedSection : user.section;
+
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: sectionToAssignTo,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
@@ -346,7 +358,7 @@ export const completeDocketEntryQCInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  if (needsNewCoversheet) {
+  if (isNewCoverSheetNeeded) {
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {

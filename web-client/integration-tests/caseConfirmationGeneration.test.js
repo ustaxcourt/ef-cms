@@ -1,17 +1,12 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { userNavigatesToCreateCaseConfirmation } from './journey/userNavigatesToCreateCaseConfirmation';
 
-const cerebralTest = setupTest();
-
 describe('Case Confirmation', () => {
-  beforeAll(() => {
-    jest.setTimeout(30000);
-  });
-
+  const cerebralTest = setupTest();
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -47,7 +42,7 @@ describe('Case Confirmation', () => {
 
   describe('Petitionsclerk creates a case then serves case then has access to case confirmation', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+    petitionsClerkCreatesNewCase(cerebralTest);
     userNavigatesToCreateCaseConfirmation(cerebralTest);
   });
 });

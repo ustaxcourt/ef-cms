@@ -10,6 +10,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
+import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -46,6 +47,7 @@ export const openCompleteAndSendMessageModalSequence = [
         success: [
           clearModalStateAction,
           refreshExternalDocumentTitleFromEventCodeAction,
+          setPreviousDocumentDocketEntryAction,
           generateTitleAction,
           updateMessageModalAfterQCAction,
           setShowModalFactoryAction('CreateMessageModalDialog'),
