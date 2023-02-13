@@ -54,7 +54,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     caseParties = caseDetail.irsPractitioners || [];
   } else if (user.role === USER_ROLES.petitioner) {
     idName = 'contactId';
-    caseParties = caseDetail.petitioners;
+    caseParties = caseDetail.petitioners || [];
   }
 
   if (caseDetail.leadDocketNumber) {
