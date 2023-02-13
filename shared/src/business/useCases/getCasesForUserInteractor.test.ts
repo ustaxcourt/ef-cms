@@ -4,169 +4,113 @@ import { MOCK_USERS } from '../../test/mockUsers';
 import { UserCase } from '../entities/UserCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-jest.mock('../entities/UserCase');
+// jest.mock('../entities/UserCase');
 
 describe('getCasesForUserInteractor', () => {
-  let mockFoundCasesList;
-
-  beforeEach(() => {
-    mockFoundCasesList = [MOCK_CASE];
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
+  it('should return the expected cases for a user', async () => {
+    applicationContext.getCurrentUser.mockResolvedValue({
+      userId: '1',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          createdAt: '2020-01-21T16:41:39.474Z',
+          docketNumber: '102-20',
+        },
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-12-11T16:02:31.173Z',
+          docketNumber: '113-19',
+          leadDocketNumber: '111-19',
+        },
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-08-16T17:29:10.132Z',
+          docketNumber: '107-19',
+        },
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-03-01T22:53:50.097Z',
+          docketNumber: '103-19',
+        },
+        {
+          ...MOCK_CASE,
+          closedDate: '2019-03-01T22:53:50.097Z',
+          docketNumber: '130-22',
+          status: CASE_STATUS_TYPES.closed,
+        },
+        {
+          ...MOCK_CASE,
+          closedDate: '2018-03-01T22:53:50.097Z',
+          docketNumber: '140-22',
+          status: CASE_STATUS_TYPES.closed,
+        },
+      ]);
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesForUser.mockImplementation(() => mockFoundCasesList);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .processUserAssociatedCases.mockReturnValue({
-        casesAssociatedWithUserOrLeadCaseMap: {
-          '101-18': MOCK_CASE,
+      .getCasesByLeadDocketNumber.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-12-11T15:25:55.006Z',
+          docketNumber: '112-19',
+          leadDocketNumber: '111-19',
         },
-        leadDocketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
-        userAssociatedDocketNumbersMap: {},
-      });
-
-    applicationContext
-      .getUseCaseHelpers()
-      .getConsolidatedCasesForLeadCase.mockReturnValue([]);
-
-    UserCase.validateRawCollection.mockImplementation(foundCases => foundCases);
-  });
-
-  it('should retrieve the current user information', async () => {
-    await getCasesForUserInteractor(applicationContext);
-
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
-  it('should make a call to retrieve open and closed cases for the current user', async () => {
-    await getCasesForUserInteractor(applicationContext);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-  });
-
-  it('should validate the list of cases found for the current user', async () => {
-    await getCasesForUserInteractor(applicationContext);
-
-    expect(UserCase.validateRawCollection).toHaveBeenCalled();
-  });
-
-  it('should return a list of open cases sorted by createdAt date descending', async () => {
-    const createdToday = applicationContext
-      .getUtilities()
-      .createISODateString();
-    const createdYesterday = applicationContext
-      .getUtilities()
-      .calculateISODate({ dateString: createdToday, howMuch: -1 });
-    mockFoundCasesList = [
-      {
-        ...MOCK_CASE,
-        createdAt: createdYesterday,
-        status: CASE_STATUS_TYPES.generalDocket,
-      },
-      {
-        ...MOCK_CASE,
-        createdAt: createdToday,
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      },
-    ];
-    applicationContext
-      .getUseCaseHelpers()
-      .processUserAssociatedCases.mockReturnValue({
-        casesAssociatedWithUserOrLeadCaseMap: mockFoundCasesList,
-        leadDocketNumbersAssociatedWithUser: [],
-      });
-
-    const { openCaseList } = await getCasesForUserInteractor(
-      applicationContext,
-    );
-
-    expect(openCaseList).toMatchObject([
-      {
-        createdAt: createdToday,
-      },
-      {
-        createdAt: createdYesterday,
-      },
-    ]);
-  });
-
-  it('should return a list of closed cases sorted by closedDate descending', async () => {
-    const closedToday = applicationContext.getUtilities().createISODateString();
-    const closedYesterday = applicationContext
-      .getUtilities()
-      .calculateISODate({ dateString: closedToday, howMuch: -1 });
-    mockFoundCasesList = [
-      {
-        ...MOCK_CASE,
-        closedDate: closedYesterday,
-        status: CASE_STATUS_TYPES.closed,
-      },
-      {
-        ...MOCK_CASE,
-        closedDate: closedToday,
-        status: CASE_STATUS_TYPES.closed,
-      },
-    ];
-
-    const { closedCaseList } = await getCasesForUserInteractor(
-      applicationContext,
-    );
-
-    expect(closedCaseList).toMatchObject([
-      {
-        closedDate: closedToday,
-      },
-      {
-        closedDate: closedYesterday,
-      },
-    ]);
-  });
-
-  it('should return a list of open cases when the user is associated with a consolidated case that is not the lead case', async () => {
-    const consolidatedCaseThatIsNotTheLeadCase = {
-      ...MOCK_CASE,
-      docketNumber: '999-20',
-      isLeadCase: false,
-    };
-    const mockUserAssociatedDocketNumbersMap = {};
-    mockUserAssociatedDocketNumbersMap[
-      consolidatedCaseThatIsNotTheLeadCase.docketNumber
-    ] = true;
-    applicationContext
-      .getUseCaseHelpers()
-      .processUserAssociatedCases.mockReturnValue({
-        casesAssociatedWithUserOrLeadCaseMap: {},
-        leadDocketNumbersAssociatedWithUser: [
-          consolidatedCaseThatIsNotTheLeadCase.docketNumber,
-        ],
-        userAssociatedDocketNumbersMap: mockUserAssociatedDocketNumbersMap,
-      });
-    applicationContext
-      .getUseCaseHelpers()
-      .getAssociatedLeadCase.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getUseCaseHelpers()
-      .formatAndSortConsolidatedCases.mockReturnValue([
-        consolidatedCaseThatIsNotTheLeadCase,
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-12-11T16:02:31.173Z',
+          docketNumber: '113-19',
+          leadDocketNumber: '111-19',
+        },
+        {
+          ...MOCK_CASE,
+          createdAt: '2019-12-11T15:25:09.284Z',
+          docketNumber: '111-19',
+          leadDocketNumber: '111-19',
+        },
       ]);
 
-    const { openCaseList } = await getCasesForUserInteractor(
-      applicationContext,
-    );
-
-    expect(openCaseList[0]).toBe(MOCK_CASE);
-    expect(openCaseList[0].consolidatedCases[0]).toBe(
-      consolidatedCaseThatIsNotTheLeadCase,
-    );
+    const userCases = await getCasesForUserInteractor(applicationContext);
+    console.log(userCases.openCaseList[1]);
+    expect(userCases).toMatchObject({
+      closedCaseList: [
+        expect.objectContaining({
+          docketNumber: '130-22',
+        }),
+        expect.objectContaining({
+          docketNumber: '140-22',
+        }),
+      ],
+      openCaseList: [
+        expect.objectContaining({
+          docketNumber: '102-20',
+          isRequestingUserAssociated: true,
+        }),
+        expect.objectContaining({
+          consolidatedCases: expect.arrayContaining([
+            expect.objectContaining({
+              docketNumber: '112-19',
+              isRequestingUserAssociated: false,
+            }),
+            expect.objectContaining({
+              docketNumber: '113-19',
+              isRequestingUserAssociated: true,
+            }),
+          ]),
+          docketNumber: '111-19',
+          isRequestingUserAssociated: false,
+        }),
+        expect.objectContaining({
+          docketNumber: '107-19',
+          isRequestingUserAssociated: true,
+        }),
+        expect.objectContaining({
+          docketNumber: '103-19',
+          isRequestingUserAssociated: true,
+        }),
+      ],
+    });
   });
 });

@@ -1,6 +1,12 @@
+import { Case, isClosed, isLeadCase } from '../entities/cases/Case';
 import { UserCase } from '../entities/UserCase';
 import { compareISODateStrings } from '../utilities/sortFunctions';
-import { isClosed } from '../entities/cases/Case';
+import { partition, uniqBy } from 'lodash';
+
+type TAssociatedCase = {
+  isRequestingUserAssociated: boolean;
+  consolidatedCases?: TCase[];
+} & TCase;
 
 /**
  * getCasesForUserInteractor
@@ -13,59 +19,85 @@ export const getCasesForUserInteractor = async (
 ) => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  let allUserCases = await applicationContext
+  const allUserCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,
       userId,
     });
 
-  allUserCases = UserCase.validateRawCollection(allUserCases, {
-    applicationContext,
+  const allUserCasesWithAssociations = UserCase.validateRawCollection(
+    allUserCases,
+    {
+      applicationContext,
+    },
+  ) as TCaseEntity[];
+
+  const [openCases, closedCases] = partition(
+    allUserCasesWithAssociations.map(
+      aCase =>
+        ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
+    ),
+    aCase => !isClosed(aCase),
+  );
+
+  const consolidatedGroups = (
+    await Promise.all(
+      openCases
+        .filter(aCase => aCase.leadDocketNumber)
+        .map(aCase => {
+          return applicationContext
+            .getPersistenceGateway()
+            .getCasesByLeadDocketNumber({
+              applicationContext,
+              leadDocketNumber: aCase.docketNumber,
+            });
+        }),
+    )
+  )
+    .flat()
+    .map(
+      aCase =>
+        ({ ...aCase, isRequestingUserAssociated: false } as TAssociatedCase),
+    );
+
+  const associatedAndUnassociatedCases = uniqBy(
+    openCases.concat(consolidatedGroups),
+    aCase => aCase.docketNumber,
+  );
+
+  const caseMap: Record<string, TAssociatedCase> =
+    associatedAndUnassociatedCases
+      .filter(
+        aCase =>
+          isLeadCase(aCase) || (!isLeadCase(aCase) && !aCase.leadDocketNumber),
+      )
+      .reduce((obj, aCase) => {
+        return {
+          ...obj,
+          [aCase.docketNumber]: aCase,
+        };
+      }, {});
+
+  associatedAndUnassociatedCases
+    .filter(aCase => !isLeadCase(aCase) && aCase.leadDocketNumber)
+    .forEach(aCase => {
+      const leadCase = caseMap[aCase.leadDocketNumber];
+      if (leadCase.consolidatedCases === undefined)
+        leadCase.consolidatedCases = [];
+      leadCase.consolidatedCases.push(aCase);
+    });
+
+  const allCases = Object.values(caseMap).map(aCase => {
+    return {
+      ...aCase,
+      consolidatedCases: aCase.consolidatedCases
+        ? Case.sortByDocketNumber(aCase.consolidatedCases)
+        : undefined,
+    };
   });
 
-  const sortedClosedCases = allUserCases
-    .filter(aCase => isClosed(aCase))
-    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
-    .reverse();
-
-  let filteredOpenCases = allUserCases.filter(aCase => !isClosed(aCase));
-
-  let {
-    casesAssociatedWithUserOrLeadCaseMap,
-    leadDocketNumbersAssociatedWithUser,
-    userAssociatedDocketNumbersMap,
-  } = applicationContext
-    .getUseCaseHelpers()
-    .processUserAssociatedCases(filteredOpenCases);
-
-  for (const leadDocketNumber of leadDocketNumbersAssociatedWithUser) {
-    const consolidatedCases = await applicationContext
-      .getUseCaseHelpers()
-      .getConsolidatedCasesForLeadCase({
-        applicationContext,
-        leadDocketNumber,
-      });
-
-    if (!casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber]) {
-      casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber] =
-        applicationContext.getUseCaseHelpers().getAssociatedLeadCase({
-          consolidatedCases,
-          leadDocketNumber,
-        });
-    }
-
-    casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber].consolidatedCases =
-      applicationContext.getUseCaseHelpers().formatAndSortConsolidatedCases({
-        consolidatedCases,
-        leadDocketNumber,
-        userAssociatedDocketNumbersMap,
-      });
-  }
-
-  const foundOpenCases: any[] = Object.values(
-    casesAssociatedWithUserOrLeadCaseMap,
-  )
+  const foundOpenCases: any[] = Object.values(allCases)
     .map((c: any) => {
       // explicitly unset the entityName because this is returning a composite entity and if an entityName
       // is set, the genericHandler will send it through the entity constructor for that entity and strip
@@ -74,6 +106,10 @@ export const getCasesForUserInteractor = async (
       return c;
     })
     .sort((a, b) => compareISODateStrings(a.createdAt, b.createdAt))
+    .reverse();
+
+  const sortedClosedCases = closedCases
+    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
     .reverse();
 
   return { closedCaseList: sortedClosedCases, openCaseList: foundOpenCases };
