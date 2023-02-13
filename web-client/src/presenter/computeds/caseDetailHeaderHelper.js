@@ -13,7 +13,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
-  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
+  const userAssociatedWithCase = get(state.screenMetadata.isDirectlyAssociated);
   const userDirectlyAssociatedWithCase = get(
     state.screenMetadata.isDirectlyAssociated,
   );
