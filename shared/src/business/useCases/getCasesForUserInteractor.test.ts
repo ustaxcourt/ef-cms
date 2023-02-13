@@ -153,7 +153,7 @@ describe('getCasesForUserInteractor', () => {
       });
     applicationContext
       .getUseCaseHelpers()
-      .getAssociatedLeadCase.mockReturnValue(MOCK_CASE);
+      .getUnassociatedLeadCase.mockReturnValue(MOCK_CASE);
     applicationContext
       .getUseCaseHelpers()
       .formatAndSortConsolidatedCases.mockReturnValue([
