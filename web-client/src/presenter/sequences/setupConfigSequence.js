@@ -1,9 +1,12 @@
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 
 export const setupConfigSequence = [
-  getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER,
-    true,
+  getFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key,
   ),
 ];

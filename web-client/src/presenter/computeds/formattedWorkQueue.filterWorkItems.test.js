@@ -326,4 +326,18 @@ describe('filterWorkItems', () => {
       workItemDocketSectionDocumentQCInProgress,
     ]);
   });
+
+  it('should getWorkQueueFilters with the section argument', () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
+    filterWorkItems({
+      applicationContext,
+      section: DOCKET_SECTION,
+      workItems: workQueueInProgress,
+      ...SECTION_DOCUMENT_QC_IN_PROGRESS,
+    });
+
+    expect(
+      applicationContext.getUtilities().getWorkQueueFilters.mock.calls[0][0],
+    ).toMatchObject({ section: DOCKET_SECTION });
+  });
 });

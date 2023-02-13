@@ -1,7 +1,6 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -35,7 +34,7 @@ describe('admissions clerk adds an email to a petitioner who already exists in t
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {

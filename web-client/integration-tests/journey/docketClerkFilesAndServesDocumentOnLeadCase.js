@@ -54,7 +54,10 @@ export const docketClerkFilesAndServesDocumentOnLeadCase = (
     );
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
-    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
+
+    expect(
+      cerebralTest.getState('modal.form.consolidatedCaseAllCheckbox'),
+    ).toEqual(false);
 
     await cerebralTest.runSequence('updateCaseCheckboxSequence', {
       docketNumber: caseDetailFormatted.consolidatedCases[1].docketNumber,
