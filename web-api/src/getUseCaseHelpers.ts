@@ -20,7 +20,6 @@ import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/bus
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
 import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
-import { getUnassociatedLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
@@ -69,7 +68,6 @@ const useCaseHelpers = {
   generateStampedCoversheetInteractor,
   getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,
-  getUnassociatedLeadCase,
   getUserIdForNote,
   parseAndScrapePdfContents,
   removeCounselFromRemovedPetitioner,
