@@ -18,7 +18,10 @@ const findPendingJob = async ({ apiToken, workflowId }) => {
 };
 
 exports.approvePendingJob = async ({ apiToken, workflowId }) => {
-  const pendingJobApprovalRequestId = findPendingJob({ apiToken, workflowId });
+  const pendingJobApprovalRequestId = await findPendingJob({
+    apiToken,
+    workflowId,
+  });
   const approveJob = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
@@ -28,13 +31,12 @@ exports.approvePendingJob = async ({ apiToken, workflowId }) => {
   await axios.post(approveJob.url, {}, approveJob);
 };
 
-exports.failPendingJob = async ({ apiToken, workflowId }) => {
-  const pendingJobApprovalRequestId = findPendingJob({ apiToken, workflowId });
-  const rejectJob = {
+exports.cancelWorkflow = async ({ apiToken, workflowId }) => {
+  const cancelWorkflow = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
-    url: `https://circleci.com/api/v2/workflow/${workflowId}/reject/${pendingJobApprovalRequestId}`,
+    url: `https://circleci.com/api/v2/workflow/${workflowId}/cancel`,
   };
 
-  await axios.post(rejectJob.url, {}, rejectJob);
+  await axios.post(cancelWorkflow.url, {}, cancelWorkflow);
 };
