@@ -43,7 +43,12 @@ export const generateDocketRecordPdfInteractor = async (
     });
 
   let caseEntity;
-  if (applicationContext.getUtilities().isSealedCase(caseSource)) {
+
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseSource);
+
+  if (isSealedCase) {
     if (user.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
         user,
