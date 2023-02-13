@@ -19,7 +19,6 @@ import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHe
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
-import { getAssociatedLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getAssociatedLeadCase';
 import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
@@ -70,7 +69,6 @@ const useCaseHelpers = {
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,
   generateStampedCoversheetInteractor,
-  getAssociatedLeadCase,
   getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,
   getUserIdForNote,
