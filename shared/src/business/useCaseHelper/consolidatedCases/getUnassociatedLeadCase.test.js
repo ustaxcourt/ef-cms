@@ -1,4 +1,4 @@
-const { getAssociatedLeadCase } = require('./getAssociatedLeadCase');
+const { getAssociatedLeadCase } = require('./getUnassociatedLeadCase');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getAssociatedLeadCase', () => {
