@@ -12,6 +12,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { User } from '../../entities/User';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
@@ -74,6 +75,7 @@ export const completeDocketEntryQCInteractor = async (
     docketNumber,
     leadDocketNumber,
     overridePaperServiceAddress,
+    selectedSection,
   } = entryMetadata;
 
   const user = await applicationContext
@@ -205,10 +207,15 @@ export const completeDocketEntryQCInteractor = async (
     user,
   });
 
+  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
+
+  let sectionToAssignTo =
+    userIsCaseServices && selectedSection ? selectedSection : user.section;
+
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: sectionToAssignTo,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
