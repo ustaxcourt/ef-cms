@@ -57,7 +57,7 @@ describe('redact', () => {
       statusCode: 200,
     },
     user: {
-      email: 'privatePractitioner1@example.com',
+      email: 'privatepractitioner1@example.com',
       entityName: 'User',
       name: 'Test private practitioner1',
       role: 'privatePractitioner',
@@ -84,7 +84,7 @@ describe('redact', () => {
       '/async/users/a1a0a206-what-isit-b725-61cd4e3aece2/contact-info',
     );
     expect(redactedLogEntry.user.email).toBe(
-      'privatePractitioner1@example.com',
+      'privatepractitioner1@example.com',
     );
   });
 });

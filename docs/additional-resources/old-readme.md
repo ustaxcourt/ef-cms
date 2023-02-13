@@ -169,11 +169,11 @@ You can log in using the following accounts.
 
 ```txt
 petitioner@example.com
-privatePractitioner@example.com
-privatePractitioner1 - privatePractitioner4@example.com
-irsPractitioner@example.com
-irsPractitioner1 - irsPractitioner4@example.com
-irsSuperuser@example.com
+privatepractitioner@example.com
+privatePractitioner1 - privatepractitioner4@example.com
+irspractitioner@example.com
+irsPractitioner1 - irspractitioner4@example.com
+irssuperuser@example.com
 ```
 
 ###### Internal Users
@@ -188,18 +188,18 @@ floater@example.com
 general@example.com
 petitionsclerk@example.com
 petitionsclerk1@example.com
-reportersOffice@example.com
+reportersoffice@example.com
 trialclerk@example.com
 judge.ashford@example.com
-ashfordsChambers@example.com
+ashfordschambers@example.com
 judge.buch@example.com
-buchsChambers@example.com
+buchschambers@example.com
 stjudge.carluzzo@example.com
-carluzzosChambers@example.com
+carluzzoschambers@example.com
 judge.cohen@example.com
-cohensChambers@example.com
+cohenschambers@example.com
 judge.colvin@example.com
-colvinsChambers@example.com
+colvinschambers@example.com
 ```
 
 No password is required.
@@ -212,8 +212,8 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 
 ```txt
 petitioner1@example.com – petitioner5@example.com
-privatePractitioner1@example.com – privatePractitioner10@example.com
-irsPractitioner1@example.com – irsPractitioner10@example.com
+privatepractitioner1@example.com – privatePractitioner10@example.com
+irspractitioner1@example.com – irsPractitioner10@example.com
 service.agent.test@irs.gov (IRS Superuser)
 ```
 

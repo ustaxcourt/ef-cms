@@ -1,18 +1,21 @@
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
-
-const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES, PAYMENT_STATUS } =
-  applicationContext.getConstants();
+import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
-  fakeFile,
-  trialLocation = 'Birmingham, Alabama',
-  shouldServe = true,
-  overrides = {},
+  {
+    shouldServe = true,
+    overrides = { trialLocation: 'Birmingham, Alabama' },
+  } = {},
 ) => {
+  const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
+
   return it('Petitions clerk creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
     expect(cerebralTest.getState('form.hasVerifiedIrsNotice')).toEqual(false);
@@ -66,7 +69,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: trialLocation,
+      value: overrides.trialLocation,
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
@@ -227,7 +230,7 @@ export const petitionsClerkCreatesNewCase = (
       'caseDetail.docketNumber',
     );
     expect(cerebralTest.getState('caseDetail.preferredTrialCity')).toEqual(
-      trialLocation,
+      overrides.trialLocation,
     );
     if (cerebralTest.casesReadyForTrial) {
       cerebralTest.casesReadyForTrial.push(cerebralTest.docketNumber);

@@ -11,7 +11,7 @@ exports.authenticateUserLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const { refreshToken, token } = await applicationContext
+      const { alertError, refreshToken, token } = await applicationContext
         .getUseCases()
         .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
       const expiresAt = applicationContext.getUtilities().calculateISODate({
@@ -21,7 +21,7 @@ exports.authenticateUserLambda = event =>
       });
 
       return {
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ alertError, token }),
         headers: {
           'Set-Cookie': createCookieString(
             'refreshToken',

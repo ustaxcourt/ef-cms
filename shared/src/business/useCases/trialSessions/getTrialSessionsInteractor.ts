@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { TrialSessionInfoDto } from '../../dto/TrialSessionInfoDto';
+import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -26,11 +26,14 @@ export const getTrialSessionsInteractor = async (
       applicationContext,
     });
 
-  const validatedSessions = TrialSession.validateRawCollection(trialSessions, {
-    applicationContext,
-  });
+  const validatedSessions = TrialSession.validateRawCollection(
+    trialSessions as any,
+    {
+      applicationContext,
+    },
+  );
 
   return validatedSessions.map(
-    trialSession => new TrialSessionInfoDto(trialSession),
+    trialSession => new TrialSessionInfoDTO(trialSession as any),
   );
 };

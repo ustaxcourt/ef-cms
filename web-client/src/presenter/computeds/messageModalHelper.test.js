@@ -1,11 +1,24 @@
+import {
+  CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
+  CASE_SERVICES_SUPERVISOR_SECTION,
+  SECTIONS,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from './messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('messageModalHelper', () => {
+  const mockConstants = {
+    CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
+    CASE_SERVICES_SUPERVISOR_SECTION,
+    SECTIONS,
+  };
   const mockDocketEntryIdOnDocketRecord = '123';
   const mockDocketEntryIdAlsoOnDocketRecord = '234';
+  const JUDGES_CHAMBERS = applicationContext
+    .getPersistenceGateway()
+    .getJudgesChambers();
 
   const mockDocketEntryWithFileAttachedOnDocketRecord = {
     descriptionDisplay: 'Hello with additional info',
@@ -260,6 +273,7 @@ describe('messageModalHelper', () => {
 
     it('should be true when screenMetadata.showAddDocumentForm is true and the maximum number of attachments has not been met', () => {
       applicationContext.getConstants.mockReturnValue({
+        ...mockConstants,
         CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
       });
 
@@ -282,6 +296,7 @@ describe('messageModalHelper', () => {
 
     it('should be false when screenMetadata.showAddDocumentForm is false and the maximum number of attachments has not been met', () => {
       applicationContext.getConstants.mockReturnValue({
+        ...mockConstants,
         CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
       });
 
@@ -304,6 +319,7 @@ describe('messageModalHelper', () => {
 
     it('should be false when screenMetadata.showAddDocumentForm is true and maximum number of attachments have been reached', () => {
       applicationContext.getConstants.mockReturnValue({
+        ...mockConstants,
         CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
       });
 
@@ -328,6 +344,7 @@ describe('messageModalHelper', () => {
   describe('showAddMoreDocumentsButton', () => {
     it('should be true when there is at least one attachment already but the maximum number of attachments have not been reached', () => {
       applicationContext.getConstants.mockReturnValue({
+        ...mockConstants,
         CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
       });
 
@@ -348,6 +365,7 @@ describe('messageModalHelper', () => {
 
     it('should be false when the maximum number of attachments have been reached', () => {
       applicationContext.getConstants.mockReturnValue({
+        ...mockConstants,
         CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
       });
 
@@ -368,6 +386,14 @@ describe('messageModalHelper', () => {
   });
 
   describe('showMessageAttachments', () => {
+    beforeEach(() => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: mockCorrespondences,
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+    });
+
     it('should be true when there is at least one attachment on the message', () => {
       const { showMessageAttachments } = runCompute(messageModalHelper, {
         state: {
@@ -391,5 +417,90 @@ describe('messageModalHelper', () => {
 
       expect(showMessageAttachments).toEqual(false);
     });
+  });
+
+  describe('section display', () => {
+    beforeEach(() => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: mockCorrespondences,
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+    });
+
+    it('should display the associated section', () => {
+      const { chambersDisplay, sectionDisplay } = runCompute(
+        messageModalHelper,
+        {
+          state: {
+            caseDetail: {},
+            modal: {
+              form: {
+                attachments: [{}, {}], // 2/2 documents attached
+              },
+            },
+            screenMetadata: {},
+          },
+        },
+      );
+
+      expect(
+        sectionDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section),
+      ).toBe(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label);
+      expect(
+        chambersDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section),
+      ).toBe(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label);
+    });
+
+    it('returns the chambers display for section display if the section is a chambers', () => {
+      const { chambersDisplay, sectionDisplay } = runCompute(
+        messageModalHelper,
+        {
+          state: {
+            ...baseState,
+            modal: {
+              form: {
+                attachments: [{}],
+              },
+            },
+            screenMetadata: {},
+          },
+        },
+      );
+
+      expect(
+        sectionDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section),
+      ).toBe(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label);
+      expect(
+        chambersDisplay(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.section),
+      ).toBe(JUDGES_CHAMBERS.URDAS_CHAMBERS_SECTION.label);
+    });
+
+    it('returns undefined for sectionDisplay if the section is not a regular section or a chambers', () => {
+      const { sectionDisplay } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(sectionDisplay('something')).toBeUndefined();
+    });
+  });
+
+  it('should return the sectionListWithoutSupervisorRole as SECTIONS without the CASE_SERVICES_SUPERVISOR_SECTION', () => {
+    applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+      correspondence: [],
+      draftDocuments: [],
+      formattedDocketEntries: [mockDocketEntryWithFileAttachedOnDocketRecord],
+    });
+
+    const { sectionListWithoutSupervisorRole } = runCompute(
+      messageModalHelper,
+      {
+        state: baseState,
+      },
+    );
+
+    expect(sectionListWithoutSupervisorRole).not.toContain(
+      CASE_SERVICES_SUPERVISOR_SECTION,
+    );
   });
 });

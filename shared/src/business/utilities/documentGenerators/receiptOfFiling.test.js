@@ -1,47 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
-const { OBJECTIONS_OPTIONS_MAP } = require('../../entities/EntityConstants');
-const { receiptOfFiling } = require('./receiptOfFiling');
+import { OBJECTIONS_OPTIONS_MAP } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { receiptOfFiling } from './receiptOfFiling';
 
-describe('documentGenerators', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('receiptOfFiling', () => {
-    it('generates a Receipt of Filing document', async () => {
-      const pdf = await receiptOfFiling({
+describe('receiptOfFiling', () => {
+  generateAndVerifyPdfDiff({
+    fileName: 'Receipt_of_Filing.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      receiptOfFiling({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -96,19 +63,7 @@ describe('documentGenerators', () => {
             },
           ],
         },
-      });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Receipt_of_Filing', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+      }),
+    testDescription: 'generates a Receipt of Filing document',
   });
 });

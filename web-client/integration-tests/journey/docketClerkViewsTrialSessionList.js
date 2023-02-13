@@ -7,7 +7,10 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export const docketClerkViewsTrialSessionList = cerebralTest => {
+export const docketClerkViewsTrialSessionList = (
+  cerebralTest,
+  overrides = {},
+) => {
   return it('Docket clerk views trial session list', async () => {
     await cerebralTest.runSequence('gotoTrialSessionsSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
@@ -22,6 +25,10 @@ export const docketClerkViewsTrialSessionList = cerebralTest => {
     });
 
     expect(trialSession).toBeDefined();
+
+    if (overrides.expectSwingSession) {
+      expect(trialSession.swingSession).toEqual(true);
+    }
 
     cerebralTest.trialSessionId = trialSession && trialSession.trialSessionId;
     if (cerebralTest.createdTrialSessions) {

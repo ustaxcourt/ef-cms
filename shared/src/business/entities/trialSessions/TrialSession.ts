@@ -1,3 +1,9 @@
+import {
+  IValidationEntity,
+  TStaticValidationMethods,
+  joiValidationDecorator,
+  validEntityDecorator,
+} from '../JoiValidationDecorator';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import {
   SESSION_STATUS_GROUPS,
@@ -11,11 +17,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
-import {
-  TValidationEntity,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from '../JoiValidationDecorator';
 import { createISODateString } from '../../utilities/DateHandler';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
@@ -97,16 +98,6 @@ export class TrialSessionClass {
   public trialSessionId: string;
   public judge: TJudge;
   public trialClerk: TTrialClerk;
-
-  // this static method is later overwritten by the joi validation decorator
-  static validateRawCollection<T>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    trialSessions: T[],
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ): T[] {
-    return [];
-  }
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -569,8 +560,12 @@ export const isStandaloneRemoteSession = function (sessionScope) {
   return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
 };
 
-export const TrialSession: typeof TrialSessionClass =
+export type TRawTrialSession = ExcludeMethods<TrialSessionClass>;
+
+export const TrialSession: typeof TrialSessionClass &
+  TStaticValidationMethods<TRawTrialSession> =
   validEntityDecorator(TrialSessionClass);
 
 // eslint-disable-next-line no-redeclare
-export interface TrialSessionClass extends TValidationEntity {}
+export interface TrialSessionClass
+  extends IValidationEntity<TrialSessionClass> {}

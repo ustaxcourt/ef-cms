@@ -4,7 +4,7 @@ module.exports = {
   ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
-    'src/**/*.js',
+    'src/**/*.{js,ts}',
     '!src/index.js',
     '!src/index-public.js',
     '!integration-tests/**/*.js',

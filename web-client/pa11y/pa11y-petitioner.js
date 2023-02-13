@@ -309,6 +309,7 @@ module.exports = [
       'wait for element #secondary-document to be visible',
     ],
     notes: ['File a document, step 2'],
+    timeout: 60000,
     url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
   {

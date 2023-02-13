@@ -120,18 +120,25 @@ function getFormattedValidationErrors(entity) {
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
-export interface TValidationEntity {
+export interface IValidationEntity<T> {
   getErrorToMessageMap(): any;
   getSchema(): any;
   isValid(): boolean;
   validateForMigration(): void;
-  validate(): TValidationEntity;
+  validate(): T;
   validateWithLogging(): void;
   getFormattedValidationErrors(): any;
   getValidationErrors(): any;
   toRawObject(): any;
   toRawObjectFromJoi(): any;
 }
+
+export type TStaticValidationMethods<R> = {
+  validateRawCollection(
+    collection: R[],
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ): R[];
+};
 
 /**
  *
@@ -176,7 +183,7 @@ export function joiValidationDecorator(
       });
 
       if (error) {
-        console.log('entity with error-------------', this);
+        console.log('Error, entity is invalid: ', this);
         throw new InvalidEntityError(
           this.entityName,
           JSON.stringify(

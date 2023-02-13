@@ -22,7 +22,7 @@ describe('Chambers dashboard', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  loginAs(cerebralTest, 'colvinschambers@example.com');
   chambersUserViewsCaseDetail(cerebralTest, 2);
   chambersUserViewsDraftDocuments(cerebralTest);
   chambersUserAddsOrderToCase(cerebralTest);

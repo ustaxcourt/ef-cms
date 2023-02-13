@@ -1,8 +1,13 @@
-import { getFormattedDocketEntriesForTest } from '../helpers';
+import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
 
 export const docketClerkSavesAndServesDocketEntry = cerebralTest => {
   return it('Docketclerk saves and serves a docket entry', async () => {
     await cerebralTest.runSequence('submitPaperFilingSequence');
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 

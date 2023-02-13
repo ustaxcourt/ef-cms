@@ -56,7 +56,7 @@ describe('trial hearings journey', () => {
   docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note one.');
   docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note one.');
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgecohen@example.com');
   judgeViewsTrialSessionWorkingCopy(
     cerebralTest,
     true,

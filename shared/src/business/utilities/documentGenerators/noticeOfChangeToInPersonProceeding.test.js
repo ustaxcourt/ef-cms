@@ -1,48 +1,17 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const {
   noticeOfChangeToInPersonProceeding,
 } = require('./noticeOfChangeToInPersonProceeding');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('noticeOfChangeToInPersonProceeding', () => {
-  const testOutputPath = path.resolve(
-    __dirname,
-    '../../../../test-output/document-generation',
-  );
-
-  const writePdfFile = (name, data) => {
-    const pdfPath = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(pdfPath, data);
-  };
-
-  beforeAll(() => {
-    if (process.env.PDF_OUTPUT) {
-      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-        if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor.mockImplementation(
-          generatePdfFromHtmlInteractor,
-        );
-    }
-  });
-
-  describe('noticeOfChangeToInPersonProceeding', () => {
-    it('generates a Notice of Change to In Person Proceeding document', async () => {
-      const pdf = await noticeOfChangeToInPersonProceeding({
+  generateAndVerifyPdfDiff({
+    fileName: 'Notice_Of_Change_To_In_Person_Proceeding.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () => {
+      return noticeOfChangeToInPersonProceeding({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -64,21 +33,8 @@ describe('noticeOfChangeToInPersonProceeding', () => {
           },
         },
       });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Of_Change_To_In_Person_Proceeding', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-        const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(1);
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
+    },
+    testDescription:
+      'generates a Notice of Change to In Person Proceeding document',
   });
 });

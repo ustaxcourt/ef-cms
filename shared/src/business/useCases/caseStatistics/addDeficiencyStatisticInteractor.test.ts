@@ -31,6 +31,20 @@ describe('addDeficiencyStatisticInteractor', () => {
       determinationTotalPenalties: 456,
       irsDeficiencyAmount: 789,
       irsTotalPenalties: 1.1,
+      penalties: [
+        {
+          name: 'Penalty 1 (IRS)',
+          penaltyAmount: 100.0,
+          penaltyType:
+            applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+        },
+        {
+          name: 'Penalty 2 (IRS)',
+          penaltyAmount: 200.0,
+          penaltyType:
+            applicationContext.getConstants().PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+        },
+      ],
       year: 2012,
       yearOrPeriod: 'Year',
     };
@@ -39,6 +53,7 @@ describe('addDeficiencyStatisticInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
       ...statistic,
     } as any);
+
     expect(result).toMatchObject({
       statistics: [statistic],
     });

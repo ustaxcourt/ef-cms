@@ -1,6 +1,6 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
 export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
@@ -124,6 +124,11 @@ export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to the docket record.',

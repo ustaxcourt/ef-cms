@@ -48,6 +48,7 @@ exports.fillInCreateCaseFromPaperForm = testData => {
   );
 
   cy.get('button.calculate-penalties').click();
+  cy.get('#penalty_0').type(0);
   cy.get('button#modal-button-confirm').click();
 
   cy.get('#upload-mode-upload').click();

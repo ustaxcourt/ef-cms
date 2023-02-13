@@ -31,9 +31,7 @@ describe('confirmAuthCode', () => {
   });
 
   it('returns the first clientId from the list of user pool clients', async () => {
-    const result = await confirmAuthCode(applicationContext, {
-      code: 'abc',
-    });
+    const result = await confirmAuthCode({ applicationContext, code: 'abc' });
 
     expect(mockAxios.post).toHaveBeenCalled();
 

@@ -19,11 +19,10 @@ import {
   waitForLoadingComponentToHide,
 } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const cerebralTest = setupTest();
@@ -31,10 +30,6 @@ describe('Trial Session Eligible Cases Journey', () => {
   const addToTrialSessionModalHelper = withAppContextDecorator(
     addToTrialSessionModalHelperComputed,
   );
-
-  beforeAll(() => {
-    jest.setTimeout(70000);
-  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -262,14 +257,14 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
     await waitForExpectedItem({
       cerebralTest,
       currentItem: 'currentPage',
       expectedItem: 'PrintPaperTrialNotices',
     });
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
-  });
+  }, 60000);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('Petitions clerk verifies NORP docket entries for open cases', async () => {

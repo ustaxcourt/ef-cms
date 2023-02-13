@@ -398,10 +398,14 @@ export const setFeatureFlag = async (isEnabled, key) => {
   });
 };
 
-export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
+export const getFormattedDocumentQCSectionInbox = async (
+  cerebralTest,
+  selectedSection = null,
+) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
+    section: selectedSection,
   });
   return runCompute(formattedWorkQueue, {
     state: cerebralTest.getState(),
@@ -584,6 +588,10 @@ export const assignWorkItems = async (cerebralTest, to, workItems) => {
     adc: {
       name: 'test ADC',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+    caseservicessupervisor: {
+      name: 'Test Case Services Supervisor',
+      userId: '35959d1a-0981-40b2-a93d-f65c7977db52',
     },
     docketclerk: {
       name: 'test Docketclerk',
@@ -1034,9 +1042,30 @@ export const waitForExpectedItemToExist = async ({
   console.log(`Waited ${waitTime}ms for ${currentItem}`);
 };
 
+// will run the cb every second until it returns true
+const waitUntil = cb => {
+  return new Promise(resolve => {
+    const waitUntilInternal = async () => {
+      const value = await cb();
+      if (value === false) {
+        setTimeout(waitUntilInternal, 1000);
+      } else {
+        resolve();
+      }
+    };
+    waitUntilInternal();
+  });
+};
+
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
+  await waitUntil(async () => {
+    const value = await axios
+      .get('http://localhost:5005/isDone')
+      .then(response => response.data);
+    return value === true;
+  });
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
   return await wait(time);

@@ -68,21 +68,21 @@ describe('Docket Clerk seals a case', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(cerebralTest);
   associatedUserAdvancedSearchForCase(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(cerebralTest);
   associatedUserAdvancedSearchForCase(cerebralTest);
 
   //unassociated users
-  loginAs(cerebralTest, 'privatePractitioner3@example.com');
+  loginAs(cerebralTest, 'privatepractitioner3@example.com');
   unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
   unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
   externalUserSearchesForAnOrderOnSealedCase(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner3@example.com');
+  loginAs(cerebralTest, 'irspractitioner3@example.com');
   unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
   unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
 });

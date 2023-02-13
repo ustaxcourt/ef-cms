@@ -58,7 +58,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   markAllCasesAsQCed(cerebralTest, () => createdDocketNumbers);
   petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  loginAs(cerebralTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgecohen@example.com');
   judgeViewsTrialSessionWorkingCopy(cerebralTest);
   judgeAddsNotesFromWorkingCopyCaseList(cerebralTest);
   judgeViewsNotesFromCaseDetail(cerebralTest);

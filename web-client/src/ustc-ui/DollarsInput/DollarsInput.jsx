@@ -5,6 +5,7 @@ export const DollarsInput = props => {
   return (
     <NumericFormat
       {...props}
+      allowNegative={false}
       decimalScale="2"
       fixedDecimalScale={true}
       prefix="$"

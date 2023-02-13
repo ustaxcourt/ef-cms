@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 export const irsSuperuserGetsReconciliationReport = cerebralTest => {
   return it('logs in as IRS superuser and retrieves reconciliation report data for today', async () => {
-    const loginUsername = 'irsSuperuser@example.com';
+    const loginUsername = 'irssuperuser@example.com';
     if (!userMap[loginUsername]) {
       throw new Error(`Unable to log into test as ${loginUsername}`);
     }
