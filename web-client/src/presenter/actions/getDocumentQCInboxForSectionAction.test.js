@@ -55,6 +55,28 @@ describe('getDocumentQCInboxForSectionAction', () => {
     });
   });
 
+  it('should call getDocumentQCInboxForSectionInteractor with the selectedSection when section exists off workQueueToDisplay', async () => {
+    const mockSection = 'a selected section';
+
+    await runAction(getDocumentQCInboxForSectionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        workQueueToDisplay: {
+          section: mockSection,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor
+        .mock.calls[0][1],
+    ).toMatchObject({
+      section: mockSection,
+    });
+  });
+
   it('should call getDocumentQCInboxForSectionInteractor with the CHIEF_JUDGE if judgeUser is not found in state and user role is adc', async () => {
     applicationContext.getCurrentUser.mockReturnValueOnce({
       role: USER_ROLES.adc,
