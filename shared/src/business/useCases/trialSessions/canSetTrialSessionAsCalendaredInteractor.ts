@@ -2,7 +2,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import {
+  TRawTrialSession,
+  TrialSession,
+} from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -15,7 +18,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const canSetTrialSessionAsCalendaredInteractor = (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: TTrialSessionData },
+  { trialSession }: { trialSession: TRawTrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 

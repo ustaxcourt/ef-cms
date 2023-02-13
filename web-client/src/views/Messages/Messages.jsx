@@ -18,8 +18,14 @@ export const Messages = connect(
     messagesHelper: state.messagesHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.messageBoxToDisplay.queue,
+    section: state.messageBoxToDisplay.section,
   },
-  function Messages({ messagesHelper, navigateToPathSequence, queue }) {
+  function Messages({
+    messagesHelper,
+    navigateToPathSequence,
+    queue,
+    section,
+  }) {
     return (
       <>
         <div className="big-blue-header">
@@ -29,7 +35,7 @@ export const Messages = connect(
               aria-label="unread messages count"
               className="unread margin-right-2"
             ></span>
-            {messagesHelper.showIndividualMessages && (
+            {messagesHelper.showSwitchToSectionMessagesButton && (
               <Button
                 link
                 className="button-switch-box"
@@ -39,7 +45,7 @@ export const Messages = connect(
                 Switch to Section Messages
               </Button>
             )}
-            {messagesHelper.showSectionMessages && (
+            {messagesHelper.showSwitchToMyMessagesButton && (
               <Button
                 link
                 className="button-switch-box"
@@ -59,7 +65,11 @@ export const Messages = connect(
             bind="messageBoxToDisplay.box"
             onSelect={box => {
               navigateToPathSequence({
-                path: `/messages/${queue}/${box}`,
+                path: messagesHelper.messagesTabNavigationPath({
+                  box,
+                  queue,
+                  section,
+                }),
               });
             }}
           >

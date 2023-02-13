@@ -2,6 +2,7 @@ import {
   ROLES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../entities/EntityConstants';
+import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createTrialSessionInteractor } from './createTrialSessionInteractor';
@@ -43,7 +44,7 @@ describe('createTrialSessionInteractor', () => {
 
     await expect(
       createTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL as TTrialSessionData,
+        trialSession: MOCK_TRIAL as TRawTrialSession,
       }),
     ).rejects.toThrow();
   });
@@ -57,14 +58,14 @@ describe('createTrialSessionInteractor', () => {
 
     await expect(
       createTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL as TTrialSessionData,
+        trialSession: MOCK_TRIAL as TRawTrialSession,
       }),
     ).rejects.toThrow('');
   });
 
   it('should successfully create a trial session', async () => {
     await createTrialSessionInteractor(applicationContext, {
-      trialSession: MOCK_TRIAL as TTrialSessionData,
+      trialSession: MOCK_TRIAL as TRawTrialSession,
     });
 
     expect(
@@ -77,7 +78,7 @@ describe('createTrialSessionInteractor', () => {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Motion/Hearing',
-      } as TTrialSessionData,
+      } as TRawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(true);
@@ -89,7 +90,7 @@ describe('createTrialSessionInteractor', () => {
         ...MOCK_TRIAL,
         sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
         sessionType: 'Something Else',
-      } as TTrialSessionData,
+      } as TRawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(true);
@@ -100,7 +101,7 @@ describe('createTrialSessionInteractor', () => {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Special',
-      } as TTrialSessionData,
+      } as TRawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(true);
@@ -108,7 +109,7 @@ describe('createTrialSessionInteractor', () => {
 
   it('shoud not set the trial session as calendared when it is a Regular session type', async () => {
     const result = await createTrialSessionInteractor(applicationContext, {
-      trialSession: MOCK_TRIAL as TTrialSessionData,
+      trialSession: MOCK_TRIAL as TRawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(false);

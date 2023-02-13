@@ -5,66 +5,70 @@ const { getScannerInterface } = require('./getScannerInterface');
 const { SCAN_MODES } = require('../../business/entities/EntityConstants');
 
 describe('getScannerInterface', () => {
-  const mockSources = ['Test Source 1', 'Test Source 2'];
-  const mockScanCount = 1;
-
-  let onPostAllTransfersCb = null;
-
-  const mockAcquireImage = jest.fn(() => onPostAllTransfersCb());
-  const mockCloseSource = jest.fn();
-  const mockOpenSource = jest.fn();
-  const mockRemoveAllImages = jest.fn();
+  let mockSources, mockScanCount, DWObject, Dynamsoft;
+  let onPostAllTransfersCb;
+  let mockAcquireImage, mockCloseSource, mockOpenSource, mockRemoveAllImages;
 
   applicationContext.getScannerResourceUri.mockReturnValue('abc');
 
-  const DWObject = {
-    AcquireImage: mockAcquireImage,
-    CloseSource: mockCloseSource,
-    ConvertToBlob: (
-      indices,
-      enumImageType,
-      asyncSuccessFunc,
-      asyncFailureFunc,
-    ) => {
-      const args = {
-        asyncFailureFunc,
-        asyncSuccessFunc,
-        enumImageType,
-        indices,
-      };
-      return asyncSuccessFunc(args);
-    },
-    DataSource: null,
-    DataSourceStatus: 0,
-    ErrorCode: 0,
-    ErrorString: 'Successful!',
-    GetSourceNameItems: index => mockSources[index],
-    HowManyImagesInBuffer: mockScanCount,
-    IfDisableSourceAfterAcquire: false,
-    IfFeederLoaded: true,
-    OpenSource: mockOpenSource,
-    RegisterEvent: (scannerEvent, cb) => {
-      onPostAllTransfersCb = cb;
-    },
-    RemoveAllImages: mockRemoveAllImages,
-    SelectSourceByIndex: idx => {
-      DWObject.DataSource = idx;
-      return true;
-    },
-    SourceCount: mockSources.length,
-    UnregisterEvent: () => null,
-  };
-
-  const Dynamsoft = {
-    DWT: {
-      EnumDWT_CapSupportedSizes: { TWSS_A4: 1 },
-      EnumDWT_ImageType: { IT_PNG: 1 },
-      EnumDWT_PixelType: { TWPT_RGB: 1 },
-      GetWebTwain: () => DWObject,
-    },
-  };
-
   beforeEach(() => {
+    mockSources = ['Test Source 1', 'Test Source 2'];
+    mockScanCount = 1;
+    mockAcquireImage = jest.fn(() => onPostAllTransfersCb());
+    mockCloseSource = jest.fn();
+    mockOpenSource = jest.fn();
+    mockRemoveAllImages = jest.fn();
+
+    applicationContext.getScannerResourceUri.mockReturnValue('abc');
+
+    DWObject = {
+      AcquireImage: mockAcquireImage,
+      CloseSource: mockCloseSource,
+      ConvertToBlob: (
+        indices,
+        enumImageType,
+        asyncSuccessFunc,
+        asyncFailureFunc,
+      ) => {
+        const args = {
+          asyncFailureFunc,
+          asyncSuccessFunc,
+          enumImageType,
+          indices,
+        };
+        return asyncSuccessFunc(args);
+      },
+      DataSource: null,
+      DataSourceStatus: 0,
+      ErrorCode: 0,
+      ErrorString: 'Successful!',
+      GetSourceNameItems: index => mockSources[index],
+      HowManyImagesInBuffer: mockScanCount,
+      IfDisableSourceAfterAcquire: false,
+      IfDuplexEnabled: false,
+      IfFeederLoaded: true,
+      OpenSource: mockOpenSource,
+      RegisterEvent: (scannerEvent, cb) => {
+        onPostAllTransfersCb = cb;
+      },
+      RemoveAllImages: mockRemoveAllImages,
+      SelectSourceByIndex: idx => {
+        DWObject.DataSource = idx;
+        return true;
+      },
+      SourceCount: mockSources.length,
+      UnregisterEvent: () => null,
+    };
+
+    Dynamsoft = {
+      DWT: {
+        EnumDWT_CapSupportedSizes: { TWSS_A4: 1 },
+        EnumDWT_ImageType: { IT_PNG: 1 },
+        EnumDWT_PixelType: { TWPT_RGB: 1 },
+        GetWebTwain: () => DWObject,
+      },
+    };
+
     window.Dynamsoft = { ...Dynamsoft };
   });
 
@@ -155,17 +159,17 @@ describe('getScannerInterface', () => {
   });
 
   describe('startScanSessions', () => {
-    const scannerAPI = getScannerInterface();
-    scannerAPI.setDWObject(DWObject);
-    beforeEach(() => {
-      jest.spyOn(DWObject, 'RemoveAllImages').mockImplementation(() => {
-        throw new Error('RemoveAllImages Mock Error');
-      });
-    });
     afterEach(() => {
       DWObject.RemoveAllImages.mockRestore();
     });
+
     it('gracefully deals with failed blob conversion', async () => {
+      const scannerAPI = getScannerInterface();
+      jest.spyOn(DWObject, 'RemoveAllImages').mockImplementation(() => {
+        throw new Error('RemoveAllImages Mock Error');
+      });
+      scannerAPI.setDWObject(DWObject);
+
       let error;
       try {
         await scannerAPI.startScanSession({ applicationContext });

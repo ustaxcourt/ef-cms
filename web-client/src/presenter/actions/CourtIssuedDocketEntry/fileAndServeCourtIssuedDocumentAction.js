@@ -17,9 +17,9 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   const docketEntryId = get(state.docketEntryId);
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-  let { docketNumbers } = props;
-
   const clientConnectionId = get(state.clientConnectionId);
+
+  const { docketNumbers } = props;
 
   await applicationContext
     .getUseCases()

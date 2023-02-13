@@ -19,6 +19,7 @@ if [[ -z "$CIRCLECI" ]]; then
   ESEARCH_PID=$!
 fi
 
+
 URL=http://localhost:8000/shell ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
 
@@ -53,7 +54,7 @@ else
   exitCode=$?
 fi
 
-if [ ${exitCode} != 0 ]; then                   
+if [ "${exitCode}" != 0 ]; then                   
   echo "Seed data is invalid!". 1>&2 && exit 1
 fi
 
@@ -62,15 +63,15 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-ts-node-transpile-only web-api/streams-local.js &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/streams-local.js" &
 nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/websockets-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
-  pkill -P $DYNAMO_PID
-  pkill -P $ESEARCH_PID
+  pkill -P "$DYNAMO_PID"
+  pkill -P "$ESEARCH_PID"
 fi
 
 pkill -P $S3RVER_PID

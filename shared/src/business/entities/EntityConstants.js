@@ -69,6 +69,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to add multiple docket entries to an order is disabled.',
     key: 'consolidated-cases-add-docket-numbers',
   },
+  CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER: {
+    disabledMessage:
+      'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
+    key: 'consolidated-cases-group-access-petitioner',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
@@ -918,6 +923,7 @@ const ROLES = {
   adc: 'adc',
   admin: 'admin',
   admissionsClerk: 'admissionsclerk',
+  caseServicesSupervisor: 'caseServicesSupervisor',
   chambers: 'chambers',
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
@@ -1232,6 +1238,7 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabyte
 
 const ADC_SECTION = 'adc';
 const ADMISSIONS_SECTION = 'admissions';
+const CASE_SERVICES_SUPERVISOR_SECTION = 'caseServicesSupervisor';
 const CHAMBERS_SECTION = 'chambers';
 const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 const DOCKET_SECTION = 'docket';
@@ -1244,6 +1251,7 @@ const TRIAL_CLERKS_SECTION = 'trialClerks';
 const SECTIONS = sortBy([
   ADC_SECTION,
   ADMISSIONS_SECTION,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CHAMBERS_SECTION,
   CLERK_OF_COURT_SECTION,
   DOCKET_SECTION,
@@ -1455,6 +1463,11 @@ const PRACTITIONER_DOCUMENT_TYPES = Object.values(
   PRACTITIONER_DOCUMENT_TYPES_MAP,
 );
 
+const PENALTY_TYPES = {
+  DETERMINATION_PENALTY_AMOUNT: 'determinationPenaltyAmount',
+  IRS_PENALTY_AMOUNT: 'irsPenaltyAmount',
+};
+
 module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
@@ -1486,6 +1499,7 @@ module.exports = deepFreeze({
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
   CASE_SEARCH_MIN_YEAR,
   CASE_SEARCH_PAGE_SIZE,
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CASE_STATUS_TYPES,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
@@ -1575,6 +1589,7 @@ module.exports = deepFreeze({
   PARTY_VIEW_TABS,
   PAYMENT_STATUS,
   PETITIONER_CONTACT_TYPES,
+  PENALTY_TYPES,
   PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,

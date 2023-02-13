@@ -195,6 +195,9 @@ const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
 const {
+  generateTrialSessionPaperServicePdfLambda,
+} = require('./trialSessions/generateTrialSessionPaperServicePdfLambda');
+const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
@@ -659,8 +662,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(editPaperFilingLambda),
+    '/async/case-documents/:docketNumber/paper-filing',
+    lambdaWrapper(editPaperFilingLambda, { isAsync: true }),
   );
   app.put(
     '/case-documents/:docketNumber/docket-entry-meta',
@@ -1017,6 +1020,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
  * trial-sessions
  */
 {
+  app.post(
+    '/trial-sessions/paper-service-pdf',
+    lambdaWrapper(generateTrialSessionPaperServicePdfLambda),
+  );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
     lambdaWrapper(setNoticesForCalendaredTrialSessionLambda, { isAsync: true }),
