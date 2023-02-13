@@ -45,7 +45,7 @@ async function fetchConsolidatedGroupsAndNest({
             .getPersistenceGateway()
             .getCasesByLeadDocketNumber({
               applicationContext,
-              leadDocketNumber: aCase.docketNumber,
+              leadDocketNumber: aCase.leadDocketNumber,
             }),
         ),
     )
@@ -79,7 +79,7 @@ async function fetchConsolidatedGroupsAndNest({
     .filter(aCase => !isLeadCase(aCase) && aCase.leadDocketNumber)
     .forEach(aCase => {
       const leadCase = caseMap[aCase.leadDocketNumber];
-      leadCase.consolidatedCases = leadCase.consolidatedCases || [];
+      leadCase.consolidatedCases = leadCase.consolidatedCases ?? [];
       leadCase.consolidatedCases.push(aCase);
     });
 
