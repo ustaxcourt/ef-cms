@@ -3,7 +3,6 @@ import { admissionsClerkAddsUnverifiedEmailToPetitioner } from './journey/admiss
 import {
   callCognitoTriggerForPendingEmail,
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   setupTest,
 } from './helpers';
@@ -21,7 +20,7 @@ describe('admissions clerk adds petitioner without existing cognito account to c
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
 

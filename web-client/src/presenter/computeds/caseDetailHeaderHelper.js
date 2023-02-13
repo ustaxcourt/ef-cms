@@ -14,6 +14,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
+  const userDirectlyAssociatedWithCase = get(
+    state.screenMetadata.isDirectlyAssociated,
+  );
   const currentPage = get(state.currentPage);
 
   const isCaseSealed = !!caseDetail.isSealed;
@@ -78,7 +81,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showCreateOrderButton: permissions.COURT_ISSUED_DOCUMENT,
     showExternalButtons: isExternalUser && canAllowDocumentServiceForCase,
     showFileDocumentButton:
-      permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase,
+      permissions.FILE_EXTERNAL_DOCUMENT && userDirectlyAssociatedWithCase,
     showFileFirstDocumentButton,
     showNewTabLink: isInternalUser,
     showPendingAccessToCaseButton,
