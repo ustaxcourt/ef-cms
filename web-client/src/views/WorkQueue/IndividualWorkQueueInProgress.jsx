@@ -29,7 +29,7 @@ export const IndividualWorkQueueInProgress = connect(
               <th>Received</th>
               <th>Case Title</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {workQueueHelper.showFiledByColumn && <th>Filed By</th>}
               {workQueueHelper.showCaseStatusColumn && <th>Case Status</th>}
               {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             </tr>
@@ -74,7 +74,7 @@ export const IndividualWorkQueueInProgress = connect(
                       </a>
                     </div>
                   </td>
-                  {!workQueueHelper.hideFiledByColumn && (
+                  {workQueueHelper.showFiledByColumn && (
                     <td className="message-queue-row">
                       {item.docketEntry.filedBy}
                     </td>
