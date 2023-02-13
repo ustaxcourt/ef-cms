@@ -252,6 +252,7 @@ export const getWorkItemDocumentLink = ({
 export const filterWorkItems = ({
   applicationContext,
   assignmentFilterValue,
+  section,
   workItems,
   workQueueToDisplay,
 }) => {
@@ -260,7 +261,7 @@ export const filterWorkItems = ({
 
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ user });
+    .getWorkQueueFilters({ section, user });
 
   const composedFilter = filters[queue][box];
   let assignmentFilter = workItem => {
@@ -315,6 +316,7 @@ const memoizedFormatItemWithLink = memoize(
 );
 
 export const formattedWorkQueue = (get, applicationContext) => {
+  const section = get(state.workQueueToDisplay.section);
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
@@ -332,6 +334,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   let workQueue = filterWorkItems({
     applicationContext,
     assignmentFilterValue,
+    section,
     workItems,
     workQueueToDisplay,
   }).map(workItem => {

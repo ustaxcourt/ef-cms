@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   ROLES,
   STATE_NOT_AVAILABLE,
@@ -149,6 +150,10 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
+User.prototype.isChambersUser = function () {
+  return this.section.includes('Chambers');
+};
+
 User.isExternalUser = function (role) {
   const externalRoles = [
     ROLES.petitioner,
@@ -165,6 +170,7 @@ User.isInternalUser = function (role) {
     ROLES.admissionsClerk,
     ROLES.chambers,
     ROLES.clerkOfCourt,
+    ROLES.caseServicesSupervisor,
     ROLES.docketClerk,
     ROLES.floater,
     ROLES.general,
@@ -176,8 +182,8 @@ User.isInternalUser = function (role) {
   return internalRoles.includes(role);
 };
 
-User.prototype.isChambersUser = function () {
-  return this.section.includes('Chambers');
+User.isCaseServicesUser = function ({ section }) {
+  return section === CASE_SERVICES_SUPERVISOR_SECTION;
 };
 
 module.exports = {
