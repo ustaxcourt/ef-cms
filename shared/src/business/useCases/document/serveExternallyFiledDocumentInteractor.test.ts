@@ -70,7 +70,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       serveExternallyFiledDocumentInteractor(applicationContext, {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: '',
-        docketNumbers: [''],
+        docketNumbers: [],
         subjectCaseDocketNumber: '',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -129,7 +129,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       serveExternallyFiledDocumentInteractor(applicationContext, {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
-        docketNumbers: [''],
+        docketNumbers: [],
         subjectCaseDocketNumber: '',
       }),
     ).rejects.toThrow('Docket entry is already being served');
@@ -155,7 +155,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -186,7 +186,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -212,7 +212,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -238,7 +238,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -264,7 +264,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -278,7 +278,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -304,7 +304,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -323,7 +323,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber, mockMemberCaseDocketNumber],
+      docketNumbers: [mockMemberCaseDocketNumber],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -346,7 +346,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber, mockMemberCaseDocketNumber],
+      docketNumbers: [mockMemberCaseDocketNumber],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -364,7 +364,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -380,7 +380,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -405,7 +405,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber, memberCaseDocketNumber],
+      docketNumbers: [memberCaseDocketNumber],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -426,7 +426,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber, memberCaseDocketNumber],
+      docketNumbers: [memberCaseDocketNumber],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -466,7 +466,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       serveExternallyFiledDocumentInteractor(applicationContext, {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
-        docketNumbers: [mockCase.docketNumber],
+        docketNumbers: [],
         subjectCaseDocketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow(mockErrorText);
@@ -497,7 +497,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -513,7 +513,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -535,7 +535,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber, ''],
+      docketNumbers: ['102-34'],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -549,7 +549,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -563,7 +563,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 
@@ -583,7 +583,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: mockClientConnectionId,
       docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockCase.docketNumber],
+      docketNumbers: [],
       subjectCaseDocketNumber: mockCase.docketNumber,
     });
 

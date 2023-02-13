@@ -3,6 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 import {
   getFormattedDocketEntriesForTest,
   getPetitionDocumentForCase,
+  waitForCondition,
 } from '../helpers';
 
 export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
@@ -66,6 +67,11 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
+    });
 
     ({ formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest));
