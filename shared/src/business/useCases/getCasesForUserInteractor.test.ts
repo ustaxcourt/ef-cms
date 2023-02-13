@@ -1,10 +1,7 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_USERS } from '../../test/mockUsers';
-import { UserCase } from '../entities/UserCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-// jest.mock('../entities/UserCase');
 
 describe('getCasesForUserInteractor', () => {
   it('should return the expected cases for a user', async () => {
@@ -73,7 +70,6 @@ describe('getCasesForUserInteractor', () => {
       ]);
 
     const userCases = await getCasesForUserInteractor(applicationContext);
-    console.log(userCases.openCaseList[1]);
     expect(userCases).toMatchObject({
       closedCaseList: [
         expect.objectContaining({
