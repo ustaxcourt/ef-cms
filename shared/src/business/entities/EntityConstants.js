@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
-const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const {
@@ -1468,7 +1467,7 @@ const PENALTY_TYPES = {
   IRS_PENALTY_AMOUNT: 'irsPenaltyAmount',
 };
 
-module.exports = deepFreeze({
+module.exports = Object.freeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
