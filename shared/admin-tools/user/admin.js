@@ -205,8 +205,8 @@ const setPassword = async ({ Password, Permanent = false, Username }) => {
  * @param {String} providers.section The user's section at the Court
  */
 const createDawsonUser = async ({
+  deployingColorUrl,
   setPermanentPassword = false,
-  urlOverride,
   user,
 }) => {
   checkEnvVar(
@@ -222,7 +222,7 @@ const createDawsonUser = async ({
     },
   };
 
-  const url = urlOverride ?? `https://api.${EFCMS_DOMAIN}/users`;
+  const url = deployingColorUrl ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
 
