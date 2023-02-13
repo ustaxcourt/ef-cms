@@ -1,4 +1,5 @@
 const {
+  CASE_SERVICES_SUPERVISOR_SECTION,
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -6,15 +7,29 @@ const {
 } = require('../entities/EntityConstants');
 
 const getDocQcSectionForUser = user => {
-  if (user.section !== PETITIONS_SECTION) {
-    return DOCKET_SECTION;
-  } else {
-    return user.section;
-  }
+  const showDocketSectionQC =
+    user.section !== PETITIONS_SECTION &&
+    user.section !== CASE_SERVICES_SUPERVISOR_SECTION;
+
+  return showDocketSectionQC ? DOCKET_SECTION : user.section;
 };
 
-const getWorkQueueFilters = ({ user }) => {
-  const docQCUserSection = getDocQcSectionForUser(user);
+const getWorkQueueFilters = ({ section, user }) => {
+  const sectionToDisplay = section || getDocQcSectionForUser(user);
+  const isCaseServicesSupervisor = user.role === ROLES.caseServicesSupervisor;
+  const isDocketClerk = user.role === ROLES.docketClerk;
+  const isPetitionsClerk = user.role === ROLES.petitionsClerk;
+
+  const canViewPetitionsSection = isPetitionsClerk || isCaseServicesSupervisor;
+  const canViewDocketSection = isDocketClerk || isCaseServicesSupervisor;
+
+  let sectionToMatch;
+
+  if (isCaseServicesSupervisor) {
+    sectionToMatch = section || sectionToDisplay;
+  } else {
+    sectionToMatch = user.section;
+  }
 
   return {
     my: {
@@ -22,13 +37,13 @@ const getWorkQueueFilters = ({ user }) => {
         return (
           // DocketClerks
           (item.assigneeId === user.userId &&
-            user.role === ROLES.docketClerk &&
+            canViewDocketSection &&
             !item.completedAt &&
-            item.section === user.section &&
+            item.section === sectionToMatch &&
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (item.assigneeId === user.userId &&
-            user.role === ROLES.petitionsClerk &&
+            canViewPetitionsSection &&
             ((item.caseStatus === CASE_STATUS_TYPES.new &&
               item.caseIsInProgress === true) || // caseIsInProgress only looked at for petitions clerks
               item.inProgress === true))
@@ -38,7 +53,7 @@ const getWorkQueueFilters = ({ user }) => {
         return (
           item.assigneeId === user.userId &&
           !item.completedAt &&
-          item.section === user.section &&
+          item.section === sectionToMatch &&
           item.docketEntry.isFileAttached !== false &&
           !item.inProgress &&
           item.caseIsInProgress !== true
@@ -46,7 +61,7 @@ const getWorkQueueFilters = ({ user }) => {
       },
       outbox: item => {
         return (
-          (user.role === ROLES.petitionsClerk ? !!item.section : true) &&
+          (canViewPetitionsSection ? !!item.section : true) &&
           item.completedByUserId &&
           item.completedByUserId === user.userId &&
           !!item.completedAt
@@ -58,11 +73,11 @@ const getWorkQueueFilters = ({ user }) => {
         return (
           // DocketClerks
           (!item.completedAt &&
-            user.role === ROLES.docketClerk &&
-            item.section === user.section &&
+            canViewDocketSection &&
+            item.section === sectionToMatch &&
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
-          (user.role === ROLES.petitionsClerk &&
+          (canViewPetitionsSection &&
             ((item.caseStatus === CASE_STATUS_TYPES.new &&
               item.caseIsInProgress === true) ||
               item.inProgress === true))
@@ -71,7 +86,7 @@ const getWorkQueueFilters = ({ user }) => {
       inbox: item => {
         return (
           !item.completedAt &&
-          item.section === docQCUserSection &&
+          item.section === sectionToDisplay &&
           item.docketEntry.isFileAttached !== false &&
           !item.inProgress &&
           item.caseIsInProgress !== true
@@ -80,7 +95,7 @@ const getWorkQueueFilters = ({ user }) => {
       outbox: item => {
         return (
           !!item.completedAt &&
-          (user.role === ROLES.petitionsClerk ? !!item.section : true)
+          (canViewPetitionsSection ? !!item.section : true)
         );
       },
     },
