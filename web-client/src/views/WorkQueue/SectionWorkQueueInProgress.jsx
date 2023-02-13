@@ -8,10 +8,10 @@ import React from 'react';
 
 const SectionWorkQueueInProgressRow = React.memo(
   function SectionWorkQueueInProgressRowComponent({
-    hideFiledByColumn,
     item,
     selectWorkItemSequence,
     showAssignedToColumn,
+    showFiledByColumn,
     showSelectColumn,
   }) {
     return (
@@ -72,7 +72,7 @@ const SectionWorkQueueInProgressRow = React.memo(
               </a>
             </div>
           </td>
-          {!hideFiledByColumn && (
+          {showFiledByColumn && (
             <td className="message-queue-row">{item.docketEntry.filedBy}</td>
           )}
           <td className="message-queue-row">{item.caseStatus}</td>
@@ -155,7 +155,7 @@ export const SectionWorkQueueInProgress = connect(
               <th>Filed</th>
               <th>Case Title</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {workQueueHelper.showFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th className="no-wrap">Assigned To</th>
@@ -165,11 +165,11 @@ export const SectionWorkQueueInProgress = connect(
           {formattedWorkQueue.map(item => {
             return (
               <SectionWorkQueueInProgressRow
-                hideFiledByColumn={workQueueHelper.hideFiledByColumn}
                 item={item}
                 key={item.workItemId}
                 selectWorkItemSequence={selectWorkItemSequence}
                 showAssignedToColumn={workQueueHelper.showAssignedToColumn}
+                showFiledByColumn={workQueueHelper.showFiledByColumn}
                 showSelectColumn={workQueueHelper.showSelectColumn}
               />
             );

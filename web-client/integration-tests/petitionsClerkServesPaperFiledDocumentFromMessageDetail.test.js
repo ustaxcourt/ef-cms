@@ -7,13 +7,11 @@ import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1View
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () => {
-  beforeAll(() => {
-    jest.setTimeout(40000);
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
 
+  beforeAll(() => {
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

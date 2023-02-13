@@ -1,4 +1,4 @@
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
 export const docketClerkFilesRQTBeforePetitionIsServed = (
   cerebralTest,
@@ -58,6 +58,11 @@ export const docketClerkFilesRQTBeforePetitionIsServed = (
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
+    });
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
   });
 };

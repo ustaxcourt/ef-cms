@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { isDocketEntryMultiDocketableAction } from './isDocketEntryMultiDocketableAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { shouldSetupConsolidatedCasesAction } from './shouldSetupConsolidatedCasesAction';
 
-describe('shouldSetupConsolidatedCasesAction', () => {
+describe('isDocketEntryMultiDocketableAction', () => {
   const mockDocketEntryId = '123333333';
   let pathYesStub;
   let pathNoStub;
@@ -26,7 +26,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
 
   SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.forEach(eventCode => {
     it(`should return the no path when the eventCode ${eventCode} is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES`, async () => {
-      await runAction(shouldSetupConsolidatedCasesAction, {
+      await runAction(isDocketEntryMultiDocketableAction, {
         modules: {
           presenter,
         },
@@ -43,7 +43,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
 
   ENTERED_AND_SERVED_EVENT_CODES.forEach(eventCode => {
     it(`should return the no path when the eventCode ${eventCode} is one of ENTERED_AND_SERVED_EVENT_CODES`, async () => {
-      await runAction(shouldSetupConsolidatedCasesAction, {
+      await runAction(isDocketEntryMultiDocketableAction, {
         modules: {
           presenter,
         },
@@ -59,7 +59,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
   });
 
   it('should return the yes path when the form eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    await runAction(shouldSetupConsolidatedCasesAction, {
+    await runAction(isDocketEntryMultiDocketableAction, {
       modules: {
         presenter,
       },
@@ -74,7 +74,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
   });
 
   it('should return the yes path when the docket entry eventCode is not one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES and ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    await runAction(shouldSetupConsolidatedCasesAction, {
+    await runAction(isDocketEntryMultiDocketableAction, {
       modules: {
         presenter,
       },

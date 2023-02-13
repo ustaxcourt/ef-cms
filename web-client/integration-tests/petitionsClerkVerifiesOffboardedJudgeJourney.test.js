@@ -3,12 +3,13 @@ import { caseDeadlineReportHelper as caseDeadlineReportComputed } from '../src/p
 import { caseInventoryReportHelper as caseInventoryReportComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
 import { formattedPendingItems as formattedPendingItemsComputed } from '../src/presenter/computeds/formattedPendingItems';
 import { loginAs, setupTest } from './helpers';
+import { messageModalHelper as messageModalHelperComputed } from '../src/presenter/computeds/messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import { workQueueSectionHelper as workQueueSectionHelperComputed } from '../src/presenter/computeds/workQueueSectionHelper';
 
 describe('Petitions clerk verifies offboarded judge journey', () => {
   const cerebralTest = setupTest();
+  const seededDocketNumber = '104-20';
 
   const OFFBOARDED_JUDGE_NAMES = ['Guy'];
 
@@ -74,16 +75,20 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
       expect(cerebralTest.getState('judges')).not.toContain(judgeName);
     });
 
-    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, () => {
-      const workQueueSection = withAppContextDecorator(
-        workQueueSectionHelperComputed,
-      );
+    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: seededDocketNumber,
+      });
 
-      const workQueueSectionHelper = runCompute(workQueueSection, {
+      await cerebralTest.runSequence('openCreateMessageModalSequence');
+
+      const messageModal = withAppContextDecorator(messageModalHelperComputed);
+
+      const messageModalHelper = runCompute(messageModal, {
         state: cerebralTest.getState(),
       });
 
-      expect(workQueueSectionHelper.chambersSections).not.toContain(judgeName);
+      expect(messageModalHelper.chambersSections).not.toContain(judgeName);
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the edit trial session judge drop down`, async () => {
