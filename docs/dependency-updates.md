@@ -62,7 +62,15 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 
 ### pdfjs-dist
 
-`pdfjs-dist` has a major version update to ^3.x,x, but currently has issues in test environment as of 11/11/2022. Skipping updating it this week.
+`pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+
+
+### esbuild
+There is a major upgrade to `esbuild` from 0.6.x to 0.7.x. The new major versions introduced breaking changes on how the `build` and `watch` commands work, which breaks reloading after changes in development environments. The major issue we ran into with upgrading was lack of documentation surrounding what the new events are called for watching for changes. Documentation for major version changes can be found [here](https://github.com/evanw/esbuild/releases/tag/v0.17.0), and in future release tags on Github, the esbuild website hasn't been updated since 0.7.x was released.
+
+
+### stylelint
+There is an update available to `stylelint` but if we update that package then there are issues with installing that require us to install with the `--legacy-peer-deps` flag again. The update to stylelint is not related to a security issue so I decided not to upgrade for now while its downstream dependencies rely on outdated packages.
 
 ### Incrementing the Node Cache Key Version
 
