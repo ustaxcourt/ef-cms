@@ -203,6 +203,29 @@ export const ContactPrimary = connect(
               onChange={onChange}
             />
           )}
+          <FormGroup className="paper-petition-email-input" errorText={}>
+            <label className="usa-label" htmlFor="paper-petition-email">
+              Petition email address{' '}
+              <span className="usa-hint">(optional)</span>
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input max-width-200"
+              id="paper-petition-email"
+              name="contactPrimary.paperPetitionEmail"
+              type="tel"
+              value={data.contactPrimary.phone || ''}
+              onBlur={() => {
+                onBlurSequence();
+              }}
+              onChange={e => {
+                updateFormValueAndSecondaryContactInfoSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
           <FormGroup
             className="phone-input"
             errorText={
