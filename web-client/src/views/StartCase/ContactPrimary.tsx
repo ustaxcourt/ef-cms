@@ -227,22 +227,27 @@ export const ContactPrimary = connect(
             />
           </FormGroup>
           <FormGroup className="electronic-service-consent-input">
-            <label className="usa-label" htmlFor="electronic-service-consent">
-              E-service consent
-            </label>
-            <input
-              checked={data.contactPrimary.hasConsentedToEService || false}
-              className="usa-checkbox__input"
-              id="electronic-service-consent"
-              name="contactPrimary.hasConsentedToEService"
-              type="checkbox"
-              onChange={e => {
-                updateFormValueAndSecondaryContactInfoSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
+            <div className="usa-checkbox">
+              <label
+                className="usa-checkbox__label"
+                htmlFor="electronic-service-consent"
+              >
+                E-service consent
+              </label>
+              <input
+                checked={data.contactPrimary.hasConsentedToEService || false}
+                className="usa-checkbox__input"
+                id="electronic-service-consent"
+                name="contactPrimary.hasConsentedToEService"
+                type="checkbox"
+                onChange={e => {
+                  updateFormValueAndSecondaryContactInfoSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
           </FormGroup>
           <FormGroup
             className="phone-input"
