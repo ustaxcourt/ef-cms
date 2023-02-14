@@ -12,8 +12,10 @@ exports.getConsolidatedCasesByCaseInteractor = (
   applicationContext,
   { docketNumber, pickFields },
 ) => {
+  const pickFieldsList = pickFields.join(',');
+
   return get({
     applicationContext,
-    endpoint: `/cases/${docketNumber}/consolidated-cases?fields=${pickFields}`,
+    endpoint: `/cases/${docketNumber}/consolidated-cases?fields=${pickFieldsList}`,
   });
 };
