@@ -19,7 +19,6 @@ export const practitionerSearchesForUnassociatedSealedCase = cerebralTest => {
     const helper = runCompute(caseDetailHelper, {
       state: cerebralTest.getState(),
     });
-    // TESTS CHECKING FOR isSealed being true but sealedDate being undefined
 
     expect(helper.showSealedCaseView).toBeTruthy();
     expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(true);
