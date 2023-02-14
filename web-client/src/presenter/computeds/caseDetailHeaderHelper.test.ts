@@ -250,7 +250,7 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   describe('showFileFirstDocumentButton', () => {
-    it("should be false when the user's role is respondent and they are associated with the case", () => {
+    it("should be true when the user's role is respondent and they are associated with the case", () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(irsPractitionerUser),
@@ -264,7 +264,7 @@ describe('caseDetailHeaderHelper', () => {
         },
       });
 
-      expect(result.showFileFirstDocumentButton).toEqual(false);
+      expect(result.showFileFirstDocumentButton).toEqual(true);
     });
 
     it("should be false when the user's role is respondent, they are not associated with the case and the case is sealed", () => {
@@ -509,7 +509,7 @@ describe('caseDetailHeaderHelper', () => {
         expect(result.showRequestAccessToCaseButton).toEqual(true);
       });
 
-      it('should be false they are associated with the case', () => {
+      it('should be true they are associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(privatePractitionerUser),
@@ -523,7 +523,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRequestAccessToCaseButton).toEqual(true);
       });
 
       it('should be false when they are not associated with the case and the case is sealed', () => {
