@@ -125,6 +125,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
+  // const eServiceConsentText =
+
   return {
     applicationForWaiverOfFilingFeeFile,
     formattedStatistics,

@@ -304,4 +304,14 @@ describe('reviewSavedPetitionHelper', () => {
       'Order for Amended Petition',
     ]);
   });
+
+  it('should return expected e-consent text when hasConsentedToEService is true', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { primaryContact: { hasConsentedToEService: true } },
+      },
+    });
+
+    expect(result.eServiceConsentText).toBe(true);
+  });
 });
