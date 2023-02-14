@@ -164,7 +164,7 @@ export const ContactSecondary = connect(
             />
           )}
 
-          <FormGroup className="paper-petition-email-input">
+          <FormGroup>
             <label
               className="usa-label"
               htmlFor="paper-petition-email-secondary"
@@ -189,28 +189,26 @@ export const ContactSecondary = connect(
               }}
             />
           </FormGroup>
-          <FormGroup className="electronic-service-consent-input">
-            <div className="usa-checkbox">
-              <input
-                checked={data.contactSecondary.hasConsentedToEService || false}
-                className="usa-checkbox__input"
-                id="electronic-service-consent-secondary"
-                name="contactSecondary.hasConsentedToEService"
-                type="checkbox"
-                onChange={e => {
-                  updateFormValueAndSecondaryContactInfoSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                }}
-              />
-              <label
-                className="usa-checkbox__label"
-                htmlFor="electronic-service-consent-secondary"
-              >
-                E-service consent
-              </label>
-            </div>
+          <FormGroup>
+            <input
+              checked={data.contactSecondary.hasConsentedToEService || false}
+              className="usa-checkbox__input"
+              id="electronic-service-consent-secondary"
+              name="contactSecondary.hasConsentedToEService"
+              type="checkbox"
+              onChange={e => {
+                updateFormValueAndSecondaryContactInfoSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+              }}
+            />
+            <label
+              className="usa-checkbox__label"
+              htmlFor="electronic-service-consent-secondary"
+            >
+              E-service consent
+            </label>
           </FormGroup>
 
           {contactsHelper.contactSecondary.displayPhone && (
