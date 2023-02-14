@@ -13,7 +13,6 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
-  const userAssociatedWithCase = get(state.screenMetadata.isDirectlyAssociated);
   const userDirectlyAssociatedWithCase = get(
     state.screenMetadata.isDirectlyAssociated,
   );
@@ -34,7 +33,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
 
-  if (isExternalUser && !userAssociatedWithCase) {
+  if (isExternalUser && !userDirectlyAssociatedWithCase) {
     const pendingAssociation = get(state.screenMetadata.pendingAssociation);
 
     const isCurrentPageFilePetitionSuccess =
