@@ -174,7 +174,7 @@ export const ContactSecondary = connect(
             </label>
             <input
               autoCapitalize="none"
-              className="usa-input max-width-200"
+              className="usa-input"
               id="paper-petition-email-secondary"
               name="contactSecondary.paperPetitionEmail"
               type="email"

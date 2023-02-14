@@ -210,7 +210,7 @@ export const ContactPrimary = connect(
             </label>
             <input
               autoCapitalize="none"
-              className="usa-input max-width-200"
+              className="usa-input"
               id="paper-petition-email-primary"
               name="contactPrimary.paperPetitionEmail"
               type="email"
