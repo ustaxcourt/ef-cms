@@ -557,9 +557,9 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Reindex Cron Lambda
+          name: Deploy Migration Status Cron Lambda
           command: |
-            npm run deploy:reindex-cron -- $ENV
+            npm run deploy:migration-cron -- $ENV
       - run:
           name: Setup Migration Infrastructure
           command: |
@@ -597,6 +597,10 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - run:
+          name: Deploy Reindex Cron Lambda
+          command: |
+            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Track successful migrations
           command: |

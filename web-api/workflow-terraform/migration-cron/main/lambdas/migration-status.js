@@ -14,7 +14,7 @@ const migrateFlag = process.env.MIGRATE_FLAG;
 
 exports.handler = async (input, context) => {
   await getSqsQueueCount(workQueueUrl);
-  let result;
+  let result = '';
   if (migrateFlag === 'true') {
     console.log(`Migrate flag is ${migrateFlag}`);
 
