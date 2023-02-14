@@ -114,4 +114,20 @@ describe('Petitioner', () => {
       expect(entity.phone).toEqual('123-456-7890');
     });
   });
+
+  describe('optional fields', () => {
+    it('should populate paperPetitionEmail when one is provided', () => {
+      const mockEmail = 'petitioner@example.com';
+
+      const entity = new Petitioner(
+        {
+          ...mockValidPetitioner,
+          paperPetitionEmail: mockEmail,
+        },
+        { applicationContext },
+      );
+
+      expect(entity.paperPetitionEmail).toEqual(mockEmail);
+    });
+  });
 });
