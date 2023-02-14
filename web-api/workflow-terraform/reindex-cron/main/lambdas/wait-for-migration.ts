@@ -1,5 +1,5 @@
 import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/interact-with-pending-job.js';
-import { getMetricStatistics, getSqsQueueCount } from '../../../../is-migration-complete';
+import { getMetricStatistics, getSqsQueueCount } from '../../../../migrationWaitHelper';
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
