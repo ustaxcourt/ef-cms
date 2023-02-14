@@ -203,13 +203,12 @@ export const ContactPrimary = connect(
               onChange={onChange}
             />
           )}
-          <FormGroup className="paper-petition-email-input">
+          <FormGroup>
             <label className="usa-label" htmlFor="paper-petition-email-primary">
               Petition email address{' '}
               <span className="usa-hint">(optional)</span>
             </label>
             <input
-              autoCapitalize="none"
               className="usa-input"
               id="paper-petition-email-primary"
               name="contactPrimary.paperPetitionEmail"
@@ -226,7 +225,7 @@ export const ContactPrimary = connect(
               }}
             />
           </FormGroup>
-          <FormGroup className="electronic-service-consent-input">
+          <FormGroup>
             <div className="usa-checkbox">
               <input
                 checked={data.contactPrimary.hasConsentedToEService || false}
