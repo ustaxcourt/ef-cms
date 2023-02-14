@@ -129,5 +129,19 @@ describe('Petitioner', () => {
 
       expect(entity.paperPetitionEmail).toEqual(mockEmail);
     });
+
+    it('should populate hasConsentedToEService when one is provided', () => {
+      const mockHasConsentedToEService = false;
+
+      const entity = new Petitioner(
+        {
+          ...mockValidPetitioner,
+          hasConsentedToEService: mockHasConsentedToEService,
+        },
+        { applicationContext },
+      );
+
+      expect(entity.hasConsentedToEService).toEqual(mockHasConsentedToEService);
+    });
   });
 });
