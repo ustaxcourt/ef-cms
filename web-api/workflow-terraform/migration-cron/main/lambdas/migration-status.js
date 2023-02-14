@@ -14,22 +14,31 @@ const migrateFlag = process.env.MIGRATE_FLAG;
 
 exports.handler = async (input, context) => {
   await getSqsQueueCount(workQueueUrl);
+  let result;
   if (migrateFlag === 'true') {
     console.log(`Migrate flag is ${migrateFlag}`);
 
     const hasErrors = hasHighPercentageOfSegmentErrors();
+    if (hasErrors) {
+      result += 'There are more than 50% segment errors.\n';
+    }
     const dlQueueHasItems = (await getSqsQueueCount(dlQueueUrl)) > 0;
+    if (dlQueueHasItems) {
+      result += 'There are items in the DL Queue.\n';
+    }
 
     const totalActiveJobs = await getSqsQueueCount(workQueueUrl);
     if (totalActiveJobs > 0 && !hasErrors && !dlQueueHasItems) {
-      return context.succeed(
-        `There are ${totalActiveJobs} active jobs in the queue.`,
-      );
+      result = `There are ${totalActiveJobs} active jobs in the queue.`;
+      return context.succeed(result);
     }
+  } else {
+    result += 'Not migrating.';
   }
 
   console.log('Approving CircleCI wait for reindex job');
   await approvePendingJob({ apiToken, workflowId });
+  return context.succeed(result);
 };
 
 const hasHighPercentageOfSegmentErrors = async () => {
