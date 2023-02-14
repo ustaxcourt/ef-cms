@@ -1,11 +1,12 @@
 import { state } from 'cerebral';
 /**
- * fetches the outbox messages for the section
+ * fetches the completed messages for the section
  *
  * @param {object} applicationContext object that contains all the context specific methods
+ * @param {object} providers.get the cerebral get function
  * @returns {Promise<{Message: Array}>} a list of messages
  */
-export const getOutboxMessagesForSectionAction = async ({
+export const getCompletedMessagesForSectionAction = async ({
   applicationContext,
   get,
 }) => {
@@ -13,7 +14,7 @@ export const getOutboxMessagesForSectionAction = async ({
 
   const messages = await applicationContext
     .getUseCases()
-    .getOutboxMessagesForSectionInteractor(applicationContext, {
+    .getCompletedMessagesForSectionInteractor(applicationContext, {
       section: selectedSection || applicationContext.getCurrentUser().section,
     });
 

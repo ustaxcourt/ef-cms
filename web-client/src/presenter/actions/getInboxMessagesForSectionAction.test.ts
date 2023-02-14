@@ -3,11 +3,11 @@ import {
   DOCKET_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getCompletedMessagesForSectionAction } from './getCompletedMessagesForSectionAction';
+import { getInboxMessagesForSectionAction } from './getInboxMessagesForSectionAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getCompletedMessagesForSectionAction', () => {
+describe('getInboxMessagesForSectionAction', () => {
   const message = {
     messageId: '180bfc0c-4e8e-448a-802a-8fe027be85ef',
   };
@@ -16,11 +16,11 @@ describe('getCompletedMessagesForSectionAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .getCompletedMessagesForSectionInteractor.mockReturnValue([message]);
+      .getInboxMessagesForSectionInteractor.mockReturnValue([message]);
   });
 
   it('returns the messages retrieved from the use case', async () => {
-    const results = await runAction(getCompletedMessagesForSectionAction, {
+    const results = await runAction(getInboxMessagesForSectionAction, {
       modules: {
         presenter,
       },
@@ -29,8 +29,8 @@ describe('getCompletedMessagesForSectionAction', () => {
     expect(results.output.messages).toEqual([message]);
   });
 
-  it('retrieves completes messages for the section from state when it is defined', async () => {
-    await runAction(getCompletedMessagesForSectionAction, {
+  it('retrieves inbox messages for the section from state when it is defined', async () => {
+    await runAction(getInboxMessagesForSectionAction, {
       modules: {
         presenter,
       },
@@ -42,17 +42,17 @@ describe('getCompletedMessagesForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCompletedMessagesForSectionInteractor
-        .mock.calls[0][1],
-    ).toEqual({ section: 'docket' });
+      applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
+        .calls[0][1],
+    ).toEqual({ section: DOCKET_SECTION });
     expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 
-  it("retrieves completed messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
+  it("retrieves inbox messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
     const currentUserSection = { section: ADC_SECTION };
     applicationContext.getCurrentUser.mockReturnValue(currentUserSection);
 
-    await runAction(getCompletedMessagesForSectionAction, {
+    await runAction(getInboxMessagesForSectionAction, {
       modules: {
         presenter,
       },
@@ -62,8 +62,8 @@ describe('getCompletedMessagesForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCompletedMessagesForSectionInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
+        .calls[0][1],
     ).toEqual(currentUserSection);
     expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });

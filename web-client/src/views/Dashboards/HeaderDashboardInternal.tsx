@@ -39,25 +39,23 @@ export const HeaderDashboardInternal = connect(
                 Switch to Section Document QC
               </Button>
             )}
-          {workQueueHelper.showSectionWorkQueue &&
-            workQueueHelper.showMyQueueToggle &&
-            !workQueueHelper.isCaseServicesSupervisor && (
-              <Button
-                link
-                className="button-switch-box"
-                onClick={() => {
-                  navigateToPathSequence({
-                    path: workQueueHelper.getQueuePath({
-                      box: 'inbox',
-                      queue: 'my',
-                    }),
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'clone']} />
-                Switch to My Document QC
-              </Button>
-            )}
+          {workQueueHelper.showSwitchToMyDocQCLink && (
+            <Button
+              link
+              className="button-switch-box"
+              onClick={() => {
+                navigateToPathSequence({
+                  path: workQueueHelper.getQueuePath({
+                    box: 'inbox',
+                    queue: 'my',
+                  }),
+                });
+              }}
+            >
+              <FontAwesomeIcon icon={['far', 'clone']} />
+              Switch to My Document QC
+            </Button>
+          )}
         </div>
       </div>
     );

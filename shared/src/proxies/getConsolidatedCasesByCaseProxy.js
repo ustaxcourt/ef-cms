@@ -10,10 +10,10 @@ const { get } = require('./requests');
  */
 exports.getConsolidatedCasesByCaseInteractor = (
   applicationContext,
-  { docketNumber },
+  { docketNumber, pickFields },
 ) => {
   return get({
     applicationContext,
-    endpoint: `/cases/${docketNumber}/consolidated-cases`,
+    endpoint: `/cases/${docketNumber}/consolidated-cases?fields=${pickFields}`,
   });
 };

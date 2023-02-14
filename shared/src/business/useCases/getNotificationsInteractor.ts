@@ -1,7 +1,7 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
 import { isEmpty } from 'lodash';
 
-const setJudgeUser = async (
+const getJudgeUser = async (
   judgeUserId: string,
   applicationContext: IApplicationContext,
   currentUser: any,
@@ -25,6 +25,7 @@ const setJudgeUser = async (
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} providers.caseServicesSupervisorData optional caseServicesSupervisorData containing section
  * @param {object} providers.judgeUser optional judgeUser for additional filtering
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
@@ -41,7 +42,7 @@ export const getNotificationsInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: appContextUser.userId });
 
-  const judgeUser = await setJudgeUser(
+  const judgeUser = await getJudgeUser(
     judgeUserId,
     applicationContext,
     currentUser,
