@@ -3,12 +3,18 @@ import {
   GetMetricStatisticsCommand,
 } from '@aws-sdk/client-cloudwatch';
 import { DateTime } from 'luxon';
+import {
+  DynamoDBClient,
+  GetItemCommand,
+  PutItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { GetQueueAttributesCommand, SQSClient } from '@aws-sdk/client-sqs';
 
 const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
 const sqsClient = new SQSClient({ region: 'us-east-1' });
+const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
 
-export const getSqsQueueCount = async queueUrl => {
+export const getSqsQueueCount = async (queueUrl: string) => {
   const command = new GetQueueAttributesCommand({
     AttributeNames: [
       'ApproximateNumberOfMessages',
@@ -27,7 +33,7 @@ export const getSqsQueueCount = async queueUrl => {
   return data; //data.something.length?
 };
 
-export const getMetricStatistics = async type => {
+export const getMetricStatistics = async (type: string) => {
   const now = DateTime.now();
   const start = DateTime.now().minus({ minutes: 15 });
   const command = new GetMetricStatisticsCommand({
@@ -51,4 +57,42 @@ export const getMetricStatistics = async type => {
     console.log(error);
   }
   return data;
+};
+
+export const putMigrationQueueIsEmptyFlag = async (value: boolean) => {
+  const command = new PutItemCommand({
+    Item: {
+      current: { BOOL: value },
+      pk: { S: 'migration-queue-is-empty' },
+      sk: { S: 'migration-queue-is-empty' },
+    },
+    TableName: `efcms-deploy-${process.env.ENV}`,
+  });
+  let data;
+  try {
+    data = await dynamodbClient.send(command);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+  return data;
+};
+
+export const getMigrationQueueIsEmptyFlag = async () => {
+  const command = new GetItemCommand({
+    Key: {
+      pk: { S: 'migration-queue-is-empty' },
+      sk: { S: 'migration-queue-is-empty' },
+    },
+    ProjectionExpression: 'current',
+    TableName: `efcms-deploy-${process.env.ENV}`,
+  });
+  let data;
+  try {
+    data = await dynamodbClient.send(command);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+  return data; //data.current
 };
