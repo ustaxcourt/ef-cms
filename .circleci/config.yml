@@ -557,7 +557,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Migration Status Cron Lambda
+          name: Deploy Check Migration Status Cron Lambda
           command: |
             npm run deploy:migration-cron -- $ENV
       - run:
@@ -598,7 +598,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Reindex Cron Lambda
+          name: Deploy Check Reindex Status Cron Lambda
           command: |
             npm run deploy:reindex-cron -- $ENV
       - run:
