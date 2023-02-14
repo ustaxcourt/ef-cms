@@ -3,7 +3,9 @@ const {
 } = require('../../../../../shared/admin-tools/circleci/interact-with-pending-job');
 const {
   getMetricStatistics,
+  getMigrationQueueIsEmptyFlag,
   getSqsQueueCount,
+  putMigrationQueueIsEmptyFlag,
 } = require('../../../../../shared/admin-tools/aws/migrationWaitHelper');
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
@@ -13,6 +15,7 @@ const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCO
 const migrateFlag = process.env.MIGRATE_FLAG;
 
 exports.handler = async (input, context) => {
+  let shouldProceed = false;
   await getSqsQueueCount(workQueueUrl);
   let result = '';
   if (migrateFlag === 'true') {
@@ -21,23 +24,37 @@ exports.handler = async (input, context) => {
     const hasErrors = hasHighPercentageOfSegmentErrors();
     if (hasErrors) {
       result += 'There are more than 50% segment errors.\n';
+      shouldProceed = true;
     }
     const dlQueueHasItems = (await getSqsQueueCount(dlQueueUrl)) > 0;
     if (dlQueueHasItems) {
       result += 'There are items in the DL Queue.\n';
+      shouldProceed = true;
     }
 
     const totalActiveJobs = await getSqsQueueCount(workQueueUrl);
-    if (totalActiveJobs > 0 && !hasErrors && !dlQueueHasItems) {
-      result = `There are ${totalActiveJobs} active jobs in the queue.`;
-      return context.succeed(result);
+    if (!hasErrors && !dlQueueHasItems) {
+      if (totalActiveJobs > 0) {
+        result = `There are ${totalActiveJobs} active jobs in the queue.`;
+        return context.succeed(result);
+      } else {
+        const migrationQueueIsEmptyDeployFlag =
+          await getMigrationQueueIsEmptyFlag();
+        if (!migrationQueueIsEmptyDeployFlag) {
+          await putMigrationQueueIsEmptyFlag(true);
+        } else {
+          shouldProceed = true;
+        }
+      }
     }
   } else {
     result += 'Not migrating.';
   }
 
   console.log('Approving CircleCI wait for reindex job');
-  await approvePendingJob({ apiToken, workflowId });
+  if (shouldProceed) {
+    await approvePendingJob({ apiToken, workflowId });
+  }
   return context.succeed(result);
 };
 
