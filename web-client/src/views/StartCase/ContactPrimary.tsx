@@ -203,7 +203,7 @@ export const ContactPrimary = connect(
               onChange={onChange}
             />
           )}
-          <FormGroup className="paper-petition-email-input" errorText={}>
+          <FormGroup className="paper-petition-email-input">
             <label className="usa-label" htmlFor="paper-petition-email">
               Petition email address{' '}
               <span className="usa-hint">(optional)</span>
@@ -213,11 +213,29 @@ export const ContactPrimary = connect(
               className="usa-input max-width-200"
               id="paper-petition-email"
               name="contactPrimary.paperPetitionEmail"
-              type="tel"
-              value={data.contactPrimary.phone || ''}
+              type="email"
+              value={data.contactPrimary.paperPetitionEmail || ''}
               onBlur={() => {
                 onBlurSequence();
               }}
+              onChange={e => {
+                updateFormValueAndSecondaryContactInfoSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+          <FormGroup className="electronic-service-consent-input">
+            <label className="usa-label" htmlFor="electronic-service-consent">
+              E-service consent
+            </label>
+            <input
+              checked={data.contactPrimary.hasConsentedToEService || false}
+              className="usa-checkbox__input"
+              id="electronic-service-consent"
+              name="contactPrimary.hasConsentedToEService"
+              type="checkbox"
               onChange={e => {
                 updateFormValueAndSecondaryContactInfoSequence({
                   key: e.target.name,
