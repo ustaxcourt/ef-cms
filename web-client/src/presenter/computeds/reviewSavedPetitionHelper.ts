@@ -134,9 +134,15 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ? 'E-service consent'
     : 'No e-service consent';
 
+  const eServiceConsentTextForSecondaryContact = caseDetail.contactPrimary
+    .hasConsentedToEService
+    ? 'E-service consent'
+    : 'No e-service consent';
+
   return {
     applicationForWaiverOfFilingFeeFile,
     eServiceConsentTextForPrimaryContact,
+    eServiceConsentTextForSecondaryContact,
     formattedStatistics,
     hasIrsNoticeFormatted,
     irsNoticeDateFormatted,

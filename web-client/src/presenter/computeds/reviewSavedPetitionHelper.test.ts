@@ -305,13 +305,39 @@ describe('reviewSavedPetitionHelper', () => {
     ]);
   });
 
-  it('should return expected e-consent text when hasConsentedToEService is true', () => {
+  it('should return expected e-consent text for primary and secondary contacts when hasConsentedToEService when they have consented to electronic service', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { contactPrimary: { hasConsentedToEService: true } },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
 
-    expect(result.eServiceConsentTextForPrimaryContact).toBe(true);
+    expect(result.eServiceConsentTextForPrimaryContact).toBe(
+      'E-service consent',
+    );
+    expect(result.eServiceConsentTextForSecondaryContact).toBe(
+      'E-service consent',
+    );
+  });
+
+  it('should return expected e-consent text for primary and secondary contacts when they have not consented to electronic service', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          contactPrimary: { hasConsentedToEService: false },
+          contactSecondary: { hasConsentedToEService: false },
+        },
+      },
+    });
+
+    expect(result.eServiceConsentTextForPrimaryContact).toBe(
+      'No e-service consent',
+    );
+    expect(result.eServiceConsentTextForSecondaryContact).toBe(
+      'No e-service consent',
+    );
   });
 });
