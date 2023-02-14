@@ -112,9 +112,11 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          petitioners: {
-            contactId: 'abc123',
-          },
+          petitioners: [
+            {
+              contactId: 'abc123',
+            },
+          ],
         },
       },
     });
