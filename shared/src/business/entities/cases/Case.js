@@ -701,11 +701,10 @@ Case.VALIDATION_RULES = {
   receivedAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
   ),
-  sealedDate: JoiValidationConstants.ISO_DATE.when('isSealed', {
-    is: true,
-    otherwise: joi.optional().allow(null),
-    then: joi.required(),
-  }).description('When the case was sealed from the public.'),
+  sealedDate: JoiValidationConstants.ISO_DATE.optional()
+    .allow(null)
+    .description('When the case was sealed from the public.'),
+
   sortableDocketNumber: joi
     .number()
     .required()
