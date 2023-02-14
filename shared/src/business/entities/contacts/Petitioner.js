@@ -37,6 +37,7 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
   this.countryType = rawContact.countryType;
   this.email = rawContact.email;
   this.paperPetitionEmail = rawContact.paperPetitionEmail;
+  this.hasConsentedToEService = rawContact.hasConsentedToEService;
   this.hasEAccess = rawContact.hasEAccess || undefined;
   this.inCareOf = rawContact.inCareOf;
   this.isAddressSealed = rawContact.isAddressSealed || false;
@@ -64,15 +65,24 @@ Petitioner.VALIDATION_RULES = {
     otherwise: joi.optional(),
     then: joi.required(),
   }),
+  hasConsentedToEService: joi
+    .boolean()
+    .optional()
+    .description(
+      'Flag that indicates the petitioner has consented to receive electronic service on a paper petition',
+    ),
   hasEAccess: joi
     .boolean()
     .optional()
     .description(
-      'Flag that indicates if the contact has credentials to both the legacy and new system.',
+      'Flag that indicates if the petitioner has credentials to both the legacy and new system.',
     ),
   inCareOf: JoiValidationConstants.STRING.max(100).optional(),
   isAddressSealed: joi.boolean().required(),
   name: JoiValidationConstants.STRING.max(100).required(),
+  paperPetitionEmail: JoiValidationConstants.EMAIL.optional().description(
+    'Email provided by the petitioner on a paper petition',
+  ),
   sealedAndUnavailable: joi.boolean().optional(),
   serviceIndicator: JoiValidationConstants.STRING.valid(
     ...Object.values(SERVICE_INDICATOR_TYPES),
