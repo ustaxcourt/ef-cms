@@ -15,8 +15,6 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   let isAssociated = false;
   let isDirectlyAssociated = false;
   let pendingAssociation = false;
-  let caseParties = [];
-  let idName = 'userId';
   const caseDetail = get(state.caseDetail);
 
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
@@ -49,35 +47,25 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     };
   }
 
-  if (user.role === USER_ROLES.privatePractitioner) {
-    caseParties = caseDetail.privatePractitioners || [];
-  } else if (user.role === USER_ROLES.irsPractitioner) {
-    caseParties = caseDetail.irsPractitioners || [];
-  } else if (user.role === USER_ROLES.petitioner) {
-    idName = 'contactId';
-    caseParties = caseDetail.petitioners || [];
+  const caseParties = [
+    ...(caseDetail.privatePractitioners || []),
+    ...(caseDetail.irsPractitioners || []),
+    ...(caseDetail.petitioners || []),
+  ];
+  const idName = user.role === USER_ROLES.petitioner ? 'contactId' : 'userId';
+
+  if (isConsolidatedGroupAccessEnabled) {
+    isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
+      consolidatedCases: caseDetail.consolidatedCases,
+      userId: user[`${idName}`],
+    });
+  } else {
+    isAssociated = caseParties.some(party => party[idName] === user.userId);
   }
 
-  if (caseDetail.leadDocketNumber) {
-    if (isConsolidatedGroupAccessEnabled) {
-      isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
-        consolidatedCases: caseDetail.consolidatedCases,
-        userId: user.userId,
-      });
-    } else {
-      isAssociated = caseParties.some(
-        party => party[`${idName}`] === user.userId,
-      );
-    }
-    isDirectlyAssociated = caseParties.some(
-      party => party[`${idName}`] === user.userId,
-    );
-  } else {
-    isAssociated = caseParties.some(
-      party => party[`${idName}`] === user.userId,
-    );
-    isDirectlyAssociated = isAssociated;
-  }
+  isDirectlyAssociated = caseParties.some(
+    party => party[idName] === user.userId,
+  );
 
   if (!isAssociated && user.role === USER_ROLES.privatePractitioner) {
     pendingAssociation = await applicationContext
