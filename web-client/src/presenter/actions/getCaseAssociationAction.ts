@@ -54,7 +54,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   ];
   const idName = user.role === USER_ROLES.petitioner ? 'contactId' : 'userId';
 
-  if (isConsolidatedGroupAccessEnabled) {
+  if (isConsolidatedGroupAccessEnabled && caseDetail.leadDocketNumber) {
     isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
       consolidatedCases: caseDetail.consolidatedCases,
       userId: user[`${idName}`],
