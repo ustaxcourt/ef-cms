@@ -204,14 +204,14 @@ export const ContactPrimary = connect(
             />
           )}
           <FormGroup className="paper-petition-email-input">
-            <label className="usa-label" htmlFor="paper-petition-email">
+            <label className="usa-label" htmlFor="paper-petition-email-primary">
               Petition email address{' '}
               <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
               className="usa-input max-width-200"
-              id="paper-petition-email"
+              id="paper-petition-email-primary"
               name="contactPrimary.paperPetitionEmail"
               type="email"
               value={data.contactPrimary.paperPetitionEmail || ''}
@@ -231,7 +231,7 @@ export const ContactPrimary = connect(
               <input
                 checked={data.contactPrimary.hasConsentedToEService || false}
                 className="usa-checkbox__input"
-                id="electronic-service-consent"
+                id="electronic-service-consent-primary"
                 name="contactPrimary.hasConsentedToEService"
                 type="checkbox"
                 onChange={e => {
@@ -243,7 +243,7 @@ export const ContactPrimary = connect(
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor="electronic-service-consent"
+                htmlFor="electronic-service-consent-primary"
               >
                 E-service consent
               </label>
