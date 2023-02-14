@@ -23,6 +23,7 @@ export const getSqsQueueCount = async queueUrl => {
   } catch (error) {
     console.log(error);
   }
+  console.log('sqs queue data: ', data);
   return data; //data.something.length?
 };
 
