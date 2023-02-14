@@ -36,6 +36,7 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
   this.country = rawContact.country;
   this.countryType = rawContact.countryType;
   this.email = rawContact.email;
+  this.paperPetitionEmail = rawContact.paperPetitionEmail;
   this.hasEAccess = rawContact.hasEAccess || undefined;
   this.inCareOf = rawContact.inCareOf;
   this.isAddressSealed = rawContact.isAddressSealed || false;
