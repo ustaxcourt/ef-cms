@@ -114,4 +114,34 @@ describe('Petitioner', () => {
       expect(entity.phone).toEqual('123-456-7890');
     });
   });
+
+  describe('optional fields', () => {
+    it('should populate paperPetitionEmail when one is provided', () => {
+      const mockEmail = 'petitioner@example.com';
+
+      const entity = new Petitioner(
+        {
+          ...mockValidPetitioner,
+          paperPetitionEmail: mockEmail,
+        },
+        { applicationContext },
+      );
+
+      expect(entity.paperPetitionEmail).toEqual(mockEmail);
+    });
+
+    it('should populate hasConsentedToEService when one is provided', () => {
+      const mockHasConsentedToEService = false;
+
+      const entity = new Petitioner(
+        {
+          ...mockValidPetitioner,
+          hasConsentedToEService: mockHasConsentedToEService,
+        },
+        { applicationContext },
+      );
+
+      expect(entity.hasConsentedToEService).toEqual(mockHasConsentedToEService);
+    });
+  });
 });
