@@ -18,11 +18,9 @@ resource "aws_lambda_function" "migration_status_lambda" {
 
   environment {
     variables = {
-      DESTINATION_TABLE             = var.destination_table
       ENVIRONMENT                   = var.environment
       NODE_ENV                      = "production"
-      SOURCE_TABLE                  = var.source_table
-      ACCOUNT_ID                    = data.aws_caller_identity.current.account_id
+      AWS_ACCOUNT_ID                = data.aws_caller_identity.current.account_id
       CIRCLE_WORKFLOW_ID            = var.circle_workflow_id
       MIGRATE_FLAG                  = var.migrate_flag
       CIRCLE_MACHINE_USER_TOKEN     = var.circle_machine_user_token
@@ -32,7 +30,7 @@ resource "aws_lambda_function" "migration_status_lambda" {
 
 resource "aws_cloudwatch_event_rule" "check_migration_status_cron_rule" {
   name                = "check_migration_status_cron_${var.environment}"
-  schedule_expression = "rate(15 minutes)"
+  schedule_expression = "rate(1 minute)"
   is_enabled          = "false"
 }
 

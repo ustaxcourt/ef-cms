@@ -579,12 +579,24 @@ jobs:
               npm run start:migration -- $ENV
             fi
       - run:
-          name: Wait for SQS Queue to Empty
-          no_output_timeout: 5h
+          name: Enable Check Migration Status Cron
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./wait-for-migration-to-finish.sh
-            fi
+            ./enable-migration-cron.sh
+
+  prepare-for-reindex:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.17.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Track successful migrations
           command: |
@@ -886,10 +898,21 @@ workflows:
             branches:
               only:
                 - test
-      - wait-for-reindex:
+      - wait-for-migration:
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          requires:
+            - wait-for-migration
+          filters:
+            branches:
+              only:
+                - test
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
@@ -953,10 +976,30 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - wait-for-reindex:
+      - wait-for-migration:
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          requires:
+            - wait-for-migration
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
@@ -1033,11 +1076,20 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
-      - wait-for-reindex:
+      - wait-for-migration:
           <<: *build-and-deploy-with-context-defaults
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-migration
+      - wait-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           <<: *build-and-deploy-with-context-defaults
           requires:
