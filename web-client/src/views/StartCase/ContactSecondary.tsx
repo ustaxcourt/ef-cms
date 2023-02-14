@@ -173,7 +173,6 @@ export const ContactSecondary = connect(
               <span className="usa-hint">(optional)</span>
             </label>
             <input
-              autoCapitalize="none"
               className="usa-input"
               id="paper-petition-email-secondary"
               name="contactSecondary.paperPetitionEmail"
