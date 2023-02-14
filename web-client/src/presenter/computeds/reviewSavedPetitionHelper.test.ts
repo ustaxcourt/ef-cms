@@ -308,10 +308,10 @@ describe('reviewSavedPetitionHelper', () => {
   it('should return expected e-consent text when hasConsentedToEService is true', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { primaryContact: { hasConsentedToEService: true } },
+        form: { contactPrimary: { hasConsentedToEService: true } },
       },
     });
 
-    expect(result.eServiceConsentText).toBe(true);
+    expect(result.eServiceConsentTextForPrimaryContact).toBe(true);
   });
 });

@@ -33,6 +33,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ...caseDetail
   } = get(state.form);
 
+  console.log('***', caseDetail);
+
   const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
     applicationContext.getConstants();
 
@@ -125,10 +127,16 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
-  // const eServiceConsentText =
+  console.log(caseDetail);
+
+  const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
+    .hasConsentedToEService
+    ? 'E-service consent'
+    : 'No e-service consent';
 
   return {
     applicationForWaiverOfFilingFeeFile,
+    eServiceConsentTextForPrimaryContact,
     formattedStatistics,
     hasIrsNoticeFormatted,
     irsNoticeDateFormatted,
