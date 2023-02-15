@@ -21,6 +21,7 @@ export const AddressDisplay = connect(
     boldName,
     constants,
     contact,
+    eServiceConsentText,
     nameOverride,
     noMargin,
     openSealAddressModalSequence,
@@ -49,6 +50,10 @@ export const AddressDisplay = connect(
         {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <span className="address-line">{contact.country}</span>
         )}
+        {/* fix styling */}
+        {contact.paperPetitionEmail && <div>{contact.paperPetitionEmail}</div>}
+        {eServiceConsentText && <div>{eServiceConsentText}</div>}
+
         {contact.phone && (
           <span
             className={classNames(

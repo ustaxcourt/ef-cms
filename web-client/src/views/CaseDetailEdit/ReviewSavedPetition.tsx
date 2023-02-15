@@ -99,18 +99,13 @@ export const ReviewSavedPetition = connect(
                         {form.contactPrimary && (
                           <>
                             <address aria-labelledby="filing-contact-primary">
-                              <AddressDisplay contact={form.contactPrimary} />
+                              <AddressDisplay
+                                contact={form.contactPrimary}
+                                eServiceConsentText={
+                                  reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
+                                }
+                              />
                             </address>
-                            {form.contactPrimary.paperPetitionEmail && (
-                              <div>
-                                {form.contactPrimary.paperPetitionEmail}
-                              </div>
-                            )}
-                            <div>
-                              {
-                                reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
-                              }
-                            </div>
                           </>
                         )}
                       </div>
@@ -124,18 +119,13 @@ export const ReviewSavedPetition = connect(
                               Spouse’s information
                             </span>
                             <address aria-labelledby="filing-contact-secondary">
-                              <AddressDisplay contact={form.contactSecondary} />
+                              <AddressDisplay
+                                contact={form.contactSecondary}
+                                eServiceConsentText={
+                                  reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
+                                }
+                              />
                             </address>
-                            {form.contactSecondary.paperPetitionEmail && (
-                              <div>
-                                {form.contactSecondary.paperPetitionEmail}
-                              </div>
-                            )}
-                            <div>
-                              {
-                                reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
-                              }
-                            </div>
                           </>
                         )}
                       </div>
