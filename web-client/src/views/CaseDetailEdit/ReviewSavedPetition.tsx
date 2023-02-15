@@ -101,14 +101,16 @@ export const ReviewSavedPetition = connect(
                             <address aria-labelledby="filing-contact-primary">
                               <AddressDisplay contact={form.contactPrimary} />
                             </address>
-                            <span>
-                              {form.contactPrimary.paperPetitionEmail}
-                            </span>
-                            <span>
+                            {form.contactPrimary.paperPetitionEmail && (
+                              <div>
+                                {form.contactPrimary.paperPetitionEmail}
+                              </div>
+                            )}
+                            <div>
                               {
                                 reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
                               }
-                            </span>
+                            </div>
                           </>
                         )}
                       </div>
@@ -124,14 +126,16 @@ export const ReviewSavedPetition = connect(
                             <address aria-labelledby="filing-contact-secondary">
                               <AddressDisplay contact={form.contactSecondary} />
                             </address>
-                            <span>
-                              {form.contactSecondary.paperPetitionEmail}
-                            </span>
-                            <span>
+                            {form.contactSecondary.paperPetitionEmail && (
+                              <div>
+                                {form.contactSecondary.paperPetitionEmail}
+                              </div>
+                            )}
+                            <div>
                               {
                                 reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
                               }
-                            </span>
+                            </div>
                           </>
                         )}
                       </div>
