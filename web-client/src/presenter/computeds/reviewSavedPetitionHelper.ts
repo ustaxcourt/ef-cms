@@ -125,10 +125,9 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
-  const shouldDisplayEConsentTextForPrimaryContact = !(
-    !!caseDetail.contactSecondary.paperPetitionEmail ||
-    caseDetail.contactSecondary.hasConsentedToEService
-  );
+  const shouldDisplayEConsentTextForPrimaryContact =
+    !!caseDetail.contactPrimary.paperPetitionEmail ||
+    caseDetail.contactPrimary.hasConsentedToEService;
 
   const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
     .hasConsentedToEService
@@ -139,10 +138,9 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let eServiceConsentTextForSecondaryContact;
 
   if (caseDetail.contactSecondary) {
-    shouldDisplayEConsentTextForSecondaryContact = !(
+    shouldDisplayEConsentTextForSecondaryContact =
       !!caseDetail.contactSecondary.paperPetitionEmail ||
-      caseDetail.contactSecondary.hasConsentedToEService
-    );
+      caseDetail.contactSecondary.hasConsentedToEService;
 
     eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
       .hasConsentedToEService
