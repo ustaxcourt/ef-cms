@@ -33,8 +33,6 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ...caseDetail
   } = get(state.form);
 
-  console.log('***', caseDetail);
-
   const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
     applicationContext.getConstants();
 
@@ -127,9 +125,9 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
-  const shouldDisplayEConsentTextForPrimaryContact = !!(
-    !!caseDetail.contactPrimary.paperPetitionEmail &&
-    !caseDetail.contactSecondary.hasConsentedToEService
+  const shouldDisplayEConsentTextForPrimaryContact = !(
+    !!caseDetail.contactSecondary.paperPetitionEmail ||
+    caseDetail.contactSecondary.hasConsentedToEService
   );
 
   const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
@@ -141,9 +139,9 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let eServiceConsentTextForSecondaryContact;
 
   if (caseDetail.contactSecondary) {
-    shouldDisplayEConsentTextForSecondaryContact = !!(
-      !!caseDetail.contactSecondary.paperPetitionEmail &&
-      !caseDetail.contactSecondary.hasConsentedToEService
+    shouldDisplayEConsentTextForSecondaryContact = !(
+      !!caseDetail.contactSecondary.paperPetitionEmail ||
+      caseDetail.contactSecondary.hasConsentedToEService
     );
 
     eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
