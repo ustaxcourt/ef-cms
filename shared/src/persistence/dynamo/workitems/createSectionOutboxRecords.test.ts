@@ -43,7 +43,7 @@ describe('createSectionOutboxRecords', () => {
     ).toMatchObject({
       Item: {
         gsi1pk: 'work-item|work-item-id-123',
-        pk: 'section-outbox|flavortown|2019-04',
+        pk: 'section-outbox|flavortown|2019-04-19',
         sk: mockWorkItem.completedAt,
       },
     });
