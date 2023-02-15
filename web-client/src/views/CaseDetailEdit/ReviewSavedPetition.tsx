@@ -104,6 +104,11 @@ export const ReviewSavedPetition = connect(
                             <span>
                               {form.contactPrimary.paperPetitionEmail}
                             </span>
+                            <span>
+                              {
+                                reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
+                              }
+                            </span>
                           </>
                         )}
                       </div>
@@ -120,7 +125,12 @@ export const ReviewSavedPetition = connect(
                               <AddressDisplay contact={form.contactSecondary} />
                             </address>
                             <span>
-                              {form.contactPrimary.paperPetitionEmail}
+                              {form.contactSecondary.paperPetitionEmail}
+                            </span>
+                            <span>
+                              {
+                                reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
+                              }
                             </span>
                           </>
                         )}
