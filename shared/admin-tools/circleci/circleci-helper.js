@@ -31,7 +31,6 @@ exports.approvePendingJob = async ({ apiToken, workflowId }) => {
   await axios.post(approveJob.url, {}, approveJob);
 };
 
-// TODO: delete this if we're sure it'll never be used
 exports.cancelWorkflow = async ({ apiToken, workflowId }) => {
   const cancelWorkflow = {
     headers: { 'Circle-Token': apiToken },

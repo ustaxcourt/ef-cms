@@ -1,6 +1,6 @@
 const {
   approvePendingJob,
-} = require('../../../../../shared/admin-tools/circleci/interact-with-pending-job');
+} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
 const {
   isReindexComplete,
 } = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
