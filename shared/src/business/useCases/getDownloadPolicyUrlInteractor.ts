@@ -6,11 +6,7 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
-import {
-  Case,
-  getPetitionerById,
-  isPetitionerPartOfGroup,
-} from '../entities/cases/Case';
+import { Case, isUserPartOfGroup } from '../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -166,9 +162,8 @@ export const getDownloadPolicyUrlInteractor = async (
           docketNumber: caseEntity.leadDocketNumber,
         });
 
-      userAssociatedWithCase = isPetitionerPartOfGroup({
+      userAssociatedWithCase = isUserPartOfGroup({
         consolidatedCases,
-        isPartyOfCase: getPetitionerById,
         userId: user.userId,
       });
     } else {
