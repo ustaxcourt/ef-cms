@@ -110,6 +110,64 @@ describe('getCasesForUserInteractor', () => {
     });
   });
 
+  it('should return links to closed consolidated that are still associated with', async () => {
+    applicationContext.getCurrentUser.mockResolvedValue({
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    const consolidatedGroup = [
+      {
+        ...MOCK_CASE,
+        createdAt: '2020-01-21T16:41:39.474Z',
+        docketNumber: '102-20',
+        leadDocketNumber: '107-19',
+      },
+      {
+        ...MOCK_CASE,
+        closedDate: '2019-08-16T17:29:10.132Z',
+        createdAt: '2019-08-16T17:29:10.132Z',
+        docketNumber: '107-19',
+        leadDocketNumber: '107-19',
+        status: 'Closed',
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockResolvedValue(consolidatedGroup);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadDocketNumber.mockResolvedValue(consolidatedGroup);
+
+    const userCases = await getCasesForUserInteractor(applicationContext);
+
+    expect(userCases.openCaseList).toEqual([
+      expect.objectContaining({
+        consolidatedCases: expect.arrayContaining([
+          expect.objectContaining({
+            docketNumber: '102-20',
+            isRequestingUserAssociated: true,
+          }),
+        ]),
+        docketNumber: '107-19',
+        isRequestingUserAssociated: true,
+        leadDocketNumber: '107-19',
+      }),
+    ]);
+    expect(userCases.closedCaseList).toEqual([
+      expect.objectContaining({
+        consolidatedCases: expect.arrayContaining([
+          expect.objectContaining({
+            docketNumber: '102-20',
+            isRequestingUserAssociated: true,
+          }),
+        ]),
+        docketNumber: '107-19',
+        isRequestingUserAssociated: true,
+        leadDocketNumber: '107-19',
+      }),
+    ]);
+  });
+
   it('should return the expected associated cases with NO consolidated groups or lead cases', async () => {
     applicationContext.getCurrentUser.mockResolvedValue({
       userId: '1',
