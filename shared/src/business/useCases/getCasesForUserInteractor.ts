@@ -30,15 +30,15 @@ type TAssociatedCase = {
  */
 async function fetchConsolidatedGroupsAndNest({
   applicationContext,
-  openCases,
+  cases,
 }: {
   applicationContext: IApplicationContext;
-  openCases: TAssociatedCase[];
+  cases: TAssociatedCase[];
 }) {
   // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
   const consolidatedGroups = (
     await Promise.all(
-      openCases
+      cases
         .filter(aCase => aCase.leadDocketNumber)
         .map(aCase =>
           applicationContext
@@ -55,7 +55,7 @@ async function fetchConsolidatedGroupsAndNest({
 
   // Combine open cases and consolidated cases and remove duplicates
   const associatedAndUnassociatedCases = uniqBy(
-    [...openCases, ...consolidatedGroups],
+    [...cases, ...consolidatedGroups],
     aCase => aCase.docketNumber,
   );
 
@@ -131,7 +131,12 @@ export const getCasesForUserInteractor = async (
 
   const nestedOpenCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    openCases,
+    cases: openCases,
+  });
+
+  const nestedClosedCases = await fetchConsolidatedGroupsAndNest({
+    applicationContext,
+    cases: closedCases,
   });
 
   const sortedOpenCases: any[] = Object.values(nestedOpenCases)
@@ -145,7 +150,7 @@ export const getCasesForUserInteractor = async (
     .sort((a, b) => compareISODateStrings(a.createdAt, b.createdAt))
     .reverse();
 
-  const sortedClosedCases = closedCases
+  const sortedClosedCases = nestedClosedCases
     .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
     .reverse();
 
