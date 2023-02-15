@@ -49,7 +49,7 @@ export const getMetricStatistics = async (type: string): Promise<object> => {
     Namespace: 'AWS/Lambda',
     Period: 60,
     StartTime: start.toJSDate(),
-    Statistics: ['sum'],
+    Statistics: ['Sum'],
   });
   let data;
   try {
