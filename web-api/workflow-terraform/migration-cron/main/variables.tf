@@ -6,22 +6,6 @@ variable "environment" {
   type = string
 }
 
-variable "stream_arn" {
-  type = string
-}
-
-variable "destination_table" {
-  type = string
-}
-
-variable "source_table" {
-  type = string
-}
-
-variable "deploying_color" {
-  type = string
-}
-
 variable "circle_workflow_id" {
   type = string
 }

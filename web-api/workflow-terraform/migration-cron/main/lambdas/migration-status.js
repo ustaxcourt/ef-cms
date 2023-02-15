@@ -12,35 +12,34 @@ const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
 const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_dl_queue_${process.env.ENVIRONMENT}`;
 const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.ENVIRONMENT}`;
-const migrateFlag = process.env.MIGRATE_FLAG;
 
 exports.handler = async (input, context) => {
   let shouldProceed = false;
-  await getSqsQueueCount(workQueueUrl);
-  let result = '';
+  await getSqsQueueCount(workQueueUrl); //TODO: remove after debugging
+  const migrateFlag = process.env.MIGRATE_FLAG;
+  const results = { migrateFlag };
   if (migrateFlag === 'true') {
-    console.log(`Migrate flag is ${migrateFlag}`);
-
-    const hasErrors = hasHighPercentageOfSegmentErrors();
-    if (hasErrors) {
-      result += 'There are more than 50% segment errors.\n';
+    results.errorRate = await getSegmentErrorRate();
+    const highErrorRate = results.errorRate > 50;
+    if (highErrorRate) {
       shouldProceed = true;
     }
-    const dlQueueHasItems = (await getSqsQueueCount(dlQueueUrl)) > 0;
+    results.dlQueueCount = await getSqsQueueCount(dlQueueUrl);
+    const dlQueueHasItems = results.dlQueueCount > 0;
     if (dlQueueHasItems) {
-      result += 'There are items in the DL Queue.\n';
       shouldProceed = true;
     }
 
-    const totalActiveJobs = await getSqsQueueCount(workQueueUrl);
-    if (!hasErrors && !dlQueueHasItems) {
-      if (totalActiveJobs > 0) {
-        result = `There are ${totalActiveJobs} active jobs in the queue.`;
-        return context.succeed(result);
+    // it's possible the queue has caught up but there are still more segments to process
+    // don't approve the job if this is the first consecutive time the queue is empty
+    results.totalActiveJobs = await getSqsQueueCount(workQueueUrl);
+    if (!highErrorRate && !dlQueueHasItems) {
+      if (results.totalActiveJobs > 0) {
+        await putMigrationQueueIsEmptyFlag(false);
       } else {
-        const migrationQueueIsEmptyDeployFlag =
+        results.migrationQueueIsEmptyFlag =
           await getMigrationQueueIsEmptyFlag();
-        if (!migrationQueueIsEmptyDeployFlag) {
+        if (!results.migrationQueueIsEmptyFlag) {
           await putMigrationQueueIsEmptyFlag(true);
         } else {
           shouldProceed = true;
@@ -48,17 +47,16 @@ exports.handler = async (input, context) => {
       }
     }
   } else {
-    result += 'Not migrating.';
+    shouldProceed = true;
   }
 
-  console.log('Approving CircleCI wait for reindex job');
   if (shouldProceed) {
     await approvePendingJob({ apiToken, workflowId });
   }
-  return context.succeed(result);
+  return context.succeed({ ...results, shouldProceed });
 };
 
-const hasHighPercentageOfSegmentErrors = async () => {
+const getSegmentErrorRate = async () => {
   const errorResponse = await getMetricStatistics('Errors');
   console.log(errorResponse);
   const invocationResponse = await getMetricStatistics('Invocations');
@@ -71,10 +69,9 @@ const hasHighPercentageOfSegmentErrors = async () => {
     console.log(
       `There were ${invocationTotal} invocations in the last 15 minutes.`,
     );
-    const failurePercentage = (errorTotal * 100) / invocationTotal;
-    console.log(
-      `There were ${failurePercentage}% errors in the last 15 minutes.`,
-    );
-    return failurePercentage > 50;
+    const errorRate = (errorTotal * 100) / invocationTotal;
+    console.log(`There were ${errorRate}% errors in the last 15 minutes.`);
+    return errorRate;
   }
+  return 0;
 };
