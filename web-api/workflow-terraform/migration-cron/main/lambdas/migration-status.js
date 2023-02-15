@@ -1,6 +1,7 @@
 const {
   approvePendingJob,
-} = require('../../../../../shared/admin-tools/circleci/interact-with-pending-job');
+  cancelWorkflow,
+} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
 const {
   getMetricStatistics,
   getMigrationQueueIsEmptyFlag,
@@ -15,18 +16,19 @@ const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCO
 
 exports.handler = async (input, context) => {
   let shouldProceed = false;
+  let shouldCancel = false;
   const migrateFlag = process.env.MIGRATE_FLAG;
   const results = { migrateFlag };
   if (migrateFlag === 'true') {
     results.errorRate = await getSegmentErrorRate();
     const highErrorRate = results.errorRate > 50;
     if (highErrorRate) {
-      shouldProceed = true;
+      shouldCancel = true;
     }
     results.dlQueueCount = await getSqsQueueCount(dlQueueUrl);
     const dlQueueHasItems = results.dlQueueCount > 0;
     if (dlQueueHasItems) {
-      shouldProceed = true;
+      shouldCancel = true;
     }
 
     // it's possible the queue has caught up but there are still more segments to process
@@ -49,6 +51,10 @@ exports.handler = async (input, context) => {
     shouldProceed = true;
   }
 
+  if (shouldCancel) {
+    await cancelWorkflow({ apiToken, workflowId });
+    return context.fail({ ...results, shouldProceed });
+  }
   if (shouldProceed) {
     await approvePendingJob({ apiToken, workflowId });
   }

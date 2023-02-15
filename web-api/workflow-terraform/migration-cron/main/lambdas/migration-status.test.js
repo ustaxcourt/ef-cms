@@ -1,6 +1,7 @@
 const {
   approvePendingJob,
-} = require('../../../../../shared/admin-tools/circleci/interact-with-pending-job');
+  cancelWorkflow,
+} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
 const {
   getMetricStatistics,
   getMigrationQueueIsEmptyFlag,
@@ -9,12 +10,10 @@ const {
 } = require('../../../../../shared/admin-tools/aws/migrationWaitHelper');
 const { handler } = require('./migration-status');
 
-jest.mock(
-  '../../../../../shared/admin-tools/circleci/interact-with-pending-job',
-  () => ({
-    approvePendingJob: jest.fn(),
-  }),
-);
+jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
+  approvePendingJob: jest.fn(),
+  cancelWorkflow: jest.fn(),
+}));
 jest.mock('../../../../../shared/admin-tools/aws/migrationWaitHelper', () => ({
   getMetricStatistics: jest.fn(),
   getMigrationQueueIsEmptyFlag: jest.fn(),
@@ -53,6 +52,7 @@ describe('migration-status', () => {
     process.env.MIGRATE_FLAG = 'false';
     await handler({}, mockContext);
     expect(approvePendingJob).toHaveBeenCalledTimes(1);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(0);
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(0);
@@ -63,7 +63,7 @@ describe('migration-status', () => {
     });
   });
 
-  it('should call approvePendingJob when the error rate is above 50%', async () => {
+  it('should call cancelWorkflow when the error rate is above 50%', async () => {
     process.env.MIGRATE_FLAG = 'true';
     getMetricStatistics
       .mockReturnValueOnce(Promise.resolve(mockErrorStatistics)) // errors
@@ -72,7 +72,8 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(55)); // migration segment queue
     await handler({}, mockContext);
-    expect(approvePendingJob).toHaveBeenCalledTimes(1);
+    expect(approvePendingJob).toHaveBeenCalledTimes(0);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
@@ -86,7 +87,7 @@ describe('migration-status', () => {
     });
   });
 
-  it('should call approvePendingJob when the DL queue is NOT empty', async () => {
+  it('should call cancelWorkflow when the DL queue is NOT empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
     getMetricStatistics
       .mockReturnValueOnce(Promise.resolve([])) // errors
@@ -95,7 +96,8 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(2)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(55)); // migration segment queue
     await handler({}, mockContext);
-    expect(approvePendingJob).toHaveBeenCalledTimes(1);
+    expect(approvePendingJob).toHaveBeenCalledTimes(0);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
@@ -119,6 +121,7 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(55)); // migration segment queue
     await handler({}, mockContext);
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
@@ -143,6 +146,7 @@ describe('migration-status', () => {
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(false));
     await handler({}, mockContext);
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(1);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
@@ -168,6 +172,7 @@ describe('migration-status', () => {
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
     await handler({}, mockContext);
     expect(approvePendingJob).toHaveBeenCalledTimes(1);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(1);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
