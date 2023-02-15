@@ -10,7 +10,7 @@ exports.handler = async () => {
 
   if (migrateFlag === 'true') {
     console.log(`Migrate flag is ${migrateFlag}`);
-    const environmentName = process.env.ENVIRONMENT;
+    const environmentName = process.env.STAGE;
     const isReindexFinished = await isReindexComplete(environmentName);
 
     if (!isReindexFinished) {

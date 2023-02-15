@@ -10,8 +10,8 @@ const {
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
-const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_dl_queue_${process.env.ENVIRONMENT}`;
-const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.ENVIRONMENT}`;
+const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_dl_queue_${process.env.STAGE}`;
+const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.STAGE}`;
 
 exports.handler = async (input, context) => {
   let shouldProceed = false;
