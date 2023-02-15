@@ -418,5 +418,25 @@ describe('reviewSavedPetitionHelper', () => {
     });
   });
 
-  describe('new flag', () => {});
+  describe('new flag', () => {
+    it('When paperPetitionEmail does NOT exist and eServiceConsent is NOT checked, display nothing.', () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            contactPrimary: {
+              hasConsentedToEService: false,
+              paperPetitionEmail: undefined,
+            },
+            contactSecondary: {
+              hasConsentedToEService: false,
+              paperPetitionEmail: undefined,
+            },
+          },
+        },
+      });
+
+      expect(result.shouldDisplayEConsentTextForPrimaryContact).toBe(false);
+      expect(result.shouldDisplayEConsentTextForSecondaryContact).toBe(false);
+    });
+  });
 });
