@@ -15,7 +15,6 @@ const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCO
 
 exports.handler = async (input, context) => {
   let shouldProceed = false;
-  await getSqsQueueCount(workQueueUrl); //TODO: remove after debugging
   const migrateFlag = process.env.MIGRATE_FLAG;
   const results = { migrateFlag };
   if (migrateFlag === 'true') {
