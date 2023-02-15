@@ -368,6 +368,21 @@ const formatCase = (applicationContext, caseDetail) => {
     result.leadDocketNumber && !result.isLeadCase
   );
 
+  result.isInConsolidatedGroup =
+    result.isLeadCase || result.isConsolidatedSubCase;
+
+  let consolidatedIconTooltipText;
+
+  if (result.isInConsolidatedGroup) {
+    if (result.isLeadCase) {
+      consolidatedIconTooltipText = 'Lead case';
+    } else {
+      consolidatedIconTooltipText = 'Consolidated case';
+    }
+  }
+
+  result.consolidatedIconTooltipText = consolidatedIconTooltipText;
+
   let paymentDate = '';
   let paymentMethod = '';
   if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {

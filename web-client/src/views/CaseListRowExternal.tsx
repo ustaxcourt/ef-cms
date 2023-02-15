@@ -1,5 +1,5 @@
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../ustc-ui/Icon/Icon';
 import React from 'react';
 
 const getCaseRow = ({
@@ -12,14 +12,21 @@ const getCaseRow = ({
     <React.Fragment key={formattedCase.docketNumber}>
       <tr>
         <td>
-          {formattedCase.isLeadCase && (
+          {formattedCase.isInConsolidatedGroup && (
             <>
-              <span className="usa-sr-only">Lead Case</span>
-              <FontAwesomeIcon
-                className="margin-right-1 icon-consolidated"
-                icon="copy"
-                size="1x"
-              />
+              <span
+                className="fa-layers fa-fw"
+                title={formattedCase.consolidatedIconTooltipText}
+              >
+                <Icon
+                  aria-label={formattedCase.consolidatedIconTooltipText}
+                  className="fa-icon-blue"
+                  icon="copy"
+                />
+                {formattedCase.isLeadCase && (
+                  <span className="fa-inverse lead-case-icon-text">L</span>
+                )}
+              </span>
             </>
           )}
         </td>
