@@ -4,12 +4,12 @@ const promiseRetry = require('promise-retry');
 const {
   createISODateString,
   dateStringsCompared,
-} = require('../../../../shared/src/business/utilities/DateHandler');
+} = require('../../../../../shared/src/business/utilities/DateHandler');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
-const { createLogger } = require('../../../src/createLogger');
+const { createLogger } = require('../../../../src/createLogger');
 const { getRecordSize } = require('./utilities/getRecordSize');
 const { migrationsToRun } = require('./migrationsToRun');
 
