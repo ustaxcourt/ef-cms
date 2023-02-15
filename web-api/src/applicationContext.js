@@ -231,6 +231,7 @@ const { Client } = require('@opensearch-project/opensearch');
 const {
   Case,
   isLeadCase,
+  isSealedCase,
 } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
@@ -737,6 +738,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getWorkQueueFilters,
         isLeadCase,
         isPending: DocketEntry.isPending,
+        isSealedCase,
         prepareDateFromString,
         scrapePdfContents,
         serveCaseDocument,
