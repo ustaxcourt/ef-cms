@@ -345,12 +345,24 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   describe('E-service Consent label', () => {
-    it('should return expected e-consent text for primary and secondary contacts when hasConsentedToEService when they have consented to electronic service', () => {
+    // When paperPetitionEmail exists and eServiceConsent is checked, display email and 'E-service consent' label.
+    // When paperPetitionEmail exists and eServiceConsent is NOT checked, display email and 'No e-service consent' label.
+
+    // When paperPetitionEmail does NOT exist and eServiceConsent is checked, display only 'E-service consent' label.
+    // When paperPetitionEmail does NOT exist and eServiceConsent is NOT checked, display nothing.
+
+    it('should return E-service consent text for primary and secondary contacts when paperPetitionEmail exists and hasConsentedToEService is true', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
-            contactPrimary: { hasConsentedToEService: true },
-            contactSecondary: { hasConsentedToEService: true },
+            contactPrimary: {
+              hasConsentedToEService: true,
+              paperPetitionEmail: 'aCoolEmail@example.com',
+            },
+            contactSecondary: {
+              hasConsentedToEService: true,
+              paperPetitionEmail: 'anotherCoolEmail@example.com',
+            },
           },
         },
       });
@@ -363,12 +375,18 @@ describe('reviewSavedPetitionHelper', () => {
       );
     });
 
-    it('should return expected e-consent text for primary and secondary contacts when they have not consented to electronic service', () => {
+    it('should return No e-service consent text for primary and secondary contacts when paperPetitionEmail exists and hasConsentedToEService is false', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
-            contactPrimary: { hasConsentedToEService: false },
-            contactSecondary: { hasConsentedToEService: false },
+            contactPrimary: {
+              hasConsentedToEService: false,
+              paperPetitionEmail: 'aCoolEmail@example.com',
+            },
+            contactSecondary: {
+              hasConsentedToEService: false,
+              paperPetitionEmail: 'anotherCoolEmail@example.com',
+            },
           },
         },
       });
