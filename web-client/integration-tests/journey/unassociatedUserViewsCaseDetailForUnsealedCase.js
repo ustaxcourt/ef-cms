@@ -4,7 +4,7 @@ export const unassociatedUserViewsCaseDetailForUnsealedCase = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeFalsy();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(false);
     expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
 
     expect(cerebralTest.getState('caseDetail.sealedDate')).toBeUndefined();
