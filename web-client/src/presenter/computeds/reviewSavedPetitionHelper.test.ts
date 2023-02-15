@@ -399,7 +399,7 @@ describe('reviewSavedPetitionHelper', () => {
       );
     });
 
-    it('should return E-service consent text when no paper petition email has been provided and the party consented to electronic service', () => {
+    it('should return E-service consent text when no paper petition email has been provided and the primary contact has consented to electronic service', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -414,6 +414,9 @@ describe('reviewSavedPetitionHelper', () => {
       expect(result.eServiceConsentTextForPrimaryContact).toBe(
         'E-service consent',
       );
+      expect(result.eServiceConsentTextForSecondaryContact).toBeUndefined();
     });
   });
+
+  describe('new flag', () => {});
 });
