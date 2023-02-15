@@ -19,7 +19,10 @@ describe('reviewSavedPetitionHelper', () => {
   it('should return the default form values if there are no changes to the form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
     expect(result).toMatchObject({
@@ -41,6 +44,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           docketEntries: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
@@ -98,6 +103,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           docketEntries: [
             {
               documentType:
@@ -123,6 +130,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
         },
@@ -137,7 +146,10 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns a message when preferred trial city has not been selected', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
 
@@ -161,6 +173,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           preferredTrialCity: mockCity,
         },
       },
@@ -186,6 +200,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
+            contactPrimary: { hasConsentedToEService: true },
+            contactSecondary: { hasConsentedToEService: true },
             [orderOrNotice]: true,
           },
         },
@@ -202,6 +218,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
+            contactPrimary: { hasConsentedToEService: true },
+            contactSecondary: { hasConsentedToEService: true },
             [orderOrNoticeInDraft]: true,
           },
         },
@@ -218,7 +236,10 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns showStatistics false if the statistics array is not present on the form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
 
@@ -228,7 +249,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns showStatistics false if the statistics array is present on the form but has length 0', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { statistics: [] },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          statistics: [],
+        },
       },
     });
 
@@ -238,7 +263,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns showStatistics true if the statistics array is present on the form and has length greater than 0', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { statistics: [{ yearOrPeriod: 'Year' }] },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          statistics: [{ yearOrPeriod: 'Year' }],
+        },
       },
     });
 
@@ -249,6 +278,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           statistics: [
             {
               irsDeficiencyAmount: 123,
@@ -284,7 +315,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('adds the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is true', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { orderForAmendedPetition: true },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          orderForAmendedPetition: true,
+        },
       },
     });
 
@@ -296,7 +331,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('does not add the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is false', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { orderForAmendedPetition: false },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          orderForAmendedPetition: false,
+        },
       },
     });
 
@@ -305,39 +344,41 @@ describe('reviewSavedPetitionHelper', () => {
     ]);
   });
 
-  it('should return expected e-consent text for primary and secondary contacts when hasConsentedToEService when they have consented to electronic service', () => {
-    const result = runCompute(reviewSavedPetitionHelper, {
-      state: {
-        form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+  describe('E-service Consent label', () => {
+    it('should return expected e-consent text for primary and secondary contacts when hasConsentedToEService when they have consented to electronic service', () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            contactPrimary: { hasConsentedToEService: true },
+            contactSecondary: { hasConsentedToEService: true },
+          },
         },
-      },
+      });
+
+      expect(result.eServiceConsentTextForPrimaryContact).toBe(
+        'E-service consent',
+      );
+      expect(result.eServiceConsentTextForSecondaryContact).toBe(
+        'E-service consent',
+      );
     });
 
-    expect(result.eServiceConsentTextForPrimaryContact).toBe(
-      'E-service consent',
-    );
-    expect(result.eServiceConsentTextForSecondaryContact).toBe(
-      'E-service consent',
-    );
-  });
-
-  it('should return expected e-consent text for primary and secondary contacts when they have not consented to electronic service', () => {
-    const result = runCompute(reviewSavedPetitionHelper, {
-      state: {
-        form: {
-          contactPrimary: { hasConsentedToEService: false },
-          contactSecondary: { hasConsentedToEService: false },
+    it('should return expected e-consent text for primary and secondary contacts when they have not consented to electronic service', () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            contactPrimary: { hasConsentedToEService: false },
+            contactSecondary: { hasConsentedToEService: false },
+          },
         },
-      },
-    });
+      });
 
-    expect(result.eServiceConsentTextForPrimaryContact).toBe(
-      'No e-service consent',
-    );
-    expect(result.eServiceConsentTextForSecondaryContact).toBe(
-      'No e-service consent',
-    );
+      expect(result.eServiceConsentTextForPrimaryContact).toBe(
+        'No e-service consent',
+      );
+      expect(result.eServiceConsentTextForSecondaryContact).toBe(
+        'No e-service consent',
+      );
+    });
   });
 });
