@@ -50,8 +50,11 @@ export const AddressDisplay = connect(
         {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <span className="address-line">{contact.country}</span>
         )}
-        {/* fix styling */}
-        {contact.paperPetitionEmail && <div>{contact.paperPetitionEmail}</div>}
+        {contact.paperPetitionEmail && (
+          <div className="margin-top-1 margin-bottom-1">
+            {contact.paperPetitionEmail}
+          </div>
+        )}
         {eServiceConsentText && <div>{eServiceConsentText}</div>}
 
         {contact.phone && (

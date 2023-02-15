@@ -127,14 +127,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
-  console.log(caseDetail);
-
   const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
     .hasConsentedToEService
     ? 'E-service consent'
     : 'No e-service consent';
 
-  const eServiceConsentTextForSecondaryContact = caseDetail.contactPrimary
+  const eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
     .hasConsentedToEService
     ? 'E-service consent'
     : 'No e-service consent';
