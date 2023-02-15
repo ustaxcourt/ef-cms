@@ -1,5 +1,8 @@
+import {
+  TIME_TO_EXIST,
+  createUserOutboxRecord,
+} from './createUserOutboxRecord';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
-import { createUserOutboxRecord } from './createUserOutboxRecord';
 
 describe('createUserOutboxRecord', () => {
   let mockWorkItem;
@@ -21,12 +24,25 @@ describe('createUserOutboxRecord', () => {
       workItem: mockWorkItem,
     });
 
+    const now = Math.floor(Date.now() / 1000);
+    const ttl = now - (now % 86400) + TIME_TO_EXIST;
+
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
         gsi1pk: 'work-item|work-item-id-123',
         pk: 'user-outbox|i-am-guy-fieri',
+        sk: mockWorkItem.completedAt,
+        ttl,
+      },
+    });
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[1][0],
+    ).toMatchObject({
+      Item: {
+        gsi1pk: 'work-item|work-item-id-123',
+        pk: 'user-outbox|i-am-guy-fieri|2019-04-19',
         sk: mockWorkItem.completedAt,
       },
     });
