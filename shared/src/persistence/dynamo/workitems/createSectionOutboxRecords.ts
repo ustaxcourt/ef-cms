@@ -2,20 +2,8 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../business/utilities/DateHandler';
+import { calculateTimeToLive } from './calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
-
-const TIME_TO_EXIST = 60 * 60 * 24 * 8; // 8 days
-
-/**
- * Calculate the start of the this day, and then add on `TIME_TO_EXIST` to determine
- * how long the record should last on the `section-outbox|${section}` primary key
- *
- * @returns {Number} Number of seconds since the epoch for when we want this record to expire
- */
-const calculateTimeToLive = () => {
-  const now = Math.floor(Date.now() / 1000);
-  return now - (now % 86400) + TIME_TO_EXIST;
-};
 
 /**
  * Create the record for the long term archive, broken out into its own partition based on the year, month and day
@@ -68,7 +56,7 @@ const createSectionOutboxRecentRecord = ({
     Item: {
       ...Item,
       pk: `section-outbox|${section}`,
-      ttl: calculateTimeToLive(),
+      ttl: calculateTimeToLive(Item.sk),
     },
     applicationContext,
   });
@@ -91,26 +79,34 @@ const createSectionOutboxRecords = ({
   section: string;
   workItem: TOutboxItem;
 }) => {
+  const sk = workItem.completedAt
+    ? workItem.completedAt
+    : (workItem as any).updatedAt;
   const Item: any = {
     ...workItem,
     gsi1pk: `work-item|${workItem.workItemId}`,
-    sk: workItem.completedAt
-      ? workItem.completedAt
-      : (workItem as any).updatedAt,
+    sk,
   };
+  const ttl = calculateTimeToLive(sk);
+  const promises = [];
+  if (ttl > 0) {
+    promises.push(
+      createSectionOutboxRecentRecord({
+        Item,
+        applicationContext,
+        section,
+      }),
+    );
+  }
 
-  return Promise.all([
-    createSectionOutboxRecentRecord({
-      Item,
-      applicationContext,
-      section,
-    }),
+  promises.push(
     createSectionOutboxArchiveRecord({
       Item,
       applicationContext,
       section,
     }),
-  ]);
+  );
+  return Promise.all(promises);
 };
 
-export { TIME_TO_EXIST, createSectionOutboxRecords };
+export { createSectionOutboxRecords };

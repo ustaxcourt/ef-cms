@@ -1,85 +1,148 @@
 import {
-  TIME_TO_EXIST,
-  createSectionOutboxRecords,
-} from './createSectionOutboxRecords';
+  FORMATS,
+  createISODateString,
+  formatDateString,
+  subtractISODates,
+} from '../../../business/utilities/DateHandler';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createSectionOutboxRecords } from './createSectionOutboxRecords';
 
 describe('createSectionOutboxRecords', () => {
   let mockWorkItem;
+  const now = createISODateString();
 
-  beforeEach(() => {
-    mockWorkItem = {
-      caseStatus: 'New',
-      completedAt: '2019-04-19T18:24:09.515Z',
-      completedMessage: 'completed',
-      updatedAt: '2019-04-15T18:24:09.515Z',
-      workItemId: 'work-item-id-123',
-    };
+  describe('recent outbox records', () => {
+    const date = formatDateString(now, FORMATS.YYYYMMDD);
+
+    beforeEach(() => {
+      mockWorkItem = {
+        caseStatus: 'New',
+        completedAt: now,
+        completedMessage: 'completed',
+        updatedAt: now,
+        workItemId: 'work-item-id-123',
+      };
+    });
+
+    it('creates a section outbox record with the completed datetime', async () => {
+      await createSectionOutboxRecords({
+        applicationContext,
+        section: 'flavortown',
+        workItem: mockWorkItem,
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          gsi1pk: 'work-item|work-item-id-123',
+          pk: 'section-outbox|flavortown',
+          sk: mockWorkItem.completedAt,
+          ttl: expect.anything(),
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          gsi1pk: 'work-item|work-item-id-123',
+          pk: `section-outbox|flavortown|${date}`,
+          sk: mockWorkItem.completedAt,
+        },
+      });
+    });
+
+    it('creates a section outbox record with the updated datetime', async () => {
+      mockWorkItem = {
+        ...mockWorkItem,
+        completedAt: undefined,
+        completedMessage: undefined,
+      };
+
+      await createSectionOutboxRecords({
+        applicationContext,
+        section: 'flavortown',
+        workItem: mockWorkItem,
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          gsi1pk: 'work-item|work-item-id-123',
+          pk: 'section-outbox|flavortown',
+          sk: mockWorkItem.updatedAt,
+          ttl: expect.anything(),
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          gsi1pk: 'work-item|work-item-id-123',
+          pk: `section-outbox|flavortown|${date}`,
+          sk: mockWorkItem.updatedAt,
+        },
+      });
+    });
   });
 
-  it('creates a section outbox record with the completed datetime', async () => {
-    await createSectionOutboxRecords({
-      applicationContext,
-      section: 'flavortown',
-      workItem: mockWorkItem,
+  describe('old outbox records', () => {
+    const oneYearAgo = subtractISODates(now, { year: 1 });
+    const date = formatDateString(oneYearAgo, FORMATS.YYYYMMDD);
+
+    beforeEach(() => {
+      mockWorkItem = {
+        caseStatus: 'New',
+        completedAt: formatDateString(oneYearAgo),
+        completedMessage: 'completed',
+        updatedAt: formatDateString(oneYearAgo),
+        workItemId: 'work-item-id-123',
+      };
     });
 
-    const now = Math.floor(Date.now() / 1000);
-    const ttl = now - (now % 86400) + TIME_TO_EXIST;
+    it('creates a section outbox record with the completed datetime', async () => {
+      await createSectionOutboxRecords({
+        applicationContext,
+        section: 'flavortown',
+        workItem: mockWorkItem,
+      });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        gsi1pk: 'work-item|work-item-id-123',
-        pk: 'section-outbox|flavortown',
-        sk: mockWorkItem.completedAt,
-        ttl,
-      },
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          gsi1pk: 'work-item|work-item-id-123',
+          pk: `section-outbox|flavortown|${date}`,
+          sk: mockWorkItem.completedAt,
+        },
+      });
     });
 
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0],
-    ).toMatchObject({
-      Item: {
-        gsi1pk: 'work-item|work-item-id-123',
-        pk: 'section-outbox|flavortown|2019-04-19',
-        sk: mockWorkItem.completedAt,
-      },
-    });
-  });
+    it('creates a section outbox record with the updated datetime', async () => {
+      mockWorkItem = {
+        ...mockWorkItem,
+        completedAt: undefined,
+        completedMessage: undefined,
+      };
 
-  it('creates a section outbox record with the updated datetime', async () => {
-    mockWorkItem = {
-      ...mockWorkItem,
-      completedAt: undefined,
-      completedMessage: undefined,
-    };
+      await createSectionOutboxRecords({
+        applicationContext,
+        section: 'flavortown',
+        workItem: mockWorkItem,
+      });
 
-    await createSectionOutboxRecords({
-      applicationContext,
-      section: 'flavortown',
-      workItem: mockWorkItem,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        gsi1pk: 'work-item|work-item-id-123',
-        pk: 'section-outbox|flavortown',
-        sk: mockWorkItem.updatedAt,
-      },
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        gsi1pk: 'work-item|work-item-id-123',
-        pk: 'section-outbox|flavortown',
-        sk: mockWorkItem.updatedAt,
-      },
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          gsi1pk: 'work-item|work-item-id-123',
+          pk: `section-outbox|flavortown|${date}`,
+          sk: mockWorkItem.updatedAt,
+        },
+      });
     });
   });
 });
