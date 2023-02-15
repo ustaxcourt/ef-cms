@@ -8,7 +8,7 @@ const TIME_TO_EXIST = 60 * 60 * 24 * 8; // 8 days
 
 /**
  * Calculate the start of the this day, and then add on `TIME_TO_EXIST` to determine
- * how long the record should last on the `work-item|${section}` partition
+ * how long the record should last on the `section-outbox|${section}` primary key
  *
  * @returns {Number} Number of seconds since the epoch for when we want this record to expire
  */
