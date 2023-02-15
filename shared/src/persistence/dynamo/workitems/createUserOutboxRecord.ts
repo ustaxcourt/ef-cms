@@ -1,20 +1,23 @@
 import {
   FORMATS,
+  createISODateString,
+  dateStringsCompared,
   formatDateString,
+  subtractISODates,
 } from '../../../business/utilities/DateHandler';
 import { put } from '../../dynamodbClientService';
 
-const TIME_TO_EXIST = 60 * 60 * 24 * 8; // 8 days
-
 /**
- * Calculate the start of the this day, and then add on `TIME_TO_EXIST` to determine
- * how long the record should last on the `user-outbox|${userId}` primary key
+ * Calculate the 8 days from the provided timestamp
  *
- * @returns {Number} Number of seconds since the epoch for when we want this record to expire
+ * @returns {Number} Number of seconds since the epoch forFORMATS when we want this record to expire
  */
-const calculateTimeToLive = () => {
-  const now = Math.floor(Date.now() / 1000);
-  return now - (now % 86400) + TIME_TO_EXIST;
+const calculateTimeToLive = timestamp => {
+  // get mills of 8 days ago
+  const eightDaysAgo = subtractISODates(createISODateString(), {
+    day: 8,
+  });
+  return dateStringsCompared(timestamp, eightDaysAgo);
 };
 
 /**
@@ -34,30 +37,40 @@ const createUserOutboxRecord = ({
   applicationContext: IApplicationContext;
   workItem: TOutboxItem;
   userId: string;
-}) =>
-  Promise.all([
-    put({
-      Item: {
-        ...workItem,
-        gsi1pk: `work-item|${workItem.workItemId}`,
-        pk: `user-outbox|${userId}`,
-        sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
-        ttl: calculateTimeToLive(),
-      },
-      applicationContext,
-    }),
-    put({
-      Item: {
-        ...workItem,
-        gsi1pk: `work-item|${workItem.workItemId}`,
-        pk: `user-outbox|${userId}|${formatDateString(
-          workItem.completedAt,
-          FORMATS.YYYYMMDD,
-        )}`,
-        sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
-      },
-      applicationContext,
-    }),
-  ]);
+}) => {
+  const sk = workItem.completedAt ? workItem.completedAt : workItem.updatedAt;
+  const ttl = calculateTimeToLive(sk);
 
-export { TIME_TO_EXIST, createUserOutboxRecord };
+  const promises = [];
+
+  if (ttl > 0) {
+    promises.push(
+      put({
+        Item: {
+          ...workItem,
+          gsi1pk: `work-item|${workItem.workItemId}`,
+          pk: `user-outbox|${userId}`,
+          sk,
+          ttl,
+        },
+        applicationContext,
+      }),
+    );
+  }
+
+  promises.push(
+    put({
+      Item: {
+        ...workItem,
+        gsi1pk: `work-item|${workItem.workItemId}`,
+        pk: `user-outbox|${userId}|${formatDateString(sk, FORMATS.YYYYMMDD)}`,
+        sk,
+      },
+      applicationContext,
+    }),
+  );
+
+  return Promise.all(promises);
+};
+
+export { calculateTimeToLive, createUserOutboxRecord };
