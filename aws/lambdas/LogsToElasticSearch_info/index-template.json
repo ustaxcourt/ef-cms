@@ -57,10 +57,16 @@
           "docketEntryId": {
             "type": "keyword"
           },
+          "numberOfItems": {
+            "type": "integer"
+          },
           "pk": {
             "type": "keyword"
           },
           "recordSizeInBytes": {
+            "type": "integer"
+          },
+          "segment": {
             "type": "integer"
           },
           "trialSessionId": {
