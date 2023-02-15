@@ -24,14 +24,28 @@ export const getSqsQueueCount = async (queueUrl: string): Promise<number> => {
     QueueUrl: queueUrl,
   });
   let data;
+  let queueCount = 0;
   try {
     data = await sqsClient.send(command);
+    if ('Attributes' in data) {
+      if ('ApproximateNumberOfMessages' in data.Attributes) {
+        queueCount += Number(data.Attributes.ApproximateNumberOfMessages);
+      }
+      if ('ApproximateNumberOfMessagesNotVisible' in data.Attributes) {
+        queueCount += Number(
+          data.Attributes.ApproximateNumberOfMessagesNotVisible,
+        );
+      }
+      if ('ApproximateNumberOfMessagesDelayed' in data.Attributes) {
+        queueCount += Number(
+          data.Attributes.ApproximateNumberOfMessagesDelayed,
+        );
+      }
+    }
   } catch (error) {
     console.log(error);
-    return 0;
   }
-  console.log('sqs queue data: ', data);
-  return data; //data.something.length?
+  return queueCount;
 };
 
 export const getMetricStatistics = async (type: string): Promise<object> => {
@@ -41,7 +55,7 @@ export const getMetricStatistics = async (type: string): Promise<object> => {
     Dimensions: [
       {
         Name: 'FunctionName',
-        Value: `migration_segments_lambda_${process.env.ENV}`,
+        Value: `migration_segments_lambda_${process.env.STAGE}`,
       },
     ],
     EndTime: now.toJSDate(),
@@ -62,23 +76,23 @@ export const getMetricStatistics = async (type: string): Promise<object> => {
 
 export const putMigrationQueueIsEmptyFlag = async (
   value: boolean,
-): Promise<object> => {
+): Promise<boolean> => {
   const command = new PutItemCommand({
     Item: {
       current: { BOOL: value },
       pk: { S: 'migration-queue-is-empty' },
       sk: { S: 'migration-queue-is-empty' },
     },
-    TableName: `efcms-deploy-${process.env.ENV}`,
+    TableName: `efcms-deploy-${process.env.STAGE}`,
   });
-  let data;
+  let result = false;
   try {
-    data = await dynamodbClient.send(command);
-    console.log(data);
+    await dynamodbClient.send(command);
+    result = true;
   } catch (error) {
     console.error(error);
   }
-  return data;
+  return result;
 };
 
 export const getMigrationQueueIsEmptyFlag = async (): Promise<boolean> => {
@@ -87,15 +101,21 @@ export const getMigrationQueueIsEmptyFlag = async (): Promise<boolean> => {
       pk: { S: 'migration-queue-is-empty' },
       sk: { S: 'migration-queue-is-empty' },
     },
-    ProjectionExpression: 'current',
-    TableName: `efcms-deploy-${process.env.ENV}`,
+    TableName: `efcms-deploy-${process.env.STAGE}`,
   });
   let data;
+  let flag = false;
   try {
     data = await dynamodbClient.send(command);
-    console.log(data);
+    if (
+      'Item' in data &&
+      'current' in data.Item &&
+      'BOOL' in data.Item.current
+    ) {
+      flag = data.Item.current.BOOL;
+    }
   } catch (error) {
     console.error(error);
   }
-  return data; //data.current
+  return flag;
 };

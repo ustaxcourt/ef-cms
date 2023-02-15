@@ -67,9 +67,13 @@ const getSegmentErrorRate = async () => {
   const invocationResponse = await getMetricStatistics('Invocations');
   console.log(invocationResponse);
 
-  const errorTotal = errorResponse.length;
-  const invocationTotal = invocationResponse.length;
-  if (errorResponse && invocationResponse) {
+  const errorTotal =
+    'Datapoints' in errorResponse ? errorResponse.Datapoints.length : 0;
+  const invocationTotal =
+    'Datapoints' in invocationResponse
+      ? invocationResponse.Datapoints.length
+      : 0;
+  if (invocationTotal > 0) {
     console.log(`There were ${errorTotal} errors in the last 15 minutes.`);
     console.log(
       `There were ${invocationTotal} invocations in the last 15 minutes.`,
