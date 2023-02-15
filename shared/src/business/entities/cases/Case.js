@@ -1664,14 +1664,24 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * @returns {boolean} true if the user is a party of the case
  */
 const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
-  return consolidatedCases.some(aCase => {
-    const userIsPartyToCase = [
-      ...aCase.petitioners,
-      ...(aCase.privatePractitioners || []),
-      ...(aCase.irsPractitioners || []),
-    ].some(user => user?.userId === userId || user?.contactId === userId);
-    return userIsPartyToCase;
-  });
+  return consolidatedCases.some(aCase =>
+    userIsDirectlyAssociated({ aCase, userId }),
+  );
+};
+
+/**
+ * @param {Object} options the options argument
+ * @param {Object} options.aCase A Case
+ * @param {String} options.userId the user's id
+ * @returns {boolean} true if the user is a party of the case
+ */
+const userIsDirectlyAssociated = function ({ aCase, userId }) {
+  const userIsPartyToCase = [
+    ...(aCase.petitioners || []),
+    ...(aCase.privatePractitioners || []),
+    ...(aCase.irsPractitioners || []),
+  ].some(user => user?.userId === userId || user?.contactId === userId);
+  return userIsPartyToCase;
 };
 
 /**
@@ -2496,4 +2506,5 @@ module.exports = {
   isUserPartOfGroup,
   shouldGenerateNoticesForCase,
   updatePetitioner,
+  userIsDirectlyAssociated,
 };

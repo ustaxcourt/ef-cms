@@ -1,5 +1,4 @@
 import { Case, isClosed, isLeadCase } from '../entities/cases/Case';
-import { UserCase } from '../entities/UserCase';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { partition, uniqBy } from 'lodash';
 
@@ -31,9 +30,11 @@ type TAssociatedCase = {
 async function fetchConsolidatedGroupsAndNest({
   applicationContext,
   cases,
+  userId,
 }: {
   applicationContext: IApplicationContext;
   cases: TAssociatedCase[];
+  userId: string;
 }) {
   // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
   const consolidatedGroups = (
@@ -51,7 +52,14 @@ async function fetchConsolidatedGroupsAndNest({
     )
   )
     .flat()
-    .map(c => ({ ...c, isRequestingUserAssociated: false }));
+    .map(aCase => {
+      const userIsPartyToCase = [
+        ...aCase.petitioners,
+        ...(aCase.privatePractitioners || []),
+        ...(aCase.irsPractitioners || []),
+      ].some(user => user?.userId === userId || user?.contactId === userId);
+      return { ...aCase, isRequestingUserAssociated: userIsPartyToCase };
+    });
 
   // Combine open cases and consolidated cases and remove duplicates
   const associatedAndUnassociatedCases = uniqBy(
@@ -107,36 +115,31 @@ export const getCasesForUserInteractor = async (
 ) => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const allUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
+  const allUserCases = (
+    await applicationContext.getPersistenceGateway().getCasesForUser({
       applicationContext,
       userId,
-    });
-
-  const allUserCasesWithAssociations = UserCase.validateRawCollection(
-    allUserCases,
-    {
-      applicationContext,
-    },
-  ) as TCaseEntity[];
+    })
+  ).map(
+    aCase =>
+      ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
+  );
 
   const [openCases, closedCases] = partition(
-    allUserCasesWithAssociations.map(
-      aCase =>
-        ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
-    ),
+    allUserCases,
     aCase => !isClosed(aCase),
   );
 
   const nestedOpenCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
     cases: openCases,
+    userId,
   });
 
   const nestedClosedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
     cases: closedCases,
+    userId,
   });
 
   const sortedOpenCases: any[] = Object.values(nestedOpenCases)
