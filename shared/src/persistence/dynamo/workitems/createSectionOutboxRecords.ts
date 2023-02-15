@@ -18,7 +18,7 @@ const calculateTimeToLive = () => {
 };
 
 /**
- * Create the record for the long term archive, broken out into its own partition based on the month
+ * Create the record for the long term archive, broken out into its own partition based on the year, month and day
  *
  * @param {Object} providers The providers object
  * @param {Object} providers.applicationContext The application context
@@ -35,12 +35,12 @@ const createSectionOutboxArchiveRecord = async ({
   Item: TOutboxItem & TDynamoRecord;
   section: string;
 }) => {
-  const skMonth = formatDateString(Item.sk, FORMATS.YYYYMM);
+  const skMonthDay = formatDateString(Item.sk, FORMATS.YYYYMMDD);
 
   await put({
     Item: {
       ...Item,
-      pk: `section-outbox|${section}|${skMonth}`,
+      pk: `section-outbox|${section}|${skMonthDay}`,
     },
     applicationContext,
   });
