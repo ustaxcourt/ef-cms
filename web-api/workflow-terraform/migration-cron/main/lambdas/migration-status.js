@@ -53,12 +53,12 @@ exports.handler = async (input, context) => {
 
   if (shouldCancel) {
     await cancelWorkflow({ apiToken, workflowId });
-    return context.fail({ ...results, shouldProceed });
+    return context.fail({ ...results, shouldCancel, shouldProceed });
   }
   if (shouldProceed) {
     await approvePendingJob({ apiToken, workflowId });
   }
-  return context.succeed({ ...results, shouldProceed });
+  return context.succeed({ ...results, shouldCancel, shouldProceed });
 };
 
 const getSegmentErrorRate = async () => {

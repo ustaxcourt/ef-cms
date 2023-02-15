@@ -59,6 +59,7 @@ describe('migration-status', () => {
     expect(putMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
       migrateFlag: 'false',
+      shouldCancel: false,
       shouldProceed: true,
     });
   });
@@ -78,11 +79,12 @@ describe('migration-status', () => {
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
     expect(putMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
-    expect(mockContext.succeed).toHaveBeenCalledWith({
+    expect(mockContext.fail).toHaveBeenCalledWith({
       dlQueueCount: 0,
       errorRate: 80,
       migrateFlag: 'true',
-      shouldProceed: true,
+      shouldCancel: true,
+      shouldProceed: false,
       totalActiveJobs: 55,
     });
   });
@@ -102,11 +104,12 @@ describe('migration-status', () => {
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
     expect(putMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
-    expect(mockContext.succeed).toHaveBeenCalledWith({
+    expect(mockContext.fail).toHaveBeenCalledWith({
       dlQueueCount: 2,
       errorRate: 0,
       migrateFlag: 'true',
-      shouldProceed: true,
+      shouldCancel: true,
+      shouldProceed: false,
       totalActiveJobs: 55,
     });
   });
@@ -130,6 +133,7 @@ describe('migration-status', () => {
       dlQueueCount: 0,
       errorRate: 0,
       migrateFlag: 'true',
+      shouldCancel: false,
       shouldProceed: false,
       totalActiveJobs: 55,
     });
@@ -156,6 +160,7 @@ describe('migration-status', () => {
       errorRate: 0,
       migrateFlag: 'true',
       migrationQueueIsEmptyFlag: false,
+      shouldCancel: false,
       shouldProceed: false,
       totalActiveJobs: 0,
     });
@@ -182,6 +187,7 @@ describe('migration-status', () => {
       errorRate: 0,
       migrateFlag: 'true',
       migrationQueueIsEmptyFlag: true,
+      shouldCancel: false,
       shouldProceed: true,
       totalActiveJobs: 0,
     });
