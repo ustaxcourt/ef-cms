@@ -101,7 +101,6 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
     },
     partyType: rawCase.partyType,
   });
-
   this.petitioners = [contacts.primary];
   if (contacts.secondary) {
     this.petitioners.push(contacts.secondary);
