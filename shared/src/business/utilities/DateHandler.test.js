@@ -407,13 +407,23 @@ describe('DateHandler', () => {
       expect(result).toEqual(0);
     });
 
-    it('should return zero if provided two ISO timestamps within 30 seconds of each other', () => {
+    it('should by default return zero if provided two ISO timestamps within 30 seconds of each other', () => {
       let result;
       const date1 = '2001-01-01T08:40:26.007Z';
       const date2 = '2001-01-01T08:40:55.007Z';
 
       result = DateHandler.dateStringsCompared(date1, date2);
       expect(result).toEqual(0);
+    });
+
+    it('should not return zero if provided two ISO timestamps within 30 seconds of each other and options specify exact is true', () => {
+      let result;
+      const date1 = '2001-01-01T08:40:26.007Z';
+      const date2 = '2001-01-01T08:40:55.007Z';
+
+      result = DateHandler.dateStringsCompared(date1, date2, { exact: true });
+      expect(result).not.toEqual(0);
+      expect(result).toEqual(-29000);
     });
   });
 
