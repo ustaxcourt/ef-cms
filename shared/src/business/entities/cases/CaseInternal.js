@@ -93,8 +93,6 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
       )
     : [];
 
-  console.log('in CaseInternal exp contact:', getContactPrimary(rawCase));
-
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -108,11 +106,6 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   if (contacts.secondary) {
     this.petitioners.push(contacts.secondary);
   }
-
-  console.log(
-    'In caseInternal - petitioners after getNthcontacts:',
-    this.petitioners,
-  );
 };
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
