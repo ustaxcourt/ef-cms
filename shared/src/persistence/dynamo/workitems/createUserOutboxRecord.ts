@@ -1,24 +1,9 @@
 import {
   FORMATS,
-  createISODateString,
-  dateStringsCompared,
   formatDateString,
-  subtractISODates,
 } from '../../../business/utilities/DateHandler';
 import { put } from '../../dynamodbClientService';
-
-/**
- * Calculate the 8 days from the provided timestamp
- *
- * @returns {Number} Number of seconds since the epoch forFORMATS when we want this record to expire
- */
-const calculateTimeToLive = timestamp => {
-  // get mills of 8 days ago
-  const eightDaysAgo = subtractISODates(createISODateString(), {
-    day: 8,
-  });
-  return dateStringsCompared(timestamp, eightDaysAgo);
-};
+const { calculateTimeToLive } = require('./calculateTimeToLive');
 
 /**
  * createUserOutboxRecord
@@ -73,4 +58,4 @@ const createUserOutboxRecord = ({
   return Promise.all(promises);
 };
 
-export { calculateTimeToLive, createUserOutboxRecord };
+export { createUserOutboxRecord };
