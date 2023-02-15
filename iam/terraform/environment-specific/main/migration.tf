@@ -215,9 +215,7 @@ resource "aws_iam_role_policy" "migration_status_policy" {
           "Action": [
             "cloudwatch:GetMetricStatistics"
           ],
-          "Resource": [
-            "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:migration_segments_lambda_${var.environment}"
-          ]
+          "Resource": "*"
         },
         {
           "Sid": "SQS",
