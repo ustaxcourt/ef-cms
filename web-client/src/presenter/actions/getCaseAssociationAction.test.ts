@@ -11,368 +11,320 @@ import { runAction } from 'cerebral/test';
 describe('getCaseAssociation', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+
     applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    });
   });
 
-  it('should return that practitioner is associated', async () => {
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          privatePractitioners: [{ userId: '123' }],
+  describe('IRS SuperUser', () => {
+    it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and service is not allowed on the case', async () => {
+      applicationContext.getCurrentUser.mockReturnValueOnce({
+        role: ROLES.irsSuperuser,
+        userId: '123',
+      });
+
+      const results = await runAction(getCaseAssociationAction, {
+        modules: {
+          presenter,
         },
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: true,
-      isDirectlyAssociated: true,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return that practitioner has pending association', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(true);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.privatePractitioner,
-      userId: '1234',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          privatePractitioners: [{ userId: '123' }],
+        props: {},
+        state: {
+          caseDetail: {
+            docketEntries: [{ documentType: 'Petition' }],
+            status: CASE_STATUS_TYPES.new,
+          },
         },
-      },
-    });
+      });
 
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: true,
+      expect(results.output).toEqual({
+        isAssociated: false,
+        isDirectlyAssociated: false,
+        pendingAssociation: false,
+      });
     });
-  });
+    it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and service is allowed for the case', async () => {
+      applicationContext.getCurrentUser.mockReturnValueOnce({
+        role: ROLES.irsSuperuser,
+        userId: '123',
+      });
 
-  it('should return that practitioner not associated', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.privatePractitioner,
-      userId: '1234',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          privatePractitioners: [{ userId: '123' }],
+      const results = await runAction(getCaseAssociationAction, {
+        modules: {
+          presenter,
         },
-      },
-    });
+        props: {},
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                documentType: 'Legacy Petition',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+        },
+      });
 
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: false,
+      expect(results.output).toEqual({
+        isAssociated: true,
+        isDirectlyAssociated: true,
+        pendingAssociation: false,
+      });
     });
   });
 
-  it('should return that practitioner not associated because there are no practitioners on the case', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.privatePractitioner,
-      userId: '1234',
-    });
+  describe('Internal user', () => {
+    it('should return true for isAssociated and false for pendingAssociation if the user is an internal user', async () => {
+      applicationContext.getCurrentUser.mockReturnValueOnce({
+        role: ROLES.petitionsClerk,
+        userId: '123',
+      });
 
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactId: 'abc123',
+      const results = await runAction(getCaseAssociationAction, {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          caseDetail: {
+            privatePractitioners: [{ userId: '123' }],
+          },
+        },
+      });
+
+      expect(results.output).toEqual({
+        isAssociated: true,
+        isDirectlyAssociated: true,
+        pendingAssociation: false,
+      });
+    });
+  });
+
+  describe('Private Practitioner, Petitioner, IRS Practitioner', () => {
+    beforeAll(() => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.privatePractitioner,
+        userId: '123',
+      });
+    });
+    describe('consolidatedCases', () => {});
+    describe('nonConsolidatedCases', () => {
+      it('should return that practitioner is associated', async () => {
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              privatePractitioners: [{ userId: '123' }],
             },
-          ],
-        },
-      },
-    });
+          },
+        });
 
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: false,
-    });
-  });
+        expect(results.output).toEqual({
+          isAssociated: true,
+          isDirectlyAssociated: true,
+          pendingAssociation: false,
+        });
+      });
 
-  it('should return that respondent is associated', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.irsPractitioner,
-      userId: '789',
-    });
+      it('should return that private practitioner has pending association', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockResolvedValueOnce(true);
 
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          irsPractitioners: [{ userId: '789' }],
-        },
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: true,
-      isDirectlyAssociated: true,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return that internal user is associated', async () => {
-    applicationContext.getUtilities().isInternalUser.mockReturnValueOnce(true);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'something internal',
-      userId: '987',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: true,
-      isDirectlyAssociated: true,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return that other roles are NOT associated', async () => {
-    applicationContext.getUtilities().isInternalUser.mockReturnValueOnce(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'something not internal',
-      userId: '987',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {},
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return that respondent is not associated', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(true);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.irsPractitioner,
-      userId: '789',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          irsPractitioners: [{ userId: '123' }],
-        },
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return that petitioner is associated when their userId is found in the case petitioners array', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '123',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactId: '123',
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              privatePractitioners: [{ userId: 'nothing' }],
             },
-          ],
-        },
-      },
-    });
+          },
+        });
 
-    expect(results.output).toEqual({
-      isAssociated: true,
-      isDirectlyAssociated: true,
-      pendingAssociation: false,
-    });
-  });
+        expect(results.output).toEqual({
+          isAssociated: false,
+          isDirectlyAssociated: false,
+          pendingAssociation: true,
+        });
+      });
 
-  it('should return that petitioner is not associated', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(true);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '789',
-    });
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactId: '456',
+      it('should return that private practitioner is not associated', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockReturnValue(false);
+
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              privatePractitioners: [
+                { userId: 'I am very different and not associated' },
+              ],
             },
-          ],
+          },
+        });
+
+        expect(results.output).toEqual({
+          isAssociated: false,
+          isDirectlyAssociated: false,
+          pendingAssociation: false,
+        });
+      });
+
+      it('should return that practitioner not associated because there are no practitioners on the case', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockReturnValue(false);
+
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              petitioners: [
+                {
+                  contactId: 'abc123',
+                },
+              ],
+            },
+          },
+        });
+
+        expect(results.output).toEqual({
+          isAssociated: false,
+          isDirectlyAssociated: false,
+          pendingAssociation: false,
+        });
+      });
+
+      it('should return that respondent is associated', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockReturnValue(false);
+        applicationContext.getCurrentUser.mockReturnValue({
+          role: ROLES.irsPractitioner,
+          userId: '789',
+        });
+
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              irsPractitioners: [{ userId: '789' }],
+            },
+          },
+        });
+
+        expect(results.output).toEqual({
+          isAssociated: true,
+          isDirectlyAssociated: true,
+          pendingAssociation: false,
+        });
+      });
+      it('should return that respondent is not associated', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockReturnValue(true);
+        applicationContext.getCurrentUser.mockReturnValue({
+          role: ROLES.irsPractitioner,
+          userId: '789',
+        });
+
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              irsPractitioners: [{ userId: '123' }],
+            },
+          },
+        });
+
+        expect(results.output).toEqual({
+          isAssociated: false,
+          isDirectlyAssociated: false,
+          pendingAssociation: false,
+        });
+      });
+      it('should return that petitioner is associated when their userId is found in the case petitioners array', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockReturnValue(false);
+        applicationContext.getCurrentUser.mockReturnValue({
+          role: ROLES.petitioner,
           userId: '123',
-        },
-      },
-    });
+        });
 
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return true for isAssociated and false for pendingAssociation if the user is an internal user', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: '123',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          privatePractitioners: [{ userId: '123' }],
-        },
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: true,
-      isDirectlyAssociated: true,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and service is not allowed on the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.irsSuperuser,
-      userId: '123',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          docketEntries: [{ documentType: 'Petition' }],
-          status: CASE_STATUS_TYPES.new,
-        },
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: false,
-      isDirectlyAssociated: false,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and service is allowed for the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.irsSuperuser,
-      userId: '123',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              documentType: 'Legacy Petition',
-              servedAt: '2019-03-01T21:40:46.415Z',
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              petitioners: [
+                {
+                  contactId: '123',
+                },
+              ],
             },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-      },
-    });
+          },
+        });
 
-    expect(results.output).toEqual({
-      isAssociated: true,
-      isDirectlyAssociated: true,
-      pendingAssociation: false,
+        expect(results.output).toEqual({
+          isAssociated: true,
+          isDirectlyAssociated: true,
+          pendingAssociation: false,
+        });
+      });
+      it('should return that petitioner is not associated', async () => {
+        applicationContext
+          .getUseCases()
+          .verifyPendingCaseForUserInteractor.mockReturnValue(true);
+        applicationContext.getCurrentUser.mockReturnValue({
+          role: ROLES.petitioner,
+          userId: '789',
+        });
+        const results = await runAction(getCaseAssociationAction, {
+          modules: {
+            presenter,
+          },
+          props: {},
+          state: {
+            caseDetail: {
+              petitioners: [
+                {
+                  contactId: '456',
+                },
+              ],
+              userId: '123',
+            },
+          },
+        });
+
+        expect(results.output).toEqual({
+          isAssociated: false,
+          isDirectlyAssociated: false,
+          pendingAssociation: false,
+        });
+      });
     });
   });
 
