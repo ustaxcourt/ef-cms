@@ -99,16 +99,20 @@ export const ReviewSavedPetition = connect(
                         {form.contactPrimary && (
                           <>
                             <address aria-labelledby="filing-contact-primary">
-                              <AddressDisplay
-                                contact={form.contactPrimary}
-                                eServiceConsentText={
+                              <AddressDisplay contact={form.contactPrimary} />
+                            </address>
+                            {form.contactPrimary.paperPetitionEmail && (
+                              <div className="margin-top-1 margin-bottom-1">
+                                {form.contactPrimary.paperPetitionEmail}
+                              </div>
+                            )}
+                            {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
+                              <div>
+                                {
                                   reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
                                 }
-                                shouldDisplayEServiceConsentText={
-                                  reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact
-                                }
-                              />
-                            </address>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
@@ -122,16 +126,20 @@ export const ReviewSavedPetition = connect(
                               Spouse’s information
                             </span>
                             <address aria-labelledby="filing-contact-secondary">
-                              <AddressDisplay
-                                contact={form.contactSecondary}
-                                eServiceConsentText={
+                              <AddressDisplay contact={form.contactSecondary} />
+                            </address>
+                            {form.contactSecondary.paperPetitionEmail && (
+                              <div className="margin-top-1 margin-bottom-1">
+                                {form.contactSecondary.paperPetitionEmail}
+                              </div>
+                            )}
+                            {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
+                              <div>
+                                {
                                   reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
                                 }
-                                shouldDisplayEServiceConsentText={
-                                  reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact
-                                }
-                              />
-                            </address>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
