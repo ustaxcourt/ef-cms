@@ -5,30 +5,7 @@ import {
   subtractISODates,
 } from '../../../business/utilities/DateHandler';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
-import {
-  calculateTimeToLive,
-  createUserOutboxRecord,
-} from './createUserOutboxRecord';
-
-describe('calculateTimeToLive', () => {
-  it('should return 0 if passed in date is eight days ago', () => {
-    expect(
-      calculateTimeToLive(subtractISODates(createISODateString(), { day: 8 })),
-    ).toBe(0);
-  });
-  it('should return a negative value if date passed in is greater than eight days ago', () => {
-    expect(
-      calculateTimeToLive(
-        subtractISODates(createISODateString(), { day: 100 }),
-      ),
-    ).toBeLessThan(0);
-  });
-  it('should return a positive number if date passed in is less than eight days ago', () => {
-    expect(
-      calculateTimeToLive(subtractISODates(createISODateString(), { day: 3 })),
-    ).toBeGreaterThan(0);
-  });
-});
+import { createUserOutboxRecord } from './createUserOutboxRecord';
 
 describe('createUserOutboxRecord', () => {
   let mockWorkItem;
