@@ -345,13 +345,7 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   describe('E-service Consent label', () => {
-    // When paperPetitionEmail exists and eServiceConsent is checked, display email and 'E-service consent' label.
-    // When paperPetitionEmail exists and eServiceConsent is NOT checked, display email and 'No e-service consent' label.
-
-    // When paperPetitionEmail does NOT exist and eServiceConsent is checked, display only 'E-service consent' label.
-    // When paperPetitionEmail does NOT exist and eServiceConsent is NOT checked, display nothing.
-
-    it('should return E-service consent text for primary and secondary contacts when paperPetitionEmail exists and hasConsentedToEService is true', () => {
+    it('should return E-service consent text for primary and secondary contacts when hasConsentedToEService is true', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -375,7 +369,7 @@ describe('reviewSavedPetitionHelper', () => {
       );
     });
 
-    it('should return No e-service consent text for primary and secondary contacts when paperPetitionEmail exists and hasConsentedToEService is false', () => {
+    it('should return No e-service consent text for primary and secondary contacts when hasConsentedToEService is false', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -399,7 +393,7 @@ describe('reviewSavedPetitionHelper', () => {
       );
     });
 
-    it('should return E-service consent text when no paper petition email has been provided and the primary contact has consented to electronic service', () => {
+    it('should not return e-service text for the secondary petitioner when it does not exist', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -411,9 +405,6 @@ describe('reviewSavedPetitionHelper', () => {
         },
       });
 
-      expect(result.eServiceConsentTextForPrimaryContact).toBe(
-        'E-service consent',
-      );
       expect(result.eServiceConsentTextForSecondaryContact).toBeUndefined();
     });
   });
