@@ -25,6 +25,7 @@ export const AddressDisplay = connect(
     nameOverride,
     noMargin,
     openSealAddressModalSequence,
+    shouldDisplayEServiceConsentText,
     showEmail,
     showSealAddressLink,
   }) {
@@ -55,7 +56,7 @@ export const AddressDisplay = connect(
             {contact.paperPetitionEmail}
           </div>
         )}
-        {eServiceConsentText && <div>{eServiceConsentText}</div>}
+        {shouldDisplayEServiceConsentText && <div>{eServiceConsentText}</div>}
 
         {contact.phone && (
           <span

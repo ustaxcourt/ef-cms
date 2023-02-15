@@ -104,6 +104,9 @@ export const ReviewSavedPetition = connect(
                                 eServiceConsentText={
                                   reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
                                 }
+                                shouldDisplayEServiceConsentText={
+                                  reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact
+                                }
                               />
                             </address>
                           </>
@@ -123,6 +126,9 @@ export const ReviewSavedPetition = connect(
                                 contact={form.contactSecondary}
                                 eServiceConsentText={
                                   reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
+                                }
+                                shouldDisplayEServiceConsentText={
+                                  reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact
                                 }
                               />
                             </address>

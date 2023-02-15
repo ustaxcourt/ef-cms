@@ -127,11 +127,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
-  // const shouldDisplayEConsentTextForPrimaryContact =
-  //   !!caseDetail.contactPrimary.paperPetitionEmail;
+  const shouldDisplayEConsentTextForPrimaryContact =
+    !!caseDetail.contactPrimary.paperPetitionEmail;
 
-  // const shouldDisplayEConsentTextForSecondaryContact =
-  //   !!caseDetail.contactSecondary.paperPetitionEmail;
+  const shouldDisplayEConsentTextForSecondaryContact =
+    !!caseDetail.contactSecondary.paperPetitionEmail ||
+    caseDetail.contactSecondary.hasConsentedToEService;
 
   const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
     .hasConsentedToEService
@@ -162,6 +163,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     receivedAtFormatted,
     renderOrderSummary,
     requestForPlaceOfTrialFile,
+    shouldDisplayEConsentTextForPrimaryContact,
+    shouldDisplayEConsentTextForSecondaryContact,
     shouldShowIrsNoticeDate,
     showOrdersAndNoticesInDraftHeader,
     showOrdersAndNoticesNeededHeader,
