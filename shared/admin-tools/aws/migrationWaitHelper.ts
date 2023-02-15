@@ -14,7 +14,7 @@ const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
 const sqsClient = new SQSClient({ region: 'us-east-1' });
 const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
 
-export const getSqsQueueCount = async (queueUrl: string) => {
+export const getSqsQueueCount = async (queueUrl: string): Promise<number> => {
   const command = new GetQueueAttributesCommand({
     AttributeNames: [
       'ApproximateNumberOfMessages',
@@ -28,12 +28,13 @@ export const getSqsQueueCount = async (queueUrl: string) => {
     data = await sqsClient.send(command);
   } catch (error) {
     console.log(error);
+    return 0;
   }
   console.log('sqs queue data: ', data);
   return data; //data.something.length?
 };
 
-export const getMetricStatistics = async (type: string) => {
+export const getMetricStatistics = async (type: string): Promise<object> => {
   const now = DateTime.now();
   const start = DateTime.now().minus({ minutes: 15 });
   const command = new GetMetricStatisticsCommand({
@@ -59,7 +60,9 @@ export const getMetricStatistics = async (type: string) => {
   return data;
 };
 
-export const putMigrationQueueIsEmptyFlag = async (value: boolean) => {
+export const putMigrationQueueIsEmptyFlag = async (
+  value: boolean,
+): Promise<object> => {
   const command = new PutItemCommand({
     Item: {
       current: { BOOL: value },
@@ -78,7 +81,7 @@ export const putMigrationQueueIsEmptyFlag = async (value: boolean) => {
   return data;
 };
 
-export const getMigrationQueueIsEmptyFlag = async () => {
+export const getMigrationQueueIsEmptyFlag = async (): Promise<boolean> => {
   const command = new GetItemCommand({
     Key: {
       pk: { S: 'migration-queue-is-empty' },
