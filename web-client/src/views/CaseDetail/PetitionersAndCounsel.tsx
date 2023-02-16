@@ -72,7 +72,7 @@ export const PetitionersAndCounsel = connect(
                     <p className="semi-bold margin-bottom-0">
                       Petition email address
                     </p>
-                    {petitioner.paperPetitionEmail}
+                    {petitioner.formattedPaperPetitionEmail}
                   </div>
 
                   {petitioner.serviceIndicator && (
