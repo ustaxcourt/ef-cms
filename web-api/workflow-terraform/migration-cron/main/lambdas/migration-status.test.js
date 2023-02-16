@@ -27,20 +27,19 @@ const mockContext = {
 };
 const mockErrorStatistics = {
   Datapoints: [
-    { message: 'error', status: 400 },
-    { message: 'error', status: 400 },
-    { message: 'error', status: 400 },
-    { message: 'error', status: 400 },
+    {
+      Sum: 4,
+      Unit: 'Count',
+    },
   ],
   Label: 'Errors',
 };
 const mockInvocationStatistics = {
   Datapoints: [
-    { data: {}, message: 'invocation' },
-    { data: {}, message: 'invocation' },
-    { data: {}, message: 'invocation' },
-    { data: {}, message: 'invocation' },
-    { data: {}, message: 'invocation' },
+    {
+      Sum: 5,
+      Unit: 'Count',
+    },
   ],
   Label: 'Invocations',
 };
@@ -95,8 +94,9 @@ describe('migration-status', () => {
 
   it('should call cancelWorkflow when the DL queue is NOT empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
+    mockErrorStatistics.Datapoints[0].Sum = 0;
     getMetricStatistics
-      .mockReturnValueOnce(Promise.resolve([])) // errors
+      .mockReturnValueOnce(Promise.resolve(mockErrorStatistics)) // errors
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics)); // invocations
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(2)) // DL queue count
@@ -120,8 +120,9 @@ describe('migration-status', () => {
 
   it('should NOT call approvePendingJob when the migration segment queue is NOT empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
+    mockErrorStatistics.Datapoints[0].Sum = 0;
     getMetricStatistics
-      .mockReturnValueOnce(Promise.resolve([])) // errors
+      .mockReturnValueOnce(Promise.resolve(mockErrorStatistics)) // errors
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics)); // invocations
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
@@ -145,8 +146,9 @@ describe('migration-status', () => {
 
   it('should NOT call approvePendingJob the first time the migration segment queue is empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
+    mockErrorStatistics.Datapoints[0].Sum = 0;
     getMetricStatistics
-      .mockReturnValueOnce(Promise.resolve([])) // errors
+      .mockReturnValueOnce(Promise.resolve(mockErrorStatistics)) // errors
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics)); // invocations
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
@@ -172,8 +174,9 @@ describe('migration-status', () => {
 
   it('should call approvePendingJob the second consecutive time the migration segment queue is empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
+    mockErrorStatistics.Datapoints[0].Sum = 0;
     getMetricStatistics
-      .mockReturnValueOnce(Promise.resolve([])) // errors
+      .mockReturnValueOnce(Promise.resolve(mockErrorStatistics)) // errors
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics)); // invocations
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
