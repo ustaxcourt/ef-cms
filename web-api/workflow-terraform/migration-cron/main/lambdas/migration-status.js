@@ -20,7 +20,13 @@ exports.handler = async (input, context) => {
   const migrateFlag = process.env.MIGRATE_FLAG;
   const results = { migrateFlag };
   if (migrateFlag === 'true') {
-    results.errorRate = await getSegmentErrorRate();
+    const segmentErrorRate = await getSegmentErrorRate();
+
+    if (segmentErrorRate === -1) {
+      return context.succeed({ ...results, shouldCancel, shouldProceed });
+    }
+
+    results.errorRate = segmentErrorRate;
     const highErrorRate = results.errorRate > 50;
     if (highErrorRate) {
       shouldCancel = true;
@@ -62,8 +68,15 @@ exports.handler = async (input, context) => {
 };
 
 const getSegmentErrorRate = async () => {
-  const errorResponse = await getMetricStatistics('Errors');
-  const invocationResponse = await getMetricStatistics('Invocations');
+  let errorResponse = {};
+  let invocationResponse = {};
+  try {
+    errorResponse = await getMetricStatistics('Errors');
+    invocationResponse = await getMetricStatistics('Invocations');
+  } catch (error) {
+    console.log(error);
+    return -1;
+  }
 
   let errorTotal = 0;
   if ('Datapoints' in errorResponse && errorResponse.Datapoints.length > 0) {
