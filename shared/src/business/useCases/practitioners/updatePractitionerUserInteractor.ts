@@ -101,7 +101,8 @@ export const updatePractitionerUserInteractor = async (
     .toRawObject();
 
   let updatedUser = validatedUserData;
-  if (oldUser.email) {
+
+  if (oldUser.email || oldUser.pendingEmail) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser({
