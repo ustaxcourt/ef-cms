@@ -25,21 +25,25 @@ const mockContext = {
   fail: jest.fn(),
   succeed: jest.fn(),
 };
-const mockErrorStatistics = [
-  // TODO: what this look like tho
-  { message: 'error', status: 400 },
-  { message: 'error', status: 400 },
-  { message: 'error', status: 400 },
-  { message: 'error', status: 400 },
-];
-const mockInvocationStatistics = [
-  // TODO: what this look like tho
-  { data: {}, message: 'invocation' },
-  { data: {}, message: 'invocation' },
-  { data: {}, message: 'invocation' },
-  { data: {}, message: 'invocation' },
-  { data: {}, message: 'invocation' },
-];
+const mockErrorStatistics = {
+  Datapoints: [
+    { message: 'error', status: 400 },
+    { message: 'error', status: 400 },
+    { message: 'error', status: 400 },
+    { message: 'error', status: 400 },
+  ],
+  Label: 'Errors',
+};
+const mockInvocationStatistics = {
+  Datapoints: [
+    { data: {}, message: 'invocation' },
+    { data: {}, message: 'invocation' },
+    { data: {}, message: 'invocation' },
+    { data: {}, message: 'invocation' },
+    { data: {}, message: 'invocation' },
+  ],
+  Label: 'Invocations',
+};
 
 describe('migration-status', () => {
   console.log = () => null;
