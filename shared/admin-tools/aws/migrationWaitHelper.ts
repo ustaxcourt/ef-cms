@@ -65,13 +65,7 @@ export const getMetricStatistics = async (type: string): Promise<object> => {
     StartTime: start.toJSDate(),
     Statistics: ['Sum'],
   });
-  let data;
-  try {
-    data = await cloudwatchClient.send(command);
-  } catch (error) {
-    console.log(error);
-  }
-  return data;
+  return await cloudwatchClient.send(command);
 };
 
 export const putMigrationQueueIsEmptyFlag = async (

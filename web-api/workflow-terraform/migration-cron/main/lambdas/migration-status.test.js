@@ -199,4 +199,57 @@ describe('migration-status', () => {
       totalActiveJobs: 0,
     });
   });
+
+  it('should fail fast on any error when getting metrics statistics for either errors or invocations', async () => {
+    process.env.MIGRATE_FLAG = 'true';
+    mockErrorStatistics.Datapoints[0].Sum = 0;
+    getMetricStatistics
+      .mockReturnValueOnce(Promise.reject()) // errors
+      .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics)); // invocations
+    await handler({}, mockContext);
+    expect(getMetricStatistics).toHaveBeenCalledTimes(1);
+    expect(mockContext.succeed).toHaveBeenCalledWith({
+      migrateFlag: 'true',
+      shouldCancel: false,
+      shouldProceed: false,
+    });
+  });
+
+  it('should return a zero error rate if no invocations have happened', async () => {
+    process.env.MIGRATE_FLAG = 'true';
+    mockErrorStatistics.Datapoints[0].Sum = 0;
+    getMetricStatistics
+      .mockReturnValueOnce(Promise.resolve(mockErrorStatistics)) // errors
+      .mockReturnValueOnce(
+        Promise.resolve({
+          Datapoints: [
+            {
+              Sum: 0,
+              Unit: 'Count',
+            },
+          ],
+          Label: 'Invocations',
+        }),
+      );
+    getSqsQueueCount
+      .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
+      .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue
+    getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
+    await handler({}, mockContext);
+    expect(approvePendingJob).toHaveBeenCalledTimes(1);
+    expect(cancelWorkflow).toHaveBeenCalledTimes(0);
+    expect(getMetricStatistics).toHaveBeenCalledTimes(2);
+    expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(1);
+    expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
+    expect(putMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
+    expect(mockContext.succeed).toHaveBeenCalledWith({
+      dlQueueCount: 0,
+      errorRate: 0,
+      migrateFlag: 'true',
+      migrationQueueIsEmptyFlag: true,
+      shouldCancel: false,
+      shouldProceed: true,
+      totalActiveJobs: 0,
+    });
+  });
 });
