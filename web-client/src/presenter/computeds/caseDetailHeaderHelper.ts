@@ -51,7 +51,10 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.irsPractitioner) {
-      const caseHasRespondent = !!caseDetail.hasIrsPractitioner;
+      // can remove  !!caseDetail.hasIrsPractitioner once CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER / consolidated-cases-group-access-petitioner has been removed
+
+      const caseHasRespondent =
+        !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length;
 
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
 
