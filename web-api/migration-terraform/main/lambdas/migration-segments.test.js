@@ -73,6 +73,10 @@ describe('migration-segments', () => {
     ],
   };
 
+  const mockLambdaContext = {
+    awsRequestId: 'some-uuid',
+  };
+
   beforeEach(() => {
     documentClientMock.get = () => ({
       promise: () => ({ Item: false }),
@@ -105,7 +109,7 @@ describe('migration-segments', () => {
       promise: () => ({ Item: true }),
     });
 
-    await handler(mockLambdaEvent);
+    await handler(mockLambdaEvent, mockLambdaContext);
 
     expect(mockLogger.debug).not.toHaveBeenCalledWith(
       'about to run migration just-a-test',
@@ -113,7 +117,7 @@ describe('migration-segments', () => {
   });
 
   it('should run a migration when it did NOT already exist as a record in the deploy table', async () => {
-    await handler(mockLambdaEvent);
+    await handler(mockLambdaEvent, mockLambdaContext);
 
     expect(mockLogger.debug).toHaveBeenCalledWith(
       'about to run migration just-a-test',
@@ -123,20 +127,21 @@ describe('migration-segments', () => {
   it('should throw an error when any item is invalid', async () => {
     mockValidationMigration.mockRejectedValue(new Error());
 
-    await expect(handler(mockLambdaEvent)).rejects.toThrow();
+    await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow();
   });
 
   it('should log a message when an item is successfully migrated to the destination table', async () => {
     const mockRecordSize = 74;
     mockGetRecordSize.mockReturnValue(mockRecordSize);
 
-    await handler(mockLambdaEvent);
+    await handler(mockLambdaEvent, mockLambdaContext);
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       'Successfully migrated case|101-20 case|101-20',
       {
         pk: 'case|101-20',
         recordSizeInBytes: mockRecordSize,
+        segment: 0,
         sk: 'case|101-20',
       },
     );
@@ -147,7 +152,7 @@ describe('migration-segments', () => {
       throw new Error();
     });
 
-    await handler(mockLambdaEvent);
+    await handler(mockLambdaEvent, mockLambdaContext);
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       'DynamoDB Record Size Calculation Error: Error, {"pk":"case|101-20","sk":"case|101-20"}',
@@ -157,6 +162,7 @@ describe('migration-segments', () => {
       {
         pk: 'case|101-20',
         recordSizeInBytes: undefined,
+        segment: 0,
         sk: 'case|101-20',
       },
     );
@@ -170,7 +176,7 @@ describe('migration-segments', () => {
         ),
     });
 
-    await handler(mockLambdaEvent);
+    await handler(mockLambdaEvent, mockLambdaContext);
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       'The item of case|101-20 case|101-20 already existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
@@ -192,14 +198,28 @@ describe('migration-segments', () => {
         ),
     });
 
-    await expect(handler(mockLambdaEvent)).rejects.toThrow(
+    await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow(
       'NOT a conditional request failed ERROR',
     );
   });
 
   it('should delete a message from the sqs queue when it is successfully processed', async () => {
-    await handler(mockLambdaEvent);
+    await handler(mockLambdaEvent, mockLambdaContext);
 
     expect(deleteMessageMock).toHaveBeenCalled();
+  });
+
+  it('should log the duration a segment took to process', async () => {
+    await handler(mockLambdaEvent, mockLambdaContext);
+
+    expect(mockLogger.info).toHaveBeenCalledWith('about to process segment', {
+      segment: 0,
+      totalSegments: 1,
+    });
+    expect(mockLogger.info).toHaveBeenCalledWith('finishing segment', {
+      duration: expect.anything(),
+      segment: 0,
+      totalSegments: 1,
+    });
   });
 });
