@@ -7,7 +7,7 @@ ENVIRONMENT=$1
 [ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You must set DESTINATION_TABLE as an environment variable" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
-[ -z "${DOCUMENTS_BUCKET_NAME}" ] && echo "You must set DOCUMENTS_BUCKET_NAME as an environment variable" && exit 1
+[ -z "${DOCUMENTS_BUCKET_NAME}" ] && DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENVIRONMENT}-${REGION}"
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
