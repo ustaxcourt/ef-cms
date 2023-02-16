@@ -1,6 +1,6 @@
 import { Case, isClosed, isLeadCase } from '../entities/cases/Case';
 import { compareISODateStrings } from '../utilities/sortFunctions';
-import { partition, uniqBy } from 'lodash';
+import { uniqBy } from 'lodash';
 
 type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
@@ -125,24 +125,22 @@ export const getCasesForUserInteractor = async (
       ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
   );
 
-  const [openCases, closedCases] = partition(
-    allUserCases,
-    aCase => !isClosed(aCase),
-  );
-
-  const nestedOpenCases = await fetchConsolidatedGroupsAndNest({
+  const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    cases: openCases,
+    cases: allUserCases,
     userId,
   });
 
-  const nestedClosedCases = await fetchConsolidatedGroupsAndNest({
-    applicationContext,
-    cases: closedCases,
-    userId,
-  });
+  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
 
-  const sortedOpenCases: any[] = Object.values(nestedOpenCases)
+  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
+
+  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
+};
+
+// TODO: confirm whether this map is still necessary, and whether is differs locally to deployed
+const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
+  return nestedCases
     .map((c: any) => {
       // explicitly unset the entityName because this is returning a composite entity and if an entityName
       // is set, the genericHandler will send it through the entity constructor for that entity and strip
@@ -150,12 +148,27 @@ export const getCasesForUserInteractor = async (
       c.entityName = undefined;
       return c;
     })
-    .sort((a, b) => compareISODateStrings(a.createdAt, b.createdAt))
-    .reverse();
+    .filter(nestedCase => {
+      const caseIsOpen = [
+        nestedCase,
+        ...(nestedCase.consolidatedCases || []),
+      ].some(aCase =>
+        caseType === 'open' ? !isClosed(aCase) : isClosed(aCase),
+      );
 
-  const sortedClosedCases = nestedClosedCases
-    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
-    .reverse();
-
-  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
+      return caseIsOpen;
+    })
+    .sort((a, b) => {
+      if (caseType === 'closed') {
+        const closedDateA = a.closedDate
+          ? a.closedDate
+          : a.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
+        const closedDateB = b.closedDate
+          ? b.closedDate
+          : b.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
+        return compareISODateStrings(closedDateB, closedDateA);
+      } else {
+        return compareISODateStrings(b.createdAt, a.createdAt);
+      }
+    });
 };
