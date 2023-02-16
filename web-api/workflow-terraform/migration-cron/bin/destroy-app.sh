@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 mkdir -p ./lambdas/dist
 touch ./lambdas/dist/migration-status.js

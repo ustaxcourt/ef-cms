@@ -12,9 +12,9 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="migrations-cron-${ENVIRONMENT}.tfstate"
+KEY="switch-colors-cron-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
+export REGION=us-east-1
 
 rm -rf .terraform
 
@@ -34,11 +34,10 @@ fi
 npm run build:assets
 
 set -eo pipefail
-npm run build:lambda:migration-cron
+npm run build:lambda:switch-colors-cron
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_migrate_flag=$MIGRATE_FLAG
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
