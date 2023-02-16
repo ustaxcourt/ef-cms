@@ -63,16 +63,29 @@ exports.handler = async (input, context) => {
 
 const getSegmentErrorRate = async () => {
   const errorResponse = await getMetricStatistics('Errors');
-  console.log(errorResponse);
   const invocationResponse = await getMetricStatistics('Invocations');
-  console.log(invocationResponse);
 
-  const errorTotal =
-    'Datapoints' in errorResponse ? errorResponse.Datapoints.length : 0;
-  const invocationTotal =
-    'Datapoints' in invocationResponse
-      ? invocationResponse.Datapoints.length
-      : 0;
+  let errorTotal = 0;
+  if ('Datapoints' in errorResponse && errorResponse.Datapoints.length > 0) {
+    for (const datapoint of errorResponse.Datapoints) {
+      if ('Sum' in datapoint) {
+        errorTotal += Number(datapoint.Sum);
+      }
+    }
+  }
+
+  let invocationTotal = 0;
+  if (
+    'Datapoints' in invocationResponse &&
+    invocationResponse.Datapoints.length > 0
+  ) {
+    for (const datapoint of invocationResponse.Datapoints) {
+      if ('Sum' in datapoint) {
+        invocationTotal += Number(datapoint.Sum);
+      }
+    }
+  }
+
   if (invocationTotal > 0) {
     console.log(`There were ${errorTotal} errors in the last 15 minutes.`);
     console.log(
