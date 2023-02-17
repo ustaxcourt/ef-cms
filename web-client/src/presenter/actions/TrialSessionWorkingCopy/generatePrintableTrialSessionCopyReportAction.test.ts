@@ -29,7 +29,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     filingPartiesCode: 'OTP',
     inConsolidatedGroup: MOCK_CASE.inConsolidatedGroup,
     irsPractitioners: MOCK_CASE.irsPractitioners,
-    leadCase: MOCK_CASE.isLeadCase,
+    isLeadCase: MOCK_CASE.isLeadCase,
     notes: {
       docketNumber: '678-90',
       notes: 'this is a note added',
