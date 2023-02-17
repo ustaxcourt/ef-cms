@@ -20,7 +20,7 @@ resource "aws_lambda_function" "reindex_status_lambda" {
   environment {
     variables = {
       DESTINATION_TABLE             = var.destination_table
-      ENVIRONMENT                   = var.environment
+      STAGE                         = var.environment
       NODE_ENV                      = "production"
       SOURCE_TABLE                  = var.source_table
       ACCOUNT_ID                    = data.aws_caller_identity.current.account_id
