@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { find } = require('lodash');
 
-const findPendingJob = async ({ apiToken, workflowId }) => {
+const findPendingJob = async ({ apiToken, jobName, workflowId }) => {
   const getAllJobs = {
     headers: { 'Circle-Token': apiToken },
     method: 'GET',
@@ -11,21 +11,22 @@ const findPendingJob = async ({ apiToken, workflowId }) => {
   const allJobsInWorkflow = await axios.get(getAllJobs.url, getAllJobs);
 
   const jobWithApprovalNeeded = find(allJobsInWorkflow.data.items, o => {
-    return o.approval_request_id !== undefined;
+    return o.name === jobName;
   });
 
   return jobWithApprovalNeeded.approval_request_id;
 };
 
-exports.approvePendingJob = async ({ apiToken, workflowId }) => {
-  const pendingJobApprovalRequestId = await findPendingJob({
+exports.approvePendingJob = async ({ apiToken, jobName, workflowId }) => {
+  const approvalRequestId = await findPendingJob({
     apiToken,
+    jobName,
     workflowId,
   });
   const approveJob = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
-    url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${pendingJobApprovalRequestId}`,
+    url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequestId}`,
   };
 
   await axios.post(approveJob.url, {}, approveJob);

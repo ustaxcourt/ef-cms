@@ -22,7 +22,8 @@ exports.handler = async () => {
   console.log('Approving CircleCI wait for reindex job');
 
   const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
+  const jobName = 'wait-for-reindex';
   const workflowId = process.env.CIRCLE_WORKFLOW_ID;
 
-  await approvePendingJob({ apiToken, workflowId });
+  await approvePendingJob({ apiToken, jobName, workflowId });
 };

@@ -13,7 +13,13 @@ jest.mock('axios');
 const axios = require('axios');
 
 describe('reindex-status', () => {
-  const mockJobs = [{}, { approval_request_id: 'MOCK_APPROVAL_REQUEST_ID' }];
+  const mockJobs = [
+    {},
+    {
+      approval_request_id: 'MOCK_APPROVAL_REQUEST_ID',
+      name: 'wait-for-reindex',
+    },
+  ];
 
   console.log = () => null;
 
