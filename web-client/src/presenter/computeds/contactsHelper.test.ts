@@ -10,41 +10,43 @@ import {
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const contactsHelper = withAppContextDecorator(
-  contactsHelperComputed,
-  applicationContext,
-);
-let mockUser;
-
-const getBaseState = user => {
-  mockUser = { ...user };
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
 describe('contactsHelper', () => {
+  let mockUser;
   let baseState;
-  let form;
+  let mockForm;
+
+  const contactsHelper = withAppContextDecorator(
+    contactsHelperComputed,
+    applicationContext,
+  );
+
+  // const getBaseState = user => {
+  //   mockUser = { ...user };
+  //   return {
+  //     permissions: getUserPermissions(user),
+  //   };
+  // };
 
   beforeEach(() => {
     baseState = {
-      ...getBaseState(mockUser),
+      // ...getBaseState(mockUser),
       caseDetail: {},
-      form,
+      form: mockForm,
     };
   });
 
   describe('user role petitioner', () => {
     it.only('should validate form view information for party type Conservator', () => {
       mockUser = petitionerUser;
-      form = { partyType: PARTY_TYPES.conservator };
+      mockForm = { partyType: PARTY_TYPES.conservator };
+
+      console.log('baseState.form', baseState.form);
 
       const result = runCompute(contactsHelper, {
         state: {
           ...baseState,
           //fix this PLEASE
-          form: { partyType: PARTY_TYPES.conservator },
+          // form: { partyType: PARTY_TYPES.conservator },
         },
       });
 
