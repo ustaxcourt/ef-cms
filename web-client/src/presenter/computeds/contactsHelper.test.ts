@@ -2,8 +2,8 @@ import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityCons
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import {
-  docketClerkUser,
   petitionerUser,
+  petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
@@ -150,8 +150,8 @@ describe('contactsHelper', () => {
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
 
-    it('should return false if its an internal user', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    it('should return true if its a petitions clerk user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
       const result = runCompute(contactsHelper, {
         state: {
