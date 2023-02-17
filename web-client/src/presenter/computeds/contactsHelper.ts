@@ -13,8 +13,11 @@ export const contactsHelper = (get, applicationContext) => {
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
 
-  let showPaperPetitionEmailField = false;
+  let showPaperPetitionEmailFieldAndConsentBox = !isExternalUser;
 
   let contactPrimary, contactSecondary;
   let showEmail = user.role !== USER_ROLES.petitioner;
@@ -35,7 +38,7 @@ export const contactsHelper = (get, applicationContext) => {
     contactPrimary,
     contactSecondary,
     showEmail,
-    showPaperPetitionEmailField,
+    showPaperPetitionEmailFieldAndConsentBox,
   };
 };
 
