@@ -164,52 +164,58 @@ export const ContactSecondary = connect(
             />
           )}
 
-          <FormGroup>
-            <label
-              className="usa-label"
-              htmlFor="paper-petition-email-secondary"
-            >
-              Petition email address{' '}
-              <span className="usa-hint">(optional)</span>
-            </label>
-            <input
-              className="usa-input"
-              id="paper-petition-email-secondary"
-              name="contactSecondary.paperPetitionEmail"
-              type="email"
-              value={data.contactSecondary.paperPetitionEmail || ''}
-              onBlur={() => {
-                onBlurSequence();
-              }}
-              onChange={e => {
-                updateFormValueAndSecondaryContactInfoSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <input
-              checked={data.contactSecondary.hasConsentedToEService || false}
-              className="usa-checkbox__input"
-              id="electronic-service-consent-secondary"
-              name="contactSecondary.hasConsentedToEService"
-              type="checkbox"
-              onChange={e => {
-                updateFormValueAndSecondaryContactInfoSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-              }}
-            />
-            <label
-              className="usa-checkbox__label"
-              htmlFor="electronic-service-consent-secondary"
-            >
-              E-service consent
-            </label>
-          </FormGroup>
+          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
+            <>
+              <FormGroup>
+                <label
+                  className="usa-label"
+                  htmlFor="paper-petition-email-secondary"
+                >
+                  Petition email address{' '}
+                  <span className="usa-hint">(optional)</span>
+                </label>
+                <input
+                  className="usa-input"
+                  id="paper-petition-email-secondary"
+                  name="contactSecondary.paperPetitionEmail"
+                  type="email"
+                  value={data.contactSecondary.paperPetitionEmail || ''}
+                  onBlur={() => {
+                    onBlurSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueAndSecondaryContactInfoSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <input
+                  checked={
+                    data.contactSecondary.hasConsentedToEService || false
+                  }
+                  className="usa-checkbox__input"
+                  id="electronic-service-consent-secondary"
+                  name="contactSecondary.hasConsentedToEService"
+                  type="checkbox"
+                  onChange={e => {
+                    updateFormValueAndSecondaryContactInfoSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="electronic-service-consent-secondary"
+                >
+                  E-service consent
+                </label>
+              </FormGroup>
+            </>
+          )}
 
           {contactsHelper.contactSecondary.displayPhone && (
             <FormGroup

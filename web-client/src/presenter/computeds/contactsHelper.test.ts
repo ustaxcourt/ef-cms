@@ -4,6 +4,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import {
+  docketClerkUser,
   petitionerUser,
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
@@ -130,7 +131,7 @@ describe('contactsHelper', () => {
     });
   });
 
-  describe('showPaperPetitionEmailField', () => {
+  describe('showPaperPetitionEmailFieldAndConsentBox', () => {
     it('should return false if its an external user', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       const result = runCompute(contactsHelper, {
@@ -140,7 +141,20 @@ describe('contactsHelper', () => {
           },
         },
       });
-      expect(result.showPaperPetitionEmailField).toEqual(false);
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should return false if its an internal user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+      const result = runCompute(contactsHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          },
+        },
+      });
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });
