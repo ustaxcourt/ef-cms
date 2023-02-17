@@ -1,7 +1,6 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import {
   petitionerUser,
   petitionsClerkUser,
@@ -11,42 +10,16 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('contactsHelper', () => {
-  let mockUser;
-  let baseState;
-  let mockForm;
-
   const contactsHelper = withAppContextDecorator(
     contactsHelperComputed,
     applicationContext,
   );
 
-  // const getBaseState = user => {
-  //   mockUser = { ...user };
-  //   return {
-  //     permissions: getUserPermissions(user),
-  //   };
-  // };
-
-  beforeEach(() => {
-    baseState = {
-      // ...getBaseState(mockUser),
-      caseDetail: {},
-      form: mockForm,
-    };
-  });
-
   describe('user role petitioner', () => {
-    it.only('should validate form view information for party type Conservator', () => {
-      mockUser = petitionerUser;
-      mockForm = { partyType: PARTY_TYPES.conservator };
-
-      console.log('baseState.form', baseState.form);
-
+    it('should validate form view information for party type Conservator', () => {
       const result = runCompute(contactsHelper, {
         state: {
-          ...baseState,
-          //fix this PLEASE
-          // form: { partyType: PARTY_TYPES.conservator },
+          form: { partyType: PARTY_TYPES.conservator },
         },
       });
 
@@ -112,6 +85,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         displaySecondaryName: true,
         header: 'Tell Us About the Tax Matters Partner',
@@ -128,6 +102,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         header: 'Tell Us About the Petitioner',
         nameLabel: 'Name',
@@ -142,6 +117,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result).toMatchObject({
         contactPrimary: {
           displayPhone: true,
@@ -158,18 +134,23 @@ describe('contactsHelper', () => {
   });
 
   describe('showPaperPetitionEmailFieldAndConsentBox', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    let baseState;
+
+    beforeEach(() => {
+      baseState = {
+        form: {
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+        },
+      };
     });
 
     it('should return false if its an external user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
       const result = runCompute(contactsHelper, {
-        state: {
-          form: {
-            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
-          },
-        },
+        state: baseState,
       });
+
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
 
@@ -177,12 +158,9 @@ describe('contactsHelper', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
       const result = runCompute(contactsHelper, {
-        state: {
-          form: {
-            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
-          },
-        },
+        state: baseState,
       });
+
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
   });
