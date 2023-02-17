@@ -44,6 +44,7 @@ export const getSqsQueueCount = async (queueUrl: string): Promise<number> => {
     }
   } catch (error) {
     console.log(error);
+    queueCount = -1;
   }
   return queueCount;
 };
@@ -84,7 +85,7 @@ export const putMigrationQueueIsEmptyFlag = async (
     await dynamodbClient.send(command);
     result = true;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
   return result;
 };
@@ -109,7 +110,7 @@ export const getMigrationQueueIsEmptyFlag = async (): Promise<boolean> => {
       flag = data.Item.current.BOOL;
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
   return flag;
 };

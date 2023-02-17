@@ -15,56 +15,47 @@ const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUN
 const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.STAGE}`;
 
 exports.handler = async (input, context) => {
-  let shouldProceed = false;
-  let shouldCancel = false;
-  const migrateFlag = process.env.MIGRATE_FLAG;
-  const results = { migrateFlag };
-  if (migrateFlag === 'true') {
-    const segmentErrorRate = await getSegmentErrorRate();
-
-    if (segmentErrorRate === -1) {
-      return context.succeed({ ...results, shouldCancel, shouldProceed });
+  const results = { migrateFlag: process.env.MIGRATE_FLAG };
+  if (results.migrateFlag === 'true') {
+    results.errorRate = await getSegmentErrorRate();
+    if (results.errorRate === -1) {
+      return context.succeed(results);
+    }
+    if (results.errorRate > 50) {
+      await cancelWorkflow({ apiToken, workflowId });
+      return context.succeed(results);
     }
 
-    results.errorRate = segmentErrorRate;
-    const highErrorRate = results.errorRate > 50;
-    if (highErrorRate) {
-      shouldCancel = true;
-    }
     results.dlQueueCount = await getSqsQueueCount(dlQueueUrl);
-    const dlQueueHasItems = results.dlQueueCount > 0;
-    if (dlQueueHasItems) {
-      shouldCancel = true;
+    if (results.dlQueueCount === -1) {
+      return context.succeed(results);
+    }
+    if (results.dlQueueCount > 0) {
+      await cancelWorkflow({ apiToken, workflowId });
+      return context.succeed(results);
     }
 
     // it's possible the queue has caught up but there are still more segments to process
     // don't approve the job if this is the first consecutive time the queue is empty
     results.totalActiveJobs = await getSqsQueueCount(workQueueUrl);
-    if (!highErrorRate && !dlQueueHasItems) {
-      if (results.totalActiveJobs > 0) {
-        await putMigrationQueueIsEmptyFlag(false);
+    if (results.totalActiveJobs === -1) {
+      return context.succeed(results);
+    }
+    if (results.totalActiveJobs > 0) {
+      await putMigrationQueueIsEmptyFlag(false);
+    } else {
+      results.migrationQueueIsEmptyFlag = await getMigrationQueueIsEmptyFlag();
+      if (!results.migrationQueueIsEmptyFlag) {
+        await putMigrationQueueIsEmptyFlag(true);
       } else {
-        results.migrationQueueIsEmptyFlag =
-          await getMigrationQueueIsEmptyFlag();
-        if (!results.migrationQueueIsEmptyFlag) {
-          await putMigrationQueueIsEmptyFlag(true);
-        } else {
-          shouldProceed = true;
-        }
+        await approvePendingJob({ apiToken, workflowId });
       }
     }
   } else {
-    shouldProceed = true;
-  }
-
-  if (shouldCancel) {
-    await cancelWorkflow({ apiToken, workflowId });
-    return context.fail({ ...results, shouldCancel, shouldProceed });
-  }
-  if (shouldProceed) {
     await approvePendingJob({ apiToken, workflowId });
   }
-  return context.succeed({ ...results, shouldCancel, shouldProceed });
+
+  return context.succeed(results);
 };
 
 const getSegmentErrorRate = async () => {
