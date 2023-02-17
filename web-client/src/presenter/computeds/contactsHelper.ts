@@ -13,7 +13,9 @@ export const contactsHelper = (get, applicationContext) => {
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
+
   let showPaperPetitionEmailField = false;
+
   let contactPrimary, contactSecondary;
   let showEmail = user.role !== USER_ROLES.petitioner;
 
