@@ -1,6 +1,7 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import {
   petitionerUser,
   petitionsClerkUser,
@@ -13,16 +14,36 @@ const contactsHelper = withAppContextDecorator(
   contactsHelperComputed,
   applicationContext,
 );
+let mockUser;
+
+const getBaseState = user => {
+  mockUser = { ...user };
+  return {
+    permissions: getUserPermissions(user),
+  };
+};
 
 describe('contactsHelper', () => {
-  describe('user role petitioner', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-    });
+  let baseState;
+  let form;
 
-    it('should validate form view information for party type Conservator', () => {
+  beforeEach(() => {
+    baseState = {
+      ...getBaseState(mockUser),
+      caseDetail: {},
+      form,
+    };
+  });
+
+  describe('user role petitioner', () => {
+    it.only('should validate form view information for party type Conservator', () => {
+      mockUser = petitionerUser;
+      form = { partyType: PARTY_TYPES.conservator };
+
       const result = runCompute(contactsHelper, {
         state: {
+          ...baseState,
+          //fix this PLEASE
           form: { partyType: PARTY_TYPES.conservator },
         },
       });
