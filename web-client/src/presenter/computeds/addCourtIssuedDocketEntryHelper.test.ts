@@ -347,4 +347,32 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
     expect(result.showReceivedDate).toBeTruthy();
   });
+
+  it('should set showAttachmentAndServiceFields to false when the document event code is TCRP', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: 'TCRP',
+        },
+      },
+    });
+
+    expect(result.showAttachmentAndServiceFields).toBe(false);
+  });
+
+  it('should set showAttachmentAndServiceFields to true when the document event code is NOT TCRP', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showAttachmentAndServiceFields).toBe(true);
+  });
 });
