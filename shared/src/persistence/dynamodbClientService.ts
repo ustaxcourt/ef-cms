@@ -274,7 +274,7 @@ export const query = ({
 
 export const scan = async params => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   const allItems = [];
   while (hasMoreResults) {
     hasMoreResults = false;

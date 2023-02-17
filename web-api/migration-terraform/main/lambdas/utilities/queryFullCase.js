@@ -1,6 +1,6 @@
 export const queryFullCase = async (documentClient, docketNumber) => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   let allResults = [];
   while (hasMoreResults) {
     hasMoreResults = false;
