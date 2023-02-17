@@ -28,7 +28,7 @@ export const docketClerkAddsAnUnservableDocument = cerebralTest => {
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
-        value: UNSERVABLE_EVENT_CODES[0], // CTRA
+        value: UNSERVABLE_EVENT_CODES.find(eventCode => eventCode === 'CTRA'),
       },
     );
 
