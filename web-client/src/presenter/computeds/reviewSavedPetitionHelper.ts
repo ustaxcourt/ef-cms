@@ -125,8 +125,33 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
+  const shouldDisplayEConsentTextForPrimaryContact =
+    !!caseDetail.contactPrimary?.paperPetitionEmail ||
+    caseDetail.contactPrimary?.hasConsentedToEService;
+
+  const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
+    ?.hasConsentedToEService
+    ? 'E-service consent'
+    : 'No e-service consent';
+
+  let shouldDisplayEConsentTextForSecondaryContact;
+  let eServiceConsentTextForSecondaryContact;
+
+  if (caseDetail.contactSecondary) {
+    shouldDisplayEConsentTextForSecondaryContact =
+      !!caseDetail.contactSecondary?.paperPetitionEmail ||
+      caseDetail.contactSecondary?.hasConsentedToEService;
+
+    eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
+      ?.hasConsentedToEService
+      ? 'E-service consent'
+      : 'No e-service consent';
+  }
+
   return {
     applicationForWaiverOfFilingFeeFile,
+    eServiceConsentTextForPrimaryContact,
+    eServiceConsentTextForSecondaryContact,
     formattedStatistics,
     hasIrsNoticeFormatted,
     irsNoticeDateFormatted,
@@ -139,6 +164,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     receivedAtFormatted,
     renderOrderSummary,
     requestForPlaceOfTrialFile,
+    shouldDisplayEConsentTextForPrimaryContact,
+    shouldDisplayEConsentTextForSecondaryContact,
     shouldShowIrsNoticeDate,
     showOrdersAndNoticesInDraftHeader,
     showOrdersAndNoticesNeededHeader,
