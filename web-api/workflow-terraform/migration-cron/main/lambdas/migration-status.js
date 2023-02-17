@@ -13,6 +13,7 @@ const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
 const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_dl_queue_${process.env.STAGE}`;
 const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.STAGE}`;
+const jobName = 'wait-for-migration';
 
 exports.handler = async (input, context) => {
   const results = { migrateFlag: process.env.MIGRATE_FLAG };
@@ -48,11 +49,11 @@ exports.handler = async (input, context) => {
       if (!results.migrationQueueIsEmptyFlag) {
         await putMigrationQueueIsEmptyFlag(true);
       } else {
-        await approvePendingJob({ apiToken, workflowId });
+        await approvePendingJob({ apiToken, jobName, workflowId });
       }
     }
   } else {
-    await approvePendingJob({ apiToken, workflowId });
+    await approvePendingJob({ apiToken, jobName, workflowId });
   }
 
   return context.succeed(results);
