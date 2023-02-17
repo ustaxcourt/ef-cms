@@ -72,7 +72,7 @@ if [[ $FORCE_MIGRATION == "--force" ]]; then
   
   EXISTS=$(check_opensearch_domain_exists "${NEXT_OPENSEARCH_DOMAIN}")
   if [[ "${EXISTS}" == "1" ]]; then
-    aws es delete-elasticsearch-domain --domain-name "${NEXT_OPENSEARCH_DOMAIN}}" --region us-east-1
+    aws es delete-elasticsearch-domain --domain-name "${NEXT_OPENSEARCH_DOMAIN}" --region us-east-1
     while [[ "${EXISTS}" == "1" ]]; do
       echo "${NEXT_OPENSEARCH_DOMAIN} is still being deleted. Waiting 30 seconds then checking again."
       sleep 30
