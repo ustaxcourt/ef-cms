@@ -1666,7 +1666,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
   return consolidatedCases.some(aCase => {
     const userIsPartyToCase = [
-      ...aCase.petitioners,
+      ...(aCase.petitioners || []),
       ...(aCase.privatePractitioners || []),
       ...(aCase.irsPractitioners || []),
     ].some(user => user?.userId === userId || user?.contactId === userId);
