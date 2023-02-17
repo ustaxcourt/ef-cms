@@ -26,7 +26,7 @@ export const updatePractitionerUser = async ({
           },
         ],
         UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
+        Username: user.email ? user.email : user.pendingEmail,
       })
       .promise();
   } catch (error) {
