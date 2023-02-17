@@ -106,6 +106,14 @@ const getDynamoClient = () => {
       endpoint: 'http://localhost:8000',
       region: 'us-east-1',
     }),
+    {
+      marshallOptions: {
+        removeUndefinedValues: true,
+      },
+      unmarshallOptions: {
+        wrapNumbers: false,
+      },
+    },
   );
   return {
     batchGet: decorateWithPromiseSupport(client, 'batchGet'),
