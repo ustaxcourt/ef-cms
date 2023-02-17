@@ -210,7 +210,7 @@ describe('migration-status', () => {
     getMetricStatistics
       .mockReturnValueOnce(Promise.resolve(mockErrorStatistics))
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics));
-    getSqsQueueCount.mockReturnValueOnce(Promise.resolve(-1)); // migration segment queue
+    getSqsQueueCount.mockReturnValueOnce(Promise.resolve(-1)); // DL queue count
     await handler({}, mockContext);
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
