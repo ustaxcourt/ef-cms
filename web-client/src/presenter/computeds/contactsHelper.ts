@@ -11,6 +11,9 @@ import { state } from 'cerebral';
  */
 export const contactsHelper = (get, applicationContext) => {
   const form = get(state.form);
+
+  console.log('form', form);
+
   const user = applicationContext.getCurrentUser();
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const isExternalUser = applicationContext
