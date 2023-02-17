@@ -581,7 +581,7 @@ jobs:
       - run:
           name: Enable Check Migration Status Cron
           command: |
-            ./enable-migration-cron.sh
+            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
 
   prepare-for-reindex:
     docker:
@@ -597,6 +597,10 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Check Migration Status Cron
+          command: |
+            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
       - run:
           name: Deploy Check Reindex Status Cron Lambda
           command: |
@@ -616,7 +620,7 @@ jobs:
       - run:
           name: Enable Check Reindex Status Cron
           command: |
-            ./enable-reindex-cron.sh
+            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
 
   disable-reindex-cron:
     docker:
@@ -635,7 +639,7 @@ jobs:
       - run:
           name: Disable Check Reindex Status Cron
           command: |
-            ./disable-reindex-cron.sh
+            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
 
   smoketests:
     docker:
