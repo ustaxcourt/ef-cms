@@ -31,7 +31,8 @@ const getHost = async DomainName => {
 
 const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
-  const domainName = `efcms-search-${environmentName}-${version}`;
+  const domainName =
+    version === 'info' ? 'info' : `efcms-search-${environmentName}-${version}`;
   const host = await getHost(domainName);
 
   return new Client({

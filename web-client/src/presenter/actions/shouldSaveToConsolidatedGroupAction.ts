@@ -20,8 +20,9 @@ export const shouldSaveToConsolidatedGroupAction = ({
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(eventCode);
   const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
+  const isNotTaxCourtPamphlet = eventCode !== 'TCRP';
 
-  if (isLeadCase && isUnservable) {
+  if (isLeadCase && isUnservable && isNotTaxCourtPamphlet) {
     return path.yes();
   } else {
     return path.no();
