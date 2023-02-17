@@ -3,7 +3,6 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import {
   petitionerUser,
-  petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
@@ -131,36 +130,6 @@ describe('contactsHelper', () => {
           nameLabel: 'Name',
         },
       });
-    });
-  });
-
-  describe('showPaperPetitionEmailFieldAndConsentBox', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-    });
-
-    it('should return false if its an external user', () => {
-      const result = runCompute(contactsHelper, {
-        state: {
-          form: {
-            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
-          },
-        },
-      });
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
-    });
-
-    it('should return true if its a petitions clerk user', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
-      const result = runCompute(contactsHelper, {
-        state: {
-          form: {
-            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
-          },
-        },
-      });
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });
