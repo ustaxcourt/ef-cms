@@ -2,8 +2,8 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { S3, SQS } from 'aws-sdk';
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocument } = require('@aws-sdk/lib-dynamodb');
 
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
@@ -89,15 +89,38 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
+const decorateWithPromiseSupport = (client, key) => {
+  return params => {
+    return {
+      promise: () =>
+        new Promise((resolve, reject) => {
+          client[key](params).then(resolve).catch(reject);
+        }),
+    };
+  };
+};
+
+const getDynamoClient = () => {
+  const client = DynamoDBDocument.from(
+    new DynamoDB({
+      endpoint: 'http://localhost:8000',
+      region: 'us-east-1',
+    }),
+  );
+  return {
+    batchGet: decorateWithPromiseSupport(client, 'batchGet'),
+    batchWrite: decorateWithPromiseSupport(client, 'batchWrite'),
+    delete: decorateWithPromiseSupport(client, 'delete'),
+    get: decorateWithPromiseSupport(client, 'get'),
+    put: decorateWithPromiseSupport(client, 'put'),
+    query: decorateWithPromiseSupport(client, 'query'),
+    scan: decorateWithPromiseSupport(client, 'scan'),
+    update: decorateWithPromiseSupport(client, 'update'),
+  };
+};
+
 Object.assign(applicationContext, {
-  getDocumentClient: () => {
-    return DynamoDBDocumentClient.from(
-      new DynamoDBClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      }),
-    );
-  },
+  getDocumentClient: getDynamoClient,
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',
     stage: 'local',
@@ -130,14 +153,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
     }),
-    getDocumentClient: () => {
-      return DynamoDBDocumentClient.from(
-        new DynamoDBClient({
-          endpoint: 'http://localhost:8000',
-          region: 'us-east-1',
-        }),
-      );
-    },
+    getDocumentClient: getDynamoClient,
     getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
     getDocumentsBucketName: () => {
       return (
