@@ -272,4 +272,45 @@ describe('migration-status', () => {
       totalActiveJobs: 0,
     });
   });
+
+  it('should return a zero error rate if the errors metrics statistics object is empty', async () => {
+    process.env.MIGRATE_FLAG = 'true';
+    getMetricStatistics
+      .mockReturnValueOnce(Promise.resolve({}))
+      .mockReturnValueOnce(Promise.resolve({}));
+    getSqsQueueCount
+      .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
+      .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
+    getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
+    await handler({}, mockContext);
+    expect(mockContext.succeed).toHaveBeenCalledWith({
+      dlQueueCount: 0,
+      errorRate: 0,
+      migrateFlag: 'true',
+      migrationQueueIsEmptyFlag: true,
+      totalActiveJobs: 0,
+    });
+  });
+
+  it('should return a zero error rate if the errors metrics statistics object is empty', async () => {
+    const sumUndefined = {
+      Datapoints: [{}],
+    };
+    process.env.MIGRATE_FLAG = 'true';
+    getMetricStatistics
+      .mockReturnValueOnce(Promise.resolve(sumUndefined))
+      .mockReturnValueOnce(Promise.resolve(sumUndefined));
+    getSqsQueueCount
+      .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
+      .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
+    getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
+    await handler({}, mockContext);
+    expect(mockContext.succeed).toHaveBeenCalledWith({
+      dlQueueCount: 0,
+      errorRate: 0,
+      migrateFlag: 'true',
+      migrationQueueIsEmptyFlag: true,
+      totalActiveJobs: 0,
+    });
+  });
 });
