@@ -2,26 +2,26 @@ const { fallbackHandler } = require('./fallbackHandler');
 
 const mockGet = jest.fn();
 
-jest.mock('aws-sdk', () => {
+jest.mock('./getDynamoEndpoints', () => {
   return {
-    DynamoDB: {
-      DocumentClient: jest.fn(() => ({
+    getDynamoEndpoints: () => ({
+      fallbackRegionDB: {
         get: mockGet,
-      })),
-    },
+      },
+      mainRegionDB: {
+        get: mockGet,
+      },
+    }),
   };
 });
 
 describe('fallbackHandler', () => {
   it('should not fallback if the first request was successful', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            text: 'success',
-          },
-        }),
-    }));
+    mockGet.mockResolvedValue({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await fallbackHandler({
       key: 'get',
@@ -32,21 +32,15 @@ describe('fallbackHandler', () => {
   });
 
   it('should fallback if the main dynamodb region is down', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.reject({
-          code: 'ResourceNotFoundException',
-        }),
-    }));
+    mockGet.mockRejectedValueOnce({
+      code: 'ResourceNotFoundException',
+    });
 
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            text: 'success',
-          },
-        }),
-    }));
+    mockGet.mockResolvedValueOnce({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await fallbackHandler({
       key: 'get',
@@ -57,21 +51,15 @@ describe('fallbackHandler', () => {
   });
 
   it('should fallback if the main dynamodb region is throwing 503 errors', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.reject({
-          statusCode: 503,
-        }),
-    }));
+    mockGet.mockRejectedValueOnce({
+      statusCode: 503,
+    });
 
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            text: 'success',
-          },
-        }),
-    }));
+    mockGet.mockResolvedValueOnce({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await fallbackHandler({
       key: 'get',
@@ -82,16 +70,11 @@ describe('fallbackHandler', () => {
   });
 
   it('should throw an error if the main dynamodb region is throwing other types of errors', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.reject({
-          statusCode: 500,
-        }),
-    }));
+    mockGet.mockRejectedValueOnce({
+      statusCode: 500,
+    });
 
-    mockGet.mockImplementationOnce(() => ({
-      promise: () => Promise.reject({}),
-    }));
+    mockGet.mockRejectedValueOnce({});
 
     await expect(
       fallbackHandler({
