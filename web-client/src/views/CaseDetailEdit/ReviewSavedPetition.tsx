@@ -102,7 +102,7 @@ export const ReviewSavedPetition = connect(
                               <AddressDisplay contact={form.contactPrimary} />
                             </address>
                             {form.contactPrimary.paperPetitionEmail && (
-                              <div className="margin-top-1 margin-bottom-1">
+                              <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
                                 {form.contactPrimary.paperPetitionEmail}
                               </div>
                             )}
@@ -129,7 +129,7 @@ export const ReviewSavedPetition = connect(
                               <AddressDisplay contact={form.contactSecondary} />
                             </address>
                             {form.contactSecondary.paperPetitionEmail && (
-                              <div className="margin-top-1 margin-bottom-1">
+                              <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
                                 {form.contactSecondary.paperPetitionEmail}
                               </div>
                             )}
