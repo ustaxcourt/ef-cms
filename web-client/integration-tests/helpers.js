@@ -1,7 +1,10 @@
 /* eslint-disable max-lines */
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
-import { DynamoDB, S3, SQS } from 'aws-sdk';
+import { S3, SQS } from 'aws-sdk';
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
 import {
@@ -88,10 +91,12 @@ const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
-    return new DynamoDB.DocumentClient({
-      endpoint: 'http://localhost:8000',
-      region: 'us-east-1',
-    });
+    return DynamoDBDocumentClient.from(
+      new DynamoDBClient({
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      }),
+    );
   },
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',
@@ -126,10 +131,12 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       sendBulkTemplatedEmail,
     }),
     getDocumentClient: () => {
-      return new DynamoDB.DocumentClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
+      return DynamoDBDocumentClient.from(
+        new DynamoDBClient({
+          endpoint: 'http://localhost:8000',
+          region: 'us-east-1',
+        }),
+      );
     },
     getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
     getDocumentsBucketName: () => {

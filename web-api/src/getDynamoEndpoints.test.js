@@ -27,7 +27,7 @@ describe('getDynamoEndpoints', () => {
 
   const { masterDynamoDbEndpoint, masterRegion } = mockEnvironment;
 
-  it('sets the fallbackRegionDB to us-east-1 when useMasterRegion is true', () => {
+  it('sets the fallbackRegionDB to us-east-1 when useMasterRegion is true', async () => {
     const result = getDynamoEndpoints({
       fallbackRegion,
       fallbackRegionEndpoint,
@@ -38,13 +38,16 @@ describe('getDynamoEndpoints', () => {
       useMasterRegion: true,
     });
 
-    expect(result.fallbackRegionDB.options.region).toEqual('us-west-1');
-    expect(result.fallbackRegionDB.options.endpoint).toEqual(
+    await expect(result.fallbackRegionDB.config.region()).resolves.toEqual(
+      'us-west-1',
+    );
+
+    await expect(result.fallbackRegionDB.config.endpoint()).resolves.toEqual(
       'dynamodb.us-west-1.amazonaws.com',
     );
   });
 
-  it('sets the fallbackRegionDB to us-east-1 when useMasterRegion is false', () => {
+  it('sets the fallbackRegionDB to us-east-1 when useMasterRegion is false', async () => {
     const result = getDynamoEndpoints({
       fallbackRegion,
       fallbackRegionEndpoint,
@@ -55,6 +58,8 @@ describe('getDynamoEndpoints', () => {
       useMasterRegion: false,
     });
 
-    expect(result.fallbackRegionDB.options.region).toEqual('us-east-1');
+    await expect(result.fallbackRegionDB.config.region()).resolves.toEqual(
+      'us-east-1',
+    );
   });
 });

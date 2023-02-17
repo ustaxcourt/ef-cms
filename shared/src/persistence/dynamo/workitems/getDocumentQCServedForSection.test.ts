@@ -67,7 +67,7 @@ describe('getDocumentQCServedForSection', () => {
     expect(
       applicationContext.getDocumentClient().query.mock.calls[0][0],
     ).toMatchObject({
-      ExclusiveStartKey: null,
+      ExclusiveStartKey: undefined,
     });
     expect(items).toEqual(
       expect.arrayContaining([

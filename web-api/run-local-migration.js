@@ -21,7 +21,7 @@ const {
 
   await documentClient
     .scan({
-      ExclusiveStartKey: null,
+      ExclusiveStartKey: undefined,
       Segment: 0,
       TableName: process.env.SOURCE_TABLE,
       TotalSegments: 1,
