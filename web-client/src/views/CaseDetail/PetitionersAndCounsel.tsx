@@ -68,20 +68,20 @@ export const PetitionersAndCounsel = connect(
                   </span>
                   {petitioner.formattedPendingEmail}
 
-                  <div className="margin-top-4">
+                  <span className="margin-top-4 word-wrap-break-word">
                     <p className="semi-bold margin-bottom-0">
                       Petition email address
                     </p>
                     {petitioner.formattedPaperPetitionEmail}
-                  </div>
+                  </span>
 
                   {petitioner.serviceIndicator && (
-                    <div className="margin-top-4">
+                    <span className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">
                         Service preference
                       </p>
                       {petitioner.serviceIndicator}
-                    </div>
+                    </span>
                   )}
                   <h4 className="margin-top-3">Counsel</h4>
                   {petitioner.hasCounsel &&
