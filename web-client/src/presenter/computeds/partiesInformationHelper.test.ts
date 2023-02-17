@@ -348,6 +348,52 @@ describe('partiesInformationHelper', () => {
         'Email Pending',
       );
     });
+
+    it('should set formattedPaperPetitionEmail to "Not provided" when a paper petition email has not been provided for the petitioner', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockPrivatePractitioner),
+          caseDetail: {
+            petitioners: [{ ...mockPetitioner, paperPetitionEmail: undefined }],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          screenMetadata: {
+            pendingEmails: {
+              [mockPetitioner.contactId]: true,
+            },
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
+        'Not provided',
+      );
+    });
+
+    it('should set formattedPaperPetitionEmail to the value of paper petition email when it has been provided for the petitioner', () => {
+      const mockPaperPetitionEmail = 'mockUser@example.com';
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockPrivatePractitioner),
+          caseDetail: {
+            petitioners: [
+              { ...mockPetitioner, paperPetitionEmail: mockPaperPetitionEmail },
+            ],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          screenMetadata: {
+            pendingEmails: {
+              [mockPetitioner.contactId]: true,
+            },
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
+        mockPaperPetitionEmail,
+      );
+    });
   });
 
   describe('formattedRespondents', () => {

@@ -96,6 +96,9 @@ export const partiesInformationHelper = (get, applicationContext) => {
         : `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`;
     }
 
+    petitioner.formattedPaperPetitionEmail =
+      petitioner.paperPetitionEmail ?? 'Not provided';
+
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
     } else {
