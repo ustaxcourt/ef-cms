@@ -1,7 +1,5 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-// import { applicationContext } from '../../applicationContext';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import {
   docketClerkUser,
@@ -19,7 +17,7 @@ const contactsHelper = withAppContextDecorator(
 describe('contactsHelper', () => {
   describe('user role petitioner', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser = () => petitionerUser;
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     });
 
     it('should validate form view information for party type Conservator', () => {
@@ -134,6 +132,7 @@ describe('contactsHelper', () => {
   describe('showPaperPetitionEmailFieldAndConsentBox', () => {
     it('should return false if its an external user', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+      // applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       const result = runCompute(contactsHelper, {
         state: {
           form: {
