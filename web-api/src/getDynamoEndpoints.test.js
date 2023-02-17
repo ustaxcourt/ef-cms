@@ -1,8 +1,31 @@
 const { getDynamoEndpoints } = require('./getDynamoEndpoints');
 
+jest.mock('@aws-sdk/lib-dynamodb', () => {
+  return {
+    DynamoDBDocument: {
+      from() {},
+    },
+  };
+});
+
+const mockDynamoDB = jest.fn();
+
+jest.mock('@aws-sdk/client-dynamodb', () => {
+  class DynamoDBClass {
+    constructor(config) {
+      mockDynamoDB(config);
+    }
+  }
+
+  return {
+    DynamoDB: DynamoDBClass,
+  };
+});
+
 describe('getDynamoEndpoints', () => {
   let mockEnvironment = {
     dynamoDbEndpoint: '',
+    masterDynamoDbEndpoint: 'dynamodb.us-east-1.amazonaws.com',
     masterRegion: 'us-east-1',
     region: 'us-east-1',
   };
@@ -11,24 +34,17 @@ describe('getDynamoEndpoints', () => {
   let mainRegionEndpoint;
   let fallbackRegionEndpoint;
 
-  beforeEach(() => {
-    mainRegion = mockEnvironment.region;
-    fallbackRegion =
-      mockEnvironment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-    mainRegionEndpoint = mockEnvironment.dynamoDbEndpoint.includes('localhost')
-      ? 'http://localhost:8000'
-      : `dynamodb.${mainRegion}.amazonaws.com`;
-    fallbackRegionEndpoint = mockEnvironment.dynamoDbEndpoint.includes(
-      'localhost',
-    )
-      ? 'http://localhost:8000'
-      : `dynamodb.${fallbackRegion}.amazonaws.com`;
-  });
-
   const { masterDynamoDbEndpoint, masterRegion } = mockEnvironment;
 
+  beforeEach(() => {
+    mainRegion = 'us-east-1';
+    fallbackRegion = 'us-west-1';
+    mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
+    fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
+  });
+
   it('sets the fallbackRegionDB to us-east-1 when useMasterRegion is true', async () => {
-    const result = getDynamoEndpoints({
+    getDynamoEndpoints({
       fallbackRegion,
       fallbackRegionEndpoint,
       mainRegion,
@@ -38,17 +54,19 @@ describe('getDynamoEndpoints', () => {
       useMasterRegion: true,
     });
 
-    await expect(result.fallbackRegionDB.config.region()).resolves.toEqual(
-      'us-west-1',
+    expect(mockDynamoDB.mock.calls[0][0].region).toEqual('us-east-1');
+    expect(mockDynamoDB.mock.calls[0][0].endpoint).toEqual(
+      'dynamodb.us-east-1.amazonaws.com',
     );
 
-    await expect(result.fallbackRegionDB.config.endpoint()).resolves.toEqual(
+    expect(mockDynamoDB.mock.calls[1][0].region).toEqual('us-west-1');
+    expect(mockDynamoDB.mock.calls[1][0].endpoint).toEqual(
       'dynamodb.us-west-1.amazonaws.com',
     );
   });
 
   it('sets the fallbackRegionDB to us-east-1 when useMasterRegion is false', async () => {
-    const result = getDynamoEndpoints({
+    getDynamoEndpoints({
       fallbackRegion,
       fallbackRegionEndpoint,
       mainRegion,
@@ -58,8 +76,14 @@ describe('getDynamoEndpoints', () => {
       useMasterRegion: false,
     });
 
-    await expect(result.fallbackRegionDB.config.region()).resolves.toEqual(
-      'us-east-1',
+    expect(mockDynamoDB.mock.calls[0][0].region).toEqual('us-east-1');
+    expect(mockDynamoDB.mock.calls[0][0].endpoint).toEqual(
+      'dynamodb.us-east-1.amazonaws.com',
+    );
+
+    expect(mockDynamoDB.mock.calls[1][0].region).toEqual('us-east-1');
+    expect(mockDynamoDB.mock.calls[1][0].endpoint).toEqual(
+      'dynamodb.us-east-1.amazonaws.com',
     );
   });
 });
