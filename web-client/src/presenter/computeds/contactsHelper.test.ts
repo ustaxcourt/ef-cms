@@ -1,5 +1,7 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+// import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import {
   petitionerUser,
@@ -125,6 +127,20 @@ describe('contactsHelper', () => {
           nameLabel: 'Name',
         },
       });
+    });
+  });
+
+  describe('showPaperPetitionEmailField', () => {
+    it('should return false if its an external user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+      const result = runCompute(contactsHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          },
+        },
+      });
+      expect(result.showPaperPetitionEmailField).toEqual(false);
     });
   });
 });
