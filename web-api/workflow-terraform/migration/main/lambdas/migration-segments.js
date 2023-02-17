@@ -34,7 +34,7 @@ const scanTableSegment = async (
   ranMigrations,
 ) => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   while (hasMoreResults) {
     hasMoreResults = false;
 

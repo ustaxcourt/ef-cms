@@ -17,7 +17,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 (async function () {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   let count = 0;
   while (hasMoreResults) {
     hasMoreResults = false;

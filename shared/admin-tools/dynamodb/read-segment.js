@@ -16,7 +16,7 @@ const [segmentArg, totalSegmentsArg] = process.argv.slice(2);
 
 const scanTableSegment = async (segment, totalSegments) => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   let items = [];
   while (hasMoreResults) {
     hasMoreResults = false;

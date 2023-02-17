@@ -21,7 +21,7 @@ const CHUNK_SIZE = 25;
 
 const clearDatabase = async () => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   let count = 0;
   while (hasMoreResults) {
     hasMoreResults = false;
