@@ -54,6 +54,24 @@ describe('shouldSaveToConsolidatedGroupAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
+  it('returns the no path if the eventCode is TCRP, caseDetail is a leadCase, and the docket entry is unservable', () => {
+    runAction(shouldSaveToConsolidatedGroupAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+          leadDocketNumber: '101-20',
+        },
+        form: {
+          eventCode: 'TCRP',
+        },
+      },
+    });
+    expect(pathNoStub).toHaveBeenCalled();
+  });
+
   it('returns the no path if the case is not a lead case and the eventCode is unservable', () => {
     runAction(shouldSaveToConsolidatedGroupAction, {
       modules: {
