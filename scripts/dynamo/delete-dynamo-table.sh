@@ -13,7 +13,7 @@
 
 TABLE_NAME=$1
 
-aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1 2> /dev/null
+aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1 > /dev/null 2>&1
 CODE=$?
 
 if [[ "${CODE}" == "0" ]]; then
@@ -22,28 +22,30 @@ if [[ "${CODE}" == "0" ]]; then
   while [[ "${CODE}" == "0" ]]; do  
     echo "${TABLE_NAME} in region us-west-1 is still being deleted. Waiting for 30 seconds then checking again."
     sleep 30
-    aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1 2> /dev/null
+    aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-west-1 > /dev/null 2>&1
     CODE=$?
   done
 fi
 
 echo "${TABLE_NAME} in region us-west-1 is deleted."
 
-aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1 2> /dev/null
+aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1 > /dev/null 2>&1
 CODE=$?
 
 if [[ "${CODE}" == "0" ]]; then
-  aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 | jq -r ".TableDescription.TableStatus"
+  aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 > /dev/null 2>&1
   CODE=$?
-  while [[ "${CODE}" == "1" ]]; do
-    aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 | jq -r ".TableDescription.TableStatus"
+  while [[ "${CODE}" != "0" ]]; do
+    echo "${TABLE_NAME} in region us-east-1 is replicating writes. Waiting for 30 seconds then checking again."
+    sleep 30
+    aws dynamodb delete-table --table-name "${TABLE_NAME}" --region us-east-1 > /dev/null 2>&1
     CODE=$?
   done
 
   while [[ "${CODE}" == "0" ]]; do
     echo "${TABLE_NAME} in region us-east-1 is still being deleted. Waiting for 30 seconds then checking again."
     sleep 30
-    aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1 2> /dev/null
+    aws dynamodb describe-table --table-name "${TABLE_NAME}" --region us-east-1 > /dev/null 2>&1
     CODE=$?
   done
 fi
