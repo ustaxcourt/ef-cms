@@ -6,7 +6,7 @@ export const unauthedUserViewsCaseDetailForSealedCase = cerebralTest => {
 
     expect(cerebralTest.getState('currentPage')).toEqual('PublicCaseDetail');
 
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(true);
     expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
 
     //this user should NOT see any case details because they are not associated with the case
