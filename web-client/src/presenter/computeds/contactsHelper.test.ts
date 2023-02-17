@@ -26,6 +26,7 @@ describe('contactsHelper', () => {
           form: { partyType: PARTY_TYPES.conservator },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
@@ -42,6 +43,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         header: 'Tell Us About Yourself',
         nameLabel: 'Name',
@@ -56,6 +58,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result).toMatchObject({
         contactPrimary: {
           displayPhone: true,
@@ -73,7 +76,9 @@ describe('contactsHelper', () => {
 
   describe('user role private practitioner', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser = () => privatePractitionerUser;
+      applicationContext.getCurrentUser.mockReturnValue(
+        privatePractitionerUser,
+      );
     });
 
     it('should validate form view information for party type Partnership (as the Tax Matters Partner)', () => {
@@ -130,9 +135,11 @@ describe('contactsHelper', () => {
   });
 
   describe('showPaperPetitionEmailFieldAndConsentBox', () => {
-    it('should return false if its an external user', () => {
+    beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-      // applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    });
+
+    it('should return false if its an external user', () => {
       const result = runCompute(contactsHelper, {
         state: {
           form: {
