@@ -1,5 +1,6 @@
 const {
   GENERIC_ORDER_DOCUMENT_TYPE,
+  REPORT_PAMPHLET_DOCUMENT_TYPE,
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
@@ -108,6 +109,17 @@ describe('CourtIssuedDocumentTypeA', () => {
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
         freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
         serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+      });
+    });
+
+    it(`should be invalid when the document type is a ${REPORT_PAMPHLET_DOCUMENT_TYPE} and freeText is not defined`, () => {
+      const documentInstance = CourtIssuedDocumentFactory({
+        documentTitle: '[Anything]',
+        documentType: REPORT_PAMPHLET_DOCUMENT_TYPE,
+        scenario: 'Type A',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
       });
     });
 
