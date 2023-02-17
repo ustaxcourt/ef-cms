@@ -65,4 +65,19 @@ describe('isUserPartOfGroup', () => {
 
     expect(isPartOfCase).toBe(true);
   });
+
+  it('should not crash when presented with public cases', () => {
+    const isPartOfCase = isUserPartOfGroup({
+      consolidatedCases: [
+        {
+          hasIrsPractitioner: false,
+          isPaper: false,
+          partyType: 'Petitioner',
+        },
+      ],
+      userId: 'abc',
+    });
+
+    expect(isPartOfCase).toBe(false);
+  });
 });
