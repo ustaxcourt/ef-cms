@@ -320,7 +320,7 @@ export const queryFull = async ({
   KeyConditionExpression: string;
 }): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   let allResults = [];
   while (hasMoreResults) {
     hasMoreResults = false;

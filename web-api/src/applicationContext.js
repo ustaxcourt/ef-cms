@@ -19,6 +19,10 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
+  Case,
+  isLeadCase,
+} = require('../../shared/src/business/entities/cases/Case');
+const {
   CASE_STATUS_TYPES,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
@@ -227,12 +231,9 @@ const {
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');
-
-const {
-  Case,
-  isLeadCase,
-} = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('./createLogger');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getPersistenceGateway } = require('./getPersistenceGateway');
@@ -245,7 +246,7 @@ const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+const { CognitoIdentityServiceProvider, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -317,17 +318,19 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
   // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      httpOptions: {
-        connectTimeout: 3000,
-        timeout: 5000,
-      },
-      maxRetries: 3,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
+    dynamoCache[type] = DynamoDBDocumentClient.from(
+      new DynamoDBClient({
+        endpoint: useMasterRegion
+          ? environment.masterDynamoDbEndpoint
+          : environment.dynamoDbEndpoint,
+        httpOptions: {
+          connectTimeout: 3000,
+          timeout: 5000,
+        },
+        maxRetries: 3,
+        region: useMasterRegion ? environment.masterRegion : environment.region,
+      }),
+    );
   }
   return dynamoCache[type];
 };
