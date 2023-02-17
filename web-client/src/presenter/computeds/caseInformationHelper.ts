@@ -22,9 +22,13 @@ export const caseInformationHelper = (get, applicationContext) => {
     caseDetail.irsPractitioners &&
     !!caseDetail.irsPractitioners.length;
 
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseDetail);
+
   const showAddCounsel = canEditCounsel;
-  const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
-  const showUnsealCaseButton = permissions.UNSEAL_CASE && caseDetail.isSealed;
+  const showSealCaseButton = permissions.SEAL_CASE && !isSealedCase;
+  const showUnsealCaseButton = permissions.UNSEAL_CASE && isSealedCase;
   const showingAdditionalPetitioners =
     get(state.showingAdditionalPetitioners) || false;
   const toggleAdditionalPetitionersDisplay = showingAdditionalPetitioners

@@ -231,6 +231,7 @@ const { Client } = require('@opensearch-project/opensearch');
 const {
   Case,
   isLeadCase,
+  isSealedCase,
 } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
@@ -696,8 +697,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
           httpOptions: {
-            timeout: 300000,
+            connectTimeout: 3000,
+            timeout: 5000,
           },
+          maxRetries: 3,
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });
@@ -737,6 +740,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getWorkQueueFilters,
         isLeadCase,
         isPending: DocketEntry.isPending,
+        isSealedCase,
         prepareDateFromString,
         scrapePdfContents,
         serveCaseDocument,

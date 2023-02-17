@@ -5,7 +5,6 @@ import {
   canAllowPrintableDocketRecord,
   getPetitionerById,
   isAssociatedUser,
-  isSealedCase,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
 import { NotFoundError } from '../../errors/errors';
@@ -182,8 +181,13 @@ export const getCaseInteractor = async (
   }
 
   let caseDetailRaw;
-  caseRecord.isSealed = isSealedCase(caseRecord);
-  if (isSealedCase(caseRecord)) {
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseRecord);
+
+  caseRecord.isSealed = isSealedCase;
+
+  if (isSealedCase) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
       caseRecord,
