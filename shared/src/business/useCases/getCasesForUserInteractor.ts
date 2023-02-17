@@ -149,14 +149,14 @@ const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
       return c;
     })
     .filter(nestedCase => {
-      const caseIsOpen = [
+      const caseStatusFilter = [
         nestedCase,
         ...(nestedCase.consolidatedCases || []),
       ].some(aCase =>
         caseType === 'open' ? !isClosed(aCase) : isClosed(aCase),
       );
 
-      return caseIsOpen;
+      return caseStatusFilter;
     })
     .sort((a, b) => {
       if (caseType === 'closed') {
