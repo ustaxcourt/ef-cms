@@ -20,7 +20,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
    > **Why am I seeing a high severity `dicer` issue?**
    > If you see this warning, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue. Check [caveats](#caveats) for more info.
-   > **Why am I seeing a medium severity for `quill`**
+
+   > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using
    getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 4. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
@@ -62,7 +63,17 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 
 ### pdfjs-dist
 
-`pdfjs-dist` has a major version update to ^3.x,x, but currently has issues in test environment as of 11/11/2022. Skipping updating it this week.
+`pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+
+
+### esbuild
+There is a major upgrade to `esbuild` from 0.6.x to 0.7.x. The new major versions introduced breaking changes on how the `build` and `watch` commands work, which breaks reloading after changes in development environments. The major issue we ran into with upgrading was lack of documentation surrounding what the new events are called for watching for changes. Documentation for major version changes can be found [here](https://github.com/evanw/esbuild/releases/tag/v0.17.0), and in future release tags on Github, the esbuild website hasn't been updated since 0.7.x was released.
+
+
+### stylelint
+There is an update available to `stylelint` but if we update that package then there are issues with installing that require us to install with the `--legacy-peer-deps` flag again. The update to stylelint is not related to a security issue so I decided not to upgrade for now while its downstream dependencies rely on outdated packages.
+
+This will happen until `stylelint-config-idiomatic-order` has updated to the latest `stylelint` ^15. I opened a [PR](https://github.com/ream88/stylelint-config-idiomatic-order/pull/79) to this project in hopes that this could move this along so we can update to ^15 of `stylelint` and associated packages. If security issues do arise and we wish to move forward to ^15 of `stylelint`, we would only get warnings on install (as of writing this).
 
 ### Incrementing the Node Cache Key Version
 

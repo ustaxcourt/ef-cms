@@ -20,7 +20,7 @@ resource "aws_lambda_function" "migration_segments_lambda" {
   environment {
     variables = {
       DESTINATION_TABLE     = var.destination_table
-      ENVIRONMENT           = var.environment
+      STAGE                 = var.environment
       NODE_ENV              = "production"
       SEGMENTS_QUEUE_URL    = aws_sqs_queue.migration_segments_queue.id
       SOURCE_TABLE          = var.source_table
