@@ -368,12 +368,12 @@ const formatCase = (applicationContext, caseDetail) => {
     result.leadDocketNumber && !result.isLeadCase
   );
 
-  result.isInConsolidatedGroup =
+  result.inConsolidatedGroup =
     result.isLeadCase || result.isConsolidatedSubCase;
 
   let consolidatedIconTooltipText;
 
-  if (result.isInConsolidatedGroup) {
+  if (result.inConsolidatedGroup) {
     if (result.isLeadCase) {
       consolidatedIconTooltipText = 'Lead case';
     } else {
