@@ -608,6 +608,7 @@ const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   'ODL',
   'SPTN',
   'OCS',
+  'TCRP',
 ];
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
