@@ -513,7 +513,7 @@ describe('processFormattedMessages', () => {
           ],
         });
 
-        expect(result.messages[0].leadCase).toBeTruthy();
+        expect(result.messages[0].isLeadCase).toBeTruthy();
       });
 
       it('returns leadCase false when message.leadDocketNumber is NOT the same as message.docketNumber', () => {
@@ -528,7 +528,7 @@ describe('processFormattedMessages', () => {
           ],
         });
 
-        expect(result.messages[0].leadCase).toBeFalsy();
+        expect(result.messages[0].isLeadCase).toBeFalsy();
       });
     });
 
