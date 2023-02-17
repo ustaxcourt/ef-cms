@@ -15,7 +15,7 @@ describe('getCasesForUserInteractor', () => {
   let unconsolidatedClosedCase1;
   let unconsolidatedClosedCase2;
 
-  beforeEach(() => {
+  beforeAll(() => {
     leadCase = {
       ...MOCK_CASE,
       createdAt: '2019-12-11T15:25:09.284Z',
@@ -69,6 +69,23 @@ describe('getCasesForUserInteractor', () => {
     });
   });
   describe('Consolidated cases', () => {
+    beforeEach(() => {
+      memberCase1 = {
+        ...MOCK_CASE,
+        createdAt: '2019-12-11T15:25:55.006Z',
+        docketNumber: '112-19',
+        leadDocketNumber: '111-19',
+      };
+
+      leadCase = {
+        ...MOCK_CASE,
+        createdAt: '2019-12-11T15:25:09.284Z',
+        docketNumber: '111-19',
+        leadDocketNumber: '111-19',
+      };
+
+      consolidatedGroupLeadCase11119 = [leadCase, memberCase1, memberCase2];
+    });
     it('should return the expected associated cases combined with the consolidated group cases for 111-19', async () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
