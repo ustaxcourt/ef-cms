@@ -1,6 +1,7 @@
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '../ustc-ui/Icon/ConsolidatedCaseIcon';
 import React from 'react';
+import classNames from 'classnames';
 
 const getCaseRow = ({
   formattedCase,
@@ -12,23 +13,14 @@ const getCaseRow = ({
     <React.Fragment key={formattedCase.docketNumber}>
       <tr>
         <td>
-          {formattedCase.isInConsolidatedGroup && (
-            <>
-              <span
-                className="fa-layers fa-fw"
-                title={formattedCase.consolidatedIconTooltipText}
-              >
-                <Icon
-                  aria-label={formattedCase.consolidatedIconTooltipText}
-                  className="fa-icon-blue"
-                  icon="copy"
-                />
-                {formattedCase.isLeadCase && (
-                  <span className="fa-inverse lead-case-icon-text">L</span>
-                )}
-              </span>
-            </>
-          )}
+          <span
+            className={classNames({
+              'margin-left-2':
+                formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
+            })}
+          >
+            <ConsolidatedCaseIcon caseItem={formattedCase} />
+          </span>
         </td>
         <td className="hide-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>
