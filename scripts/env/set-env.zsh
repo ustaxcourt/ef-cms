@@ -41,13 +41,16 @@ if [[ ! -f "./scripts/env/environments/${environment}.env" ]]; then
   return 1
 fi
 
+# quiet can potentially be overwritten
+sshhh=${quiet}
+
 # shellcheck disable=SC1090
 source "./scripts/env/environments/${environment}.env"
 
 if [[ $environment != "local" ]]; then
   source "./scripts/env/environments/00-common"
 
-  if [[ $quiet -ne 0 ]] && [[ -n "$CURRENT_COLOR" ]]; then
+  if [[ $sshhh -eq 0 ]] && [[ -n "$CURRENT_COLOR" ]]; then
     echo "  ___   ___      _____  ___  _  _ ";
     echo " |   \ /_\ \    / / __|/ _ \| \| |";
     echo " | |) / _ \ \/\/ /\__ \ (_) | .\` |";

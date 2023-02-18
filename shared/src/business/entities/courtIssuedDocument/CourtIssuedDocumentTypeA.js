@@ -4,6 +4,7 @@ const {
   CourtIssuedDocumentDefault,
 } = require('./CourtIssuedDocumentDefault');
 const {
+  DOCUMENT_TYPES_REQUIRING_DESCRIPTION,
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
   VALIDATION_ERROR_MESSAGES,
@@ -34,7 +35,7 @@ CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
 CourtIssuedDocumentTypeA.schema = {
   ...CourtIssuedDocumentDefault.schema,
   freeText: JoiValidationConstants.STRING.max(1000).when('documentType', {
-    is: GENERIC_ORDER_DOCUMENT_TYPE,
+    is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
