@@ -12,9 +12,16 @@ import { state } from 'cerebral';
  */
 export const startCaseInternalContactsHelper = (get, applicationContext) => {
   const partyType = get(state.form.partyType);
+  const user = applicationContext.getCurrentUser();
+
   const { PARTY_TYPES } = applicationContext.getConstants();
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
+
+  let showPaperPetitionEmailFieldAndConsentBox = !isExternalUser;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
-  return contacts;
+  return { ...contacts, showPaperPetitionEmailFieldAndConsentBox };
 };
