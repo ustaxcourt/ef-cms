@@ -1,5 +1,10 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+
+import {
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
 import { startCaseInternalContactsHelper as startCaseInternalContactsHelperComputed } from './startCaseInternalContactsHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -376,6 +381,36 @@ describe('startCaseInternalContactsHelper', () => {
         nameLabel: 'Name of trust',
         secondaryNameLabel: 'Name of trustee',
       },
+    });
+  });
+
+  describe('showPaperPetitionEmailFieldAndConsentBox', () => {
+    beforeAll(() => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    });
+
+    it('should return false if its an external user', () => {
+      const result = runCompute(startCaseInternalContactsHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          },
+        },
+      });
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should return true if its a petitions clerk user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(startCaseInternalContactsHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          },
+        },
+      });
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });
