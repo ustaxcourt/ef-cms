@@ -206,7 +206,12 @@ export const ContactPrimary = connect(
 
           {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
             <>
-              <FormGroup>
+              <FormGroup
+                errorText={
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.paperPetitionEmail
+                }
+              >
                 <label
                   className="usa-label"
                   htmlFor="paper-petition-email-primary"
