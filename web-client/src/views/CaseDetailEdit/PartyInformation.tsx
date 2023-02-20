@@ -6,14 +6,14 @@ import React from 'react';
 
 export const PartyInformation = connect(
   {
+    caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
-    startCaseInternalContactsHelper: state.startCaseInternalContactsHelper,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function PartyInformation({
+    caseDetailEditHelper,
     form,
-    startCaseInternalContactsHelper,
     updateCasePartyTypeSequence,
     updateFormValueSequence,
   }) {
@@ -37,22 +37,18 @@ export const PartyInformation = connect(
               }}
             >
               <option value="">- Select -</option>
-              {Object.keys(startCaseInternalContactsHelper.partyTypes).map(
-                partyType => (
-                  <option
-                    key={partyType}
-                    value={
-                      startCaseInternalContactsHelper.partyTypes[partyType]
-                    }
-                  >
-                    {startCaseInternalContactsHelper.partyTypes[partyType]}
-                  </option>
-                ),
-              )}
+              {Object.keys(caseDetailEditHelper.partyTypes).map(partyType => (
+                <option
+                  key={partyType}
+                  value={caseDetailEditHelper.partyTypes[partyType]}
+                >
+                  {caseDetailEditHelper.partyTypes[partyType]}
+                </option>
+              ))}
             </select>
           </div>
         </div>
-        {startCaseInternalContactsHelper.showOwnershipDisclosureStatement && (
+        {caseDetailEditHelper.showOwnershipDisclosureStatement && (
           <div className="subsection">
             <FormGroup>
               <div className="order-checkbox">
@@ -76,19 +72,15 @@ export const PartyInformation = connect(
             </FormGroup>
           </div>
         )}
-        {(startCaseInternalContactsHelper.showPrimaryContact ||
-          startCaseInternalContactsHelper.showSecondaryContact) && (
+        {(caseDetailEditHelper.showPrimaryContact ||
+          caseDetailEditHelper.showSecondaryContact) && (
           <div className="subsection contacts">
             <Contacts
               bind="form"
               contactsHelper="internalPetitionPartiesHelper"
               parentView="CaseDetail"
-              showPrimaryContact={
-                startCaseInternalContactsHelper.showPrimaryContact
-              }
-              showSecondaryContact={
-                startCaseInternalContactsHelper.showSecondaryContact
-              }
+              showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
+              showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
               useSameAsPrimary={true}
               onBlur="validateCaseDetailSequence"
               onChange="updateFormValueAndCaseCaptionSequence"

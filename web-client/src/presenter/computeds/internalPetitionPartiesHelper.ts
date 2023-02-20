@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
   let contacts;
   switch (partyType) {
