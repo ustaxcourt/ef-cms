@@ -21,6 +21,7 @@ const {
 const {
   Case,
   isLeadCase,
+  isSealedCase,
 } = require('../../shared/src/business/entities/cases/Case');
 const {
   CASE_STATUS_TYPES,
@@ -740,6 +741,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getWorkQueueFilters,
         isLeadCase,
         isPending: DocketEntry.isPending,
+        isSealedCase,
         prepareDateFromString,
         scrapePdfContents,
         serveCaseDocument,
