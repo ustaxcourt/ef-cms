@@ -5,9 +5,14 @@ import {
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { partiesInformationHelper } from '../src/presenter/computeds/partiesInformationHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('petitions clerk creates paper case with E-consent fields', () => {
   const cerebralTest = setupTest();
+
+  const validPaperPetitionEmail = 'validEmail@example.com';
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -204,7 +209,7 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       'updateFormValueAndSecondaryContactInfoSequence',
       {
         key: 'contactPrimary.paperPetitionEmail',
-        value: 'validEmail@example.com',
+        value: validPaperPetitionEmail,
       },
     );
 
@@ -226,15 +231,29 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
 
   //go to case detail, parties infor
   //verify paper petition email exists
+  //verify case from state has e access
   it('Refactor my description please!', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
+
+    const partiesInformationHelperComputed = runCompute(
+      withAppContextDecorator(partiesInformationHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .paperPetitionEmail,
+    ).toEqual(validPaperPetitionEmail);
   });
 
-  //verify case from state has e access
   //login as docketlclerk
+  loginAs(cerebralTest, 'docketclerk@example.com');
   //seal address
+  it('Refactor my description please!', async () => {});
   //verify things
 
   //view case as unauthed user, verify the fields dont show
