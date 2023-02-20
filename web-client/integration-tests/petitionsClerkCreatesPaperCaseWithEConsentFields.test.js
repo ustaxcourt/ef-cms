@@ -14,8 +14,17 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
   });
 
   //create paper case with invalid email
+  //submit and see validation errors
+  //edit and enter valid email, check e consent box
+  //submit
+  //verify things on revew screen
+
+  //edit
+  //change email add
+  //submit
+  //review and serve
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('should create a paper caswe with invalid email', async () => {
+  it('should create a paper case with an invalid email', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -183,37 +192,45 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    // expect(cerebralTest.getState('alertError')).toBeDefined();
+    expect(cerebralTest.getState('alertError')).toBeDefined();
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      paperPetitionEmail: '',
+      contactPrimary: {
+        paperPetitionEmail:
+          'Please enter email address in format: yourname@example.com',
+      },
     });
 
-    // await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence(
+      'updateFormValueAndSecondaryContactInfoSequence',
+      {
+        key: 'contactPrimary.paperPetitionEmail',
+        value: 'validEmail@example.com',
+      },
+    );
 
-    // expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    // await cerebralTest.runSequence('serveCaseToIrsSequence');
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    // await cerebralTest.runSequence('gotoCaseDetailSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    // cerebralTest.docketNumber = cerebralTest.getState(
-    //   'caseDetail.docketNumber',
-    // );
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await cerebralTest.runSequence('gotoCaseDetailSequence');
+
+    cerebralTest.docketNumber = cerebralTest.getState(
+      'caseDetail.docketNumber',
+    );
   });
-  //submit and see validation errors
-
-  //edit and enter valid email, check e consent box
-
-  //submit
-  //verify things on revew screen
-
-  //edit
-  //change email add
-  //submit
-  //review and serve
 
   //go to case detail, parties infor
   //verify paper petition email exists
+  it('Refactor my description please!', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+  });
 
   //verify case from state has e access
   //login as docketlclerk
