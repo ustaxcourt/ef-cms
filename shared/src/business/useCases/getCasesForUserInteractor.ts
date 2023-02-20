@@ -1,4 +1,9 @@
-import { Case, isClosed, isLeadCase } from '../entities/cases/Case';
+import {
+  Case,
+  isClosed,
+  isLeadCase,
+  userIsDirectlyAssociated,
+} from '../entities/cases/Case';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { uniqBy } from 'lodash';
 
@@ -53,12 +58,10 @@ async function fetchConsolidatedGroupsAndNest({
   )
     .flat()
     .map(aCase => {
-      const userIsPartyToCase = [
-        ...aCase.petitioners,
-        ...(aCase.privatePractitioners || []),
-        ...(aCase.irsPractitioners || []),
-      ].some(user => user?.userId === userId || user?.contactId === userId);
-      return { ...aCase, isRequestingUserAssociated: userIsPartyToCase };
+      return {
+        ...aCase,
+        isRequestingUserAssociated: userIsDirectlyAssociated({ aCase, userId }),
+      };
     });
 
   // Combine open cases and consolidated cases and remove duplicates
@@ -138,7 +141,6 @@ export const getCasesForUserInteractor = async (
   return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
 };
 
-// TODO: confirm whether this map is still necessary, and whether is differs locally to deployed
 const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
   return nestedCases
     .map((c: any) => {
