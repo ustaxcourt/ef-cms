@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
   let contacts;
   switch (partyType) {
@@ -190,24 +188,6 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       };
       break;
   }
-
-  return contacts;
-};
-
-/**
- * gets the contact view options based on partyType
- *
- * @param {Function} get the cerebral get function used
- * @param {object} applicationContext the application context
- * for getting state.caseDetail.partyType and state.constants
- * @returns {object} the contactPrimary and/or contactSecondary
- * view options
- */
-export const caseDetailEditContactsHelper = (get, applicationContext) => {
-  const partyType = get(state.form.partyType);
-  const { PARTY_TYPES } = applicationContext.getConstants();
-
-  const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
   return contacts;
 };
