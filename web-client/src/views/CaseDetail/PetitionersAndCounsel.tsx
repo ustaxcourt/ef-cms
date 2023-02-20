@@ -68,7 +68,7 @@ export const PetitionersAndCounsel = connect(
                   </span>
                   {petitioner.formattedPendingEmail}
 
-                  {!petitioner.isAddressSealed && (
+                  {!petitioner.sealedAndUnavailable && (
                     <span className="margin-top-4 word-wrap-break-word">
                       <p className="semi-bold margin-bottom-0">
                         Petition email address
