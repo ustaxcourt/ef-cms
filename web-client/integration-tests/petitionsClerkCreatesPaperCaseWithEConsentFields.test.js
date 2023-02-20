@@ -1,16 +1,13 @@
 import {
-  contactPrimaryFromState,
-  fakeFile,
-  loginAs,
-  setupTest,
-} from './helpers';
-import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
-const { faker } = require('@faker-js/faker');
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../shared/src/business/entities/EntityConstants';
+import { fakeFile, loginAs, setupTest } from './helpers';
 
 describe('petitions clerk creates paper case with E-consent fields', () => {
   const cerebralTest = setupTest();
-
-  // const validEmail = `${faker.internet.userName()}_no_error@example.com`;
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -18,33 +15,19 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
 
   //create paper case with invalid email
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('should create a paper caswe with invalid email', () => {
+  it('should create a paper caswe with invalid email', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
-
-    expect(cerebralTest.getState('validationErrors.caseCaption')).toEqual(
-      VALIDATION_ERROR_MESSAGES.caseCaption,
-    );
-
-    expect(cerebralTest.getState('validationErrors.receivedAt')).toEqual(
-      VALIDATION_ERROR_MESSAGES.receivedAt[1],
-    );
-
-    expect(cerebralTest.getState('validationErrors.petitionFile')).toEqual(
-      VALIDATION_ERROR_MESSAGES.petitionFile,
-    );
-
-    expect(
-      cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
-    ).toBeUndefined();
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',
       value: '01',
     });
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtDay',
       value: '01',
     });
+
     const receivedAtYear = '2001';
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtYear',
@@ -64,14 +47,8 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: overrides.trialLocation,
+      value: 'Seattle, Washington',
     });
-
-    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
-
-    expect(
-      cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
-    ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionFile',
@@ -113,12 +90,6 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       value: 1,
     });
 
-    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
-
-    expect(
-      cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
-    ).toBeUndefined();
-
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,
@@ -131,7 +102,7 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: overrides.procedureType || 'Small',
+      value: 'Small',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -179,6 +150,14 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       value: '1234567890',
     });
 
+    await cerebralTest.runSequence(
+      'updateFormValueAndSecondaryContactInfoSequence',
+      {
+        key: 'contactPrimary.paperPetitionEmail',
+        value: 'invalidEmail',
+      },
+    );
+
     await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.PAID,
@@ -202,22 +181,24 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       value: 'Money, I guess',
     });
 
-    await cerebralTest.runSequence('validatePetitionFromPaperSequence');
-    expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+    // expect(cerebralTest.getState('alertError')).toBeDefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      paperPetitionEmail: '',
+    });
 
+    // await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-      await cerebralTest.runSequence('serveCaseToIrsSequence');
+    // expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await cerebralTest.runSequence('gotoCaseDetailSequence');
+    // await cerebralTest.runSequence('serveCaseToIrsSequence');
 
-    cerebralTest.docketNumber = cerebralTest.getState(
-      'caseDetail.docketNumber',
-    );
+    // await cerebralTest.runSequence('gotoCaseDetailSequence');
+
+    // cerebralTest.docketNumber = cerebralTest.getState(
+    //   'caseDetail.docketNumber',
+    // );
   });
   //submit and see validation errors
 
