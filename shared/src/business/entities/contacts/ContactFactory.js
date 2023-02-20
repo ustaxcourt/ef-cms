@@ -23,7 +23,8 @@ ContactFactory.SHARED_ERROR_MESSAGES = {
   city: 'Enter city',
   countryType: 'Enter country type',
   name: 'Enter name',
-  paperPetitionEmail: 'Enter a valid email',
+  paperPetitionEmail:
+    'Please enter email address in format: yourname@example.com',
   phone: 'Enter phone number',
 };
 
