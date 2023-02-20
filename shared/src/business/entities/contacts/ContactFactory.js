@@ -18,11 +18,14 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 const ContactFactory = {};
 
+ContactFactory.SHARED_ERROR_MESSAGES = {
+  countryType: 'Enter country type',
+  name: 'Enter name',
+};
+
 ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
-  countryType: 'Enter country type',
-  name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: [
     {
@@ -38,8 +41,6 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   country: 'Enter a country',
-  countryType: 'Enter country type',
-  name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: 'Enter ZIP code',
 };
@@ -60,6 +61,12 @@ const commonValidationRequirements = {
     otherwise: joi.optional(),
     then: joi.required(),
   }),
+  hasConsentedToEService: joi
+    .boolean()
+    .optional()
+    .description(
+      'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
+    ),
   hasEAccess: joi
     .boolean()
     .optional()
@@ -69,6 +76,9 @@ const commonValidationRequirements = {
   inCareOf: JoiValidationConstants.STRING.max(100).optional(),
   isAddressSealed: joi.boolean().required(),
   name: JoiValidationConstants.STRING.max(100).required(),
+  paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+    .allow(null)
+    .description('Email provided by the petitioner on their petition form'),
   phone: JoiValidationConstants.STRING.max(100).required(),
   sealedAndUnavailable: joi.boolean().optional(),
   secondaryName: JoiValidationConstants.STRING.max(100).optional(),
