@@ -19,14 +19,16 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 const ContactFactory = {};
 
 ContactFactory.SHARED_ERROR_MESSAGES = {
+  address1: 'Enter mailing address',
+  city: 'Enter city',
   countryType: 'Enter country type',
   name: 'Enter name',
+  paperPetitionEmail: 'Enter a valid email',
+  phone: 'Enter phone number',
 };
 
 ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
-  address1: 'Enter mailing address',
-  city: 'Enter city',
-  phone: 'Enter phone number',
+  ...ContactFactory.SHARED_ERROR_MESSAGES,
   postalCode: [
     {
       contains: 'match',
@@ -38,10 +40,8 @@ ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
 };
 
 ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
-  address1: 'Enter mailing address',
-  city: 'Enter city',
+  ...ContactFactory.SHARED_ERROR_MESSAGES,
   country: 'Enter a country',
-  phone: 'Enter phone number',
   postalCode: 'Enter ZIP code',
 };
 
