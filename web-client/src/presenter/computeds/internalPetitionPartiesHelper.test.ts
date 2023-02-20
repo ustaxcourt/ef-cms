@@ -1,18 +1,25 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
-import { caseDetailEditContactsHelper as caseDetailEditContactsHelperComputed } from './caseDetailEditContactsHelper';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from './internalPetitionPartiesHelper';
+import {
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseDetailEditContactsHelper = withAppContextDecorator(
-  caseDetailEditContactsHelperComputed,
+const internalPetitionPartiesHelper = withAppContextDecorator(
+  internalPetitionPartiesHelperComputed,
   applicationContext,
 );
 
-describe('caseDetailEditContactsHelper', () => {
+describe('internalPetitionPartiesHelper', () => {
   it('should validate form view information for party type Conservator', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: { partyType: PARTY_TYPES.conservator },
       },
     });
@@ -27,8 +34,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Corporation', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: { partyType: PARTY_TYPES.corporation },
       },
     });
@@ -42,8 +52,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Custodian', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: { partyType: PARTY_TYPES.custodian },
       },
     });
@@ -58,8 +71,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Donor', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: { partyType: PARTY_TYPES.donor },
       },
     });
@@ -72,8 +88,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.estate,
         },
@@ -91,8 +110,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.estateWithoutExecutor,
         },
@@ -108,8 +130,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Guardian', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.guardian,
         },
@@ -126,8 +151,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
@@ -144,8 +172,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.nextFriendForMinor,
         },
@@ -162,8 +193,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.partnershipBBA,
         },
@@ -180,8 +214,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner)', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
@@ -198,8 +235,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as the Tax Matters Partner)', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
@@ -216,8 +256,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.petitioner,
         },
@@ -232,8 +275,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Spouse', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.petitionerSpouse,
         },
@@ -254,8 +300,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Deceased Spouse', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
@@ -274,8 +323,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Surviving Spouse', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.survivingSpouse,
         },
@@ -292,8 +344,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Transferee', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.transferee,
         },
@@ -308,8 +363,11 @@ describe('caseDetailEditContactsHelper', () => {
   });
 
   it('should validate form view information for party type Trust', () => {
-    const result = runCompute(caseDetailEditContactsHelper, {
+    const result = runCompute(internalPetitionPartiesHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           partyType: PARTY_TYPES.trust,
         },
@@ -322,6 +380,36 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of trust',
         secondaryNameLabel: 'Name of trustee',
       },
+    });
+  });
+
+  describe('showPaperPetitionEmailFieldAndConsentBox', () => {
+    beforeAll(() => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    });
+
+    it('should return false if its an external user', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          },
+        },
+      });
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should return true if its a petitions clerk user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          },
+        },
+      });
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });
