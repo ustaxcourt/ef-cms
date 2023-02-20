@@ -213,6 +213,7 @@ const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
 const { getUserIdForNote } = require('../useCaseHelper/getUserIdForNote');
+const { isSealedCase } = require('../entities/cases/Case');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -392,6 +393,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
+    isSealedCase: jest.fn().mockImplementation(isSealedCase),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
       .fn()

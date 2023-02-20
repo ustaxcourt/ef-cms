@@ -18,6 +18,7 @@ import {
   hasPartyWithServiceType,
   isClosed,
   isLeadCase,
+  isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
 } from '../../shared/src/business/entities/cases/Case';
@@ -769,6 +770,7 @@ const applicationContext = {
       isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
+      isSealedCase,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
