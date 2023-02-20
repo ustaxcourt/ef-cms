@@ -19,7 +19,13 @@ const getCaseRow = ({
                 formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
             })}
           >
-            <ConsolidatedCaseIcon caseItem={formattedCase} />
+            <ConsolidatedCaseIcon
+              consolidatedIconTooltipText={
+                formattedCase.consolidatedIconTooltipText
+              }
+              inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+              showLeadCaseIcon={formattedCase.isLeadCase}
+            />
           </span>
         </td>
         <td className="hide-on-mobile">
