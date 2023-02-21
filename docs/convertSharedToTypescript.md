@@ -9,6 +9,9 @@
   - Navigate to shared/src in the terminal and run: ```find . -iname "*.js" -exec rename -f 's/\.js/\.ts/' {} \;```
 1. Commit rename changes.
 1. Find and replace .jsx' to .tsx' with big find in shared/src directory
+  - Find: ``` .jsx' ```
+  - Replace: ``` .tsx' ```
+  - Files to inclide: ``` shared/src/** ```
 1. Find and replace .js' to .ts' with big find in shared/src directory
 1. In web-client/src/applicationContext.ts remove the ~.js~ on the import for sharedAppContext
 
