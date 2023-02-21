@@ -394,50 +394,63 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getCognito: () => {
       if (environment.stage === 'local') {
-        return {
-          adminCreateUser: () => ({
-            promise: () => ({
-              User: {
-                Username: uuidv4(),
+        console.log('111111111111111');
+        if (process.env.USE_COGNITO_LOCAL === 'true') {
+          console.log('222222222222222');
+          return new CognitoIdentityServiceProvider({
+            endpoint: 'http://localhost:9229/',
+            httpOptions: {
+              connectTimeout: 3000,
+              timeout: 5000,
+            },
+            maxRetries: 3,
+            region: 'local',
+          });
+        } else {
+          console.log('33333333333');
+          return {
+            adminCreateUser: () => ({
+              promise: () => ({
+                User: {
+                  Username: uuidv4(),
+                },
+              }),
+            }),
+            adminDisableUser: () => ({
+              promise: () => {},
+            }),
+            adminGetUser: ({ Username }) => ({
+              promise: async () => {
+                // TODO: this scan might become REALLY slow while doing a full integration
+                // test run.
+                const items = await scan({
+                  applicationContext: {
+                    environment,
+                    getDocumentClient,
+                  },
+                });
+                const users = items.filter(
+                  ({ pk, sk }) =>
+                    pk.startsWith('user|') && sk.startsWith('user|'),
+                );
+                const foundUser = users.find(({ email }) => email === Username);
+                if (foundUser) {
+                  return {
+                    UserAttributes: [],
+                    Username: foundUser.userId,
+                  };
+                } else {
+                  const error = new Error();
+                  error.code = 'UserNotFoundException';
+                  throw error;
+                }
               },
             }),
-          }),
-          adminDisableUser: () => ({
-            promise: () => {},
-          }),
-          adminGetUser: ({ Username }) => ({
-            promise: async () => {
-              // TODO: this scan might become REALLY slow while doing a full integration
-              // test run.
-              const items = await scan({
-                applicationContext: {
-                  environment,
-                  getDocumentClient,
-                },
-              });
-              const users = items.filter(
-                ({ pk, sk }) =>
-                  pk.startsWith('user|') && sk.startsWith('user|'),
-              );
-
-              const foundUser = users.find(({ email }) => email === Username);
-
-              if (foundUser) {
-                return {
-                  UserAttributes: [],
-                  Username: foundUser.userId,
-                };
-              } else {
-                const error = new Error();
-                error.code = 'UserNotFoundException';
-                throw error;
-              }
-            },
-          }),
-          adminUpdateUserAttributes: () => ({
-            promise: () => {},
-          }),
-        };
+            adminUpdateUserAttributes: () => ({
+              promise: () => {},
+            }),
+          };
+        }
       } else {
         return new CognitoIdentityServiceProvider({
           httpOptions: {
