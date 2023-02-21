@@ -15,7 +15,7 @@
   - Navigate to shared/src in the terminal and run: ```find . -iname "*.jsx" -exec rename -f 's/\.jsx/\.tsx/' {} \;```
 1. Rename all .js files to .ts files
   - Navigate to shared/src in the terminal and run: ```find . -iname "*.js" -exec rename -f 's/\.js/\.ts/' {} \;```
-1. Commit rename changes.
+1. Commit rename changes. (You will need to do a --no-verify as index.pug_.ts is a generated file with strange syntax).
 1. Find and replace .jsx' to .tsx' with big find in shared/src directory
   - Find: ``` .jsx' ```
   - Replace: ``` .tsx' ```
