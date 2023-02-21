@@ -68,15 +68,14 @@ export const PetitionersAndCounsel = connect(
                   </span>
                   {petitioner.formattedPendingEmail}
 
-                  {!petitioner.sealedAndUnavailable &&
-                    caseInformationHelper.isInternalUser && (
-                      <span className="margin-top-4 word-wrap-break-word">
-                        <p className="semi-bold margin-bottom-0">
-                          Petition email address
-                        </p>
-                        {petitioner.formattedPaperPetitionEmail}
-                      </span>
-                    )}
+                  {petitioner.showPaperPetitionEmail && (
+                    <span className="margin-top-4 word-wrap-break-word">
+                      <p className="semi-bold margin-bottom-0">
+                        Petition email address
+                      </p>
+                      {petitioner.formattedPaperPetitionEmail}
+                    </span>
+                  )}
 
                   {petitioner.serviceIndicator && (
                     <span className="margin-top-4">
