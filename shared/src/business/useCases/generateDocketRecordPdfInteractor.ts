@@ -1,8 +1,4 @@
-import {
-  Case,
-  getPractitionersRepresenting,
-  isSealedCase,
-} from '../entities/cases/Case';
+import { Case, getPractitionersRepresenting } from '../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -47,7 +43,12 @@ export const generateDocketRecordPdfInteractor = async (
     });
 
   let caseEntity;
-  if (isSealedCase(caseSource)) {
+
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseSource);
+
+  if (isSealedCase) {
     if (user.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
         user,
