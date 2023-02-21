@@ -4,7 +4,10 @@ import {
   UNIQUE_OTHER_FILER_TYPE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
+import {
+  docketClerkUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -395,29 +398,73 @@ describe('partiesInformationHelper', () => {
       );
     });
 
-    it('should set showPaperPetitionEmail flag to true when sealedAndUnavailable is false and the user is not an externalUser', () => {
+    it('should set showPaperPetitionEmail flag to true when their contact info is not sealed and the user is an internal user', () => {
       const mockPaperPetitionEmail = 'mockUser@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(mockPrivatePractitioner),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             petitioners: [
-              { ...mockPetitioner, paperPetitionEmail: mockPaperPetitionEmail },
+              {
+                ...mockPetitioner,
+                paperPetitionEmail: mockPaperPetitionEmail,
+                sealedAndUnavailable: false,
+              },
             ],
             privatePractitioners: [mockPrivatePractitioner],
           },
-          screenMetadata: {
-            pendingEmails: {
-              [mockPetitioner.contactId]: true,
-            },
-          },
+          screenMetadata: {},
         },
       });
 
-      expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
-        mockPaperPetitionEmail,
-      );
+      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(true);
+    });
+
+    it('should set showPaperPetitionEmail flag to false when their contact info is sealed and the user is an internal user', () => {
+      const mockPaperPetitionEmail = 'mockUser@example.com';
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            petitioners: [
+              {
+                ...mockPetitioner,
+                paperPetitionEmail: mockPaperPetitionEmail,
+                sealedAndUnavailable: true,
+              },
+            ],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          screenMetadata: {},
+        },
+      });
+
+      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+    });
+
+    it('should set showPaperPetitionEmail flag to false when their contact info is not sealed and the user is an external user', () => {
+      const mockPaperPetitionEmail = 'mockUser@example.com';
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            petitioners: [
+              {
+                ...mockPetitioner,
+                paperPetitionEmail: mockPaperPetitionEmail,
+                sealedAndUnavailable: true,
+              },
+            ],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          screenMetadata: {},
+        },
+      });
+
+      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
     });
   });
 

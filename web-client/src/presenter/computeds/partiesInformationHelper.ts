@@ -171,3 +171,4 @@ export const partiesInformationHelper = (get, applicationContext) => {
     showParticipantsTab: formattedParticipants.length > 0,
   };
 };
+ 
