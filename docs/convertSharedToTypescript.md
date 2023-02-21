@@ -19,8 +19,15 @@
 1. Find and replace .jsx' to .tsx' with big find in shared/src directory
   - Find: ``` .jsx' ```
   - Replace: ``` .tsx' ```
-  - Files to inclide: ``` shared/src/** ```
+  - Files to inclide: ```shared/src/**```
 1. Find and replace .js' to .ts' with big find in shared/src directory
+  - Find: ``` .js' ```
+  - Replace: ``` .ts' ```
+  - Files to inclide: ```shared/src/**```
+1. Find and replace .js' to ' with big find in web-client/src directory for all files except AppComponentPublic.tsx as this is embedding a .js file
+  - Find: ``` .js' ```
+  - Replace: ```'```
+  - Files to inclide: ```web-client/src/**```
 1. In web-client/src/applicationContext.ts remove the ~.js~ on the import for sharedAppContext
 
 ## Steps For Deployment Day
