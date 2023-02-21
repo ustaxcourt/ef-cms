@@ -105,6 +105,9 @@ const {
   closeTrialSessionLambda,
 } = require('./trialSessions/closeTrialSessionLambda');
 const {
+  cognitoTriggersLocalLambda,
+} = require('../terraform/template/lambdas/cognitoTriggersLocalLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -1218,10 +1221,14 @@ app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
 if (process.env.IS_LOCAL) {
+  // This endpoint is used for testing purpose only which exposes the
+  // CRON lambda which runs nightly to update cases to be ready for trial.
   app.get(
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
+  // This endpoint is used for locally invoking the cognito triggers
+  app.post('/cognito-triggers-local', cognitoTriggersLocalLambda);
 }
 
 exports.app = app;

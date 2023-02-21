@@ -1,0 +1,16 @@
+{
+  "Clients": {
+    "bvjrggnd3co403c0aahscinne": {
+      "ClientId": "bvjrggnd3co403c0aahscinne",
+      "ClientName": "MyClient",
+      "CreationDate": "2023-01-25T00:20:19.784Z",
+      "LastModifiedDate": "2023-01-25T00:20:19.784Z",
+      "TokenValidityUnits": {
+        "AccessToken": "hours",
+        "IdToken": "minutes",
+        "RefreshToken": "days"
+      },
+      "UserPoolId": "local_2pHzece7"
+    }
+  }
+}
