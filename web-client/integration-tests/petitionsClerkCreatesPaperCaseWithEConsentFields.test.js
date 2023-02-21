@@ -224,7 +224,6 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
   //   await cerebralTest.runSequence('sealAddressSequence');
   // });
 
-  //view case as unauthed user, verify the fields dont show
   loginAs(cerebralTest, 'petitioner1@example.com');
   it('should not display the paper petition email field for external unassociated users', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -238,6 +237,9 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       },
     );
 
-    expect(partiesInformationHelperComputed.showPaperPetitionEmail).toBe(false);
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .showPaperPetitionEmail,
+    ).toBe(false);
   });
 });
