@@ -46,6 +46,7 @@ const mockInvocationStatistics = {
 
 describe('migration-status', () => {
   console.log = () => null;
+  console.error = () => null;
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -119,12 +120,7 @@ describe('migration-status', () => {
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
     expect(putMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(1);
-    expect(mockContext.succeed).toHaveBeenCalledWith({
-      dlQueueCount: 0,
-      errorRate: 0,
-      migrateFlag: 'true',
-      totalActiveJobs: 55,
-    });
+    expect(mockContext.succeed).not.toHaveBeenCalled();
   });
 
   it('should NOT call approvePendingJob the first time the migration segment queue is empty', async () => {
@@ -273,7 +269,7 @@ describe('migration-status', () => {
     });
   });
 
-  it('should return a zero error rate if the errors metrics statistics object is empty', async () => {
+  it('should return a throw an error if the errors metrics statistics object is empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
     getMetricStatistics
       .mockReturnValueOnce(Promise.resolve({}))
@@ -284,11 +280,8 @@ describe('migration-status', () => {
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
     await handler({}, mockContext);
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      dlQueueCount: 0,
-      errorRate: 0,
+      errorRate: -1,
       migrateFlag: 'true',
-      migrationQueueIsEmptyFlag: true,
-      totalActiveJobs: 0,
     });
   });
 
