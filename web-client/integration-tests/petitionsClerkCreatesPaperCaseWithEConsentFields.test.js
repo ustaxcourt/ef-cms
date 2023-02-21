@@ -6,6 +6,7 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { partiesInformationHelper } from '../src/presenter/computeds/partiesInformationHelper';
+import { reviewSavedPetitionHelper } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -13,155 +14,60 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
   const cerebralTest = setupTest();
 
   const validPaperPetitionEmail = 'validEmail@example.com';
+  const updatedValidPaperPetitionEmail = 'updated_validEmail@example.com';
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  //create paper case with invalid email
-  //submit and see validation errors
-  //edit and enter valid email, check e consent box
-  //submit
-  //verify things on revew screen
-
-  //edit
-  //change email add
-  //submit
-  //review and serve
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('should create a paper case with an invalid email', async () => {
+  it('should display validation errors when creating a paper case with an invalid paper petition email', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtMonth',
-      value: '01',
+    /* eslint-disable sort-keys-fix/sort-keys-fix */
+    const paperPetitionFields = {
+      caseCaption: 'Margo Albert, Petitioner',
+      mailingDate: '12/27/1999',
+      preferredTrialCity: 'Seattle, Washington',
+      receivedAtDay: '01',
+      receivedAtMonth: '01',
+      receivedAtYear: '2001',
+      procedureType: 'Small',
+      caseType: CASE_TYPES_MAP.whistleblower,
+      partyType: PARTY_TYPES.petitioner,
+      ['contactPrimary.countryType']: COUNTRY_TYPES.DOMESTIC,
+      ['contactPrimary.name']: 'Margo Albert',
+      ['contactPrimary.address1']: '1234 N Road Lane',
+      ['contactPrimary.city']: 'Cityville',
+      ['contactPrimary.state']: 'WA',
+      ['contactPrimary.postalCode']: '45755',
+      ['contactPrimary.phone']: '231-845-2215',
+      paymentDateDay: '01',
+      paymentDateMonth: '01',
+      paymentDateYear: '2001',
+      petitionFile: fakeFile,
+      petitionFileSize: 5,
+      stinFile: fakeFile,
+      stinFileSize: 2,
+      requestForPlaceOfTrialFile: fakeFile,
+      requestForPlaceOfTrialFileSize: 3,
+    };
+
+    for (const [key, value] of Object.entries(paperPetitionFields)) {
+      await cerebralTest.runSequence('updateFormValueSequence', {
+        key,
+        value,
+      });
+    }
+
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: PAYMENT_STATUS.PAID,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtDay',
-      value: '01',
-    });
-
-    const receivedAtYear = '2001';
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtYear',
-      value: receivedAtYear,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'mailingDate',
-      value: 'Some Day',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'caseCaption',
-      value:
-        'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'preferredTrialCity',
-      value: 'Seattle, Washington',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'petitionFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'stinFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'stinFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'requestForPlaceOfTrialFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'requestForPlaceOfTrialFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'procedureType',
-      value: 'Small',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'caseType',
-      value: CASE_TYPES_MAP.deficiency,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'partyType',
-      value: PARTY_TYPES.petitioner,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.countryType',
-      value: COUNTRY_TYPES.INTERNATIONAL,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.country',
-      value: 'Switzerland',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.name',
-      value: 'Daenerys Stormborn',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.address1',
-      value: '123 Abc Ln',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.city',
-      value: 'Cityville',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.postalCode',
-      value: '23-skidoo',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.phone',
-      value: '1234567890',
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentMethod',
+      value: 'Check',
     });
 
     await cerebralTest.runSequence(
@@ -171,29 +77,6 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
         value: 'invalidEmail',
       },
     );
-
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'petitionPaymentStatus',
-      value: PAYMENT_STATUS.PAID,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateDay',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateMonth',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateYear',
-      value: '2001',
-    });
-
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'petitionPaymentMethod',
-      value: 'Money, I guess',
-    });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
@@ -217,22 +100,98 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
 
     expect(cerebralTest.getState('alertError')).toBeUndefined();
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
     expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await cerebralTest.runSequence('serveCaseToIrsSequence');
+    const { contactPrimary } = cerebralTest.getState('form');
+    const reviewSavedPetitionHelperComputed = runCompute(
+      withAppContextDecorator(reviewSavedPetitionHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
 
-    await cerebralTest.runSequence('gotoCaseDetailSequence');
+    expect(
+      reviewSavedPetitionHelperComputed.shouldDisplayEConsentTextForPrimaryContact,
+    ).toBe(true);
+    expect(
+      reviewSavedPetitionHelperComputed.eServiceConsentTextForPrimaryContact,
+    ).toEqual('No e-service consent');
+    expect(contactPrimary.paperPetitionEmail).toEqual(validPaperPetitionEmail);
 
     cerebralTest.docketNumber = cerebralTest.getState(
       'caseDetail.docketNumber',
     );
   });
 
-  //go to case detail, parties infor
-  //verify paper petition email exists
-  //verify case from state has e access
-  it('Refactor my description please!', async () => {
+  it('should allow edits to paper petition email and electronic consent values and display those updates on the Review Petition screen', async () => {
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      tab: 'partyInfo',
+    });
+
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
+
+    await cerebralTest.runSequence('updateFormValueAndCaseCaptionSequence', {
+      key: 'contactPrimary.paperPetitionEmail',
+      value: updatedValidPaperPetitionEmail,
+    });
+
+    await cerebralTest.runSequence('updateFormValueAndCaseCaptionSequence', {
+      key: 'contactPrimary.hasConsentedToEService',
+      value: true,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'petitionFile',
+      value: fakeFile,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'petitionFileSize',
+      value: 2,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'requestForPlaceOfTrialFile',
+      value: fakeFile,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'requestForPlaceOfTrialFileSize',
+      value: 5,
+    });
+
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    const { contactPrimary } = cerebralTest.getState('form');
+    const reviewSavedPetitionHelperComputed = runCompute(
+      withAppContextDecorator(reviewSavedPetitionHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(
+      reviewSavedPetitionHelperComputed.shouldDisplayEConsentTextForPrimaryContact,
+    ).toBe(true);
+    expect(
+      reviewSavedPetitionHelperComputed.eServiceConsentTextForPrimaryContact,
+    ).toEqual('E-service consent');
+    expect(contactPrimary.paperPetitionEmail).toEqual(
+      updatedValidPaperPetitionEmail,
+    );
+
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PrintPaperPetitionReceipt',
+    );
+  });
+
+  it('should display the updated paper petition email on the case information, parties tab after the case has been served', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -247,14 +206,23 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
     expect(
       partiesInformationHelperComputed.formattedPetitioners[0]
         .paperPetitionEmail,
-    ).toEqual(validPaperPetitionEmail);
+    ).toEqual(updatedValidPaperPetitionEmail);
   });
 
-  //login as docketlclerk
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  //seal address
-  it('Refactor my description please!', async () => {});
-  //verify things
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // it('should still display paper petition email after docket clerk seals the petitioners address', async () => {
+  //   await cerebralTest.runSequence('gotoCaseDetailSequence', {
+  //     docketNumber: cerebralTest.docketNumber,
+  //   });
+
+  //   const { petitioners } = cerebralTest.getState('caseDetail');
+
+  //   await cerebralTest.runSequence('openSealAddressModalSequence', {
+  //     contactToSeal: petitioners[0],
+  //   });
+
+  //   await cerebralTest.runSequence('sealAddressSequence');
+  // });
 
   //view case as unauthed user, verify the fields dont show
 });
