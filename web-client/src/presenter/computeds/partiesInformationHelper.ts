@@ -137,6 +137,8 @@ export const partiesInformationHelper = (get, applicationContext) => {
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
       showExternalHeader: isExternalUser,
+      showPaperPetitionEmail:
+        !petitioner.sealedAndUnavailable && !isExternalUser,
     };
   });
 
@@ -147,6 +149,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const formattedPetitioners = formattedParties.filter(
     petitioner => !otherContactTypes.includes(petitioner.contactType),
   );
+
   const formattedParticipants = formattedParties.filter(petitioner =>
     otherContactTypes.includes(petitioner.contactType),
   );
