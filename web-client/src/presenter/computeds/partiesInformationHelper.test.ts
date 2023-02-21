@@ -394,6 +394,31 @@ describe('partiesInformationHelper', () => {
         mockPaperPetitionEmail,
       );
     });
+
+    it('should set showPaperPetitionEmail flag to true when sealedAndUnavailable is false and the user is not an externalUser', () => {
+      const mockPaperPetitionEmail = 'mockUser@example.com';
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockPrivatePractitioner),
+          caseDetail: {
+            petitioners: [
+              { ...mockPetitioner, paperPetitionEmail: mockPaperPetitionEmail },
+            ],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          screenMetadata: {
+            pendingEmails: {
+              [mockPetitioner.contactId]: true,
+            },
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
+        mockPaperPetitionEmail,
+      );
+    });
   });
 
   describe('formattedRespondents', () => {
