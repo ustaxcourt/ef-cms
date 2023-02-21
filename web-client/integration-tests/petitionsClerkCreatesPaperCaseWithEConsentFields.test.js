@@ -4,6 +4,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
+import { caseInformationHelper as caseInformationHelperComputed } from '../src/presenter/computeds/caseInformationHelper';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { partiesInformationHelper } from '../src/presenter/computeds/partiesInformationHelper';
 import { reviewSavedPetitionHelper } from '../src/presenter/computeds/reviewSavedPetitionHelper';
@@ -225,4 +226,30 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
   // });
 
   //view case as unauthed user, verify the fields dont show
+  loginAs(cerebralTest, 'petitioner1@example.com');
+  it('should not display the paper petition email field for external unassociated users', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const partiesInformationHelperComputed = runCompute(
+      withAppContextDecorator(partiesInformationHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    const caseInformationHelper = runCompute(
+      withAppContextDecorator(caseInformationHelperComputed),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .paperPetitionEmail,
+    ).toEqual(updatedValidPaperPetitionEmail);
+    expect(caseInformationHelper.isInternalUser).toBe(false);
+  });
 });
