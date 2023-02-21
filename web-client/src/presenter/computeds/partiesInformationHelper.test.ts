@@ -6,6 +6,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   docketClerkUser,
+  petitionerUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -449,13 +450,13 @@ describe('partiesInformationHelper', () => {
 
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(petitionerUser),
           caseDetail: {
             petitioners: [
               {
                 ...mockPetitioner,
                 paperPetitionEmail: mockPaperPetitionEmail,
-                sealedAndUnavailable: true,
+                sealedAndUnavailable: false,
               },
             ],
             privatePractitioners: [mockPrivatePractitioner],
