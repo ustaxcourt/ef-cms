@@ -15,3 +15,7 @@ export DYNAMODB_TABLE_NAME=efcms-local
 export USER_LIMITER_THRESHOLD='5000'
 export IP_LIMITER_THRESHOLD='5000'
 export EFCMS_DOMAIN=localhost
+
+export USTC_ADMIN_PASS='4UtEnp!EDLJ@Pl3g'
+export USTC_ADMIN_USER='admin@example.com'
+export USER_POOL_ID='local_2pHzece7'
