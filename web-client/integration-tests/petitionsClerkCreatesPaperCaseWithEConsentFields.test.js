@@ -4,7 +4,6 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { caseInformationHelper as caseInformationHelperComputed } from '../src/presenter/computeds/caseInformationHelper';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { partiesInformationHelper } from '../src/presenter/computeds/partiesInformationHelper';
 import { reviewSavedPetitionHelper } from '../src/presenter/computeds/reviewSavedPetitionHelper';
@@ -239,17 +238,6 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       },
     );
 
-    const caseInformationHelper = runCompute(
-      withAppContextDecorator(caseInformationHelperComputed),
-      {
-        state: cerebralTest.getState(),
-      },
-    );
-
-    expect(
-      partiesInformationHelperComputed.formattedPetitioners[0]
-        .paperPetitionEmail,
-    ).toEqual(updatedValidPaperPetitionEmail);
-    expect(caseInformationHelper.isInternalUser).toBe(false);
+    expect(partiesInformationHelperComputed.showPaperPetitionEmail).toBe(false);
   });
 });
