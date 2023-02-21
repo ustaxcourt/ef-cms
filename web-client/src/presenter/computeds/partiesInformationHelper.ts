@@ -160,6 +160,11 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }),
   );
 
+  // !petitioner.sealedAndUnavailable &&
+                    // caseInformationHelper.isInternalUser
+
+  const showPaperPetitionEmail =  !isExternalUser;
+
   return {
     formattedParticipants,
     formattedPetitioners,
