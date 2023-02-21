@@ -4,12 +4,21 @@ const {
 const { isSealedCase } = require('./Case');
 
 describe('isSealedCase', () => {
-  it('returns false for objects without any truthy sealed attributes', () => {
+  it('returns false if isSealed is false', () => {
     const result = isSealedCase({
       docketEntries: [],
       isSealed: false,
       name: 'Johnny Appleseed',
-      sealedDate: false,
+      sealedDate: undefined,
+    });
+    expect(result).toBe(false);
+  });
+
+  it('returns false if isSealedDate is undefined', () => {
+    const result = isSealedCase({
+      docketEntries: [],
+      name: 'Johnny Appleseed',
+      sealedDate: undefined,
     });
     expect(result).toBe(false);
   });
