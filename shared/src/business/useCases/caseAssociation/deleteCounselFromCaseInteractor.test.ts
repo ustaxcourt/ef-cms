@@ -4,7 +4,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase.js';
+import { MOCK_CASE } from '../../../test/mockCase.ts';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   deleteCounselFromCaseInteractor,
