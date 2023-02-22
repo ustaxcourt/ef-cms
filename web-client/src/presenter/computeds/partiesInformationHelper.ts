@@ -137,12 +137,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ],
     );
 
-    console.log('Am I working?', E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG);
-    let showPaperPetitionEmail = false;
-    if (E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG) {
-      showPaperPetitionEmail =
-        !petitioner.sealedAndUnavailable && !isExternalUser;
-    }
+    const showPaperPetitionEmail =
+      E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
+      !petitioner.sealedAndUnavailable &&
+      !isExternalUser;
 
     return {
       ...petitioner,
