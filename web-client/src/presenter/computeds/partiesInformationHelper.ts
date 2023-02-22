@@ -29,8 +29,7 @@ export const getCanEditPetitioner = ({
   user,
   userAssociatedWithCase,
 }) => {
-  const { ALLOWLIST_FEATURE_FLAGS, USER_ROLES } =
-    applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
 
   if (!petitionIsServed) return false;
 
@@ -50,7 +49,8 @@ export const getCanEditPetitioner = ({
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS, CONTACT_TYPES } =
+    applicationContext.getConstants();
   const otherContactTypes = [
     CONTACT_TYPES.intervenor,
     CONTACT_TYPES.participant,
@@ -130,10 +130,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
     const editPetitionerLink = isExternalUser
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
-//key off value for state from allowlist const
+
     const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
-      state.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG,
+      state.featureFlags[
+        ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+      ],
     );
+
+    console.log('Am I working?', E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG);
     let showPaperPetitionEmail = false;
     if (E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG) {
       showPaperPetitionEmail =
