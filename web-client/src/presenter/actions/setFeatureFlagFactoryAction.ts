@@ -8,8 +8,9 @@ import { state } from 'cerebral';
  */
 export const setFeatureFlagFactoryAction =
   featureFlagName =>
-  ({ props, store }) => {
+  ({ get, props, store }) => {
     const featureFlagValue = props[featureFlagName];
 
     store.set(state.featureFlags[featureFlagName], featureFlagValue);
+    console.log(get(state.featureFlags[featureFlagName]));
   };
