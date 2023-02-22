@@ -131,27 +131,30 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ],
   );
 
-  const shouldDisplayEConsentTextForPrimaryContact =
-    !!caseDetail.contactPrimary?.paperPetitionEmail ||
-    caseDetail.contactPrimary?.hasConsentedToEService;
-
-  const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
-    ?.hasConsentedToEService
-    ? 'E-service consent'
-    : 'No e-service consent';
-
+  let shouldDisplayEConsentTextForPrimaryContact;
   let shouldDisplayEConsentTextForSecondaryContact;
+  let eServiceConsentTextForPrimaryContact;
   let eServiceConsentTextForSecondaryContact;
+  if (eConsentFieldsEnabledFeatureFlag) {
+    shouldDisplayEConsentTextForPrimaryContact =
+      !!caseDetail.contactPrimary?.paperPetitionEmail ||
+      caseDetail.contactPrimary?.hasConsentedToEService;
 
-  if (caseDetail.contactSecondary) {
-    shouldDisplayEConsentTextForSecondaryContact =
-      !!caseDetail.contactSecondary?.paperPetitionEmail ||
-      caseDetail.contactSecondary?.hasConsentedToEService;
-
-    eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
+    eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
       ?.hasConsentedToEService
       ? 'E-service consent'
       : 'No e-service consent';
+
+    if (caseDetail.contactSecondary) {
+      shouldDisplayEConsentTextForSecondaryContact =
+        !!caseDetail.contactSecondary?.paperPetitionEmail ||
+        caseDetail.contactSecondary?.hasConsentedToEService;
+
+      eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
+        ?.hasConsentedToEService
+        ? 'E-service consent'
+        : 'No e-service consent';
+    }
   }
 
   return {
