@@ -129,7 +129,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
     const editPetitionerLink = isExternalUser
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
-      : `/case-detail/${caseDetail.doketNumber}/edit-petitioner-information/${petitioner.contactId}`;
+      : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
     const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
       state.featureFlags[
