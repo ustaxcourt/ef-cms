@@ -11,7 +11,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: undefined,
       inConsolidatedGroup: false,
-      leadCase: false,
+      isLeadCase: false,
     });
   });
 
@@ -26,7 +26,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
     });
   });
 
@@ -41,7 +41,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Lead case',
       inConsolidatedGroup: true,
-      leadCase: true,
+      isLeadCase: true,
     });
   });
 
@@ -56,7 +56,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
       shouldIndent: undefined,
     });
   });
@@ -76,8 +76,49 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
       shouldIndent: true,
+    });
+  });
+
+  it('should indent the case item if the lead case has isManuallyAdded and skipPriorityStatus is true', () => {
+    const mockCaseItem = {
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
+    };
+    const result = setConsolidationFlagsForDisplay(
+      mockCaseItem,
+      [
+        {
+          docketNumber: '300-20',
+          isManuallyAdded: true,
+        },
+      ],
+      true,
+    );
+
+    expect(result).toEqual({
+      ...mockCaseItem,
+      consolidatedIconTooltipText: 'Consolidated case',
+      inConsolidatedGroup: true,
+      isLeadCase: false,
+      shouldIndent: true,
+    });
+  });
+
+  it('should NOT indent the case when the lead case is missing from the case list and skipPriorityStatus is true', () => {
+    const mockCaseItem = {
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
+    };
+    const result = setConsolidationFlagsForDisplay(mockCaseItem, [], true);
+
+    expect(result).toEqual({
+      ...mockCaseItem,
+      consolidatedIconTooltipText: 'Consolidated case',
+      inConsolidatedGroup: true,
+      isLeadCase: false,
+      shouldIndent: undefined,
     });
   });
 });

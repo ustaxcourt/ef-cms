@@ -39,8 +39,12 @@ export const RecentMessagesInbox = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
-                      caseItem={item}
-                    ></ConsolidatedCaseIcon>
+                      consolidatedIconTooltipText={
+                        item.consolidatedIconTooltipText
+                      }
+                      inConsolidatedGroup={item.inConsolidatedGroup}
+                      showLeadCaseIcon={item.isLeadCase}
+                    />
                   </td>
                   <td className="message-queue-row small">
                     {item.docketNumberWithSuffix}
