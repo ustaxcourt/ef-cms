@@ -4,7 +4,12 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { partiesInformationHelper } from '../src/presenter/computeds/partiesInformationHelper';
 import { reviewSavedPetitionHelper } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
@@ -209,21 +214,6 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
     ).toEqual(updatedValidPaperPetitionEmail);
   });
 
-  // loginAs(cerebralTest, 'docketclerk@example.com');
-  // it('should still display paper petition email after docket clerk seals the petitioners address', async () => {
-  //   await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //     docketNumber: cerebralTest.docketNumber,
-  //   });
-
-  //   const { petitioners } = cerebralTest.getState('caseDetail');
-
-  //   await cerebralTest.runSequence('openSealAddressModalSequence', {
-  //     contactToSeal: petitioners[0],
-  //   });
-
-  //   await cerebralTest.runSequence('sealAddressSequence');
-  // });
-
   loginAs(cerebralTest, 'petitioner1@example.com');
   it('should not display the paper petition email field for external unassociated users', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -237,6 +227,66 @@ describe('petitions clerk creates paper case with E-consent fields', () => {
       },
     );
 
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .showPaperPetitionEmail,
+    ).toBe(false);
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  it('should seal the paper petition email address when petitioner address is sealed but remain viewable to docket clerks', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
+
+    await cerebralTest.runSequence('openSealAddressModalSequence', {
+      contactToSeal: contactPrimary,
+    });
+
+    await cerebralTest.runSequence('sealAddressSequence');
+
+    const partiesInformationHelperComputed = runCompute(
+      withAppContextDecorator(partiesInformationHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0].isAddressSealed,
+    ).toBe(true);
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .sealedAndUnavailable,
+    ).toBe(false);
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .showPaperPetitionEmail,
+    ).toBe(true);
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  it('should not display the paper petition email field for internal users other than docket clerk when the petitioner address is sealed', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const partiesInformationHelperComputed = runCompute(
+      withAppContextDecorator(partiesInformationHelper),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0].isAddressSealed,
+    ).toBe(true);
+    expect(
+      partiesInformationHelperComputed.formattedPetitioners[0]
+        .sealedAndUnavailable,
+    ).toBe(true);
     expect(
       partiesInformationHelperComputed.formattedPetitioners[0]
         .showPaperPetitionEmail,
