@@ -13,7 +13,5 @@ export const getFeatureFlagFactoryAction =
         featureFlag: featureFlagName,
       });
 
-    console.log({ [featureFlagName]: featureFlagValue }, '--');
-
     return { [featureFlagName]: featureFlagValue };
   };
