@@ -16,6 +16,19 @@ export const ordersAndNoticesInDraftsCodes = {
   orderToShowCause: 'Order to Show Cause',
 };
 
+const getEConsentAttributesForContact = (
+  contact: any,
+): { eServiceConsentText: string; shouldDisplayEConsentText: boolean } => {
+  const shouldDisplayEConsentText =
+    !!contact.paperPetitionEmail || contact.hasConsentedToEService;
+
+  const eServiceConsentText = contact?.hasConsentedToEService
+    ? 'E-service consent'
+    : 'No e-service consent';
+
+  return { eServiceConsentText, shouldDisplayEConsentText };
+};
+
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
 
@@ -136,14 +149,10 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let eServiceConsentTextForPrimaryContact;
   let eServiceConsentTextForSecondaryContact;
   if (eConsentFieldsEnabledFeatureFlag) {
-    shouldDisplayEConsentTextForPrimaryContact =
-      !!caseDetail.contactPrimary?.paperPetitionEmail ||
-      caseDetail.contactPrimary?.hasConsentedToEService;
-
-    eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
-      ?.hasConsentedToEService
-      ? 'E-service consent'
-      : 'No e-service consent';
+    ({
+      eServiceConsentText: eServiceConsentTextForPrimaryContact,
+      shouldDisplayEConsentText: shouldDisplayEConsentTextForPrimaryContact,
+    } = getEConsentAttributesForContact(caseDetail.contactPrimary));
 
     if (caseDetail.contactSecondary) {
       shouldDisplayEConsentTextForSecondaryContact =
