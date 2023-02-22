@@ -2,7 +2,7 @@
 
 ENVIRONMENT=$1
 
-[ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as a command line argument 1" && exit 1
+[ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must set ZONE_NAME as an environment variable" && exit 1
 [ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You set DESTINATION_TABLE as an environment variable" && exit 1
@@ -13,37 +13,13 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 
-../../../../scripts/verify-terraform-version.sh
+export ENVIRONMENT="${ENVIRONMENT}"
 
-BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="reindex-cron-${ENVIRONMENT}.tfstate"
-LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
-
-rm -rf .terraform
-
-echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
-sh ../../../../shared/terraform/bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
-
-echo "checking for the dynamodb lock table..."
-aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
-result=$?
-if [ ${result} -ne 0 ]; then
-  echo "dynamodb lock does not exist, creating"
-  sh ../../../../shared/terraform/bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
-else
-  echo "dynamodb lock table already exists"
-fi
-
-npm run build:assets
-
-set -eo pipefail
-npm run build:lambda:reindex-cron
+../../../../shared/terraform/bin/pre-init.sh reindex-cron
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_destination_table=$DESTINATION_TABLE
-export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
 export TF_VAR_source_table=$SOURCE_TABLE
 
