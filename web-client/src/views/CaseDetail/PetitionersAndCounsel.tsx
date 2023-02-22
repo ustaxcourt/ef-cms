@@ -70,20 +70,20 @@ export const PetitionersAndCounsel = connect(
                   {petitioner.formattedPendingEmail}
 
                   {petitioner.showPaperPetitionEmail && (
-                    <div>
+                    <>
                       <p className="semi-bold margin-bottom-0">
                         Petition email address
                       </p>
                       <span
                         className={classNames(
                           petitioner.isAddressSealed && 'margin-left-205',
-                          'margin-top-4 word-wrap-break-word',
+                          'margin-top-4 word-wrap-break-word sealed-address',
                         )}
                       >
                         {petitioner.isAddressSealed && (
                           <span
-                            aria-label="sealed address"
-                            className="sealed-address sealed-contact-icon"
+                            aria-label="sealed paper petition email"
+                            className="sealed-contact-icon"
                           >
                             <FontAwesomeIcon
                               className="margin-right-05"
@@ -94,7 +94,7 @@ export const PetitionersAndCounsel = connect(
                         )}
                         {petitioner.formattedPaperPetitionEmail}
                       </span>
-                    </div>
+                    </>
                   )}
 
                   {petitioner.serviceIndicator && (
