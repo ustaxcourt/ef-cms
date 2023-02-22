@@ -155,14 +155,10 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     } = getEConsentAttributesForContact(caseDetail.contactPrimary));
 
     if (caseDetail.contactSecondary) {
-      shouldDisplayEConsentTextForSecondaryContact =
-        !!caseDetail.contactSecondary?.paperPetitionEmail ||
-        caseDetail.contactSecondary?.hasConsentedToEService;
-
-      eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
-        ?.hasConsentedToEService
-        ? 'E-service consent'
-        : 'No e-service consent';
+      ({
+        eServiceConsentText: eServiceConsentTextForSecondaryContact,
+        shouldDisplayEConsentText: shouldDisplayEConsentTextForSecondaryContact,
+      } = getEConsentAttributesForContact(caseDetail.contactSecondary));
     }
   }
 
