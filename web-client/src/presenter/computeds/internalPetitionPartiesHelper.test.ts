@@ -1,4 +1,7 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from './internalPetitionPartiesHelper';
 import {
@@ -23,6 +26,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: { partyType: PARTY_TYPES.conservator },
       },
     });
+
     expect(result).toMatchObject({
       contactPrimary: {
         displaySecondaryName: true,
@@ -384,32 +388,50 @@ describe('internalPetitionPartiesHelper', () => {
   });
 
   describe('showPaperPetitionEmailFieldAndConsentBox', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-    });
+    const baseState = {
+      featureFlags: {
+        [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+          true,
+      },
+      form: {
+        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+      },
+    };
 
-    it('should return false if its an external user', () => {
+    it('should be false when the current user is an external user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
       const result = runCompute(internalPetitionPartiesHelper, {
-        state: {
-          form: {
-            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
-          },
-        },
+        state: baseState,
       });
+
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
 
-    it('should return true if its a petitions clerk user', () => {
+    it('should be true when the current user is a petitions clerk user', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: baseState,
+      });
+
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
+    });
+
+    it('should be false when the e-consent feature flag is disabled', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
-          form: {
-            partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          ...baseState,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              false,
           },
         },
       });
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
+
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
   });
 });
