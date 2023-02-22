@@ -101,17 +101,21 @@ export const ReviewSavedPetition = connect(
                             <address aria-labelledby="filing-contact-primary">
                               <AddressDisplay contact={form.contactPrimary} />
                             </address>
-                            {form.contactPrimary.paperPetitionEmail && (
-                              <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
-                                {form.contactPrimary.paperPetitionEmail}
-                              </div>
-                            )}
-                            {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
-                              <div>
-                                {
-                                  reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
-                                }
-                              </div>
+                            {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
+                              <>
+                                {form.contactPrimary.paperPetitionEmail && (
+                                  <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
+                                    {form.contactPrimary.paperPetitionEmail}
+                                  </div>
+                                )}
+                                {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
+                                  <div>
+                                    {
+                                      reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
+                                    }
+                                  </div>
+                                )}
+                              </>
                             )}
                           </>
                         )}
@@ -128,17 +132,21 @@ export const ReviewSavedPetition = connect(
                             <address aria-labelledby="filing-contact-secondary">
                               <AddressDisplay contact={form.contactSecondary} />
                             </address>
-                            {form.contactSecondary.paperPetitionEmail && (
-                              <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
-                                {form.contactSecondary.paperPetitionEmail}
-                              </div>
-                            )}
-                            {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
-                              <div>
-                                {
-                                  reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
-                                }
-                              </div>
+                            {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
+                              <>
+                                {form.contactSecondary.paperPetitionEmail && (
+                                  <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
+                                    {form.contactSecondary.paperPetitionEmail}
+                                  </div>
+                                )}
+                                {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
+                                  <div>
+                                    {
+                                      reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
+                                    }
+                                  </div>
+                                )}
+                              </>
                             )}
                           </>
                         )}

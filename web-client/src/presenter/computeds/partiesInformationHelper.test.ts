@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
   ROLES,
   UNIQUE_OTHER_FILER_TYPE,
@@ -28,6 +29,7 @@ describe('partiesInformationHelper', () => {
   let mockPetitioner;
   let mockPrivatePractitioner;
   let mockIrsPractitioner;
+  let mockUser;
 
   const partiesInformationHelper = withAppContextDecorator(
     partiesInformationHelperComputed,
@@ -36,13 +38,16 @@ describe('partiesInformationHelper', () => {
 
   const getBaseState = user => {
     mockUser = { ...user };
+
     return {
+      featureFlags: {
+        [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+          true,
+      },
       permissions: getUserPermissions(user),
       screenMetadata: { pendingEmails: {} },
     };
   };
-
-  let mockUser;
 
   beforeEach(() => {
     mockUser = {};
@@ -462,6 +467,31 @@ describe('partiesInformationHelper', () => {
             privatePractitioners: [mockPrivatePractitioner],
           },
           screenMetadata: {},
+        },
+      });
+
+      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+    });
+
+    it('should not display paper petition email when the feature flag is off', () => {
+      const mockPaperPetitionEmail = 'mockUser@example.com';
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            petitioners: [
+              {
+                ...mockPetitioner,
+                paperPetitionEmail: mockPaperPetitionEmail,
+                sealedAndUnavailable: false,
+              },
+            ],
+          },
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              false,
+          },
         },
       });
 
