@@ -19,5 +19,4 @@ export const setCurrentPageAction =
     await new Promise(resolve => {
       setTimeout(resolve, 0);
     });
-    console.timeEnd('Sequence Duration');
   };
