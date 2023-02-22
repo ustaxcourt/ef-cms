@@ -130,6 +130,15 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
+    const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
+      state.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG,
+    );
+    let showPaperPetitionEmail = false;
+    if (E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG) {
+      showPaperPetitionEmail =
+        !petitioner.sealedAndUnavailable && !isExternalUser;
+    }
+
     return {
       ...petitioner,
       canEditPetitioner,
@@ -137,8 +146,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
       showExternalHeader: isExternalUser,
-      showPaperPetitionEmail:
-        !petitioner.sealedAndUnavailable && !isExternalUser,
+      showPaperPetitionEmail,
     };
   });
 
