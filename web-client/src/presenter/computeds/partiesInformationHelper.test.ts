@@ -468,6 +468,28 @@ describe('partiesInformationHelper', () => {
 
       expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
     });
+
+    it('should not display paper petition email when the feature flag is off', () => {
+      const mockPaperPetitionEmail = 'mockUser@example.com';
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: false,
+          caseDetail: {
+            petitioners: [
+              {
+                ...mockPetitioner,
+                paperPetitionEmail: mockPaperPetitionEmail,
+                sealedAndUnavailable: false,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+    });
   });
 
   describe('formattedRespondents', () => {
@@ -598,28 +620,4 @@ describe('partiesInformationHelper', () => {
       expect(showIntervenorRole).toBeFalsy();
     });
   });
-
-  // describe('Feature Flag off', () => {
-  //   it('should not display paper petition email when the feature flag is off', () => {
-  //     const mockPaperPetitionEmail = 'mockUser@example.com';
-
-  //     const result = runCompute(partiesInformationHelper, {
-  //       state: {
-  //         ...getBaseState(docketClerkUser),
-  //         E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: false,
-  //         caseDetail: {
-  //           petitioners: [
-  //             {
-  //               ...mockPetitioner,
-  //               paperPetitionEmail: mockPaperPetitionEmail,
-  //               sealedAndUnavailable: false,
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     });
-
-  //     expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
-  //   });
-  // });
 });
