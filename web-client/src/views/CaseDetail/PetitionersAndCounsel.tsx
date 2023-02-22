@@ -70,27 +70,28 @@ export const PetitionersAndCounsel = connect(
                   {petitioner.formattedPendingEmail}
 
                   {petitioner.showPaperPetitionEmail && (
-                    <div
-                      className={classNames(
-                        petitioner.isAddressSealed && 'margin-left-205',
-                      )}
-                    >
-                      {petitioner.isAddressSealed && (
-                        <span
-                          aria-label="sealed address"
-                          className="sealed-address sealed-contact-icon"
-                        >
-                          <FontAwesomeIcon
-                            className="margin-right-05"
-                            icon={['fas', 'lock']}
-                            size="sm"
-                          />
-                        </span>
-                      )}
-                      <span className="margin-top-4 word-wrap-break-word">
-                        <p className="semi-bold margin-bottom-0">
-                          Petition email address
-                        </p>
+                    <div>
+                      <p className="semi-bold margin-bottom-0">
+                        Petition email address
+                      </p>
+                      <span
+                        className={classNames(
+                          petitioner.isAddressSealed && 'margin-left-205',
+                          'margin-top-4 word-wrap-break-word',
+                        )}
+                      >
+                        {petitioner.isAddressSealed && (
+                          <span
+                            aria-label="sealed address"
+                            className="sealed-address sealed-contact-icon"
+                          >
+                            <FontAwesomeIcon
+                              className="margin-right-05"
+                              icon={['fas', 'lock']}
+                              size="sm"
+                            />
+                          </span>
+                        )}
                         {petitioner.formattedPaperPetitionEmail}
                       </span>
                     </div>
