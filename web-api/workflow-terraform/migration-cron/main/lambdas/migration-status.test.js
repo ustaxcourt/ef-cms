@@ -285,7 +285,7 @@ describe('migration-status', () => {
     });
   });
 
-  it('should return a zero error rate if the errors metrics statistics object is empty', async () => {
+  it('should return a zero error rate if the errors metrics statistics are undefined', async () => {
     const sumUndefined = {
       Datapoints: [{}],
     };

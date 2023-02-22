@@ -826,15 +826,11 @@ jobs:
       - run:
           name: Destroy Check Migration Status Cron Infrastructure
           command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration-cron -- $ENV
-            fi
+            npm run destroy:migration-cron -- $ENV
       - run:
           name: Destroy Check Reindex Status Cron Infrastructure
           command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:reindex-cron -- $ENV
-            fi
+            npm run destroy:reindex-cron -- $ENV
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
