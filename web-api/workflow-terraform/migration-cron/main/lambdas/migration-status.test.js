@@ -120,7 +120,7 @@ describe('migration-status', () => {
     expect(getMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(0);
     expect(getSqsQueueCount).toHaveBeenCalledTimes(2);
     expect(putMigrationQueueIsEmptyFlag).toHaveBeenCalledTimes(1);
-    expect(mockContext.succeed).not.toHaveBeenCalled();
+    expect(mockContext.succeed).toHaveBeenCalledTimes(1);
   });
 
   it('should NOT call approvePendingJob the first time the migration segment queue is empty', async () => {
