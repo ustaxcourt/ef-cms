@@ -1,7 +1,15 @@
-const axios = require('axios');
-const { find } = require('lodash');
+import { find } from 'lodash';
+import axios from 'axios';
 
-const findPendingJob = async ({ apiToken, jobName, workflowId }) => {
+const findPendingJob = async ({
+  apiToken,
+  jobName,
+  workflowId,
+}: {
+  apiToken: string;
+  jobName: string;
+  workflowId: string;
+}): Promise<string> => {
   const getAllJobs = {
     headers: { 'Circle-Token': apiToken },
     method: 'GET',
@@ -17,7 +25,15 @@ const findPendingJob = async ({ apiToken, jobName, workflowId }) => {
   return jobWithApprovalNeeded.approval_request_id;
 };
 
-exports.approvePendingJob = async ({ apiToken, jobName, workflowId }) => {
+exports.approvePendingJob = async ({
+  apiToken,
+  jobName,
+  workflowId,
+}: {
+  apiToken: string;
+  jobName: string;
+  workflowId: string;
+}) => {
   const approvalRequestId = await findPendingJob({
     apiToken,
     jobName,
@@ -32,7 +48,13 @@ exports.approvePendingJob = async ({ apiToken, jobName, workflowId }) => {
   await axios.post(approveJob.url, {}, approveJob);
 };
 
-exports.cancelWorkflow = async ({ apiToken, workflowId }) => {
+exports.cancelWorkflow = async ({
+  apiToken,
+  workflowId,
+}: {
+  apiToken: string;
+  workflowId: string;
+}) => {
   const cancelWorkflow = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
