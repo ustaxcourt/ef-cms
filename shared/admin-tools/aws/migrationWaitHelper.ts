@@ -23,25 +23,13 @@ export const getSqsQueueCount = async (queueUrl: string): Promise<number> => {
     ],
     QueueUrl: queueUrl,
   });
-  let data;
   let queueCount = 0;
+  let data;
   try {
     data = await sqsClient.send(command);
-    if ('Attributes' in data) {
-      if ('ApproximateNumberOfMessages' in data.Attributes) {
-        queueCount += Number(data.Attributes.ApproximateNumberOfMessages);
-      }
-      if ('ApproximateNumberOfMessagesNotVisible' in data.Attributes) {
-        queueCount += Number(
-          data.Attributes.ApproximateNumberOfMessagesNotVisible,
-        );
-      }
-      if ('ApproximateNumberOfMessagesDelayed' in data.Attributes) {
-        queueCount += Number(
-          data.Attributes.ApproximateNumberOfMessagesDelayed,
-        );
-      }
-    }
+    queueCount += Number(data.Attributes.ApproximateNumberOfMessages);
+    queueCount += Number(data.Attributes.ApproximateNumberOfMessagesNotVisible);
+    queueCount += Number(data.Attributes.ApproximateNumberOfMessagesDelayed);
   } catch (error) {
     console.log(error);
     queueCount = -1;

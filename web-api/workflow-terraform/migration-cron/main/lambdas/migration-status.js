@@ -48,15 +48,16 @@ exports.handler = async (input, context) => {
   }
   if (results.totalActiveJobs > 0) {
     await putMigrationQueueIsEmptyFlag(false);
-  } else {
-    results.migrationQueueIsEmptyFlag = await getMigrationQueueIsEmptyFlag();
-    if (!results.migrationQueueIsEmptyFlag) {
-      await putMigrationQueueIsEmptyFlag(true);
-    } else {
-      await approvePendingJob({ apiToken, jobName, workflowId });
-    }
     return context.succeed(results);
   }
+
+  results.migrationQueueIsEmptyFlag = await getMigrationQueueIsEmptyFlag();
+  if (!results.migrationQueueIsEmptyFlag) {
+    await putMigrationQueueIsEmptyFlag(true);
+  } else {
+    await approvePendingJob({ apiToken, jobName, workflowId });
+  }
+  return context.succeed(results);
 };
 
 const getSegmentErrorRate = async () => {
