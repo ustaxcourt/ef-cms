@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   ordersAndNoticesInDraftsCodes,
@@ -348,6 +349,10 @@ describe('reviewSavedPetitionHelper', () => {
     it('should return E-service consent text for primary and secondary contacts when hasConsentedToEService is true', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
           form: {
             contactPrimary: {
               hasConsentedToEService: true,
@@ -372,6 +377,10 @@ describe('reviewSavedPetitionHelper', () => {
     it('should return No e-service consent text for primary and secondary contacts when hasConsentedToEService is false', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
           form: {
             contactPrimary: {
               hasConsentedToEService: false,
@@ -412,6 +421,10 @@ describe('reviewSavedPetitionHelper', () => {
   it('should NOT display electronic service consent text when paper petition email has not been provided and the contact has NOT consented to electronic service', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+            true,
+        },
         form: {
           contactPrimary: {
             hasConsentedToEService: false,
@@ -427,5 +440,29 @@ describe('reviewSavedPetitionHelper', () => {
 
     expect(result.shouldDisplayEConsentTextForPrimaryContact).toBe(false);
     expect(result.shouldDisplayEConsentTextForSecondaryContact).toBe(false);
+  });
+
+  it('should NOT display electronic service consent text when the feature flag is disabled', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+            false,
+        },
+        form: {
+          contactPrimary: {
+            hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
+          },
+          contactSecondary: {
+            hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
+          },
+        },
+      },
+    });
+
+    expect(result.shouldDisplayEConsentTextForPrimaryContact).toBeUndefined();
+    expect(result.shouldDisplayEConsentTextForSecondaryContact).toBeUndefined();
   });
 });

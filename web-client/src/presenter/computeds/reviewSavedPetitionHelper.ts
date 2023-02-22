@@ -33,7 +33,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ...caseDetail
   } = get(state.form);
 
-  const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
+  const { ALLOWLIST_FEATURE_FLAGS, INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
     applicationContext.getConstants();
 
   const receivedAtFormatted = applicationContext
@@ -125,31 +125,41 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
-  const shouldDisplayEConsentTextForPrimaryContact =
-    !!caseDetail.contactPrimary?.paperPetitionEmail ||
-    caseDetail.contactPrimary?.hasConsentedToEService;
+  const eConsentFieldsEnabledFeatureFlag = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+    ],
+  );
 
-  const eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
-    ?.hasConsentedToEService
-    ? 'E-service consent'
-    : 'No e-service consent';
-
+  let shouldDisplayEConsentTextForPrimaryContact;
   let shouldDisplayEConsentTextForSecondaryContact;
+  let eServiceConsentTextForPrimaryContact;
   let eServiceConsentTextForSecondaryContact;
+  if (eConsentFieldsEnabledFeatureFlag) {
+    shouldDisplayEConsentTextForPrimaryContact =
+      !!caseDetail.contactPrimary?.paperPetitionEmail ||
+      caseDetail.contactPrimary?.hasConsentedToEService;
 
-  if (caseDetail.contactSecondary) {
-    shouldDisplayEConsentTextForSecondaryContact =
-      !!caseDetail.contactSecondary?.paperPetitionEmail ||
-      caseDetail.contactSecondary?.hasConsentedToEService;
-
-    eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
+    eServiceConsentTextForPrimaryContact = caseDetail.contactPrimary
       ?.hasConsentedToEService
       ? 'E-service consent'
       : 'No e-service consent';
+
+    if (caseDetail.contactSecondary) {
+      shouldDisplayEConsentTextForSecondaryContact =
+        !!caseDetail.contactSecondary?.paperPetitionEmail ||
+        caseDetail.contactSecondary?.hasConsentedToEService;
+
+      eServiceConsentTextForSecondaryContact = caseDetail.contactSecondary
+        ?.hasConsentedToEService
+        ? 'E-service consent'
+        : 'No e-service consent';
+    }
   }
 
   return {
     applicationForWaiverOfFilingFeeFile,
+    eConsentFieldsEnabledFeatureFlag,
     eServiceConsentTextForPrimaryContact,
     eServiceConsentTextForSecondaryContact,
     formattedStatistics,

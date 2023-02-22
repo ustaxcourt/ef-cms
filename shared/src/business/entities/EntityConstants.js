@@ -74,6 +74,9 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
     key: 'consolidated-cases-group-access-petitioner',
   },
+  E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
+    key: 'e-consent-fields-enabled-feature-flag',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
