@@ -204,15 +204,23 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
  * view options
  */
 export const internalPetitionPartiesHelper = (get, applicationContext) => {
-  const partyType = get(state.form.partyType);
+  const { ALLOWLIST_FEATURE_FLAGS, PARTY_TYPES } =
+    applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
 
-  const { PARTY_TYPES } = applicationContext.getConstants();
+  const partyType = get(state.form.partyType);
+  const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+    ],
+  );
+
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
 
-  let showPaperPetitionEmailFieldAndConsentBox = !isExternalUser;
+  const showPaperPetitionEmailFieldAndConsentBox =
+    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !isExternalUser;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
