@@ -130,14 +130,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
-    // const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
-    //   state.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG,
-    // );
-    // let showPaperPetitionEmail = false;
-    // if (E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG) {
-    const showPaperPetitionEmail =
-      !petitioner.sealedAndUnavailable && !isExternalUser;
-    // }
+    const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
+      state.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG,
+    );
+    let showPaperPetitionEmail = false;
+    if (E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG) {
+      showPaperPetitionEmail =
+        !petitioner.sealedAndUnavailable && !isExternalUser;
+    }
 
     return {
       ...petitioner,
