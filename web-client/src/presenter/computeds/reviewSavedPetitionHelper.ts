@@ -33,7 +33,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ...caseDetail
   } = get(state.form);
 
-  const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
+  const { ALLOWLIST_FEATURE_FLAGS, INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
     applicationContext.getConstants();
 
   const receivedAtFormatted = applicationContext
@@ -125,6 +125,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
+  const eConsentFieldsEnabledFeatureFlag = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+    ],
+  );
+
   const shouldDisplayEConsentTextForPrimaryContact =
     !!caseDetail.contactPrimary?.paperPetitionEmail ||
     caseDetail.contactPrimary?.hasConsentedToEService;
@@ -150,6 +156,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   return {
     applicationForWaiverOfFilingFeeFile,
+    eConsentFieldsEnabledFeatureFlag,
     eServiceConsentTextForPrimaryContact,
     eServiceConsentTextForSecondaryContact,
     formattedStatistics,
