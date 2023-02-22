@@ -6,6 +6,7 @@ import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PetitionersAndCounsel = connect(
   {
@@ -69,12 +70,30 @@ export const PetitionersAndCounsel = connect(
                   {petitioner.formattedPendingEmail}
 
                   {petitioner.showPaperPetitionEmail && (
-                    <span className="margin-top-4 word-wrap-break-word">
-                      <p className="semi-bold margin-bottom-0">
-                        Petition email address
-                      </p>
-                      {petitioner.formattedPaperPetitionEmail}
-                    </span>
+                    <div
+                      className={classNames(
+                        petitioner.isAddressSealed && 'margin-left-205',
+                      )}
+                    >
+                      {petitioner.isAddressSealed && (
+                        <span
+                          aria-label="sealed address"
+                          className="sealed-address sealed-contact-icon"
+                        >
+                          <FontAwesomeIcon
+                            className="margin-right-05"
+                            icon={['fas', 'lock']}
+                            size="sm"
+                          />
+                        </span>
+                      )}
+                      <span className="margin-top-4 word-wrap-break-word">
+                        <p className="semi-bold margin-bottom-0">
+                          Petition email address
+                        </p>
+                        {petitioner.formattedPaperPetitionEmail}
+                      </span>
+                    </div>
                   )}
 
                   {petitioner.serviceIndicator && (
