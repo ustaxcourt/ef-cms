@@ -76,8 +76,9 @@ export const PetitionersAndCounsel = connect(
                       </p>
                       <span
                         className={classNames(
-                          petitioner.isAddressSealed && 'margin-left-205',
-                          'margin-top-4 word-wrap-break-word sealed-address',
+                          petitioner.isAddressSealed &&
+                            'margin-left-205 sealed-address',
+                          'margin-top-4 word-wrap-break-word',
                         )}
                       >
                         {petitioner.isAddressSealed && (
