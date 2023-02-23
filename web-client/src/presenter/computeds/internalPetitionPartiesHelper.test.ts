@@ -394,6 +394,7 @@ describe('internalPetitionPartiesHelper', () => {
           true,
       },
       form: {
+        isPaper: undefined,
         partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
       },
     };
@@ -412,7 +413,12 @@ describe('internalPetitionPartiesHelper', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
       const result = runCompute(internalPetitionPartiesHelper, {
-        state: baseState,
+        state: {
+          ...baseState,
+          form: {
+            isPaper: true,
+          },
+        },
       });
 
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
@@ -427,6 +433,44 @@ describe('internalPetitionPartiesHelper', () => {
           featureFlags: {
             [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
               false,
+          },
+        },
+      });
+
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should be true when the e-consent feature flag is enabled, it is a paper petition and the current user is internal', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          ...baseState,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            isPaper: true,
+          },
+        },
+      });
+
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
+    });
+
+    it('should be false when the e-consent feature flag is enabled, and it is NOT a paper petition', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          ...baseState,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            isPaper: false,
           },
         },
       });
