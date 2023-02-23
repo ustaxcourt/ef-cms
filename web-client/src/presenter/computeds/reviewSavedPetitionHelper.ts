@@ -149,7 +149,6 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let eServiceConsentTextForPrimaryContact;
   let eServiceConsentTextForSecondaryContact;
   if (eConsentFieldsEnabledFeatureFlag) {
-    console.log(caseDetail.contactPrimary);
     ({
       eServiceConsentText: eServiceConsentTextForPrimaryContact,
       shouldDisplayEConsentText: shouldDisplayEConsentTextForPrimaryContact,
