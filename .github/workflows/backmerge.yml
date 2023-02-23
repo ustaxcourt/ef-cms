@@ -1,0 +1,23 @@
+name: PRs to test
+on:
+  pull_request:
+    branches: [staging-temp]
+    types: [closed]
+jobs:
+  merge-staging-back-to-test:
+    if: github.event.pull_request.merged == true
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Git config
+        run: |
+          git config --local user.email "ahighsmith@flexion.us"
+          git config --local user.name "Rosie Highsmith"
+      - name: Merge staging back to test
+        run: |
+          git fetch --unshallow
+          git checkout test-temp
+          git pull
+          git merge --no-ff staging-temp -m "Auto-merge master back to test"
+          git push
