@@ -1,7 +1,7 @@
 name: Auto-backmerge PRs to test
 on:
   pull_request:
-    branches: [staging-temp]
+    branches: [staging]
     types: [closed]
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - name: Merge staging back to test
         run: |
           git fetch --unshallow
-          git checkout test-temp
+          git checkout test
           git pull
-          git merge --no-ff staging-temp -m "Auto-merge staging back to test-temp"
+          git merge --no-ff staging -m "Auto-merge staging back to test"
           git push
