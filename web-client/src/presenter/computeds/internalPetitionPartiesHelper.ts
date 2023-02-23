@@ -208,7 +208,7 @@ export const internalPetitionPartiesHelper = (get, applicationContext) => {
     applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
 
-  const partyType = get(state.form.partyType);
+  const { isPaper, partyType } = get(state.form);
   const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
@@ -219,8 +219,10 @@ export const internalPetitionPartiesHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
 
+  console.log('form in state***', get(state.form));
+
   const showPaperPetitionEmailFieldAndConsentBox =
-    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !isExternalUser;
+    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !!isPaper && !isExternalUser;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
