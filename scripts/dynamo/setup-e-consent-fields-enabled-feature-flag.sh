@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Sets the e consent fields enabled feature flag to "true" in the dynamo deploy table
+# Sets the e consent fields enabled feature flag to "false" in the dynamo deploy table
 
 # Usage
 #   ENV=dev ./setup-e-consent-fields-enabled-feature-flag.sh
