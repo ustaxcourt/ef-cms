@@ -36,8 +36,6 @@ if [[ -n "$2" ]] && [[ "$2" == "--build-lambda" ]]; then
   npm run "build:lambda:${SLUG}"
 fi
 
-export TF_VAR_environment=$ENVIRONMENT
-
 terraform init -backend=true \
  -backend-config=bucket="${BUCKET}" \
  -backend-config=key="${KEY}" \

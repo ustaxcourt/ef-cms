@@ -24,6 +24,7 @@ STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Stream
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
+export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
 
