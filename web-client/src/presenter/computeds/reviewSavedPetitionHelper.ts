@@ -17,12 +17,12 @@ export const ordersAndNoticesInDraftsCodes = {
 };
 
 const getEConsentAttributesForContact = (
-  contact: any,
+  contact: any = {},
 ): { eServiceConsentText: string; shouldDisplayEConsentText: boolean } => {
   const shouldDisplayEConsentText =
     !!contact.paperPetitionEmail || contact.hasConsentedToEService;
 
-  const eServiceConsentText = contact?.hasConsentedToEService
+  const eServiceConsentText = contact.hasConsentedToEService
     ? 'E-service consent'
     : 'No e-service consent';
 
@@ -149,6 +149,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let eServiceConsentTextForPrimaryContact;
   let eServiceConsentTextForSecondaryContact;
   if (eConsentFieldsEnabledFeatureFlag) {
+    console.log(caseDetail.contactPrimary);
     ({
       eServiceConsentText: eServiceConsentTextForPrimaryContact,
       shouldDisplayEConsentText: shouldDisplayEConsentTextForPrimaryContact,
