@@ -13,7 +13,7 @@ jobs:
       - name: Set Git config
         run: |
           git config --local user.email "ahighsmith@flexion.us"
-          git config --local user.name "Rosie Highsmith"
+          git config --local user.name "Rosie Highsmith yo"
       - name: Merge staging back to test
         run: |
           git fetch --unshallow
