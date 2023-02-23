@@ -11,8 +11,9 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { partiesInformationHelper } from '../src/presenter/computeds/partiesInformationHelper';
-import { reviewSavedPetitionHelper } from '../src/presenter/computeds/reviewSavedPetitionHelper';
+import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from '../src/presenter/computeds/internalPetitionPartiesHelper';
+import { partiesInformationHelper as partiesInformationHelperComputed } from '../src/presenter/computeds/partiesInformationHelper';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -112,18 +113,18 @@ describe('E-Consent journey', () => {
       );
 
       const { contactPrimary } = cerebralTest.getState('form');
-      const reviewSavedPetitionHelperComputed = runCompute(
-        withAppContextDecorator(reviewSavedPetitionHelper),
+      const reviewSavedPetitionHelper = runCompute(
+        withAppContextDecorator(reviewSavedPetitionHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
 
       expect(
-        reviewSavedPetitionHelperComputed.shouldDisplayEConsentTextForPrimaryContact,
+        reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact,
       ).toBe(true);
       expect(
-        reviewSavedPetitionHelperComputed.eServiceConsentTextForPrimaryContact,
+        reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact,
       ).toEqual('No e-service consent');
       expect(contactPrimary.paperPetitionEmail).toEqual(
         validPaperPetitionEmail,
@@ -178,18 +179,18 @@ describe('E-Consent journey', () => {
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
       const { contactPrimary } = cerebralTest.getState('form');
-      const reviewSavedPetitionHelperComputed = runCompute(
-        withAppContextDecorator(reviewSavedPetitionHelper),
+      const reviewSavedPetitionHelper = runCompute(
+        withAppContextDecorator(reviewSavedPetitionHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
 
       expect(
-        reviewSavedPetitionHelperComputed.shouldDisplayEConsentTextForPrimaryContact,
+        reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact,
       ).toBe(true);
       expect(
-        reviewSavedPetitionHelperComputed.eServiceConsentTextForPrimaryContact,
+        reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact,
       ).toEqual('E-service consent');
       expect(contactPrimary.paperPetitionEmail).toEqual(
         updatedValidPaperPetitionEmail,
@@ -207,16 +208,15 @@ describe('E-Consent journey', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const partiesInformationHelperComputed = runCompute(
-        withAppContextDecorator(partiesInformationHelper),
+      const partiesInformationHelper = runCompute(
+        withAppContextDecorator(partiesInformationHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
 
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .paperPetitionEmail,
+        partiesInformationHelper.formattedPetitioners[0].paperPetitionEmail,
       ).toEqual(updatedValidPaperPetitionEmail);
     });
 
@@ -226,16 +226,15 @@ describe('E-Consent journey', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const partiesInformationHelperComputed = runCompute(
-        withAppContextDecorator(partiesInformationHelper),
+      const partiesInformationHelper = runCompute(
+        withAppContextDecorator(partiesInformationHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
 
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .showPaperPetitionEmail,
+        partiesInformationHelper.formattedPetitioners[0].showPaperPetitionEmail,
       ).toBe(false);
     });
 
@@ -253,24 +252,21 @@ describe('E-Consent journey', () => {
 
       await cerebralTest.runSequence('sealAddressSequence');
 
-      const partiesInformationHelperComputed = runCompute(
-        withAppContextDecorator(partiesInformationHelper),
+      const partiesInformationHelper = runCompute(
+        withAppContextDecorator(partiesInformationHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
 
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .isAddressSealed,
+        partiesInformationHelper.formattedPetitioners[0].isAddressSealed,
       ).toBe(true);
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .sealedAndUnavailable,
+        partiesInformationHelper.formattedPetitioners[0].sealedAndUnavailable,
       ).toBe(false);
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .showPaperPetitionEmail,
+        partiesInformationHelper.formattedPetitioners[0].showPaperPetitionEmail,
       ).toBe(true);
     });
 
@@ -280,24 +276,21 @@ describe('E-Consent journey', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const partiesInformationHelperComputed = runCompute(
-        withAppContextDecorator(partiesInformationHelper),
+      const partiesInformationHelper = runCompute(
+        withAppContextDecorator(partiesInformationHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
 
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .isAddressSealed,
+        partiesInformationHelper.formattedPetitioners[0].isAddressSealed,
       ).toBe(true);
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .sealedAndUnavailable,
+        partiesInformationHelper.formattedPetitioners[0].sealedAndUnavailable,
       ).toBe(true);
       expect(
-        partiesInformationHelperComputed.formattedPetitioners[0]
-          .showPaperPetitionEmail,
+        partiesInformationHelper.formattedPetitioners[0].showPaperPetitionEmail,
       ).toBe(false);
     });
   });
@@ -318,12 +311,16 @@ describe('E-Consent journey', () => {
         tab: 'partyInfo',
       });
 
-      const internalPetitionPartiesHelperComputed = runCompute(
-        withAppContextDecorator(partiesInformationHelper),
+      const internalPetitionPartiesHelper = runCompute(
+        withAppContextDecorator(internalPetitionPartiesHelperComputed),
         {
           state: cerebralTest.getState(),
         },
       );
+
+      expect(
+        internalPetitionPartiesHelper.showPaperPetitionEmailFieldAndConsentBox,
+      ).toBe(false);
     });
   });
 });
