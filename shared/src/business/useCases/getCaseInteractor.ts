@@ -5,7 +5,7 @@ import {
   canAllowPrintableDocketRecord,
   getPetitionerById,
   isAssociatedUser,
-  isPetitionerPartOfGroup,
+  isUserPartOfGroup,
 } from '../entities/cases/Case';
 import { NotFoundError } from '../../errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
@@ -159,9 +159,8 @@ export const getCaseInteractor = async (
       isConsolidatedGroupAccessEnabled &&
       caseRecord.leadDocketNumber
     ) {
-      isAuthorizedToGetCase = isPetitionerPartOfGroup({
+      isAuthorizedToGetCase = isUserPartOfGroup({
         consolidatedCases,
-        isPartyOfCase: getPetitionerById,
         userId: currentUser.userId,
       });
     }
@@ -175,9 +174,8 @@ export const getCaseInteractor = async (
   if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
     isAssociatedWithCase =
       isAssociatedWithCase ||
-      isPetitionerPartOfGroup({
+      isUserPartOfGroup({
         consolidatedCases,
-        isPartyOfCase: getPetitionerById,
         userId: currentUser.userId,
       });
   }
