@@ -14,7 +14,6 @@ export const setDefaultStartCaseInternalFormAction = ({
 }) => {
   const {
     hasVerifiedIrsNotice,
-    isPaper,
     orderDesignatingPlaceOfTrial,
     preferredTrialCity,
     procedureType,
@@ -43,7 +42,5 @@ export const setDefaultStartCaseInternalFormAction = ({
     store.set(state.form.statistics, []);
   }
 
-  if (!isPaper) {
-    store.set(state.form.isPaper, true);
-  }
+  store.set(state.form.isPaper, true);
 };
