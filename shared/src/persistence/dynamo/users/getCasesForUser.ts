@@ -26,4 +26,4 @@ export const getCasesForUser = ({
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-  });
+  }) as unknown as Promise<TCase[]>;
