@@ -219,8 +219,6 @@ export const internalPetitionPartiesHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
 
-  console.log('form in state***', get(state.form));
-
   const showPaperPetitionEmailFieldAndConsentBox =
     E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !!isPaper && !isExternalUser;
 
