@@ -17,7 +17,8 @@ describe('migration', () => {
         }),
       };
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
-      await processItems({
+      const applicationContext = jest.fn();
+      await processItems(applicationContext, {
         documentClient: mockDocumentClient,
         items: mockItems,
         migrateRecords: mockMigrateRecords,
