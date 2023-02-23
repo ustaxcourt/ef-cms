@@ -19,7 +19,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   );
   const currentPage = get(state.currentPage);
 
-  const isCaseSealed = !!caseDetail.isSealed;
+  const isCaseSealed = applicationContext
+    .getUtilities()
+    .isSealedCase(caseDetail);
 
   const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner =>
     applicationContext

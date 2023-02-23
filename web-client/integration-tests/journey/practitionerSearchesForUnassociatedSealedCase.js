@@ -21,7 +21,7 @@ export const practitionerSearchesForUnassociatedSealedCase = cerebralTest => {
     });
 
     expect(helper.showSealedCaseView).toBeTruthy();
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(true);
     expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
 
     expect(cerebralTest.getState('caseDetail.sealedDate')).toBeUndefined();
