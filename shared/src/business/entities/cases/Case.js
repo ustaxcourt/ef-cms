@@ -704,6 +704,7 @@ Case.VALIDATION_RULES = {
   sealedDate: JoiValidationConstants.ISO_DATE.optional()
     .allow(null)
     .description('When the case was sealed from the public.'),
+
   sortableDocketNumber: joi
     .number()
     .required()
