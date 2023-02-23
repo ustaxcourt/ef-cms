@@ -1,8 +1,9 @@
-name: PRs to test
+name: Auto-backmerge PRs to test
 on:
   pull_request:
     branches: [staging-temp]
     types: [closed]
+
 jobs:
   merge-staging-back-to-test:
     if: github.event.pull_request.merged == true
@@ -13,11 +14,11 @@ jobs:
       - name: Set Git config
         run: |
           git config --local user.email "ahighsmith@flexion.us"
-          git config --local user.name "Rosie Highsmith yo"
+          git config --local user.name "Rosie Highsmith"
       - name: Merge staging back to test
         run: |
           git fetch --unshallow
           git checkout test-temp
           git pull
-          git merge --no-ff staging-temp -m "Auto-merge master back to test"
+          git merge --no-ff staging-temp -m "Auto-merge staging back to test-temp"
           git push
