@@ -48,15 +48,20 @@ jobs:
         with:
           port: 8000
           cors: '*'
-      - name: Web Client - Integration Test
+      - name: Web Client - Integration Tests
         run: |
           npm ci
           mkdir -p /tmp/web-client
           npm run start:api:ci > /tmp/web-client/server-output.txt &
+          ./wait-for-dynamo.sh
           URL=http://localhost:4000/api/swagger ./wait-until.sh
-          URL=http://localhost:9200 ./wait-until.sh
+          URL=http://localhost:9200/efcms-case ./wait-until.sh
+          URL=http://localhost:9200/efcms-case-deadline ./wait-until.sh
+          URL=http://localhost:9200/efcms-docket-entry ./wait-until.sh
+          URL=http://localhost:9200/efcms-user ./wait-until.sh
+          URL=http://localhost:9200/efcms-message ./wait-until.sh
+          URL=http://localhost:9200/efcms-work-item ./wait-until.sh
           URL=http://localhost:9000/ ./wait-until.sh
-          URL=http://localhost:8000/shell ./wait-until.sh
           export TESTFILES=$(node split-tests.js)
           npm run test:client:integration:ci
       - name: Store Video Artifacts
