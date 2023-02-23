@@ -13,6 +13,7 @@ export ENVIRONMENT="${ENVIRONMENT}"
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
+export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
 
 ../../../../shared/terraform/bin/init.sh migration-cron --build-lambda

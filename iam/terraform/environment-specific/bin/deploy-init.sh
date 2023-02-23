@@ -24,5 +24,6 @@ elif [[ ${EFCMS_DOMAIN} != "${ENVIRONMENT}"* ]]; then
 fi
 
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_environment=$ENVIRONMENT
 
 ../../../../shared/terraform/bin/init.sh permissions
