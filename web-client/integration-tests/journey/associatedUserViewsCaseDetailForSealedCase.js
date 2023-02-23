@@ -5,7 +5,7 @@ export const associatedUserViewsCaseDetailForSealedCase = cerebralTest => {
     });
 
     expect(cerebralTest.getState('caseDetail.sealedDate')).toBeDefined();
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(true);
     //this user should see all case details because they are associated with the case
     expect(cerebralTest.getState('caseDetail.caseCaption')).toBeDefined();
   });
