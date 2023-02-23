@@ -15,12 +15,10 @@ echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 
 export ENVIRONMENT="${ENVIRONMENT}"
 
-../../../../shared/terraform/bin/pre-init.sh reindex-cron
-
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
 export TF_VAR_source_table=$SOURCE_TABLE
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+../../../../shared/terraform/bin/init.sh reindex-cron --build-lambda

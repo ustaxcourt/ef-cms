@@ -19,8 +19,6 @@ echo "  - DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}"
 
 export ENVIRONMENT="${ENVIRONMENT}"
 
-../../../../shared/terraform/bin/pre-init.sh migration
-
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 
 export TF_VAR_destination_table=$DESTINATION_TABLE
@@ -29,4 +27,4 @@ export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+../../../../shared/terraform/bin/init.sh migration --build-lambda

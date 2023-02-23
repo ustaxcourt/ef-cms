@@ -11,9 +11,7 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 
 export ENVIRONMENT="${ENVIRONMENT}"
 
-../../../../shared/terraform/bin/pre-init.sh switch-colors-cron
-
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+../../../../shared/terraform/bin/init.sh switch-colors-cron --build-lambda
