@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@18f/us-federal-holidays": "^3.0.1",
-    "@aws-crypto/sha256-browser": "^3.0.0",
+    "@aws-crypto/sha256-browser": "^4.0.0",
     "@aws-sdk/credential-provider-node": "^3.272.0",
     "@aws-sdk/node-http-handler": "^3.272.0",
     "@aws-sdk/protocol-http": "^3.272.0",
