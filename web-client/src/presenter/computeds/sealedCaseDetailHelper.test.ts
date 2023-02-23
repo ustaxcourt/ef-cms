@@ -1,7 +1,10 @@
 import { runCompute } from 'cerebral/test';
 import { sealedCaseDetailHelper } from './sealedCaseDetailHelper';
+import { withAppContextDecorator } from '../../withAppContext';
 
 let state;
+let sealedCaseDetailHelperDecorator;
+
 describe('sealedCaseDetailHelper', () => {
   beforeEach(() => {
     state = {
@@ -11,6 +14,9 @@ describe('sealedCaseDetailHelper', () => {
         docketNumberWithSuffix: '123-45S',
       },
     };
+    sealedCaseDetailHelperDecorator = withAppContextDecorator(
+      sealedCaseDetailHelper,
+    );
   });
 
   it('should return an empty string for caseCaption when it is undefined', () => {
@@ -22,7 +28,7 @@ describe('sealedCaseDetailHelper', () => {
       },
     };
 
-    const result = runCompute(sealedCaseDetailHelper, {
+    const result = runCompute(sealedCaseDetailHelperDecorator, {
       state: stateWithoutCaseCaption,
     });
 
@@ -30,7 +36,9 @@ describe('sealedCaseDetailHelper', () => {
   });
 
   it('should return case detail helper information', () => {
-    const result = runCompute(sealedCaseDetailHelper, { state });
+    const result = runCompute(sealedCaseDetailHelperDecorator, {
+      state,
+    });
 
     expect(result).toMatchObject({
       caseCaption: 'Test Caption',
@@ -43,7 +51,7 @@ describe('sealedCaseDetailHelper', () => {
   it('should indicate whether a case is sealed', () => {
     state.caseDetail.isSealed = true;
 
-    const result = runCompute(sealedCaseDetailHelper, { state });
+    const result = runCompute(sealedCaseDetailHelperDecorator, { state });
 
     expect(result.isCaseSealed).toBe(true);
   });
