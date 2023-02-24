@@ -162,7 +162,7 @@ export const StartCaseStep5 = connect(
                                     id="cds-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
-                                    title="corporate Disclosure Statement"
+                                    title="Corporate Disclosure Statement"
                                   />
                                 </div>
                               </div>
