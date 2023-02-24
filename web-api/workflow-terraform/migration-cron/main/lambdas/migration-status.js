@@ -19,36 +19,36 @@ exports.handler = async (input, context) => {
   const results = { migrateFlag: process.env.MIGRATE_FLAG };
   if (results.migrateFlag !== 'true') {
     await approvePendingJob({ apiToken, jobName, workflowId });
-    return context.succeed(results);
+    return succeed({ context, results });
   }
 
   results.errorRate = await getSegmentErrorRate();
   if (results.errorRate === -1) {
-    return context.succeed(results);
+    return succeed({ context, results });
   }
   if (results.errorRate > 50) {
     await cancelWorkflow({ apiToken, workflowId });
-    return context.succeed(results);
+    return succeed({ context, results });
   }
 
   results.dlQueueCount = await getSqsQueueCount(dlQueueUrl);
   if (results.dlQueueCount === -1) {
-    return context.succeed(results);
+    return succeed({ context, results });
   }
   if (results.dlQueueCount > 0) {
     await cancelWorkflow({ apiToken, workflowId });
-    return context.succeed(results);
+    return succeed({ context, results });
   }
 
   // it's possible the queue has caught up but there are still more segments to process
   // don't approve the job if this is the first consecutive time the queue is empty
   results.totalActiveJobs = await getSqsQueueCount(workQueueUrl);
   if (results.totalActiveJobs === -1) {
-    return context.succeed(results);
+    return succeed({ context, results });
   }
   if (results.totalActiveJobs > 0) {
     await putMigrationQueueIsEmptyFlag(false);
-    return context.succeed(results);
+    return succeed({ context, results });
   }
 
   results.migrationQueueIsEmptyFlag = await getMigrationQueueIsEmptyFlag();
@@ -57,7 +57,7 @@ exports.handler = async (input, context) => {
   } else {
     await approvePendingJob({ apiToken, jobName, workflowId });
   }
-  return context.succeed(results);
+  return succeed({ context, results });
 };
 
 const getSegmentErrorRate = async () => {
@@ -100,4 +100,9 @@ const getTotals = response => {
     total += Number(datapoint.Sum);
   }
   return total;
+};
+
+const succeed = ({ context, results }) => {
+  console.log(results);
+  return context.succeed(results);
 };
