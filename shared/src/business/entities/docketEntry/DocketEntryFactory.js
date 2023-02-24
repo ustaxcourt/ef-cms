@@ -140,10 +140,14 @@ function DocketEntryFactory(rawProps) {
   let schemaOptionalItems = {
     certificateOfServiceDate:
       JoiValidationConstants.ISO_DATE.max('now').required(),
-    filers: joi
-      .array()
-      .items(JoiValidationConstants.UUID.required())
-      .required(),
+    filers: joi.when('eventCode', {
+      is: joi.valid('AMBR'),
+      otherwise: joi
+        .array()
+        .items(JoiValidationConstants.UUID.required())
+        .required(),
+      then: joi.optional(),
+    }),
     objections: JoiValidationConstants.STRING.required(),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrivatePractitioner: joi.boolean().required(),

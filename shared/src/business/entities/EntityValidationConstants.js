@@ -133,14 +133,10 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
-  filers: joi.when('eventCode', {
-    is: joi.valid('AMBR'),
-    otherwise: joi.when('servedAt', {
-      is: joi.exist().not(null),
-      otherwise: joi.array().items(JoiValidationConstants.UUID).optional(),
-      then: joi.array().required(),
-    }),
-    then: joi.optional(),
+  filers: joi.when('servedAt', {
+    is: joi.exist().not(null),
+    otherwise: joi.array().items(JoiValidationConstants.UUID).optional(),
+    then: joi.array().required(),
   }),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
