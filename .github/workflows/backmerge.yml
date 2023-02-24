@@ -11,14 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set Git config
-        run: |
-          git config --local user.email "ahighsmith@flexion.us"
-          git config --local user.name "Rosie Highsmith"
       - name: Merge staging back to test
         run: |
           git fetch --unshallow
           git checkout test
           git pull
-          git merge --no-ff staging -m "Auto-merge staging back to test"
+          git merge --no-ff staging -m "Auto-merge staging back to test [skip ci]"
           git push
