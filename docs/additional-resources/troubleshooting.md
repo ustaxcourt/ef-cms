@@ -333,3 +333,16 @@ Solution:
 - These are also known as an **Internal Server Error**. In our case, it often means that Lambda is trying to return too much information (6mb) to API Gateway. When each request ends, Lambda logs `Request ended: ${req.method} ${req.url}` and additional context that includes the `response.responseSize`. If those are approaching 6 megabytes, this is likely the cause of the problem. We will need to refactor our endpoint to return less information to the client via API Gateway. Does the client really need all of that information to do its job? Perhaps we can write a Data Transfer Object (DTO) to reduce what we return to the client and keep the `responseSize` in check.
 - Additionally, we include the `request.url` in the API Gateway logs for each request. In Kibana, filter `response.statusCode` = `502`, and find the log entries to identify the offending URLs by `request.url` or the Lambda invocation by `requestId.lambda` to attain additional information about what Lambda returned to API Gateway that triggered the `502` error.
 - `Amazon-Route53-Health-Check-Service` can also trigger a `502` status code if it fails. Most of these failures are false positives as AWS is throttling our requests for whether an AWS Service is healthy. [opex card to address](https://trello.com/c/wcGB8sO5/1124-amazon-route53-health-check-service-are-returning-erroneous-502-errors-because-they-are-throttling-our-requests)
+
+## Starting Local Instance Stalls
+
+- When running `npm run start:api`, it gets stuck on `Waiting for http://localhost:9200 to be hosted...`
+
+Solution:
+
+- Try deleting your `.elasticsearch` directory and trying again.
+
+    ```bash
+    rm -rf ./.elasticsearch
+    npm run start:api
+    ```
