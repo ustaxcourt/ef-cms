@@ -71,6 +71,7 @@ export class DocketEntryClass {
   public filers: string[];
   public ordinalValue?: string;
   public otherFilingParty?: string;
+  public amicusCuriae?: string;
   public partyIrsPractitioner?: string;
   public processingStatus: string;
   public receivedAt: string;
@@ -192,6 +193,7 @@ export class DocketEntryClass {
     this.filers = rawDocketEntry.filers || [];
     this.ordinalValue = rawDocketEntry.ordinalValue;
     this.otherFilingParty = rawDocketEntry.otherFilingParty;
+    this.amicusCuriae = rawDocketEntry.amicusCuriae;
     this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
     this.processingStatus = rawDocketEntry.processingStatus || 'pending';
     this.receivedAt = createISODateAtStartOfDayEST(rawDocketEntry.receivedAt);
@@ -384,7 +386,12 @@ and contact info from the raw docket entry
         filedByArray.push(this.otherFilingParty);
       }
 
-      const filedByString = filedByArray.join(', ');
+      let filedByString;
+      if (this.amicusCuriae) {
+        filedByString = this.amicusCuriae;
+      } else {
+        filedByString = filedByArray.join(', ');
+      }
       if (filedByString) {
         this.filedBy = filedByString;
       }

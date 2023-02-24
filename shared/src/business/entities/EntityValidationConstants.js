@@ -35,6 +35,11 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   addToCoversheet: joi.boolean().optional(),
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
+  amicusCuriae: JoiValidationConstants.STRING.when('eventCode', {
+    is: joi.valid('AMBR'),
+    otherwise: joi.optional(),
+    then: joi.required(),
+  }).description('The amicus curiae filing party is required.'),
   archived: joi
     .boolean()
     .optional()
@@ -128,10 +133,14 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
-  filers: joi.when('servedAt', {
-    is: joi.exist().not(null),
-    otherwise: joi.array().items(JoiValidationConstants.UUID).optional(),
-    then: joi.array().required(),
+  filers: joi.when('eventCode', {
+    is: joi.valid('AMBR'),
+    otherwise: joi.when('servedAt', {
+      is: joi.exist().not(null),
+      otherwise: joi.array().items(JoiValidationConstants.UUID).optional(),
+      then: joi.array().required(),
+    }),
+    then: joi.optional(),
   }),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
