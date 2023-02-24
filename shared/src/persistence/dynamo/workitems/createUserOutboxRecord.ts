@@ -48,7 +48,10 @@ const createUserOutboxRecord = ({
       Item: {
         ...workItem,
         gsi1pk: `work-item|${workItem.workItemId}`,
-        pk: `user-outbox|${userId}|${formatDateString(sk, FORMATS.YYYYMMDD)}`,
+        pk: `user-outbox|${userId}|${formatDateString(
+          sk,
+          FORMATS.YEAR,
+        )}-w${formatDateString(sk, FORMATS.WEEK)}`,
         sk,
       },
       applicationContext,

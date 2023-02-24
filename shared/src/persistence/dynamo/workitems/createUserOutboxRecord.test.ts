@@ -12,7 +12,8 @@ describe('createUserOutboxRecord', () => {
   const now = createISODateString();
 
   describe('recent outbox records', () => {
-    const date = formatDateString(now, FORMATS.YYYYMMDD);
+    const week = formatDateString(now, FORMATS.WEEK);
+    const year = formatDateString(now, FORMATS.YEAR);
 
     beforeEach(() => {
       mockWorkItem = {
@@ -47,7 +48,7 @@ describe('createUserOutboxRecord', () => {
       ).toMatchObject({
         Item: {
           gsi1pk: 'work-item|work-item-id-123',
-          pk: `user-outbox|i-am-guy-fieri|${date}`,
+          pk: `user-outbox|i-am-guy-fieri|${year}-w${week}`,
           sk: mockWorkItem.completedAt,
         },
       });
@@ -82,7 +83,7 @@ describe('createUserOutboxRecord', () => {
       ).toMatchObject({
         Item: {
           gsi1pk: 'work-item|work-item-id-123',
-          pk: `user-outbox|i-am-guy-fieri|${date}`,
+          pk: `user-outbox|i-am-guy-fieri|${year}-w${week}`,
           sk: mockWorkItem.updatedAt,
         },
       });
@@ -91,7 +92,9 @@ describe('createUserOutboxRecord', () => {
 
   describe('old outbox records', () => {
     const oneYearAgo = subtractISODates(now, { year: 1 });
-    const date = formatDateString(oneYearAgo, FORMATS.YYYYMMDD);
+    const week = formatDateString(oneYearAgo, FORMATS.WEEK);
+    const year = formatDateString(oneYearAgo, FORMATS.YEAR);
+
     beforeEach(() => {
       mockWorkItem = {
         caseStatus: 'New',
@@ -114,7 +117,7 @@ describe('createUserOutboxRecord', () => {
       ).toMatchObject({
         Item: {
           gsi1pk: 'work-item|work-item-id-123',
-          pk: `user-outbox|i-am-guy-fieri|${date}`,
+          pk: `user-outbox|i-am-guy-fieri|${year}-w${week}`,
           sk: mockWorkItem.completedAt,
         },
       });
@@ -138,7 +141,7 @@ describe('createUserOutboxRecord', () => {
       ).toMatchObject({
         Item: {
           gsi1pk: 'work-item|work-item-id-123',
-          pk: `user-outbox|i-am-guy-fieri|${date}`,
+          pk: `user-outbox|i-am-guy-fieri|${year}-w${week}`,
           sk: mockWorkItem.updatedAt,
         },
       });
