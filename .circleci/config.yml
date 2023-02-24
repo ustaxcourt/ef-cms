@@ -557,7 +557,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Migration Cron Lambda
+          name: Deploy Check Migration Status Cron Lambda
           command: |
             npm run deploy:migration-cron -- $ENV
       - run:
@@ -579,12 +579,32 @@ jobs:
               npm run start:migration -- $ENV
             fi
       - run:
-          name: Wait for SQS Queue to Empty
-          no_output_timeout: 5h
+          name: Enable Check Migration Status Cron
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./wait-for-migration-to-finish.sh
-            fi
+            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
+
+  prepare-for-reindex:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.19.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Check Migration Status Cron
+          command: |
+            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
+      - run:
+          name: Deploy Check Reindex Status Cron Lambda
+          command: |
+            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Track successful migrations
           command: |
@@ -600,7 +620,7 @@ jobs:
       - run:
           name: Enable Check Reindex Status Cron
           command: |
-            ./enable-reindex-cron.sh
+            ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
 
   disable-reindex-cron:
     docker:
@@ -619,7 +639,7 @@ jobs:
       - run:
           name: Disable Check Reindex Status Cron
           command: |
-            ./disable-reindex-cron.sh
+            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
 
   smoketests:
     docker:
@@ -804,11 +824,13 @@ jobs:
               npm run destroy:migration -- $ENV
             fi
       - run:
-          name: Destroy Migration Cron Infrastructure
+          name: Destroy Check Migration Status Cron Infrastructure
           command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration-cron -- $ENV
-            fi
+            npm run destroy:migration-cron -- $ENV
+      - run:
+          name: Destroy Check Reindex Status Cron Infrastructure
+          command: |
+            npm run destroy:reindex-cron -- $ENV
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
@@ -886,10 +908,21 @@ workflows:
             branches:
               only:
                 - test
-      - wait-for-reindex:
+      - wait-for-migration:
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          requires:
+            - wait-for-migration
+          filters:
+            branches:
+              only:
+                - test
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
@@ -953,10 +986,30 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - wait-for-reindex:
+      - wait-for-migration:
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          requires:
+            - wait-for-migration
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
@@ -1033,11 +1086,20 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
-      - wait-for-reindex:
+      - wait-for-migration:
           <<: *build-and-deploy-with-context-defaults
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-migration
+      - wait-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           <<: *build-and-deploy-with-context-defaults
           requires:
