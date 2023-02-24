@@ -33,7 +33,7 @@ const migrationsToRun = [
     script: migration0006,
   },
   {
-    key: '0007-update-corporate-disclosure-document.js',
+    key: '0007-update-corporate-disclosure-document.ts',
     script: migration0007,
   },
 ];
