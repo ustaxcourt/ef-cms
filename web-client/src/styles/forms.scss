@@ -323,6 +323,10 @@ label.validated::after {
   }
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 .document-detail-one-third {
   max-height: 890px;
   overflow-y: auto;
