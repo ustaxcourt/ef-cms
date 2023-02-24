@@ -97,9 +97,27 @@ export const ReviewSavedPetition = connect(
                           Petitioner’s information
                         </span>
                         {form.contactPrimary && (
-                          <address aria-labelledby="filing-contact-primary">
-                            <AddressDisplay contact={form.contactPrimary} />
-                          </address>
+                          <>
+                            <address aria-labelledby="filing-contact-primary">
+                              <AddressDisplay contact={form.contactPrimary} />
+                            </address>
+                            {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
+                              <>
+                                {form.contactPrimary.paperPetitionEmail && (
+                                  <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
+                                    {form.contactPrimary.paperPetitionEmail}
+                                  </div>
+                                )}
+                                {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
+                                  <div>
+                                    {
+                                      reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
+                                    }
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          </>
                         )}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
@@ -114,6 +132,22 @@ export const ReviewSavedPetition = connect(
                             <address aria-labelledby="filing-contact-secondary">
                               <AddressDisplay contact={form.contactSecondary} />
                             </address>
+                            {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
+                              <>
+                                {form.contactSecondary.paperPetitionEmail && (
+                                  <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
+                                    {form.contactSecondary.paperPetitionEmail}
+                                  </div>
+                                )}
+                                {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
+                                  <div>
+                                    {
+                                      reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
+                                    }
+                                  </div>
+                                )}
+                              </>
+                            )}
                           </>
                         )}
                       </div>
