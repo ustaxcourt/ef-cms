@@ -10,7 +10,7 @@ const isCase = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
 };
 
-const migrateItems = items => {
+export const migrateItems = items => {
   const itemsAfter = [];
 
   for (const item of items) {
@@ -29,5 +29,3 @@ const migrateItems = items => {
   }
   return itemsAfter;
 };
-
-exports.migrateItems = migrateItems;
