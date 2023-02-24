@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set Git config
+        run: |
+          git config --local user.email "michael.marcotte@ustaxcourt.gov"
+          git config --local user.name "Mike Marcotte"
       - name: Merge staging back to test
         run: |
           git fetch --unshallow
