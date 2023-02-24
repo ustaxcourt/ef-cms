@@ -61,6 +61,7 @@ export const validateDocketEntryAction = ({
       'filers',
       'partyIrsPractitioner',
       'otherFilingParty',
+      'amicusCuriae',
     ];
 
     return path.error({

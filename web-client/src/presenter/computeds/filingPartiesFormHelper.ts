@@ -29,6 +29,8 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
+  const showFilingPartiesAsCheckboxes = form.eventCode !== 'AMBR';
+
   return {
     isServed,
     noMargin:
@@ -36,6 +38,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
       (amendmentEventCodes.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     partyValidationError,
+    showFilingPartiesAsCheckboxes,
     showSecondaryParty,
   };
 };
