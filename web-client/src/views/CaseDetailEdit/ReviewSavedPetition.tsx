@@ -104,12 +104,12 @@ export const ReviewSavedPetition = connect(
                             {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                               <>
                                 {form.contactPrimary.paperPetitionEmail && (
-                                  <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
+                                  <div className="margin-top-1 word-wrap-break-word">
                                     {form.contactPrimary.paperPetitionEmail}
                                   </div>
                                 )}
                                 {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
-                                  <div>
+                                  <div className="margin-top-1">
                                     {
                                       reviewSavedPetitionHelper.eServiceConsentTextForPrimaryContact
                                     }
@@ -135,12 +135,12 @@ export const ReviewSavedPetition = connect(
                             {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                               <>
                                 {form.contactSecondary.paperPetitionEmail && (
-                                  <div className="margin-top-1 margin-bottom-1 word-wrap-break-word">
+                                  <div className="margin-top-1 word-wrap-break-word">
                                     {form.contactSecondary.paperPetitionEmail}
                                   </div>
                                 )}
                                 {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
-                                  <div>
+                                  <div className="margin-top-1">
                                     {
                                       reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
                                     }
