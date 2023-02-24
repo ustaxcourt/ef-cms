@@ -125,6 +125,34 @@ describe('filingPartiesFormHelper', () => {
     expect(result.noMargin).toBeFalsy();
   });
 
+  it('returns showFilingPartiesAsCheckboxes true if document in the form is not an Amicus Brief', () => {
+    const result = runCompute(filingPartiesFormHelper, {
+      state: {
+        ...baseState,
+        form: {
+          documentType: 'Answer',
+          eventCode: 'A',
+        },
+      },
+    });
+
+    expect(result.showFilingPartiesAsCheckboxes).toBeTruthy();
+  });
+
+  it('returns showFilingPartiesAsCheckboxes false if document in the form is an Amicus Brief', () => {
+    const result = runCompute(filingPartiesFormHelper, {
+      state: {
+        ...baseState,
+        form: {
+          documentType: 'Amicus Brief',
+          eventCode: 'AMBR',
+        },
+      },
+    });
+
+    expect(result.showFilingPartiesAsCheckboxes).toBeFalsy();
+  });
+
   describe('isServed', () => {
     it('should be true when the docket entry has been served', () => {
       applicationContext.getUtilities().isServed.mockReturnValue(true);
