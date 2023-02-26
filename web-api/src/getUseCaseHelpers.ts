@@ -13,7 +13,6 @@ import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useC
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
 import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
-import { formatAndSortConsolidatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
@@ -21,10 +20,8 @@ import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/bus
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
 import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
-import { getUnassociatedLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
-import { processUserAssociatedCases } from '../../shared/src/business/useCaseHelper/consolidatedCases/processUserAssociatedCases';
 import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
@@ -64,7 +61,6 @@ const useCaseHelpers = {
   createUserForContact,
   fetchPendingItemsByDocketNumber,
   fileAndServeDocumentOnOneCase,
-  formatAndSortConsolidatedCases,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
@@ -72,10 +68,8 @@ const useCaseHelpers = {
   generateStampedCoversheetInteractor,
   getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,
-  getUnassociatedLeadCase,
   getUserIdForNote,
   parseAndScrapePdfContents,
-  processUserAssociatedCases,
   removeCounselFromRemovedPetitioner,
   removeCoversheet,
   saveFileAndGenerateUrl,

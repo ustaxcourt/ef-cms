@@ -7,12 +7,12 @@ export const docketClerkUnsealsCase = cerebralTest => {
     });
 
     expect(cerebralTest.getState('caseDetail.sealedDate')).toBeDefined();
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(true);
 
     await cerebralTest.runSequence('unsealCaseSequence');
 
     expect(cerebralTest.getState('caseDetail.sealedDate')).not.toBeDefined();
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeFalsy();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(false);
 
     await refreshElasticsearchIndex();
   });
