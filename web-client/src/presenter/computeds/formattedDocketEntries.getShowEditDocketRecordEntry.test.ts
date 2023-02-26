@@ -22,8 +22,8 @@ describe('getShowEditDocketRecordEntry', () => {
     const result = getShowEditDocketRecordEntry({
       applicationContext,
       entry: {
-        documentTitle: 'Ownership Disclosure Statement',
-        documentType: 'Ownership Disclosure Statement',
+        documentTitle: 'Corporate Disclosure Statement',
+        documentType: 'Corporate Disclosure Statement',
         eventCode: 'DISC',
         isCourtIssuedDocument: false,
         isMinuteEntry: false,

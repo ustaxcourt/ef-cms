@@ -69,20 +69,20 @@ describe('filePetitionFromPaperInteractor', () => {
     ).toEqual('this APW file');
   });
 
-  it('calls upload on an ODS file', async () => {
+  it('calls upload on an CDS file', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
 
     await filePetitionFromPaperInteractor(applicationContext, {
-      ownershipDisclosureFile: 'this ods file',
+      corporateDisclosureFile: 'this cds file',
     } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
-    ).toEqual('this ods file');
+    ).toEqual('this cds file');
   });
 
   it('calls upload on a STIN file', async () => {
@@ -128,15 +128,15 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      ownershipDisclosureFileId: undefined,
+      corporateDisclosureFileId: undefined,
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
-  it('uploads an Ownership Disclosure Statement file', async () => {
+  it('uploads an Corporate Disclosure Statement file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      ownershipDisclosureFile: 'something',
+      corporateDisclosureFile: 'something',
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
@@ -146,7 +146,7 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      corporateDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
