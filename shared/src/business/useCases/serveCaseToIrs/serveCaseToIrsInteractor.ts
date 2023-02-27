@@ -146,9 +146,9 @@ const generateNoticeOfReceipt = async ({
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: contactPrimary,
         caseCaptionExtension,
         caseTitle,
+        contact: contactPrimary,
         docketNumberWithSuffix,
         preferredTrialCity,
         receivedAtFormatted: applicationContext
