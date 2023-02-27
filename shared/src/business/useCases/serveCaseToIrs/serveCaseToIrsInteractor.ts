@@ -176,7 +176,22 @@ const generateNoticeOfReceipt = async ({
     caseEntity,
   });
 
-  if (contactSecondary && addressesAreDifferent) {
+  const isSetupForEService = contactInfo => {
+    return (
+      contactInfo.hasConsentedToEService && !!contactInfo.paperPetitionEmail
+    );
+  };
+
+  if (
+    contactSecondary &&
+    (addressesAreDifferent ||
+      (contactPrimary.paperPetitionEmail !==
+        contactSecondary.paperPetitionEmail &&
+        isSetupForEService(contactPrimary) &&
+        isSetupForEService(contactSecondary)) ||
+      (!isSetupForEService(contactPrimary) &&
+        isSetupForEService(contactSecondary)))
+  ) {
     if (
       contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
     ) {
