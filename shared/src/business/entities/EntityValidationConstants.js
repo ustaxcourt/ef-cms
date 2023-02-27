@@ -39,7 +39,9 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     is: joi.exist().valid('AMBR'),
     otherwise: joi.optional(),
     then: joi.required(),
-  }).description('The amicus curiae filing party is required.'),
+  }).description(
+    'Outside individuals/organizations who are not parties to a case',
+  ),
   archived: joi
     .boolean()
     .optional()
