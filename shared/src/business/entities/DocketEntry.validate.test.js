@@ -28,6 +28,11 @@ describe('validate', () => {
     },
     {
       description:
+        'should pass validation when "eventCode" is "AMBR and "amicusCuriae" is defined',
+      docketEntry: { amicusCuriae: 'Make It So Inc.', eventCode: 'AMBR' },
+    },
+    {
+      description:
         'should not throw an error on valid court-issued docket entry with null filedBy string',
       docketEntry: {
         documentTitle: 'Order',
@@ -268,6 +273,12 @@ describe('validate', () => {
         'should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined',
       docketEntry: { isLegacySealed: true },
       expectValidationErrors: ['isLegacy', 'isSealed'],
+    },
+    {
+      description:
+        'should fail validation when "eventCode" is "AMBR but "amicusCuriae" is undefined',
+      docketEntry: { eventCode: 'AMBR' },
+      expectValidationErrors: ['amicusCuriae'],
     },
     {
       description:
