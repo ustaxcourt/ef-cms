@@ -55,6 +55,17 @@ describe('filingPartiesFormHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
+  it('shows a party validation error when the document being filed is an Amicus Brief and Amicus Curiae is empty', () => {
+    const result = runCompute(filingPartiesFormHelper, {
+      state: {
+        ...baseState,
+        validationErrors: { amicusCuriae: 'You did something bad.' },
+      },
+    });
+
+    expect(result.partyValidationError).toEqual('You did something bad.');
+  });
+
   it('returns noMargin true if document in the form is an objection', () => {
     const result = runCompute(filingPartiesFormHelper, {
       state: {
