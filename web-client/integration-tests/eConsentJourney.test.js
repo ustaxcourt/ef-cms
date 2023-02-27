@@ -92,7 +92,7 @@ describe('E-Consent journey', () => {
       expect(cerebralTest.getState('validationErrors')).toEqual({
         contactPrimary: {
           paperPetitionEmail:
-            'Please enter email address in format: yourname@example.com',
+            'Enter email address in format: yourname@example.com',
         },
       });
 
