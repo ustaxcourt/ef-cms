@@ -228,11 +228,147 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
-        .calls[1][0].data.address,
+        .calls[1][0].data.contact,
     ).toMatchObject({
       address1: '123 Side St',
       name: 'Test Petitioner Secondary',
     });
+  });
+
+  it('should generate a second notice of receipt of petition with different access codes when contactSecondary.address is the same as contactPrimary.address, but the contactPrimary does NOT want e service (no paperPetitionEmail) but contactSecondary is setup for e service (has paperPetitionEmail set)', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        { ...MOCK_CASE.petitioners[0], hasConsentedToEService: false },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUtilities().getAddressPhoneDiff,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.contact,
+    ).toMatchObject({
+      address1: '123 Main St',
+    });
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.contact,
+    ).toMatchObject({
+      address1: '123 Main St',
+    });
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).not.toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+  });
+
+  it('should not generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should generate a second notice of receipt of petition when both have e access but they have different paperPetitionEmail', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing1@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).not.toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('should NOT generate a second notice of receipt of petition when contactSecondary.address is NOT different from contactPrimary.address', async () => {
