@@ -51,6 +51,22 @@ describe('migrateItems', () => {
     });
   });
 
+  it('should modify docket entry items with documentType "Order for Ownership Disclosure Statement", updating documentType', async () => {
+    const mockItem = {
+      documentTitle: 'ORDER FOR OWNERSHIP DISCLOSURE STATEMENT BY 12/03/18',
+      documentType: 'Order for Ownership Disclosure Statement',
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual({
+      ...mockItem,
+      documentType: 'Order for Corporate Disclosure Statement',
+    });
+  });
+
   it('should modify case items that have property "orderForOds"', async () => {
     const mockItem = {
       orderForOds: true,
