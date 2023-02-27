@@ -12,7 +12,9 @@ describe('noticeOfReceiptOfPetition', () => {
       return noticeOfReceiptOfPetition({
         applicationContext,
         data: {
-          address: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          contact: {
             address1: '123 Some St.',
             city: 'Somecity',
             country: '',
@@ -20,8 +22,6 @@ describe('noticeOfReceiptOfPetition', () => {
             postalCode: '80008',
             state: 'ZZ',
           },
-          caseCaptionExtension: 'Petitioner(s)',
-          caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
           preferredTrialCity: 'Birmingham, Alabama',
           receivedAtFormatted: 'December 1, 2019',

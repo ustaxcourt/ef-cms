@@ -24,7 +24,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
-import { remove } from 'lodash';
+import { random, remove } from 'lodash';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -125,6 +125,12 @@ const createPetitionWorkItems = async ({
   });
 };
 
+const generateAccessCode = () => {
+  const randomNumber = random(0, 999999);
+  const accessCode = ('000000' + randomNumber).slice(-6);
+  return accessCode;
+};
+
 const generateNoticeOfReceipt = async ({
   applicationContext,
   caseEntity,
@@ -141,11 +147,14 @@ const generateNoticeOfReceipt = async ({
 
   const contactPrimary = caseEntity.getContactPrimary();
 
+  let accessCode = generateAccessCode();
+
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
+        accessCode,
         caseCaptionExtension,
         caseTitle,
         contact: contactPrimary,
@@ -166,15 +175,23 @@ const generateNoticeOfReceipt = async ({
     applicationContext,
     caseEntity,
   });
+
   if (contactSecondary && addressesAreDifferent) {
+    if (
+      contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
+    ) {
+      accessCode = generateAccessCode();
+    }
+
     secondaryContactNotrPdfData = await applicationContext
       .getDocumentGenerators()
       .noticeOfReceiptOfPetition({
         applicationContext,
         data: {
-          address: contactSecondary,
+          accessCode,
           caseCaptionExtension,
           caseTitle,
+          contact: contactSecondary,
           docketNumberWithSuffix,
           preferredTrialCity,
           receivedAtFormatted: applicationContext
