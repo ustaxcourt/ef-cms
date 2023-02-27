@@ -353,6 +353,11 @@ and contact info from the raw docket entry
         practitioner => practitioner.partyPrivatePractitioner,
       );
 
+      if (this.amicusCuriae) {
+        this.filedBy = this.amicusCuriae;
+        return;
+      }
+
       if (privatePractitionerIsFiling) {
         Array.isArray(this.privatePractitioners) &&
           this.privatePractitioners.forEach(practitioner => {
@@ -386,12 +391,7 @@ and contact info from the raw docket entry
         filedByArray.push(this.otherFilingParty);
       }
 
-      let filedByString;
-      if (this.amicusCuriae) {
-        filedByString = this.amicusCuriae;
-      } else {
-        filedByString = filedByArray.join(', ');
-      }
+      const filedByString = filedByArray.join(', ');
       if (filedByString) {
         this.filedBy = filedByString;
       }
