@@ -19,6 +19,7 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
+  amicusCuriae: 'Enter the name of the amicus curiae',
   dateReceived: [
     {
       contains: 'must be less than or equal to',

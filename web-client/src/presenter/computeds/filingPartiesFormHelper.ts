@@ -10,7 +10,9 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
 
   const partyValidationError =
     validationErrors &&
-    (validationErrors.filers || validationErrors.partyIrsPractitioner);
+    (validationErrors.filers ||
+      validationErrors.partyIrsPractitioner ||
+      validationErrors.amicusCuriae);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
