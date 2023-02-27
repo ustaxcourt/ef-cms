@@ -36,7 +36,7 @@ describe('migrateItems', () => {
     expect(results[0]).toEqual(mockItem);
   });
 
-  it('should modify docket entry items with documentType "Ownership Disclosure Statement", updating documentTitle and documentType', async () => {
+  it('should modify docket entry items with documentType "Ownership Disclosure Statement", updating documentType', async () => {
     const mockItem = {
       documentTitle: 'Ownership Disclosure Statement',
       documentType: 'Ownership Disclosure Statement',
@@ -52,7 +52,7 @@ describe('migrateItems', () => {
     });
   });
 
-  it('should modify docket entry items with documentType "Order for Ownership Disclosure Statement", updating documentTitle and documentType', async () => {
+  it('should modify docket entry items with documentType "Order for Ownership Disclosure Statement", updating documentType', async () => {
     const mockItem = {
       documentTitle: 'ORDER FOR CORPORATE DISCLOSURE STATEMENT BY 12/03/58',
       documentType: 'Order for Ownership Disclosure Statement',
@@ -68,7 +68,7 @@ describe('migrateItems', () => {
     });
   });
 
-  it('should modify docket entry items with previousDocument that has documentType "Ownership Disclosure Statement", updating documentTitle and documentType', async () => {
+  it('should modify docket entry items with previousDocument that has documentType "Ownership Disclosure Statement", updating documentType', async () => {
     const mockItem = {
       pk: `case|${MOCK_CASE.docketNumber}`,
       previousDocument: {
