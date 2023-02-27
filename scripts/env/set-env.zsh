@@ -29,9 +29,11 @@ else
   environment="${DEFAULT_ORG}-${env}"
 fi
 
+if [[ $quiet -eq 0 ]]; then
 # load zsh colors
-autoload -Uz colors
-colors
+  autoload -Uz colors
+  colors
+fi
 
 # shellcheck disable=SC2154
 if [[ ! -f "./scripts/env/environments/${environment}.env" ]]; then
