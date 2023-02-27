@@ -34,7 +34,7 @@ describe('migrateItems', () => {
     expect(results[0]).toEqual(mockItem);
   });
 
-  it('should modify docket entry items with documentType "Ownership Disclosure Statement", updating documentTitle and documentType', async () => {
+  it('should modify docket entry items with documentType "Ownership Disclosure Statement", updating documentType', async () => {
     const mockItem = {
       documentTitle: 'Ownership Disclosure Statement',
       documentType: 'Ownership Disclosure Statement',
@@ -46,8 +46,44 @@ describe('migrateItems', () => {
 
     expect(results[0]).toEqual({
       ...mockItem,
-      documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentTitle,
       documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+    });
+  });
+
+  it('should modify docket entry items with documentType "Order for Ownership Disclosure Statement", updating documentType', async () => {
+    const mockItem = {
+      documentTitle: 'ORDER FOR CORPORATE DISCLOSURE STATEMENT BY 12/03/58',
+      documentType: 'Order for Ownership Disclosure Statement',
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual({
+      ...mockItem,
+      documentType: 'Order for Corporate Disclosure Statement',
+    });
+  });
+
+  it('should modify docket entry items with previousDocument that has documentType "Ownership Disclosure Statement", updating documentType', async () => {
+    const mockItem = {
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      previousDocument: {
+        documentTitle: 'Ownership Disclosure Statement',
+        documentType: 'Ownership Disclosure Statement',
+      },
+      sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual({
+      ...mockItem,
+      previousDocument: {
+        ...mockItem.previousDocument,
+        documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+      },
     });
   });
 
