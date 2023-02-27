@@ -314,4 +314,18 @@ describe('DocketEntryFactory', () => {
       });
     });
   });
+
+  describe('amicusCuriae', () => {
+    it('should be required when the eventCode is AMBR', () => {
+      rawEntity.eventCode = 'AMBR';
+
+      const validationErrors = new DocketEntryFactory(
+        rawEntity,
+      ).getFormattedValidationErrors();
+
+      expect(validationErrors.amicusCuriae).toEqual(
+        '"amicusCuriae" is required',
+      );
+    });
+  });
 });
