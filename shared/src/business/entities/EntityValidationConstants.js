@@ -36,7 +36,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
   amicusCuriae: JoiValidationConstants.STRING.when('eventCode', {
-    is: joi.valid('AMBR'),
+    is: joi.exist().valid('AMBR'),
     otherwise: joi.optional(),
     then: joi.required(),
   }).description('The amicus curiae filing party is required.'),
