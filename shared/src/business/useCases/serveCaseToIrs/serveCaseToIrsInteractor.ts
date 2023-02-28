@@ -199,8 +199,17 @@ const generateNoticeOfReceipt = async ({
     isSetupForEService(contactPrimary) &&
     !isSetupForEService(contactSecondary);
 
+  const addressesAreDifferentAndContactPrimaryHasNoEAccess =
+    addressesAreDifferent &&
+    (!isSetupForEService(contactPrimary) ||
+      !isSetupForEService(contactSecondary));
+
+  const addressesAreDifferentAndBothHaveEAccessAndEmailsAreDifferent =
+    addressesAreDifferent && differentEmailsBothEAccess;
+
   const shouldGenerateNotrForSecondary =
-    addressesAreDifferent ||
+    addressesAreDifferentAndContactPrimaryHasNoEAccess ||
+    addressesAreDifferentAndBothHaveEAccessAndEmailsAreDifferent ||
     differentEmailsBothEAccess ||
     onlySecondaryHasEAccess ||
     sameAddressPrimaryEAccess;
