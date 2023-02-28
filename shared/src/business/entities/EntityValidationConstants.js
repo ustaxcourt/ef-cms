@@ -28,13 +28,13 @@ const SERVICE_INDICATOR_ERROR = {
     'You cannot change from paper to electronic service. Select a valid service preference.',
 };
 
-const objectionDocumentTypes = [
+const objectionEventCodes = [
   ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
-    return entry.documentType;
+    return entry.eventCode;
   }),
-  'Motion to Withdraw Counsel (filed by petitioner)',
-  'Motion to Withdraw as Counsel',
-  'Application to Take Deposition',
+  'M116',
+  'M112',
+  'APLD',
 ];
 
 const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
@@ -60,7 +60,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     ),
   attachments: joi.boolean().optional(),
   certificateOfService: joi.boolean().optional(),
-  certificateOfServiceDate: JoiValidationConstants.ISO_DATE.when(
+  certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now').when(
     'certificateOfService',
     {
       is: true,
@@ -241,21 +241,22 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     ),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
   numberOfPages: joi.number().integer().optional().allow(null),
-  objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
-    .when('documentType', {
-      is: joi.exist().valid(...objectionDocumentTypes),
-      otherwise: joi.optional(),
-      then: joi.required(),
-    })
-    .when('eventCode', {
-      is: joi.exist().valid(...['AMAT', 'ADMT']), // When the eventCode is an amendedpetition and the previousDocument is an objectionDocumentType
-      otherwise: joi.optional(),
-      then: joi.when('previousDocument.documentType', {
-        is: joi.exist().valid(...objectionDocumentTypes),
+  objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS).when(
+    'eventCode',
+    {
+      is: joi.exist().valid(...objectionEventCodes),
+      otherwise: joi.when('eventCode', {
+        is: joi.exist().valid(...['AMAT', 'ADMT']), // When the eventCode is an amendedpetition and the previousDocument is an objectionDocumentType
         otherwise: joi.optional(),
-        then: joi.required(),
+        then: joi.when('previousDocument.eventCode', {
+          is: joi.exist().valid(...objectionEventCodes),
+          otherwise: joi.optional(),
+          then: joi.required(),
+        }),
       }),
-    }),
+      then: joi.required(),
+    },
+  ),
   ordinalValue: JoiValidationConstants.STRING.optional(),
   otherFilingParty: JoiValidationConstants.STRING.max(100)
     .when('hasOtherFilingParty', {
