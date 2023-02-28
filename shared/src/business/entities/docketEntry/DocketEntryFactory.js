@@ -147,7 +147,7 @@ function DocketEntryFactory(rawProps) {
         .required(),
       then: joi.optional(),
     }),
-    objections: JoiValidationConstants.STRING.required(),
+    objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
     partyIrsPractitioner: joi.boolean().required(),
     partyPrivatePractitioner: joi.boolean().required(),
     secondaryDocumentFile: joi.object().optional(),
