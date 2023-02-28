@@ -4,11 +4,12 @@ REGION="${DEFAULT_REGION}"
 DYNAMODB_ENDPOINT="dynamodb.${DEFAULT_REGION}.amazonaws.com"
 
 CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
-SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}" | sed -e "s/efcms-${ENV}-//")
+SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}")
+SOURCE_TABLE_VERSION="${SOURCE_TABLE//efcms-${ENV}-/}"
 
 # region hard-coded; all ES domains and Cognito user pools are in us-east-1
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-  --domain-name "efcms-search-${ENV}-${SOURCE_TABLE}" \
+  --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" \
   --region "us-east-1" \
   --query 'DomainStatus.Endpoint' \
   --output text)
@@ -46,7 +47,7 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "DAWSON_ENV='${ENV}'"
   echo "DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-documents-${ENV}-${REGION}'"
   echo "DYNAMODB_ENDPOINT='${DYNAMODB_ENDPOINT}'"
-  echo "DYNAMODB_TABLE_NAME='efcms-${ENV}-${SOURCE_TABLE}'"
+  echo "DYNAMODB_TABLE_NAME='${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
   echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
   echo "EMAIL_DOCUMENT_SERVED_TEMPLATE='document_served_${ENV}'"
@@ -60,7 +61,7 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "REGION='${REGION}'"
   echo "S3_ENDPOINT='s3.${REGION}.amazonaws.com'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
-  echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE}'"
+  echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE_VERSION}'"
   echo "STAGE='${ENV}'"
   echo "TEMP_DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-temp-documents-${ENV}-${REGION}'"
   echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
