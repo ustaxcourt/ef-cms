@@ -9,12 +9,12 @@ const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
+const { createLogger } = require('../../../src/createLogger');
 const { getRecordSize } = require('./utilities/getRecordSize');
 const { migrationsToRun } = require('./migrationsToRun');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
-const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
   region: 'us-east-1',
@@ -27,7 +27,12 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 });
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
+const scanTableSegment = async (
+  applicationContext,
+  segment,
+  totalSegments,
+  ranMigrations,
+) => {
   let hasMoreResults = true;
   let lastKey = null;
   while (hasMoreResults) {
@@ -42,12 +47,14 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
       })
       .promise()
       .then(async results => {
-        applicationContext.logger.info(
-          `${segment}/${totalSegments} got ${results.Items.length} results`,
-        );
+        applicationContext.logger.info('scanned table segment', {
+          numberOfItems: results.Items.length,
+          segment,
+          totalSegments,
+        });
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        await exports.processItems({
+        await exports.processItems(applicationContext, {
           documentClient: dynamoDbDocumentClient,
           items: results.Items,
           ranMigrations,
@@ -64,17 +71,16 @@ const hasMigrationRan = async key => {
         pk: `migration|${key}`,
         sk: `migration|${key}`,
       },
-      TableName: `efcms-deploy-${process.env.ENVIRONMENT}`,
+      TableName: `efcms-deploy-${process.env.STAGE}`,
     })
     .promise();
   return { [key]: !!Item };
 };
 
-exports.migrateRecords = async ({
-  documentClient,
-  items,
-  ranMigrations = {},
-}) => {
+exports.migrateRecords = async (
+  applicationContext,
+  { documentClient, items, ranMigrations = {} },
+) => {
   for (let { key, script } of migrationsToRun) {
     if (!ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
@@ -88,14 +94,12 @@ exports.migrateRecords = async ({
   return items;
 };
 
-exports.processItems = async ({
-  documentClient,
-  items,
-  ranMigrations,
-  segment,
-}) => {
+exports.processItems = async (
+  applicationContext,
+  { documentClient, items, ranMigrations, segment },
+) => {
   try {
-    items = await exports.migrateRecords({
+    items = await exports.migrateRecords(applicationContext, {
       documentClient,
       items,
       ranMigrations,
@@ -162,7 +166,20 @@ exports.processItems = async ({
   }
 };
 
-exports.handler = async event => {
+exports.handler = async (event, context) => {
+  const applicationContext = createApplicationContext(
+    {},
+    createLogger({
+      defaultMeta: {
+        environment: {
+          stage: process.env.STAGE || 'local',
+        },
+        requestId: {
+          lambda: context.awsRequestId,
+        },
+      },
+    }),
+  );
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
@@ -178,10 +195,16 @@ exports.handler = async event => {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 
-  await scanTableSegment(segment, totalSegments, ranMigrations);
+  await scanTableSegment(
+    applicationContext,
+    segment,
+    totalSegments,
+    ranMigrations,
+  );
   const finish = createISODateString();
+  const duration = dateStringsCompared(finish, start, { exact: true });
   applicationContext.logger.info('finishing segment', {
-    duration: dateStringsCompared(start, finish),
+    duration,
     segment,
     totalSegments,
   });

@@ -1,11 +1,9 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { DOCUMENT_SERVED_MESSAGES } from '../../../shared/src/business/entities/EntityConstants';
 import { waitForLoadingComponentToHide } from '../helpers';
 
 export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail =
   cerebralTest => {
     return it('petitions clerk 1 serves court issued document from message detail', async () => {
-      const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
-
       await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
@@ -20,7 +18,6 @@ export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail =
       expect(cerebralTest.getState('docketEntryId')).toBe(
         cerebralTest.docketEntryId,
       );
-
       expect(cerebralTest.getState('modal.showModal')).toBe(
         'ConfirmInitiateCourtIssuedFilingServiceModal',
       );
@@ -36,7 +33,6 @@ export const petitionsClerk1ServesCourtIssuedDocumentFromMessageDetail =
         overwritable: false,
       });
       expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
-
       expect(cerebralTest.getState('iframeSrc')).not.toBeUndefined();
     });
   };

@@ -57,6 +57,9 @@
           "docketEntryId": {
             "type": "keyword"
           },
+          "numberOfItems": {
+            "type": "integer"
+          },
           "pk": {
             "type": "keyword"
           },

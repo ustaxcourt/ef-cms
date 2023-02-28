@@ -127,8 +127,8 @@ export class DocketEntryClass {
     rawDocketEntry,
     {
       applicationContext,
-      petitioners = [],
       filtered = false,
+      petitioners = [],
     }: {
       applicationContext: IApplicationContext;
       petitioners: any[];
@@ -462,9 +462,13 @@ and contact info from the raw docket entry
    * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
    */
   isCourtIssued() {
-    return COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
-      this.eventCode,
-    );
+    return DocketEntryClass.isCourtIssued(this.eventCode);
+  }
+
+  static isCourtIssued(eventCode: string): boolean {
+    return COURT_ISSUED_EVENT_CODES.map(
+      ({ eventCode: courtIssuedEventCode }) => courtIssuedEventCode,
+    ).includes(eventCode);
   }
 
   /**

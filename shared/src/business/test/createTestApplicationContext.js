@@ -26,8 +26,8 @@ const {
   getPetitionerById,
   getPractitionersRepresenting,
   isLeadCase,
-  isPetitionerPartOfGroup,
   isUserIdRepresentedByPrivatePractitioner,
+  isUserPartOfGroup,
 } = require('../entities/cases/Case');
 const {
   combineTwoPdfs,
@@ -63,6 +63,9 @@ const {
   testInvalidPdfDoc,
   testPdfDoc,
 } = require('./getFakeFile');
+const {
+  fileAndServeDocumentOnOneCase,
+} = require('../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase');
 const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
@@ -196,6 +199,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -209,6 +213,7 @@ const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
 const { getUserIdForNote } = require('../useCaseHelper/getUserIdForNote');
+const { isSealedCase } = require('../entities/cases/Case');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -267,6 +272,10 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetReduceImageBlobValue = {
     toBlob: jest.fn(),
+  };
+
+  const mockGetDTOs = {
+    ConsolidatedCaseDTO,
   };
 
   const mockGetUtilities = appContextProxy({
@@ -384,9 +393,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
-    isPetitionerPartOfGroup: jest
-      .fn()
-      .mockImplementation(isPetitionerPartOfGroup),
+    isSealedCase: jest.fn().mockImplementation(isSealedCase),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
       .fn()
@@ -397,6 +404,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
+    isUserPartOfGroup: jest.fn().mockImplementation(isUserPartOfGroup),
     isValidDateString: jest
       .fn()
       .mockImplementation(DateHandler.isValidDateString),
@@ -456,6 +464,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    fileAndServeDocumentOnOneCase: jest
+      .fn()
+      .mockImplementation(fileAndServeDocumentOnOneCase),
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
@@ -678,6 +689,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
+    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
