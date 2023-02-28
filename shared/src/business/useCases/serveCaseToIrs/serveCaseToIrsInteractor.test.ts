@@ -327,7 +327,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should not generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail', async () => {
+  it('should generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail AND have the same address', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -360,8 +360,62 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).not.toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+
+    expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
-    ).toHaveBeenCalledTimes(1);
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail BUT not the same address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          address1: 'addy 1',
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).not.toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('should not generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail and addresses are differents', async () => {
