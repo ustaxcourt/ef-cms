@@ -331,7 +331,7 @@ describe('DocketEntryFactory', () => {
       ).getFormattedValidationErrors();
 
       expect(validationErrors.amicusCuriae).toEqual(
-        '"amicusCuriae" is required',
+        'Enter the name of the amicus curiae',
       );
     });
 
