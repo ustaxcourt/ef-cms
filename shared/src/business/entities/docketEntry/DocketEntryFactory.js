@@ -102,7 +102,7 @@ function DocketEntryFactory(rawProps) {
     certificateOfService:
       DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
     certificateOfServiceDate:
-      JoiValidationConstants.ISO_DATE.max('now').required(),
+      DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
     dateReceived: JoiValidationConstants.ISO_DATE.max('now').required(),
     documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
     documentType: JoiValidationConstants.STRING.valid(
@@ -150,7 +150,6 @@ function DocketEntryFactory(rawProps) {
     }),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrivatePractitioner: joi.boolean().required(),
-    secondaryDocumentFile: joi.object().optional(),
   };
 
   const addToSchema = itemName => {
@@ -167,30 +166,6 @@ function DocketEntryFactory(rawProps) {
       category: JoiValidationConstants.STRING.optional(), // omitting category
     }),
   );
-
-  // const objectionDocumentTypes = [
-  //   ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
-  //     return entry.documentType;
-  //   }),
-  //   'Motion to Withdraw Counsel (filed by petitioner)',
-  //   'Motion to Withdraw as Counsel',
-  //   'Application to Take Deposition',
-  // ];
-
-  // if (
-  //   objectionDocumentTypes.includes(rawProps.documentType) ||
-  //   (['AMAT', 'ADMT'].includes(rawProps.eventCode) &&
-  //     objectionDocumentTypes.includes(rawProps.previousDocument.documentType))
-  // ) {
-  //   addToSchema('objections');
-  // }
-
-  if (
-    rawProps.scenario &&
-    rawProps.scenario.toLowerCase().trim() === 'nonstandard h'
-  ) {
-    addToSchema('secondaryDocumentFile');
-  }
 
   if (
     rawProps.filers.length === 0 &&

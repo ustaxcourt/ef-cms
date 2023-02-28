@@ -78,24 +78,24 @@ describe('DocketEntryFactory', () => {
     expect(errors().eventCode).toBeDefined();
   });
 
-  it.only('should require objections when eventCode is ADMT and previous document is an objection document type', () => {
+  it('should require objections when eventCode is ADMT and previous document is an objection document type', () => {
     rawEntity.eventCode = 'ADMT';
     rawEntity.previousDocument = {
-      documentType: 'Application to Take Deposition',
+      eventCode: 'APLD',
     };
     expect(errors().objections).toBeDefined();
   });
 
-  it.only('should require objections when eventCode is AMAT and previous document is an objection document type', () => {
+  it('should require objections when eventCode is AMAT and previous document is an objection document type', () => {
     rawEntity.eventCode = 'AMAT';
     rawEntity.previousDocument = {
-      documentType: 'Application to Take Deposition',
+      eventCode: 'APLD',
     };
     expect(errors().objections).toBeDefined();
   });
 
-  it.only('should require objections when document is an objection document type', () => {
-    rawEntity.documentType = 'Application to Take Deposition';
+  it('should require objections when document is an objection document type', () => {
+    rawEntity.eventCode = 'APLD';
     expect(errors().objections).toBeDefined();
   });
 
@@ -171,7 +171,7 @@ describe('DocketEntryFactory', () => {
     describe('Motion Document', () => {
       beforeEach(() => {
         rawEntity.category = 'Motion';
-        rawEntity.documentType = 'Motion for Continuance';
+        rawEntity.eventCode = 'M006';
       });
 
       it('should require Objections', () => {
@@ -186,7 +186,7 @@ describe('DocketEntryFactory', () => {
         rawEntity.category = 'Miscellaneous';
         rawEntity.eventCode = 'AMAT';
         rawEntity.previousDocument = {
-          documentType: 'Motion for Continuance',
+          eventCode: 'M006',
         };
 
         expect(errors().objections).toEqual(
@@ -331,7 +331,7 @@ describe('DocketEntryFactory', () => {
       ).getFormattedValidationErrors();
 
       expect(validationErrors.amicusCuriae).toEqual(
-        '"amicusCuriae" is required',
+        'Enter the name of the amicus curiae',
       );
     });
 
