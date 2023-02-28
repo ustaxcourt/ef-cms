@@ -290,6 +290,43 @@ describe('serveCaseToIrsInteractor', () => {
     );
   });
 
+  it('should generate a second notice of receipt of petition when contactSecondary.address is the same as contactPrimary.address, and the secondary has no email or e access', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: false,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: undefined,
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+  });
+
   it('should not generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail', async () => {
     mockCase = {
       ...MOCK_CASE,

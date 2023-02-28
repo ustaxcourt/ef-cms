@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
@@ -182,16 +183,29 @@ const generateNoticeOfReceipt = async ({
     );
   };
 
-  if (
+  const differentEmailsBothEAccess =
     contactSecondary &&
-    (addressesAreDifferent ||
-      (contactPrimary.paperPetitionEmail !==
-        contactSecondary.paperPetitionEmail &&
-        isSetupForEService(contactPrimary) &&
-        isSetupForEService(contactSecondary)) ||
-      (!isSetupForEService(contactPrimary) &&
-        isSetupForEService(contactSecondary)))
-  ) {
+    contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail &&
+    isSetupForEService(contactPrimary) &&
+    isSetupForEService(contactSecondary);
+
+  const onlySecondaryHasEAccess =
+    contactSecondary &&
+    !isSetupForEService(contactPrimary) &&
+    isSetupForEService(contactSecondary);
+
+  const sameAddressPrimaryEAccess =
+    contactSecondary &&
+    isSetupForEService(contactPrimary) &&
+    !isSetupForEService(contactSecondary);
+
+  const shouldGenerateNotrForSecondary =
+    addressesAreDifferent ||
+    differentEmailsBothEAccess ||
+    onlySecondaryHasEAccess ||
+    sameAddressPrimaryEAccess;
+
+  if (shouldGenerateNotrForSecondary) {
     if (
       contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
     ) {
