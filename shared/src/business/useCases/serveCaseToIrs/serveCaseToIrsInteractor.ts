@@ -183,36 +183,29 @@ const generateNoticeOfReceipt = async ({
     );
   };
 
-  const differentEmailsBothEAccess =
+  const onlyContactPrimaryPetitionerHasEAccess =
     contactSecondary &&
-    contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail &&
-    isSetupForEService(contactPrimary) &&
-    isSetupForEService(contactSecondary);
-
-  const onlySecondaryHasEAccess =
-    contactSecondary &&
+    !addressesAreDifferent &&
     !isSetupForEService(contactPrimary) &&
     isSetupForEService(contactSecondary);
 
-  const sameAddressPrimaryEAccess =
+  const onlyContactSecondaryPetitionerHasEAccess =
     contactSecondary &&
+    !addressesAreDifferent &&
     isSetupForEService(contactPrimary) &&
     !isSetupForEService(contactSecondary);
 
-  const addressesAreDifferentAndContactPrimaryHasNoEAccess =
-    addressesAreDifferent &&
-    (!isSetupForEService(contactPrimary) ||
-      !isSetupForEService(contactSecondary));
-
-  const addressesAreDifferentAndBothHaveEAccessAndEmailsAreDifferent =
-    addressesAreDifferent && differentEmailsBothEAccess;
+  const bothPrimaryAndSecondaryPetitionerHasEAccess =
+    contactSecondary &&
+    !addressesAreDifferent &&
+    isSetupForEService(contactPrimary) &&
+    isSetupForEService(contactSecondary);
 
   const shouldGenerateNotrForSecondary =
-    addressesAreDifferentAndContactPrimaryHasNoEAccess ||
-    addressesAreDifferentAndBothHaveEAccessAndEmailsAreDifferent ||
-    differentEmailsBothEAccess ||
-    onlySecondaryHasEAccess ||
-    sameAddressPrimaryEAccess;
+    addressesAreDifferent ||
+    onlyContactPrimaryPetitionerHasEAccess ||
+    onlyContactSecondaryPetitionerHasEAccess ||
+    bothPrimaryAndSecondaryPetitionerHasEAccess;
 
   if (shouldGenerateNotrForSecondary) {
     if (

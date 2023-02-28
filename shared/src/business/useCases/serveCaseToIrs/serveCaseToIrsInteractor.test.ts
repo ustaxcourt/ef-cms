@@ -327,7 +327,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail AND have the same address', async () => {
+  it('should generate a second notice of receipt of petition with different access codes when both have e access to the same paperPetitionEmail AND have the same address', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -342,7 +342,6 @@ describe('serveCaseToIrsInteractor', () => {
           ...MOCK_CASE.petitioners[0],
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           hasConsentedToEService: true,
           name: 'Test Petitioner Secondary',
@@ -362,7 +361,7 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
         .calls[0][0].data.accessCode,
-    ).not.toEqual(
+    ).toEqual(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
         .calls[1][0].data.accessCode,
     );
@@ -372,7 +371,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail BUT not the same address', async () => {
+  it('should generate a second notice of receipt of petition with the same access code when both have e access to the same paperPetitionEmail BUT not the same address', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -408,7 +407,7 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
         .calls[0][0].data.accessCode,
-    ).not.toEqual(
+    ).toEqual(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
         .calls[1][0].data.accessCode,
     );
@@ -418,7 +417,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should not generate a second notice of receipt of petition when both have e access to the same paperPetitionEmail and addresses are differents', async () => {
+  it('should generate a second notice of receipt of petition with the same access code when both have e access to the same paperPetitionEmail but addresses are different', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -452,8 +451,16 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+
+    expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
-    ).toHaveBeenCalledTimes(1);
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('should generate a second notice of receipt of petition when both have e access but they have different paperPetitionEmail', async () => {
