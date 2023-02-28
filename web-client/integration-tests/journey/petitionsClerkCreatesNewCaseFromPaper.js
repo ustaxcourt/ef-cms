@@ -8,10 +8,10 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   {
-    trialLocation = 'Birmingham, Alabama',
-    procedureType = 'Small',
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
+    procedureType = 'Small',
+    trialLocation = 'Birmingham, Alabama',
   } = {},
   formOverrides = [],
 ) => {
