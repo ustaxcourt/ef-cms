@@ -6,27 +6,24 @@ const { AddressLabel } = require('../components/AddressLabel.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const StandardNOTRText = () => (
-  <>
-    <div className="info-box-content">
-      The Court encourages registration for DAWSON, the Court’s electronic
-      filing and case management system, so that you can electronically file and
-      view documents in your case. For more information about electronic
-      service, email{' '}
-      <strong>
-        <a href="mailto:dawson.support@ustaxcourt.gov">
-          dawson.support@ustaxcourt.gov
-        </a>
-      </strong>
-      , and a letter with eAccess instructions will be mailed to the address of
-      record. If you do not register for eFiling, you must send the opposing
-      party a copy of any document you file with the Court. To obtain further
-      information about Tax Court proceedings, visit{' '}
-      <strong>
-        <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
-      </strong>{' '}
-      and select &quot;Guidance for Petitioners.&quot;
-    </div>
-  </>
+  <div className="info-box-content">
+    The Court encourages registration for DAWSON, the Court’s electronic filing
+    and case management system, so that you can electronically file and view
+    documents in your case. For more information about electronic service, email{' '}
+    <strong>
+      <a href="mailto:dawson.support@ustaxcourt.gov">
+        dawson.support@ustaxcourt.gov
+      </a>
+    </strong>
+    , and a letter with eAccess instructions will be mailed to the address of
+    record. If you do not register for eFiling, you must send the opposing party
+    a copy of any document you file with the Court. To obtain further
+    information about Tax Court proceedings, visit{' '}
+    <strong>
+      <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
+    </strong>{' '}
+    and select &quot;Guidance for Petitioners.&quot;
+  </div>
 );
 
 const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
@@ -54,7 +51,7 @@ const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
 );
 
 export const NoticeOfReceiptOfPetition = ({
-  accessCode = '123456',
+  accessCode,
   caseCaptionExtension,
   caseTitle,
   contact,
