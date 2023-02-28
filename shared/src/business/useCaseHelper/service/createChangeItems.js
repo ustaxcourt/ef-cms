@@ -26,8 +26,8 @@ const { WorkItem } = require('../../entities/WorkItem');
 const createDocketEntryForChange = async ({
   applicationContext,
   caseEntity,
-  documentType,
   docketMeta = {},
+  documentType,
   newData,
   oldData,
   servedParties,
