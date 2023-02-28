@@ -183,29 +183,14 @@ const generateNoticeOfReceipt = async ({
     );
   };
 
-  const onlyContactPrimaryPetitionerHasEAccess =
+  const petitionerIsSetupForEService =
     contactSecondary &&
-    !addressesAreDifferent &&
-    !isSetupForEService(contactPrimary) &&
-    isSetupForEService(contactSecondary);
-
-  const onlyContactSecondaryPetitionerHasEAccess =
-    contactSecondary &&
-    !addressesAreDifferent &&
-    isSetupForEService(contactPrimary) &&
-    !isSetupForEService(contactSecondary);
-
-  const bothPrimaryAndSecondaryPetitionerHasEAccess =
-    contactSecondary &&
-    !addressesAreDifferent &&
-    isSetupForEService(contactPrimary) &&
-    isSetupForEService(contactSecondary);
+    [contactPrimary, contactSecondary].some(contact => {
+      return isSetupForEService(contact) === true;
+    });
 
   const shouldGenerateNotrForSecondary =
-    addressesAreDifferent ||
-    onlyContactPrimaryPetitionerHasEAccess ||
-    onlyContactSecondaryPetitionerHasEAccess ||
-    bothPrimaryAndSecondaryPetitionerHasEAccess;
+    addressesAreDifferent || petitionerIsSetupForEService;
 
   if (shouldGenerateNotrForSecondary) {
     if (
