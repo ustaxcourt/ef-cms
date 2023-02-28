@@ -114,6 +114,8 @@ const request = JSON.parse(readFileSync(requestJsonFile, 'utf-8'));
   // - serviceStamp: form.serviceStamp
   rawDocketEntry.serviceStamp = request.form.serviceStamp;
 
+  // TODO: figure out index
+
   const docketEntry = new DocketEntry(rawDocketEntry, {
     applicationContext,
   }).validate();
