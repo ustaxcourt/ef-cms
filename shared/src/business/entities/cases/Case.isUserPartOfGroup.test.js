@@ -55,9 +55,9 @@ describe('isUserPartOfGroup', () => {
     const isPartOfCase = isUserPartOfGroup({
       consolidatedCases: [
         {
-          irsPractitioners: [],
-          petitioners: [{ contactId: 'xyz' }],
-          privatePractitioners: [{ userId: 'abc' }],
+          irsPractitioners: [{ userId: 'abc' }],
+          petitioners: [],
+          privatePractitioners: [],
         },
       ],
       userId: 'abc',
