@@ -11,6 +11,7 @@ const {
 } = require('../../src/persistence/dynamo/workitems/createUserOutboxRecord');
 const { chunk } = require('lodash');
 const { readFileSync } = require('fs');
+const { sleep } = require('../../src/tools/helpers');
 
 const usage = error => {
   if (error) {
@@ -41,6 +42,41 @@ const archiveSectionOutboxItems = async (
   await Promise.all(promises);
 };
 
+const archiveOutboxItems = async (
+  applicationContext,
+  { bucketKey, bucketType, items, retries = 0 },
+) => {
+  try {
+    switch (bucketType) {
+      case 'user-outbox':
+        await archiveUserOutboxItems(applicationContext, {
+          items,
+          userId: bucketKey,
+        });
+        break;
+      case 'section-outbox':
+        await archiveSectionOutboxItems(applicationContext, {
+          items,
+          section: bucketKey,
+        });
+        break;
+    }
+  } catch (err) {
+    console.log(`ERROR - ${err.message}`);
+    if (retries > 9) {
+      console.log(items);
+      throw 'Cannot complete operation';
+    }
+    await sleep(1000 * Math.pow(2, retries));
+    await archiveOutboxItems(applicationContext, {
+      bucketKey,
+      bucketType,
+      items,
+      retries: retries + 1,
+    });
+  }
+};
+
 const processPrimaryKey = async (applicationContext, { pk }) => {
   const [bucketType, bucketKey] = pk.split('|');
 
@@ -67,22 +103,14 @@ const processPrimaryKey = async (applicationContext, { pk }) => {
       applicationContext,
       items,
     });
+
+    await archiveOutboxItems(applicationContext, {
+      bucketKey,
+      bucketType,
+      items,
+    });
+
     console.log(`batch ${i++}/${chunks.length} done`);
-    switch (bucketType) {
-      case 'user-outbox':
-        await archiveUserOutboxItems(applicationContext, {
-          items,
-          userId: bucketKey,
-        });
-        break;
-      case 'section-outbox':
-        await archiveSectionOutboxItems(applicationContext, {
-          items,
-          section: bucketKey,
-        });
-        break;
-    }
-    // break;
   }
   console.timeEnd(pk);
 };
