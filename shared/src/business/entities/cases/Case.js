@@ -1482,7 +1482,6 @@ Case.prototype.checkForReadyForTrial = function () {
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.setCaseStatus({
-          changedBy: 'System',
           date: currentDate,
           updatedCaseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
         });
@@ -1968,17 +1967,14 @@ Case.prototype.unsetAsHighPriority = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.removeFromTrial = function ({
-  associatedJudge,
-  changedBy,
+  associatedJudge = CHIEF_JUDGE,
   date,
-  updatedCaseStatus,
+  updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
 }) {
-  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
+  this.setAssociatedJudge(associatedJudge);
   this.setCaseStatus({
-    changedBy,
     date,
-    updatedCaseStatus:
-      updatedCaseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    updatedCaseStatus,
   });
   this.trialDate = undefined;
   this.trialLocation = undefined;
@@ -2048,7 +2044,7 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setCaseStatus = function ({
-  changedBy,
+  changedBy = 'System',
   date,
   updatedCaseStatus,
 }) {

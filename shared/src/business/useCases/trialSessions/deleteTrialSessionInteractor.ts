@@ -77,7 +77,6 @@ export const deleteTrialSessionInteractor = async (
 
     const date = applicationContext.getUtilities().createISODateString();
     caseEntity.removeFromTrial({
-      changedBy: user.name,
       date,
     });
 
