@@ -69,11 +69,8 @@ export const removeCaseFromTrialInteractor = async (
   const caseEntity = new Case(myCase, { applicationContext });
 
   if (!caseEntity.isHearing(trialSessionId)) {
-    const date = applicationContext.getUtilities().createISODateString();
-
     caseEntity.removeFromTrial({
       associatedJudge,
-      date,
       updatedCaseStatus: caseStatus,
     });
 

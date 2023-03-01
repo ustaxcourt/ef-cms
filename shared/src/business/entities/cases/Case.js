@@ -1080,7 +1080,10 @@ const isClosedStatus = function (caseStatus) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function () {
-  this.status = CASE_STATUS_TYPES.generalDocket;
+  this.setCaseStatus({
+    changedBy: 'System',
+    updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+  });
 
   this.petitioners.map(p => {
     if (PETITIONER_CONTACT_TYPES.includes(p.contactType)) {
@@ -1482,7 +1485,6 @@ Case.prototype.checkForReadyForTrial = function () {
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.setCaseStatus({
-          date: currentDate,
           updatedCaseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
         });
       }
@@ -1579,7 +1581,10 @@ Case.prototype.generateTrialSortTags = function () {
 Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.updateTrialSessionInformation(trialSessionEntity);
   if (trialSessionEntity.isCalendared === true) {
-    this.status = CASE_STATUS_TYPES.calendared;
+    this.setCaseStatus({
+      changedBy: 'System',
+      updatedCaseStatus: CASE_STATUS_TYPES.calendared,
+    });
   }
   return this;
 };
@@ -1968,12 +1973,10 @@ Case.prototype.unsetAsHighPriority = function () {
  */
 Case.prototype.removeFromTrial = function ({
   associatedJudge = CHIEF_JUDGE,
-  date,
   updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
 }) {
   this.setAssociatedJudge(associatedJudge);
   this.setCaseStatus({
-    date,
     updatedCaseStatus,
   });
   this.trialDate = undefined;
@@ -2045,13 +2048,17 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
  */
 Case.prototype.setCaseStatus = function ({
   changedBy = 'System',
-  date,
   updatedCaseStatus,
 }) {
   const previousCaseStatus = this.status;
+  const date = createISODateString();
 
   this.status = updatedCaseStatus;
-  this.caseStatusHistory.push({ changedBy, date, updatedCaseStatus });
+  this.caseStatusHistory.push({
+    changedBy,
+    date,
+    updatedCaseStatus,
+  });
 
   if (
     [
@@ -2063,7 +2070,7 @@ Case.prototype.setCaseStatus = function ({
   }
 
   if (isClosedStatus(updatedCaseStatus)) {
-    this.closedDate = createISODateString();
+    this.closedDate = date;
     this.unsetAsBlocked();
     this.unsetAsHighPriority();
   } else {
