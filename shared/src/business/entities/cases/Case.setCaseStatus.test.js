@@ -130,7 +130,7 @@ describe('setCaseStatus', () => {
     expect(reopenCaseSpy).toHaveBeenCalled();
   });
 
-  it('should update the case status and call reopenCase when the new status is NOT a closed case status and the previous status is a closed case status', () => {
+  it('should add a new entry to the caseStatusHistory after changing the case status', () => {
     const updatedCase = new Case(
       {
         ...MOCK_CASE,
