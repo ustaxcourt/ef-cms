@@ -1,13 +1,11 @@
 import {
+  FORMATS,
   createISODateString,
-  dateStringsCompared,
-  subtractISODates,
+  formatDateString,
 } from '../../../business/utilities/DateHandler';
 
 /**
- * Calculate numDays ago from the provided timestamp
- *
- * @returns {Number} Number of seconds since the epoch for when we want this record to expire
+ * Calculate the time to live for the provided timestamp given the `numDays` it should exist
  */
 export const calculateTimeToLive = ({
   numDays = 8,
@@ -15,9 +13,18 @@ export const calculateTimeToLive = ({
 }: {
   numDays: number;
   timestamp: string;
-}) => {
-  const numDaysAgo = subtractISODates(createISODateString(), {
-    day: numDays,
-  });
-  return Math.floor(dateStringsCompared(timestamp, numDaysAgo) / 1000);
+}): { expirationTimestamp: number; numSeconds: number } => {
+  const numSeconds = numDays * 86400;
+  const unixTimestamp = Number(
+    formatDateString(timestamp, FORMATS.UNIX_TIMESTAMP_SECONDS),
+  );
+  const nowTimestamp = Number(
+    formatDateString(createISODateString(), FORMATS.UNIX_TIMESTAMP_SECONDS),
+  );
+  const ttl = unixTimestamp - nowTimestamp + numSeconds;
+
+  return {
+    expirationTimestamp: unixTimestamp + numSeconds,
+    numSeconds: ttl,
+  };
 };
