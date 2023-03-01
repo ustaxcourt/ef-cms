@@ -73,7 +73,6 @@ export const removeCaseFromTrialInteractor = async (
 
     caseEntity.removeFromTrial({
       associatedJudge,
-      changedBy: user.name,
       date,
       updatedCaseStatus: caseStatus,
     });

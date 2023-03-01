@@ -16,7 +16,6 @@ exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
   }
 
   caseEntity.setCaseStatus({
-    changedBy: 'System',
     date: applicationContext.getUtilities().createISODateString(),
     updatedCaseStatus: closedStatus,
   });

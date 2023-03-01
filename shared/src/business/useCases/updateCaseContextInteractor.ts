@@ -47,7 +47,7 @@ export const updateCaseContextInteractor = async (
   if (caseCaption) {
     newCase.setCaseCaption(caseCaption);
   }
-  if (caseStatus) {
+  if (oldCase.status !== caseStatus) {
     const date = applicationContext.getUtilities().createISODateString();
     newCase.setCaseStatus({
       changedBy: user.name,
