@@ -189,7 +189,7 @@ const caseDecorator = (
   assignPractitioners(params);
   assignFieldsForAllUsers(params);
   if (isNewCase) {
-    this.setCaseStatus({
+    obj.setCaseStatus({
       changedBy: currentUser.name,
       updatedCaseStatus: rawObject.status || CASE_STATUS_TYPES.new,
     });
