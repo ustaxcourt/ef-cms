@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { Address } from './Address';
 import { Country } from './Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
