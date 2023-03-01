@@ -17,6 +17,8 @@ export const ContactSecondary = connect(
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
+    toggleUseContactPrimaryAddressSequence:
+      sequences.toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
@@ -31,6 +33,7 @@ export const ContactSecondary = connect(
     onChange,
     onChangeSequence,
     parentView,
+    toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence,
     useSameAsPrimary,
     validationErrors,
@@ -86,6 +89,7 @@ export const ContactSecondary = connect(
                     key: e.target.name,
                     value: e.target.checked,
                   });
+                  toggleUseContactPrimaryAddressSequence();
                 }}
               />
               <label
