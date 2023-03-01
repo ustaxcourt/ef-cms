@@ -38,7 +38,7 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
 
-    caseToUpdate.removeFromTrial();
+    caseToUpdate.removeFromTrial({});
 
     expect(caseToUpdate.status).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -81,7 +81,7 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
 
-    caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav);
+    caseToUpdate.removeFromTrial({ updatedCaseStatus: CASE_STATUS_TYPES.cav });
 
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
     expect(caseToUpdate.associatedJudge).toEqual('Chief Judge');
@@ -118,7 +118,10 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
 
-    caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav, 'Judge Dredd');
+    caseToUpdate.removeFromTrial({
+      associatedJudge: 'Judge Dredd',
+      updatedCaseStatus: CASE_STATUS_TYPES.cav,
+    });
 
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
     expect(caseToUpdate.associatedJudge).toEqual('Judge Dredd');
