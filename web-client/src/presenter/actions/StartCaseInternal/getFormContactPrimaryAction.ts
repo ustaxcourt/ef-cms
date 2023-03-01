@@ -9,6 +9,6 @@ import { state } from 'cerebral';
  */
 export const getFormContactPrimaryAction = ({ get }) => {
   const contact = get(state.form.contactPrimary);
-
+  console.log('contactPrimary', contact);
   return { contact };
 };

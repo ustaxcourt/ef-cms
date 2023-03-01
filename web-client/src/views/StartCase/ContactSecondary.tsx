@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Address } from './Address';
 import { Country } from './Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -11,7 +12,7 @@ export const ContactSecondary = connect(
     bind: props.bind,
     constants: state.constants,
     contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
+    data: state.form,
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,

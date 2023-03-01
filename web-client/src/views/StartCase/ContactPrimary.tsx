@@ -11,7 +11,7 @@ export const ContactPrimary = connect(
     bind: props.bind,
     constants: state.constants,
     contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
+    data: state.form,
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,

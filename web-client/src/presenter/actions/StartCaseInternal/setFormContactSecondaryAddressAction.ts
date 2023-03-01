@@ -17,7 +17,7 @@ export const setFormContactSecondaryAddressAction = ({ get, props, store }) => {
       state.form.contactSecondary.hasConsentedToEService,
     ),
     inCareOf: get(state.form.contactSecondary.inCareOf),
-    name: get(state.form.contactSecondary.name),
+    name: get(state.form.contactSecondary.name) || '',
     paperPetitionEmail: get(state.form.contactSecondary.paperPetitionEmail),
   });
 };
