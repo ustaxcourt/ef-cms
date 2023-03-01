@@ -5,9 +5,9 @@ import {
 } from '../../../business/utilities/DateHandler';
 
 /**
- * Calculate the 8 days from the provided timestamp
+ * Calculate numDays ago from the provided timestamp
  *
- * @returns {Number} Number of seconds since the epoch forFORMATS when we want this record to expire
+ * @returns {Number} Number of seconds since the epoch for when we want this record to expire
  */
 export const calculateTimeToLive = ({
   numDays = 8,
