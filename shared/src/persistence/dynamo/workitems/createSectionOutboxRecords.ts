@@ -56,7 +56,7 @@ const createSectionOutboxRecentRecord = ({
     Item: {
       ...Item,
       pk: `section-outbox|${section}`,
-      ttl: calculateTimeToLive(Item.sk),
+      ttl: calculateTimeToLive({ numDays: 8, timestamp: Item.sk }),
     },
     applicationContext,
   });
@@ -87,7 +87,7 @@ const createSectionOutboxRecords = ({
     gsi1pk: `work-item|${workItem.workItemId}`,
     sk,
   };
-  const ttl = calculateTimeToLive(sk);
+  const ttl = calculateTimeToLive({ numDays: 8, timestamp: sk });
   const promises = [];
   if (ttl > 0) {
     promises.push(
