@@ -49,7 +49,11 @@ export const updateCaseContextInteractor = async (
   }
   if (caseStatus) {
     const date = applicationContext.getUtilities().createISODateString();
-    newCase.setCaseStatus({ caseStatus, changedBy: user.name, date });
+    newCase.setCaseStatus({
+      changedBy: user.name,
+      date,
+      updatedCaseStatus: caseStatus,
+    });
   }
   if (associatedJudge) {
     newCase.setAssociatedJudge(associatedJudge);
