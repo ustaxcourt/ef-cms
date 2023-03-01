@@ -7,19 +7,24 @@ import React from 'react';
  * @param {object} caseItem the case to be passed to the FontAwesomeIcon
  * @returns {object} a react component
  */
-export const ConsolidatedCaseIcon = ({ caseItem }) => {
+export const ConsolidatedCaseIcon = ({
+  consolidatedIconTooltipText,
+  inConsolidatedGroup,
+  showLeadCaseIcon,
+}: {
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  showLeadCaseIcon: boolean;
+}) => {
   return (
-    caseItem.inConsolidatedGroup && (
-      <span
-        className="fa-layers fa-fw"
-        title={caseItem.consolidatedIconTooltipText}
-      >
+    inConsolidatedGroup && (
+      <span className="fa-layers fa-fw" title={consolidatedIconTooltipText}>
         <Icon
-          aria-label={caseItem.consolidatedIconTooltipText}
+          aria-label={consolidatedIconTooltipText}
           className="fa-icon-blue"
           icon="copy"
         />
-        {caseItem.leadCase && (
+        {showLeadCaseIcon && (
           <span className="fa-inverse lead-case-icon-text">L</span>
         )}
       </span>
