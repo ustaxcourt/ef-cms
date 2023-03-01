@@ -1,7 +1,11 @@
-import { Case, isClosed, isLeadCase } from '../entities/cases/Case';
-import { UserCase } from '../entities/UserCase';
+import {
+  Case,
+  isClosed,
+  isLeadCase,
+  userIsDirectlyAssociated,
+} from '../entities/cases/Case';
 import { compareISODateStrings } from '../utilities/sortFunctions';
-import { partition, uniqBy } from 'lodash';
+import { uniqBy } from 'lodash';
 
 type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
@@ -30,15 +34,17 @@ type TAssociatedCase = {
  */
 async function fetchConsolidatedGroupsAndNest({
   applicationContext,
-  openCases,
+  cases,
+  userId,
 }: {
   applicationContext: IApplicationContext;
-  openCases: TAssociatedCase[];
+  cases: TAssociatedCase[];
+  userId: string;
 }) {
   // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
   const consolidatedGroups = (
     await Promise.all(
-      openCases
+      cases
         .filter(aCase => aCase.leadDocketNumber)
         .map(aCase =>
           applicationContext
@@ -51,11 +57,16 @@ async function fetchConsolidatedGroupsAndNest({
     )
   )
     .flat()
-    .map(c => ({ ...c, isRequestingUserAssociated: false }));
+    .map(aCase => {
+      return {
+        ...aCase,
+        isRequestingUserAssociated: userIsDirectlyAssociated({ aCase, userId }),
+      };
+    });
 
   // Combine open cases and consolidated cases and remove duplicates
   const associatedAndUnassociatedCases = uniqBy(
-    [...openCases, ...consolidatedGroups],
+    [...cases, ...consolidatedGroups],
     aCase => aCase.docketNumber,
   );
 
@@ -107,34 +118,31 @@ export const getCasesForUserInteractor = async (
 ) => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const allUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
+  const allUserCases = (
+    await applicationContext.getPersistenceGateway().getCasesForUser({
       applicationContext,
       userId,
-    });
-
-  const allUserCasesWithAssociations = UserCase.validateRawCollection(
-    allUserCases,
-    {
-      applicationContext,
-    },
-  ) as TCaseEntity[];
-
-  const [openCases, closedCases] = partition(
-    allUserCasesWithAssociations.map(
-      aCase =>
-        ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
-    ),
-    aCase => !isClosed(aCase),
+    })
+  ).map(
+    aCase =>
+      ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
   );
 
-  const nestedOpenCases = await fetchConsolidatedGroupsAndNest({
+  const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    openCases,
+    cases: allUserCases,
+    userId,
   });
 
-  const sortedOpenCases: any[] = Object.values(nestedOpenCases)
+  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
+
+  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
+
+  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
+};
+
+const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
+  return nestedCases
     .map((c: any) => {
       // explicitly unset the entityName because this is returning a composite entity and if an entityName
       // is set, the genericHandler will send it through the entity constructor for that entity and strip
@@ -142,12 +150,27 @@ export const getCasesForUserInteractor = async (
       c.entityName = undefined;
       return c;
     })
-    .sort((a, b) => compareISODateStrings(a.createdAt, b.createdAt))
-    .reverse();
+    .filter(nestedCase => {
+      const caseStatusFilter = [
+        nestedCase,
+        ...(nestedCase.consolidatedCases || []),
+      ].some(aCase =>
+        caseType === 'open' ? !isClosed(aCase) : isClosed(aCase),
+      );
 
-  const sortedClosedCases = closedCases
-    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
-    .reverse();
-
-  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
+      return caseStatusFilter;
+    })
+    .sort((a, b) => {
+      if (caseType === 'closed') {
+        const closedDateA = a.closedDate
+          ? a.closedDate
+          : a.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
+        const closedDateB = b.closedDate
+          ? b.closedDate
+          : b.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
+        return compareISODateStrings(closedDateB, closedDateA);
+      } else {
+        return compareISODateStrings(b.createdAt, a.createdAt);
+      }
+    });
 };
