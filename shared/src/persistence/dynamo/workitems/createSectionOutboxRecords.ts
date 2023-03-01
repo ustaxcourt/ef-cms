@@ -41,22 +41,25 @@ const createSectionOutboxArchiveRecord = async ({
  * @param {Object} providers.applicationContext The application context
  * @param {Object} providers.Item The base object that gets stored in persistence
  * @param {String} providers.section docket or petitions
+ * @param {Number} providers.ttl the timestamp when this record expires
  * @returns {Promise} resolves upon completion of persistence request
  */
 const createSectionOutboxRecentRecord = ({
   applicationContext,
   Item,
   section,
+  ttl,
 }: {
   applicationContext: IApplicationContext;
   Item: TOutboxItem & TDynamoRecord;
   section: string;
+  ttl: number;
 }) =>
   put({
     Item: {
       ...Item,
       pk: `section-outbox|${section}`,
-      ttl: calculateTimeToLive({ numDays: 8, timestamp: Item.sk }),
+      ttl,
     },
     applicationContext,
   });
@@ -87,14 +90,16 @@ const createSectionOutboxRecords = ({
     gsi1pk: `work-item|${workItem.workItemId}`,
     sk,
   };
-  const ttl = calculateTimeToLive({ numDays: 8, timestamp: sk });
   const promises = [];
-  if (ttl > 0) {
+  const ttl = calculateTimeToLive({ numDays: 8, timestamp: sk });
+
+  if (ttl.numSeconds > 0) {
     promises.push(
       createSectionOutboxRecentRecord({
         Item,
         applicationContext,
         section,
+        ttl: ttl.expirationTimestamp,
       }),
     );
   }

@@ -19,6 +19,7 @@ const FORMATS = {
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
+  UNIX_TIMESTAMP_SECONDS: 'X',
   WEEK: 'W',
   YEAR: 'yyyy',
   YEAR_TWO_DIGIT: 'yy',
