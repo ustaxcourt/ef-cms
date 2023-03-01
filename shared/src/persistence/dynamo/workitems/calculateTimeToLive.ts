@@ -9,9 +9,15 @@ import {
  *
  * @returns {Number} Number of seconds since the epoch forFORMATS when we want this record to expire
  */
-export const calculateTimeToLive = (timestamp: string) => {
-  const eightDaysAgo = subtractISODates(createISODateString(), {
-    day: 8,
+export const calculateTimeToLive = ({
+  numDays = 8,
+  timestamp,
+}: {
+  numDays: number;
+  timestamp: string;
+}) => {
+  const numDaysAgo = subtractISODates(createISODateString(), {
+    day: numDays,
   });
-  return Math.floor(dateStringsCompared(timestamp, eightDaysAgo) / 1000);
+  return Math.floor(dateStringsCompared(timestamp, numDaysAgo) / 1000);
 };

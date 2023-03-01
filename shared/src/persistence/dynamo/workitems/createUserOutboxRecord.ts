@@ -24,7 +24,7 @@ const createUserOutboxRecord = ({
   userId: string;
 }) => {
   const sk = workItem.completedAt ? workItem.completedAt : workItem.updatedAt;
-  const ttl = calculateTimeToLive(sk);
+  const ttl = calculateTimeToLive({ numDays: 8, timestamp: sk });
 
   const promises = [];
 
