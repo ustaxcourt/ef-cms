@@ -10,9 +10,7 @@ import { state } from 'cerebral';
  */
 export const shouldUseContactPrimaryAddressAction = ({ get, path }) => {
   const useSameAsPrimary = get(state.form.useSameAsPrimary);
-  console.log('get(state.form', get(state.form));
 
-  console.log('useSameAsPrimary', useSameAsPrimary);
   if (useSameAsPrimary) {
     return path.yes();
   } else {
