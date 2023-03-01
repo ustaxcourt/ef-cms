@@ -199,6 +199,7 @@ const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
   obj.blocked = rawCase.blocked;
   obj.blockedDate = rawCase.blockedDate;
   obj.blockedReason = rawCase.blockedReason;
+  obj.caseStatusHistory = rawCase.caseStatusHistory || [];
   obj.caseNote = rawCase.caseNote;
   obj.damages = rawCase.damages;
   obj.highPriority = rawCase.highPriority;
@@ -492,6 +493,10 @@ Case.VALIDATION_RULES = {
     .meta({
       tags: ['Restricted'],
     }),
+  caseStatusHistory: joi
+    .array()
+    .required()
+    .description('The history of status changes on the case'),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: joi.exist().valid(...CLOSED_CASE_STATUSES),
@@ -2055,10 +2060,15 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
  * @param {string} updatedCaseStatus the case status to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseStatus = function (updatedCaseStatus) {
+Case.prototype.setCaseStatus = function ({
+  changedBy,
+  date,
+  updatedCaseStatus,
+}) {
   const previousCaseStatus = this.status;
 
   this.status = updatedCaseStatus;
+  this.caseStatusHistory.push({ changedBy, date, updatedCaseStatus });
 
   if (
     [

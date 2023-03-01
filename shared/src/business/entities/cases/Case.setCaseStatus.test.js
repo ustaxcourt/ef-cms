@@ -10,6 +10,8 @@ const { Case } = require('./Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setCaseStatus', () => {
+  const date = '2018-03-01T00:01:00.000Z';
+  const changedBy = 'Test Docket Clerk 1';
   it('should update the case status and set the associated judge to the chief judge when the new status is "General Docket - Not At Issue"', () => {
     const updatedCase = new Case(
       {
@@ -21,7 +23,11 @@ describe('setCaseStatus', () => {
       },
     );
 
-    updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
+    updatedCase.setCaseStatus({
+      changedBy,
+      date,
+      updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+    });
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(updatedCase.associatedJudge).toEqual(CHIEF_JUDGE);
@@ -38,7 +44,11 @@ describe('setCaseStatus', () => {
       },
     );
 
-    updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+    updatedCase.setCaseStatus({
+      changedBy,
+      date,
+      updatedCaseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     expect(updatedCase.status).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -59,7 +69,11 @@ describe('setCaseStatus', () => {
       },
     );
 
-    updatedCase.setCaseStatus(CASE_STATUS_TYPES.closed);
+    updatedCase.setCaseStatus({
+      changedBy,
+      date,
+      updatedCaseStatus: CASE_STATUS_TYPES.closed,
+    });
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
@@ -80,7 +94,11 @@ describe('setCaseStatus', () => {
       },
     );
 
-    updatedCase.setCaseStatus(CASE_STATUS_TYPES.closedDismissed);
+    updatedCase.setCaseStatus({
+      changedBy,
+      date,
+      updatedCaseStatus: CASE_STATUS_TYPES.closedDismissed,
+    });
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closedDismissed);
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
@@ -102,9 +120,41 @@ describe('setCaseStatus', () => {
       },
     );
 
-    updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
+    updatedCase.setCaseStatus({
+      changedBy,
+      date,
+      updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+    });
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(reopenCaseSpy).toHaveBeenCalled();
+  });
+
+  it('should update the case status and call reopenCase when the new status is NOT a closed case status and the previous status is a closed case status', () => {
+    const updatedCase = new Case(
+      {
+        ...MOCK_CASE,
+        associatedJudge: 'Judge Buch',
+        status: CLOSED_CASE_STATUSES[0],
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    updatedCase.setCaseStatus({
+      changedBy: 'Test Docket Clerk',
+      date,
+      updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+    });
+
+    expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
+    expect(updatedCase.caseStatusHistory).toEqual([
+      {
+        changedBy: 'Test Docket Clerk',
+        date,
+        updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+      },
+    ]);
   });
 });
