@@ -358,7 +358,7 @@ describe('formattedTrialSessionDetails', () => {
       expect.objectContaining({
         consolidatedIconTooltipText: 'Lead case',
         docketNumber: '500-17',
-        leadCase: true,
+        isLeadCase: true,
       }),
       expect.objectContaining({ docketNumber: '102-19' }),
     ]);
