@@ -25,14 +25,14 @@ jest.mock('../utilities/DateHandler', () => {
 });
 
 describe('createCaseFromPaperInteractor', () => {
-  const DATE = '2018-11-21T20:49:28.192Z';
+  const date = '2018-11-21T20:49:28.192Z';
   let user = new User({
     name: 'Test Petitionsclerk',
     role: ROLES.petitionsClerk,
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   });
   const mockCreateIsoDateString = createISODateString as jest.Mock;
-  mockCreateIsoDateString.mockReturnValue(DATE);
+  mockCreateIsoDateString.mockReturnValue(date);
   beforeEach(() => {
     applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
       '00101-00',
@@ -85,7 +85,7 @@ describe('createCaseFromPaperInteractor', () => {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -146,7 +146,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -203,7 +203,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -259,7 +259,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -326,7 +326,7 @@ describe('createCaseFromPaperInteractor', () => {
           },
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'test',
           partyType: PARTY_TYPES.petitionerSpouse,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -379,7 +379,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
