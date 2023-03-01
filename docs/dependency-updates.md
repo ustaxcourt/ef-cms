@@ -78,6 +78,12 @@ There is an update available to `stylelint` but if we update that package then t
 
 This will happen until `stylelint-config-idiomatic-order` has updated to the latest `stylelint` ^15. I opened a [PR](https://github.com/ream88/stylelint-config-idiomatic-order/pull/79) to this project in hopes that this could move this along so we can update to ^15 of `stylelint` and associated packages. If security issues do arise and we wish to move forward to ^15 of `stylelint`, we would only get warnings on install (as of writing this).
 
+### stylelint-config-standard
+There is a major update to `stylelint-config-standard` from 29.0.0 to 30.0.1 that has a peer dependency for `stylelint@^15.0.0`. Currently `stylelint` is locked in our project as seen in the above caveat. When the lock is resolved this package should be able to be updated to the latest version. If there is a wish to update this it can be done, but it would require the reintrodction of the `--legacy-peer-deps` flag in our project until `stylelint` is updated.
+
+### stylelint-config-standard-scss
+There is a major update to `stylelint-config-standard-scss` from 6.1.0 to 7.0.1 that has a peer dependency for `stylelint@^15.0.0`. Currently `stylelint` is locked in our project as seen in the above caveat. When the lock is resolved this package should be able to be updated to the latest version. If there is a wish to update this it can be done, but it would require the reintrodction of the `--legacy-peer-deps` flag in our project until `stylelint` is updated.
+
 ### Incrementing the Node Cache Key Version
 
 It's rare to need to increment or change the cache key. One reason you may want to do so is if something happens while storing the cache which corrupts it. For example, a few months ago a package failed to install while the cache was being stored. CircleCI had no idea that the installation didn't go according to plan and saved the corrupted cache. In this case, we incremented the cache key version so that CircleCI was forced to reinstall the node dependencies and save them under the new key. The cache key can be updated by searching within config.yml for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
