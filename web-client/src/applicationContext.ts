@@ -21,6 +21,7 @@ import {
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
+  userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -784,6 +785,7 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       setupPdfDocument,
       sortDocketEntries,
+      userIsDirectlyAssociated,
       validateDateAndCreateISO,
     };
   },
