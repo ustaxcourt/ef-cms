@@ -389,24 +389,26 @@ describe('getFormattedCaseDetail', () => {
       });
     });
 
-    it("should set isLeadCase to true on the case when the leadDocketNumber matches the current case's docketNumber", () => {
+    it("should set lead case attributes when the leadDocketNumber matches the current case's docketNumber", () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
         leadDocketNumber: MOCK_CASE.docketNumber,
       });
 
       expect(result).toMatchObject({
+        consolidatedIconTooltipText: 'Lead case',
         isLeadCase: true,
       });
     });
 
-    it("should set isLeadCase to false when the leadDocketNumber does not match the current case's docket number", () => {
+    it("should not set lead case attributes when the leadDocketNumber does not match the current case's docket number", () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
         leadDocketNumber: 'notthedocketNumber',
       });
 
       expect(result).toMatchObject({
+        consolidatedIconTooltipText: 'Consolidated case',
         isLeadCase: false,
       });
     });

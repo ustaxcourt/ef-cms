@@ -456,7 +456,7 @@ describe('processFormattedMessages', () => {
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
           inConsolidatedGroup: false,
-          leadCase: false,
+          isLeadCase: false,
           message: 'This is a test message one',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
@@ -467,7 +467,7 @@ describe('processFormattedMessages', () => {
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
           inConsolidatedGroup: false,
-          leadCase: false,
+          isLeadCase: false,
           message: 'This is a test message three',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
@@ -513,7 +513,7 @@ describe('processFormattedMessages', () => {
           ],
         });
 
-        expect(result.messages[0].leadCase).toBeTruthy();
+        expect(result.messages[0].isLeadCase).toBeTruthy();
       });
 
       it('returns leadCase false when message.leadDocketNumber is NOT the same as message.docketNumber', () => {
@@ -528,7 +528,7 @@ describe('processFormattedMessages', () => {
           ],
         });
 
-        expect(result.messages[0].leadCase).toBeFalsy();
+        expect(result.messages[0].isLeadCase).toBeFalsy();
       });
     });
 

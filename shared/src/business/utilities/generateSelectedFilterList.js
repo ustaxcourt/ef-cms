@@ -22,7 +22,7 @@ const generateCaseStatus = (
 };
 
 const isMemberCase = formattedCase => {
-  return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
+  return formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase;
 };
 
 module.exports = {
