@@ -119,6 +119,7 @@ export const createCaseFromPaperInteractor = async (
     },
     {
       applicationContext,
+      isNewCase: true,
     },
   );
 

@@ -154,15 +154,15 @@ function Case() {
 
 Case.prototype.init = function init(
   rawCase,
-  { applicationContext, filtered = false },
+  { applicationContext, filtered = false, isNewCase = false },
 ) {
-  caseDecorator(this, rawCase, { applicationContext, filtered });
+  caseDecorator(this, rawCase, { applicationContext, filtered, isNewCase });
 };
 
 const caseDecorator = (
   obj,
   rawObject,
-  { applicationContext, filtered = false },
+  { applicationContext, filtered = false, isNewCase },
 ) => {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
@@ -170,10 +170,9 @@ const caseDecorator = (
 
   obj.petitioners = [];
 
-  if (
-    !filtered ||
-    User.isInternalUser(applicationContext.getCurrentUser().role)
-  ) {
+  const currentUser = applicationContext.getCurrentUser();
+
+  if (!filtered || User.isInternalUser(currentUser.role)) {
     assignFieldsForInternalUsers({
       applicationContext,
       obj,
@@ -189,6 +188,12 @@ const caseDecorator = (
   assignHearings(params);
   assignPractitioners(params);
   assignFieldsForAllUsers(params);
+  if (isNewCase) {
+    this.setCaseStatus({
+      changedBy: currentUser.name,
+      updatedCaseStatus: rawObject.status || CASE_STATUS_TYPES.new,
+    });
+  }
 };
 
 const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
