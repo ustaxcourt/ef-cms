@@ -206,7 +206,7 @@ export const BeforeStartingCase = connect(
                   <p className="label">A Business</p>
                   <p>
                     If you’re filing for a business, you’ll need to complete and
-                    submit the Ownership Disclosure Statement.
+                    submit the Corporate Disclosure Statement.
                   </p>
                   <p className="label">
                     If you didn’t already fill out the form, you can download it
@@ -216,14 +216,14 @@ export const BeforeStartingCase = connect(
                     <Button
                       link
                       className="usa-link--external text-left mobile-text-wrap"
-                      href="https://www.ustaxcourt.gov/resources/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                      href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
                       icon="file-pdf"
                       iconColor="blue"
                       overrideMargin="margin-right-1"
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      Download Ownership Disclosure Statement (T.C. Form 6)
+                      Download Corporate Disclosure Statement (T.C. Form 6)
                     </Button>
                   </p>
                 </AccordionItem>

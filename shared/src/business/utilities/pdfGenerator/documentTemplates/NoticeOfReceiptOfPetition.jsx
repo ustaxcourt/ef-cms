@@ -5,10 +5,56 @@ const {
 const { AddressLabel } = require('../components/AddressLabel.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
+const StandardNOTRText = () => (
+  <div className="info-box-content">
+    The Court encourages registration for DAWSON, the Court’s electronic filing
+    and case management system, so that you can electronically file and view
+    documents in your case. For more information about electronic service, email{' '}
+    <strong>
+      <a href="mailto:dawson.support@ustaxcourt.gov">
+        dawson.support@ustaxcourt.gov
+      </a>
+    </strong>
+    , and a letter with eAccess instructions will be mailed to the address of
+    record. If you do not register for eFiling, you must send the opposing party
+    a copy of any document you file with the Court. To obtain further
+    information about Tax Court proceedings, visit{' '}
+    <strong>
+      <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
+    </strong>{' '}
+    and select &quot;Guidance for Petitioners.&quot;
+  </div>
+);
+
+const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
+  <div className="info-box-content">
+    You indicated on your Petition that you wish to receive electronic service
+    for your case at <strong>{contact.paperPetitionEmail}</strong>. You must
+    verify your electronic service address by e-mailing{' '}
+    <strong>
+      <a href="mailto:dawson.support@ustaxcourt.gov">
+        dawson.support@ustaxcourt.gov
+      </a>
+    </strong>{' '}
+    with the subject line “E-Access Request” and include your docket number and
+    the following access code in the body of your email:
+    <strong> {accessCode}</strong>. Until the verification process is completed
+    you will continue to receive paper service. To obtain further information
+    about Tax Court proceedings, visit{' '}
+    <strong>
+      <a href="mailto:dawson.support@ustaxcourt.gov">
+        dawson.support@ustaxcourt.gov
+      </a>
+    </strong>{' '}
+    and select &quot;Guidance for Petitioners.&quot;
+  </div>
+);
+
 export const NoticeOfReceiptOfPetition = ({
-  address,
+  accessCode,
   caseCaptionExtension,
   caseTitle,
+  contact,
   docketNumberWithSuffix,
   preferredTrialCity,
   receivedAtFormatted,
@@ -53,25 +99,14 @@ export const NoticeOfReceiptOfPetition = ({
 
       <div className="info-box margin-bottom-0">
         <div className="info-box-header">Electronic Access to Your Case:</div>
-        <div className="info-box-content">
-          The Court encourages registration for DAWSON, the Court’s electronic
-          filing and case management system, so that you can electronically file
-          and view documents in your case. For more information about electronic
-          service, email{' '}
-          <strong>
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
-            </a>
-          </strong>
-          , and a letter with eAccess instructions will be mailed to the address
-          of record. If you do not register for eFiling, you must send the
-          opposing party a copy of any document you file with the Court. To
-          obtain further information about Tax Court proceedings, visit{' '}
-          <strong>
-            <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
-          </strong>{' '}
-          and select &quot;Guidance for Petitioners.&quot;
-        </div>
+        {!!contact.paperPetitionEmail && contact.hasConsentedToEService ? (
+          <ElectronicServiceNOTRText
+            accessCode={accessCode}
+            contact={contact}
+          />
+        ) : (
+          <StandardNOTRText />
+        )}
       </div>
 
       <div className="info-box margin-bottom-0">
@@ -117,18 +152,18 @@ export const NoticeOfReceiptOfPetition = ({
 
       <div id="address-label-cover-sheet">
         <AddressLabel
-          additionalName={address.additionalName}
-          address1={address.address1}
-          address2={address.address2}
-          address3={address.address3}
-          city={address.city}
-          country={address.country}
-          inCareOf={address.inCareOf}
-          name={address.name}
-          postalCode={address.postalCode}
-          secondaryName={address.secondaryName}
-          state={address.state}
-          title={address.title}
+          additionalName={contact.additionalName}
+          address1={contact.address1}
+          address2={contact.address2}
+          address3={contact.address3}
+          city={contact.city}
+          country={contact.country}
+          inCareOf={contact.inCareOf}
+          name={contact.name}
+          postalCode={contact.postalCode}
+          secondaryName={contact.secondaryName}
+          state={contact.state}
+          title={contact.title}
         />
       </div>
     </div>
