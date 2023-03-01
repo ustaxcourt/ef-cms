@@ -1984,15 +1984,23 @@ Case.prototype.unsetAsHighPriority = function () {
 /**
  * remove case from trial, setting case status to generalDocketReadyForTrial
  *
- * @param {string} caseStatus optional case status to set the case to
- * @param {string} associatedJudge optional associatedJudge to set on the case
+ * @param {string} providers.updatedCaseStatus optional case status to set the case to
+ * @param {string} providers.associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
+Case.prototype.removeFromTrial = function ({
+  associatedJudge,
+  changedBy,
+  date,
+  updatedCaseStatus,
+}) {
   this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
-  this.setCaseStatus(
-    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
-  );
+  this.setCaseStatus({
+    changedBy,
+    date,
+    updatedCaseStatus:
+      updatedCaseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  });
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
