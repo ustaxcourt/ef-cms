@@ -1047,31 +1047,6 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 };
 
 /**
- * Reopen the case with the provided status
- *
- * @param {String} reopenedStatus the status to set the case to
- * @returns {Case} the updated case entity
- */
-Case.prototype.reopenCase = function ({ reopenedStatus }) {
-  this.closedDate = undefined;
-  this.status = reopenedStatus;
-  return this;
-};
-
-/**
- * Close the case with the provided status
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.closeCase = function ({ closedStatus }) {
-  this.closedDate = createISODateString();
-  this.status = closedStatus;
-  this.unsetAsBlocked();
-  this.unsetAsHighPriority();
-  return this;
-};
-
-/**
  * Determines if the case has been closed
  *
  * @returns {Boolean} true if the case has been closed, false otherwise
@@ -1506,7 +1481,11 @@ Case.prototype.checkForReadyForTrial = function () {
         daysElapsedSinceDocumentWasFiled > ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
-        this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
+        this.setCaseStatus({
+          changedBy: 'System',
+          date: currentDate,
+          updatedCaseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        });
       }
     });
   }
@@ -2088,10 +2067,12 @@ Case.prototype.setCaseStatus = function ({
   }
 
   if (isClosedStatus(updatedCaseStatus)) {
-    this.closeCase({ closedStatus: updatedCaseStatus });
+    this.closedDate = createISODateString();
+    this.unsetAsBlocked();
+    this.unsetAsHighPriority();
   } else {
     if (isClosedStatus(previousCaseStatus)) {
-      this.reopenCase({ reopenedStatus: updatedCaseStatus });
+      this.closedDate = undefined;
     }
   }
 
