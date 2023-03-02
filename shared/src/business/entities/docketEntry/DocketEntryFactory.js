@@ -166,7 +166,7 @@ function DocketEntryFactory(rawProps) {
   );
 
   if (
-    rawProps.filers.length === 0 &&
+    rawProps.filers?.length === 0 &&
     rawProps.partyIrsPractitioner !== true &&
     rawProps.partyPrivatePractitioner !== true &&
     rawProps.hasOtherFilingParty !== true &&
