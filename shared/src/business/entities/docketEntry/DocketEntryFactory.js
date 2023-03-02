@@ -22,7 +22,6 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
-  amicusCuriae: 'Enter the name of the amicus curiae',
   dateReceived: [
     {
       contains: 'must be less than or equal to',
@@ -60,7 +59,6 @@ function DocketEntryFactory(rawProps) {
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
     this.addToCoversheet = rawPropsParam.addToCoversheet;
-    this.amicusCuriae = rawPropsParam.amicusCuriae;
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
@@ -69,6 +67,7 @@ function DocketEntryFactory(rawProps) {
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
     this.filers = rawPropsParam.filers;
+    this.filedBy = rawPropsParam.filedBy;
     this.freeText = rawPropsParam.freeText;
     this.hasOtherFilingParty = rawPropsParam.hasOtherFilingParty;
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
@@ -97,7 +96,6 @@ function DocketEntryFactory(rawProps) {
     addToCoversheet: DOCKET_ENTRY_VALIDATION_RULE_KEYS.addToCoversheet,
     additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
     additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
-    amicusCuriae: DOCKET_ENTRY_VALIDATION_RULE_KEYS.amicusCuriae,
     attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
     certificateOfService:
       DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
@@ -111,6 +109,11 @@ function DocketEntryFactory(rawProps) {
     eventCode: JoiValidationConstants.STRING.valid(
       ...ALL_EVENT_CODES,
     ).required(),
+    filedBy: JoiValidationConstants.STRING.when('eventCode', {
+      is: joi.exist().valid('AMBR'),
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
     freeText: DOCKET_ENTRY_VALIDATION_RULE_KEYS.freeText,
     hasOtherFilingParty: DOCKET_ENTRY_VALIDATION_RULE_KEYS.hasOtherFilingParty,
     hasSupportingDocuments:
