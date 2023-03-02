@@ -59,7 +59,7 @@ describe('filingPartiesFormHelper', () => {
     const result = runCompute(filingPartiesFormHelper, {
       state: {
         ...baseState,
-        validationErrors: { amicusCuriae: 'You did something bad.' },
+        validationErrors: { filedBy: 'You did something bad.' },
       },
     });
 
