@@ -35,6 +35,7 @@
     "core-js": "^3.28.0",
     "cors": "^2.8.5",
     "deep-freeze": "0.0.1",
+    "deep-object-diff": "^1.1.9",
     "diff-arrays-of-objects": "^1.1.9",
     "esbuild": "^0.16.17",
     "esbuild-css-modules-plugin": "^2.7.1",

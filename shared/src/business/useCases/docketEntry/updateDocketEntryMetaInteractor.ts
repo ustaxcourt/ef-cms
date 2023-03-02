@@ -211,7 +211,8 @@ export const updateDocketEntryMetaInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCase: caseToUpdate,
     });
 
   return new Case(result, { applicationContext }).validate().toRawObject();

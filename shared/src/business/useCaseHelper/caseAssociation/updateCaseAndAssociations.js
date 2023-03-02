@@ -1,3 +1,5 @@
+const { diff: diffObject } = require('deep-object-diff');
+
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
@@ -521,22 +523,16 @@ const updateCaseDeadlines = async ({
  */
 exports.updateCaseAndAssociations = async ({
   applicationContext,
-  caseToUpdate,
+  newCase,
+  oldCase,
 }) => {
-  const caseEntity = caseToUpdate.validate
-    ? caseToUpdate
-    : new Case(caseToUpdate, { applicationContext });
+  const caseEntity = newCase.validate
+    ? newCase
+    : new Case(newCase, { applicationContext });
 
-  const oldCaseEntity = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const validRawNewCaseEntity = caseEntity.validate().toRawObject();
 
-  const validRawCaseEntity = caseEntity.validate().toRawObject();
-
-  const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
+  const validRawOldCaseEntity = new Case(oldCase, { applicationContext })
     .validate()
     .toRawObject();
 
@@ -555,7 +551,7 @@ exports.updateCaseAndAssociations = async ({
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
     fn({
       applicationContext,
-      caseToUpdate: validRawCaseEntity,
+      caseToUpdate: validRawNewCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),
   );
@@ -570,8 +566,17 @@ exports.updateCaseAndAssociations = async ({
 
   await Promise.all(persistenceRequests);
 
-  return applicationContext.getPersistenceGateway().updateCase({
+  const didCaseChange = diffObject(
+    validRawOldCaseEntity,
+    validRawNewCaseEntity,
+  );
+  applicationContext.logger.debug('Did the case change?', { didCaseChange });
+
+  //
+
+  return applicationContext.getPersistenceGateway().updateCaseV2({
     applicationContext,
-    caseToUpdate: validRawCaseEntity,
+    caseToUpdate: validRawNewCaseEntity,
+    diff: didCaseChange,
   });
 };
