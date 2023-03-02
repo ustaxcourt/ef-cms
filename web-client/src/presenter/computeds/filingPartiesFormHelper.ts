@@ -5,7 +5,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
-  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } =
+  const { AMENDMENT_EVENT_CODES, INTERNAL_CATEGORY_MAP, PARTY_TYPES } =
     applicationContext.getConstants();
 
   const partyValidationError =
@@ -23,8 +23,6 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
-  const amendmentEventCodes = ['AMAT', 'ADMT'];
-
   const isServed = applicationContext.getUtilities().isServed(form);
 
   const showSecondaryParty =
@@ -37,7 +35,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     isServed,
     noMargin:
       objectionDocumentTypes.includes(form.documentType) ||
-      (amendmentEventCodes.includes(form.eventCode) &&
+      (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     partyValidationError,
     showFilingPartiesAsCheckboxes,
