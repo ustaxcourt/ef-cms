@@ -1,8 +1,5 @@
 /* eslint-disable max-lines */
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -16,14 +13,50 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
-} = require('../EntityConstants');
-const { Case, getContactPrimary } = require('./Case');
-const { ContactFactory } = require('../contacts/ContactFactory');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+} from '../EntityConstants';
+import { Case, getContactPrimary } from './Case';
+import { ContactFactory } from '../contacts/ContactFactory';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createISODateString } from '../../utilities/DateHandler';
+
+jest.mock('../../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn(),
+  };
+});
 
 describe('Case entity', () => {
+  describe('init', () => {
+    it('should add case status information to the `caseStatusHistory` if a new case is created', () => {
+      const internalUser = MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'];
+      applicationContext.getCurrentUser.mockReturnValueOnce(internalUser);
+      const mockCreateIsoDateString = createISODateString as jest.Mock;
+      mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
+
+      const expectedCaseStatus = {
+        changedBy: internalUser.name,
+        date: createISODateString(),
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      };
+      const myCase = new Case(
+        { ...MOCK_CASE, status: undefined },
+        {
+          applicationContext,
+          isNewCase: true,
+        },
+      );
+
+      expect(myCase).toMatchObject({
+        caseStatusHistory: [expectedCaseStatus],
+      });
+    });
+  });
   it('should throw an error if app context is not passed in', () => {
     expect(() => new Case({}, {})).toThrow();
   });
@@ -1264,4 +1297,6 @@ describe('Case entity', () => {
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
   });
+
+  describe;
 });
