@@ -3,7 +3,7 @@ import {
   createISODateString,
   formatDateString,
   subtractISODates,
-} from '../../../business/utilities/DateHandler';
+} from '../../business/utilities/DateHandler';
 
 const { calculateTimeToLive } = require('./calculateTimeToLive');
 
