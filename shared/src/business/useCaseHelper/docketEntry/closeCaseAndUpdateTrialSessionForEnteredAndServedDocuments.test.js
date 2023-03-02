@@ -20,7 +20,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
   const eventCode = ENTERED_AND_SERVED_EVENT_CODES[4];
 
-  jest.spyOn(Case.prototype, 'closeCase');
+  jest.spyOn(Case.prototype, 'setCaseStatus');
   jest.spyOn(TrialSession.prototype, 'removeCaseFromCalendar');
   jest.spyOn(TrialSession.prototype, 'deleteCaseFromCalendar');
   jest.spyOn(TrialSession.prototype, 'validate');
@@ -39,9 +39,11 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
         eventCode: orderEventCode,
       });
 
-      expect(Case.prototype.closeCase).toHaveBeenCalledWith({
-        closedStatus: CASE_STATUS_TYPES.closedDismissed,
-      });
+      expect(Case.prototype.setCaseStatus).toHaveBeenCalledWith(
+        expect.objectContaining({
+          updatedCaseStatus: CASE_STATUS_TYPES.closedDismissed,
+        }),
+      );
     });
   });
 
@@ -52,9 +54,11 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       eventCode,
     });
 
-    expect(Case.prototype.closeCase).toHaveBeenCalledWith({
-      closedStatus: CASE_STATUS_TYPES.closed,
-    });
+    expect(Case.prototype.setCaseStatus).toHaveBeenCalledWith(
+      expect.objectContaining({
+        updatedCaseStatus: CASE_STATUS_TYPES.closed,
+      }),
+    );
   });
 
   it('should make a call to delete the case trial sort mapping records', async () => {
