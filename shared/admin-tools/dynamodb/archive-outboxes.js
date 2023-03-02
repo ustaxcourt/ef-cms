@@ -106,16 +106,11 @@ const processPrimaryKey = async (applicationContext, { pk }) => {
   console.timeEnd(pk);
 };
 (async () => {
-  const applicationContext = createApplicationContext({});
-  // move user-outbox records to outbox
   const jsonFile = process.argv[2];
+  const applicationContext = createApplicationContext({});
 
   const pks = JSON.parse(readFileSync(jsonFile, 'utf-8'));
-  console.log(pks);
-
   for (const pk of pks) {
     await processPrimaryKey(applicationContext, { pk });
   }
-
-  // get all records in outbox
 })();
