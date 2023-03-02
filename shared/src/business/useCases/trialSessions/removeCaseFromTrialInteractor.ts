@@ -71,6 +71,7 @@ export const removeCaseFromTrialInteractor = async (
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
       associatedJudge,
+      changedBy: user.name,
       updatedCaseStatus: caseStatus,
     });
 

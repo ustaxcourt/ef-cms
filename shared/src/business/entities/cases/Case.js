@@ -1978,10 +1978,12 @@ Case.prototype.unsetAsHighPriority = function () {
  */
 Case.prototype.removeFromTrial = function ({
   associatedJudge = CHIEF_JUDGE,
+  changedBy,
   updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
 }) {
   this.setAssociatedJudge(associatedJudge);
   this.setCaseStatus({
+    changedBy,
     updatedCaseStatus,
   });
   this.trialDate = undefined;
