@@ -2,7 +2,7 @@ import { refreshElasticsearchIndex } from '../helpers';
 
 export const docketClerkViewsQCInProgress = (cerebralTest, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
-    await refreshElasticsearchIndex();
+    await refreshElasticsearchIndex(1000);
 
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
@@ -17,6 +17,7 @@ export const docketClerkViewsQCInProgress = (cerebralTest, shouldExist) => {
     expect(workQueueToDisplay.box).toEqual('inProgress');
 
     const inProgressQueue = cerebralTest.getState('workQueue');
+    console.log(inProgressQueue);
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
         workItem.docketEntry.docketEntryId ===
