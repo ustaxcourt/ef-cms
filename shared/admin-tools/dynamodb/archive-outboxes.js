@@ -13,15 +13,6 @@ const { chunk } = require('lodash');
 const { readFileSync } = require('fs');
 const { sleep } = require('../../src/tools/helpers');
 
-const usage = error => {
-  if (error) {
-    console.error(`ERROR: ${error}`);
-  }
-  console.log(
-    'USAGE: \n$ npx ts-node archive-outboxes.js [user-outbox|uuid, section-outbox|section]',
-  );
-};
-
 const archiveUserOutboxItems = async (
   applicationContext,
   { items, userId },
@@ -81,7 +72,7 @@ const processPrimaryKey = async (applicationContext, { pk }) => {
   const [bucketType, bucketKey] = pk.split('|');
 
   if (!['user-outbox', 'section-outbox'].includes(bucketType)) {
-    return usage(`received invalid pk: ${pk}`);
+    console.log(`received invalid pk: ${pk}`);
   }
   console.time(pk);
 
