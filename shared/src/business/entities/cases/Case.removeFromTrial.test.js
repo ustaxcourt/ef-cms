@@ -29,6 +29,8 @@ describe('removeFromTrial', () => {
       },
       { applicationContext },
     );
+    const user = 'Petitions Clerk';
+
     caseToUpdate.setAsCalendared(trialSession);
 
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
@@ -38,7 +40,11 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
 
-    caseToUpdate.removeFromTrial({});
+    caseToUpdate.removeFromTrial({
+      changedBy: user,
+    });
+    const indexOfLastCaseHistoryItem =
+      caseToUpdate.caseStatusHistory.length - 1;
 
     expect(caseToUpdate.status).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -48,6 +54,9 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialLocation).toBeFalsy();
     expect(caseToUpdate.trialSessionId).toBeFalsy();
     expect(caseToUpdate.trialTime).toBeFalsy();
+    expect(
+      caseToUpdate.caseStatusHistory[indexOfLastCaseHistoryItem],
+    ).toMatchObject({ changedBy: user });
   });
 
   it('sets the case status to the given case status when provided', () => {
