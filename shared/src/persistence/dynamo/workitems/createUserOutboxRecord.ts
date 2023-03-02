@@ -2,8 +2,8 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../business/utilities/DateHandler';
+import { calculateTimeToLive } from '../calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
-const { calculateTimeToLive } = require('./calculateTimeToLive');
 
 /**
  * createUserOutboxRecord
@@ -28,7 +28,7 @@ const createUserOutboxRecord = ({
 
   const promises = [];
 
-  if (ttl > 0) {
+  if (ttl.numSeconds > 0) {
     promises.push(
       put({
         Item: {
@@ -36,7 +36,7 @@ const createUserOutboxRecord = ({
           gsi1pk: `work-item|${workItem.workItemId}`,
           pk: `user-outbox|${userId}`,
           sk,
-          ttl,
+          ttl: ttl.expirationTimestamp,
         },
         applicationContext,
       }),

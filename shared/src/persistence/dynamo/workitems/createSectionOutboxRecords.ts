@@ -2,7 +2,7 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../business/utilities/DateHandler';
-import { calculateTimeToLive } from './calculateTimeToLive';
+import { calculateTimeToLive } from '../calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
 
 /**
