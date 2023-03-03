@@ -216,6 +216,10 @@ export abstract class JoiValidationEntity {
     return this;
   }
 
+  validateWithLogging(applicationContext) {
+    return this.validate({ applicationContext, logErrors: true });
+  }
+
   static validateRawCollection(collection: any, args: any) {
     throw new Error('not implemented!');
   }
