@@ -42,12 +42,6 @@ export const validateDocketEntryAction = ({
     errors.serviceDate = errors.serviceDate || 'Enter a four-digit year';
   }
 
-  if (entryMetadata.eventCode === 'AMBR') {
-    if (errors) {
-      errors.filedBy = 'Enter the name of the amicus curiae';
-    }
-  }
-
   if (!errors) {
     return path.success();
   } else {
@@ -67,7 +61,7 @@ export const validateDocketEntryAction = ({
       'filers',
       'partyIrsPractitioner',
       'otherFilingParty',
-      'filedBy',
+      'amicusCuriae',
     ];
 
     return path.error({
