@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../errors/errors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
@@ -9,6 +10,33 @@ const setIsValidated = obj => {
     writable: false,
   });
 };
+/**
+ *
+ */
+function toRawObject(entity) {
+  const keys = Object.keys(entity);
+  const obj = {};
+  for (let key of keys) {
+    const value = entity[key];
+    if (Array.isArray(value)) {
+      obj[key] = value.map(v => {
+        if (typeof v === 'string' || v instanceof String) {
+          return v;
+        } else {
+          return toRawObject(v);
+        }
+      });
+    } else if (typeof value === 'object' && value !== null) {
+      obj[key] = toRawObject(value);
+    } else {
+      obj[key] = value;
+    }
+  }
+  if (entity.isValidated) {
+    setIsValidated(obj);
+  }
+  return obj;
+}
 
 /**
  *
@@ -121,7 +149,10 @@ export abstract class JoiValidationEntity {
     return isEmpty(validationErrors);
   }
 
-  validate(options) {
+  validate(options?: {
+    applicationContext: IApplicationContext;
+    logErrors: boolean;
+  }) {
     const applicationContext = options?.applicationContext;
     const logErrors = options?.logErrors;
 
@@ -154,5 +185,38 @@ export abstract class JoiValidationEntity {
 
   getFormattedValidationErrors() {
     return getFormattedValidationErrors(this);
+  }
+
+  toRawObject() {
+    return toRawObject(this) as ExcludeMethods<this>;
+  }
+
+  toRawObjectFromJoi() {
+    return toRawObject(this) as ExcludeMethods<this>;
+  }
+
+  validateForMigration() {
+    let { error } = this.schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    if (error) {
+      console.log('Error, entity is invalid: ', this);
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(
+          error.details.map(detail => {
+            return detail.message.replace(/"/g, "'");
+          }),
+        ),
+      );
+    }
+    setIsValidated(this);
+    return this;
+  }
+
+  static validateRawCollection(collection: any, args: any) {
+    throw new Error('not implemented!');
   }
 }

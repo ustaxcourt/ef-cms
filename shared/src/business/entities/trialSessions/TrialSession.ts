@@ -542,6 +542,12 @@ export class TrialSession extends JoiValidationEntity {
     this.sessionStatus = SESSION_STATUS_TYPES.closed;
     return this;
   }
+
+  static validateRawCollection(collection: TRawTrialSession[] = [], args: any) {
+    return collection.map(rawEntity =>
+      new TrialSession(rawEntity, args).validate().toRawObject(),
+    );
+  }
 }
 
 /**
