@@ -130,7 +130,11 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
     <tbody>
       <tr>
         <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
+          <ConsolidatedCaseIcon
+            consolidatedIconTooltipText={message.consolidatedIconTooltipText}
+            inConsolidatedGroup={message.inConsolidatedGroup}
+            showLeadCaseIcon={message.isLeadCase}
+          />
         </td>
         <td className="message-queue-row small" colSpan="2">
           {message.docketNumberWithSuffix}
