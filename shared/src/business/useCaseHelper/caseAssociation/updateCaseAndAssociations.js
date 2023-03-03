@@ -1,13 +1,15 @@
-const { diff: diffObject } = require('deep-object-diff');
-
 const diff = require('diff-arrays-of-objects');
+const {
+  fieldsToOmitBeforePersisting,
+} = require('../../../persistence/dynamo/cases/createCase');
 const { Case } = require('../../entities/cases/Case');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
+const { diff: deepObjectDiff } = require('deep-object-diff');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { isEmpty, omit, pick } = require('lodash');
 const { Message } = require('../../entities/Message');
-const { pick } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
 /**
@@ -566,17 +568,49 @@ exports.updateCaseAndAssociations = async ({
 
   await Promise.all(persistenceRequests);
 
-  const didCaseChange = diffObject(
-    validRawOldCaseEntity,
-    validRawNewCaseEntity,
-  );
-  applicationContext.logger.debug('Did the case change?', { didCaseChange });
-
-  //
-
-  return applicationContext.getPersistenceGateway().updateCaseV2({
+  return updateCase({
     applicationContext,
     caseToUpdate: validRawNewCaseEntity,
-    diff: didCaseChange,
+    oldCase: validRawOldCaseEntity,
   });
+};
+
+/**
+ * updateCase
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseToUpdate the case object which was updated
+ * @param {object} providers.oldCase the original copy of the case object which was updated
+ * @returns {Promise<*>} the updated case entity
+ * */
+const updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
+  const caseDifference = omit(
+    deepObjectDiff(oldCase, caseToUpdate),
+    fieldsToOmitBeforePersisting,
+  );
+
+  if (isEmpty(caseDifference)) {
+    return caseToUpdate;
+  }
+
+  const mostRecentCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  const mostRecentCaseUpdated = {
+    ...mostRecentCase,
+    ...caseDifference,
+  };
+
+  const validUpdatedCase = new Case(mostRecentCaseUpdated, {
+    applicationContext,
+  }).validate();
+
+  return applicationContext
+    .getPersistenceGateway()
+    .updateCase({ applicationContext, caseToUpdate: validUpdatedCase });
 };

@@ -138,10 +138,7 @@ import { setMessageAsRead } from '../../shared/src/persistence/dynamo/messages/s
 import { setPriorityOnAllWorkItems } from '../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
-import {
-  updateCase,
-  updateCaseV2,
-} from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from '../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from '../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing';
 import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
@@ -256,7 +253,6 @@ const gatewayMethods = {
     updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
-    updateCaseV2,
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
