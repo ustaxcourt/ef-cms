@@ -12,7 +12,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     validationErrors &&
     (validationErrors.filers ||
       validationErrors.partyIrsPractitioner ||
-      validationErrors.filedBy);
+      validationErrors.amicusCuriae);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
