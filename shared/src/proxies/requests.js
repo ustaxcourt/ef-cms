@@ -135,8 +135,8 @@ exports.put = async ({ applicationContext, body, endpoint }) => {
 exports.remove = async ({
   applicationContext,
   endpoint,
-  params,
   options = {},
+  params,
 }) => {
   getMemoized.clear();
   return await applicationContext
