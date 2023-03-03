@@ -46,13 +46,14 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   addToCoversheet: joi.boolean().optional(),
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
-  amicusCuriae: JoiValidationConstants.STRING.when('eventCode', {
-    is: joi.exist().valid('AMBR'),
-    otherwise: joi.optional(),
-    then: joi.required(),
-  }).description(
-    'Outside individuals/organizations who are not parties to a case',
-  ),
+  //fix this for otherFilingParty
+  // amicusCuriae: JoiValidationConstants.STRING.when('eventCode', {
+  //   is: joi.exist().valid('AMBR'),
+  //   otherwise: joi.optional(),
+  //   then: joi.required(),
+  // }).description(
+  //   'Outside individuals/organizations who are not parties to a case',
+  // ),
   archived: joi
     .boolean()
     .optional()

@@ -56,10 +56,11 @@ describe('filingPartiesFormHelper', () => {
   });
 
   it('shows a party validation error when the document being filed is an Amicus Brief and Amicus Curiae is empty', () => {
+    //fix this for otherFilingParty
     const result = runCompute(filingPartiesFormHelper, {
       state: {
         ...baseState,
-        validationErrors: { amicusCuriae: 'You did something bad.' },
+        validationErrors: { otherFilingParty: 'You did something bad.' },
       },
     });
 

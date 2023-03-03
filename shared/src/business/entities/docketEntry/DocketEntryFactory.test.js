@@ -279,6 +279,7 @@ describe('DocketEntryFactory', () => {
       expect(errors()).toBeNull();
     });
 
+    //fix this for otherFilingParty
     it('should be optional when the docket entry event code is "AMBR" and has a defined amicusCuriae', () => {
       rawEntity.eventCode = 'AMBR';
       rawEntity.amicusCuriae = 'Mike Tyson';
@@ -326,6 +327,7 @@ describe('DocketEntryFactory', () => {
     });
   });
 
+  //fix this for otherFilingParty
   describe('amicusCuriae', () => {
     it('should be required when the eventCode is AMBR', () => {
       rawEntity.eventCode = 'AMBR';

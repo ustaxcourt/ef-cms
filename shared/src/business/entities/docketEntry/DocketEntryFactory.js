@@ -2,7 +2,6 @@ const joi = require('joi');
 const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
-  // DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
@@ -22,7 +21,6 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
-  amicusCuriae: 'Enter the name of the amicus curiae',
   dateReceived: [
     {
       contains: 'must be less than or equal to',
@@ -60,7 +58,6 @@ function DocketEntryFactory(rawProps) {
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
     this.addToCoversheet = rawPropsParam.addToCoversheet;
-    this.amicusCuriae = rawPropsParam.amicusCuriae;
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
@@ -97,7 +94,6 @@ function DocketEntryFactory(rawProps) {
     addToCoversheet: DOCKET_ENTRY_VALIDATION_RULE_KEYS.addToCoversheet,
     additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
     additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
-    amicusCuriae: DOCKET_ENTRY_VALIDATION_RULE_KEYS.amicusCuriae,
     attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
     certificateOfService:
       DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
