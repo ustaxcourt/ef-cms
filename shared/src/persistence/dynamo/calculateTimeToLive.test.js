@@ -9,9 +9,9 @@ const { calculateTimeToLive } = require('./calculateTimeToLive');
 
 describe('calculateTimeToLive', () => {
   const now = createISODateString();
-  const eightDaysAgo = subtractISODates(now, { day: 8 });
 
   it('should return 0 if passed in date is eight days ago', () => {
+    const eightDaysAgo = subtractISODates(now, { day: 8 });
     const ttl = calculateTimeToLive({ numDays: 8, timestamp: eightDaysAgo });
     expect(ttl.numSeconds).toBe(0);
     expect(ttl.expirationTimestamp).toBe(
