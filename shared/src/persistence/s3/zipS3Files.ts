@@ -3,19 +3,19 @@
 const noop = () => {};
 
 export const zipS3Files = ({
+  additionalFileNames = [],
+  additionalFiles = [],
   archiver,
-  s3FilesLib,
   bucket,
   debug = false,
+  folder = '',
   onEntry = noop,
   onError = () => {},
   onProgress = noop,
   s3Client,
-  additionalFiles = [],
-  additionalFileNames = [],
+  s3FilesLib,
   s3Keys,
   s3KeysFileNames,
-  folder = '',
 }: {
   archiver: any;
   s3FilesLib: any;

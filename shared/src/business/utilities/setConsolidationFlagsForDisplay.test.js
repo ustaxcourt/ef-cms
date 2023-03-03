@@ -11,7 +11,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: undefined,
       inConsolidatedGroup: false,
-      leadCase: false,
+      isLeadCase: false,
     });
   });
 
@@ -26,7 +26,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
     });
   });
 
@@ -41,7 +41,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Lead case',
       inConsolidatedGroup: true,
-      leadCase: true,
+      isLeadCase: true,
     });
   });
 
@@ -56,7 +56,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
       shouldIndent: undefined,
     });
   });
@@ -76,7 +76,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
       shouldIndent: true,
     });
   });
@@ -101,7 +101,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
       shouldIndent: true,
     });
   });
@@ -117,7 +117,7 @@ describe('setConsolidationFlagsForDisplay', () => {
       ...mockCaseItem,
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
       shouldIndent: undefined,
     });
   });
