@@ -36,7 +36,23 @@ describe('unsetAddressOnFormAction', () => {
     expect(state.form.contact.state).toBeUndefined();
     expect(state.form.contact.postalCode).toBeUndefined();
     expect(state.form.contact.country).toBeUndefined();
-    expect(state.form.contact.countryType).toBeUndefined();
+  });
+
+  it('should not unset the default country type', async () => {
+    const { state } = await runAction(unsetAddressOnFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          contact: {
+            countryType: COUNTRY_TYPES.DOMESTIC,
+          },
+        },
+      },
+    });
+
+    expect(state.form.contact.countryType).toEqual(COUNTRY_TYPES.DOMESTIC);
   });
 
   it('should unset state.screenMetadata.petitionerAddresses', async () => {
