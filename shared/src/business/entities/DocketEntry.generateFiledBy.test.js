@@ -235,4 +235,41 @@ describe('generateFiledBy (called in constructor)', () => {
 
     expect(docketEntry.filedBy).toEqual('Bob Practitioner');
   });
+
+  it('should not update filedBy when the docket entry has been served', () => {
+    const mockFiledBy =
+      'This filed by should not be updated by the constructor';
+    const myDoc = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        filedBy: mockFiledBy,
+        filers: [mockPrimaryId, mockSecondaryId],
+        isLegacyServed: undefined,
+        servedAt: '2019-08-25T05:00:00.000Z',
+        servedParties: 'Test Petitioner',
+      },
+      {
+        applicationContext,
+        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+      },
+    );
+
+    expect(myDoc.filedBy).toEqual(mockFiledBy);
+  });
+
+  it('should set the filedBy value to the amicusCuriae when an amicusCuriae exists', () => {
+    const myDoc = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        amicusCuriae: 'Make it so',
+        filedBy: undefined,
+      },
+      {
+        applicationContext,
+        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+      },
+    );
+
+    expect(myDoc.filedBy).toEqual('Make it so');
+  });
 });
