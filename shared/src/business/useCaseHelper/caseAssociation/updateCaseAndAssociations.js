@@ -583,7 +583,7 @@ exports.updateCaseAndAssociations = async ({
  * @param {object} providers.caseToUpdate the case object which was updated
  * @param {object} providers.oldCase the original copy of the case object which was updated
  * @returns {Promise<*>} the updated case entity
- * */
+ */
 const updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   const caseDifference = omit(
     deepObjectDiff(oldCase, caseToUpdate),
