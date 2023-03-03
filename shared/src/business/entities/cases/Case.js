@@ -154,15 +154,15 @@ function Case() {
 
 Case.prototype.init = function init(
   rawCase,
-  { applicationContext, filtered = false },
+  { applicationContext, filtered = false, isNewCase = false },
 ) {
-  caseDecorator(this, rawCase, { applicationContext, filtered });
+  caseDecorator(this, rawCase, { applicationContext, filtered, isNewCase });
 };
 
 const caseDecorator = (
   obj,
   rawObject,
-  { applicationContext, filtered = false },
+  { applicationContext, filtered = false, isNewCase },
 ) => {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
@@ -170,10 +170,9 @@ const caseDecorator = (
 
   obj.petitioners = [];
 
-  if (
-    !filtered ||
-    User.isInternalUser(applicationContext.getCurrentUser().role)
-  ) {
+  const currentUser = applicationContext.getCurrentUser();
+
+  if (!filtered || User.isInternalUser(currentUser.role)) {
     assignFieldsForInternalUsers({
       applicationContext,
       obj,
@@ -189,6 +188,12 @@ const caseDecorator = (
   assignHearings(params);
   assignPractitioners(params);
   assignFieldsForAllUsers(params);
+  if (isNewCase) {
+    obj.setCaseStatus({
+      changedBy: currentUser.name,
+      updatedCaseStatus: rawObject.status || CASE_STATUS_TYPES.new,
+    });
+  }
 };
 
 const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
@@ -199,6 +204,7 @@ const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
   obj.blocked = rawCase.blocked;
   obj.blockedDate = rawCase.blockedDate;
   obj.blockedReason = rawCase.blockedReason;
+  obj.caseStatusHistory = rawCase.caseStatusHistory || [];
   obj.caseNote = rawCase.caseNote;
   obj.damages = rawCase.damages;
   obj.highPriority = rawCase.highPriority;
@@ -492,6 +498,10 @@ Case.VALIDATION_RULES = {
     .meta({
       tags: ['Restricted'],
     }),
+  caseStatusHistory: joi
+    .array()
+    .required()
+    .description('The history of status changes on the case'),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: joi.exist().valid(...CLOSED_CASE_STATUSES),
@@ -1042,31 +1052,6 @@ Case.prototype.addDocketEntry = function (docketEntryEntity) {
 };
 
 /**
- * Reopen the case with the provided status
- *
- * @param {String} reopenedStatus the status to set the case to
- * @returns {Case} the updated case entity
- */
-Case.prototype.reopenCase = function ({ reopenedStatus }) {
-  this.closedDate = undefined;
-  this.status = reopenedStatus;
-  return this;
-};
-
-/**
- * Close the case with the provided status
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.closeCase = function ({ closedStatus }) {
-  this.closedDate = createISODateString();
-  this.status = closedStatus;
-  this.unsetAsBlocked();
-  this.unsetAsHighPriority();
-  return this;
-};
-
-/**
  * Determines if the case has been closed
  *
  * @returns {Boolean} true if the case has been closed, false otherwise
@@ -1100,7 +1085,10 @@ const isClosedStatus = function (caseStatus) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function () {
-  this.status = CASE_STATUS_TYPES.generalDocket;
+  this.setCaseStatus({
+    changedBy: 'System',
+    updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+  });
 
   this.petitioners.map(p => {
     if (PETITIONER_CONTACT_TYPES.includes(p.contactType)) {
@@ -1501,7 +1489,9 @@ Case.prototype.checkForReadyForTrial = function () {
         daysElapsedSinceDocumentWasFiled > ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
-        this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
+        this.setCaseStatus({
+          updatedCaseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        });
       }
     });
   }
@@ -1596,7 +1586,10 @@ Case.prototype.generateTrialSortTags = function () {
 Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.updateTrialSessionInformation(trialSessionEntity);
   if (trialSessionEntity.isCalendared === true) {
-    this.status = CASE_STATUS_TYPES.calendared;
+    this.setCaseStatus({
+      changedBy: 'System',
+      updatedCaseStatus: CASE_STATUS_TYPES.calendared,
+    });
   }
   return this;
 };
@@ -1979,15 +1972,20 @@ Case.prototype.unsetAsHighPriority = function () {
 /**
  * remove case from trial, setting case status to generalDocketReadyForTrial
  *
- * @param {string} caseStatus optional case status to set the case to
- * @param {string} associatedJudge optional associatedJudge to set on the case
+ * @param {string} providers.updatedCaseStatus optional case status to set the case to
+ * @param {string} providers.associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
-  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
-  this.setCaseStatus(
-    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
-  );
+Case.prototype.removeFromTrial = function ({
+  associatedJudge = CHIEF_JUDGE,
+  changedBy,
+  updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
+}) {
+  this.setAssociatedJudge(associatedJudge);
+  this.setCaseStatus({
+    changedBy,
+    updatedCaseStatus,
+  });
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
@@ -2055,10 +2053,19 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
  * @param {string} updatedCaseStatus the case status to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseStatus = function (updatedCaseStatus) {
+Case.prototype.setCaseStatus = function ({
+  changedBy = 'System',
+  updatedCaseStatus,
+}) {
   const previousCaseStatus = this.status;
+  const date = createISODateString();
 
   this.status = updatedCaseStatus;
+  this.caseStatusHistory.push({
+    changedBy,
+    date,
+    updatedCaseStatus,
+  });
 
   if (
     [
@@ -2070,10 +2077,12 @@ Case.prototype.setCaseStatus = function (updatedCaseStatus) {
   }
 
   if (isClosedStatus(updatedCaseStatus)) {
-    this.closeCase({ closedStatus: updatedCaseStatus });
+    this.closedDate = date;
+    this.unsetAsBlocked();
+    this.unsetAsHighPriority();
   } else {
     if (isClosedStatus(previousCaseStatus)) {
-      this.reopenCase({ reopenedStatus: updatedCaseStatus });
+      this.closedDate = undefined;
     }
   }
 
