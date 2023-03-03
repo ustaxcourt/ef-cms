@@ -128,8 +128,8 @@ export class DocketEntryClass {
     rawDocketEntry,
     {
       applicationContext,
-      petitioners = [],
       filtered = false,
+      petitioners = [],
     }: {
       applicationContext: IApplicationContext;
       petitioners: any[];
