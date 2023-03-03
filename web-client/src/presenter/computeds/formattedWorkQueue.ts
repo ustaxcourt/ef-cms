@@ -56,8 +56,8 @@ export const formatDateIfToday = (
 
 export const formatWorkItem = ({
   applicationContext,
-  workItem = {},
   isSelected,
+  workItem = {},
 }) => {
   const { COURT_ISSUED_EVENT_CODES, ORDER_TYPES_MAP } =
     applicationContext.getConstants();

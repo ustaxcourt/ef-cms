@@ -9,7 +9,7 @@ SOURCE_TABLE_VERSION="${SOURCE_TABLE//efcms-${ENV}-/}"
 
 # region hard-coded; all ES domains and Cognito user pools are in us-east-1
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-  --domain-name "efcms-search-${ENV}-${SOURCE_TABLE}" \
+  --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" \
   --region "us-east-1" \
   --query 'DomainStatus.Endpoint' \
   --output text)

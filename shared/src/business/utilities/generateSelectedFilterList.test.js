@@ -62,7 +62,7 @@ describe('isMemberCase', () => {
   it('return true if case in a member case and not lead case', () => {
     const formattedCase = {
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
     };
     const result = isMemberCase(formattedCase);
     expect(result).toEqual(true);
