@@ -23,6 +23,8 @@ const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
+const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
+
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -1483,6 +1485,7 @@ module.exports = deepFreeze({
   ALPHABETICALLY_ASCENDING,
   ALPHABETICALLY_DESCENDING,
   AMENDED_PETITION_FORM_NAME,
+  AMENDMENT_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,

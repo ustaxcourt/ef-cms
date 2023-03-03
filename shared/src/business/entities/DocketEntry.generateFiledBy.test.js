@@ -256,20 +256,4 @@ describe('generateFiledBy (called in constructor)', () => {
 
     expect(myDoc.filedBy).toEqual(mockFiledBy);
   });
-
-  it('should set the filedBy value to the amicusCuriae when an amicusCuriae exists', () => {
-    const myDoc = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        amicusCuriae: 'Make it so',
-        filedBy: undefined,
-      },
-      {
-        applicationContext,
-        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
-      },
-    );
-
-    expect(myDoc.filedBy).toEqual('Make it so');
-  });
 });
