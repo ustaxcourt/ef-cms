@@ -16,6 +16,7 @@ export const validateDocketEntryAction = ({
   path,
 }) => {
   const entryMetadata = get(state.form);
+  const { AMICUS_BRIEF_EVENT_CODE } = applicationContext.getConstants();
 
   let errors = applicationContext.getUseCases().validateDocketEntryInteractor({
     entryMetadata,
@@ -44,7 +45,7 @@ export const validateDocketEntryAction = ({
   }
 
   if (
-    entryMetadata.eventCode === 'AMBR' &&
+    entryMetadata.eventCode === AMICUS_BRIEF_EVENT_CODE &&
     isEmpty(entryMetadata.otherFilingParty)
   ) {
     if (!errors) {

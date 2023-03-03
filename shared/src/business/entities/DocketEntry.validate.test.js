@@ -5,6 +5,7 @@ const {
   mockSecondaryId,
 } = require('./DocketEntry.test');
 const {
+  AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
@@ -29,7 +30,10 @@ describe('validate', () => {
     {
       description:
         'should pass validation when "eventCode" is "AMBR and "otherFilingParty" is defined',
-      docketEntry: { eventCode: 'AMBR', otherFilingParty: 'Make It So Inc.' },
+      docketEntry: {
+        eventCode: AMICUS_BRIEF_EVENT_CODE,
+        otherFilingParty: 'Make It So Inc.',
+      },
     },
     {
       description:
@@ -277,7 +281,10 @@ describe('validate', () => {
     {
       description:
         'should fail validation when "eventCode" is "AMBR but "otherFilingParty" is undefined',
-      docketEntry: { eventCode: 'AMBR', otherFilingParty: undefined },
+      docketEntry: {
+        eventCode: AMICUS_BRIEF_EVENT_CODE,
+        otherFilingParty: undefined,
+      },
       expectValidationErrors: ['otherFilingParty'],
     },
     {
