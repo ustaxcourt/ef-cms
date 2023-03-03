@@ -20,6 +20,8 @@ export const validateDocketEntryAction = ({
     entryMetadata,
   });
 
+  console.log('ERRORS ARE: ', errors);
+
   if (
     entryMetadata.dateReceivedYear &&
     entryMetadata.dateReceivedYear.toString().length !== 4
@@ -40,6 +42,14 @@ export const validateDocketEntryAction = ({
     }
 
     errors.serviceDate = errors.serviceDate || 'Enter a four-digit year';
+  }
+
+  if (entryMetadata.eventCode === 'AMBR' && errors.otherFilingParty) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.otherFilingParty = 'Enter the name of the amicus curiae';
   }
 
   if (!errors) {
