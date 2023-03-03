@@ -14,12 +14,12 @@ export const calculatePenaltiesSequence = [
     error: [setModalErrorAction],
     success: [
       setTotalPenaltiesAmountForStatisticAction,
-      clearModalStateAction,
       chooseStatisticValidationStrategyAction,
       {
-        addEditStatistic: [validateAddDeficiencyStatisticsSequence],
-        startCase: [validatePetitionFromPaperSequence],
+        addEditStatistic: validateAddDeficiencyStatisticsSequence,
+        startCase: validatePetitionFromPaperSequence,
       },
+      clearModalStateAction,
     ],
   },
 ];
