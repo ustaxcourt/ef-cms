@@ -22,8 +22,6 @@ const {
 } = require('./EntityConstants');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
-// TODO: when 6217 is done, enable the commented validators
-
 const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
     'You cannot change from paper to electronic service. Select a valid service preference.',
@@ -46,14 +44,6 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   addToCoversheet: joi.boolean().optional(),
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
-  //fix this for otherFilingParty
-  // amicusCuriae: JoiValidationConstants.STRING.when('eventCode', {
-  //   is: joi.exist().valid('AMBR'),
-  //   otherwise: joi.optional(),
-  //   then: joi.required(),
-  // }).description(
-  //   'Outside individuals/organizations who are not parties to a case',
-  // ),
   archived: joi
     .boolean()
     .optional()
@@ -248,7 +238,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     {
       is: joi.exist().valid(...objectionEventCodes),
       otherwise: joi.when('eventCode', {
-        is: joi.exist().valid(...AMENDMENT_EVENT_CODES), // When the eventCode is an amendedpetition and the previousDocument is an objectionDocumentType
+        is: joi.exist().valid(...AMENDMENT_EVENT_CODES),
         otherwise: joi.optional(),
         then: joi.when('previousDocument.eventCode', {
           is: joi.exist().valid(...objectionEventCodes),
@@ -263,7 +253,11 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   otherFilingParty: JoiValidationConstants.STRING.max(100)
     .when('hasOtherFilingParty', {
       is: true,
-      otherwise: joi.optional(),
+      otherwise: JoiValidationConstants.STRING.when('eventCode', {
+        is: joi.exist().valid('AMBR'),
+        otherwise: joi.optional(),
+        then: joi.required(),
+      }),
       then: joi.required(),
     })
     .description(
