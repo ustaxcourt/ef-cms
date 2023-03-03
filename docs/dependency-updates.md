@@ -48,9 +48,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-#### puppeteer / puppeteer-core
-
-`puppeteer` and `puppeteer-core` have a major version update to ^19.x.x, but they need to stay at the same major version as `chrome-aws-lambda` (17.1.3). If we upgrade `puppeteer`, we see a `cannot read property 'prototype' of undefined` error.
 
 #### s3rver
 
@@ -79,10 +76,10 @@ There is an update available to `stylelint` but if we update that package then t
 This will happen until `stylelint-config-idiomatic-order` has updated to the latest `stylelint` ^15. I opened a [PR](https://github.com/ream88/stylelint-config-idiomatic-order/pull/79) to this project in hopes that this could move this along so we can update to ^15 of `stylelint` and associated packages. If security issues do arise and we wish to move forward to ^15 of `stylelint`, we would only get warnings on install (as of writing this).
 
 ### stylelint-config-standard
-There is a major update to `stylelint-config-standard` from 29.0.0 to 30.0.1 that has a peer dependency for `stylelint@^15.0.0`. Currently `stylelint` is locked in our project as seen in the above caveat. When the lock is resolved this package should be able to be updated to the latest version. If there is a wish to update this it can be done, but it would require the reintrodction of the `--legacy-peer-deps` flag in our project until `stylelint` is updated.
+There is a major update to `stylelint-config-standard` from 29.0.0 to 30.0.1 that has a peer dependency for `stylelint@^15.0.0`. Currently `stylelint` is locked in our project as seen in the above caveat. When the lock is resolved this package should be able to be updated to the latest version.
 
 ### stylelint-config-standard-scss
-There is a major update to `stylelint-config-standard-scss` from 6.1.0 to 7.0.1 that has a peer dependency for `stylelint@^15.0.0`. Currently `stylelint` is locked in our project as seen in the above caveat. When the lock is resolved this package should be able to be updated to the latest version. If there is a wish to update this it can be done, but it would require the reintrodction of the `--legacy-peer-deps` flag in our project until `stylelint` is updated.
+There is a major update to `stylelint-config-standard-scss` from 6.1.0 to 7.0.1 that has a peer dependency for `stylelint@^15.0.0`. Currently `stylelint` is locked in our project as seen in the above caveat. When the lock is resolved this package should be able to be updated to the latest version.
 
 ### Incrementing the Node Cache Key Version
 
