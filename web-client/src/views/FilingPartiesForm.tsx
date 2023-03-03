@@ -159,9 +159,8 @@ export const FilingPartiesForm = connect(
                 <input
                   className="usa-input usa-input-inline"
                   id="amicus-curiae"
-                  maxLength="25"
-                  name="amicusCuriae"
-                  value={form.amicusCuriae || ''}
+                  name="otherFilingParty"
+                  value={form.otherFilingParty || ''}
                   onChange={e => {
                     updateSequence({
                       key: e.target.name,

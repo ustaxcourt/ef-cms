@@ -256,7 +256,7 @@ describe('generateFiledBy (called in constructor)', () => {
 
     expect(myDoc.filedBy).toEqual(mockFiledBy);
   });
-
+  //fix this for otherFilingParty
   it('should set the filedBy value to the amicusCuriae when an amicusCuriae exists', () => {
     const myDoc = new DocketEntry(
       {
