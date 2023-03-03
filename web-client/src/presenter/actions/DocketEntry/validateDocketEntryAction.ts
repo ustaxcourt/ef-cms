@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -19,8 +20,6 @@ export const validateDocketEntryAction = ({
   let errors = applicationContext.getUseCases().validateDocketEntryInteractor({
     entryMetadata,
   });
-
-  console.log('ERRORS ARE: ', errors);
 
   if (
     entryMetadata.dateReceivedYear &&
@@ -44,11 +43,13 @@ export const validateDocketEntryAction = ({
     errors.serviceDate = errors.serviceDate || 'Enter a four-digit year';
   }
 
-  if (entryMetadata.eventCode === 'AMBR' && errors.otherFilingParty) {
+  if (
+    entryMetadata.eventCode === 'AMBR' &&
+    isEmpty(entryMetadata.otherFilingParty)
+  ) {
     if (!errors) {
       errors = {};
     }
-
     errors.otherFilingParty = 'Enter the name of the amicus curiae';
   }
 
