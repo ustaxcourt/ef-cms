@@ -88,7 +88,7 @@ export const PrintableWorkingCopySessionList = ({
                       <div
                         className={classNames(
                           `${
-                            formattedCase.leadCase && 'lead-consolidated-icon'
+                            formattedCase.isLeadCase && 'lead-consolidated-icon'
                           } ${memberCase && 'consolidated-icon'}`,
                         )}
                         style={{ marginRight: '0.3rem' }}
