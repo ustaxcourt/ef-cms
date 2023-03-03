@@ -33,7 +33,7 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   eventCode: 'Select a document type',
   filers: 'Select a filing party',
   lodged: 'Enter selection for filing status.',
-  // otherFilingParty: 'Enter other filing party name.',
+  otherFilingParty: 'Enter other filing party name.',
   primaryDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
