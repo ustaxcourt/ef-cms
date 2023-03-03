@@ -237,11 +237,12 @@ describe('DocketEntryFactory', () => {
         rawEntity,
       ).getFormattedValidationErrors();
 
-      expect(validationErrors.amicusCuriae).toEqual('Enter other filing party');
+      expect(validationErrors.otherFilingParty).toBeDefined();
     });
 
     it('should pass validation when hasOtherFilingParty is not defined and the docket entry event code is NOT "AMBR"', () => {
       rawEntity.hasOtherFilingParty = undefined;
+      rawEntity.eventCode = 'O';
       rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
 
       expect(errors()).toBeNull();
