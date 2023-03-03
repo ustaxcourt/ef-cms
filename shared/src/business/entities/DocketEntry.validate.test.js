@@ -27,10 +27,9 @@ describe('validate', () => {
       },
     },
     {
-      //fix this for otherFilingParty
       description:
-        'should pass validation when "eventCode" is "AMBR and "amicusCuriae" is defined',
-      docketEntry: { amicusCuriae: 'Make It So Inc.', eventCode: 'AMBR' },
+        'should pass validation when "eventCode" is "AMBR and "otherFilingParty" is defined',
+      docketEntry: { eventCode: 'AMBR', otherFilingParty: 'Make It So Inc.' },
     },
     {
       description:
@@ -276,11 +275,10 @@ describe('validate', () => {
       expectValidationErrors: ['isLegacy', 'isSealed'],
     },
     {
-      //fix this for otherFilingParty
       description:
-        'should fail validation when "eventCode" is "AMBR but "amicusCuriae" is undefined',
-      docketEntry: { eventCode: 'AMBR' },
-      expectValidationErrors: ['amicusCuriae'],
+        'should fail validation when "eventCode" is "AMBR but "otherFilingParty" is undefined',
+      docketEntry: { eventCode: 'AMBR', otherFilingParty: undefined },
+      expectValidationErrors: ['otherFilingParty'],
     },
     {
       description:
