@@ -230,7 +230,17 @@ describe('DocketEntryFactory', () => {
       rawEntity.partyPrimary = true;
     });
 
-    it('should pass validation when hasOtherFilingParty is not defined', () => {
+    it('should be required when the docket entry event code is AMBR', () => {
+      rawEntity.eventCode = 'AMBR';
+
+      const validationErrors = new DocketEntryFactory(
+        rawEntity,
+      ).getFormattedValidationErrors();
+
+      expect(validationErrors.amicusCuriae).toEqual('Enter other filing party');
+    });
+
+    it('should pass validation when hasOtherFilingParty is not defined and the docket entry event code is NOT "AMBR"', () => {
       rawEntity.hasOtherFilingParty = undefined;
       rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
 
@@ -279,10 +289,9 @@ describe('DocketEntryFactory', () => {
       expect(errors()).toBeNull();
     });
 
-    //fix this for otherFilingParty
-    it('should be optional when the docket entry event code is "AMBR" and has a defined amicusCuriae', () => {
+    it('should be optional when the docket entry event code is "AMBR"', () => {
       rawEntity.eventCode = 'AMBR';
-      rawEntity.amicusCuriae = 'Mike Tyson';
+      rawEntity.otherFilingParty = 'Mike Tyson';
 
       expect(errors()).toBeNull();
     });
@@ -324,31 +333,6 @@ describe('DocketEntryFactory', () => {
       expect(errors()).toEqual({
         filers: 'Select a filing party',
       });
-    });
-  });
-
-  //fix this for otherFilingParty
-  describe('amicusCuriae', () => {
-    it('should be required when the eventCode is AMBR', () => {
-      rawEntity.eventCode = 'AMBR';
-
-      const validationErrors = new DocketEntryFactory(
-        rawEntity,
-      ).getFormattedValidationErrors();
-
-      expect(validationErrors.amicusCuriae).toEqual(
-        'Enter the name of the amicus curiae',
-      );
-    });
-
-    it('should NOT be required when the eventCode is NOT AMBR', () => {
-      rawEntity.eventCode = 'O';
-
-      const validationErrors = new DocketEntryFactory(
-        rawEntity,
-      ).getFormattedValidationErrors();
-
-      expect(validationErrors.amicusCuriae).toBeUndefined();
     });
   });
 });
