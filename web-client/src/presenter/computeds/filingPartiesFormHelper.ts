@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export const filingPartiesFormHelper = (get, applicationContext) => {
-  const caseDetail = get(state.caseDetail);
+  const { partyType } = get(state.caseDetail);
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
@@ -26,8 +26,8 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const isServed = applicationContext.getUtilities().isServed(form);
 
   const showSecondaryParty =
-    caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
-    caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+    partyType === PARTY_TYPES.petitionerSpouse ||
+    partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
   const showFilingPartiesAsCheckboxes = form.eventCode !== 'AMBR';
 
