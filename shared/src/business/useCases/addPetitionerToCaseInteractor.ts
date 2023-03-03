@@ -6,6 +6,8 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * used to add a petitioner to a case
@@ -36,6 +38,7 @@ export const addPetitionerToCaseInteractor = async (
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
@@ -57,7 +60,8 @@ export const addPetitionerToCaseInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

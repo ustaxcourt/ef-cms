@@ -1,11 +1,12 @@
+const deepFreeze = require('deep-freeze');
 const {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { cloneDeep, orderBy } = require('lodash');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { Message } = require('../../entities/Message');
-const { orderBy } = require('lodash');
 const { Stamp } = require('../../entities/Stamp');
 
 /**
@@ -39,6 +40,8 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = deepFreeze(cloneDeep(caseRecord));
+
   const caseEntity = new Case(caseRecord, { applicationContext });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
@@ -107,6 +110,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 };

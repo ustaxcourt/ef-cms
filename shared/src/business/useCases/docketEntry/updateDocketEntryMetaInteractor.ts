@@ -9,8 +9,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { cloneDeep } from 'lodash';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import deepFreeze from 'deep-freeze';
 
 export const shouldGenerateCoversheetForDocketEntry = ({
   certificateOfServiceUpdated,
@@ -63,6 +65,8 @@ export const updateDocketEntryMetaInteractor = async (
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
+
+  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
@@ -212,7 +216,7 @@ export const updateDocketEntryMetaInteractor = async (
     .updateCaseAndAssociations({
       applicationContext,
       newCase: caseEntity,
-      oldCase: caseToUpdate,
+      oldCaseCopy,
     });
 
   return new Case(result, { applicationContext }).validate().toRawObject();

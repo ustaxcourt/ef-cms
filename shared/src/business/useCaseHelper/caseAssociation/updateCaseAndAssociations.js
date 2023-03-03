@@ -526,7 +526,7 @@ const updateCaseDeadlines = async ({
 exports.updateCaseAndAssociations = async ({
   applicationContext,
   newCase,
-  oldCase,
+  oldCaseCopy,
 }) => {
   const caseEntity = newCase.validate
     ? newCase
@@ -534,7 +534,7 @@ exports.updateCaseAndAssociations = async ({
 
   const validRawNewCaseEntity = caseEntity.validate().toRawObject();
 
-  const validRawOldCaseEntity = new Case(oldCase, { applicationContext })
+  const validRawOldCaseEntity = new Case(oldCaseCopy, { applicationContext })
     .validate()
     .toRawObject();
 
@@ -599,6 +599,7 @@ const updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
+      // readConsistent
     });
 
   const mostRecentCaseUpdated = {

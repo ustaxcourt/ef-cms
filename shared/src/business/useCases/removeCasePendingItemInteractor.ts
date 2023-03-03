@@ -4,6 +4,8 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * removeCasePendingItemInteractor
@@ -27,14 +29,14 @@ export const removeCasePendingItemInteractor = async (
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
+  let updatedCaseEntity = new Case(caseToUpdate, { applicationContext });
 
-  caseToUpdate.docketEntries.forEach(docketEntry => {
+  updatedCaseEntity.docketEntries.forEach(docketEntry => {
     if (docketEntry.docketEntryId === docketEntryId) {
       docketEntry.pending = false;
     }
   });
-
-  let updatedCaseEntity = new Case(caseToUpdate, { applicationContext });
 
   updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -45,7 +47,8 @@ export const removeCasePendingItemInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: updatedCaseEntity,
+    newCase: updatedCaseEntity,
+    oldCaseCopy,
   });
 
   return updatedCaseEntity.toRawObject();

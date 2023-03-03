@@ -1,4 +1,6 @@
+const deepFreeze = require('deep-freeze');
 const { Case } = require('../../entities/cases/Case');
+const { cloneDeep } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UserCase } = require('../../entities/UserCase');
@@ -35,6 +37,7 @@ exports.associatePrivatePractitionerToCase = async ({
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
   const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,
@@ -70,7 +73,8 @@ exports.associatePrivatePractitionerToCase = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
     return caseEntity.toRawObject();

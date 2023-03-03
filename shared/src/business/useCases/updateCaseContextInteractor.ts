@@ -6,6 +6,8 @@ import {
 } from '../../authorization/authorizationClientService';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * updateCaseContextInteractor
@@ -41,7 +43,7 @@ export const updateCaseContextInteractor = async (
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-
+  const oldCaseCopy = deepFreeze(cloneDeep(oldCase));
   const newCase = new Case(oldCase, { applicationContext });
 
   if (caseCaption) {
@@ -108,7 +110,8 @@ export const updateCaseContextInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      newCase,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();

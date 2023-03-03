@@ -4,6 +4,9 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
+
 /**
  * used for setting a case as blocked
  *
@@ -29,6 +32,7 @@ export const blockCaseFromTrialInteractor = async (
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
@@ -45,7 +49,8 @@ export const blockCaseFromTrialInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

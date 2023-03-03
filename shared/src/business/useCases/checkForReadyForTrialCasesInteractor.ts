@@ -1,6 +1,8 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
+import { cloneDeep } from 'lodash';
 import { createISODateString } from '../utilities/DateHandler';
+import deepFreeze from 'deep-freeze';
 
 /**
  * @param {object} applicationContext the application context
@@ -14,12 +16,13 @@ export const checkForReadyForTrialCasesInteractor = async (
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
 
-  const updateForTrial = async entity => {
+  const updateForTrial = async ({ entity, oldCaseCopy }) => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
     if (caseEntity.isReadyForTrial()) {
@@ -45,6 +48,7 @@ export const checkForReadyForTrialCasesInteractor = async (
       });
 
     if (caseToCheck) {
+      const oldCaseCopy = deepFreeze(cloneDeep(caseToCheck));
       const caseEntity = new Case(caseToCheck, { applicationContext });
 
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
@@ -52,7 +56,9 @@ export const checkForReadyForTrialCasesInteractor = async (
         if (
           caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
         ) {
-          updatedCases.push(updateForTrial(caseEntity));
+          updatedCases.push(
+            updateForTrial({ entity: caseEntity, oldCaseCopy }),
+          );
         }
       }
     }

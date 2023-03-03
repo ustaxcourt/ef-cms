@@ -13,6 +13,8 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  *
@@ -94,6 +96,7 @@ export const addPaperFilingInteractor = async (
         docketNumber,
       });
 
+    const oldCaseCopy = deepFreeze(cloneDeep(rawCase));
     let caseEntity = new Case(rawCase, { applicationContext });
 
     const docketEntryEntity = new DocketEntry(
@@ -185,7 +188,8 @@ export const addPaperFilingInteractor = async (
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      newCase: caseEntity.validate().toRawObject(),
+      oldCaseCopy,
     });
   }
 

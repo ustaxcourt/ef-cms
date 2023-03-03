@@ -1,4 +1,6 @@
+const deepFreeze = require('deep-freeze');
 const { Case } = require('../../entities/cases/Case');
+const { cloneDeep } = require('lodash');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { UserCase } = require('../../entities/UserCase');
 
@@ -33,6 +35,7 @@ exports.associateIrsPractitionerToCase = async ({
         applicationContext,
         docketNumber,
       });
+    const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
     const userCaseEntity = new UserCase(caseToUpdate);
 
@@ -51,7 +54,8 @@ exports.associateIrsPractitionerToCase = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
     return caseEntity.toRawObject();

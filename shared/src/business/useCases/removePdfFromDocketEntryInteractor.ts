@@ -4,6 +4,8 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * removePdfFromDocketEntryInteractor
@@ -30,7 +32,7 @@ export const removePdfFromDocketEntryInteractor = async (
       applicationContext,
       docketNumber,
     });
-
+  const oldCaseCopy = deepFreeze(cloneDeep(caseRecord));
   const caseEntity = new Case(caseRecord, {
     applicationContext,
   });
@@ -50,7 +52,8 @@ export const removePdfFromDocketEntryInteractor = async (
       .getUseCaseHelpers()
       .updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity,
+        newCase: caseEntity,
+        oldCaseCopy,
       });
 
     return new Case(updatedCase, { applicationContext }).toRawObject();

@@ -7,6 +7,8 @@ import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * sealCaseContactAddressInteractor
@@ -35,6 +37,7 @@ export const sealCaseContactAddressInteractor = async (
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = cloneDeep(deepFreeze(caseRecord));
 
   const caseEntity = new Case(caseRecord, {
     applicationContext,
@@ -53,7 +56,8 @@ export const sealCaseContactAddressInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();

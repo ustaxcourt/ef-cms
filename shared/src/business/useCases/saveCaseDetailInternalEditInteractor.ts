@@ -9,7 +9,8 @@ import {
   UnprocessableEntityError,
 } from '../../errors/errors';
 import { WorkItem } from '../entities/WorkItem';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * saveCaseDetailInternalEditInteractor
@@ -45,6 +46,7 @@ export const saveCaseDetailInternalEditInteractor = async (
       docketNumber,
     });
 
+  const oldCaseCopy = deepFreeze(cloneDeep(caseRecord));
   const originalCaseEntity = new Case(caseRecord, { applicationContext });
 
   const editableFields = {
@@ -160,7 +162,8 @@ export const saveCaseDetailInternalEditInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();

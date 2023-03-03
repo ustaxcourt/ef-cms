@@ -5,6 +5,9 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
+
 /**
  * used to remove a petitioner from a case
  *
@@ -36,6 +39,7 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
@@ -73,7 +77,8 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

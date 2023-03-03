@@ -9,6 +9,8 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { cloneDeep } from 'lodash';
+import deepFreeze from 'deep-freeze';
 
 /**
  * updateCaseDetailsInteractor
@@ -45,7 +47,7 @@ export const updateCaseDetailsInteractor = async (
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-
+  const oldCaseCopy = deepFreeze(cloneDeep(oldCase));
   const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
     editableFields.petitionPaymentStatus === PAYMENT_STATUS.WAIVED;
@@ -129,6 +131,7 @@ export const updateCaseDetailsInteractor = async (
     .updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: newCaseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
