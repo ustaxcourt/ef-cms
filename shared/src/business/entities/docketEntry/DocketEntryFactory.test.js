@@ -279,9 +279,9 @@ describe('DocketEntryFactory', () => {
       expect(errors()).toBeNull();
     });
 
-    it('should be optional when the docket entry event code is "AMBR" and has a defined filedBy', () => {
+    it('should be optional when the docket entry event code is "AMBR" and has a defined amicusCuriae', () => {
       rawEntity.eventCode = 'AMBR';
-      rawEntity.filedBy = 'Mike Tyson';
+      rawEntity.amicusCuriae = 'Mike Tyson';
 
       expect(errors()).toBeNull();
     });
@@ -326,7 +326,7 @@ describe('DocketEntryFactory', () => {
     });
   });
 
-  describe('filedBy', () => {
+  describe('amicusCuriae', () => {
     it('should be required when the eventCode is AMBR', () => {
       rawEntity.eventCode = 'AMBR';
 
@@ -334,7 +334,9 @@ describe('DocketEntryFactory', () => {
         rawEntity,
       ).getFormattedValidationErrors();
 
-      expect(validationErrors.filedBy).toBeDefined();
+      expect(validationErrors.amicusCuriae).toEqual(
+        'Enter the name of the amicus curiae',
+      );
     });
 
     it('should NOT be required when the eventCode is NOT AMBR', () => {
@@ -344,7 +346,7 @@ describe('DocketEntryFactory', () => {
         rawEntity,
       ).getFormattedValidationErrors();
 
-      expect(validationErrors.filedBy).toBeUndefined();
+      expect(validationErrors.amicusCuriae).toBeUndefined();
     });
   });
 });
