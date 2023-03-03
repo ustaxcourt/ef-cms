@@ -413,6 +413,7 @@ import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
+import { toggleUseContactPrimaryAddressSequence } from './sequences/toggleUseContactPrimaryAddressSequence';
 import { toggleUseExistingAddressSequence } from './sequences/toggleUseExistingAddressSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
@@ -938,6 +939,7 @@ export const presenter = {
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     toggleUsaBannerDetailsSequence,
+    toggleUseContactPrimaryAddressSequence,
     toggleUseExistingAddressSequence,
     toggleWorkingCopySortSequence,
     unauthorizedErrorSequence,
