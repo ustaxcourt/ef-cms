@@ -5,8 +5,12 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
-  const { AMENDMENT_EVENT_CODES, INTERNAL_CATEGORY_MAP, PARTY_TYPES } =
-    applicationContext.getConstants();
+  const {
+    AMENDMENT_EVENT_CODES,
+    AMICUS_BRIEF_EVENT_CODE,
+    INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
 
   const partyValidationError =
     validationErrors &&
@@ -29,7 +33,8 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     partyType === PARTY_TYPES.petitionerSpouse ||
     partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
-  const showFilingPartiesAsCheckboxes = form.eventCode !== 'AMBR';
+  const showFilingPartiesAsCheckboxes =
+    form.eventCode !== AMICUS_BRIEF_EVENT_CODE;
 
   return {
     isServed,

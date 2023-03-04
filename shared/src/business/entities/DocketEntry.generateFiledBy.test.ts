@@ -1,3 +1,4 @@
+import { DocketEntryClass } from './DocketEntry';
 const {
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
 } = require('./EntityConstants');
@@ -5,98 +6,113 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
-describe('generateFiledBy (called in constructor)', () => {
-  const mockDocketEntry = MOCK_DOCUMENTS[0];
-  const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
-  const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
-  const petitioners = [
-    { contactId: mockPrimaryId, name: 'Bob' },
-    { contactId: mockSecondaryId, name: 'Bill' },
+describe('generateFiledBy', () => {
+  let mockDocketEntry;
+
+  const mockOtherFilingParty: string = 'Bob Barker';
+  const mockPrimaryContactId: string = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
+  const mockSecondaryContactId: string = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
+  const mockPetitioners = [
+    { contactId: mockPrimaryContactId, name: 'Bob' },
+    { contactId: mockSecondaryContactId, name: 'Bill' },
   ];
 
+  beforeEach(() => {
+    mockDocketEntry = MOCK_DOCUMENTS[0];
+  });
+
   it('should generate correct filedBy string for single petitioner in filers', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId],
+        filers: [mockPrimaryContactId],
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Petr. Bob');
   });
 
-  it('should generate correct filedBy string for single petitioner in filers and otherFilingParty', () => {
-    const docketEntry = new DocketEntry(
+  it('should include the value provided for other filing party when one is provided', () => {
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId],
-        otherFilingParty: 'Bob Barker',
+        filers: [mockPrimaryContactId],
+        otherFilingParty: mockOtherFilingParty,
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
-    expect(docketEntry.filedBy).toEqual('Petr. Bob, Bob Barker');
+
+    expect(docketEntry.filedBy).toEqual(`Petr. Bob, ${mockOtherFilingParty}`);
   });
 
   it('should generate correct filedBy string for single petitioner in filers that is not the primary', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockSecondaryId],
+        filers: [mockSecondaryContactId],
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Petr. Bill');
   });
 
-  it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner', () => {
-    const docketEntry = new DocketEntry(
+  it('should include "Resp." in the filedBy text when the respondent is selected as one of the filers', () => {
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId],
+        filers: [mockPrimaryContactId],
         partyIrsPractitioner: true,
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
   });
 
   it('should generate correct filedBy string for single petitioner in filers, partyIrsPractitioner, and otherFilingParty', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId],
-        otherFilingParty: 'Bob Barker',
+        filers: [mockPrimaryContactId],
+        otherFilingParty: mockOtherFilingParty,
         partyIrsPractitioner: true,
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
-    expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob, Bob Barker');
+
+    expect(docketEntry.filedBy).toEqual(
+      `Resp. & Petr. Bob, ${mockOtherFilingParty}`,
+    );
   });
 
   it('should generate correct filedBy string for only otherFilingParty', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        otherFilingParty: 'Bob Barker',
+        otherFilingParty: mockOtherFilingParty,
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
-    expect(docketEntry.filedBy).toEqual('Bob Barker');
+
+    expect(docketEntry.filedBy).toEqual(mockOtherFilingParty);
   });
 
   it('should generate correct filedBy string for multiple petitioners in filers', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId, mockSecondaryId],
+        filers: [mockPrimaryContactId, mockSecondaryContactId],
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
   });
 
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
         partyIrsPractitioner: true,
@@ -105,13 +121,14 @@ describe('generateFiledBy (called in constructor)', () => {
           name: 'Test Practitioner',
         },
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
         partyIrsPractitioner: true,
@@ -123,36 +140,39 @@ describe('generateFiledBy (called in constructor)', () => {
           },
         ],
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
   it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner in the constructor when values are present', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId],
+        filers: [mockPrimaryContactId],
         partyIrsPractitioner: true,
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
   });
 
   it('should generate correct filedBy string for multiple petitioners in filers in the constructor when values are present', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId, mockSecondaryId],
+        filers: [mockPrimaryContactId, mockSecondaryContactId],
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
   });
 
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
         partyIrsPractitioner: true,
@@ -164,50 +184,41 @@ describe('generateFiledBy (called in constructor)', () => {
           },
         ],
       },
-      { applicationContext, petitioners },
+      { applicationContext, petitioners: mockPetitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
-  it('should set filedBy to undefined when the docket entry is an auto-generated notice of contact change', () => {
-    const mockDocketEntryNoFiledBy = {
-      ...mockDocketEntry,
-      filedBy: undefined,
-    };
-    const docketEntry = new DocketEntry(
+  it('should not generate a filedBy value when the docket entry is an auto-generated notice of contact change', () => {
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
-        ...mockDocketEntryNoFiledBy,
+        ...mockDocketEntry,
         documentType: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
         eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
-        filers: [mockPrimaryId],
+        filedBy: undefined,
+        filers: [mockPrimaryContactId],
         isAutoGenerated: true,
-        isMinuteEntry: false,
-        isOnDocketRecord: true,
-        privatePractitioners: [
-          { name: 'Bob Practitioner', partyPrivatePractitioner: true },
-        ],
-        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
-      { applicationContext },
+      { applicationContext, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toBeUndefined();
   });
 
   it('should generate filed by when the docket entry is a non-auto-generated notice of contact change and is not served', () => {
-    const nonNoticeOfContactChangeEventCode = 'O';
-    const docketEntry = new DocketEntry(
+    const nonNoticeOfContactChangeEventCode: string = 'O';
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
         eventCode: nonNoticeOfContactChangeEventCode,
-        filers: [mockPrimaryId],
+        filers: [mockPrimaryContactId],
         isAutoGenerated: false,
         servedAt: undefined,
-        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
       {
         applicationContext,
-        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+        petitioners: mockPetitioners,
       },
     );
 
@@ -215,21 +226,20 @@ describe('generateFiledBy (called in constructor)', () => {
   });
 
   it('should ignore filers array when the filer is a private practitioner', () => {
-    const docketEntry = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
-        filers: [mockPrimaryId],
+        filers: [mockPrimaryContactId],
         privatePractitioners: [
           {
             name: 'Bob Practitioner',
             partyPrivatePractitioner: true,
           },
         ],
-        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
       {
         applicationContext,
-        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+        petitioners: mockPetitioners,
       },
     );
 
@@ -237,23 +247,22 @@ describe('generateFiledBy (called in constructor)', () => {
   });
 
   it('should not update filedBy when the docket entry has been served', () => {
-    const mockFiledBy =
+    const mockFiledBy: string =
       'This filed by should not be updated by the constructor';
-    const myDoc = new DocketEntry(
+    const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
         filedBy: mockFiledBy,
-        filers: [mockPrimaryId, mockSecondaryId],
-        isLegacyServed: undefined,
+        filers: [mockPrimaryContactId],
         servedAt: '2019-08-25T05:00:00.000Z',
         servedParties: 'Test Petitioner',
       },
       {
         applicationContext,
-        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+        petitioners: mockPetitioners,
       },
     );
 
-    expect(myDoc.filedBy).toEqual(mockFiledBy);
+    expect(docketEntry.filedBy).toEqual(mockFiledBy);
   });
 });

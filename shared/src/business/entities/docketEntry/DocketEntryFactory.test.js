@@ -1,10 +1,13 @@
 const {
+  AMICUS_BRIEF_EVENT_CODE,
+  OBJECTIONS_OPTIONS_MAP,
+} = require('../EntityConstants');
+const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
 const { getTextByCount } = require('../../utilities/getTextByCount');
-const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
@@ -230,8 +233,8 @@ describe('DocketEntryFactory', () => {
       rawEntity.partyPrimary = true;
     });
 
-    it('should be required when the docket entry event code is AMBR', () => {
-      rawEntity.eventCode = 'AMBR';
+    it(`should be required when the docket entry event code is ${AMICUS_BRIEF_EVENT_CODE}`, () => {
+      rawEntity.eventCode = AMICUS_BRIEF_EVENT_CODE;
 
       const validationErrors = new DocketEntryFactory(
         rawEntity,
@@ -291,7 +294,7 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should be optional when the docket entry event code is "AMBR"', () => {
-      rawEntity.eventCode = 'AMBR';
+      rawEntity.eventCode = AMICUS_BRIEF_EVENT_CODE;
       rawEntity.otherFilingParty = 'Mike Tyson';
 
       expect(errors()).toBeNull();
