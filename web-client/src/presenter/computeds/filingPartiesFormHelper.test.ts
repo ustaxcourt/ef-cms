@@ -1,4 +1,7 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  AMICUS_BRIEF_EVENT_CODE,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filingPartiesFormHelper as filingPartiesFormHelperComputed } from './filingPartiesFormHelper';
 import { runCompute } from 'cerebral/test';
@@ -171,7 +174,7 @@ describe('filingPartiesFormHelper', () => {
           ...baseState,
           form: {
             documentType: 'Amicus Brief',
-            eventCode: 'AMBR',
+            eventCode: AMICUS_BRIEF_EVENT_CODE,
           },
         },
       });

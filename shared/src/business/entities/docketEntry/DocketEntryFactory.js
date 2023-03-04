@@ -2,6 +2,7 @@ const joi = require('joi');
 const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
+  AMICUS_BRIEF_EVENT_CODE,
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
@@ -137,7 +138,7 @@ function DocketEntryFactory(rawProps) {
 
   const schemaOptionalItems = {
     filers: joi.when('eventCode', {
-      is: joi.exist().valid('AMBR'),
+      is: joi.exist().valid(AMICUS_BRIEF_EVENT_CODE),
       otherwise: joi
         .array()
         .items(JoiValidationConstants.UUID.required())

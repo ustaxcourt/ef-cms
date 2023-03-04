@@ -602,6 +602,8 @@ const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
 
+const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+
 const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
@@ -1642,4 +1644,5 @@ module.exports = deepFreeze({
   CLOSED_CASE_STATUSES,
   US_STATES,
   SESSION_STATUS_TYPES,
+  AMICUS_BRIEF_EVENT_CODE,
 });
