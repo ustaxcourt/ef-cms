@@ -20,7 +20,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
    > **Why am I seeing a high severity `dicer` issue?**
    > If you see this warning, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue. Check [caveats](#caveats) for more info.
-   > **Why am I seeing a medium severity for `quill`**
+
+   > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using
    getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 4. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
@@ -71,6 +72,8 @@ There is a major upgrade to `esbuild` from 0.6.x to 0.7.x. The new major version
 
 ### stylelint
 There is an update available to `stylelint` but if we update that package then there are issues with installing that require us to install with the `--legacy-peer-deps` flag again. The update to stylelint is not related to a security issue so I decided not to upgrade for now while its downstream dependencies rely on outdated packages.
+
+This will happen until `stylelint-config-idiomatic-order` has updated to the latest `stylelint` ^15. I opened a [PR](https://github.com/ream88/stylelint-config-idiomatic-order/pull/79) to this project in hopes that this could move this along so we can update to ^15 of `stylelint` and associated packages. If security issues do arise and we wish to move forward to ^15 of `stylelint`, we would only get warnings on install (as of writing this).
 
 ### Incrementing the Node Cache Key Version
 
