@@ -14,22 +14,31 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 describe('Amicus Brief Journey', () => {
   const cerebralTest = setupTest();
 
+  const amicusBriefMissingFormFields = {
+    dateReceivedDay: 1,
+    dateReceivedMonth: 1,
+    dateReceivedYear: 2018,
+    freeText: 'Amicus brief filed by an integration test',
+    otherFilingParty: 'Marie Curie',
+  };
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('create case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+  it('login as a petitioner and create case an electronic case', async () => {
+    const { docketNumber } = await uploadPetition(cerebralTest);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  it('create an Amicus Brief docket entry', async () => {
+  it('create an Amicus Brief paper filing and save for later', async () => {
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -48,70 +57,54 @@ describe('Amicus Brief Journey', () => {
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
+  });
 
-    const paperFilingValidationErrors = [
+  it('fix validation errors by providing required, missing fields', async () => {
+    expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual([
       'dateReceived',
       'documentTitle',
       'freeText',
       'otherFilingParty',
-    ];
+    ]);
 
-    expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(
-      paperFilingValidationErrors,
-    );
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'The title of this document',
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'otherFilingParty',
-      value: 'Marie Curie',
-    });
+    for (const [key, value] of Object.entries(amicusBriefMissingFormFields)) {
+      await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+        key,
+        value,
+      });
+    }
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+  });
 
+  it('verify a docket entry has been created for the Amicus Brief', async () => {
     await waitForCondition({
       booleanExpressionCondition: () =>
         cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
-
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const amicusbriefDocument = cerebralTest.getState(
-      'caseDetail.docketEntries.0',
+    const { docketEntries } = cerebralTest.getState('caseDetail');
+    const amicusBriefDocketEntry = docketEntries.find(
+      doc => doc.eventCode === AMICUS_BRIEF_EVENT_CODE,
     );
 
-    expect(amicusbriefDocument).toMatchObject({
-      documentTitle: 'The title of this document',
+    expect(amicusBriefDocketEntry).toMatchObject({
+      documentTitle: amicusBriefMissingFormFields.freeText,
       documentType: 'Amicus Brief',
       eventCode: AMICUS_BRIEF_EVENT_CODE,
-      filedBy: 'Marie Curie',
+      filedBy: amicusBriefMissingFormFields.otherFilingParty,
       isFileAttached: true,
     });
 
-    cerebralTest.docketEntryId = amicusbriefDocument.docketEntryId;
+    cerebralTest.docketEntryId = amicusBriefDocketEntry.docketEntryId;
   });
 
-  it('edit and serve the Amicus Brief', async () => {
+  it('edit the Amicus Brief docket entry', async () => {
     await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId: cerebralTest.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
@@ -132,7 +125,9 @@ describe('Amicus Brief Journey', () => {
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+  });
 
+  it('save the edits and serve the Amicus Brief', async () => {
     await waitForCondition({
       booleanExpressionCondition: () =>
         cerebralTest.getState('currentPage') === 'CaseDetailInternal',
