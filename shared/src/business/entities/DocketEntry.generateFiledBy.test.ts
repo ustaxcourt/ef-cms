@@ -207,7 +207,7 @@ describe('generateFiledBy', () => {
   });
 
   it('should generate filed by when the docket entry is a non-auto-generated notice of contact change and is not served', () => {
-    const nonNoticeOfContactChangeEventCode = 'O';
+    const nonNoticeOfContactChangeEventCode: string = 'O';
     const docketEntry: DocketEntryClass = new DocketEntry(
       {
         ...mockDocketEntry,
@@ -247,7 +247,7 @@ describe('generateFiledBy', () => {
   });
 
   it('should not update filedBy when the docket entry has been served', () => {
-    const mockFiledBy =
+    const mockFiledBy: string =
       'This filed by should not be updated by the constructor';
     const docketEntry: DocketEntryClass = new DocketEntry(
       {
