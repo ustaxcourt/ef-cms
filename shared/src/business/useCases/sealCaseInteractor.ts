@@ -4,8 +4,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * sealCaseInteractor
@@ -25,12 +23,14 @@ export const sealCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
 
-  const oldCase = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const oldCaseCopy = deepFreeze(cloneDeep(oldCase));
-  const newCase = new Case(oldCase, { applicationContext });
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
+  const newCase = new Case(caseRecord, { applicationContext });
 
   newCase.setAsSealed();
 

@@ -41,6 +41,9 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext');
 const {
+  cloneAndFreeze,
+} = require('../../shared/src/business/utilities/cloneAndFreeze');
+const {
   combineTwoPdfs,
 } = require('../../shared/src/business/utilities/documentGenerators/combineTwoPdfs');
 const {
@@ -717,6 +720,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return {
         calculateDifferenceInDays,
         calculateISODate,
+        cloneAndFreeze,
         combineTwoPdfs,
         compareCasesByDocketNumber,
         compareISODateStrings,

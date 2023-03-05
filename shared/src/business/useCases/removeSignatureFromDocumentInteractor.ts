@@ -1,6 +1,4 @@
 import { Case } from '../entities/cases/Case';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * Removes a signature from a document
@@ -21,7 +19,9 @@ export const removeSignatureFromDocumentInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseRecord));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
   const caseEntity = new Case(caseRecord, { applicationContext });
   const docketEntryToUnsign = caseEntity.getDocketEntryById({

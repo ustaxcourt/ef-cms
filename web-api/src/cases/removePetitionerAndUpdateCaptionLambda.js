@@ -7,11 +7,11 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.removePetitionerAndUpdateCaptionLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
+  genericHandler(event, ({ applicationContext }) =>
+    applicationContext
       .getUseCases()
       .removePetitionerAndUpdateCaptionInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
-      });
-  });
+      }),
+  );

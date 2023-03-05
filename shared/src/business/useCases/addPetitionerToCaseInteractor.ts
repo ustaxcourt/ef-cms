@@ -6,8 +6,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * used to add a petitioner to a case
@@ -32,15 +30,17 @@ export const addPetitionerToCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized for adding petitioner to case');
   }
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseRecord, { applicationContext });
 
   if (caseEntity.status === CASE_STATUS_TYPES.new) {
     throw new Error(

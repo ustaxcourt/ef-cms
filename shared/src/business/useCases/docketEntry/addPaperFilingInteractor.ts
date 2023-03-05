@@ -13,8 +13,6 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  *
@@ -89,15 +87,17 @@ export const addPaperFilingInteractor = async (
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
+    const caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
         docketNumber,
       });
 
-    const oldCaseCopy = deepFreeze(cloneDeep(rawCase));
-    let caseEntity = new Case(rawCase, { applicationContext });
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(caseRecord);
+    let caseEntity = new Case(caseRecord, { applicationContext });
 
     const docketEntryEntity = new DocketEntry(
       {

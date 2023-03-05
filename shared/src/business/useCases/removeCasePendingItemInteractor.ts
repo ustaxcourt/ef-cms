@@ -4,8 +4,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * removeCasePendingItemInteractor
@@ -26,11 +24,13 @@ export const removeCasePendingItemInteractor = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
-  let updatedCaseEntity = new Case(caseToUpdate, { applicationContext });
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
+  let updatedCaseEntity = new Case(caseRecord, { applicationContext });
 
   updatedCaseEntity.docketEntries.forEach(docketEntry => {
     if (docketEntry.docketEntryId === docketEntryId) {

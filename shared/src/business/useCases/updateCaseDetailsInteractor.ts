@@ -9,9 +9,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
-
 /**
  * updateCaseDetailsInteractor
  *
@@ -44,17 +41,19 @@ export const updateCaseDetailsInteractor = async (
     statistics: caseDetails.statistics,
   };
 
-  const oldCase = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-  const oldCaseCopy = deepFreeze(cloneDeep(oldCase));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
   const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
     editableFields.petitionPaymentStatus === PAYMENT_STATUS.WAIVED;
 
   const newCaseEntity = new Case(
     {
-      ...oldCase,
+      ...caseRecord,
       ...editableFields,
       petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
       petitionPaymentMethod: isPaid
@@ -67,7 +66,7 @@ export const updateCaseDetailsInteractor = async (
     { applicationContext },
   );
 
-  if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
+  if (caseRecord.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
       newCaseEntity.addDocketEntry(
         new DocketEntry(
@@ -106,7 +105,7 @@ export const updateCaseDetailsInteractor = async (
   }
 
   if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(oldCase, { applicationContext });
+    const oldCaseEntity = new Case(caseRecord, { applicationContext });
     const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
       ? oldCaseEntity.generateTrialSortTags()
       : {};

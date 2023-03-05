@@ -7,8 +7,6 @@ import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * sealCaseContactAddressInteractor

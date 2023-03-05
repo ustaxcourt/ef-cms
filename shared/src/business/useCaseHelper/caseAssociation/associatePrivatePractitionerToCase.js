@@ -1,6 +1,4 @@
-const deepFreeze = require('deep-freeze');
 const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UserCase } = require('../../entities/UserCase');
@@ -31,20 +29,22 @@ exports.associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
-  const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
+  const isPrivatePractitionerOnCase = caseRecord.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,
   );
 
   if (!isAssociated) {
-    const userCaseEntity = new UserCase(caseToUpdate);
+    const userCaseEntity = new UserCase(caseRecord);
 
     await applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
@@ -53,7 +53,7 @@ exports.associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+    const caseEntity = new Case(caseRecord, { applicationContext });
 
     const { petitioners } = caseEntity;
 

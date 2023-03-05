@@ -5,8 +5,7 @@ import {
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
-import { cloneDeep, orderBy } from 'lodash';
-import deepFreeze from 'deep-freeze';
+import { orderBy } from 'lodash';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
@@ -81,7 +80,9 @@ export const saveSignedDocumentInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseRecord));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
   const caseEntity = new Case(caseRecord, { applicationContext });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(

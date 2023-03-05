@@ -11,7 +11,6 @@ import { addCoverToPdf } from './addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
-import deepFreeze from 'deep-freeze';
 
 /**
  * updateContactInteractor
@@ -42,24 +41,21 @@ export const updateContactInteractor = async (
     state: contactInfo.state,
   };
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
 
-  if (!caseToUpdate) {
+  if (!caseRecord) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
-  let caseEntity = new Case(
-    {
-      ...caseToUpdate,
-    },
-    { applicationContext },
-  );
+  let caseEntity = new Case(caseRecord, { applicationContext });
 
   const oldCaseContact = cloneDeep(
     caseEntity.getPetitionerById(contactInfo.contactId),

@@ -4,8 +4,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * used for removing the high priority from a case
@@ -31,7 +29,9 @@ export const unprioritizeCaseInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 

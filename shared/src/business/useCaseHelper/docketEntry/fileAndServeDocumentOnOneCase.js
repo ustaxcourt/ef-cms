@@ -1,4 +1,3 @@
-const deepFreeze = require('deep-freeze');
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
@@ -6,7 +5,6 @@ const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -18,7 +16,9 @@ exports.fileAndServeDocumentOnOneCase = async ({
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
-  const oldCaseCopy = deepFreeze(cloneDeep(caseEntity.toRawObject()));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseEntity.toRawObject());
 
   docketEntryEntity.setAsServed(servedParties.all);
 

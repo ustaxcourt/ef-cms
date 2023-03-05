@@ -1,8 +1,6 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { cloneDeep } from 'lodash';
 import { createISODateString } from '../utilities/DateHandler';
-import deepFreeze from 'deep-freeze';
 
 /**
  * @param {object} applicationContext the application context
@@ -38,18 +36,19 @@ export const checkForReadyForTrialCasesInteractor = async (
 
   const updatedCases = [];
 
-  for (let caseRecord of caseCatalog) {
-    const { docketNumber } = caseRecord;
-    const caseToCheck = await applicationContext
+  for (const { docketNumber } of caseCatalog) {
+    const caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
         docketNumber,
       });
 
-    if (caseToCheck) {
-      const oldCaseCopy = deepFreeze(cloneDeep(caseToCheck));
-      const caseEntity = new Case(caseToCheck, { applicationContext });
+    if (caseRecord) {
+      const oldCaseCopy = applicationContext
+        .getUtilities()
+        .cloneAndFreeze(caseRecord);
+      const caseEntity = new Case(caseRecord, { applicationContext });
 
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();

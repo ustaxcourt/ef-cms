@@ -9,10 +9,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { cloneDeep } from 'lodash';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
-import deepFreeze from 'deep-freeze';
 
 export const shouldGenerateCoversheetForDocketEntry = ({
   certificateOfServiceUpdated,
@@ -55,20 +53,22 @@ export const updateDocketEntryMetaInteractor = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
 
-  if (!caseToUpdate) {
+  if (!caseRecord) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseRecord, { applicationContext });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,

@@ -5,8 +5,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
-import { cloneDeep } from 'lodash';
-import deepFreeze from 'deep-freeze';
 
 /**
  * used to remove a petitioner from a case
@@ -36,22 +34,24 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-  const oldCaseCopy = deepFreeze(cloneDeep(caseToUpdate));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseRecord, { applicationContext });
 
-  if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
+  if (caseRecord.status === CASE_STATUS_TYPES.new) {
     throw new Error(
-      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
+      `Case with docketNumber ${caseRecord.docketNumber} has not been served`,
     );
   }
 
   if (caseEntity.petitioners.length <= 1) {
     throw new Error(
-      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
+      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseRecord.docketNumber}`,
     );
   }
 
