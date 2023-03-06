@@ -101,7 +101,7 @@ describe('formattedTrialSessionDetails', () => {
           inConsolidatedGroup: false,
           irsPractitioners: [],
           isDocketSuffixHighPriority: true,
-          leadCase: false,
+          isLeadCase: false,
           privatePractitioners: [],
           qcCompleteForTrial: {},
         },
