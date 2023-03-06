@@ -23,6 +23,8 @@ const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
+const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
+
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -602,6 +604,8 @@ const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
+
+const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
 
 const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
@@ -1486,6 +1490,7 @@ module.exports = deepFreeze({
   ALPHABETICALLY_ASCENDING,
   ALPHABETICALLY_DESCENDING,
   AMENDED_PETITION_FORM_NAME,
+  AMENDMENT_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
@@ -1642,4 +1647,5 @@ module.exports = deepFreeze({
   CLOSED_CASE_STATUSES,
   US_STATES,
   SESSION_STATUS_TYPES,
+  AMICUS_BRIEF_EVENT_CODE,
 });
