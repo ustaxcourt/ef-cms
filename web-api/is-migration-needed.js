@@ -35,7 +35,10 @@ const hasMigrationRan = async key => {
 
 (async () => {
   const migrationFiles = getFilesInDirectory(
-    path.join(__dirname, './migration-terraform/main/lambdas/migrations'),
+    path.join(
+      __dirname,
+      './workflow-terraform/migration/main/lambdas/migrations',
+    ),
   );
   for (let migrationFile of migrationFiles) {
     const hasRan = await hasMigrationRan(migrationFile);
