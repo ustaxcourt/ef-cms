@@ -432,6 +432,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   sentBySection: JoiValidationConstants.STRING.optional(),
   sentByUserId: JoiValidationConstants.UUID.optional(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+  trialLocation: JoiValidationConstants.ISO_DATE.optional().allow(null),
   updatedAt: JoiValidationConstants.ISO_DATE.required(),
   workItemId: JoiValidationConstants.UUID.required(),
 };
