@@ -48,7 +48,7 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
-const { clone, compact, includes, isEmpty } = require('lodash');
+const { clone, compact, includes, isEmpty, startCase } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -189,8 +189,12 @@ const caseDecorator = (
   assignPractitioners(params);
   assignFieldsForAllUsers(params);
   if (isNewCase) {
+    const changedBy = rawObject.isPaper
+      ? currentUser.name
+      : startCase(currentUser.role);
+
     obj.setCaseStatus({
-      changedBy: currentUser.name,
+      changedBy,
       updatedCaseStatus: rawObject.status || CASE_STATUS_TYPES.new,
     });
   }
