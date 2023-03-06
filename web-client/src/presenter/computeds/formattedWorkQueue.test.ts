@@ -10,8 +10,13 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedWorkQueue', () => {
-  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
-    applicationContext.getConstants();
+  const {
+    CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
+    DOCKET_SECTION,
+    STATUS_TYPES,
+    TRIAL_SESSION_SCOPE_TYPES,
+  } = applicationContext.getConstants();
 
   let globalUser;
   let screenMetadata = {};
@@ -508,14 +513,35 @@ describe('formattedWorkQueue', () => {
   });
 
   it('should set showTrialInformation to false on formattedWorkItem when caseStatus is not calendared', () => {
-    const trialDate = '2025-01-01T16:29:13.122Z';
-    const trialLocation = 'Austin, TX';
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(docketClerkUser),
         workQueue: [
           {
             ...baseWorkItem,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result[0].showTrialInformation).toBe(false);
+  });
+
+  it('should format the trialDate and trialLocation on the formattedWorkItem when caseStatus is Calendared', () => {
+    const trialDate = '2025-01-01T16:29:13.122Z';
+    const trialLocation = 'Austin, Texas';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.calendared,
             trialDate,
             trialLocation,
           },
@@ -527,6 +553,45 @@ describe('formattedWorkQueue', () => {
       },
     });
 
-    expect(result[0].showTrialInformation).toBe(false);
+    expect(result[0].showTrialInformation).toBe(true);
+
+    expect(result[0]).toMatchObject({
+      formattedTrialDate: '01/01/25',
+      formattedTrialLocation: 'Austin, TX',
+    });
+  });
+
+  it('should format the trialDate and trialLocation on the formattedWorkItem when caseStatus is Calendared and standAloneRemote', () => {
+    const trialDate = '2025-01-01T16:29:13.122Z';
+    const trialLocation = TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.calendared,
+            trialDate,
+            trialLocation,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result[0].showTrialInformation).toBe(true);
+
+    expect(
+      applicationContext.getUtilities().abbreviateState,
+    ).not.toHaveBeenCalled();
+
+    expect(result[0]).toMatchObject({
+      formattedTrialDate: '01/01/25',
+      formattedTrialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    });
   });
 });
