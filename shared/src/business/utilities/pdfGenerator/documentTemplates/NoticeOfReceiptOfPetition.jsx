@@ -42,9 +42,7 @@ const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
     you will continue to receive paper service. To obtain further information
     about Tax Court proceedings, visit{' '}
     <strong>
-      <a href="mailto:dawson.support@ustaxcourt.gov">
-        dawson.support@ustaxcourt.gov
-      </a>
+      <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
     </strong>{' '}
     and select &quot;Guidance for Petitioners.&quot;
   </div>
