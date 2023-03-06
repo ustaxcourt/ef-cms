@@ -66,6 +66,7 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.sentBySection = rawWorkItem.sentBySection;
   this.sentByUserId = rawWorkItem.sentByUserId;
   this.trialDate = rawWorkItem.trialDate;
+  this.trialLocation = rawWorkItem.trialLocation;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
 };
