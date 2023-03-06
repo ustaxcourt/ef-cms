@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+const deepFreeze = require('deep-freeze');
 const joi = require('joi');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
@@ -48,7 +49,7 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
-const { clone, compact, includes, isEmpty } = require('lodash');
+const { clone, cloneDeep, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -167,9 +168,7 @@ const caseDecorator = (
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  obj.originalCase = applicationContext
-    .getUseCaseHelpers()
-    .cloneAndFreeze(rawObject);
+  obj.originalCase = deepFreeze(cloneDeep(rawObject));
   obj.petitioners = [];
 
   if (
