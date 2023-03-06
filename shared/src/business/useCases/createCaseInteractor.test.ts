@@ -116,7 +116,42 @@ describe('createCaseInteractor', () => {
     ).toMatchObject({
       caseStatusHistory: [
         {
-          changedBy: 'Test Petitioner',
+          changedBy: 'Petitioner',
+          date: createISODateString(),
+          updatedCaseStatus: CASE_STATUS_TYPES.new,
+        },
+      ],
+    });
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toHaveBeenCalled();
+  });
+
+  it('should create a case (with a case status history) successfully as a private practitioner', async () => {
+    user = {
+      barNumber: 'BN1234',
+      name: 'Attorney One',
+      role: ROLES.privatePractitioner,
+      userId: '330d4b65-620a-489d-8414-6623653ebc4f',
+    };
+
+    const result = await createCaseInteractor(applicationContext, {
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: mockPetitionMetadata,
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+    } as any);
+
+    expect(result).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate,
+    ).toMatchObject({
+      caseStatusHistory: [
+        {
+          changedBy: 'Private Practitioner',
           date: createISODateString(),
           updatedCaseStatus: CASE_STATUS_TYPES.new,
         },
