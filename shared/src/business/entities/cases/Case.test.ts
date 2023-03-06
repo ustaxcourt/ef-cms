@@ -33,7 +33,7 @@ jest.mock('../../utilities/DateHandler', () => {
 
 describe('Case entity', () => {
   describe('init', () => {
-    it('should add case status information to the `caseStatusHistory` if a new case is created', () => {
+    it('should add case status information including the internal users NAME to the `caseStatusHistory` if a new case is created by an internal user', () => {
       const internalUser = MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'];
       applicationContext.getCurrentUser.mockReturnValueOnce(internalUser);
       const mockCreateIsoDateString = createISODateString as jest.Mock;
@@ -45,7 +45,58 @@ describe('Case entity', () => {
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       };
       const myCase = new Case(
-        { ...MOCK_CASE, status: undefined },
+        { ...MOCK_CASE, isPaper: true, status: undefined },
+        {
+          applicationContext,
+          isNewCase: true,
+        },
+      );
+
+      expect(myCase).toMatchObject({
+        caseStatusHistory: [expectedCaseStatus],
+      });
+    });
+
+    it('should add case status information including the petitioners ROLE to the `caseStatusHistory` if a new case is created by an petitioner', () => {
+      const petitionerUser = MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'];
+      applicationContext.getCurrentUser.mockReturnValueOnce(petitionerUser);
+      const mockCreateIsoDateString = createISODateString as jest.Mock;
+      mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
+
+      const expectedCaseStatus = {
+        changedBy: 'Petitioner',
+        date: createISODateString(),
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      };
+      const myCase = new Case(
+        { ...MOCK_CASE, isPaper: false, status: undefined },
+        {
+          applicationContext,
+          isNewCase: true,
+        },
+      );
+
+      expect(myCase).toMatchObject({
+        caseStatusHistory: [expectedCaseStatus],
+      });
+    });
+
+    it('should add case status information including a private practitioners ROLE to the `caseStatusHistory` if a new case is created by an private practitioners', () => {
+      const privatePractitionerUser =
+        MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
+      applicationContext.getCurrentUser.mockReturnValueOnce(
+        privatePractitionerUser,
+      );
+      const mockCreateIsoDateString = createISODateString as jest.Mock;
+      mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
+
+      const expectedCaseStatus = {
+        changedBy: 'Private Practitioner',
+        date: createISODateString(),
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      };
+      const myCase = new Case(
+        { ...MOCK_CASE, isPaper: false, status: undefined },
         {
           applicationContext,
           isNewCase: true,
