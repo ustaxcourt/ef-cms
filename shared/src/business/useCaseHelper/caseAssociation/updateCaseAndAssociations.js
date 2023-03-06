@@ -568,7 +568,10 @@ exports.updateCaseAndAssociations = async ({
   });
 
   await Promise.all(persistenceRequests);
-  await updateCase({ applicationContext, caseToUpdate });
+  return updateCase({
+    applicationContext,
+    caseToUpdate: validRawCaseEntity,
+  });
 };
 
 /**
@@ -580,8 +583,11 @@ exports.updateCaseAndAssociations = async ({
  * @returns {Promise<*>} the updated case entity
  */
 const updateCase = async ({ applicationContext, caseToUpdate }) => {
+  const originalCase = new Case(caseToUpdate.originalCase, {
+    applicationContext,
+  }).toRawObject();
   const caseDifference = deepObjectDiff(
-    caseToUpdate.originalCase,
+    omit(originalCase, fieldsToOmitBeforePersisting),
     omit(caseToUpdate, fieldsToOmitBeforePersisting),
   );
 
