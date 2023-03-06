@@ -8,6 +8,7 @@ export const fieldsToOmitBeforePersisting = [
   'docketEntries',
   'hearings',
   'irsPractitioners',
+  'originalCase',
   'privatePractitioners',
 ];
 
