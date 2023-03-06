@@ -86,6 +86,15 @@ export const formatWorkItem = ({
     result.caseStatus === STATUS_TYPES.calendared
   );
 
+  if (result.showTrialInformation) {
+    setTrialInformationOnWorkItem({
+      applicationContext,
+      workItem: result,
+    });
+  }
+
+  console.log('result:::', result);
+
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
   result.consolidatedIconTooltipText = consolidatedIconTooltipText;
@@ -398,4 +407,22 @@ export const formattedWorkQueue = (get, applicationContext) => {
   );
 
   return workQueue;
+};
+
+const setTrialInformationOnWorkItem = ({ applicationContext, workItem }) => {
+  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
+
+  if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+    workItem.formattedTrialLocation = applicationContext
+      .getUtilities()
+      .abbreviateState(workItem.trialLocation);
+  } else {
+    workItem.formattedTrialLocation = workItem.trialLocation;
+  }
+
+  console.log('after if');
+
+  workItem.formattedTrialDate = applicationContext
+    .getUtilities()
+    .formatDateString(workItem.trialDate, 'MMDDYY');
 };
