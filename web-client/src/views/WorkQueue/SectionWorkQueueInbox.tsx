@@ -33,6 +33,8 @@ const SectionWorkQueueTable = connect(
     toggleAllWorkItemCheckboxChangeSequence,
     workitemAllCheckbox,
   }) {
+    console.log('formattedWorkQueue:::', formattedWorkQueue);
+
     return (
       <table
         aria-describedby="tab-work-queue"
