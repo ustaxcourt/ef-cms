@@ -482,4 +482,19 @@ describe('formattedWorkQueue', () => {
       expect(result[0].consolidatedIconTooltipText).toBe('Consolidated case');
     });
   });
+
+  it('should set showTrialInformation to true on formattedWorkItem when caseStatus is calendared', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [{ ...baseWorkItem, caseStatus: STATUS_TYPES.calendared }],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.messages[0].showTrialInformation).toBe(true);
+  });
 });
