@@ -1,4 +1,5 @@
 import {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -11,7 +12,17 @@ import { PrivatePractitioner } from '../entities/PrivatePractitioner';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createCaseInteractor } from './createCaseInteractor';
+import { createISODateString } from '../utilities/DateHandler';
 import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
+
+jest.mock('../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn(),
+  };
+});
 
 describe('createCaseInteractor', () => {
   let user;
@@ -41,6 +52,9 @@ describe('createCaseInteractor', () => {
     stinFile: new File([], 'test.pdf'),
     stinFileSize: 1,
   };
+  const date = '2020-11-21T20:49:28.192Z';
+  const mockCreateIsoDateString = createISODateString as jest.Mock;
+  mockCreateIsoDateString.mockReturnValue(date);
 
   beforeEach(() => {
     user = new User({
@@ -88,7 +102,7 @@ describe('createCaseInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should create a case successfully as a petitioner', async () => {
+  it('should create a case (with a case status history) successfully as a petitioner', async () => {
     const result = await createCaseInteractor(applicationContext, {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: mockPetitionMetadata,
@@ -97,8 +111,17 @@ describe('createCaseInteractor', () => {
 
     expect(result).toBeDefined();
     expect(
-      applicationContext.getUseCaseHelpers().createCaseAndAssociations,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate,
+    ).toMatchObject({
+      caseStatusHistory: [
+        {
+          changedBy: 'Test Petitioner',
+          date: createISODateString(),
+          updatedCaseStatus: CASE_STATUS_TYPES.new,
+        },
+      ],
+    });
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
@@ -165,7 +188,7 @@ describe('createCaseInteractor', () => {
     });
 
     const result = await createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -217,7 +240,7 @@ describe('createCaseInteractor', () => {
     });
 
     const result = await createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -281,7 +304,7 @@ describe('createCaseInteractor', () => {
     });
 
     const result = await createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,

@@ -32,6 +32,27 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
+type TWorkItemEntity = {
+  assignToUser: ({
+    assigneeId,
+    assigneeName,
+    section,
+    sentBy,
+    sentBySection,
+    sentByUserId,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    section: string;
+    sentBy: string;
+    sentBySection: string;
+    sentByUserId: string;
+  }) => TWorkItemEntity;
+  toRawObject(): WorkItem;
+  validate(): TWorkItemEntity;
+  setAsCompleted(options: any): TWorkItemEntity;
+} & WorkItem;
+
 type WorkItem = {
   createdAt: string;
   assigneeId: string;
@@ -54,6 +75,7 @@ type WorkItem = {
   updatedAt: string;
   gsi1pk: string;
   inProgress: boolean;
+  section: string;
 };
 
 type TOutboxItem = {
@@ -251,7 +273,7 @@ type TCase = {
   orderForAmendedPetition: boolean;
   orderForAmendedPetitionAndFilingFee: boolean;
   orderForFilingFee: boolean;
-  orderForOds: boolean;
+  orderForCds: boolean;
   orderForRatification: boolean;
   orderToShowCause: boolean;
   partyType: string;

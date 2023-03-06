@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const {
   processItems,
-} = require('./migration-terraform/main/lambdas/migration-segments');
+} = require('./workflow-terraform/migration/main/lambdas/migration-segments');
 
 (async () => {
   const dynamo = new AWS.DynamoDB({
