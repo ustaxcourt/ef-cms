@@ -80,6 +80,11 @@ export const formatWorkItem = ({
       consolidatedIconTooltipText = 'Consolidated case';
     }
   }
+  const { STATUS_TYPES } = applicationContext.getConstants();
+
+  result.showTrialInformation = !!(
+    result.caseStatus === STATUS_TYPES.calendared
+  );
 
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
