@@ -11,6 +11,8 @@ export const NonstandardForm = connect(
   {
     caseDetail: state.caseDetail,
     form: state.form,
+    getOrdinalValuesForUploadIteration:
+      state.getOrdinalValuesForUploadIteration,
     helper: state[props.helper],
     level: props.level,
     namespace: props.namespace,
@@ -22,6 +24,7 @@ export const NonstandardForm = connect(
   function NonstandardForm({
     caseDetail,
     form,
+    getOrdinalValuesForUploadIteration,
     helper,
     level,
     namespace,
@@ -169,41 +172,32 @@ export const NonstandardForm = connect(
 
         {helper[level].ordinalField && (
           <FormGroup errorText={validationErrors?.ordinalValue}>
-            <fieldset
-              className="usa-fieldset margin-bottom-0"
-              id={`${namespace}ordinal-field-radios`}
+            <label
+              className="usa-label"
+              htmlFor={`${namespace}ordinal-field-select`}
             >
-              <legend htmlFor={`${namespace}ordinal-field-radios`}>
-                {helper[level].ordinalField}
-              </legend>
-              {['First', 'Second', 'Third'].map(ordinalValue => (
-                <div className="usa-radio usa-radio__inline" key={ordinalValue}>
-                  <input
-                    checked={
-                      get(form, `${namespace}ordinalValue`, '') === ordinalValue
-                    }
-                    className="usa-radio__input"
-                    id={`${namespace}${ordinalValue}`}
-                    name={`${namespace}ordinalValue`}
-                    type="radio"
-                    value={ordinalValue}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-radio__label"
-                    htmlFor={`${namespace}${ordinalValue}`}
-                  >
-                    {ordinalValue}
-                  </label>
-                </div>
+              {helper[level].ordinalField}
+            </label>
+            <select
+              className="usa-select"
+              id={`${namespace}ordinal-field-select`}
+              name="ordinalValue"
+              value={form.ordinalValue}
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateSequence();
+              }}
+            >
+              <option value="">- Select -</option>
+              {getOrdinalValuesForUploadIteration.map(ordinalValue => (
+                <option key={ordinalValue} value={ordinalValue}>
+                  {ordinalValue}
+                </option>
               ))}
-            </fieldset>
+            </select>
           </FormGroup>
         )}
       </div>
