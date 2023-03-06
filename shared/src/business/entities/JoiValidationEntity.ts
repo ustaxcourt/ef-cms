@@ -10,8 +10,11 @@ const setIsValidated = obj => {
     writable: false,
   });
 };
+
 /**
+ * converts an entity to the raw json object form needed for persistence.
  *
+ * @returns {object} the raw object
  */
 function toRawObject(entity) {
   const keys = Object.keys(entity);
@@ -39,7 +42,9 @@ function toRawObject(entity) {
 }
 
 /**
+ * returns all of the validation errors after being converted to their formatted output
  *
+ * @returns {object} the formatted errors
  */
 function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
@@ -67,7 +72,9 @@ function getFormattedValidationErrorsHelper(entity) {
 }
 
 /**
+ * returns all of the validation errors after being converted to their formatted output
  *
+ * @returns {object} the formatted errors
  */
 function getFormattedValidationErrors(entity) {
   const keys = Object.keys(entity);
