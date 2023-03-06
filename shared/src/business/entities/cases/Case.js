@@ -168,7 +168,7 @@ const caseDecorator = (
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  obj.originalCase = deepFreeze(cloneDeep(rawObject));
+  obj.originalCase = rawObject.originalCase || deepFreeze(cloneDeep(rawObject));
   obj.petitioners = [];
 
   if (
