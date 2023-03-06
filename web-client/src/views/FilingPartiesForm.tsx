@@ -158,7 +158,6 @@ export const FilingPartiesForm = connect(
               ) : (
                 <input
                   className="usa-input usa-input-inline"
-                  id="amicus-curiae"
                   name="otherFilingParty"
                   value={form.otherFilingParty || ''}
                   onChange={e => {
