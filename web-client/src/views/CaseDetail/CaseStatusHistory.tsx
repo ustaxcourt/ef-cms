@@ -45,7 +45,7 @@ export const CaseStatusHistory = connect(
             </tbody>
           </table>
           {!caseStatusHistoryHelper.isTableDisplayed && (
-            <div>There is no case status history on this case.</div>
+            <div>There is no case status history.</div>
           )}
         </div>
       </div>
