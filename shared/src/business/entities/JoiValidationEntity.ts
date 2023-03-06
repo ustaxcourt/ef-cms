@@ -121,7 +121,12 @@ export abstract class JoiValidationEntity {
   constructor(entityName: string) {
     this.entityName = entityName;
     const rules = this.getValidationRules();
-    this.schema = joi.object().keys(rules);
+
+    Object.defineProperty(this, 'schema', {
+      enumerable: false,
+      value: joi.object().keys(rules),
+      writable: true,
+    });
   }
 
   abstract getValidationRules(): any;
