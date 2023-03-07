@@ -626,7 +626,11 @@ exports.updateCaseAndAssociations = async ({
  * @param {object} providers.caseToUpdate the case object which was updated
  * @returns {Promise<*>} the updated case entity
  */
-const updateCase = ({ applicationContext, caseToUpdate, mostRecentCase }) => {
+const updateCase = async ({
+  applicationContext,
+  caseToUpdate,
+  mostRecentCase,
+}) => {
   const originalCase = new Case(caseToUpdate.originalCase, {
     applicationContext,
   });
@@ -648,7 +652,9 @@ const updateCase = ({ applicationContext, caseToUpdate, mostRecentCase }) => {
     applicationContext,
   }).validate();
 
-  return applicationContext
+  const caseToReturn = await applicationContext
     .getPersistenceGateway()
     .updateCase({ applicationContext, caseToUpdate: validUpdatedCase });
+  console.log(JSON.stringify(caseToReturn));
+  return caseToReturn;
 };
