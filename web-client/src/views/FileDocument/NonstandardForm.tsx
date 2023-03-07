@@ -201,7 +201,7 @@ export const NonstandardForm = connect(
           </FormGroup>
         )}
         {form.ordinalValue === 'Other' && (
-          <FormGroup errorText={validationErrors.otherIteration}>
+          <FormGroup errorText={validationErrors?.otherIteration}>
             <label className="usa-label" htmlFor="other-iteration">
               Iteration
             </label>
