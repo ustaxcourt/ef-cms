@@ -18,6 +18,7 @@ export const NonstandardForm = connect(
     namespace: props.namespace,
     trialCitiesHelper: state.trialCitiesHelper,
     updateSequence: sequences[props.updateSequence],
+    validateOtherIterationSequence: sequences.validateOtherIterationSequence,
     validateSequence: sequences[props.validateSequence],
     validationErrors: state[props.validationErrors],
   },
@@ -29,6 +30,7 @@ export const NonstandardForm = connect(
     level,
     namespace,
     updateSequence,
+    validateOtherIterationSequence,
     validateSequence,
     validationErrors,
   }) {
@@ -198,6 +200,30 @@ export const NonstandardForm = connect(
                 </option>
               ))}
             </select>
+            {form.ordinalValue === 'Other' && (
+              <FormGroup errorText={validationErrors.otherIteration}>
+                <label className="usa-label" htmlFor="other-iteration">
+                  Iteration
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="other-iteration"
+                  name="otherIteration"
+                  placeholder="Number"
+                  type="number"
+                  value={form.otherIteration || ''}
+                  onBlur={() => validateOtherIterationSequence()}
+                  onChange={e => {
+                    updateSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validateSequence();
+                  }}
+                />
+              </FormGroup>
+            )}
           </FormGroup>
         )}
       </div>

@@ -1,4 +1,5 @@
 const joi = require('joi');
+const ordinals = require('english-ordinals');
 const {
   baseExternalDocumentValidation,
   externalDocumentDecorator,
@@ -29,7 +30,8 @@ ExternalDocumentNonStandardF.prototype.init = function init(rawProps) {
 ExternalDocumentNonStandardF.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    this.ordinalValue,
+    ordinals.getOrdinal(Number(this.ordinalValue)).charAt(0).toUpperCase() +
+      ordinals.getOrdinal(Number(this.ordinalValue)).slice(1),
     this.previousDocument
       ? this.previousDocument.documentTitle ||
           this.previousDocument.documentType
