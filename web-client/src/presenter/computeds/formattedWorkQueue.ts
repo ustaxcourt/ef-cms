@@ -80,20 +80,11 @@ export const formatWorkItem = ({
       consolidatedIconTooltipText = 'Consolidated case';
     }
   }
-  const { STATUS_TYPES } = applicationContext.getConstants();
 
-  result.showTrialInformation = !!(
-    result.caseStatus === STATUS_TYPES.calendared
-  );
-
-  if (result.showTrialInformation) {
-    setTrialInformationOnWorkItem({
-      applicationContext,
-      workItem: result,
-    });
-  }
-
-  console.log('result:::', result);
+  result.formattedCaseStatus = setFormattedCaseStatus({
+    applicationContext,
+    workItem: result,
+  });
 
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
@@ -409,20 +400,27 @@ export const formattedWorkQueue = (get, applicationContext) => {
   return workQueue;
 };
 
-const setTrialInformationOnWorkItem = ({ applicationContext, workItem }) => {
-  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
+const setFormattedCaseStatus = ({ applicationContext, workItem }) => {
+  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
+  let formattedCaseStatus = workItem.caseStatus;
 
-  if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-    workItem.formattedTrialLocation = applicationContext
+  if (workItem.caseStatus === STATUS_TYPES.calendared) {
+    let formattedTrialLocation = '';
+    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      formattedTrialLocation = applicationContext
+        .getUtilities()
+        .abbreviateState(workItem.trialLocation);
+    } else {
+      formattedTrialLocation = workItem.trialLocation;
+    }
+
+    const formattedTrialDate = applicationContext
       .getUtilities()
-      .abbreviateState(workItem.trialLocation);
-  } else {
-    workItem.formattedTrialLocation = workItem.trialLocation;
+      .formatDateString(workItem.trialDate, 'MMDDYY');
+
+    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
   }
 
-  console.log('after if');
-
-  workItem.formattedTrialDate = applicationContext
-    .getUtilities()
-    .formatDateString(workItem.trialDate, 'MMDDYY');
+  return formattedCaseStatus;
 };
