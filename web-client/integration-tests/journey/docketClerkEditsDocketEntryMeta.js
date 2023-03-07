@@ -29,7 +29,7 @@ export const docketClerkEditsDocketEntryMeta = (
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'ordinalValue',
-        value: 'First',
+        value: '1',
       },
     );
 

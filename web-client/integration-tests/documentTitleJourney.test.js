@@ -179,7 +179,7 @@ describe('Document title journey', () => {
       documentType: 'Amendment [anything]',
       eventCode: 'ADMT',
       filers: [contactPrimary.contactId],
-      ordinalValue: 'First',
+      ordinalValue: '1',
       primaryDocumentFile: fakeFile,
       scenario: 'Nonstandard F',
     };
