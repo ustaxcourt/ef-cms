@@ -24,10 +24,9 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<function>} the persistence functions required to complete this action
  */
-const updateCaseDocketEntries = ({
+const updateCaseDocketEntries = async ({
   applicationContext,
   caseToUpdate,
-  mostRecentCase,
   oldCase,
 }) => {
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
@@ -42,6 +41,14 @@ const updateCaseDocketEntries = ({
   // for each of the added docket entries, do we already have an index, if so give it a new index
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  const mostRecentCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+      readConsistent: true,
+    });
 
   // fix docket entry collisions
   [...addedDocketEntries, ...updatedDocketEntries].forEach(addedDocketEntry => {
@@ -614,7 +621,6 @@ exports.updateCaseAndAssociations = async ({
   return updateCase({
     applicationContext,
     caseToUpdate,
-    mostRecentCase,
   });
 };
 
@@ -626,11 +632,7 @@ exports.updateCaseAndAssociations = async ({
  * @param {object} providers.caseToUpdate the case object which was updated
  * @returns {Promise<*>} the updated case entity
  */
-const updateCase = async ({
-  applicationContext,
-  caseToUpdate,
-  mostRecentCase,
-}) => {
+const updateCase = async ({ applicationContext, caseToUpdate }) => {
   const originalCase = new Case(caseToUpdate.originalCase, {
     applicationContext,
   });
@@ -642,6 +644,14 @@ const updateCase = async ({
   if (isEmpty(caseDifference)) {
     return caseToUpdate;
   }
+
+  const mostRecentCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+      readConsistent: true,
+    });
 
   const mostRecentCaseUpdated = {
     ...mostRecentCase,
@@ -655,6 +665,5 @@ const updateCase = async ({
   const caseToReturn = await applicationContext
     .getPersistenceGateway()
     .updateCase({ applicationContext, caseToUpdate: validUpdatedCase });
-  console.log(JSON.stringify(caseToReturn));
   return caseToReturn;
 };
