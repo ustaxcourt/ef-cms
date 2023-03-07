@@ -81,28 +81,66 @@ describe('DocketEntryFactory', () => {
     expect(errors().eventCode).toBeDefined();
   });
 
-  it('should require objections when eventCode is ADMT and previous document is an objection document type', () => {
-    rawEntity.eventCode = 'ADMT';
-    rawEntity.previousDocument = {
-      eventCode: 'APLD',
-    };
-    expect(errors().objections).toBeDefined();
+  it('should not require Additional info 1', () => {
+    expect(errors().additionalInfo).toEqual(undefined);
   });
 
-  it('should require objections when eventCode is AMAT and previous document is an objection document type', () => {
-    rawEntity.eventCode = 'AMAT';
-    rawEntity.previousDocument = {
-      eventCode: 'APLD',
-    };
-    expect(errors().objections).toBeDefined();
+  it('should not require Additional info 2', () => {
+    expect(errors().additionalInfo2).toEqual(undefined);
   });
 
-  it('should require objections when document is an objection document type', () => {
-    rawEntity.eventCode = 'APLD';
-    expect(errors().objections).toBeDefined();
+  it('should not require add to cover sheet', () => {
+    expect(errors().addToCoversheet).toEqual(undefined);
   });
 
-  describe('Document type', () => {
+  describe('objections', () => {
+    beforeEach(() => {
+      // rawEntity = {
+      //   ...rawEntity,
+      //   category: 'Answer',
+      //   documentTitle: '[First, Second, etc.] Amendment to Answer',
+      //   documentType: 'Amendment to Answer',
+      //   scenario: 'Nonstandard G',
+      // };
+    });
+
+    it('should require objections when eventCode is ADMT and previous document is an objection document type', () => {
+      rawEntity.eventCode = 'ADMT';
+      rawEntity.previousDocument = {
+        eventCode: 'APLD',
+      };
+
+      expect(errors().objections).toBeDefined();
+    });
+
+    it('should require objections when eventCode is AMAT and previous document is an objection document type', () => {
+      rawEntity.eventCode = 'AMAT';
+      rawEntity.previousDocument = {
+        eventCode: 'APLD',
+      };
+
+      expect(errors().objections).toBeDefined();
+    });
+
+    it('should require objections when document is an objection document type', () => {
+      rawEntity.eventCode = 'APLD';
+
+      expect(errors().objections).toBeDefined();
+    });
+
+    it('should be optional when the docket entry is a paper filing and the docket entry is a motion', () => {
+      rawEntity.eventCode = 'M006'; // Motion for Continuance
+      rawEntity.isPaperFiling = true;
+
+      const docketEntry = DocketEntryFactory(rawEntity);
+
+      expect(
+        docketEntry.getFormattedValidationErrors().objections,
+      ).toBeUndefined();
+    });
+  });
+
+  describe('documentType', () => {
     beforeEach(() => {
       rawEntity = {
         ...rawEntity,
@@ -120,18 +158,6 @@ describe('DocketEntryFactory', () => {
       rawEntity.ordinalValue = 'First';
       expect(errors().ordinalValue).toEqual(undefined);
     });
-  });
-
-  it('should not require Additional info 1', () => {
-    expect(errors().additionalInfo).toEqual(undefined);
-  });
-
-  it('should not require Additional info 2', () => {
-    expect(errors().additionalInfo2).toEqual(undefined);
-  });
-
-  it('should not require add to cover sheet', () => {
-    expect(errors().addToCoversheet).toEqual(undefined);
   });
 
   describe('Inclusions', () => {
