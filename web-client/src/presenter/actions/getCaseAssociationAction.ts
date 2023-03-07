@@ -1,4 +1,3 @@
-import { some } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -16,6 +15,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   let isAssociated = false;
   let isDirectlyAssociated = false;
   let pendingAssociation = false;
+  const caseDetail = get(state.caseDetail);
 
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const isConsolidatedGroupAccessEnabled = get(
@@ -24,59 +24,56 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     ],
   );
 
-  if (user.role === USER_ROLES.privatePractitioner) {
-    const caseDetailPractitioners = get(state.caseDetail.privatePractitioners);
-    const docketNumber = get(state.caseDetail.docketNumber);
-
-    isAssociated = some(caseDetailPractitioners, { userId: user.userId });
-    isDirectlyAssociated = isAssociated;
-    if (!isAssociated) {
-      pendingAssociation = await applicationContext
-        .getUseCases()
-        .verifyPendingCaseForUserInteractor(applicationContext, {
-          docketNumber,
-          userId: user.userId,
-        });
-    }
-  } else if (user.role === USER_ROLES.irsPractitioner) {
-    const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
-
-    isAssociated = some(caseDetailRespondents, { userId: user.userId });
-    isDirectlyAssociated = isAssociated;
-  } else if (user.role === USER_ROLES.petitioner) {
-    const caseDetail = get(state.caseDetail);
-    if (caseDetail.leadDocketNumber) {
-      if (isConsolidatedGroupAccessEnabled) {
-        isAssociated = applicationContext
-          .getUtilities()
-          .isPetitionerPartOfGroup({
-            consolidatedCases: caseDetail.consolidatedCases,
-            isPartyOfCase: applicationContext.getUtilities().getPetitionerById,
-            userId: user.userId,
-          });
-      } else {
-        isAssociated = !!applicationContext
-          .getUtilities()
-          .getPetitionerById(caseDetail, user.userId);
-      }
-      isDirectlyAssociated = !!applicationContext
-        .getUtilities()
-        .getPetitionerById(caseDetail, user.userId);
-    } else {
-      isAssociated = !!applicationContext
-        .getUtilities()
-        .getPetitionerById(caseDetail, user.userId);
-      isDirectlyAssociated = isAssociated;
-    }
-  } else if (user.role === USER_ROLES.irsSuperuser) {
-    const caseDetail = get(state.caseDetail);
-    const canAllowDocumentServiceForCase = applicationContext
-      .getUtilities()
-      .canAllowDocumentServiceForCase(caseDetail);
-
-    isAssociated = canAllowDocumentServiceForCase;
-  } else if (applicationContext.getUtilities().isInternalUser(user.role)) {
+  if (
+    user.role === USER_ROLES.irsSuperuser ||
+    applicationContext.getUtilities().isInternalUser(user.role)
+  ) {
     isAssociated = true;
+
+    if (user.role === USER_ROLES.irsSuperuser) {
+      const canAllowDocumentServiceForCase = applicationContext
+        .getUtilities()
+        .canAllowDocumentServiceForCase(caseDetail);
+
+      isAssociated = canAllowDocumentServiceForCase;
+    }
+
+    return {
+      isAssociated,
+      isDirectlyAssociated: isConsolidatedGroupAccessEnabled
+        ? isDirectlyAssociated
+        : isAssociated,
+      pendingAssociation,
+    };
+  }
+
+  const caseParties = [
+    ...(caseDetail.privatePractitioners || []),
+    ...(caseDetail.irsPractitioners || []),
+    ...(caseDetail.petitioners || []),
+  ];
+  const idName = user.role === USER_ROLES.petitioner ? 'contactId' : 'userId';
+
+  if (isConsolidatedGroupAccessEnabled && caseDetail.leadDocketNumber) {
+    isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
+      consolidatedCases: caseDetail.consolidatedCases,
+      userId: user[`${idName}`],
+    });
+  } else {
+    isAssociated = caseParties.some(party => party[idName] === user.userId);
+  }
+
+  isDirectlyAssociated = caseParties.some(
+    party => party[idName] === user.userId,
+  );
+
+  if (!isAssociated && user.role === USER_ROLES.privatePractitioner) {
+    pendingAssociation = await applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor(applicationContext, {
+        docketNumber: caseDetail.docketNumber,
+        userId: user.userId,
+      });
   }
 
   return {

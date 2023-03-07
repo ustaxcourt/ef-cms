@@ -710,8 +710,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
           httpOptions: {
-            timeout: 300000,
+            connectTimeout: 3000,
+            timeout: 5000,
           },
+          maxRetries: 3,
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });

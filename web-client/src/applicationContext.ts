@@ -18,9 +18,10 @@ import {
   hasPartyWithServiceType,
   isClosed,
   isLeadCase,
-  isPetitionerPartOfGroup,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  isUserPartOfGroup,
+  userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -770,12 +771,12 @@ const applicationContext = {
       isLeadCase,
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
-      isPetitionerPartOfGroup,
       isSealedCase,
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
       isUserIdRepresentedByPrivatePractitioner,
+      isUserPartOfGroup,
       isValidDateString,
       openUrlInNewTab,
       prepareDateFromString,
@@ -784,6 +785,7 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       setupPdfDocument,
       sortDocketEntries,
+      userIsDirectlyAssociated,
       validateDateAndCreateISO,
     };
   },
