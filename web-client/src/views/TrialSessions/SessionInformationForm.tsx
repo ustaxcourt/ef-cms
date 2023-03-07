@@ -291,7 +291,7 @@ export const SessionInformationForm = connect(
                           key={session.trialSessionId}
                           value={session.trialSessionId}
                         >
-                          {session.trialLocation}
+                          {session.optionText}
                         </option>
                       ))}
                     </select>

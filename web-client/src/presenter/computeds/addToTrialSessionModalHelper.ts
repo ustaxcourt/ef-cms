@@ -1,7 +1,10 @@
 import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
-const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
+export const formatTrialSessionDisplayOptions = (
+  trialSessions,
+  applicationContext,
+) => {
   return trialSessions.map(trialSession => {
     trialSession.startDateFormatted = applicationContext
       .getUtilities()
@@ -45,7 +48,7 @@ export const trialSessionsModalHelper = ({
   const trialSessionRemote = 'Remote';
 
   if (trialSessionsFormatted) {
-    trialSessionsFormatted = formatTrialSessionsForHelper(
+    trialSessionsFormatted = formatTrialSessionDisplayOptions(
       trialSessionsFormatted,
       applicationContext,
     );
