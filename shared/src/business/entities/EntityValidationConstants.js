@@ -227,7 +227,6 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
   ).optional(),
-  ordinalValue: JoiValidationConstants.STRING.optional(),
   otherFilingParty: JoiValidationConstants.STRING.max(100)
     .when('hasOtherFilingParty', {
       is: true,
