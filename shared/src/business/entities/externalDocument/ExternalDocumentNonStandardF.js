@@ -24,14 +24,26 @@ function ExternalDocumentNonStandardF() {}
 ExternalDocumentNonStandardF.prototype.init = function init(rawProps) {
   externalDocumentDecorator(this, rawProps);
   this.ordinalValue = rawProps.ordinalValue;
+  this.otherIteration = rawProps.otherIteration;
   this.previousDocument = rawProps.previousDocument;
+};
+
+const getOrdinalSuffixInWords = formVal => {
+  return ordinals
+    .getOrdinal(Number(formVal))
+    .split(' ')
+    .map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
 };
 
 ExternalDocumentNonStandardF.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    ordinals.getOrdinal(Number(this.ordinalValue)).charAt(0).toUpperCase() +
-      ordinals.getOrdinal(Number(this.ordinalValue)).slice(1),
+    this.otherIteration
+      ? getOrdinalSuffixInWords(this.otherIteration)
+      : getOrdinalSuffixInWords(this.ordinalValue),
     this.previousDocument
       ? this.previousDocument.documentTitle ||
           this.previousDocument.documentType
@@ -46,6 +58,7 @@ ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES = {
 ExternalDocumentNonStandardF.schema = {
   ...baseExternalDocumentValidation,
   ordinalValue: JoiValidationConstants.STRING.required(),
+  otherIteration: JoiValidationConstants.STRING.max(3).optional(), // required if ordinalValue is "Other"
   previousDocument: joi
     .object()
     .keys({

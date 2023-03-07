@@ -198,30 +198,29 @@ export const NonstandardForm = connect(
                 </option>
               ))}
             </select>
-            {form.ordinalValue === 'Other' && (
-              <FormGroup errorText={validationErrors.otherIteration}>
-                <label className="usa-label" htmlFor="other-iteration">
-                  Iteration
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="other-iteration"
-                  name="otherIteration"
-                  placeholder="Number"
-                  type="number"
-                  value={form.otherIteration || ''}
-                  onBlur={() => validateSequence()}
-                  onChange={e => {
-                    updateSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                    validateSequence(); // use joi to determine max of 9999?
-                  }}
-                />
-              </FormGroup>
-            )}
+          </FormGroup>
+        )}
+        {form.ordinalValue === 'Other' && (
+          <FormGroup errorText={validationErrors.otherIteration}>
+            <label className="usa-label" htmlFor="other-iteration">
+              Iteration
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id="other-iteration"
+              name="otherIteration"
+              placeholder="Number"
+              value={form.otherIteration || ''}
+              onBlur={() => validateSequence()}
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateSequence();
+              }}
+            />
           </FormGroup>
         )}
       </div>

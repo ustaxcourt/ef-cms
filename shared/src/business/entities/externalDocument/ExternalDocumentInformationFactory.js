@@ -78,6 +78,7 @@ const VALIDATION_ERROR_MESSAGES = {
   hasSupportingDocuments: 'Enter selection for Supporting Documents.',
   objections: 'Enter selection for Objections.',
   ordinalValue: 'Select an iteration',
+  otherIteration: ['Maximum iteration value is 999.'],
   partyIrsPractitioner: 'Select a filing party',
   previousDocument: 'Select a document',
   primaryDocumentFile: 'Upload a document',
