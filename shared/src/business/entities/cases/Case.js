@@ -157,6 +157,11 @@ Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
 ) {
+  Object.defineProperty(this, 'originalCase', {
+    enumerable: false,
+    value: deepFreeze(cloneDeep(rawCase)),
+    writable: false,
+  });
   caseDecorator(this, rawCase, { applicationContext, filtered });
 };
 
@@ -168,7 +173,6 @@ const caseDecorator = (
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  obj.originalCase = rawObject.originalCase || deepFreeze(cloneDeep(rawObject));
   obj.petitioners = [];
 
   if (
