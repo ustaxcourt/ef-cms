@@ -11,5 +11,5 @@ const urls = [...docketclerk, ...judge, ...reportersOffice].map(
 
 module.exports = {
   defaults,
-  urls: setTimeouts()(getOnly(urls)),
+  urls: getOnly(urls).map(setTimeouts),
 };
