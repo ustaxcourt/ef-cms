@@ -2,6 +2,9 @@ const diff = require('diff-arrays-of-objects');
 const {
   fieldsToOmitBeforePersisting,
 } = require('../../../persistence/dynamo/cases/createCase');
+const {
+  shouldGenerateDocketRecordIndex,
+} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { Case } = require('../../entities/cases/Case');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
@@ -24,6 +27,7 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const updateCaseDocketEntries = ({
   applicationContext,
   caseToUpdate,
+  mostRecentCase,
   oldCase,
 }) => {
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
@@ -31,6 +35,38 @@ const updateCaseDocketEntries = ({
     caseToUpdate.docketEntries,
     'docketEntryId',
   );
+
+  // maybe docket entry index collision handling
+  // do any of our updated docket entries have an index that already exists
+  // caseToUpdate.docketEntries
+  // for each of the added docket entries, do we already have an index, if so give it a new index
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  // fix docket entry collisions
+  [...addedDocketEntries, ...updatedDocketEntries].forEach(addedDocketEntry => {
+    if (
+      !addedDocketEntry.isOnDocketRecord ||
+      !shouldGenerateDocketRecordIndex({
+        caseDetail: caseEntity,
+        docketEntry: {
+          ...addedDocketEntry,
+          index: undefined,
+        },
+      })
+    )
+      return;
+
+    if (
+      mostRecentCase.docketEntries.find(
+        de =>
+          de.docketEntryId !== addedDocketEntry.docketEntryId &&
+          de.index === addedDocketEntry.index,
+      )
+    ) {
+      addedDocketEntry.index = caseEntity.generateNextDocketRecordIndex();
+    }
+  });
 
   const {
     added: addedArchivedDocketEntries,
@@ -532,12 +568,18 @@ exports.updateCaseAndAssociations = async ({
     : new Case(caseToUpdate, { applicationContext });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
-
   const validRawOldCaseEntity = new Case(caseToUpdate.originalCase, {
     applicationContext,
   })
     .validate()
     .toRawObject();
+
+  const mostRecentCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
 
   const RELATED_CASE_OPERATIONS = [
     updateCaseDeadlines,
@@ -555,6 +597,7 @@ exports.updateCaseAndAssociations = async ({
     fn({
       applicationContext,
       caseToUpdate: validRawCaseEntity,
+      mostRecentCase,
       oldCase: validRawOldCaseEntity,
     }),
   );
@@ -571,6 +614,7 @@ exports.updateCaseAndAssociations = async ({
   return updateCase({
     applicationContext,
     caseToUpdate,
+    mostRecentCase,
   });
 };
 
@@ -582,7 +626,7 @@ exports.updateCaseAndAssociations = async ({
  * @param {object} providers.caseToUpdate the case object which was updated
  * @returns {Promise<*>} the updated case entity
  */
-const updateCase = async ({ applicationContext, caseToUpdate }) => {
+const updateCase = ({ applicationContext, caseToUpdate, mostRecentCase }) => {
   const originalCase = new Case(caseToUpdate.originalCase, {
     applicationContext,
   });
@@ -594,13 +638,6 @@ const updateCase = async ({ applicationContext, caseToUpdate }) => {
   if (isEmpty(caseDifference)) {
     return caseToUpdate;
   }
-
-  const mostRecentCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
 
   const mostRecentCaseUpdated = {
     ...mostRecentCase,

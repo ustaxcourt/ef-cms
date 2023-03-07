@@ -84,6 +84,8 @@ exports.fileAndServeDocumentOnOneCase = async ({
       });
   }
 
+  await new Promise(resolve => setTimeout(resolve, 8000));
+
   const validRawCaseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
