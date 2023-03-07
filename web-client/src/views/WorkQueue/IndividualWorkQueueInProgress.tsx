@@ -79,9 +79,17 @@ export const IndividualWorkQueueInProgress = connect(
                       {item.docketEntry.filedBy}
                     </td>
                   )}
-                  {workQueueHelper.showCaseStatusColumn && (
-                    <td className="message-queue-row">{item.caseStatus}</td>
-                  )}
+                  {workQueueHelper.showCaseStatusColumn &&
+                    !item.showTrialInformation && (
+                      <td className="message-queue-row">{item.caseStatus}</td>
+                    )}
+                  {workQueueHelper.showCaseStatusColumn &&
+                    item.showTrialInformation && (
+                      <td className="message-queue-row">
+                        {item.caseStatus} - {item.formattedTrialDate}{' '}
+                        {item.formattedTrialLocation}
+                      </td>
+                    )}
                   {workQueueHelper.showProcessedByColumn && (
                     <td>{item.assigneeName}</td>
                   )}
