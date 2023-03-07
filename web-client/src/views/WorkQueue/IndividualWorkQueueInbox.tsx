@@ -102,7 +102,15 @@ export const IndividualWorkQueueInbox = connect(
                       {item.docketEntry.filedBy}
                     </td>
                   )}
-                  <td className="message-queue-row">{item.caseStatus}</td>
+                  {!item.showTrialInformation && (
+                    <td className="message-queue-row">{item.caseStatus}</td>
+                  )}
+                  {item.showTrialInformation && (
+                    <td className="message-queue-row">
+                      {item.caseStatus} - {item.formattedTrialDate}{' '}
+                      {item.formattedTrialLocation}
+                    </td>
+                  )}
                 </tr>
               </tbody>
             );
