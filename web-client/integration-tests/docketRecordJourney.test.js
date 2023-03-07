@@ -441,7 +441,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   it('verifies the docket record after filing a petition electronically', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
-      ownershipDisclosureFileId: '2da6d239-555a-40e8-af81-1949c8270cd7',
+      corporateDisclosureFileId: '2da6d239-555a-40e8-af81-1949c8270cd7',
     });
     cerebralTest.docketNumber = caseDetail.docketNumber;
 

@@ -11,7 +11,7 @@ import { petitionsClerkEditsDeficiencyStatistic } from './journey/petitionsClerk
 import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsClerkEditsPetitionInQCIRSNotice';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './journey/petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox';
-import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
+import { petitionsClerkVerifiesOrderForCdsCheckbox } from './journey/petitionsClerkVerifiesOrderForCdsCheckbox';
 import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petitionsClerkVerifiesPetitionPaymentFeeOptions';
 
 describe('Petitions clerk case journey', () => {
@@ -35,7 +35,7 @@ describe('Petitions clerk case journey', () => {
     receivedAtFormatted: '01/01/01',
     shouldShowIrsNoticeDate: false,
   });
-  petitionsClerkVerifiesOrderForOdsCheckbox(cerebralTest, fakeFile);
+  petitionsClerkVerifiesOrderForCdsCheckbox(cerebralTest, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(
     cerebralTest,
     fakeFile,
