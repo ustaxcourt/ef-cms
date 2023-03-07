@@ -11,22 +11,24 @@ export const getDocumentQCServedForSection = async ({
       query: {
         bool: {
           must: [
-            {
-              prefix: { 'pk.S': 'case|' },
-            },
-            {
-              prefix: { 'sk.S': 'work-item|' },
-            },
+            // {
+            //   prefix: { 'pk.S': 'case|' },
+            // },
+            // {
+            //   prefix: { 'sk.S': 'work-item|' },
+            // },
             {
               term: {
                 'section.S': section,
               },
             },
-            {
-              exists: {
-                field: 'completedAt.S',
-              },
-            },
+            // {
+            //   range: {
+            //     'completedAt.S': {
+            //       gte: 'now-7d/d',
+            //     },
+            //   },
+            // },
           ],
           should: [GET_PARENT_CASE],
         },
@@ -40,6 +42,8 @@ export const getDocumentQCServedForSection = async ({
     applicationContext,
     searchParameters: query,
   });
+
+  console.log(results);
 
   return results;
 };
