@@ -81,10 +81,12 @@ export const formatWorkItem = ({
     }
   }
 
-  result.formattedCaseStatus = setFormattedCaseStatus({
-    applicationContext,
-    workItem: result,
-  });
+  // result.formattedCaseStatus = setFormattedCaseStatus({
+  //   applicationContext,
+  //   workItem: result,
+  // });
+
+  result.formattedCaseStatus = result.caseStatus;
 
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
