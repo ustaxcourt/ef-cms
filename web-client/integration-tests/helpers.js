@@ -796,7 +796,7 @@ export const loginAs = (cerebralTest, user) =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
+export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {

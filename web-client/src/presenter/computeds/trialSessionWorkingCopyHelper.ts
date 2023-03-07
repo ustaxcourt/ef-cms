@@ -77,7 +77,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   );
 
   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
-    if (caseToUpdate.leadCase) {
+    if (caseToUpdate.isLeadCase) {
       caseToUpdate.consolidatedCases = memberConsolidatedCases.filter(
         memberCase => {
           return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;

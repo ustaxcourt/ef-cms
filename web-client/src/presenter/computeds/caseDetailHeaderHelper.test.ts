@@ -126,7 +126,7 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   describe('showConsolidatedCaseIcon', () => {
-    it('should show the consolidated case icon when the case is associated with a lead case', () => {
+    it('should show the consolidated case icon when the case is directly associated with a lead case', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -140,7 +140,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showConsolidatedCaseIcon).toEqual(true);
     });
 
-    it('should NOT show the consolidated case icon when the case is NOT associated with a lead case', () => {
+    it('should NOT show the consolidated case icon when the case is NOT directly associated with a lead case', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -250,7 +250,7 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   describe('showFileFirstDocumentButton', () => {
-    it("should be false when the user's role is respondent and they are associated with the case", () => {
+    it("should be false when the user's role is respondent and they are directly associated with the case", () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(irsPractitionerUser),
@@ -259,7 +259,7 @@ describe('caseDetailHeaderHelper', () => {
             irsPractitioners: [{ userId: '789' }],
           },
           screenMetadata: {
-            isAssociated: true,
+            isDirectlyAssociated: true,
           },
         },
       });
@@ -267,7 +267,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showFileFirstDocumentButton).toEqual(false);
     });
 
-    it("should be false when the user's role is respondent, they are not associated with the case and the case is sealed", () => {
+    it("should be false when the user's role is respondent, they are not directly associated with the case and the case is sealed", () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(irsPractitionerUser),
@@ -277,7 +277,7 @@ describe('caseDetailHeaderHelper', () => {
             isSealed: true,
           },
           screenMetadata: {
-            isAssociated: false,
+            isDirectlyAssociated: false,
           },
         },
       });
@@ -285,25 +285,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showFileFirstDocumentButton).toEqual(false);
     });
 
-    it("should be false when the user's role is respondent, they are not associated with the case and the case is sealed", () => {
-      const result = runCompute(caseDetailHeaderHelper, {
-        state: {
-          ...getBaseState(irsPractitionerUser),
-          caseDetail: {
-            ...getBaseState(irsPractitionerUser).caseDetail,
-            hasIrsPractitioner: true,
-            isSealed: true,
-          },
-          screenMetadata: {
-            isAssociated: false,
-          },
-        },
-      });
-
-      expect(result.showFileFirstDocumentButton).toEqual(false);
-    });
-
-    it("should be false when the user's role is respondent and they are not associated with the case", () => {
+    it("should be false when the user's role is respondent and they are not directly associated with the case", () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(irsPractitionerUser),
@@ -312,7 +294,7 @@ describe('caseDetailHeaderHelper', () => {
             hasIrsPractitioner: true,
           },
           screenMetadata: {
-            isAssociated: false,
+            isDirectlyAssociated: false,
           },
         },
       });
@@ -320,7 +302,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showFileFirstDocumentButton).toEqual(false);
     });
 
-    it("should be true when the user's role is respondent and there they are not associated with the case", () => {
+    it("should be true when the user's role is respondent, they are not directly associated with the case, and there is no other irsPractitioner on the case s(Public Case)", () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(irsPractitionerUser),
@@ -329,12 +311,33 @@ describe('caseDetailHeaderHelper', () => {
             hasIrsPractitioner: false,
           },
           screenMetadata: {
-            isAssociated: false,
+            isDirectlyAssociated: false,
           },
         },
       });
 
       expect(result.showFileFirstDocumentButton).toEqual(true);
+    });
+
+    it("should be true when the user's role is respondent, they are not directly associated with the case, and there is already an irsPractitioner on the case (Full Case)", () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(irsPractitionerUser),
+          caseDetail: {
+            ...getBaseState(irsPractitionerUser).caseDetail,
+            irsPractitioners: [
+              {
+                userId: 'something',
+              },
+            ],
+          },
+          screenMetadata: {
+            isDirectlyAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showFileFirstDocumentButton).toEqual(false);
     });
   });
 
@@ -357,12 +360,12 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   describe('showPendingAccessToCaseButton', () => {
-    it('should be true when the user is a practitioner and the user is not yet associated with the case but has pending request', () => {
+    it('should be true when the user is a practitioner and the user is not yet directly associated with the case but has pending request', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(privatePractitionerUser),
           screenMetadata: {
-            isAssociated: false,
+            isDirectlyAssociated: false,
             pendingAssociation: true,
           },
         },
@@ -442,7 +445,7 @@ describe('caseDetailHeaderHelper', () => {
 
   describe('showRequestAccessToCaseButton', () => {
     describe('when the user is an irs practitioner', () => {
-      it('should be false when they are associated with the case', () => {
+      it('should be false when they are directly associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(irsPractitionerUser),
@@ -451,7 +454,7 @@ describe('caseDetailHeaderHelper', () => {
               irsPractitioners: [{ userId: '789' }],
             },
             screenMetadata: {
-              isAssociated: true,
+              isDirectlyAssociated: true,
             },
           },
         });
@@ -459,7 +462,7 @@ describe('caseDetailHeaderHelper', () => {
         expect(result.showRequestAccessToCaseButton).toEqual(false);
       });
 
-      it('should be true when they are not associated with the case', () => {
+      it('should be true when they are not directly associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(irsPractitionerUser),
@@ -468,7 +471,7 @@ describe('caseDetailHeaderHelper', () => {
               hasIrsPractitioner: true,
             },
             screenMetadata: {
-              isAssociated: false,
+              isDirectlyAssociated: false,
             },
           },
         });
@@ -476,7 +479,7 @@ describe('caseDetailHeaderHelper', () => {
         expect(result.showRequestAccessToCaseButton).toEqual(true);
       });
 
-      it('should be false when they are not associated with the case and the case is sealed', () => {
+      it('should be false when they are not directly associated with the case and the case is sealed', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(irsPractitionerUser),
@@ -486,7 +489,7 @@ describe('caseDetailHeaderHelper', () => {
               isSealed: true,
             },
             screenMetadata: {
-              isAssociated: false,
+              isDirectlyAssociated: false,
             },
           },
         });
@@ -496,12 +499,12 @@ describe('caseDetailHeaderHelper', () => {
     });
 
     describe('when the user is a private practitioner', () => {
-      it('should be true when they are not associated with the case', () => {
+      it('should be true when they are not directly associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(privatePractitionerUser),
             screenMetadata: {
-              isAssociated: false,
+              isDirectlyAssociated: false,
             },
           },
         });
@@ -509,7 +512,7 @@ describe('caseDetailHeaderHelper', () => {
         expect(result.showRequestAccessToCaseButton).toEqual(true);
       });
 
-      it('should be false they are associated with the case', () => {
+      it('should be false they are directly associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(privatePractitionerUser),
@@ -518,7 +521,7 @@ describe('caseDetailHeaderHelper', () => {
               privatePractitioners: [{ userId: '123' }],
             },
             screenMetadata: {
-              isAssociated: true,
+              isDirectlyAssociated: true,
             },
           },
         });
@@ -526,7 +529,7 @@ describe('caseDetailHeaderHelper', () => {
         expect(result.showRequestAccessToCaseButton).toEqual(false);
       });
 
-      it('should be false when they are not associated with the case and the case is sealed', () => {
+      it('should be false when they are not directly associated with the case and the case is sealed', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(privatePractitionerUser),
@@ -535,7 +538,7 @@ describe('caseDetailHeaderHelper', () => {
               isSealed: true,
             },
             screenMetadata: {
-              isAssociated: false,
+              isDirectlyAssociated: false,
             },
           },
         });
@@ -567,12 +570,12 @@ describe('caseDetailHeaderHelper', () => {
     });
 
     describe('when the user is a petitioner', () => {
-      it('should be false when the user is a petitioner and they are not associated with the case', () => {
+      it('should be false when the user is a petitioner and they are not directly associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(petitionerUser),
             screenMetadata: {
-              isAssociated: false,
+              isDirectlyAssociated: false,
             },
           },
         });
