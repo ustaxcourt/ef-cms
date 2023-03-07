@@ -18,7 +18,6 @@ export const NonstandardForm = connect(
     namespace: props.namespace,
     trialCitiesHelper: state.trialCitiesHelper,
     updateSequence: sequences[props.updateSequence],
-    validateOtherIterationSequence: sequences.validateOtherIterationSequence,
     validateSequence: sequences[props.validateSequence],
     validationErrors: state[props.validationErrors],
   },
@@ -30,7 +29,6 @@ export const NonstandardForm = connect(
     level,
     namespace,
     updateSequence,
-    validateOtherIterationSequence,
     validateSequence,
     validationErrors,
   }) {
@@ -213,13 +211,13 @@ export const NonstandardForm = connect(
                   placeholder="Number"
                   type="number"
                   value={form.otherIteration || ''}
-                  onBlur={() => validateOtherIterationSequence()}
+                  onBlur={() => validateSequence()}
                   onChange={e => {
                     updateSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
-                    validateSequence();
+                    validateSequence(); // use joi to determine max of 9999?
                   }}
                 />
               </FormGroup>
