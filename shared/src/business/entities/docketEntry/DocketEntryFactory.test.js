@@ -154,7 +154,7 @@ describe('DocketEntryFactory', () => {
 
     it('should be optional when the docket entry is a paper filing and the docket entry is a motion', () => {
       rawEntity.eventCode = 'M006'; // Motion for Continuance
-      rawEntity.isPaperFiling = true;
+      rawEntity.isPaper = true;
 
       expect(
         DocketEntryFactory(rawEntity).getFormattedValidationErrors().objections,

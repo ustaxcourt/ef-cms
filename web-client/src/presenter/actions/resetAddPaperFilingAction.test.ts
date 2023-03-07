@@ -20,7 +20,7 @@ describe('resetAddPaperFilingAction', () => {
       form: {
         filers: [],
         filersMap: {},
-        isPaperFiling: true,
+        isPaper: true,
         lodged: false,
         practitioner: [],
       },
