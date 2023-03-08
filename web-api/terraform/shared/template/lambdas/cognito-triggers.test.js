@@ -1,4 +1,4 @@
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { handler } from './cognito-triggers';
 const mockCreatePetitionerAccountInteractor = jest.fn();
 const mockGetUserById = jest.fn();
