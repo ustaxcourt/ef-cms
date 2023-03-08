@@ -171,56 +171,64 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].ordinalField && (
-          <FormGroup errorText={validationErrors?.ordinalValue}>
-            <label
-              className="usa-label"
-              htmlFor={`${namespace}ordinal-field-select`}
+          <FormGroup className="grid-row grid-gap">
+            <FormGroup
+              className="grid-col-6"
+              errorText={validationErrors?.ordinalValue}
             >
-              {helper[level].ordinalField}
-            </label>
-            <select
-              className="usa-select"
-              id={`${namespace}ordinal-field-select`}
-              name="ordinalValue"
-              value={form.ordinalValue}
-              onChange={e => {
-                updateSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validateSequence();
-              }}
-            >
-              <option value="">- Select -</option>
-              {getOrdinalValuesForUploadIteration.map(ordinalValue => (
-                <option key={ordinalValue} value={ordinalValue}>
-                  {ordinalValue}
-                </option>
-              ))}
-            </select>
-          </FormGroup>
-        )}
-        {form.ordinalValue === 'Other' && (
-          <FormGroup errorText={validationErrors?.otherIteration}>
-            <label className="usa-label" htmlFor="other-iteration">
-              Iteration
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id="other-iteration"
-              name="otherIteration"
-              placeholder="Number"
-              value={form.otherIteration || ''}
-              onBlur={() => validateSequence()}
-              onChange={e => {
-                updateSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validateSequence();
-              }}
-            />
+              <label
+                className="usa-label"
+                htmlFor={`${namespace}ordinal-field-select`}
+              >
+                {helper[level].ordinalField}
+              </label>
+              <select
+                className="usa-select"
+                id={`${namespace}ordinal-field-select`}
+                name="ordinalValue"
+                value={form.ordinalValue}
+                onChange={e => {
+                  updateSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateSequence();
+                }}
+              >
+                <option value="">- Select -</option>
+                {getOrdinalValuesForUploadIteration.map(ordinalValue => (
+                  <option key={ordinalValue} value={ordinalValue}>
+                    {ordinalValue}
+                  </option>
+                ))}
+              </select>
+            </FormGroup>
+            {form.ordinalValue === 'Other' && (
+              <FormGroup
+                className="grid-col-6"
+                errorText={validationErrors?.otherIteration}
+              >
+                <label className="usa-label" htmlFor="other-iteration">
+                  Iteration
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input margin-0"
+                  id="other-iteration"
+                  name="otherIteration"
+                  placeholder="Number"
+                  value={form.otherIteration || ''}
+                  onBlur={() => validateSequence()}
+                  onChange={e => {
+                    updateSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validateSequence();
+                  }}
+                />
+              </FormGroup>
+            )}
           </FormGroup>
         )}
       </div>
