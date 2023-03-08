@@ -1,4 +1,4 @@
-name: E2E Pa11y Pubic
+name: E2E Pa11y Pubic (Search)
 
 on:
   pull_request:
