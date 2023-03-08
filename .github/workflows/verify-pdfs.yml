@@ -1,4 +1,4 @@
-name: Build API Typescript
+name: Node.js CI - PDF Tests
 
 on:
   pull_request:
@@ -7,15 +7,15 @@ on:
       - dependency-updates
 
 jobs:
-  build_ts_api:
+  Client:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Build Typescript API
-        run: |
-          npm ci
-          npm run build:assets
-          npm run build:lambda:api
+      - name: NPM Install
+        run: npm ci
+      - name: Verify PDFs
+        run: npm run test:document-generation
