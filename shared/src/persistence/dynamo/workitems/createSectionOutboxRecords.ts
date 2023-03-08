@@ -20,7 +20,7 @@ const createSectionOutboxArchiveRecord = async ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  Item: TOutboxItem & TDynamoRecord;
+  Item: RawOutboxItem & TDynamoRecord;
   section: string;
 }) => {
   const skMonthDay = formatDateString(Item.sk, FORMATS.YYYYMMDD);
@@ -51,7 +51,7 @@ const createSectionOutboxRecentRecord = ({
   ttl,
 }: {
   applicationContext: IApplicationContext;
-  Item: TOutboxItem & TDynamoRecord;
+  Item: RawOutboxItem & TDynamoRecord;
   section: string;
   ttl: number;
 }) =>
@@ -80,7 +80,7 @@ const createSectionOutboxRecords = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-  workItem: TOutboxItem;
+  workItem: RawWorkItem;
 }) => {
   const sk = workItem.completedAt
     ? workItem.completedAt

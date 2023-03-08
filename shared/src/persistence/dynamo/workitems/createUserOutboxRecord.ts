@@ -20,7 +20,7 @@ const createUserOutboxRecord = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: TOutboxItem;
+  workItem: RawWorkItem;
   userId: string;
 }) => {
   const sk = workItem.completedAt ? workItem.completedAt : workItem.updatedAt;
