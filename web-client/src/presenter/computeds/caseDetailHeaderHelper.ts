@@ -13,7 +13,6 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
-  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const userDirectlyAssociatedWithCase = get(
     state.screenMetadata.isDirectlyAssociated,
   );
@@ -36,7 +35,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
 
-  if (isExternalUser && !userAssociatedWithCase) {
+  if (isExternalUser && !userDirectlyAssociatedWithCase) {
     const pendingAssociation = get(state.screenMetadata.pendingAssociation);
 
     const isCurrentPageFilePetitionSuccess =
@@ -52,7 +51,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.irsPractitioner) {
-      const caseHasRespondent = !!caseDetail.hasIrsPractitioner;
+      // can remove  !!caseDetail.hasIrsPractitioner once CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER / consolidated-cases-group-access-petitioner has been removed
+
+      const caseHasRespondent = !!(
+        !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length
+      );
 
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
 

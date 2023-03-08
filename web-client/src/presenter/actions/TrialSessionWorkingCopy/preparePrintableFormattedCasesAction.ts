@@ -11,7 +11,7 @@ export const preparePrintableFormattedCasesAction = ({ props }) => {
 
   formattedCases.forEach(formattedCase => {
     temporaryFormattedCases.push(formattedCase);
-    if (formattedCase.leadCase) {
+    if (formattedCase.isLeadCase) {
       temporaryFormattedCases = temporaryFormattedCases.concat(
         formattedCase.consolidatedCases,
       );
