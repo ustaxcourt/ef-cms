@@ -349,30 +349,30 @@ describe('scanHelper', () => {
     });
   });
 
-  describe('ownershipDisclosureFileCompleted', () => {
+  describe('corporateDisclosureFileCompleted', () => {
     it('should be true when document is on form', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
+            corporateDisclosureFile: {},
             docketEntries: [],
-            ownershipDisclosureFile: {},
           },
         },
       });
 
-      expect(result.ownershipDisclosureFileCompleted).toBeTruthy();
+      expect(result.corporateDisclosureFileCompleted).toBeTruthy();
     });
 
     it('should be false when document is not on form', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
+            corporateDisclosureFile: null,
             docketEntries: [],
-            ownershipDisclosureFile: null,
           },
         },
       });
-      expect(result.ownershipDisclosureFileCompleted).toBeFalsy();
+      expect(result.corporateDisclosureFileCompleted).toBeFalsy();
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -382,14 +382,14 @@ describe('scanHelper', () => {
             docketEntries: [
               {
                 documentType:
-                  INITIAL_DOCUMENT_TYPES_MAP.ownershipDisclosureFile,
+                  INITIAL_DOCUMENT_TYPES_MAP.corporateDisclosureFile,
               },
             ],
           },
         },
       });
 
-      expect(result.ownershipDisclosureFileCompleted).toBeTruthy();
+      expect(result.corporateDisclosureFileCompleted).toBeTruthy();
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -401,7 +401,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.ownershipDisclosureFileCompleted).toBeFalsy();
+      expect(result.corporateDisclosureFileCompleted).toBeFalsy();
     });
   });
 });
