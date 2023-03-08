@@ -4,7 +4,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
-import { WorkItem } from '../../entities/WorkItem';
+import { WorkItem, WorkItemClass } from '../../entities/WorkItem';
 
 /**
  * getWorkItem
@@ -51,7 +51,7 @@ export const assignWorkItemsInteractor = async (
       workItemId,
     });
 
-  const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
+  const workItemEntity: WorkItemClass = new WorkItem(workItemRecord, {
     applicationContext,
   });
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
