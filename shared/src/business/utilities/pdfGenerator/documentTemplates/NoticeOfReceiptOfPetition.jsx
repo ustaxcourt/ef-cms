@@ -38,9 +38,12 @@ const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
     </strong>{' '}
     with the subject line “E-Access Request” and include your docket number and
     the following access code in the body of your email:
-    <strong> {accessCode}</strong>. Until the verification process is completed
-    you will continue to receive paper service. To obtain further information
-    about Tax Court proceedings, visit{' '}
+    <strong> {accessCode}</strong>.{' '}
+    <b>
+      Until the verification process is completed you will continue to receive
+      paper service .
+    </b>{' '}
+    To obtain further information about Tax Court proceedings, visit{' '}
     <strong>
       <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
     </strong>{' '}
