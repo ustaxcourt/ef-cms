@@ -4,7 +4,7 @@ import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { get } from 'lodash';
 import { props, sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const NonstandardForm = connect(
@@ -32,6 +32,19 @@ export const NonstandardForm = connect(
     validateSequence,
     validationErrors,
   }) {
+    useEffect(() => {
+      const input = window.document.getElementById('other-iteration');
+      if (input) {
+        input.addEventListener('keydown', keydownTriggered, false);
+      }
+    });
+
+    const keydownTriggered = e => {
+      if (e.keyCode < 48 || e.keyCode > 57) {
+        e.preventDefault();
+      }
+    };
+
     namespace = namespace ? `${namespace}.` : '';
     return (
       <div className="nonstandard-form">
