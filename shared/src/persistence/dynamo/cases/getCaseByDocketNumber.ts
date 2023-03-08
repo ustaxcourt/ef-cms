@@ -17,7 +17,7 @@ export const getCaseByDocketNumber = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  readConsistent: boolean;
+  readConsistent?: boolean;
 }) => {
   const caseItems = await queryFull({
     ExpressionAttributeNames: {
