@@ -22,6 +22,9 @@ jobs:
       CIRCLECI: true
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
@@ -44,7 +47,7 @@ jobs:
           mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
           ./wait-until-services.sh
-          URL=http://localhost:5000/ ./wait-until.sh
+          URL=http://localhost:5000/public-api/health ./wait-until.sh
           sleep 10
           npm run test:pa11y:public --node-flags --max-old-space-size=1536
           npm run test:pa11y:public-search --node-flags --max-old-space-size=1536

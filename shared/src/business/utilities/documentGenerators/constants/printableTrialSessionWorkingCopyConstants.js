@@ -46,7 +46,7 @@ const FORMATTED_CASES = [
         userId: '5fb6e815-b5d3-459b-b08b-49c61f0fce5e',
       },
     ],
-    leadCase: true,
+    isLeadCase: true,
     privatePractitioners: [
       {
         barNumber: 'PT1234',
@@ -142,7 +142,7 @@ const FORMATTED_CASES = [
         userId: '5fb6e815-b5d3-459b-b08b-49c61f0fce5e',
       },
     ],
-    leadCase: false,
+    isLeadCase: false,
     privatePractitioners: [
       {
         barNumber: 'PT9999',
@@ -216,7 +216,7 @@ const FORMATTED_CASES = [
         userId: '5fb6e815-b5d3-459b-b08b-49c61f0fce5e',
       },
     ],
-    leadCase: false,
+    isLeadCase: false,
     privatePractitioners: [
       {
         barNumber: 'PT1234',
@@ -315,7 +315,7 @@ const FORMATTED_CASES = [
         userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ],
-    leadCase: false,
+    isLeadCase: false,
     privatePractitioners: [
       {
         barNumber: 'PT1234',
@@ -412,7 +412,7 @@ const FORMATTED_CASES = [
         userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ],
-    leadCase: false,
+    isLeadCase: false,
     privatePractitioners: [
       {
         barNumber: 'PT9999',
