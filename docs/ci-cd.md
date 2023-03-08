@@ -86,7 +86,7 @@ All of our actions are defined in [.github/workflows](https://github.com/ustaxco
 Here is an example of our `test:client:unit` action:
 
 ```yml
-# client.yml
+#  client.yml
 name: Node.js CI
 on: [pull_request]
 jobs:
