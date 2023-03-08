@@ -16,7 +16,6 @@ npm run start:api:ci > /tmp/web-client/server-output.txt &
 URL=http://localhost:4000/api/swagger ./wait-until.sh
 URL=http://localhost:9200 ./wait-until.sh
 URL=http://localhost:9000/ ./wait-until.sh
-URL=http://localhost:8000/shell ./wait-until.sh
 sleep 20 # figure out why we need to sleep here since we wait above ^
 
 # can specify which tests you want to run here
