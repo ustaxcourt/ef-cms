@@ -99,7 +99,6 @@ jobs:
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             URL=http://localhost:9200 ./wait-until.sh
             URL=http://localhost:9000/ ./wait-until.sh
-            URL=http://localhost:8000/shell ./wait-until.sh
             sleep 20 # figure out why we need to sleep here since we wait above ^
             export TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             npm run test:client:integration:ci
@@ -180,7 +179,6 @@ jobs:
             npm run start:all >> /tmp/pa11y/pa11y-server.txt &
             URL=http://localhost:1234 ./wait-until.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
-            URL=http://localhost:8000/shell ./wait-until.sh
             URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
             sleep 10
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
@@ -229,7 +227,7 @@ jobs:
           command: |
             npm run start:all >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            URL=http://localhost:5000/ ./wait-until.sh
+            URL=http://localhost:5000/public-api/health ./wait-until.sh
             sleep 10
             npm run test:pa11y:public --node-flags --max-old-space-size=1536
       - store_artifacts:
@@ -274,7 +272,7 @@ jobs:
           command: |
             npm run start:all >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            URL=http://localhost:5000/ ./wait-until.sh
+            URL=http://localhost:5000/public-api/health ./wait-until.sh
             sleep 10
             npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - store_artifacts:
@@ -557,7 +555,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Migration Cron Lambda
+          name: Deploy Check Migration Status Cron Lambda
           command: |
             npm run deploy:migration-cron -- $ENV
       - run:
@@ -579,12 +577,32 @@ jobs:
               npm run start:migration -- $ENV
             fi
       - run:
-          name: Wait for SQS Queue to Empty
-          no_output_timeout: 5h
+          name: Enable Check Migration Status Cron
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./wait-for-migration-to-finish.sh
-            fi
+            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
+
+  prepare-for-reindex:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.20.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Check Migration Status Cron
+          command: |
+            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
+      - run:
+          name: Deploy Check Reindex Status Cron Lambda
+          command: |
+            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Track successful migrations
           command: |
@@ -600,7 +618,7 @@ jobs:
       - run:
           name: Enable Check Reindex Status Cron
           command: |
-            ./enable-reindex-cron.sh
+            ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
 
   disable-reindex-cron:
     docker:
@@ -619,7 +637,7 @@ jobs:
       - run:
           name: Disable Check Reindex Status Cron
           command: |
-            ./disable-reindex-cron.sh
+            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
 
   smoketests:
     docker:
@@ -804,11 +822,13 @@ jobs:
               npm run destroy:migration -- $ENV
             fi
       - run:
-          name: Destroy Migration Cron Infrastructure
+          name: Destroy Check Migration Status Cron Infrastructure
           command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration-cron -- $ENV
-            fi
+            npm run destroy:migration-cron -- $ENV
+      - run:
+          name: Destroy Check Reindex Status Cron Infrastructure
+          command: |
+            npm run destroy:reindex-cron -- $ENV
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
@@ -886,10 +906,21 @@ workflows:
             branches:
               only:
                 - test
-      - wait-for-reindex:
+      - wait-for-migration:
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          requires:
+            - wait-for-migration
+          filters:
+            branches:
+              only:
+                - test
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
@@ -953,10 +984,30 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - wait-for-reindex:
+      - wait-for-migration:
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          requires:
+            - wait-for-migration
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
@@ -1033,11 +1084,20 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
-      - wait-for-reindex:
+      - wait-for-migration:
           <<: *build-and-deploy-with-context-defaults
           type: approval
           requires:
             - migrate
+      - prepare-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-migration
+      - wait-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - prepare-for-reindex
       - disable-reindex-cron:
           <<: *build-and-deploy-with-context-defaults
           requires:
