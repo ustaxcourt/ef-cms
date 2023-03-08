@@ -4,4 +4,5 @@ interface IApplicationContext {
   getPersistenceGateway: IGetPersistenceGateway;
   getUseCaseHelpers: IGetUseCaseHelpers;
   getUseCases: IGetUseCases;
+  getUtilities: IGetUtilities;
 }

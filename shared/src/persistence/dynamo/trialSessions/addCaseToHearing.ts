@@ -1,4 +1,4 @@
-import { TRawTrialSession } from '../../../business/entities/trialSessions/TrialSession';
+import { RawTrialSession } from '../../../business/entities/trialSessions/TrialSession';
 import { put } from '../../dynamodbClientService';
 import { updateTrialSession } from './updateTrialSession';
 
@@ -18,7 +18,7 @@ export const addCaseToHearing = ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  trialSession: TRawTrialSession;
+  trialSession: RawTrialSession;
 }) =>
   Promise.all([
     // Create mapping record
