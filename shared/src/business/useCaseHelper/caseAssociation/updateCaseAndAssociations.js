@@ -641,10 +641,6 @@ const updateCase = async ({ applicationContext, caseToUpdate }) => {
     omit(caseToUpdate, fieldsToOmitBeforePersisting),
   );
 
-  if (isEmpty(caseDifference)) {
-    return caseToUpdate;
-  }
-
   const mostRecentCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -652,6 +648,10 @@ const updateCase = async ({ applicationContext, caseToUpdate }) => {
       docketNumber: caseToUpdate.docketNumber,
       readConsistent: true,
     });
+
+  if (isEmpty(caseDifference)) {
+    return mostRecentCase;
+  }
 
   const mostRecentCaseUpdated = {
     ...mostRecentCase,
