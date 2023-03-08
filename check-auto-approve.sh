@@ -2,7 +2,7 @@
 
 files=()
 files+=("./iam/terraform/environment-specific/bin/deploy-app.sh")
-# files+=("./web-api/terraform/bin/deploy-app.sh")
+# files+=("./web-api/terraform/bin/deploy-app.sh") TODO: update these at the end
 files+=("./web-api/workflow-terraform/migration/bin/deploy-app.sh")
 files+=("./web-api/workflow-terraform/migration-cron/bin/deploy-app.sh")
 files+=("./web-api/workflow-terraform/switch-colors-cron/bin/deploy-app.sh")
