@@ -81,7 +81,7 @@ const VALIDATION_ERROR_MESSAGES = {
   otherIteration: [
     {
       contains: 'is required',
-      message: 'Provide an iteration value when "Other" is selected.',
+      message: 'Enter an iteration number.',
     },
     'Maximum iteration value is 999.',
   ],
