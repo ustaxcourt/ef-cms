@@ -47,7 +47,7 @@ For example, here is what our migrate job looks like:
 
 This is saying the migrate job should only run directly after the deploy job is successful, and only on the defined branches.
 
-### Executor 
+### Executor
 
 When running a job in Circle, you have the option to run in either a VM or a container.
 
@@ -87,23 +87,26 @@ Here is an example of our `test:client:unit` action:
 
 ```yml
 #  client.yml
-name: Node.js CI
-on: [pull_request]
+name: Node.js CI - Client
+
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
+
 jobs:
   Client:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
+
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18'
       - name: NPM Install
-        run: npm ci --no-optional && npm rebuild
-      - name: API
+        run: npm ci --legacy-peer-dep
+      - name: Test Client Unit
         run: npm run test:client:unit
 ```
 
