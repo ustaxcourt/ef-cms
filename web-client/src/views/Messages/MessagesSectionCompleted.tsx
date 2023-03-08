@@ -90,7 +90,7 @@ export const MessagesSectionCompleted = connect(
               )}
               {!showSortableHeaders && <th>Message</th>}
               <th>Comment</th>
-              <th>Completed by</th>
+              <th>Completed By</th>
               <th>Section</th>
             </tr>
           </thead>
