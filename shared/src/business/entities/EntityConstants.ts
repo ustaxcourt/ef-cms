@@ -615,15 +615,7 @@ export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   'TCRP',
 ];
 
-export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
-  noticeOfAttachmentsInNatureOfEvidence: {
-    eventCode: 'NOT',
-    content:
-      '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
-      .documentType,
-    documentTitle: 'Notice of Attachments in the Nature of Evidence',
-  },
+const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
       '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_30], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_30], may result in dismissal of this case.',
@@ -632,14 +624,6 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OF',
     documentTitle: 'Order',
     deadlineDescription: 'Filing Fee Due',
-  },
-  orderDesignatingPlaceOfTrial: {
-    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
-    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
-      .documentType,
-    eventCode: 'O',
-    documentTitle: 'Order',
   },
   orderForAmendedPetition: {
     content:
@@ -672,6 +656,25 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OAPF',
     documentTitle: 'Order',
     deadlineDescription: 'AP & Fee Due',
+  },
+};
+
+export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
+  noticeOfAttachmentsInNatureOfEvidence: {
+    eventCode: 'NOT',
+    content:
+      '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
+      .documentType,
+    documentTitle: 'Notice of Attachments in the Nature of Evidence',
+  },
+  orderDesignatingPlaceOfTrial: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
+    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
+      .documentType,
+    eventCode: 'O',
+    documentTitle: 'Order',
   },
   orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -730,12 +733,11 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change of Trial Judge',
     eventCode: 'NOT',
   },
+  ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
-  Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).filter(
-    (doc: Record<string, any>) => doc.deadlineDescription,
-  ),
+  Object.values(AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES),
 );
 
 export const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
