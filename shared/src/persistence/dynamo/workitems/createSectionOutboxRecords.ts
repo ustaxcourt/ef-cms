@@ -32,7 +32,7 @@ const createSectionOutboxArchiveRecord = async ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  Item: TOutboxItem & TDynamoRecord;
+  Item: RawOutboxItem & TDynamoRecord;
   section: string;
 }) => {
   const skMonth = formatDateString(Item.sk, FORMATS.YYYYMM);
@@ -61,7 +61,7 @@ const createSectionOutboxRecentRecord = ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  Item: TOutboxItem & TDynamoRecord;
+  Item: RawOutboxItem & TDynamoRecord;
   section: string;
 }) =>
   put({
@@ -89,14 +89,12 @@ const createSectionOutboxRecords = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-  workItem: TOutboxItem;
+  workItem: RawWorkItem;
 }) => {
   const Item: any = {
     ...workItem,
     gsi1pk: `work-item|${workItem.workItemId}`,
-    sk: workItem.completedAt
-      ? workItem.completedAt
-      : (workItem as any).updatedAt,
+    sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
   };
 
   return Promise.all([
