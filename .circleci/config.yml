@@ -456,12 +456,12 @@ jobs:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
-            cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
+            cd "web-api/terraform/${DEPLOYING_COLOR}/main" && ../bin/deploy-app.sh $ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
           command: |
-            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
+            cd "web-client/terraform/${DEPLOYING_COLOR}/main" && ../bin/deploy-app.sh $ENV
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
