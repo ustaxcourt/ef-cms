@@ -1,23 +1,26 @@
 /* eslint-disable @miovision/disallow-date/no-new-date */
-const http = require('http');
-const uuid = require('uuid').v4;
-const WebSocketServer = require('websocket').server;
+import { server as WebSocketServer } from 'websocket';
+import { v4 as uuid } from 'uuid';
+import http from 'http';
 
 const { connectLambda } = require('./src/notifications/connectLambda');
 const { disconnectLambda } = require('./src/notifications/disconnectLambda');
 
 const connections = {};
 
-const server = http.createServer(function (request, response) {
+const server = http.createServer((request, response) => {
   let body = '';
   request.on('data', chunk => {
     body += chunk.toString();
   });
   request.on('end', () => {
-    const split = request.url.split('/');
+    const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
       connections[connectionId].sendUTF(body);
+      response.writeHead(200);
+      response.end();
+    } else if (request.url?.includes('isDone')) {
       response.writeHead(200);
       response.end();
     } else {
@@ -42,9 +45,9 @@ wsServer.on('request', function (request) {
   const connection = request.accept('echo-protocol', request.origin);
   const connectionId = uuid();
   connections[connectionId] = connection;
-  const queryStringParameters = Object.keys(request.resourceURL.query).reduce(
+  const queryStringParameters = Object.keys(request.resourceURL.query!).reduce(
     (aggregatedValue, key) => {
-      const value = request.resourceURL.query[key];
+      const value = request.resourceURL.query![key];
       aggregatedValue[key] = value;
       return aggregatedValue;
     },
@@ -56,11 +59,6 @@ wsServer.on('request', function (request) {
       connectionId,
       domainName: `ws://localhost:${PORT}`,
     },
-  });
-  connection.on('message', function (message) {
-    if (message.utf8Data === 'ping') {
-      connection.send(JSON.stringify({ data: { action: 'pong' } }));
-    }
   });
   connection.on('close', function () {
     delete connections[connectionId];
