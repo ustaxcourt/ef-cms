@@ -8,6 +8,7 @@
 
 ## Steps to convert shared to Typescript
 1. Pull latest from staging: ```git fetch --all```
+1. Checkout staging ```gco ustc/staging```
 1. branch off of staging to create the mass rename branch: ```gco -b convert-shared-to-typescript```
 1. Merge in minimum change branch: ```git pull origin devex-typescript-shared-conversion```
 1. Delete 'shared/src/business/utilities/htmlGenerator/index.pug_.js' and 'shared/src/business/utilities/htmlGenerator/index.scss_.js' as they are generated files and should be ignored.
