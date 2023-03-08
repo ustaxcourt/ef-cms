@@ -90,7 +90,7 @@ export const MessagesSectionCompleted = connect(
               )}
               {!showSortableHeaders && <th>Message</th>}
               <th>Comment</th>
-              <th>Completed by</th>
+              <th>Completed By</th>
               <th>Section</th>
             </tr>
           </thead>
@@ -113,7 +113,11 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
     <tbody>
       <tr>
         <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
+          <ConsolidatedCaseIcon
+            consolidatedIconTooltipText={message.consolidatedIconTooltipText}
+            inConsolidatedGroup={message.inConsolidatedGroup}
+            showLeadCaseIcon={message.isLeadCase}
+          />
         </td>
         <td className="message-queue-row small" colSpan="2">
           {message.docketNumberWithSuffix}
