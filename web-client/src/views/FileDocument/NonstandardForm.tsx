@@ -173,7 +173,7 @@ export const NonstandardForm = connect(
         {helper[level].ordinalField && (
           <FormGroup className="grid-row grid-gap">
             <FormGroup
-              className="grid-col-6"
+              className="grid-col-6 margin-bottom-0"
               errorText={validationErrors?.ordinalValue}
             >
               <label
@@ -217,6 +217,7 @@ export const NonstandardForm = connect(
                   id="other-iteration"
                   name="otherIteration"
                   placeholder="Number"
+                  type="number"
                   value={form.otherIteration || ''}
                   onBlur={() => validateSequence()}
                   onChange={e => {
