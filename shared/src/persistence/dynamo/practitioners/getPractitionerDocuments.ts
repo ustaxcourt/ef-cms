@@ -9,7 +9,7 @@ export const getPractitionerDocuments = async ({
 }) => {
   barNumber = barNumber.toLowerCase();
 
-  return await client.queryFull({
+  return (await client.queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -20,5 +20,5 @@ export const getPractitionerDocuments = async ({
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-  });
+  })) as unknown as Promise<RawPractitionerDocument[]>;
 };
