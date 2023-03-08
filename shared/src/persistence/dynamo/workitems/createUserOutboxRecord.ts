@@ -15,7 +15,7 @@ export const createUserOutboxRecord = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: WorkItem;
+  workItem: RawWorkItem;
   userId: string;
 }) =>
   put({

@@ -4,16 +4,6 @@
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
 */
 
-type TCaseDeadline = {
-  associatedJudge: string;
-  caseDeadlineId: number;
-  createdAt: Date;
-  deadlineDate: Date;
-  description: string;
-  docketNumber: string;
-  sortableDocketNumber: string;
-};
-
 type TRawPenalty = {
   name: string;
   penaltyAmount: number;
@@ -108,7 +98,7 @@ type TDynamoRecord = {
   [key: string]: any;
 };
 
-type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
+type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;
 type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
 
 type TSectionWorkItem = {
