@@ -57,8 +57,8 @@ CaseExternal.prototype.initSelf = function (rawCase) {
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
-  this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
+  this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
+  this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
@@ -81,27 +81,27 @@ CaseExternal.commonRequirements = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
+  corporateDisclosureFile: joi.object().when('filingType', {
+    is: 'A business',
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }),
+  corporateDisclosureFileSize: joi
+    .number()
+    .integer()
+    .min(1)
+    .max(MAX_FILE_SIZE_BYTES)
+    .when('corporateDisclosureFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
   countryType: JoiValidationConstants.STRING.optional(),
   filingType: JoiValidationConstants.STRING.valid(
     ...FILING_TYPES[ROLES.petitioner],
     ...FILING_TYPES[ROLES.privatePractitioner],
   ).required(),
   hasIrsNotice: joi.boolean().required(),
-  ownershipDisclosureFile: joi.object().when('filingType', {
-    is: 'A business',
-    otherwise: joi.optional().allow(null),
-    then: joi.required(),
-  }),
-  ownershipDisclosureFileSize: joi
-    .number()
-    .integer()
-    .min(1)
-    .max(MAX_FILE_SIZE_BYTES)
-    .when('ownershipDisclosureFile', {
-      is: joi.exist(),
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
   partyType: JoiValidationConstants.STRING.valid(
     ...Object.values(PARTY_TYPES),
   ).required(),

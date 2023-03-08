@@ -15,7 +15,10 @@ exports.closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
     closedStatus = CASE_STATUS_TYPES.closedDismissed;
   }
 
-  caseEntity.closeCase({ closedStatus });
+  caseEntity.setCaseStatus({
+    date: applicationContext.getUtilities().createISODateString(),
+    updatedCaseStatus: closedStatus,
+  });
 
   await applicationContext
     .getPersistenceGateway()
