@@ -63,6 +63,7 @@ import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionD
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
+import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -181,6 +182,7 @@ const helpers = {
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
+  getOrdinalValuesForUploadIteration,
   getTrialCityName,
   headerHelper,
   internalPetitionPartiesHelper,
