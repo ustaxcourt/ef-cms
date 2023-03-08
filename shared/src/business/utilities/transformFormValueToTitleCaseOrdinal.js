@@ -7,13 +7,34 @@ const ordinals = require('english-ordinals');
  * @returns {string|void} the formValue as an ordinal in title case
  */
 const transformFormValueToTitleCaseOrdinal = formValue => {
-  return ordinals
-    .getOrdinal(Number(formValue))
-    .split(' ')
-    .map(function (word) {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
+  let splitNumberIntoWords = ordinals.getOrdinal(Number(formValue)).split(' ');
+
+  let wordWithHyphen = splitNumberIntoWords.find(word => word.includes('-'));
+  if (wordWithHyphen) {
+    const splitWordWithHyphenCapitalized =
+      capitalizeWordAfterHyphen(wordWithHyphen);
+    splitNumberIntoWords[splitNumberIntoWords.length - 1] =
+      splitWordWithHyphenCapitalized;
+  }
+
+  let titleCaseOrdinal = splitNumberIntoWords
+    .map(word => (word !== 'and' ? capitalizeWord(word) : word))
     .join(' ');
+
+  return titleCaseOrdinal;
 };
+
+const capitalizeWord = word => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};
+
+const capitalizeWordAfterHyphen = wordWithHyphen => {
+  let splitWordWithHyphen = wordWithHyphen.split('-');
+  const wordAfterHyphenCapitalized = capitalizeWord(splitWordWithHyphen[1]);
+  splitWordWithHyphen[1] = wordAfterHyphenCapitalized;
+  splitWordWithHyphen = splitWordWithHyphen.join('-');
+  return splitWordWithHyphen;
+};
+
 exports.transformFormValueToTitleCaseOrdinal =
   transformFormValueToTitleCaseOrdinal;
