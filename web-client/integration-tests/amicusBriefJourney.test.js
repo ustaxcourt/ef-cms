@@ -62,7 +62,6 @@ describe('Amicus Brief Journey', () => {
   it('fix validation errors by providing required, missing fields', async () => {
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual([
       'dateReceived',
-      'documentTitle',
       'freeText',
       'otherFilingParty',
     ]);
