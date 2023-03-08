@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import {
   Case,
   isClosed,
@@ -5,12 +6,92 @@ import {
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
 import { compareISODateStrings } from '../utilities/sortFunctions';
+import { getCasesForUserInteractorOld } from './getCasesForUserInteractorOld';
 import { uniqBy } from 'lodash';
 
 type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
   consolidatedCases?: TCase[];
 } & TCase;
+
+/**
+ * getCasesForUserInteractor
+ *
+ * @param {object} applicationContext the application context
+ * @returns {object} A list of the open cases and a list of the closed cases for the user
+ */
+export const getCasesForUserInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
+  const isConsolidatedGroupAccessEnabled = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+    });
+
+  if (!isConsolidatedGroupAccessEnabled) {
+    return getCasesForUserInteractorOld(applicationContext);
+  }
+
+  const { userId } = await applicationContext.getCurrentUser();
+
+  const allUserCases = (
+    await applicationContext.getPersistenceGateway().getCasesForUser({
+      applicationContext,
+      userId,
+    })
+  ).map(
+    aCase =>
+      ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
+  );
+
+  const nestedCases = await fetchConsolidatedGroupsAndNest({
+    applicationContext,
+    cases: allUserCases,
+    userId,
+  });
+
+  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
+
+  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
+
+  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
+};
+
+const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
+  return nestedCases
+    .map((c: any) => {
+      // explicitly unset the entityName because this is returning a composite entity and if an entityName
+      // is set, the genericHandler will send it through the entity constructor for that entity and strip
+      // out necessary data
+      c.entityName = undefined;
+      return c;
+    })
+    .filter(nestedCase => {
+      const caseStatusFilter = [
+        nestedCase,
+        ...(nestedCase.consolidatedCases || []),
+      ].some(aCase =>
+        caseType === 'open' ? !isClosed(aCase) : isClosed(aCase),
+      );
+
+      return caseStatusFilter;
+    })
+    .sort((a, b) => {
+      if (caseType === 'closed') {
+        const closedDateA = a.closedDate
+          ? a.closedDate
+          : a.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
+        const closedDateB = b.closedDate
+          ? b.closedDate
+          : b.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
+        return compareISODateStrings(closedDateB, closedDateA);
+      } else {
+        return compareISODateStrings(b.createdAt, a.createdAt);
+      }
+    });
+};
 
 /**
  * This function will take in an array of cases, fetch all cases part of a consolidated group,
@@ -106,71 +187,3 @@ async function fetchConsolidatedGroupsAndNest({
 
   return allCases;
 }
-
-/**
- * getCasesForUserInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {object} A list of the open cases and a list of the closed cases for the user
- */
-export const getCasesForUserInteractor = async (
-  applicationContext: IApplicationContext,
-) => {
-  const { userId } = await applicationContext.getCurrentUser();
-
-  const allUserCases = (
-    await applicationContext.getPersistenceGateway().getCasesForUser({
-      applicationContext,
-      userId,
-    })
-  ).map(
-    aCase =>
-      ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
-  );
-
-  const nestedCases = await fetchConsolidatedGroupsAndNest({
-    applicationContext,
-    cases: allUserCases,
-    userId,
-  });
-
-  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
-
-  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
-
-  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
-};
-
-const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
-  return nestedCases
-    .map((c: any) => {
-      // explicitly unset the entityName because this is returning a composite entity and if an entityName
-      // is set, the genericHandler will send it through the entity constructor for that entity and strip
-      // out necessary data
-      c.entityName = undefined;
-      return c;
-    })
-    .filter(nestedCase => {
-      const caseStatusFilter = [
-        nestedCase,
-        ...(nestedCase.consolidatedCases || []),
-      ].some(aCase =>
-        caseType === 'open' ? !isClosed(aCase) : isClosed(aCase),
-      );
-
-      return caseStatusFilter;
-    })
-    .sort((a, b) => {
-      if (caseType === 'closed') {
-        const closedDateA = a.closedDate
-          ? a.closedDate
-          : a.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
-        const closedDateB = b.closedDate
-          ? b.closedDate
-          : b.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
-        return compareISODateStrings(closedDateB, closedDateA);
-      } else {
-        return compareISODateStrings(b.createdAt, a.createdAt);
-      }
-    });
-};
