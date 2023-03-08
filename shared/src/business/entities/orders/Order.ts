@@ -1,21 +1,14 @@
 import { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } from '../EntityConstants';
-import {
-  IValidationEntity,
-  TStaticValidationMethods,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from '../JoiValidationDecorator';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import joi from 'joi';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 
-export class OrderClass {
+export class Order extends JoiValidationEntity {
   public documentTitle: string;
   public documentType: string;
   public orderBody: string;
 
-  constructor() {}
-
-  init(rawOrder: RawOrder) {
+  constructor(rawOrder: RawOrder) {
+    super('Order');
     this.documentTitle = rawOrder.documentTitle;
     this.documentType = rawOrder.documentType;
     this.orderBody = rawOrder.orderBody;
@@ -44,19 +37,16 @@ export class OrderClass {
     ).optional(),
     orderBody: JoiValidationConstants.STRING.max(500).required(),
   };
+
+  getValidationRules() {
+    return Order.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return Order.VALIDATION_ERROR_MESSAGES;
+  }
 }
-
-joiValidationDecorator(
-  OrderClass,
-  joi.object().keys(OrderClass.VALIDATION_RULES),
-  OrderClass.VALIDATION_ERROR_MESSAGES,
-);
-
-export const Order: typeof OrderClass & TStaticValidationMethods<RawWorkItem> =
-  validEntityDecorator(OrderClass);
 
 declare global {
-  type RawOrder = ExcludeMethods<OrderClass>;
+  type RawOrder = ExcludeMethods<Order>;
 }
-// eslint-disable-next-line no-redeclare
-export interface WorkItemClass extends IValidationEntity<OrderClass> {}
