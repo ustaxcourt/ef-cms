@@ -1,68 +1,69 @@
 /* eslint-disable max-lines */
-const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
-const deepFreeze = require('deep-freeze');
-const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
-const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('./courtIssuedDocument/CourtIssuedDocumentConstants');
-const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
-const { formatNow, FORMATS } = require('../utilities/DateHandler');
+import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
+import { FORMATS, formatNow } from '../utilities/DateHandler';
+import { flatten, omit, sortBy, union, uniq, without } from 'lodash';
+import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
+import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
+import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
-const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+export const DOCUMENT_INTERNAL_CATEGORIES_MAP = internalFilingEventsJson;
+export const DOCUMENT_EXTERNAL_CATEGORIES_MAP = externalFilingEventsJson;
+export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
 
-const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
+export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
-const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
+export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
-const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
+export const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
-const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
+export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 
-const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
-const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
+export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+
+export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
 // city, state, optional unique ID (generated automatically in testing files)
-const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
+export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
-const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
+export const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
-const ORDER_JUDGE_FIELD = 'signedJudgeName';
+export const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
-const OPINION_JUDGE_FIELD = 'judge';
+export const OPINION_JUDGE_FIELD = 'judge';
 
-const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
+export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 
-const TRIAL_SESSION_PROCEEDING_TYPES = {
+export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
 };
 
-const TRIAL_SESSION_SCOPE_TYPES = {
+export const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
 };
 
-const JURISDICTIONAL_OPTIONS = {
+export const JURISDICTIONAL_OPTIONS = {
   restoredToDocket: 'The case is restored to the general docket',
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+export const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
 
-const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
+export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
 
-const PARTY_VIEW_TABS = {
+export const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
   respondentCounsel: 'Respondent Counsel',
 };
 
-const ALLOWLIST_FEATURE_FLAGS = {
+export const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
   },
@@ -110,26 +111,26 @@ const ALLOWLIST_FEATURE_FLAGS = {
   },
 };
 
-const CONFIGURATION_ITEM_KEYS = {
+export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
     key: 'section-outbox-number-of-days',
   },
 };
 
-const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
+export const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
-const SERVICE_INDICATOR_TYPES = {
+export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
 };
 
-const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
+export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
   PENDING: 'pending',
 };
 
-const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
+export const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
   {
     documentType: 'Notice of Change of Address',
     eventCode: 'NCA',
@@ -152,12 +153,12 @@ const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
   },
 ];
 
-const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
+export const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
 
-const CHIEF_JUDGE = 'Chief Judge';
+export const CHIEF_JUDGE = 'Chief Judge';
 
-const DOCKET_NUMBER_SUFFIXES = {
+export const DOCKET_NUMBER_SUFFIXES = {
   DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS: 'X',
   DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION: 'R',
   DISCLOSURE: 'D',
@@ -168,7 +169,7 @@ const DOCKET_NUMBER_SUFFIXES = {
   WHISTLEBLOWER: 'W',
 };
 
-const CASE_STATUS_TYPES = {
+export const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
   calendared: 'Calendared', // Case has been scheduled for trial
@@ -184,12 +185,12 @@ const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
 };
 
-const CLOSED_CASE_STATUSES = [
+export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
 
-const DOCUMENT_RELATIONSHIPS = {
+export const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
   PRIMARY_SUPPORTING: 'primarySupportingDocument',
   SECONDARY: 'secondaryDocument',
@@ -197,42 +198,42 @@ const DOCUMENT_RELATIONSHIPS = {
   SUPPORTING: 'supportingDocument',
 };
 
-const DOCUMENT_SERVED_MESSAGES = {
+export const DOCUMENT_SERVED_MESSAGES = {
   ENTRY_ADDED: 'Your entry has been added to the docket record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
-const DOCUMENT_SEARCH_SORT = {
+export const DOCUMENT_SEARCH_SORT = {
   FILING_DATE_ASC: 'FILING_DATE_ASC',
   FILING_DATE_DESC: 'FILING_DATE_DESC',
   NUMBER_OF_PAGES_ASC: 'NUMBER_OF_PAGES_ASC',
   NUMBER_OF_PAGES_DESC: 'NUMBER_OF_PAGES_DESC',
 };
 
-const TODAYS_ORDERS_SORTS = {
+export const TODAYS_ORDERS_SORTS = {
   ...DOCUMENT_SEARCH_SORT,
 };
 
-const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
+export const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
 
 // This docket entry type isn't defined anywhere else
-const STIN_DOCKET_ENTRY_TYPE = {
+export const STIN_DOCKET_ENTRY_TYPE = {
   documentType: 'Statement of Taxpayer Identification',
   eventCode: 'STIN',
 };
 
 const pickEventCode = d => d.eventCode;
 
-const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
 ).map(pickEventCode);
 
-const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
+export const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.closesAndDismissesCase,
 ).map(pickEventCode);
 
-const ORDER_TYPES = [
+export const ORDER_TYPES = [
   {
     documentType: 'Order',
     eventCode: 'O',
@@ -305,16 +306,16 @@ const ORDER_TYPES = [
   },
 ];
 
-const BENCH_OPINION_EVENT_CODE = 'OST';
+export const BENCH_OPINION_EVENT_CODE = 'OST';
 
-const ADVANCED_SEARCH_OPINION_TYPES = {
+export const ADVANCED_SEARCH_OPINION_TYPES = {
   Bench: BENCH_OPINION_EVENT_CODE,
   Memorandum: 'MOP',
   Summary: 'SOP',
   'T.C.': 'TCOP',
 };
 
-const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
+export const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
   {
     eventCode: ADVANCED_SEARCH_OPINION_TYPES['T.C.'],
     label: 'T.C.',
@@ -333,83 +334,83 @@ const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
   },
 ];
 
-const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
 
-const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
+export const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Order',
 ).eventCode;
 
-const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+export const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isNotice,
 ).map(pickEventCode);
 
-const OPINION_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.filter(
+export const OPINION_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOpinion,
 );
-const OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION = [
+export const OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION = [
   ...OPINION_DOCUMENT_TYPES.map(pickEventCode),
 ];
 
-const OPINION_EVENT_CODES_WITH_BENCH_OPINION = [
+export const OPINION_EVENT_CODES_WITH_BENCH_OPINION = [
   ...OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   BENCH_OPINION_EVENT_CODE,
 ];
 
-const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
+export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
 );
-const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
+export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_INTERNAL_CATEGORIES_MAP,
 );
-const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
+export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
-const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
+export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
 
 // _without returns a new array with values from arg1 sans values subsequent args
-const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
+export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
   'NTD',
   'NOT',
 );
 
-const EXTERNAL_DOCUMENT_TYPES = flatten(
+export const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 ).map(t => t.documentType);
 
-const INTERNAL_DOCUMENT_TYPES = flatten(
+export const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ).map(t => t.documentType);
 
-const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
+export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
   t => t.documentType,
 );
 
-const AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES = flatten(
+export const AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 )
-  .filter(d => d.isAutogenerated)
+  .filter((d: Record<string, any>) => d.isAutogenerated)
   .map(d => d.documentType);
 
-const AUTOGENERATED_INTERNAL_DOCUMENT_TYPES = flatten(
+export const AUTOGENERATED_INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 )
-  .filter(d => d.isAutogenerated)
+  .filter((d: Record<string, any>) => d.isAutogenerated)
   .map(d => d.documentType);
 
-const EXTERNAL_DOCUMENTS_ARRAY = flatten(
+export const EXTERNAL_DOCUMENTS_ARRAY = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 );
 
-const INTERNAL_DOCUMENTS_ARRAY = flatten(
+export const INTERNAL_DOCUMENTS_ARRAY = flatten(
   Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 );
 
-const SCENARIOS = [
+export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
   'Nonstandard B',
@@ -431,27 +432,27 @@ const SCENARIOS = [
   'Type H',
 ];
 
-const TRANSCRIPT_EVENT_CODE = 'TRAN';
-const CORRECTED_TRANSCRIPT_EVENT_CODE = 'CTRA';
-const REVISED_TRANSCRIPT_EVENT_CODE = 'RTRA';
+export const TRANSCRIPT_EVENT_CODE = 'TRAN';
+export const CORRECTED_TRANSCRIPT_EVENT_CODE = 'CTRA';
+export const REVISED_TRANSCRIPT_EVENT_CODE = 'RTRA';
 
-const LODGED_EVENT_CODE = 'MISCL';
+export const LODGED_EVENT_CODE = 'MISCL';
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-const OBJECTIONS_OPTIONS_MAP = {
+export const OBJECTIONS_OPTIONS_MAP = {
   YES: 'Yes',
   NO: 'No',
   UNKNOWN: 'Unknown',
 };
-const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
+export const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
-const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
+export const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 )
-  .filter(d => d.isContactChange)
+  .filter((d: Record<string, any>) => d.isContactChange)
   .map(d => d.documentType);
 
-const TRACKED_DOCUMENT_TYPES = {
+export const TRACKED_DOCUMENT_TYPES = {
   application: {
     category: 'Application',
   },
@@ -468,41 +469,43 @@ const TRACKED_DOCUMENT_TYPES = {
   },
 };
 
-const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
+export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ])
-  .filter(internalEvent => internalEvent.caseDecision)
+  .filter((internalEvent: Record<string, any>) => internalEvent.caseDecision)
   .map(x => x.eventCode);
 
-const NON_MULTI_DOCKETABLE_EVENT_CODES = [
+export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
   ...ENTERED_AND_SERVED_EVENT_CODES,
   ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
 ];
 
-const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
+export const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ])
-  .filter(internalEvent => !internalEvent.caseDecision)
+  .filter((internalEvent: Record<string, any>) => !internalEvent.caseDecision)
   .map(x => x.eventCode);
 
-const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
+export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
-    .filter(doc => doc.allowStamp)
+    .filter((doc: Record<string, any>) => doc.allowStamp)
     .map(x => x.eventCode),
 );
 
-const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES = EXTERNAL_DOCUMENTS_ARRAY.filter(
-  doc =>
-    doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
-    doc.category === TRACKED_DOCUMENT_TYPES.motion.category,
-).map(x => x.eventCode);
-const INTERNAL_TRACKED_DOCUMENT_EVENT_CODES = INTERNAL_DOCUMENTS_ARRAY.filter(
-  doc =>
-    doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
-    doc.category === TRACKED_DOCUMENT_TYPES.motion.category,
-).map(x => x.eventCode);
+export const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
+  EXTERNAL_DOCUMENTS_ARRAY.filter(
+    doc =>
+      doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
+      doc.category === TRACKED_DOCUMENT_TYPES.motion.category,
+  ).map(x => x.eventCode);
+export const INTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
+  INTERNAL_DOCUMENTS_ARRAY.filter(
+    doc =>
+      doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
+      doc.category === TRACKED_DOCUMENT_TYPES.motion.category,
+  ).map(x => x.eventCode);
 
-const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
+export const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
   EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES,
   INTERNAL_TRACKED_DOCUMENT_EVENT_CODES,
   [
@@ -511,18 +514,19 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
   ],
 );
 
-const DOCKET_RECORD_FILTER_OPTIONS = {
+export const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
   orders: 'Orders',
 };
 
-const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(DOCKET_RECORD_FILTER_OPTIONS, [
-  'exhibits',
-]);
+export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
+  DOCKET_RECORD_FILTER_OPTIONS,
+  ['exhibits'],
+);
 
 // TODO: should come from internal or external filing event
-const INITIAL_DOCUMENT_TYPES = {
+export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
@@ -546,7 +550,7 @@ const INITIAL_DOCUMENT_TYPES = {
   stin: STIN_DOCKET_ENTRY_TYPE,
 };
 
-const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
+export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
   ownershipDisclosure: 'ownershipDisclosureFile',
   petition: 'petitionFile',
@@ -554,7 +558,7 @@ const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   stin: 'stinFile',
 };
 
-const INITIAL_DOCUMENT_TYPES_MAP = {
+export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
   ownershipDisclosureFile:
@@ -565,7 +569,7 @@ const INITIAL_DOCUMENT_TYPES_MAP = {
   stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
 };
 
-const MINUTE_ENTRIES_MAP = {
+export const MINUTE_ENTRIES_MAP = {
   captionOfCaseIsAmended: {
     description:
       'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
@@ -595,16 +599,16 @@ const MINUTE_ENTRIES_MAP = {
   },
 };
 
-const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
+export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',
 );
-const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
+export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
 
-const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
 
-const EVENT_CODES_VISIBLE_TO_PUBLIC = [
+export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
@@ -615,15 +619,7 @@ const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   'TCRP',
 ];
 
-const SYSTEM_GENERATED_DOCUMENT_TYPES = {
-  noticeOfAttachmentsInNatureOfEvidence: {
-    eventCode: 'NOT',
-    content:
-      '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
-      .documentType,
-    documentTitle: 'Notice of Attachments in the Nature of Evidence',
-  },
+const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
       '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_30], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_30], may result in dismissal of this case.',
@@ -632,14 +628,6 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OF',
     documentTitle: 'Order',
     deadlineDescription: 'Filing Fee Due',
-  },
-  orderDesignatingPlaceOfTrial: {
-    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
-    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
-      .documentType,
-    eventCode: 'O',
-    documentTitle: 'Order',
   },
   orderForAmendedPetition: {
     content:
@@ -672,6 +660,25 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OAPF',
     documentTitle: 'Order',
     deadlineDescription: 'AP & Fee Due',
+  },
+};
+
+export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
+  noticeOfAttachmentsInNatureOfEvidence: {
+    eventCode: 'NOT',
+    content:
+      '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
+      .documentType,
+    documentTitle: 'Notice of Attachments in the Nature of Evidence',
+  },
+  orderDesignatingPlaceOfTrial: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
+    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
+      .documentType,
+    eventCode: 'O',
+    documentTitle: 'Order',
   },
   orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -730,29 +737,28 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change of Trial Judge',
     eventCode: 'NOT',
   },
+  ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
-const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
-  Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).filter(
-    doc => doc.deadlineDescription,
-  ),
+export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
+  Object.values(AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES),
 );
 
-const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
+export const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 ).find(d => d.documentType === 'Proposed Stipulated Decision').eventCode;
-const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
+export const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Stipulated Decision',
 ).eventCode;
 
-const SIGNED_DOCUMENT_TYPES = {
+export const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
     eventCode: 'SDEC',
   },
 };
 
-const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
+export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   {
     documentType: 'Entry of Appearance',
     documentTitle: 'Entry of Appearance',
@@ -803,26 +809,26 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   },
 ];
 
-const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
+export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
-const PAYMENT_STATUS = {
+export const PAYMENT_STATUS = {
   PAID: 'Paid',
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
 
-const PROCEDURE_TYPES_MAP = {
+export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
   small: 'Small',
 };
 
-const PROCEDURE_TYPES = [
+export const PROCEDURE_TYPES = [
   PROCEDURE_TYPES_MAP.regular,
   PROCEDURE_TYPES_MAP.small,
 ]; // This is the order that they appear in the UI
 
-const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
+export const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.assignedCase,
   CASE_STATUS_TYPES.assignedMotion,
   CASE_STATUS_TYPES.cav,
@@ -831,7 +837,7 @@ const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.submitted,
 ];
 
-const STATUS_TYPES_MANUAL_UPDATE = [
+export const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.assignedCase,
   CASE_STATUS_TYPES.assignedMotion,
   CASE_STATUS_TYPES.cav,
@@ -845,7 +851,7 @@ const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.submitted,
 ];
 
-const ANSWER_DOCUMENT_CODES = [
+export const ANSWER_DOCUMENT_CODES = [
   'A',
   'AAAP',
   'AAPN',
@@ -859,15 +865,16 @@ const ANSWER_DOCUMENT_CODES = [
   'ATSP',
 ];
 
-const CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
+export const CASE_CAPTION_POSTFIX =
+  'v. Commissioner of Internal Revenue, Respondent';
 
-const AUTOMATIC_BLOCKED_REASONS = {
+export const AUTOMATIC_BLOCKED_REASONS = {
   dueDate: 'Due Date',
   pending: 'Pending Item',
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
-const CASE_TYPES_MAP = {
+export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
   deficiency: 'Deficiency',
   djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
@@ -884,9 +891,9 @@ const CASE_TYPES_MAP = {
   workerClassification: 'Worker Classification',
 };
 
-const CASE_TYPES = Object.values(CASE_TYPES_MAP);
+export const CASE_TYPES = Object.values(CASE_TYPES_MAP);
 
-const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
+export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
   [CASE_TYPES_MAP.cdp]: 'Notice of Determination Concerning Collection Action',
   [CASE_TYPES_MAP.innocentSpouse]:
@@ -911,7 +918,7 @@ const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.other]: 'Other',
 };
 
-const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
+export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
   [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
   [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',
   [CASE_TYPES_MAP.whistleblower]: 'Whistleblower',
@@ -924,7 +931,7 @@ const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
   [CASE_TYPES_MAP.other]: 'Other',
 };
 
-const ROLES = {
+export const ROLES = {
   adc: 'adc',
   admin: 'admin',
   admissionsClerk: 'admissionsclerk',
@@ -946,7 +953,7 @@ const ROLES = {
   trialClerk: 'trialclerk',
 };
 
-const FILING_TYPES = {
+export const FILING_TYPES = {
   [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
   [ROLES.privatePractitioner]: [
     'Individual petitioner',
@@ -956,16 +963,16 @@ const FILING_TYPES = {
   ],
 };
 
-const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
+export const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 
-const ANSWER_CUTOFF_UNIT = 'day';
+export const ANSWER_CUTOFF_UNIT = 'day';
 
-const COUNTRY_TYPES = {
+export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
 };
 
-const US_STATES = {
+export const US_STATES = {
   AK: 'Alaska',
   AL: 'Alabama',
   AR: 'Arkansas',
@@ -1019,7 +1026,7 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
-const US_STATES_OTHER = {
+export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
   AP: 'Armed Forces Pacific',
@@ -1033,9 +1040,9 @@ const US_STATES_OTHER = {
   VI: 'Virgin Islands',
 };
 
-const STATE_NOT_AVAILABLE = 'N/A';
+export const STATE_NOT_AVAILABLE = 'N/A';
 
-const PARTY_TYPES = {
+export const PARTY_TYPES = {
   conservator: 'Conservator',
   corporation: 'Corporation',
   custodian: 'Custodian',
@@ -1061,20 +1068,20 @@ const PARTY_TYPES = {
   trust: 'Trust',
 };
 
-const BUSINESS_TYPES = {
+export const BUSINESS_TYPES = {
   corporation: PARTY_TYPES.corporation,
   partnershipAsTaxMattersPartner: PARTY_TYPES.partnershipAsTaxMattersPartner,
   partnershipBBA: PARTY_TYPES.partnershipBBA,
   partnershipOtherThanTaxMatters: PARTY_TYPES.partnershipOtherThanTaxMatters,
 };
 
-const ESTATE_TYPES = {
+export const ESTATE_TYPES = {
   estate: PARTY_TYPES.estate,
   estateWithoutExecutor: PARTY_TYPES.estateWithoutExecutor,
   trust: PARTY_TYPES.trust,
 };
 
-const OTHER_TYPES = {
+export const OTHER_TYPES = {
   conservator: PARTY_TYPES.conservator,
   custodian: PARTY_TYPES.custodian,
   guardian: PARTY_TYPES.guardian,
@@ -1082,7 +1089,7 @@ const OTHER_TYPES = {
   nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
 };
 
-const CONTACT_TYPES = {
+export const CONTACT_TYPES = {
   intervenor: 'intervenor',
   otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
   otherPetitioner: 'otherPetitioner',
@@ -1093,7 +1100,7 @@ const CONTACT_TYPES = {
   secondary: 'secondary',
 };
 
-const CONTACT_TYPE_TITLES = {
+export const CONTACT_TYPE_TITLES = {
   intervenor: 'Intervenor',
   petitioner: 'Petitioner',
   otherFilers: 'Petitioner',
@@ -1103,13 +1110,13 @@ const CONTACT_TYPE_TITLES = {
   secondary: 'Petitioner',
 };
 
-const PETITIONER_CONTACT_TYPES = [
+export const PETITIONER_CONTACT_TYPES = [
   CONTACT_TYPES.primary,
   CONTACT_TYPES.secondary,
   CONTACT_TYPES.otherPetitioner,
 ];
 
-const COMMON_CITIES = [
+export const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
   { city: 'Anchorage', state: 'Alaska' },
@@ -1171,7 +1178,7 @@ const COMMON_CITIES = [
   { city: 'Milwaukee', state: 'Wisconsin' },
 ];
 
-const SMALL_CITIES = [
+export const SMALL_CITIES = [
   { city: 'Fresno', state: 'California' },
   { city: 'Tallahassee', state: 'Florida' },
   { city: 'Pocatello', state: 'Idaho' },
@@ -1190,13 +1197,13 @@ const SMALL_CITIES = [
   ...COMMON_CITIES,
 ];
 
-const TRIAL_CITIES = {
+export const TRIAL_CITIES = {
   ALL: SMALL_CITIES,
   REGULAR: COMMON_CITIES,
   SMALL: SMALL_CITIES,
 };
 
-const LEGACY_TRIAL_CITIES = [
+export const LEGACY_TRIAL_CITIES = [
   { city: 'Biloxi', state: 'Mississippi' },
   { city: 'Huntington', state: 'West Virginia' },
   { city: 'Maui', state: 'Hawaii' },
@@ -1207,17 +1214,17 @@ const LEGACY_TRIAL_CITIES = [
   { city: 'Westbury', state: 'New York' },
 ];
 
-const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+export const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
-const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
+export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
-const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
 
-const SESSION_TYPES = {
+export const SESSION_TYPES = {
   regular: 'Regular',
   small: 'Small',
   hybrid: 'Hybrid',
@@ -1225,35 +1232,35 @@ const SESSION_TYPES = {
   motionHearing: 'Motion/Hearing',
 };
 
-const SESSION_STATUS_TYPES = {
+export const SESSION_STATUS_TYPES = {
   closed: 'Closed',
   new: 'New',
   open: 'Open',
 };
 
-const SESSION_STATUS_GROUPS = {
+export const SESSION_STATUS_GROUPS = {
   all: 'All',
   closed: SESSION_STATUS_TYPES.closed,
   new: SESSION_STATUS_TYPES.new,
   open: SESSION_STATUS_TYPES.open,
 };
 
-const MAX_FILE_SIZE_MB = 250; // megabytes
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabytes
+export const MAX_FILE_SIZE_MB = 250; // megabytes
+export const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabytes
 
-const ADC_SECTION = 'adc';
-const ADMISSIONS_SECTION = 'admissions';
-const CASE_SERVICES_SUPERVISOR_SECTION = 'caseServicesSupervisor';
-const CHAMBERS_SECTION = 'chambers';
-const CLERK_OF_COURT_SECTION = 'clerkofcourt';
-const DOCKET_SECTION = 'docket';
-const FLOATER_SECTION = 'floater';
-const IRS_SYSTEM_SECTION = 'irsSystem';
-const PETITIONS_SECTION = 'petitions';
-const REPORTERS_OFFICE_SECTION = 'reportersOffice';
-const TRIAL_CLERKS_SECTION = 'trialClerks';
+export const ADC_SECTION = 'adc';
+export const ADMISSIONS_SECTION = 'admissions';
+export const CASE_SERVICES_SUPERVISOR_SECTION = 'caseServicesSupervisor';
+export const CHAMBERS_SECTION = 'chambers';
+export const CLERK_OF_COURT_SECTION = 'clerkofcourt';
+export const DOCKET_SECTION = 'docket';
+export const FLOATER_SECTION = 'floater';
+export const IRS_SYSTEM_SECTION = 'irsSystem';
+export const PETITIONS_SECTION = 'petitions';
+export const REPORTERS_OFFICE_SECTION = 'reportersOffice';
+export const TRIAL_CLERKS_SECTION = 'trialClerks';
 
-const SECTIONS = sortBy([
+export const SECTIONS = sortBy([
   ADC_SECTION,
   ADMISSIONS_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
@@ -1266,7 +1273,7 @@ const SECTIONS = sortBy([
   TRIAL_CLERKS_SECTION,
 ]);
 
-const TRIAL_STATUS_TYPES = {
+export const TRIAL_STATUS_TYPES = {
   basisReached: {
     deprecated: false,
     displayOrder: 1,
@@ -1335,23 +1342,23 @@ const TRIAL_STATUS_TYPES = {
   },
 };
 
-const SCAN_MODES = {
+export const SCAN_MODES = {
   DUPLEX: 'duplex',
   FEEDER: 'feeder',
   FLATBED: 'flatbed',
 };
 
-const SCAN_MODE_LABELS = {
+export const SCAN_MODE_LABELS = {
   DUPLEX: 'Double sided',
   FEEDER: 'Single sided',
   FLATBED: 'Flatbed',
 };
 
-const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
+export const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 
-const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
+export const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 
-const ADMISSIONS_STATUS_OPTIONS = [
+export const ADMISSIONS_STATUS_OPTIONS = [
   'Active',
   'Suspended',
   'Disbarred',
@@ -1360,17 +1367,17 @@ const ADMISSIONS_STATUS_OPTIONS = [
   'Inactive',
 ];
 
-const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
+export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-const CASE_SEARCH_MIN_YEAR = 1986;
-const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
-const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
-const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
-const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
+export const CASE_SEARCH_MIN_YEAR = 1986;
+export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
+export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
+export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
+export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
+export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 
 // TODO: event codes need to be reorganized
-const ALL_EVENT_CODES = flatten([
+export const ALL_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
   ...Object.values(INITIAL_DOCUMENT_TYPES),
@@ -1381,7 +1388,7 @@ const ALL_EVENT_CODES = flatten([
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
   .sort();
 
-const ALL_DOCUMENT_TYPES_MAP = (() => {
+export const ALL_DOCUMENT_TYPES_MAP = (() => {
   const allFilingEvents = flatten([
     ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
     ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
@@ -1406,51 +1413,51 @@ const ALL_DOCUMENT_TYPES_MAP = (() => {
   return documentTypes;
 })();
 
-const ALL_DOCUMENT_TYPES = (() => {
+export const ALL_DOCUMENT_TYPES = (() => {
   return ALL_DOCUMENT_TYPES_MAP.map(d => d.documentType)
     .filter(d => d)
     .sort();
 })();
 
-const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
-const OTHER_FILER_TYPES = [
+export const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
+export const OTHER_FILER_TYPES = [
   UNIQUE_OTHER_FILER_TYPE,
   'Tax Matters Partner',
   'Partner Other Than Tax Matters Partner',
 ];
 
-const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
+export const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
 
-const MESSAGE_QUEUE_TYPES = ['my', 'section'];
+export const MESSAGE_QUEUE_TYPES = ['my', 'section'];
 
-const TRIAL_SESSION_ELIGIBLE_CASES_BUFFER = 50;
+export const TRIAL_SESSION_ELIGIBLE_CASES_BUFFER = 50;
 
-const ADVANCED_SEARCH_TABS = {
+export const ADVANCED_SEARCH_TABS = {
   CASE: 'case',
   OPINION: 'opinion',
   ORDER: 'order',
   PRACTITIONER: 'practitioner',
 };
 
-const DATE_RANGE_SEARCH_OPTIONS = {
+export const DATE_RANGE_SEARCH_OPTIONS = {
   ALL_DATES: 'allDates',
   CUSTOM_DATES: 'customDates',
 };
 
-const DOCKET_ENTRY_SEALED_TO_TYPES = {
+export const DOCKET_ENTRY_SEALED_TO_TYPES = {
   EXTERNAL: 'External', // Do not allow practitioners, petitioners, and irs practitioners to view the documents even when associated
   PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 
-const ASCENDING = 'asc';
-const DESCENDING = 'desc';
+export const ASCENDING = 'asc';
+export const DESCENDING = 'desc';
 
-const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
-const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
-const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
-const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
+export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
+export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
+export const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
+export const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
-const PRACTITIONER_DOCUMENT_TYPES_MAP = {
+export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   APPLICATION_PACKAGE: 'Application Package',
   APPLICATION: 'Application',
   CERTIFICATE_OF_GOOD_STANDING: 'Certificate of Good Standing',
@@ -1464,185 +1471,15 @@ const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   MISCELLANEOUS: 'Miscellaneous',
 };
 
-const PRACTITIONER_DOCUMENT_TYPES = Object.values(
+export const PRACTITIONER_DOCUMENT_TYPES = Object.values(
   PRACTITIONER_DOCUMENT_TYPES_MAP,
 );
 
-const PENALTY_TYPES = {
+export const PENALTY_TYPES = {
   DETERMINATION_PENALTY_AMOUNT: 'determinationPenaltyAmount',
   IRS_PENALTY_AMOUNT: 'irsPenaltyAmount',
 };
 
-module.exports = deepFreeze({
-  ADC_SECTION,
-  ADMISSIONS_SECTION,
-  ADMISSIONS_STATUS_OPTIONS,
-  ADVANCED_SEARCH_OPINION_TYPES_LIST,
-  ADVANCED_SEARCH_OPINION_TYPES,
-  ADVANCED_SEARCH_TABS,
-  ALL_DOCUMENT_TYPES_MAP,
-  ALL_DOCUMENT_TYPES,
-  ALL_EVENT_CODES,
-  ALLOWLIST_FEATURE_FLAGS,
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  AMENDED_PETITION_FORM_NAME,
-  AMENDMENT_EVENT_CODES,
-  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
-  ANSWER_CUTOFF_UNIT,
-  ANSWER_DOCUMENT_CODES,
-  ASCENDING,
-  AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES,
-  AUTOGENERATED_INTERNAL_DOCUMENT_TYPES,
-  AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
-  AUTOMATIC_BLOCKED_REASONS,
-  BENCH_OPINION_EVENT_CODE,
-  BUSINESS_TYPES,
-  CASE_CAPTION_POSTFIX,
-  CASE_DISMISSAL_ORDER_TYPES,
-  CASE_INVENTORY_PAGE_SIZE,
-  CASE_LIST_PAGE_SIZE,
-  CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
-  CASE_SEARCH_MIN_YEAR,
-  CASE_SEARCH_PAGE_SIZE,
-  CASE_SERVICES_SUPERVISOR_SECTION,
-  CASE_STATUS_TYPES,
-  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
-  CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
-  CASE_TYPES_MAP,
-  CASE_TYPES,
-  CHAMBERS_SECTION,
-  CHIEF_JUDGE,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  CLERK_OF_COURT_SECTION,
-  CONFIGURATION_ITEM_KEYS,
-  CONTACT_CHANGE_DOCUMENT_TYPES,
-  CONTACT_TYPE_TITLES,
-  CONTACT_TYPES,
-  CORRECTED_TRANSCRIPT_EVENT_CODE,
-  COUNTRY_TYPES,
-  COURT_ISSUED_DOCUMENT_TYPES,
-  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  COURT_ISSUED_EVENT_CODES,
-  CURRENT_YEAR,
-  DATE_RANGE_SEARCH_OPTIONS,
-  DEADLINE_REPORT_PAGE_SIZE,
-  DEFAULT_PRACTITIONER_BIRTH_YEAR,
-  DEFAULT_PROCEDURE_TYPE,
-  DEFAULT_PROCEEDING_TYPE,
-  DESCENDING,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
-  DOCKET_NUMBER_MATCHER,
-  DOCKET_NUMBER_SUFFIXES,
-  DOCKET_RECORD_FILTER_OPTIONS,
-  DOCKET_SECTION,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  DOCUMENT_EXTERNAL_CATEGORIES,
-  DOCUMENT_INTERNAL_CATEGORIES_MAP,
-  DOCUMENT_INTERNAL_CATEGORIES,
-  DOCUMENT_NOTICE_EVENT_CODES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_RELATIONSHIPS,
-  DOCUMENT_SERVED_MESSAGES,
-  DOCUMENT_SEARCH_SORT,
-  EMPLOYER_OPTIONS,
-  ESTATE_TYPES,
-  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
-  EVENT_CODES_REQUIRING_SIGNATURE,
-  EVENT_CODES_VISIBLE_TO_PUBLIC,
-  EXHIBIT_EVENT_CODES,
-  EXTERNAL_DOCUMENT_TYPES,
-  EXTERNAL_DOCUMENTS_ARRAY,
-  FILING_TYPES,
-  GENERIC_ORDER_EVENT_CODE,
-  INITIAL_DOCUMENT_TYPES_FILE_MAP,
-  INITIAL_DOCUMENT_TYPES_MAP,
-  INITIAL_DOCUMENT_TYPES,
-  INTERNAL_DOCUMENT_TYPES,
-  INTERNAL_DOCUMENTS_ARRAY,
-  IRS_SYSTEM_SECTION,
-  JURISDICTIONAL_OPTIONS,
-  LEGACY_TRIAL_CITY_STRINGS,
-  LODGED_EVENT_CODE,
-  MAX_ELASTICSEARCH_PAGINATION: 10000,
-  MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
-  MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
-  MAX_SEARCH_CLIENT_RESULTS: 200,
-  MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
-  MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
-  MESSAGE_QUEUE_TYPES,
-  MINUTE_ENTRIES_MAP,
-  MOTION_DISPOSITIONS,
-  MULTI_DOCKET_FILING_EVENT_CODES,
-  NON_MULTI_DOCKETABLE_EVENT_CODES,
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
-  OBJECTIONS_OPTIONS_MAP,
-  OBJECTIONS_OPTIONS,
-  OPINION_DOCUMENT_TYPES,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
-  OPINION_JUDGE_FIELD,
-  ORDER_EVENT_CODES,
-  ORDER_JUDGE_FIELD,
-  ORDER_TYPES,
-  OTHER_FILER_TYPES,
-  OTHER_TYPES,
-  PARTIES_CODES,
-  PARTY_TYPES,
-  PARTY_VIEW_TABS,
-  PAYMENT_STATUS,
-  PETITIONER_CONTACT_TYPES,
-  PENALTY_TYPES,
-  PETITIONS_SECTION,
-  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
-  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
-  PRACTITIONER_DOCUMENT_TYPES_MAP,
-  PRACTITIONER_DOCUMENT_TYPES,
-  PRACTITIONER_TYPE_OPTIONS,
-  PROCEDURE_TYPES_MAP,
-  PROCEDURE_TYPES,
-  PROPOSED_STIPULATED_DECISION_EVENT_CODE,
-  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-  REVISED_TRANSCRIPT_EVENT_CODE,
-  ROLES,
-  SCAN_MODE_LABELS,
-  SCAN_MODES,
-  SCENARIOS,
-  SECTIONS,
-  SERVICE_INDICATOR_TYPES,
-  SESSION_STATUS_GROUPS,
-  SESSION_TERMS,
-  SESSION_TYPES,
-  SIGNED_DOCUMENT_TYPES,
-  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-  STAMPED_DOCUMENTS_ALLOWLIST,
-  STATE_NOT_AVAILABLE,
-  STATUS_TYPES_MANUAL_UPDATE,
-  STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
-  STIPULATED_DECISION_EVENT_CODE,
-  STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-  TODAYS_ORDERS_PAGE_SIZE,
-  TODAYS_ORDERS_SORT_DEFAULT,
-  TODAYS_ORDERS_SORTS,
-  TRACKED_DOCUMENT_TYPES_EVENT_CODES,
-  TRANSCRIPT_EVENT_CODE,
-  TRIAL_CITIES,
-  TRIAL_CITY_STRINGS,
-  TRIAL_CLERKS_SECTION,
-  TRIAL_LOCATION_MATCHER,
-  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-  TRIAL_SESSION_SCOPE_TYPES,
-  TRIAL_STATUS_TYPES,
-  UNIQUE_OTHER_FILER_TYPE,
-  UNSERVABLE_EVENT_CODES,
-  US_STATES_OTHER,
-  CLOSED_CASE_STATUSES,
-  US_STATES,
-  SESSION_STATUS_TYPES,
-  AMICUS_BRIEF_EVENT_CODE,
-});
+export const MAX_ELASTICSEARCH_PAGINATION = 10000;
+export const MAX_SEARCH_CLIENT_RESULTS = 200;
+export const MAX_SEARCH_RESULTS = 100;
