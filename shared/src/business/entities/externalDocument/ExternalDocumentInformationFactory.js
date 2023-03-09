@@ -6,6 +6,7 @@ const {
 const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
+  AMENDMENT_EVENT_CODES,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
@@ -269,7 +270,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   if (
     objectionDocumentTypes.includes(documentMetadata.documentType) ||
-    (['AMAT', 'ADMT'].includes(documentMetadata.eventCode) &&
+    (AMENDMENT_EVENT_CODES.includes(documentMetadata.eventCode) &&
       objectionDocumentTypes.includes(
         documentMetadata.previousDocument.documentType,
       ))
