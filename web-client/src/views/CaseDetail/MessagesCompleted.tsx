@@ -20,7 +20,7 @@ export const MessagesCompleted = connect(
                 <th className="header-fixed-width">Completed</th>
                 <th className="header-fixed-width">Last Message</th>
                 <th className="header-fixed-width">Comment</th>
-                <th>Completed by</th>
+                <th>Completed By</th>
                 <th>Section</th>
               </tr>
             </thead>
