@@ -27,6 +27,7 @@ export const getSupportingDocumentTypeList = categoryMap => {
 
 export const addDocketEntryHelper = (get, applicationContext) => {
   const {
+    AMENDMENT_EVENT_CODES,
     INTERNAL_CATEGORY_MAP,
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -51,8 +52,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     'Motion to Withdraw as Counsel',
     'Application to Take Deposition',
   ];
-
-  const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
@@ -123,7 +122,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     showFilingPartiesForm,
     showObjection:
       objectionDocumentTypes.includes(form.documentType) ||
-      (amendmentEventCodes.includes(form.eventCode) &&
+      (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
