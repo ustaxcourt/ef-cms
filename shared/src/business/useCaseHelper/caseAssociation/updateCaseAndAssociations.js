@@ -635,11 +635,15 @@ exports.updateCaseAndAssociations = async ({
 const updateCase = async ({ applicationContext, caseToUpdate }) => {
   const originalCase = new Case(caseToUpdate.originalCase, {
     applicationContext,
-  });
+  }).toRawObject();
+  caseToUpdate = caseToUpdate.toRawObject();
   const caseDifference = deepObjectDiff(
     omit(originalCase, fieldsToOmitBeforePersisting),
     omit(caseToUpdate, fieldsToOmitBeforePersisting),
   );
+
+  // console.log(JSON.stringify(omit(caseToUpdate, fieldsToOmitBeforePersisting)));
+  // console.log(JSON.stringify(omit(originalCase, fieldsToOmitBeforePersisting)));
 
   const mostRecentCase = await applicationContext
     .getPersistenceGateway()
@@ -653,10 +657,16 @@ const updateCase = async ({ applicationContext, caseToUpdate }) => {
     return mostRecentCase;
   }
 
+  // applicationContext.logger.info('update case v2a', { caseDifference });
+
   const mostRecentCaseUpdated = {
     ...mostRecentCase,
-    ...caseDifference,
   };
+  Object.keys(caseDifference).forEach(key => {
+    mostRecentCaseUpdated[key] = caseToUpdate[key];
+  });
+
+  // console.log(JSON.stringify(mostRecentCaseUpdated));
 
   const validUpdatedCase = new Case(mostRecentCaseUpdated, {
     applicationContext,
@@ -665,5 +675,7 @@ const updateCase = async ({ applicationContext, caseToUpdate }) => {
   const caseToReturn = await applicationContext
     .getPersistenceGateway()
     .updateCase({ applicationContext, caseToUpdate: validUpdatedCase });
+  // console.log(JSON.stringify(caseToReturn));
+
   return caseToReturn;
 };
