@@ -26,8 +26,7 @@ Before diving into the technical aspects of the backend, it might be useful just
 │       ├── package-lock.json
 │       └── package.json
 ├── src
-│   ├── app-local.js // used for running the private API locally
-│   ├── app-public-local.js // used for running the public API locally
+│   ├── app-local.ts // used for running the backend locally
 │   ├── app-public.js // the public API which contains all the endpoints
 │   ├── app.js // the private API which contains all the endpoints
 │   ├── applicationContext.js // the application context
@@ -92,12 +91,10 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   │   │   └──  main
 │   │   │       ├── lambdas // the lambda containing the node logic
 │   │   │       ├── main.tf // the main terraform entrypoint
-├── streams-local.js // sets up the dynamo streams locally
 ├── swagger.json // the swagger .json we update when api endpoints are changed or added
 ├── switch-cognito-triggers-color.js // used to switch the color of the cognito triggers
 ├── track-successful-migrations.js // tracks which migration scripts have run after doing a migration
 ├── verify-ses-email.sh // used to verify SES 
-└── websockets-local.js // used for setting up the websockets locally
 ```
 
 ## Express
