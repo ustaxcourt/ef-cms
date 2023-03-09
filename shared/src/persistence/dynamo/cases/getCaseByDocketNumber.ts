@@ -27,10 +27,8 @@ export const getCaseByDocketNumber = async ({
       ':pk': `case|${docketNumber}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    ReadConsistent: readConsistent,
     applicationContext,
-    params: {
-      ReadConsistent: readConsistent,
-    },
   });
 
   return aggregateCaseItems(caseItems);

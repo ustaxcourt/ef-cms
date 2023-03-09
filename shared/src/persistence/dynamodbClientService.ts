@@ -310,6 +310,7 @@ export const queryFull = async ({
   ExpressionAttributeValues,
   IndexName,
   KeyConditionExpression,
+  ReadConsistent = false,
   ...params
 }: {
   applicationContext: IApplicationContext;
@@ -334,6 +335,7 @@ export const queryFull = async ({
         ExpressionAttributeValues,
         IndexName,
         KeyConditionExpression,
+        ReadConsistent,
         TableName: getTableName({
           applicationContext,
         }),
