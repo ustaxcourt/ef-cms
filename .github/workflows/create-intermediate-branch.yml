@@ -1,0 +1,39 @@
+name: Automaticall create an intermediate branch for feature branches
+
+on:
+  pull_request:
+    branches:
+      - test
+    type:
+      - opened
+
+jobs:
+  create-intermediate-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create Intermediate branch
+        run: |
+          destination_branch=test
+          feature_branch="feature_branch"
+          intermediate_branch="${feature_branch}-intermediate-to-test"
+
+          git checkout destination_branch
+          git pull
+
+          # Create a copy of the destination branch
+          git checkout -b "${intermediate_branch}" "${destination_branch}"
+
+          # Merge the feature branch into the copied branch
+          git merge "${feature_branch}"
+
+          # Push the new branch to remote
+          git push -u origin "${intermediate_branch}"
+
+      - name: Make PR of Intermediate branch to Test
+        run: |
+          destination_branch=test
+          pr_title="${feature_branch} intermediate to test"
+          pr_description="PR to test"
+          hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
