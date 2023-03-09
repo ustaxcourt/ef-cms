@@ -24,7 +24,7 @@ export const CaseDetailEdit = connect(
         <Tabs
           boxed
           bind="currentViewMetadata.documentDetail.tab"
-          className="container-tabs tab-button-h3"
+          className="container-tabs tab-button-h3 overflow-hidden"
           id="case-detail-tabs"
         >
           <Tab id="tab-parties" tabName="partyInfo" title="Parties">
