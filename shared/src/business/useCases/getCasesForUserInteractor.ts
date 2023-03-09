@@ -177,9 +177,12 @@ const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
     .map(nestedCase => ({
       ...new UserCase(nestedCase).toRawObject(),
       consolidatedCases: nestedCase.consolidatedCases
-        ? nestedCase.consolidatedCases.map(
-            consolidatedCase => new UserCase(consolidatedCase),
-          )
+        ? nestedCase.consolidatedCases.map(consolidatedCase => ({
+            ...new UserCase(consolidatedCase),
+            isRequestingUserAssociated:
+              consolidatedCase.isRequestingUserAssociated,
+          }))
         : undefined,
+      isRequestingUserAssociated: nestedCase.isRequestingUserAssociated,
     }));
 };
