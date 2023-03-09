@@ -32,8 +32,20 @@ fi
 npm run build:assets
 
 set -eo pipefail
-if [[ -n "$2" ]] && [[ "$2" == "--build-lambda" ]]; then
-  npm run "build:lambda:${SLUG}"
+if [[ -n "$2" ]]; then
+  case "$2" in
+    "--build-lambda")
+      npm run "build:lambda:${SLUG}"
+      ;;
+    "--build-api")
+      npm run build:lambda:api
+      if [ -z "${CIRCLE_BRANCH}" ]; then
+        pushd ../../runtimes/puppeteer/
+        sh build-local.sh
+        popd
+      fi
+      ;;
+  esac
 fi
 
 terraform init -backend=true \
