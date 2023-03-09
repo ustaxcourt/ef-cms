@@ -4,6 +4,7 @@ import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -191,6 +192,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
           filedBy: 'Test Petitioner',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           scenario: 'Nonstandard H',
           secondaryDocument: {
@@ -199,6 +201,7 @@ describe('fileExternalDocumentInteractor', () => {
             documentType: 'Motion for Judgment on the Pleadings',
             eventCode: 'M121',
             filedBy: 'Test Petitioner',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
           },
           secondarySupportingDocuments: [
             {
@@ -207,6 +210,7 @@ describe('fileExternalDocumentInteractor', () => {
               documentType: 'Motion for in Camera Review',
               eventCode: 'M135',
               filedBy: 'Test Petitioner',
+              objections: OBJECTIONS_OPTIONS_MAP.NO,
             },
           ],
           supportingDocuments: [
