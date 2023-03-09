@@ -30,13 +30,8 @@ const config: Config = {
     },
   },
   maxWorkers: '50%',
-  moduleNameMapper: {
-    // Is this necessary?
-    '^uuid$': require.resolve('uuid'),
-  },
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
-  // testSequencer: `${__dirname}/jestSequencer.js`,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
