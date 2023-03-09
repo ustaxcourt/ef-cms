@@ -15,25 +15,31 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create Intermediate branch
         run: |
+          # Initialize variables
           destination_branch=test
-          feature_branch="feature_branch"
+          feature_branch=github.head_ref
           intermediate_branch="${feature_branch}-intermediate-to-test"
 
-          git checkout destination_branch
+          # Get Test branch
+          git fetch --unshallow
+          git checkout test
           git pull
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}" "${destination_branch}"
 
-          # Merge the feature branch into the copied branch
+          # Merge the feature branch into the intermediate branch
           git merge "${feature_branch}"
 
-          # Push the new branch to remote
+          # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
 
       - name: Make PR of Intermediate branch to Test
         run: |
+          # Initialize variables
           destination_branch=test
+          feature_branch=github.head_ref
           pr_title="${feature_branch} intermediate to test"
           pr_description="PR to test"
+
           hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
