@@ -1,7 +1,7 @@
 const React = require('react');
-const { COUNTRY_TYPES } = require('../../../entities/EntityConstants.ts');
-const { DocketHeader } = require('../components/DocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+const { COUNTRY_TYPES } = require('../../../entities/EntityConstants');
+const { DocketHeader } = require('../components/DocketHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const renderTable = ({ data, label, options }) => {
   return (

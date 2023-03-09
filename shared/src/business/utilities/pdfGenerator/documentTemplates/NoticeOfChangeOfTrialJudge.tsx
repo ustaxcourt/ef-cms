@@ -1,4 +1,4 @@
-import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants.ts';
+import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants';
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.tsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
