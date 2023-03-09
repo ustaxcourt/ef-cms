@@ -24,7 +24,7 @@ export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
-const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
+export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
 // city, state, optional unique ID (generated automatically in testing files)
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
