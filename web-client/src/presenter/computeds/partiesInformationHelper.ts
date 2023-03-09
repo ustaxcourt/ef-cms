@@ -49,7 +49,8 @@ export const getCanEditPetitioner = ({
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS, CONTACT_TYPES } =
+    applicationContext.getConstants();
   const otherContactTypes = [
     CONTACT_TYPES.intervenor,
     CONTACT_TYPES.participant,
@@ -96,6 +97,9 @@ export const partiesInformationHelper = (get, applicationContext) => {
         : `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`;
     }
 
+    petitioner.formattedPaperPetitionEmail =
+      petitioner.paperPetitionEmail ?? 'Not provided';
+
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
     } else {
@@ -127,6 +131,17 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
+    const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
+      state.featureFlags[
+        ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+      ],
+    );
+
+    const showPaperPetitionEmail =
+      E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
+      !petitioner.sealedAndUnavailable &&
+      !isExternalUser;
+
     return {
       ...petitioner,
       canEditPetitioner,
@@ -134,6 +149,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
       showExternalHeader: isExternalUser,
+      showPaperPetitionEmail,
     };
   });
 
@@ -144,6 +160,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const formattedPetitioners = formattedParties.filter(
     petitioner => !otherContactTypes.includes(petitioner.contactType),
   );
+
   const formattedParticipants = formattedParties.filter(petitioner =>
     otherContactTypes.includes(petitioner.contactType),
   );
