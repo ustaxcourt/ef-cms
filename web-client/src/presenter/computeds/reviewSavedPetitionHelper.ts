@@ -16,6 +16,19 @@ export const ordersAndNoticesInDraftsCodes = {
   orderToShowCause: 'Order to Show Cause',
 };
 
+const getEConsentAttributesForContact = (
+  contact: any = {},
+): { eServiceConsentText: string; shouldDisplayEConsentText: boolean } => {
+  const shouldDisplayEConsentText =
+    !!contact.paperPetitionEmail || contact.hasConsentedToEService;
+
+  const eServiceConsentText = contact.hasConsentedToEService
+    ? 'E-service consent'
+    : 'No e-service consent';
+
+  return { eServiceConsentText, shouldDisplayEConsentText };
+};
+
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
 
@@ -33,7 +46,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ...caseDetail
   } = get(state.form);
 
-  const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
+  const { ALLOWLIST_FEATURE_FLAGS, INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
     applicationContext.getConstants();
 
   const receivedAtFormatted = applicationContext
@@ -125,8 +138,35 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
+  const eConsentFieldsEnabledFeatureFlag = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+    ],
+  );
+
+  let shouldDisplayEConsentTextForPrimaryContact;
+  let shouldDisplayEConsentTextForSecondaryContact;
+  let eServiceConsentTextForPrimaryContact;
+  let eServiceConsentTextForSecondaryContact;
+  if (eConsentFieldsEnabledFeatureFlag) {
+    ({
+      eServiceConsentText: eServiceConsentTextForPrimaryContact,
+      shouldDisplayEConsentText: shouldDisplayEConsentTextForPrimaryContact,
+    } = getEConsentAttributesForContact(caseDetail.contactPrimary));
+
+    if (caseDetail.contactSecondary) {
+      ({
+        eServiceConsentText: eServiceConsentTextForSecondaryContact,
+        shouldDisplayEConsentText: shouldDisplayEConsentTextForSecondaryContact,
+      } = getEConsentAttributesForContact(caseDetail.contactSecondary));
+    }
+  }
+
   return {
     applicationForWaiverOfFilingFeeFile,
+    eConsentFieldsEnabledFeatureFlag,
+    eServiceConsentTextForPrimaryContact,
+    eServiceConsentTextForSecondaryContact,
     formattedStatistics,
     hasIrsNoticeFormatted,
     irsNoticeDateFormatted,
@@ -139,6 +179,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     receivedAtFormatted,
     renderOrderSummary,
     requestForPlaceOfTrialFile,
+    shouldDisplayEConsentTextForPrimaryContact,
+    shouldDisplayEConsentTextForSecondaryContact,
     shouldShowIrsNoticeDate,
     showOrdersAndNoticesInDraftHeader,
     showOrdersAndNoticesNeededHeader,
