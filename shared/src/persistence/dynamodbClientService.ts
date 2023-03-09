@@ -318,6 +318,7 @@ export const queryFull = async ({
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
   KeyConditionExpression: string;
+  ReadConsistent?: boolean;
 }): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
   let lastKey = null;
