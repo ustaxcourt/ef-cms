@@ -141,7 +141,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       caseEntities.push(new Case(caseToUpdate, { applicationContext }));
     }
 
-    await new Promise(resolve => setTimeout(resolve, 8000));
+    // await new Promise(resolve => setTimeout(resolve, 8000));
 
     // this worked, it filed the docket entries
     caseEntities = await Promise.all(
