@@ -1,5 +1,5 @@
 const React = require('react');
-const { COUNTRY_TYPES } = require('../../../entities/EntityConstants.js');
+const { COUNTRY_TYPES } = require('../../../entities/EntityConstants');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 

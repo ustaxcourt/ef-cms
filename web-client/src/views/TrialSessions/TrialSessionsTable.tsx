@@ -106,7 +106,7 @@ export const TrialSessionsTable = connect(
               <th>Proceeding Type</th>
               <th>Session Type</th>
               <th>Judge</th>
-              {trialSessionsHelper.showNoticeIssued && <th>Notice issued</th>}
+              {trialSessionsHelper.showNoticeIssued && <th>Notice Issued</th>}
               {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
             </tr>
           </thead>
