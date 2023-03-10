@@ -29,15 +29,15 @@ jobs:
       - name: Check if intermediate branch exists
         run: |
           git fetch origin
-          if git rev-parse --verify "$intermediate_branch" >/dev/null 2>&1; then
+          if git rev-parse --verify "${intermediate_branch}" >/dev/null 2>&1; then
             intermediate_branch_exists=true
-            echo "Branch $intermediate_branch exists"
+            echo "Branch ${intermediate_branch} exists"
           else
-              echo "Branch $intermediate_branch does not exist"
+              echo "Branch ${intermediate_branch} does not exist"
           fi
 
       - name: Create Intermediate branch
-        if: intermediate_branch_exists==false
+        if: ${{ intermediate_branch_exists==false }}
         run: |
 
 
