@@ -1,5 +1,6 @@
 import { DOCKET_SECTION } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { createISODateString } from '../../../business/utilities/DateHandler';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './saveWorkItemForDocketClerkFilingExternalDocument';
 
 describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
@@ -25,7 +26,8 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
     });
   });
 
-  it('invokes the persistence layer 4 times to store the work item, user and section outbox records, and work item mapping record', async () => {
+  it('invokes the persistence layer 5 times to store the work item, user and section outbox records, and work item mapping record', async () => {
+    const timestamp = createISODateString();
     applicationContext.getCurrentUser.mockReturnValue({
       section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -38,7 +40,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
       applicationContext,
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        completedAt: '2021-03-30T17:25:38.186Z',
+        completedAt: timestamp,
         docketNumber: '456-20',
         section: DOCKET_SECTION,
         workItemId: '123',
@@ -53,7 +55,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
             Item: expect.objectContaining({
               gsi1pk: 'work-item|123',
               pk: 'section-outbox|docket',
-              sk: '2021-03-30T17:25:38.186Z',
+              sk: timestamp,
               workItemId: '123',
             }),
           }),
@@ -63,8 +65,8 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
           expect.objectContaining({
             Item: expect.objectContaining({
               gsi1pk: 'work-item|123',
-              pk: 'section-outbox|docket|2021-03',
-              sk: '2021-03-30T17:25:38.186Z',
+              pk: expect.anything(),
+              sk: timestamp,
               workItemId: '123',
             }),
           }),
@@ -75,7 +77,18 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
             Item: expect.objectContaining({
               gsi1pk: 'work-item|123',
               pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
-              sk: '2021-03-30T17:25:38.186Z',
+              sk: timestamp,
+              workItemId: '123',
+            }),
+          }),
+        ]),
+        // user outbox archive
+        expect.arrayContaining([
+          expect.objectContaining({
+            Item: expect.objectContaining({
+              gsi1pk: 'work-item|123',
+              pk: expect.anything(),
+              sk: timestamp,
               workItemId: '123',
             }),
           }),

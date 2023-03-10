@@ -11,7 +11,8 @@ export const supportingDocumentFreeTextTypes = [
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
 export const fileDocumentHelper = (get, applicationContext) => {
-  const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
+  const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
+    applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const form = get(state.form);
@@ -69,6 +70,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     null;
 
   const { primaryDocument, secondaryDocument } = getPrimarySecondaryDocuments({
+    AMENDMENT_EVENT_CODES,
     CATEGORY_MAP,
     form,
   });
@@ -180,7 +182,11 @@ const getShowSecondaryProperties = ({ caseDetail, form, PARTY_TYPES }) => {
   };
 };
 
-const getPrimarySecondaryDocuments = ({ CATEGORY_MAP, form }) => {
+const getPrimarySecondaryDocuments = ({
+  AMENDMENT_EVENT_CODES,
+  CATEGORY_MAP,
+  form,
+}) => {
   const objectionDocumentTypes = [
     ...CATEGORY_MAP['Motion'].map(entry => entry.documentType),
     'Motion to Withdraw Counsel (filed by petitioner)',
@@ -188,13 +194,11 @@ const getPrimarySecondaryDocuments = ({ CATEGORY_MAP, form }) => {
     'Application to Take Deposition',
   ];
 
-  const amendmentEventCodes = ['AMAT', 'ADMT'];
-
   const primarySecondaryDocuments = {
     primaryDocument: {
       showObjection:
         objectionDocumentTypes.includes(form.documentType) ||
-        (amendmentEventCodes.includes(form.eventCode) &&
+        (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
           objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     },
     secondaryDocument: {
@@ -202,7 +206,7 @@ const getPrimarySecondaryDocuments = ({ CATEGORY_MAP, form }) => {
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
         (objectionDocumentTypes.includes(form.secondaryDocument.documentType) ||
-          (amendmentEventCodes.includes(form.secondaryDocument.eventCode) &&
+          (AMENDMENT_EVENT_CODES.includes(form.secondaryDocument.eventCode) &&
             objectionDocumentTypes.includes(
               form.secondaryDocument.previousDocument?.documentType,
             ))),
