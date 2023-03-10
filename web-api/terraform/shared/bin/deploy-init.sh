@@ -13,15 +13,20 @@ if [ -z "${SECRETS_LOADED}" ]; then
   popd || exit 1
 fi
 
+[ -z "${DEPLOYING_COLOR}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
+[ -z "${DESTINATION_ELASTICSEARCH}" ] && echo "You must have DYNAMSOFT_URL set in your environment" && exit 1
+[ -z "${DESTINATION_TABLE}" ] && echo "You must have DESTINATION_TABLE set in your environment" && exit 1
+[ -z "${SOURCE_TABLE}" ] && echo "You must have SOURCE_TABLE set in your environment" && exit 1
+
+#TODO: remove unnecessary lines 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME="${DESTINATION_TABLE}" #TODO: remove lines 22, 23, 25, 26, 27 entirely
+  BLUE_TABLE_NAME="${DESTINATION_TABLE}" 
   GREEN_TABLE_NAME="${DESTINATION_TABLE}"
-  DESTINATION_DOMAIN="${DESTINATION_ELASTICSEARCH}"
-  BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
-  GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
+  BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_ELASTICSEARCH}"
+  GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_ELASTICSEARCH}"
   COGNITO_TRIGGER_TABLE_NAME="${DESTINATION_TABLE}"
 
-  if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
+  if [[ "${DESTINATION_ELASTICSEARCH}" == *'alpha'* ]]; then
     SHOULD_ES_ALPHA_EXIST=true
     SHOULD_ES_BETA_EXIST=false
   else
