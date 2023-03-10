@@ -503,6 +503,26 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('formattedDocketEntriesOnDocketRecord and formattedPendingDocketEntriesOnDocketRecord', () => {
+    const mockDocketEntries = [
+      {
+        ...mockDocketEntry,
+        docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+        documentTitle: 'Exhibit for Noodles',
+        eventCode: 'EXH',
+      },
+      {
+        ...mockDocketEntry,
+        docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+        documentTitle: 'Order in the Court',
+        eventCode: 'O',
+      },
+      {
+        ...mockDocketEntry,
+        docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+        documentTitle: 'Motion in the Ocean',
+        eventCode: 'M000',
+      },
+    ];
     it('should return formatted docket entries that are on the docket record, and in the pending list', () => {
       const caseDetail = {
         ...MOCK_CASE,
@@ -549,20 +569,7 @@ describe('formattedDocketEntries', () => {
     it('should ONLY show exhibit docket entries when "Exhibits" has been selected as the filter', () => {
       const caseDetail = {
         ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockDocketEntry,
-            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-            documentTitle: 'Exhibit for Noodles',
-            eventCode: 'EXH',
-          },
-          {
-            ...mockDocketEntry,
-            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-            documentTitle: 'Order in the Court',
-            eventCode: 'O',
-          },
-        ],
+        docketEntries: mockDocketEntries,
       };
 
       const result = runCompute(formattedDocketEntries, {
@@ -584,20 +591,7 @@ describe('formattedDocketEntries', () => {
     it('should ONLY show order type docket entries when "Orders" has been selected as the filter', () => {
       const caseDetail = {
         ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockDocketEntry,
-            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-            documentTitle: 'Exhibit for Noodles',
-            eventCode: 'EXH',
-          },
-          {
-            ...mockDocketEntry,
-            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-            documentTitle: 'Order in the Court',
-            eventCode: 'O',
-          },
-        ],
+        docketEntries: mockDocketEntries,
       };
 
       const result = runCompute(formattedDocketEntries, {
@@ -613,6 +607,28 @@ describe('formattedDocketEntries', () => {
       expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(1);
       expect(result.formattedDocketEntriesOnDocketRecord[0].eventCode).toBe(
         'O',
+      );
+    });
+
+    it('should ONLY show motion type docket entries when "Motions" has been selected as the filter', () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: mockDocketEntries,
+      };
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          sessionMetadata: {
+            docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.motions,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(1);
+      expect(result.formattedDocketEntriesOnDocketRecord[0].eventCode).toBe(
+        'M000',
       );
     });
 
