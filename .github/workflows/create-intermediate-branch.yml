@@ -1,8 +1,8 @@
-name: Create an intermediate branch to experimental3
+name: Create an intermediate branch to test
 
 on:
   pull_request:
-    branches: [experimental3]
+    branches: [test]
     type:
       - opened
 
@@ -20,13 +20,13 @@ jobs:
       - name: Create Intermediate branch
         run: |
           # Initialize variables
-          destination_branch=experimental3
+          destination_branch=test
           feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch="${feature_branch}-intermediate-to-test"
 
           # Get Test branch
           git fetch --unshallow
-          git checkout experimental3
+          git checkout test
           git pull
 
           # Create a copy of the destination branch
@@ -37,13 +37,12 @@ jobs:
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
-
       - name: Make PR of Intermediate branch to Test
-        run: |
-          # Initialize variables
-          destination_branch=experimental3
-          feature_branch=${{ github.head_ref }}
-          pr_title="${feature_branch} intermediate to experimental3"
-          pr_description="PR to experimental3."
-
-          hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: 'PR setup for intermediate branch of ${{ github.head_ref }} to test'
+          title: '${{ github.head_ref }} intermediate to test'
+          body: 'PR to test.'
+          base: test
+          labels: automated-pr
+          branch: ${{ github.head_ref }}
