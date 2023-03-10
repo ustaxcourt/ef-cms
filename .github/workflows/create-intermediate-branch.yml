@@ -1,8 +1,8 @@
-name: Create an intermediate branch to test
+name: Create an intermediate branch to experimental3
 
 on:
   pull_request:
-    branches: [test]
+    branches: [experimental3]
     type:
       - opened
 
@@ -16,12 +16,30 @@ jobs:
         run: |
           git config --local user.email "michael.marcotte@ustaxcourt.gov"
           git config --local user.name "Mike Marcotte"
-      - name: Create Intermediate branch
+      - name: Install Hub
         run: |
-          # Initialize variables
-          destination_branch=test
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-test"
+          sudo apt-get update
+          sudo apt-get install hub
+      - name: Initialize variables
+        run: |
+          destination_branch=experimental3
+          feature_branch=github.head_ref
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch_exists=false
+      - name: Check if intermediate branch exists
+        run: |
+          git fetch origin
+          if git rev-parse --verify "$intermediate_branch" >/dev/null 2>&1; then
+            intermediate_branch_exists=true
+            echo "Branch $intermediate_branch exists"
+          else
+              echo "Branch $intermediate_branch does not exist"
+          fi
+
+      - name: Create Intermediate branch
+        if: intermediate_branch_exists==false
+        run: |
+
 
           # Get the base branch
           git fetch --unshallow
@@ -36,15 +54,10 @@ jobs:
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
-      - name: Install Hub
-        run: |
-          sudo apt-get update
-          sudo apt-get install hub
       - name: Make PR of Intermediate branch to Test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pr_title="${feature_branch} intermediate to test"
-          pr_description="PR to test"
+          pr_title="${feature_branch} intermediate to experimental3"
 
-          hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
+          hub pull-request -b $destination_branch -m "$pr_title"
