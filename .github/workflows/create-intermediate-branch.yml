@@ -12,7 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
       - name: Set Git config
         run: |
           git config --local user.email "michael.marcotte@ustaxcourt.gov"
@@ -24,25 +23,28 @@ jobs:
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
 
-          # Get Test branch
+          # Get the base branch
           git fetch --unshallow
-          git checkout test
+          git checkout $destination_branch
           git pull
 
           # Create a copy of the destination branch
-          git checkout -b "${intermediate_branch}" "${destination_branch}"
+          git checkout -b "${intermediate_branch}"
 
           # Merge the feature branch into the intermediate branch
           git merge "origin/${feature_branch}"
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
+      - name: Install Hub
+        run: |
+          sudo apt-get update
+          sudo apt-get install hub
       - name: Make PR of Intermediate branch to Test
-        uses: peter-evans/create-pull-request@v4
-        with:
-          commit-message: 'PR setup for intermediate branch of ${{ github.head_ref }} to test'
-          title: '${{ github.head_ref }} intermediate to test'
-          body: 'PR to test.'
-          base: test
-          labels: automated-pr
-          branch: ${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pr_title="${feature_branch} intermediate to test"
+          pr_description="PR to test"
+
+          hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
