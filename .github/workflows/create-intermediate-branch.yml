@@ -33,7 +33,7 @@ jobs:
             intermediate_branch_exists=true
             echo "Branch $intermediate_branch exists"
           else
-              echo "Branch $intermediate_branch does not existt"
+              echo "Branch $intermediate_branch does not exist"
           fi
 
       - name: Create Intermediate branch
