@@ -14,7 +14,7 @@ import {
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { User } from './User';
-import { WorkItem, WorkItemClass } from './WorkItem';
+import { WorkItem } from './WorkItem';
 import {
   createISODateAtStartOfDayEST,
   createISODateString,
@@ -102,7 +102,7 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: WorkItemClass;
+  public workItem?: WorkItem;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
