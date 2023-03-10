@@ -41,6 +41,7 @@ export class Message extends JoiValidationEntity {
 
   constructor(rawMessage, { applicationContext }) {
     super('Message');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -68,7 +69,7 @@ export class Message extends JoiValidationEntity {
     this.message = rawMessage.message;
     this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
     this.parentMessageId = rawMessage.parentMessageId || this.messageId;
-    this.subject = rawMessage.subject;
+    this.subject = rawMessage.subject?.trim();
     this.to = rawMessage.to;
     this.toSection = rawMessage.toSection;
     this.toUserId = rawMessage.toUserId;
