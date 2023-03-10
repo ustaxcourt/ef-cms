@@ -528,8 +528,8 @@ export const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
 export const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
-  orders: 'Orders',
   motions: 'Motions',
+  orders: 'Orders',
 };
 
 export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(

@@ -286,14 +286,14 @@ export const formattedDocketEntries = (get, applicationContext) => {
         entry => EXHIBIT_EVENT_CODES.includes(entry.eventCode),
       );
       break;
-    case DOCKET_RECORD_FILTER_OPTIONS.orders:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
-      );
-      break;
     case DOCKET_RECORD_FILTER_OPTIONS.motions:
       result.formattedDocketEntries = result.formattedDocketEntries.filter(
         entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.orders:
+      result.formattedDocketEntries = result.formattedDocketEntries.filter(
+        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
       );
       break;
   }
