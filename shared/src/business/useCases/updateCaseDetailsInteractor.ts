@@ -54,6 +54,7 @@ export const updateCaseDetailsInteractor = async (
     {
       ...oldCase,
       ...editableFields,
+      originalCase: oldCase,
       petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
       petitionPaymentMethod: isPaid
         ? editableFields.petitionPaymentMethod
