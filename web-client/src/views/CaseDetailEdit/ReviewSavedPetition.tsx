@@ -372,15 +372,15 @@ export const ReviewSavedPetition = connect(
                           </div>
                         </div>
                       )}
-                      {reviewSavedPetitionHelper.ownershipDisclosureFile && (
+                      {reviewSavedPetitionHelper.corporateDisclosureFile && (
                         <div className="margin-top-3 margin-bottom-3">
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
                                 file={
-                                  reviewSavedPetitionHelper.ownershipDisclosureFile
+                                  reviewSavedPetitionHelper.corporateDisclosureFile
                                 }
-                                title="Ownership Disclosure Statement"
+                                title="Corporate Disclosure Statement"
                               />
                             </div>
                           </div>

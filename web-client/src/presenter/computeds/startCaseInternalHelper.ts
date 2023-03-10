@@ -14,7 +14,7 @@ export const startCaseInternalHelper = (get, applicationContext) => {
   const petitionPaymentStatus = get(state.form.petitionPaymentStatus);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
-  let showOrderForOwnershipDisclosureStatement = false;
+  let showOrderForCorporateDisclosureStatement = false;
 
   if (
     [
@@ -24,7 +24,7 @@ export const startCaseInternalHelper = (get, applicationContext) => {
       PARTY_TYPES.corporation,
     ].includes(partyType)
   ) {
-    showOrderForOwnershipDisclosureStatement = true;
+    showOrderForCorporateDisclosureStatement = true;
   }
 
   const shouldShowIrsNoticeDate = get(state.form.hasVerifiedIrsNotice) === true;
@@ -32,8 +32,8 @@ export const startCaseInternalHelper = (get, applicationContext) => {
   return {
     partyTypes: PARTY_TYPES,
     shouldShowIrsNoticeDate,
+    showOrderForCorporateDisclosureStatement,
     showOrderForFilingFee: petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
-    showOrderForOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showSecondaryContact: showContacts.contactSecondary,
   };
