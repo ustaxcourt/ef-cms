@@ -159,7 +159,7 @@ Case.prototype.init = function init(
 ) {
   Object.defineProperty(this, 'originalCase', {
     enumerable: false,
-    value: deepFreeze(cloneDeep(rawCase)),
+    value: deepFreeze(cloneDeep(rawCase.originalCase || rawCase)),
     writable: false,
   });
   caseDecorator(this, rawCase, { applicationContext, filtered });
