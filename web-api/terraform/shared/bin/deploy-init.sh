@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ENVIRONMENT=$1
 
@@ -13,10 +13,11 @@ if [ -z "${SECRETS_LOADED}" ]; then
   popd || exit 1
 fi
 
-[ -z "${DEPLOYING_COLOR}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
-[ -z "${DESTINATION_ELASTICSEARCH}" ] && echo "You must have DYNAMSOFT_URL set in your environment" && exit 1
-[ -z "${DESTINATION_TABLE}" ] && echo "You must have DESTINATION_TABLE set in your environment" && exit 1
-[ -z "${SOURCE_TABLE}" ] && echo "You must have SOURCE_TABLE set in your environment" && exit 1
+../../../../check-env-variables.sh \
+  "DEPLOYING_COLOR" \
+  "DESTINATION_TABLE" \
+  "DESTINATION_ELASTICSEARCH" \
+  "SOURCE_TABLE"
 
 #TODO: remove unnecessary lines 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
