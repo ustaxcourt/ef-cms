@@ -20,12 +20,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install hub
+
       - name: Initialize variables
         run: |
           destination_branch=experimental3
           feature_branch=github.head_ref
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
           intermediate_branch_exists=false
+
       - name: Check if intermediate branch exists
         run: |
           git fetch origin
@@ -53,6 +55,7 @@ jobs:
 
             # Push the new intermediate to remote
             git push -u origin "${intermediate_branch}"
+
       - name: Make PR of Intermediate branch to Test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
