@@ -129,6 +129,10 @@ select {
   }
 }
 
+.usa-checkbox__input {
+  display: none;
+}
+
 .usa-checkbox__input:disabled + .usa-checkbox__label {
   &::before {
     box-shadow: 0 0 0 1px color($theme-color-base-lighter);
