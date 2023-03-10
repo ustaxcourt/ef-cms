@@ -37,27 +37,26 @@ jobs:
           fi
 
       - name: Create Intermediate branch
-        if: ${{ intermediate_branch_exists==false }}
         run: |
 
+          if intermediate_branch_exists==false;
+            # Get the base branch
+            git fetch --unshallow
+            git checkout $destination_branch
+            git pull
 
-          # Get the base branch
-          git fetch --unshallow
-          git checkout $destination_branch
-          git pull
+            # Create a copy of the destination branch
+            git checkout -b "${intermediate_branch}"
 
-          # Create a copy of the destination branch
-          git checkout -b "${intermediate_branch}"
+            # Merge the feature branch into the intermediate branch
+            git merge "origin/${feature_branch}"
 
-          # Merge the feature branch into the intermediate branch
-          git merge "origin/${feature_branch}"
-
-          # Push the new intermediate to remote
-          git push -u origin "${intermediate_branch}"
+            # Push the new intermediate to remote
+            git push -u origin "${intermediate_branch}"
       - name: Make PR of Intermediate branch to Test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pr_title="${feature_branch} intermediate to experimental3"
-
-          hub pull-request -b $destination_branch -m "$pr_title"
+          if intermediate_branch_exists==false;
+            pr_title="${feature_branch} intermediate to experimental3"
+            hub pull-request -b $destination_branch -m "$pr_title"
