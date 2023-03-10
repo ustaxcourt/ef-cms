@@ -69,7 +69,11 @@ export const Parties = connect(
                 });
               }}
             />
-            <label className="usa-checkbox__label" htmlFor="order-for-ods">
+            <label
+              className="usa-checkbox__label"
+              htmlFor="order-for-ods"
+              id="order-for-ods-label"
+            >
               Order for Ownership Disclosure Statement
             </label>
           </div>

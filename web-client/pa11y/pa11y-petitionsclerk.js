@@ -18,7 +18,7 @@ module.exports = [
       'wait for #party-type to be visible',
       'set field #party-type to Corporation',
       'check field #party-type',
-      'wait for #order-for-ods to be visible',
+      'wait for #order-for-ods-label to be visible',
     ],
     notes: 'checks a11y of Create Case with inputs revealed - Order for ODS',
     url: 'http://localhost:1234/log-in?code=petitionsclerk@example.com&path=/file-a-petition/step-1&info=order-for-ods',
