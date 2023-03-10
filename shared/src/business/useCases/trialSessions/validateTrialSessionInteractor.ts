@@ -1,5 +1,5 @@
 import { NewTrialSession } from '../../entities/trialSessions/NewTrialSession';
-import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
+import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 
 /**
  * validateTrialSessionInteractor
@@ -11,7 +11,7 @@ import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
  */
 export const validateTrialSessionInteractor = (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: TRawTrialSession },
+  { trialSession }: { trialSession: RawTrialSession },
 ) => {
   const errors = new NewTrialSession(trialSession, {
     applicationContext,
