@@ -269,6 +269,7 @@ import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
+import { transformFormValueToTitleCaseOrdinal } from '../../shared/src/business/utilities/transformFormValueToTitleCaseOrdinal';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
@@ -785,6 +786,7 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       setupPdfDocument,
       sortDocketEntries,
+      transformFormValueToTitleCaseOrdinal,
       userIsDirectlyAssociated,
       validateDateAndCreateISO,
     };
