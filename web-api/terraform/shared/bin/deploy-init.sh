@@ -19,12 +19,12 @@ if [ -z "${SECRETS_LOADED}" ]; then
 fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  BLUE_TABLE_NAME="${DESTINATION_TABLE}" #TODO: remove lines 22, 23, 25, 26, 27 entirely
+  GREEN_TABLE_NAME="${DESTINATION_TABLE}"
   DESTINATION_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
   BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  COGNITO_TRIGGER_TABLE_NAME="${DESTINATION_TABLE}"
 
   if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
     SHOULD_ES_ALPHA_EXIST=true
@@ -38,11 +38,11 @@ else
   SHOULD_ES_BETA_EXIST=true
 
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    BLUE_TABLE_NAME="${DESTINATION_TABLE}"
+    GREEN_TABLE_NAME="${SOURCE_TABLE}"
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    COGNITO_TRIGGER_TABLE_NAME="${SOURCE_TABLE}"
   else
     GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
     BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
