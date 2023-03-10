@@ -85,6 +85,7 @@ export const saveCaseDetailInternalEditInteractor = async (
     ...editableFields,
     contactPrimary: caseToUpdate.contactPrimary,
     contactSecondary: caseToUpdate.contactSecondary,
+    originalCase: originalCaseEntity.originalCase,
     petitioners: undefined,
   };
 
