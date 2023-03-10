@@ -51,7 +51,7 @@ describe('ExternalDocumentNonStandardF', () => {
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
-        ordinalValue: 'First',
+        ordinalValue: '1',
         previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard F',
       });
@@ -63,7 +63,7 @@ describe('ExternalDocumentNonStandardF', () => {
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
-        ordinalValue: 'First',
+        ordinalValue: '1',
         previousDocument: {
           documentTitle: 'Stipulation Something',
           documentType: 'Stipulation',
@@ -80,10 +80,22 @@ describe('ExternalDocumentNonStandardF', () => {
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
-        ordinalValue: 'First',
+        ordinalValue: '1',
         scenario: 'Nonstandard F',
       });
       expect(extDoc.getDocumentTitle()).toEqual('First Amended');
+    });
+
+    it('should generate title with an otherIteration defined when ordinalValue is "Other"', () => {
+      const extDoc = ExternalDocumentFactory({
+        category: 'Miscellaneous',
+        documentTitle: '[First, Second, etc.] Amended [Document Name]',
+        documentType: 'Amended',
+        ordinalValue: 'Other',
+        otherIteration: '50',
+        scenario: 'Nonstandard F',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('Fiftieth Amended');
     });
   });
 });

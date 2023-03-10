@@ -65,12 +65,12 @@ const wizardStep2 = atWizardStep(2, {
 
 const wizardStep3 = atWizardStep(3, {
   businessType: CaseExternal.commonRequirements.businessType,
+  corporateDisclosureFile:
+    CaseExternal.commonRequirements.corporateDisclosureFile,
+  corporateDisclosureFileSize:
+    CaseExternal.commonRequirements.corporateDisclosureFileSize,
   countryType: CaseExternal.commonRequirements.countryType,
   filingType: CaseExternal.commonRequirements.filingType,
-  ownershipDisclosureFile:
-    CaseExternal.commonRequirements.ownershipDisclosureFile,
-  ownershipDisclosureFileSize:
-    CaseExternal.commonRequirements.ownershipDisclosureFileSize,
   partyType: CaseExternal.commonRequirements.partyType,
 });
 

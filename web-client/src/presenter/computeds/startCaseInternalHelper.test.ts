@@ -236,7 +236,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showOrderForOwnershipDisclosureStatement true if partyType is corporation', () => {
+  it('sets showOrderForCorporateDisclosureStatement true if partyType is corporation', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {
@@ -244,10 +244,10 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOrderForOwnershipDisclosureStatement).toBeTruthy();
+    expect(result.showOrderForCorporateDisclosureStatement).toBeTruthy();
   });
 
-  it('sets showOrderForOwnershipDisclosureStatement false if partyType is petitioner', () => {
+  it('sets showOrderForCorporateDisclosureStatement false if partyType is petitioner', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {
@@ -255,7 +255,7 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOrderForOwnershipDisclosureStatement).toBeFalsy();
+    expect(result.showOrderForCorporateDisclosureStatement).toBeFalsy();
   });
 
   it('sets showOrderForFilingFee true if petitionPaymentStatus is unpaid', () => {

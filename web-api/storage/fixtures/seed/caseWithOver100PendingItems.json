@@ -19,7 +19,7 @@
     "entityName": "Case",
     "caseCaption": "Mona Schultz, Petitioner",
     "sk": "case|101-21",
-    "orderForOds": false,
+    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "101-21L",
     "orderForRatification": false,
