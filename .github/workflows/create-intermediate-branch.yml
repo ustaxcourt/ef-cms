@@ -32,7 +32,7 @@ jobs:
       - name: Create Intermediate branch
         run: |
 
-          if [$intermediate_branch==false]; then
+          if $intermediate_branch==false; then
             # Get the base branch
             git fetch --unshallow
             git checkout $destination_branch
@@ -52,11 +52,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [$intermediate_branch==false]; then
+          if $intermediate_branch==false; then
 
             sudo apt-get update
             sudo apt-get install hub
-            
+
             pr_title="${feature_branch} intermediate to experimental3"
             hub pull-request -b ${destination_branch} -m "$pr_title"
           fi
