@@ -43,7 +43,7 @@ export const completeMessageInteractor = async (
 
   const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-  const updatedMessage: TMessageEntity = new Message(mostRecentMessage, {
+  const updatedMessage = new Message(mostRecentMessage, {
     applicationContext,
   }).validate();
 
