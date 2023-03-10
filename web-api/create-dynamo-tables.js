@@ -42,6 +42,10 @@ const createEFCMSTable = async () => {
           AttributeName: 'gsi1pk',
           AttributeType: 'S',
         },
+        {
+          AttributeName: 'gsi2pk',
+          AttributeType: 'S',
+        },
       ],
       GlobalSecondaryIndexes: [
         {
@@ -53,6 +57,26 @@ const createEFCMSTable = async () => {
             },
             {
               AttributeName: 'pk',
+              KeyType: 'RANGE',
+            },
+          ],
+          Projection: {
+            ProjectionType: 'ALL',
+          },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+        {
+          IndexName: 'gsi2',
+          KeySchema: [
+            {
+              AttributeName: 'gsi2pk',
+              KeyType: 'HASH',
+            },
+            {
+              AttributeName: 'sk',
               KeyType: 'RANGE',
             },
           ],
@@ -101,6 +125,10 @@ const createEFCMSTable = async () => {
           AttributeName: 'gsi1pk',
           AttributeType: 'S',
         },
+        {
+          AttributeName: 'gsi2pk',
+          AttributeType: 'S',
+        },
       ],
       GlobalSecondaryIndexes: [
         {
@@ -112,6 +140,26 @@ const createEFCMSTable = async () => {
             },
             {
               AttributeName: 'pk',
+              KeyType: 'RANGE',
+            },
+          ],
+          Projection: {
+            ProjectionType: 'ALL',
+          },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+        {
+          IndexName: 'gsi2',
+          KeySchema: [
+            {
+              AttributeName: 'gsi2pk',
+              KeyType: 'HASH',
+            },
+            {
+              AttributeName: 'sk',
               KeyType: 'RANGE',
             },
           ],

@@ -35,6 +35,11 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     type = "S"
   }
 
+   attribute {
+    name = "gsi2pk"
+    type = "S"
+  }
+
   point_in_time_recovery {
     enabled = true
   }
@@ -43,6 +48,13 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     name            = "gsi1"
     hash_key        = "gsi1pk"
     range_key       = "pk"
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "gsi2"
+    hash_key        = "gsi2pk"
+    range_key       = "sk"
     projection_type = "ALL"
   }
 
@@ -58,9 +70,11 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     attribute_name = "ttl"
     enabled        = true
   }
+
   replica {
     region_name = "us-west-1"
   }
+
   timeouts {
     create = "2h"
     update = "2h"
