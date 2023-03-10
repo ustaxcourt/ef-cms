@@ -57,7 +57,7 @@ jobs:
             git push -u origin "${intermediate_branch}"
           fi
 
-      - name: Make PR of Intermediate branch to Test
+      - name: Make PR of Intermediate branch to Tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
