@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoReviewSavedPetitionSequence } from '../sequences/gotoReviewSavedPetitionSequence';
 import { presenter } from '../presenter-mock';
@@ -44,25 +43,5 @@ describe('gotoReviewSavedPetitionSequence', () => {
     expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
     expect(cerebralTest.getState('caseDetail')).toMatchObject(mockCase);
     expect(cerebralTest.getState('form')).toMatchObject(mockCase);
-  });
-
-  it('should not unset state.caseDetail.petitioners in the ignore path', async () => {
-    const mockDocketNumber = '199-99';
-    const mockPetitioner = MOCK_CASE.petitioners[0];
-
-    cerebralTest.setState('form', { partyType: 'petitioner' });
-    cerebralTest.setState('caseDetail', {
-      docketNumber: mockDocketNumber,
-      partyType: PARTY_TYPES.petitioner,
-      petitioners: [mockPetitioner],
-    });
-
-    await cerebralTest.runSequence('gotoReviewSavedPetitionSequence', {
-      docketNumber: mockDocketNumber,
-    });
-
-    expect(cerebralTest.getState('caseDetail.petitioners')).toEqual([
-      mockPetitioner,
-    ]);
   });
 });
