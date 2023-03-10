@@ -28,7 +28,7 @@ jobs:
           git checkout -b "${intermediate_branch}" "${destination_branch}"
 
           # Merge the feature branch into the intermediate branch
-          git merge "${feature_branch}"
+          git merge "origin/${feature_branch}"
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
