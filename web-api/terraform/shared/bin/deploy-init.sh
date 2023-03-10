@@ -2,13 +2,8 @@
 
 ENVIRONMENT=$1
 
-DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENVIRONMENT}")
-MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENVIRONMENT}")
-
 export ENV="${ENVIRONMENT}"
 export ENVIRONMENT
-export DEPLOYING_COLOR
-export MIGRATE_FLAG
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 if [ -z "${SECRETS_LOADED}" ]; then
@@ -21,7 +16,7 @@ fi
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME="${DESTINATION_TABLE}" #TODO: remove lines 22, 23, 25, 26, 27 entirely
   GREEN_TABLE_NAME="${DESTINATION_TABLE}"
-  DESTINATION_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  DESTINATION_DOMAIN="${DESTINATION_ELASTICSEARCH}"
   BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   COGNITO_TRIGGER_TABLE_NAME="${DESTINATION_TABLE}"
@@ -40,15 +35,15 @@ else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
     BLUE_TABLE_NAME="${DESTINATION_TABLE}"
     GREEN_TABLE_NAME="${SOURCE_TABLE}"
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+    BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_ELASTICSEARCH}"
+    GREEN_ELASTICSEARCH_DOMAIN="${SOURCE_ELASTICSEARCH}"
     COGNITO_TRIGGER_TABLE_NAME="${SOURCE_TABLE}"
   else
-    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    GREEN_TABLE_NAME="${DESTINATION_TABLE}"
+    BLUE_TABLE_NAME="${SOURCE_TABLE}"
+    GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_ELASTICSEARCH}"
+    BLUE_ELASTICSEARCH_DOMAIN="${SOURCE_ELASTICSEARCH}"
+    COGNITO_TRIGGER_TABLE_NAME="${SOURCE_TABLE}"
   fi
 fi
 

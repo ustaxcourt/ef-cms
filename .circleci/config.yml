@@ -447,12 +447,6 @@ jobs:
           command: |
             ./setup-for-blue-green-migration.sh
       - run:
-          name: Setup Migrate Flag
-          command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Destination Table Var
-          command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-      - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
