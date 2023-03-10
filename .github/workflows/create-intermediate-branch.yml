@@ -1,9 +1,8 @@
-name: Automaticall create an intermediate branch for feature branches
+name: Create an intermediate branch to test
 
 on:
   pull_request:
-    branches:
-      - test
+    branches: [test]
     type:
       - opened
 
@@ -40,6 +39,6 @@ jobs:
           destination_branch=test
           feature_branch=github.head_ref
           pr_title="${feature_branch} intermediate to test"
-          pr_description="PR to test"
+          pr_description="PR to test."
 
           hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
