@@ -413,6 +413,14 @@ export const INTERNAL_DOCUMENTS_ARRAY = flatten(
   Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 );
 
+export const MOTION_EVENT_CODES = [
+  ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+    return entry.eventCode;
+  }),
+  'M116',
+  'M112',
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -521,6 +529,7 @@ export const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
   orders: 'Orders',
+  motions: 'Motions',
 };
 
 export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
