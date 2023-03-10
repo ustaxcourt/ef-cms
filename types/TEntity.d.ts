@@ -4,79 +4,11 @@
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
 */
 
-type TCaseDeadline = {
-  associatedJudge: string;
-  caseDeadlineId: number;
-  createdAt: Date;
-  deadlineDate: Date;
-  description: string;
-  docketNumber: string;
-  sortableDocketNumber: string;
-};
-
 type TRawPenalty = {
   name: string;
   penaltyAmount: number;
   penaltyType: string;
 };
-
-type TPractitionerDocument = {
-  categoryType: string;
-  categoryName: string;
-  location: string;
-  practitionerDocumentFileId: string;
-};
-
-type TPractitionerDocumentEntity = {
-  validate(): TPractitionerDocumentEntity;
-  toRawObject(): TPractitionerDocument;
-} & TPractitionerDocument;
-
-type WorkItem = {
-  createdAt: string;
-  assigneeId: string;
-  docketEntry: Partial<RawDocketEntry>;
-  assigneeName: string;
-  associatedJudge: string;
-  caseIsInProgress: boolean;
-  caseStatus: string;
-  caseTitle: string;
-  completedBy: string;
-  completedByUserId: string;
-  completedMessage: string;
-  docketNumberWithSuffix: string;
-  entityName: string;
-  highPriority: boolean;
-  isInitializeCase: boolean;
-  docketNumber: string;
-  workItemId: string;
-  completedAt: string;
-  updatedAt: string;
-  gsi1pk: string;
-  inProgress: boolean;
-};
-
-type TOutboxItem = {
-  caseStatus: string;
-  caseTitle: string;
-  completedAt: string;
-  completedBy: string;
-  caseIsInProgress: boolean;
-  docketEntry: RawDocketEntry;
-  docketNumber: string;
-  highPriority: boolean;
-  inProgress: boolean;
-  leadDocketNumber: string;
-  section: string;
-  trialDate: string;
-  workItemId: string;
-} & WorkItem;
-
-type TOutboxItemEntity = {
-  validate(): TOutboxItemEntity;
-  isValid(): boolean;
-  toRawObject(): TOutboxItem;
-} & TOutboxItem;
 
 type TDynamoRecord = {
   pk: string;
@@ -86,7 +18,7 @@ type TDynamoRecord = {
   [key: string]: any;
 };
 
-type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
+type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;
 type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
 
 type TSectionWorkItem = {

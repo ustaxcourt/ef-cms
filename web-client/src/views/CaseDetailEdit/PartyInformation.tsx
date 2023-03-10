@@ -77,7 +77,7 @@ export const PartyInformation = connect(
           <div className="subsection contacts">
             <Contacts
               bind="form"
-              contactsHelper="caseDetailEditContactsHelper"
+              contactsHelper="internalPetitionPartiesHelper"
               parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
