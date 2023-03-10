@@ -664,6 +664,12 @@ describe('publicCaseDetailHelper', () => {
           documentTitle: 'Order in the Court',
           eventCode: 'O',
         },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+          documentTitle: 'Motion in the Ocean',
+          eventCode: 'M000',
+        },
       ],
     };
 
@@ -680,6 +686,22 @@ describe('publicCaseDetailHelper', () => {
       expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(1);
       expect(result.formattedDocketEntriesOnDocketRecord[0].eventCode).toBe(
         'O',
+      );
+    });
+
+    it('should ONLY show motion type docket entries when "Motions" has been selected as the filter', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail,
+          sessionMetadata: {
+            docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(1);
+      expect(result.formattedDocketEntriesOnDocketRecord[0].eventCode).toBe(
+        'M000',
       );
     });
 
