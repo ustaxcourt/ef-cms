@@ -7,7 +7,7 @@ export const createPractitionerDocument = async ({
 }: {
   applicationContext: IApplicationContext;
   barNumber: string;
-  practitionerDocument: TPractitionerDocument;
+  practitionerDocument: RawPractitionerDocument;
 }) => {
   barNumber = barNumber.toLowerCase();
 

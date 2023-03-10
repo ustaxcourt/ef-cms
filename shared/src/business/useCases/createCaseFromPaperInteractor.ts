@@ -102,7 +102,6 @@ export const createCaseFromPaperInteractor = async (
     { applicationContext },
   ).validate();
 
-  // invoke the createCase interactor
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
       applicationContext,

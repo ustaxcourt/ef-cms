@@ -12,5 +12,5 @@ const urls = [...petitioner, ...adc, ...irsSuperuser, ...admissionsClerk].map(
 
 module.exports = {
   defaults,
-  urls: setTimeouts()(getOnly(urls)),
+  urls: getOnly(urls).map(setTimeouts),
 };

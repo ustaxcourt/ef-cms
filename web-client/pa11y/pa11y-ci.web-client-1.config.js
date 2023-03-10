@@ -25,5 +25,5 @@ const urls = [...initialUrls, ...userUrls].map(jsCheckDecorator);
 
 module.exports = {
   defaults,
-  urls: setTimeouts()(getOnly(urls)),
+  urls: getOnly(urls).map(setTimeouts),
 };

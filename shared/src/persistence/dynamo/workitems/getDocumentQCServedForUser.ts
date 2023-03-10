@@ -29,5 +29,5 @@ export const getDocumentQCServedForUser = ({
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
-  });
+  }) as unknown as Promise<RawWorkItem[]>;
 };

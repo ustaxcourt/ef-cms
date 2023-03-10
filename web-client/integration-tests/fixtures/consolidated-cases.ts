@@ -267,7 +267,7 @@ const case106_23_stin: RawDocketEntry & TDynamoRecord = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
 };
 
-const case105_23_petition_work_item: WorkItem & TDynamoRecord = {
+const case105_23_petition_work_item: RawWorkItem & TDynamoRecord = {
   assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
   assigneeName: 'Test Petitionsclerk1',
   associatedJudge: 'Chief Judge',
