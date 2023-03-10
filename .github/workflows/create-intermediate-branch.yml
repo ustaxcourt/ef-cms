@@ -31,7 +31,7 @@ jobs:
       - name: Check if intermediate branch exists
         run: |
           git fetch origin
-          if git rev-parse --verify "${intermediate_branch}" >/dev/null 2>&1; then
+          if [git rev-parse --verify "${intermediate_branch}" >/dev/null 2>&1]; then
             intermediate_branch_exists=true
             echo "Branch ${intermediate_branch} exists"
           else
@@ -41,7 +41,7 @@ jobs:
       - name: Create Intermediate branch
         run: |
 
-          if intermediate_branch_exists==false;
+          if [intermediate_branch_exists==false]; then
             # Get the base branch
             git fetch --unshallow
             git checkout $destination_branch
@@ -55,11 +55,13 @@ jobs:
 
             # Push the new intermediate to remote
             git push -u origin "${intermediate_branch}"
+          fi
 
       - name: Make PR of Intermediate branch to Test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if intermediate_branch_exists==false;
+          if intermediate_branch_exists==false; then
             pr_title="${feature_branch} intermediate to experimental3"
             hub pull-request -b $destination_branch -m "$pr_title"
+          fi
