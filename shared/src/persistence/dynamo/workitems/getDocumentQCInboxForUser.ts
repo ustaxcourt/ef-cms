@@ -6,8 +6,8 @@ export const getDocumentQCInboxForUser = async ({
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) => {
-  const workItems = await query({
+}): Promise<RawWorkItem[]> => {
+  const workItems: RawWorkItem[] = (await query({
     ExpressionAttributeNames: {
       '#gsi2pk': 'gsi2pk',
       '#sk': 'sk',
@@ -19,7 +19,7 @@ export const getDocumentQCInboxForUser = async ({
     IndexName: 'gsi2',
     KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
     applicationContext,
-  });
+  })) as any;
 
   return workItems
     .filter(workItem => !workItem.completedAt)
