@@ -194,6 +194,7 @@ export const updatePetitionerInformationInteractor = async (
   let caseEntity = new Case(
     {
       ...caseToUpdateContacts.toRawObject(),
+      originalCase: oldCase,
     },
     { applicationContext },
   ).validate();
