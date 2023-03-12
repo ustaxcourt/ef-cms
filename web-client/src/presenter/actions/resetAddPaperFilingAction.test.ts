@@ -5,20 +5,10 @@ describe('resetAddPaperFilingAction', () => {
   it('sets default properties on state for the add docket entry form', async () => {
     const result = await runAction(resetAddPaperFilingAction, {
       state: {
-        currentViewMetadata: {
-          documentSelectedForScan: 'passport',
-          documentUploadMode: 'teleport',
-        },
-        form: {
-          lodged: true,
-          practitioner: [
-            {
-              userId: 'hey',
-            },
-          ],
-        },
-        isEditingDocketEntry: true,
-        wizardStep: 'noooo',
+        currentViewMetadata: undefined,
+        form: undefined,
+        isEditingDocketEntry: undefined,
+        wizardStep: undefined,
       },
     });
 
@@ -30,6 +20,7 @@ describe('resetAddPaperFilingAction', () => {
       form: {
         filers: [],
         filersMap: {},
+        isPaper: true,
         lodged: false,
         practitioner: [],
       },

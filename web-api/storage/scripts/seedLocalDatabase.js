@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const seedEntries = require('../fixtures/seed');
 const {
   migrateItems: validationMigration,
-} = require('../../migration-terraform/main/lambdas/migrations/0000-validate-all-items');
+} = require('../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items');
 const { chunk: splitIntoChunks } = require('lodash');
 const { createCase1 } = require('./cases/createCase1');
 const { createUsers } = require('./createUsers');

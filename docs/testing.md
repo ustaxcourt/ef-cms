@@ -318,9 +318,11 @@ All of the expected output images are found in the `./shared/test-pdf-expected-i
 ```
 docker build -t efcms -f Dockerfile . && \
 docker build -t efcms-local -f Dockerfile-local . && \
-docker run -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation" && \
-cp -r shared/test-output/*.png shared/test-pdf-expected-images/
+docker run -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
 ```
+
+After inspecting the failed pdfs, override the existing the pdfs by running the following command:
+```cp -r shared/test-output/*.png shared/test-pdf-expected-images/```
 
 ## Client Integration Testing
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.

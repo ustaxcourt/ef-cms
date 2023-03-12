@@ -1,17 +1,17 @@
 const {
+  AMICUS_BRIEF_EVENT_CODE,
+  OBJECTIONS_OPTIONS_MAP,
+} = require('../EntityConstants');
+const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
 const { getTextByCount } = require('../../utilities/getTextByCount');
-const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
-
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 describe('DocketEntryFactory', () => {
   let rawEntity;
-  const errors = () =>
-    DocketEntryFactory(rawEntity).getFormattedValidationErrors();
 
   beforeEach(() => {
     rawEntity = {
@@ -21,85 +21,148 @@ describe('DocketEntryFactory', () => {
 
   it('should require a file if isDocumentRequired', () => {
     rawEntity.isDocumentRequired = true;
-    expect(errors().primaryDocumentFile).toBeDefined();
+
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .primaryDocumentFile,
+    ).toBeDefined();
   });
 
   it('should require a file', () => {
     rawEntity.primaryDocumentFile = {};
     rawEntity.primaryDocumentFileSize = 1;
-    expect(errors().primaryDocumentFile).toEqual(undefined);
+
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .primaryDocumentFile,
+    ).toEqual(undefined);
   });
 
   it('should return an error when an empty document is attached', () => {
     rawEntity.primaryDocumentFile = {};
     rawEntity.primaryDocumentFileSize = 0;
-    expect(errors().primaryDocumentFile).toEqual(undefined);
-    expect(errors().primaryDocumentFileSize).toEqual(
-      VALIDATION_ERROR_MESSAGES.primaryDocumentFileSize[1],
-    );
+
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .primaryDocumentFile,
+    ).toEqual(undefined);
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .primaryDocumentFileSize,
+    ).toEqual(VALIDATION_ERROR_MESSAGES.primaryDocumentFileSize[1]);
   });
 
   it('should not require a filing status selection', () => {
-    expect(errors().lodged).toEqual(undefined);
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors().lodged,
+    ).toEqual(undefined);
   });
 
   it('should require received date be entered', () => {
-    expect(errors().dateReceived).toEqual(
-      VALIDATION_ERROR_MESSAGES.dateReceived[1],
-    );
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors().dateReceived,
+    ).toEqual(VALIDATION_ERROR_MESSAGES.dateReceived[1]);
     rawEntity.dateReceived = createISODateString();
-    expect(errors().dateReceived).toEqual(undefined);
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors().dateReceived,
+    ).toEqual(undefined);
   });
 
   it('should not allow received date be in the future', () => {
     rawEntity.dateReceived = calculateISODate({ howMuch: 1, units: 'days' });
-    expect(errors().dateReceived).toEqual(
-      VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
-    );
+
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors().dateReceived,
+    ).toEqual(VALIDATION_ERROR_MESSAGES.dateReceived[0].message);
   });
 
   it('should be invalid when additionalInfo is over 500 characters long', () => {
     rawEntity.additionalInfo = getTextByCount(1001);
 
-    expect(errors().additionalInfo).toEqual(
-      VALIDATION_ERROR_MESSAGES.additionalInfo[0].message,
-    );
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .additionalInfo,
+    ).toEqual(VALIDATION_ERROR_MESSAGES.additionalInfo[0].message);
   });
 
   it('should be invalid when additionalInfo2 is over 500 characters long', () => {
     rawEntity.additionalInfo2 = getTextByCount(1001);
 
-    expect(errors().additionalInfo2).toEqual(
-      VALIDATION_ERROR_MESSAGES.additionalInfo2[0].message,
-    );
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .additionalInfo2,
+    ).toEqual(VALIDATION_ERROR_MESSAGES.additionalInfo2[0].message);
   });
 
   it('should require event code', () => {
-    expect(errors().eventCode).toBeDefined();
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors().eventCode,
+    ).toBeDefined();
   });
 
-  it('should require objections when eventCode is ADMT and previopus document is an objection document type', () => {
-    rawEntity.eventCode = 'ADMT';
-    rawEntity.previousDocument = {
-      documentType: 'Application to Take Deposition',
-    };
-    expect(errors().objections).toBeDefined();
+  it('should not require Additional info 1', () => {
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .additionalInfo,
+    ).toEqual(undefined);
   });
 
-  it('should require objections when eventCode is AMAT and previopus document is an objection document type', () => {
-    rawEntity.eventCode = 'AMAT';
-    rawEntity.previousDocument = {
-      documentType: 'Application to Take Deposition',
-    };
-    expect(errors().objections).toBeDefined();
+  it('should not require Additional info 2', () => {
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .additionalInfo2,
+    ).toEqual(undefined);
   });
 
-  it('should require objections when document is an objection document type', () => {
-    rawEntity.documentType = 'Application to Take Deposition';
-    expect(errors().objections).toBeDefined();
+  it('should not require add to cover sheet', () => {
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .addToCoversheet,
+    ).toEqual(undefined);
   });
 
-  describe('Document type', () => {
+  describe('objections', () => {
+    it('should require objections when eventCode is ADMT and previous document is an objection document type', () => {
+      rawEntity.eventCode = 'ADMT';
+      rawEntity.previousDocument = {
+        eventCode: 'APLD',
+      };
+
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors().objections,
+      ).toBeDefined();
+    });
+
+    it('should require objections when eventCode is AMAT and previous document is an objection document type', () => {
+      rawEntity.eventCode = 'AMAT';
+      rawEntity.previousDocument = {
+        eventCode: 'APLD',
+      };
+
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors().objections,
+      ).toBeDefined();
+    });
+
+    it('should require objections when document is an objection document type', () => {
+      rawEntity.eventCode = 'APLD';
+
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors().objections,
+      ).toBeDefined();
+    });
+
+    it('should be optional when the docket entry is a paper filing and the docket entry is a motion', () => {
+      rawEntity.eventCode = 'M006'; // Motion for Continuance
+      rawEntity.isPaper = true;
+
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors().objections,
+      ).toBeUndefined();
+    });
+  });
+
+  describe('documentType', () => {
     beforeEach(() => {
       rawEntity = {
         ...rawEntity,
@@ -111,29 +174,24 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require non standard fields', () => {
-      expect(errors().ordinalValue).toEqual(
-        VALIDATION_ERROR_MESSAGES.ordinalValue,
-      );
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+          .ordinalValue,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.ordinalValue);
       rawEntity.ordinalValue = 'First';
-      expect(errors().ordinalValue).toEqual(undefined);
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+          .ordinalValue,
+      ).toEqual(undefined);
     });
-  });
-
-  it('should not require Additional info 1', () => {
-    expect(errors().additionalInfo).toEqual(undefined);
-  });
-
-  it('should not require Additional info 2', () => {
-    expect(errors().additionalInfo2).toEqual(undefined);
-  });
-
-  it('should not require add to cover sheet', () => {
-    expect(errors().addToCoversheet).toEqual(undefined);
   });
 
   describe('Inclusions', () => {
     it('should not require Certificate of Service', () => {
-      expect(errors().certificateOfService).toEqual(undefined);
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+          .certificateOfService,
+      ).toEqual(undefined);
     });
 
     describe('Has Certificate of Service', () => {
@@ -142,11 +200,15 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require certificate of service date be entered', () => {
-        expect(errors().certificateOfServiceDate).toEqual(
-          VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
-        );
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .certificateOfServiceDate,
+        ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
         rawEntity.certificateOfServiceDate = createISODateString();
-        expect(errors().certificateOfServiceDate).toEqual(undefined);
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .certificateOfServiceDate,
+        ).toEqual(undefined);
       });
 
       it('should not allow certificate of service date be in the future', () => {
@@ -154,46 +216,63 @@ describe('DocketEntryFactory', () => {
           howMuch: 1,
           units: 'days',
         });
-        expect(errors().certificateOfServiceDate).toEqual(
+
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .certificateOfServiceDate,
+        ).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
       });
     });
 
     it('should not require Attachments', () => {
-      expect(errors().attachments).toEqual(undefined);
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+          .attachments,
+      ).toEqual(undefined);
     });
 
     it('should not require Objections', () => {
-      expect(errors().objections).toEqual(undefined);
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors().objections,
+      ).toEqual(undefined);
     });
 
     describe('Motion Document', () => {
       beforeEach(() => {
         rawEntity.category = 'Motion';
-        rawEntity.documentType = 'Motion for Continuance';
+        rawEntity.eventCode = 'M006';
       });
 
       it('should require Objections', () => {
-        expect(errors().objections).toEqual(
-          VALIDATION_ERROR_MESSAGES.objections,
-        );
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .objections,
+        ).toEqual(VALIDATION_ERROR_MESSAGES.objections);
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
-        expect(errors().objections).toEqual(undefined);
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .objections,
+        ).toEqual(undefined);
       });
 
       it('should require Objections for an Amended document with a Motion previousDocument', () => {
         rawEntity.category = 'Miscellaneous';
         rawEntity.eventCode = 'AMAT';
         rawEntity.previousDocument = {
-          documentType: 'Motion for Continuance',
+          eventCode: 'M006',
         };
 
-        expect(errors().objections).toEqual(
-          VALIDATION_ERROR_MESSAGES.objections,
-        );
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .objections,
+        ).toEqual(VALIDATION_ERROR_MESSAGES.objections);
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
-        expect(errors().objections).toEqual(undefined);
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .objections,
+        ).toEqual(undefined);
       });
     });
 
@@ -203,7 +282,10 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should not require secondary file', () => {
-        expect(errors().secondaryDocumentFile).toEqual(undefined);
+        expect(
+          DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+            .secondaryDocumentFile,
+        ).toEqual(undefined);
       });
 
       describe('Secondary Document', () => {
@@ -212,7 +294,10 @@ describe('DocketEntryFactory', () => {
         });
 
         it('should validate secondary document', () => {
-          expect(errors().secondaryDocument).toEqual({
+          expect(
+            DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+              .secondaryDocument,
+          ).toEqual({
             category: VALIDATION_ERROR_MESSAGES.category,
             documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
           });
@@ -230,35 +315,54 @@ describe('DocketEntryFactory', () => {
       rawEntity.partyPrimary = true;
     });
 
-    it('should pass validation when hasOtherFilingParty is not defined', () => {
-      rawEntity.hasOtherFilingParty = undefined;
-      rawEntity.filers = ['abc'];
+    it(`should be required when the docket entry event code is ${AMICUS_BRIEF_EVENT_CODE}`, () => {
+      rawEntity.eventCode = AMICUS_BRIEF_EVENT_CODE;
 
-      expect(errors()).toBeNull();
+      const validationErrors = new DocketEntryFactory(
+        rawEntity,
+      ).getFormattedValidationErrors();
+
+      expect(validationErrors.otherFilingParty).toBeDefined();
+    });
+
+    it('should pass validation when hasOtherFilingParty is not defined and the docket entry event code is NOT "AMBR"', () => {
+      rawEntity.hasOtherFilingParty = undefined;
+      rawEntity.eventCode = 'O';
+      rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
+
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
     });
 
     it('should pass validation when hasOtherFilingParty is true and otherFilingParties has value', () => {
       rawEntity.hasOtherFilingParty = true;
       rawEntity.otherFilingParty = 'An Other Party';
 
-      expect(errors()).toBeNull();
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
     });
 
     it('should fail validation when hasOtherFilingParty is true and otherFilingParties has no value', () => {
       rawEntity.hasOtherFilingParty = true;
       rawEntity.otherFilingParty = undefined;
 
-      expect(errors()).toEqual({
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toEqual({
         otherFilingParty: 'Enter other filing party name.',
       });
     });
 
     it('should pass validation when hasOtherFilingParty is false and otherFilingParties has no value', () => {
       rawEntity.hasOtherFilingParty = false;
-      rawEntity.filers = ['abc'];
+      rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
       rawEntity.otherFilingParty = undefined;
 
-      expect(errors()).toBeNull();
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
     });
   });
 
@@ -274,24 +378,43 @@ describe('DocketEntryFactory', () => {
       rawEntity.isAutoGenerated = true;
       rawEntity.hasOtherFilingParty = false;
       rawEntity.otherFilingParty = undefined;
-      rawEntity.filers = ['abc'];
+      rawEntity.filers = undefined;
 
-      expect(errors()).toBeNull();
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
+    });
+
+    it('should be optional when the docket entry event code is "AMBR"', () => {
+      rawEntity.eventCode = AMICUS_BRIEF_EVENT_CODE;
+      rawEntity.otherFilingParty = 'Mike Tyson';
+
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
     });
 
     it('should be required when isAutoGenerated is false', () => {
+      rawEntity.servedAt = undefined;
+      rawEntity.partyIrsPractitioner = false;
+      rawEntity.partyPrivatePractitioner = false;
+      rawEntity.hasOtherFilingParty = false;
       rawEntity.isAutoGenerated = false;
 
-      expect(errors()).toEqual({
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toEqual({
         filers: 'Select a filing party',
       });
     });
 
     it('should be not required when isAutoGenerated is false, filers is not empty', () => {
       rawEntity.isAutoGenerated = false;
-      rawEntity.filers = ['abc'];
+      rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
 
-      expect(errors()).toBeNull();
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
     });
 
     it('should be not required when isAutoGenerated is false, filers is empty, and partyPrivatePractitioner is true', () => {
@@ -299,7 +422,9 @@ describe('DocketEntryFactory', () => {
       rawEntity.filers = [];
       rawEntity.partyPrivatePractitioner = true;
 
-      expect(errors()).toBeNull();
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toBeNull();
     });
 
     it('should be required when isAutoGenerated, filers, partyIrsPractitioner, and partyPrivatePractitioner are false', () => {
@@ -309,7 +434,9 @@ describe('DocketEntryFactory', () => {
       rawEntity.partyIrsPractitioner = false;
       rawEntity.hasOtherFilingParty = false;
 
-      expect(errors()).toEqual({
+      expect(
+        DocketEntryFactory(rawEntity).getFormattedValidationErrors(),
+      ).toEqual({
         filers: 'Select a filing party',
       });
     });

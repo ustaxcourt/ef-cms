@@ -2,23 +2,11 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../business/utilities/DateHandler';
+import { calculateTimeToLive } from '../calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
 
-const TIME_TO_EXIST = 60 * 60 * 24 * 8; // 8 days
-
 /**
- * Calculate the start of the this day, and then add on `TIME_TO_EXIST` to determine
- * how long the record should last on the `work-item|${section}` partition
- *
- * @returns {Number} Number of seconds since the epoch for when we want this record to expire
- */
-const calculateTimeToLive = () => {
-  const now = Math.floor(Date.now() / 1000);
-  return now - (now % 86400) + TIME_TO_EXIST;
-};
-
-/**
- * Create the record for the long term archive, broken out into its own partition based on the month
+ * Create the record for the long term archive, broken out into its own partition based on the year, month and day
  *
  * @param {Object} providers The providers object
  * @param {Object} providers.applicationContext The application context
@@ -32,15 +20,15 @@ const createSectionOutboxArchiveRecord = async ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  Item: TOutboxItem & TDynamoRecord;
+  Item: RawOutboxItem & TDynamoRecord;
   section: string;
 }) => {
-  const skMonth = formatDateString(Item.sk, FORMATS.YYYYMM);
+  const skMonthDay = formatDateString(Item.sk, FORMATS.YYYYMMDD);
 
   await put({
     Item: {
       ...Item,
-      pk: `section-outbox|${section}|${skMonth}`,
+      pk: `section-outbox|${section}|${skMonthDay}`,
     },
     applicationContext,
   });
@@ -53,22 +41,25 @@ const createSectionOutboxArchiveRecord = async ({
  * @param {Object} providers.applicationContext The application context
  * @param {Object} providers.Item The base object that gets stored in persistence
  * @param {String} providers.section docket or petitions
+ * @param {Number} providers.ttl the timestamp when this record expires
  * @returns {Promise} resolves upon completion of persistence request
  */
 const createSectionOutboxRecentRecord = ({
   applicationContext,
   Item,
   section,
+  ttl,
 }: {
   applicationContext: IApplicationContext;
-  Item: TOutboxItem & TDynamoRecord;
+  Item: RawOutboxItem & TDynamoRecord;
   section: string;
+  ttl: number;
 }) =>
   put({
     Item: {
       ...Item,
       pk: `section-outbox|${section}`,
-      ttl: calculateTimeToLive(),
+      ttl,
     },
     applicationContext,
   });
@@ -89,28 +80,38 @@ const createSectionOutboxRecords = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-  workItem: TOutboxItem;
+  workItem: RawWorkItem;
 }) => {
+  const sk = workItem.completedAt
+    ? workItem.completedAt
+    : (workItem as any).updatedAt;
   const Item: any = {
     ...workItem,
     gsi1pk: `work-item|${workItem.workItemId}`,
-    sk: workItem.completedAt
-      ? workItem.completedAt
-      : (workItem as any).updatedAt,
+    sk,
   };
+  const promises = [];
+  const ttl = calculateTimeToLive({ numDays: 8, timestamp: sk });
 
-  return Promise.all([
-    createSectionOutboxRecentRecord({
-      Item,
-      applicationContext,
-      section,
-    }),
+  if (ttl.numSeconds > 0) {
+    promises.push(
+      createSectionOutboxRecentRecord({
+        Item,
+        applicationContext,
+        section,
+        ttl: ttl.expirationTimestamp,
+      }),
+    );
+  }
+
+  promises.push(
     createSectionOutboxArchiveRecord({
       Item,
       applicationContext,
       section,
     }),
-  ]);
+  );
+  return Promise.all(promises);
 };
 
-export { TIME_TO_EXIST, createSectionOutboxRecords };
+export { createSectionOutboxRecords };
