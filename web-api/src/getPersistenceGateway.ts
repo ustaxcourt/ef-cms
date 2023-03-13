@@ -163,6 +163,7 @@ import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/wo
 import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
 import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
 import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
+import { updateWorkItemTrialLocation } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialLocation';
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
@@ -272,6 +273,7 @@ const gatewayMethods = {
     updateWorkItemCaseTitle,
     updateWorkItemDocketNumberSuffix,
     updateWorkItemTrialDate,
+    updateWorkItemTrialLocation,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
