@@ -276,9 +276,9 @@ describe('formattedDocketEntries', () => {
           },
           {
             createdAt: '2019-03-28T21:14:39.488Z',
-            docketEntryId: 'Ownership Disclosure Statement',
-            documentTitle: 'Ownership Disclosure Statement',
-            documentType: 'Ownership Disclosure Statement',
+            docketEntryId: 'Corporate Disclosure Statement',
+            documentTitle: 'Corporate Disclosure Statement',
+            documentType: 'Corporate Disclosure Statement',
             filingDate: '2019-03-28T21:14:39.488Z',
             index: 4,
             isOnDocketRecord: true,
@@ -308,7 +308,7 @@ describe('formattedDocketEntries', () => {
         { documentType: 'Petition' },
         { documentTitle: 'Request for Place of Trial' },
         { documentType: 'Other' },
-        { documentType: 'Ownership Disclosure Statement' },
+        { documentType: 'Corporate Disclosure Statement' },
       ]);
     });
   });

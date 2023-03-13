@@ -79,6 +79,14 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
   ],
   caseType: 'Select a case type',
+  corporateDisclosureFile: 'Upload a Corporate Disclosure Statement',
+  corporateDisclosureFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Corporate Disclosure Statement file size is empty',
+  ],
   docketEntries: 'At least one valid docket entry is required',
   docketNumber: 'Docket number is required',
   filingType: 'Select on whose behalf you are filing',
@@ -93,14 +101,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Please enter a valid IRS notice date',
   ],
   mailingDate: 'Enter a mailing date',
-  ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
-  ownershipDisclosureFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Ownership Disclosure Statement file size is empty',
-  ],
   partyType: 'Select a party type',
   petitionFile: 'Upload a Petition',
   petitionFileSize: [
@@ -214,7 +214,7 @@ const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
   obj.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee || false;
   obj.orderForFilingFee = rawCase.orderForFilingFee || false;
-  obj.orderForOds = rawCase.orderForOds || false;
+  obj.orderForCds = rawCase.orderForCds || false;
   obj.orderForRatification = rawCase.orderForRatification || false;
   obj.orderToShowCause = rawCase.orderToShowCause || false;
 
@@ -615,14 +615,14 @@ Case.VALIDATION_RULES = {
     .description(
       'Reminder for clerks to review the order for amended Petition And filing fee.',
     ),
+  orderForCds: joi
+    .boolean()
+    .optional()
+    .description('Reminder for clerks to review the order for CDS.'),
   orderForFilingFee: joi
     .boolean()
     .optional()
     .description('Reminder for clerks to review the order for filing fee.'),
-  orderForOds: joi
-    .boolean()
-    .optional()
-    .description('Reminder for clerks to review the order for ODS.'),
   orderForRatification: joi
     .boolean()
     .optional()

@@ -78,7 +78,7 @@ export const createCaseFromPaperAction = async ({
 }) => {
   const {
     applicationForWaiverOfFilingFeeFile,
-    ownershipDisclosureFile,
+    corporateDisclosureFile,
     petitionFile,
     requestForPlaceOfTrialFile,
     stinFile,
@@ -104,7 +104,7 @@ export const createCaseFromPaperAction = async ({
 
   const progressFunctions = setupPercentDone(
     {
-      ownership: ownershipDisclosureFile,
+      corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
       trial: requestForPlaceOfTrialFile,
@@ -122,8 +122,8 @@ export const createCaseFromPaperAction = async ({
         applicationForWaiverOfFilingFeeFile,
         applicationForWaiverOfFilingFeeUploadProgress:
           progressFunctions.waiverOfFilingFee,
-        ownershipDisclosureFile,
-        ownershipDisclosureUploadProgress: progressFunctions.ownership,
+        corporateDisclosureFile,
+        corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,
         petitionMetadata: form,
         petitionUploadProgress: progressFunctions.petition,

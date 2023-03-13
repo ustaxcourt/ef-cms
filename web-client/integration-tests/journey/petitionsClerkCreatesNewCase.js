@@ -99,12 +99,12 @@ export const petitionsClerkCreatesNewCase = (
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFile',
+      key: 'corporateDisclosureFile',
       value: fakeFile,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFileSize',
+      key: 'corporateDisclosureFileSize',
       value: 1,
     });
 

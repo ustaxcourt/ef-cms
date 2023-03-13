@@ -124,8 +124,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
+      orderForCds: false,
       orderForFilingFee: false,
-      orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
       petitioners: [

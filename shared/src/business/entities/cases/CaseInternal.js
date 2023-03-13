@@ -48,15 +48,15 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   if (this.orderDesignatingPlaceOfTrial === false) {
     this.orderDesignatingPlaceOfTrial = undefined;
   }
-  this.orderForOds = rawCase.orderForOds;
+  this.orderForCds = rawCase.orderForCds;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition;
   this.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee;
   this.orderForFilingFee = rawCase.orderForFilingFee;
   this.orderForRatification = rawCase.orderForRatification;
   this.orderToShowCause = rawCase.orderToShowCause;
-  this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
-  this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
+  this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
+  this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
@@ -113,7 +113,7 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = {
     'Upload or scan an Application for Waiver of Filing Fee (APW)',
   chooseAtLeastOneValue:
     'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
-  ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement(ODS)',
+  corporateDisclosureFile: 'Upload or scan Corporate Disclosure Statement(CDS)',
   petitionFile: 'Upload or scan a Petition',
   petitionPaymentDate: [
     {
@@ -151,6 +151,31 @@ const paperRequirements = joi
     archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
+    corporateDisclosureFile: joi.object().when('partyType', {
+      is: joi
+        .exist()
+        .valid(
+          PARTY_TYPES.corporation,
+          PARTY_TYPES.partnershipAsTaxMattersPartner,
+          PARTY_TYPES.partnershipBBA,
+          PARTY_TYPES.partnershipOtherThanTaxMatters,
+        ),
+      otherwise: joi.optional().allow(null),
+      then: joi.when('orderForCds', {
+        is: joi.not(true),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }),
+    }),
+    corporateDisclosureFileSize:
+      JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'corporateDisclosureFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
@@ -164,35 +189,10 @@ const paperRequirements = joi
     orderForAmendedPetition: Case.VALIDATION_RULES.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
       Case.VALIDATION_RULES.orderForAmendedPetitionAndFilingFee,
+    orderForCds: Case.VALIDATION_RULES.orderForCds,
     orderForFilingFee: Case.VALIDATION_RULES.orderForFilingFee,
-    orderForOds: Case.VALIDATION_RULES.orderForOds,
     orderForRatification: Case.VALIDATION_RULES.orderForRatification,
     orderToShowCause: Case.VALIDATION_RULES.orderToShowCause,
-    ownershipDisclosureFile: joi.object().when('partyType', {
-      is: joi
-        .exist()
-        .valid(
-          PARTY_TYPES.corporation,
-          PARTY_TYPES.partnershipAsTaxMattersPartner,
-          PARTY_TYPES.partnershipBBA,
-          PARTY_TYPES.partnershipOtherThanTaxMatters,
-        ),
-      otherwise: joi.optional().allow(null),
-      then: joi.when('orderForOds', {
-        is: joi.not(true),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
-    }),
-    ownershipDisclosureFileSize:
-      JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
-        'ownershipDisclosureFile',
-        {
-          is: joi.exist().not(null),
-          otherwise: joi.optional().allow(null),
-          then: joi.required(),
-        },
-      ),
     partyType: JoiValidationConstants.STRING.valid(
       ...Object.values(PARTY_TYPES),
     ).required(),

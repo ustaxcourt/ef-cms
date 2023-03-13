@@ -183,7 +183,7 @@ type TCase = {
   orderForAmendedPetition: boolean;
   orderForAmendedPetitionAndFilingFee: boolean;
   orderForFilingFee: boolean;
-  orderForOds: boolean;
+  orderForCds: boolean;
   orderForRatification: boolean;
   orderToShowCause: boolean;
   partyType: string;

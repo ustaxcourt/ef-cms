@@ -110,24 +110,24 @@ export const WhatToExpect = () => (
               Download Petition form (T.C. Form 2)
             </Button>
           </p>
-          <p className="label">3. Ownership Disclosure Statement (ODS)</p>
+          <p className="label">3. Corporate Disclosure Statement (CDS)</p>
           <p>
             If you’re filing on behalf of a business (this includes a
             corporation, partnership, and LLC), you’ll need to complete this to
-            provide the court additional information about ownership interests
+            provide the court additional information about corporate interests
             in the business.
             <br />
             <Button
               link
               className="usa-link--external text-left mobile-text-wrap"
-              href="https://www.ustaxcourt.gov/resources/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+              href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
               icon="file-pdf"
               iconColor="blue"
               overrideMargin="margin-right-1"
               rel="noopener noreferrer"
               target="_blank"
             >
-              Download Ownership Disclosure Statement (T.C. Form 6)
+              Download Corporate Disclosure Statement (T.C. Form 6)
             </Button>
           </p>
         </span>

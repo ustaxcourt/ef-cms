@@ -199,7 +199,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     });
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeTruthy();
-    expect(result.showOwnershipDisclosure).toBeFalsy();
+    expect(result.showCorporateDisclosure).toBeFalsy();
 
     // Corporation party type primary contact
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
@@ -221,7 +221,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       state: cerebralTest.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showOwnershipDisclosure).toBeTruthy();
+    expect(result.showCorporateDisclosure).toBeTruthy();
 
     // Partnership tax matters party type primary contact
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
@@ -244,22 +244,22 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     });
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
-    expect(result.showOwnershipDisclosure).toBeTruthy();
+    expect(result.showCorporateDisclosure).toBeTruthy();
 
     await cerebralTest.runSequence('submitFilePetitionSequence');
 
     expect(cerebralTest.getState('alertError').messages).toContain(
-      VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
+      VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
     );
 
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'ownershipDisclosureFile',
+      key: 'corporateDisclosureFile',
       value: fakeFile,
     });
 
     await cerebralTest.runSequence('submitFilePetitionSequence');
     expect(cerebralTest.getState('alertError').messages[0]).not.toContain(
-      VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
+      VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
     );
 
     // Partnership other than tax matters party type primary contact
@@ -321,9 +321,9 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       state: cerebralTest.getState(),
     });
     expect(result.showOtherFilingTypeOptions).toBeTruthy();
-    expect(result.showOwnershipDisclosure).toBeFalsy();
+    expect(result.showCorporateDisclosure).toBeFalsy();
     expect(
-      cerebralTest.getState('petition.ownershipDisclosureFile'),
+      cerebralTest.getState('petition.corporateDisclosureFile'),
     ).toBeUndefined();
 
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {

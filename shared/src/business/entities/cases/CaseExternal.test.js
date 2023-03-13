@@ -12,7 +12,7 @@ const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
 describe('CaseExternal entity', () => {
   describe('isValid', () => {
-    it('requires ownership disclosure if filing type is a business', () => {
+    it('requires corporate disclosure if filing type is a business', () => {
       const caseExternal = new CaseExternal(
         {
           businessType: PARTY_TYPES.corporation,
@@ -25,10 +25,10 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
-    it('does not require ownership disclosure if filing type not set', () => {
+    it('does not require corporate disclosure if filing type not set', () => {
       const petition = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
@@ -39,10 +39,10 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFile,
+        petition.getFormattedValidationErrors().corporateDisclosureFile,
       ).toBeUndefined();
     });
-    it('does not require ownership disclosure if filing type not a business', () => {
+    it('does not require corporate disclosure if filing type not a business', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
@@ -54,7 +54,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
       ).toBeUndefined();
     });
     it('requires stinFile', () => {
@@ -225,15 +225,15 @@ describe('CaseExternal entity', () => {
     });
   });
 
-  describe('ownership disclosure file size', () => {
-    it('should inform you if ownership disclosure file size is greater than the PDF max file size', () => {
+  describe('corporate disclosure file size', () => {
+    it('should inform you if corporate disclosure file size is greater than the PDF max file size', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
+          corporateDisclosureFile: new File([], 'cdsFile.pdf'),
+          corporateDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
           filingType: 'Myself',
           hasIrsNotice: true,
-          ownershipDisclosureFile: new File([], 'odsFile.pdf'),
-          ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
           partyType: PARTY_TYPES.nextFriendForMinor,
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
@@ -241,35 +241,18 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
       ).toEqual(
-        VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[0].message,
+        VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[0].message,
       );
     });
 
-    it('should inform you if ownership disclosure file size is zero', () => {
+    it('should inform you if corporate disclosure file size is zero', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          ownershipDisclosureFile: new File([], 'test.pdf'),
-          ownershipDisclosureFileSize: 0,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
-      expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
-    });
-
-    it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
-      const caseExternal = new CaseExternal(
-        {
-          caseType: CASE_TYPES_MAP.other,
+          corporateDisclosureFile: new File([], 'test.pdf'),
+          corporateDisclosureFileSize: 0,
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.nextFriendForMinor,
@@ -279,17 +262,34 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+    });
+
+    it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
+      const caseExternal = new CaseExternal(
+        {
+          caseType: CASE_TYPES_MAP.other,
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          partyType: PARTY_TYPES.nextFriendForMinor,
+          preferredTrialCity: 'Memphis, Tennessee',
+          procedureType: 'Small',
+        },
+        { applicationContext },
+      );
+      expect(
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
       ).toBeUndefined();
     });
 
-    it('should error on ownershipDisclosureFileSize when ownershipDisclosureFile is defined', () => {
+    it('should error on corporateDisclosureFileSize when corporateDisclosureFile is defined', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
+          corporateDisclosureFile: new File([], 'testStinFile.pdf'),
           filingType: 'Myself',
           hasIrsNotice: true,
-          ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
           partyType: PARTY_TYPES.nextFriendForMinor,
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
@@ -297,8 +297,8 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
     });
   });
 });
