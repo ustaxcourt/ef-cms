@@ -402,6 +402,15 @@ const updateCaseWorkItems = async ({
         }),
       );
     }
+    if (previousCase.trialLocation !== updatedCase.trialLocation) {
+      workItemRequestFunctions.push(() =>
+        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems({
+          applicationContext,
+          trialLocation: updatedCase.trialLocation || null,
+          workItemId,
+        }),
+      );
+    }
 
     return workItemRequestFunctions;
   };

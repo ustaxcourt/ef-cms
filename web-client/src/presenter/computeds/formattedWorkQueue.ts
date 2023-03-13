@@ -81,12 +81,13 @@ export const formatWorkItem = ({
     }
   }
 
-  // result.formattedCaseStatus = setFormattedCaseStatus({
-  //   applicationContext,
-  //   workItem: result,
-  // });
+  result.formattedCaseStatus = setFormattedCaseStatus({
+    applicationContext,
+    workItem: result,
+  });
+  console.log(result.formattedCaseStatus);
 
-  result.formattedCaseStatus = result.caseStatus;
+  // result.formattedCaseStatus = result.caseStatus;
 
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
@@ -407,12 +408,16 @@ const setFormattedCaseStatus = ({ applicationContext, workItem }) => {
     applicationContext.getConstants();
   let formattedCaseStatus = workItem.caseStatus;
 
-  if (workItem.caseStatus === STATUS_TYPES.calendared) {
+  if (
+    workItem.caseStatus === STATUS_TYPES.calendared &&
+    workItem.trialLocation &&
+    workItem.trialDate
+  ) {
     let formattedTrialLocation = '';
     if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
       formattedTrialLocation = applicationContext
         .getUtilities()
-        .abbreviateState(workItem.trialLocation);
+        .abbreviateState(workItem.trialLocation ?? '');
     } else {
       formattedTrialLocation = workItem.trialLocation;
     }

@@ -54,6 +54,7 @@ _OutboxItem.prototype.init = function init(
   this.leadDocketNumber = rawOutboxItem.leadDocketNumber;
   this.section = rawOutboxItem.section;
   this.trialDate = rawOutboxItem.trialDate;
+  this.trialLocation = rawOutboxItem.trialLocation;
   this.workItemId =
     rawOutboxItem.workItemId || applicationContext.getUniqueId();
 };
