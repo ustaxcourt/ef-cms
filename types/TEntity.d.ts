@@ -10,18 +10,6 @@ type TRawPenalty = {
   penaltyType: string;
 };
 
-type TDynamoRecord = {
-  pk: string;
-  sk: string;
-  gsi1pk?: string;
-  gsi2pk?: string;
-  ttl?: number;
-  [key: string]: any;
-};
-
-type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;
-type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
-
 type TSectionWorkItem = {
   createdAt: string;
   docketEntry: RawDocketEntry[];
