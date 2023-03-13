@@ -43,7 +43,7 @@ describe('start a case computed', () => {
     expect(result.showPetitionFileValid).toBeTruthy();
   });
 
-  it('sets showOwnershipDisclosure when the party is business', () => {
+  it('sets showCorporateDisclosure when the party is business', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
@@ -54,10 +54,10 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.showOwnershipDisclosure).toBeTruthy();
+    expect(result.showCorporateDisclosure).toBeTruthy();
   });
 
-  it('clears showOwnershipDisclosure when the party is not business', () => {
+  it('clears showCorporateDisclosure when the party is not business', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
@@ -68,7 +68,7 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.showOwnershipDisclosure).toBeFalsy();
+    expect(result.showCorporateDisclosure).toBeFalsy();
   });
 
   it('sets showHasIrsNoticeOptions when hasIrsNotice is Yes', () => {

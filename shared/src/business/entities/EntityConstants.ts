@@ -535,9 +535,9 @@ export const INITIAL_DOCUMENT_TYPES = {
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
   },
-  ownershipDisclosure: {
-    documentTitle: 'Ownership Disclosure Statement',
-    documentType: 'Ownership Disclosure Statement',
+  corporateDisclosure: {
+    documentTitle: 'Corporate Disclosure Statement',
+    documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
   },
   petition: {
@@ -555,7 +555,7 @@ export const INITIAL_DOCUMENT_TYPES = {
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
-  ownershipDisclosure: 'ownershipDisclosureFile',
+  corporateDisclosure: 'corporateDisclosureFile',
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
@@ -564,8 +564,8 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-  ownershipDisclosureFile:
-    INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+  corporateDisclosureFile:
+    INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
   requestForPlaceOfTrialFile:
     INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
