@@ -1,8 +1,6 @@
-const AWS = require('aws-sdk');
-const createApplicationContext = require('./src/applicationContext');
-const {
-  processItems,
-} = require('./workflow-terraform/migration/main/lambdas/migration-segments');
+import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
+import AWS from 'aws-sdk';
+import createApplicationContext from './src/applicationContext';
 
 const applicationContext = createApplicationContext({});
 
@@ -24,9 +22,9 @@ const applicationContext = createApplicationContext({});
 
   await documentClient
     .scan({
-      ExclusiveStartKey: null,
+      ExclusiveStartKey: undefined,
       Segment: 0,
-      TableName: process.env.SOURCE_TABLE,
+      TableName: process.env.SOURCE_TABLE!,
       TotalSegments: 1,
     })
     .promise()
@@ -34,6 +32,8 @@ const applicationContext = createApplicationContext({});
       await processItems(applicationContext, {
         documentClient,
         items: results.Items,
+        ranMigrations: undefined,
+        segment: undefined,
       });
     });
 })();
