@@ -348,8 +348,6 @@ const updateCaseWorkItems = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
-  console.log('work items on case', workItems);
-
   const updateWorkItemRecordFunctions = (
     updatedCase,
     previousCase,
