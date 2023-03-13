@@ -8,11 +8,12 @@ exports.updateAssociatedJudgeOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemAssociatedJudge({
+    applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord({
       applicationContext,
-      associatedJudge,
-      docketNumber: workItem.docketNumber,
-      workItemId: workItem.workItemId,
+      attributeKey: 'associatedJudge',
+      attributeValue: associatedJudge,
+      pk: workItem.pk,
+      sk: workItem.sk,
     }),
   );
 
