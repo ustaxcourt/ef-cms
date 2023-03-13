@@ -8,7 +8,7 @@ exports.updateTrialLocationOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemTrialDate({
+    applicationContext.getPersistenceGateway().updateWorkItemTrialLocation({
       applicationContext,
       docketNumber: workItem.docketNumber,
       trialLocation,
