@@ -8,11 +8,12 @@ exports.updateTrialLocationOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemTrialLocation({
+    applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord({
       applicationContext,
-      docketNumber: workItem.docketNumber,
-      trialLocation,
-      workItemId: workItem.workItemId,
+      attributeKey: 'trialLocation',
+      attributeValue: trialLocation,
+      pk: workItem.pk,
+      sk: workItem.sk,
     }),
   );
 

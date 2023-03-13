@@ -138,6 +138,7 @@ import { setMessageAsRead } from '../../shared/src/persistence/dynamo/messages/s
 import { setPriorityOnAllWorkItems } from '../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
+import { updateAttributeOnDynamoRecord } from '../../shared/src/persistence/dynamo/workitems/updateAttributeOnDynamoRecord';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from '../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from '../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing';
@@ -150,6 +151,7 @@ import {
 } from '../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from '../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode';
 import { updateMessage } from '../../shared/src/persistence/dynamo/messages/updateMessage';
+import { updateOutboxItemCaseStatus } from '../../shared/src/persistence/dynamo/workitems/updateOutboxItemCaseStatus';
 import { updatePractitionerUser } from '../../shared/src/persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -251,6 +253,7 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
+    updateAttributeOnDynamoRecord,
     updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
@@ -260,6 +263,7 @@ const gatewayMethods = {
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updateMessage,
+    updateOutboxItemCaseStatus,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
     updateTrialSession,

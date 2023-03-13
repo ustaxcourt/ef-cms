@@ -334,7 +334,8 @@ const updateCaseWorkItems = async ({
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.status !== caseToUpdate.status ||
-    oldCase.trialDate !== caseToUpdate.trialDate;
+    oldCase.trialDate !== caseToUpdate.trialDate ||
+    oldCase.trialLocation !== caseToUpdate.trialLocation;
 
   if (!workItemsRequireUpdate) {
     return [];
@@ -346,6 +347,8 @@ const updateCaseWorkItems = async ({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });
+
+  console.log('work items on case', workItems);
 
   const updateWorkItemRecordFunctions = (
     updatedCase,
