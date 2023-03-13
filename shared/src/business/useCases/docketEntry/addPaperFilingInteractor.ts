@@ -142,6 +142,8 @@ export const addPaperFilingInteractor = async (
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
     );

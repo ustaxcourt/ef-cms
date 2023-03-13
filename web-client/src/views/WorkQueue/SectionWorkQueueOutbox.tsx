@@ -86,7 +86,9 @@ export const SectionWorkQueueOutbox = connect(
                     </td>
                   )}
                   {!workQueueHelper.hideCaseStatusColumn && (
-                    <td className="message-queue-row">{item.caseStatus}</td>
+                    <td className="message-queue-row">
+                      {item.formattedCaseStatus}
+                    </td>
                   )}
                   {workQueueHelper.showAssignedToColumn && (
                     <td className="message-queue-row">

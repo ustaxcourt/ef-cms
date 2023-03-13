@@ -40,6 +40,8 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,
+      trialDate: caseToAdd.trialDate,
+      trialLocation: caseToAdd.trialLocation,
     },
     { applicationContext },
   );
