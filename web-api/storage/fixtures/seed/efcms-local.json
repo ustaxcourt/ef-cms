@@ -204,7 +204,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|100-22",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "100-22W",
     "orderForRatification": false,
@@ -229,7 +228,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 22000100,
+    "sortableDocketNumber": 2022000100,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -335,7 +335,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -362,7 +364,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -378,6 +382,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "100-22W",
     "updatedAt": "2022-02-01T17:21:07.511Z",
     "completedAt": "2022-02-01T17:21:07.638Z",
@@ -514,7 +519,6 @@
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|101-11",
-    "orderForCds": false,
     "docketNumberWithSuffix": "101-11",
     "orderForRatification": true,
     "petitioners": [
@@ -539,8 +543,9 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 11000101,
+    "sortableDocketNumber": 2011000101,
     "mailingDate": "15-Dec-1973",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
@@ -631,7 +636,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -668,7 +675,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -705,7 +714,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -724,6 +735,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|c3786b1e-0b95-481c-9ffb-efed1930f600",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-11",
     "updatedAt": "2021-10-29T13:41:06.781Z",
     "completedAt": "2021-10-29T13:41:09.339Z",
@@ -763,6 +775,7 @@
     "assigneeName": "Test Docketclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|d71e75cc-63a5-48de-bd02-cce5db481e41",
+    "gsi2pk": "assigneeId|2805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-11",
     "updatedAt": "2021-10-29T13:42:43.040Z",
     "completedAt": "2021-10-29T13:42:43.040Z",
@@ -808,7 +821,6 @@
     "entityName": "Case",
     "caseCaption": "Gwendolyn Cross, Gwendolyn Cross, Partnership Representative, Petitioner(s)",
     "sk": "case|101-16",
-    "orderForCds": true,
     "docketNumberWithSuffix": "101-16",
     "orderForRatification": false,
     "petitioners": [
@@ -833,8 +845,9 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 16000101,
+    "sortableDocketNumber": 2016000101,
     "mailingDate": "27-Oct-1972",
+    "orderForCds": true,
     "orderForAmendedPetition": true,
     "orderToShowCause": false,
     "preferredTrialCity": "Phoenix, Arizona",
@@ -880,7 +893,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -963,7 +978,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
@@ -1000,7 +1017,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -1019,6 +1038,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|186c80b7-9fda-47b9-b485-982d92b6de53",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-16",
     "updatedAt": "2021-10-29T13:06:21.411Z",
     "completedAt": "2021-10-29T13:06:24.935Z",
@@ -1058,6 +1078,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|b8632aec-0a6e-4084-b29e-a7131e0eb24d",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-16",
     "updatedAt": "2021-10-29T13:07:19.785Z",
     "completedAt": "2021-10-29T13:07:19.785Z",
@@ -1087,7 +1108,7 @@
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 19000101,
+    "sortableDocketNumber": 2019000101,
     "partyType": "Petitioner",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -1269,7 +1290,6 @@
     "caseCaption": "Bill Burr, Petitioner",
     "sk": "case|101-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "101-20S",
     "orderForRatification": false,
     "petitioners": [
@@ -1420,8 +1440,9 @@
     "initialDocketNumberSuffix": "S",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "S",
-    "sortableDocketNumber": 20000101,
+    "sortableDocketNumber": 2020000101,
     "trialDate": "2020-11-27T05:00:00.000Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -1454,7 +1475,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -1476,7 +1499,9 @@
     "createdAt": "2020-01-02T16:05:45.979Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "cb323daf-c541-4645-bb44-232255d03d40",
@@ -1541,7 +1566,6 @@
     "entityName": "Case",
     "caseCaption": "Mona Schultz, Petitioner",
     "sk": "case|101-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "101-21L",
     "orderForRatification": false,
@@ -1566,7 +1590,8 @@
     ],
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "sortableDocketNumber": 22000101,
+    "sortableDocketNumber": 2021000101,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Seattle, Washington",
@@ -1899,7 +1924,9 @@
     "eventCode": "EVID",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -2110,7 +2137,9 @@
     "eventCode": "P",
     "createdAt": "2021-03-01T16:26:49.115Z",
     "processingStatus": "pending",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Mona Schultz",
     "docketEntryId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
@@ -2724,7 +2753,9 @@
     "eventCode": "STIN",
     "createdAt": "2021-03-01T16:26:49.119Z",
     "processingStatus": "pending",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Mona Schultz",
     "docketEntryId": "2efcd272-da92-4e31-bedc-28cdad2e08b0",
@@ -2914,7 +2945,9 @@
     "eventCode": "MOTR",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -3741,7 +3774,9 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"filersMap\":{\"7805d1ab-18d0-43ec-bafb-654e83405416\":true},\"filers\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"practitioner\":[],\"dateReceivedMonth\":1,\"dateReceivedDay\":1,\"dateReceivedYear\":2018,\"primaryDocumentFileSize\":100,\"eventCode\":\"A\",\"category\":\"Answer (filed by respondent only)\",\"documentType\":\"Answer\",\"documentTitle\":\"Answer\",\"scenario\":\"Standard\",\"pending\":true,\"certificateOfServiceDate\":null,\"dateReceived\":\"2018-01-01T05:00:00.000Z\",\"createdAt\":\"2018-01-01T05:00:00.000Z\",\"docketNumber\":\"101-21\",\"isFileAttached\":false,\"isPaper\":true,\"receivedAt\":\"2018-01-01T05:00:00.000Z\"}",
     "pk": "case|101-21",
@@ -8046,6 +8081,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|7a81a95d-c695-4cc1-97db-19ecfacbd1f0",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-21L",
     "docketEntry": {
       "eventCode": "A",
@@ -9225,6 +9261,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|df474063-f849-4c55-8934-5f43be7dd4c2",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-21L",
     "updatedAt": "2021-03-01T16:27:08.589Z",
     "completedAt": "2021-03-01T16:27:08.643Z",
@@ -9449,6 +9486,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|ebb32cfc-9d54-455b-bdf7-978d15ba7cf8",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-21L",
     "updatedAt": "2021-03-01T16:27:03.544Z",
     "completedAt": "2021-03-01T16:27:03.606Z",
@@ -9835,7 +9873,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|101-22",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "101-22W",
     "orderForRatification": false,
@@ -9860,7 +9897,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 22000101,
+    "sortableDocketNumber": 2022000101,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -9966,7 +10004,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -9993,7 +10033,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10009,6 +10051,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|55cd0550-6191-4014-bef8-da56f8cf3685",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "101-22W",
     "updatedAt": "2022-02-15T16:52:14.160Z",
     "completedAt": "2022-02-15T16:52:14.314Z",
@@ -10129,10 +10172,180 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2023-03-13T22:23:32.843Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "createdAt": "2023-03-13T22:23:32.843Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|101-23",
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "101-23W",
+    "orderForRatification": false,
+    "petitioners": [
+      {
+        "isAddressSealed": false,
+        "address3": "Architecto assumenda",
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "address2": "Suscipit animi solu",
+        "city": "Aspernatur nostrum s",
+        "address1": "68 Fabien Freeway",
+        "postalCode": "89499",
+        "contactType": "primary",
+        "sealedAndUnavailable": false,
+        "countryType": "domestic",
+        "serviceIndicator": "Electronic",
+        "phone": "+1 (537) 235-6147",
+        "name": "Brett Osborne",
+        "state": "AK",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "sortableDocketNumber": 2023000101,
+    "orderForCds": false,
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|101-23",
+    "docketNumber": "101-23",
+    "statistics": [],
+    "status": "New"
+  },
+  {
+    "stampData": {},
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2023-03-13T22:23:32.843Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2023-03-13T04:00:00.000Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2023-03-13T22:23:32.845Z",
+    "processingStatus": "complete",
+    "filers": [],
+    "entityName": "DocketEntry",
+    "docketEntryId": "384f04a1-9c16-4417-9620-8fcc9a5894cf",
+    "sk": "docket-entry|384f04a1-9c16-4417-9620-8fcc9a5894cf",
+    "pk": "case|101-23",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "101-23",
+    "addToCoversheet": false
+  },
+  {
+    "stampData": {},
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2023-03-13T22:23:32.843Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2023-03-13T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2023-03-13T22:23:32.844Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "816c2c35-c645-44bc-8079-1fe162ea1c93",
+    "sk": "docket-entry|816c2c35-c645-44bc-8079-1fe162ea1c93",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "pk": "case|101-23",
+    "docketNumber": "101-23"
+  },
+  {
+    "stampData": {},
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2023-03-13T22:23:32.843Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2023-03-13T04:00:00.000Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2023-03-13T22:23:32.846Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "ceb40c30-d2b1-4c36-b839-426a108bd4cd",
+    "sk": "docket-entry|ceb40c30-d2b1-4c36-b839-426a108bd4cd",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "index": 0,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "pk": "case|101-23",
+    "docketNumber": "101-23"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|7b19ef58-a023-4b3d-8e77-2d6141504732",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "7b19ef58-a023-4b3d-8e77-2d6141504732",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2023-03-13T22:23:32.845Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|7b19ef58-a023-4b3d-8e77-2d6141504732",
+    "docketNumberWithSuffix": "101-23W",
+    "docketEntry": {
+      "eventCode": "P",
+      "createdAt": "2023-03-13T22:23:32.844Z",
+      "documentType": "Petition",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "816c2c35-c645-44bc-8079-1fe162ea1c93",
+      "documentTitle": "Petition",
+      "isFileAttached": true,
+      "receivedAt": "2023-03-13T04:00:00.000Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|101-23",
+    "docketNumber": "101-23",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2023-03-13T22:23:32.845Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
     "procedureType": "Small",
     "docketNumberSuffix": "P",
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
-    "sortableDocketNumber": 19000102,
+    "sortableDocketNumber": 2019000102,
     "partyType": "Petitioner & spouse",
     "receivedAt": "2019-03-01T21:42:29.073Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10304,7 +10517,6 @@
     "caseCaption": "Eve Brewer, Petitioner",
     "sk": "case|102-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "102-20S",
     "orderForRatification": false,
     "petitioners": [
@@ -10326,8 +10538,9 @@
     ],
     "initialDocketNumberSuffix": "S",
     "docketNumberSuffix": "S",
-    "sortableDocketNumber": 20000102,
+    "sortableDocketNumber": 2020000102,
     "noticeOfTrialDate": "2020-01-21T16:41:39.474Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -10400,7 +10613,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -10465,7 +10680,9 @@
     "createdAt": "2020-01-21T16:41:39.481Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
@@ -10499,7 +10716,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -10576,7 +10795,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|102-22",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "102-22W",
     "orderForRatification": false,
@@ -10601,7 +10819,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 22000102,
+    "sortableDocketNumber": 2022000102,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -10662,7 +10881,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -10690,7 +10911,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -10739,7 +10962,6 @@
     "caseCaption": "Samson Workman, Petitioner",
     "sk": "case|103-19",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "103-19S",
     "orderForRatification": false,
     "petitioners": [
@@ -10763,7 +10985,8 @@
     ],
     "initialDocketNumberSuffix": "S",
     "docketNumberSuffix": "S",
-    "sortableDocketNumber": 19000103,
+    "sortableDocketNumber": 2019000103,
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -10903,7 +11126,9 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
+    "filers": [
+      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -10985,6 +11210,7 @@
     "highPriority": false,
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
+    "gsi2pk": "assigneeId|dabbad00-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "103-19S",
     "docketEntry": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -11020,7 +11246,6 @@
     "caseCaption": "Reuben Blair, Petitioner",
     "sk": "case|103-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "103-20L",
     "orderForRatification": false,
     "petitioners": [
@@ -11046,9 +11271,10 @@
     "initialDocketNumberSuffix": "L",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "L",
-    "sortableDocketNumber": 20000103,
+    "sortableDocketNumber": 2020000103,
     "trialDate": "2020-11-27T05:00:00.000Z",
     "noticeOfTrialDate": "2020-01-23T21:45:14.136Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -11129,7 +11355,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -11170,7 +11398,9 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
@@ -11243,7 +11473,9 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -11311,7 +11543,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|103-20",
     "servedAt": "2020-09-25T19:27:16.630Z",
@@ -11338,7 +11572,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -11360,7 +11596,9 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
@@ -11508,7 +11746,6 @@
     "caseCaption": "Hanan Al Hroub, Petitioner",
     "sk": "case|104-17",
     "docketNumberWithSuffix": "104-17R",
-    "orderForCds": false,
     "orderForRatification": false,
     "petitioners": [
       {
@@ -11529,9 +11766,10 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": "R",
-    "sortableDocketNumber": 20000104,
+    "sortableDocketNumber": 2017000104,
     "mailingDate": "04/12/2020",
     "noticeOfTrialDate": "2020-04-14T19:59:46.087Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -11608,7 +11846,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -11644,7 +11884,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -11677,7 +11919,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -11695,6 +11939,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "104-17",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
@@ -11748,7 +11993,6 @@
     "caseCaption": "Hanan Al Hroub, Petitioner",
     "sk": "case|104-18",
     "docketNumberWithSuffix": "104-18R",
-    "orderForCds": false,
     "orderForRatification": false,
     "petitioners": [
       {
@@ -11769,9 +12013,10 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": "R",
-    "sortableDocketNumber": 20000104,
+    "sortableDocketNumber": 2018000104,
     "mailingDate": "04/12/2020",
     "noticeOfTrialDate": "2020-04-14T19:59:46.087Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -11848,7 +12093,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -11884,7 +12131,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -11917,7 +12166,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -11935,6 +12186,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "104-18",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
@@ -11989,7 +12241,6 @@
     "caseCaption": "Mufutau Wade, Petitioner",
     "sk": "case|104-19",
     "filingType": "A business",
-    "orderForCds": true,
     "docketNumberWithSuffix": "104-19",
     "orderForRatification": true,
     "petitioners": [
@@ -12014,7 +12265,8 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 19000104,
+    "sortableDocketNumber": 2019000104,
+    "orderForCds": true,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": true,
     "orderToShowCause": true,
@@ -12231,7 +12483,6 @@
     "entityName": "Case",
     "caseCaption": "Hanan Al Hroub, Petitioner",
     "sk": "case|104-20",
-    "orderForCds": false,
     "docketNumberWithSuffix": "104-20R",
     "orderForRatification": false,
     "petitioners": [
@@ -12253,9 +12504,10 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": "R",
-    "sortableDocketNumber": 20000104,
+    "sortableDocketNumber": 2020000104,
     "mailingDate": "04/12/2020",
     "noticeOfTrialDate": "2020-04-14T19:59:46.087Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -12333,7 +12585,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -12369,7 +12623,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -12402,7 +12658,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -12420,6 +12678,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "104-20",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
@@ -12467,7 +12726,6 @@
     "caseCaption": "Caryn Wall, Petitioner",
     "sk": "case|105-19",
     "filingType": "Individual petitioner",
-    "orderForCds": false,
     "docketNumberWithSuffix": "105-19",
     "orderForRatification": false,
     "petitioners": [
@@ -12491,7 +12749,8 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 19000105,
+    "sortableDocketNumber": 2019000105,
+    "orderForCds": false,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -12590,7 +12849,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
+    "representing": [
+      "28cae029-bae2-4eef-ac54-878fbbab65e3"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -12623,10 +12884,10 @@
     "createdAt": "2020-04-29T15:50:41.686Z",
     "entityName": "Case",
     "caseCaption": "Astra Santiago, Petitioner",
-    "orderForCds": false,
     "orderForRatification": false,
     "privatePractitioners": [],
     "noticeOfTrialDate": "2020-04-29T15:50:41.687Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "New York City, New York",
@@ -12670,7 +12931,7 @@
     "litigationCosts": 19824.99,
     "docketNumberSuffix": null,
     "correspondence": [],
-    "sortableDocketNumber": 20000106,
+    "sortableDocketNumber": 2020000105,
     "archivedDocketEntries": [],
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "initialCaption": "Astra Santiago, Petitioner",
@@ -12816,7 +13077,9 @@
     "eventCode": "M000",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "freeText": "For testing Stamp Data",
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
@@ -12853,7 +13116,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
@@ -12888,7 +13153,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
@@ -12956,7 +13223,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -13034,6 +13303,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|551a67f8-ec18-4baa-89b8-797dbc31e52a",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "105-20",
     "updatedAt": "2022-08-05T20:25:50.076Z",
     "completedAt": "2022-08-05T20:25:50.219Z",
@@ -13077,7 +13347,6 @@
     "caseCaption": "Denise Gould, Petitioner",
     "sk": "case|106-19",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "106-19",
     "orderForRatification": false,
     "petitioners": [
@@ -13101,7 +13370,8 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 19000106,
+    "sortableDocketNumber": 2019000106,
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -13181,7 +13451,9 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -13270,30 +13542,34 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
   },
   {
     "associatedJudge": "Chief Judge",
-    "completedAt": "2019-07-12T17:11:27.244Z",
     "caseStatus": "New",
-    "completedMessage": "completed",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "section": "docket",
     "workItemId": "2b8ef08e-50be-4f9b-8a96-57baa5112f02",
-    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
-    "sentBySection": "docket",
     "createdAt": "2019-07-12T17:11:27.244Z",
     "highPriority": false,
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "106-19",
+    "updatedAt": "2019-07-12T17:11:27.244Z",
+    "completedAt": "2019-07-12T17:11:27.244Z",
+    "completedMessage": "completed",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
     "docketEntry": {
       "isPaper": true,
       "serviceDate": null,
@@ -13320,8 +13596,7 @@
     "pk": "case|106-19",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Docketclerk",
-    "updatedAt": "2019-07-12T17:11:27.244Z"
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -13340,6 +13615,7 @@
     "highPriority": false,
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "gsi2pk": "assigneeId|dabbad00-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "106-19",
     "docketEntry": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -13370,6 +13646,7 @@
     "assigneeName": "Test ADC",
     "entityName": "WorkItem",
     "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
+    "gsi2pk": "assigneeId|6805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "106-19",
     "docketEntry": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -13435,7 +13712,6 @@
     "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
     "sk": "case|107-19",
     "filingType": "A business",
-    "orderForCds": false,
     "docketNumberWithSuffix": "107-19L",
     "orderForRatification": false,
     "petitioners": [
@@ -13497,7 +13773,8 @@
     ],
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "sortableDocketNumber": 19000107,
+    "sortableDocketNumber": 2019000107,
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -13751,7 +14028,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -13785,6 +14064,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|39b3ac72-0173-4851-829b-e0878def646c",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "107-19L",
     "updatedAt": "2021-12-15T21:25:25.325Z",
     "completedAt": "2021-12-15T21:25:25.326Z",
@@ -13827,7 +14107,6 @@
     "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
     "sk": "case|108-19",
     "filingType": "Other",
-    "orderForCds": false,
     "docketNumberWithSuffix": "108-19",
     "orderForRatification": false,
     "petitioners": [
@@ -13953,8 +14232,9 @@
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 19000108,
+    "sortableDocketNumber": 2019000108,
     "trialDate": "2019-11-27T05:00:00.000Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -14071,6 +14351,7 @@
     "assigneeName": "IRS Holding Queue",
     "entityName": "WorkItem",
     "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "gsi2pk": "assigneeId|63784910-c1af-4476-8988-a02f92da8e09",
     "docketNumberWithSuffix": "108-19",
     "updatedAt": "2019-08-16T19:21:46.147Z",
     "completedAt": "2019-08-16T19:22:13.925Z",
@@ -14139,7 +14420,7 @@
     ],
     "docketNumberSuffix": "W",
     "blockedReason": "petitioner is in jail",
-    "sortableDocketNumber": 19000109,
+    "sortableDocketNumber": 2019000109,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "preferredTrialCity": "Birmingham, Alabama",
     "initialCaption": "Brett Osborne, Petitioner",
@@ -14265,7 +14546,7 @@
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 19000110,
+    "sortableDocketNumber": 2019000110,
     "partyType": "Petitioner",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -14434,7 +14715,9 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
+    "representing": [
+      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
+    ],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -14460,7 +14743,6 @@
     "entityName": "Case",
     "caseCaption": "Guy Fieri, Petitioner",
     "sk": "case|111-19",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "111-19L",
     "orderForRatification": false,
@@ -14483,7 +14765,8 @@
     ],
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "sortableDocketNumber": 19000111,
+    "sortableDocketNumber": 2019000111,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -14631,7 +14914,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.564Z",
@@ -14667,7 +14952,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.554Z",
@@ -14699,7 +14986,9 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{}",
     "pk": "case|111-19",
@@ -14723,6 +15012,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|030ec8bd-a021-4b58-9624-ea62ab31dacb",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "111-19L",
     "docketEntry": {
       "eventCode": "A",
@@ -14743,24 +15033,26 @@
   },
   {
     "associatedJudge": "Chief Judge",
-    "completedAt": "2022-09-28T16:48:30.590Z",
     "caseStatus": "General Docket - Not at Issue",
-    "completedMessage": "Served to IRS",
     "caseIsInProgress": true,
     "gsi1pk": "work-item|dffa984d-2caf-42b5-8d69-59728b32f13f",
-    "caseTitle": "Guy Fieri",
     "section": "petitions",
     "workItemId": "dffa984d-2caf-42b5-8d69-59728b32f13f",
-    "isInitializeCase": true,
-    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk1",
     "createdAt": "2022-09-28T16:48:27.729Z",
     "highPriority": false,
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|dffa984d-2caf-42b5-8d69-59728b32f13f",
+    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "111-19L",
+    "updatedAt": "2022-09-28T16:48:27.729Z",
+    "completedAt": "2022-09-28T16:48:30.590Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Guy Fieri",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketEntry": {
       "documentType": "Petition",
       "index": 1,
@@ -14769,7 +15061,9 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Guy Fieri",
       "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -14778,8 +15072,7 @@
     },
     "pk": "case|111-19",
     "docketNumber": "111-19",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2022-09-28T16:48:27.729Z"
+    "completedBy": "Test Petitionsclerk"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -14802,7 +15095,6 @@
     "entityName": "Case",
     "caseCaption": "Brian Earl Spilner, Petitioner",
     "sk": "case|112-19",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "112-19L",
     "orderForRatification": false,
@@ -14825,7 +15117,8 @@
     ],
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "sortableDocketNumber": 19000112,
+    "sortableDocketNumber": 2019000112,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -14870,7 +15163,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.670Z",
@@ -14906,7 +15201,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.667Z",
@@ -14979,24 +15276,26 @@
   },
   {
     "associatedJudge": "Chief Judge",
-    "completedAt": "2022-09-28T16:48:49.683Z",
     "caseStatus": "General Docket - Not at Issue",
-    "completedMessage": "Served to IRS",
     "caseIsInProgress": true,
     "gsi1pk": "work-item|e7fb2a37-d371-4cdc-ba55-83561dde5f28",
-    "caseTitle": "Brian Earl Spilner",
     "section": "petitions",
     "workItemId": "e7fb2a37-d371-4cdc-ba55-83561dde5f28",
-    "isInitializeCase": true,
-    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk1",
     "createdAt": "2022-09-28T16:48:47.111Z",
     "highPriority": false,
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|e7fb2a37-d371-4cdc-ba55-83561dde5f28",
+    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "112-19L",
+    "updatedAt": "2022-09-28T16:48:47.111Z",
+    "completedAt": "2022-09-28T16:48:49.683Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Brian Earl Spilner",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketEntry": {
       "documentType": "Petition",
       "index": 1,
@@ -15005,7 +15304,9 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Brian Earl Spilner",
       "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -15014,8 +15315,7 @@
     },
     "pk": "case|112-19",
     "docketNumber": "112-19",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2022-09-28T16:48:47.111Z"
+    "completedBy": "Test Petitionsclerk"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -15036,7 +15336,6 @@
     "entityName": "Case",
     "caseCaption": "Letti Toretto, Petitioner",
     "sk": "case|113-19",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "113-19L",
     "orderForRatification": false,
@@ -15059,7 +15358,8 @@
     ],
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "sortableDocketNumber": 19000113,
+    "sortableDocketNumber": 2019000113,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -15131,7 +15431,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.643Z",
@@ -15167,7 +15469,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.636Z",
@@ -15210,24 +15514,26 @@
   },
   {
     "associatedJudge": "Chief Judge",
-    "completedAt": "2022-09-28T19:47:03.663Z",
     "caseStatus": "General Docket - Not at Issue",
-    "completedMessage": "Served to IRS",
     "caseIsInProgress": true,
     "gsi1pk": "work-item|9f326cac-c07c-42c4-8639-42d0dfb3672d",
-    "caseTitle": "Letti Toretto",
     "section": "petitions",
     "workItemId": "9f326cac-c07c-42c4-8639-42d0dfb3672d",
-    "isInitializeCase": true,
-    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk1",
     "createdAt": "2022-09-28T16:48:47.111Z",
     "highPriority": false,
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|9f326cac-c07c-42c4-8639-42d0dfb3672d",
+    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "113-19L",
+    "updatedAt": "2022-09-28T16:48:47.111Z",
+    "completedAt": "2022-09-28T19:47:03.663Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Letti Toretto",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketEntry": {
       "eventCode": "P",
       "createdAt": "2019-12-11T15:25:09.285Z",
@@ -15241,8 +15547,7 @@
     },
     "pk": "case|113-19",
     "docketNumber": "113-19",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2022-09-28T16:48:47.111Z"
+    "completedBy": "Test Petitionsclerk"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -15262,7 +15567,6 @@
     "caseCaption": "Bart Simpson, Petitioner",
     "sk": "case|117-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "117-20L",
     "orderForRatification": false,
     "petitioners": [
@@ -15285,8 +15589,9 @@
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
     "correspondence": [],
-    "sortableDocketNumber": 20000117,
+    "sortableDocketNumber": 2020000117,
     "noticeOfTrialDate": "2020-06-25T20:40:13.682Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -15324,7 +15629,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -15352,7 +15659,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -15432,7 +15741,6 @@
     "caseCaption": "Sean Connery, Petitioner",
     "sk": "case|120-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "120-20SL",
     "orderForRatification": false,
     "petitioners": [
@@ -15456,8 +15764,9 @@
     "initialDocketNumberSuffix": "SL",
     "docketNumberSuffix": "SL",
     "correspondence": [],
-    "sortableDocketNumber": 20000120,
+    "sortableDocketNumber": 2020000120,
     "noticeOfTrialDate": "2020-06-25T20:58:55.412Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -15528,7 +15837,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -15560,7 +15871,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -15605,7 +15918,6 @@
     "entityName": "Case",
     "caseCaption": "Idola Flowers, Donor, Petitioner",
     "sk": "case|121-20",
-    "orderForCds": false,
     "docketNumberWithSuffix": "121-20",
     "orderForRatification": true,
     "petitioners": [
@@ -15629,9 +15941,10 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "correspondence": [],
-    "sortableDocketNumber": 20000122,
+    "sortableDocketNumber": 2020000121,
     "mailingDate": "05-Apr-1990",
     "noticeOfTrialDate": "2020-08-10T17:16:49.185Z",
+    "orderForCds": false,
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": true,
     "orderToShowCause": true,
@@ -15668,7 +15981,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -15710,7 +16025,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -15754,7 +16071,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -15778,6 +16097,7 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|b99d6fab-d009-4f22-8bdf-e42157cecfe9",
+    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "121-20",
     "docketEntry": {
       "isPaper": true,
@@ -15822,7 +16142,6 @@
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|122-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "122-20W",
     "orderForRatification": false,
     "petitioners": [
@@ -15848,9 +16167,10 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "correspondence": [],
-    "sortableDocketNumber": 20000122,
+    "sortableDocketNumber": 2020000122,
     "archivedDocketEntries": [],
     "noticeOfTrialDate": "2020-09-25T19:27:00.202Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -15885,7 +16205,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -15936,7 +16258,9 @@
     "processingStatus": "complete",
     "createdAt": "2020-09-25T19:27:00.208Z",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "953057bb-72d2-412d-8352-fb68c6b0fe2b",
@@ -16008,7 +16332,6 @@
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|123-20",
     "filingType": "Myself",
-    "orderForCds": false,
     "docketNumberWithSuffix": "123-20W",
     "orderForRatification": false,
     "petitioners": [
@@ -16034,9 +16357,10 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "correspondence": [],
-    "sortableDocketNumber": 20000123,
+    "sortableDocketNumber": 2020000123,
     "archivedDocketEntries": [],
     "noticeOfTrialDate": "2020-09-30T20:22:10.381Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -16071,7 +16395,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -16114,7 +16440,9 @@
     "processingStatus": "complete",
     "createdAt": "2020-09-30T20:22:10.388Z",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "7a9ae90c-348c-467a-8720-c3d1c195d76b",
@@ -16187,7 +16515,6 @@
     "entityName": "Case",
     "caseCaption": "Stacy Russold, Natalya Chaouche, Tax Matters Partner, Petitioner",
     "sk": "case|124-20",
-    "orderForCds": true,
     "docketNumberWithSuffix": "124-20",
     "orderForRatification": false,
     "petitioners": [
@@ -16212,10 +16539,11 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "correspondence": [],
-    "sortableDocketNumber": 20000124,
+    "sortableDocketNumber": 2020000124,
     "archivedDocketEntries": [],
     "mailingDate": "03/03/2020",
     "noticeOfTrialDate": "2020-09-30T20:23:57.354Z",
+    "orderForCds": true,
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -16259,7 +16587,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
+    "filers": [
+      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
+    ],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -16295,7 +16625,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
+    "filers": [
+      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
+    ],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -16394,6 +16726,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "124-20",
     "updatedAt": "2020-09-30T20:23:57.361Z",
     "completedAt": "2020-09-30T20:24:15.441Z",
@@ -16448,7 +16781,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|125-20",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "125-20W",
     "orderForRatification": false,
@@ -16475,9 +16807,10 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "correspondence": [],
-    "sortableDocketNumber": 20000125,
+    "sortableDocketNumber": 2020000125,
     "archivedDocketEntries": [],
     "noticeOfTrialDate": "2020-10-13T20:23:17.557Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -16512,7 +16845,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -16555,7 +16890,9 @@
     "processingStatus": "complete",
     "createdAt": "2020-10-13T20:23:17.560Z",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
@@ -16625,7 +16962,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|126-20",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "126-20W",
     "orderForRatification": false,
@@ -16652,9 +16988,10 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "correspondence": [],
-    "sortableDocketNumber": 20000126,
+    "sortableDocketNumber": 2020000126,
     "archivedDocketEntries": [],
     "noticeOfTrialDate": "2020-10-16T15:19:38.086Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -16689,7 +17026,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
+    "filers": [
+      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
+    ],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -16709,7 +17048,9 @@
     "createdAt": "2020-10-16T15:19:38.088Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
+    "filers": [
+      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "8439ca33-ac7a-4ae6-a228-7581e2114341",
@@ -16802,7 +17143,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|127-20",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "127-20W",
     "orderForRatification": false,
@@ -16829,9 +17169,10 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "correspondence": [],
-    "sortableDocketNumber": 20000127,
+    "sortableDocketNumber": 2020000127,
     "archivedDocketEntries": [],
     "noticeOfTrialDate": "2020-11-18T19:32:11.463Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -16866,7 +17207,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -16916,7 +17259,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -16980,7 +17325,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|128-20",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "128-20W",
     "orderForRatification": false,
@@ -17007,9 +17351,10 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "correspondence": [],
-    "sortableDocketNumber": 20000128,
+    "sortableDocketNumber": 2020000128,
     "archivedDocketEntries": [],
     "noticeOfTrialDate": "2020-11-30T21:58:13.407Z",
+    "orderForCds": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -17044,7 +17389,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -17071,7 +17418,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -17160,7 +17509,6 @@
     "entityName": "Case",
     "caseCaption": "Valentine Holman, Petitioner",
     "sk": "case|129-20",
-    "orderForCds": false,
     "docketNumberWithSuffix": "129-20",
     "orderForRatification": false,
     "petitioners": [
@@ -17186,10 +17534,11 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "correspondence": [],
-    "sortableDocketNumber": 20000129,
+    "sortableDocketNumber": 2020000129,
     "archivedDocketEntries": [],
     "mailingDate": "25-Sep-1995",
     "noticeOfTrialDate": "2020-11-30T22:57:58.404Z",
+    "orderForCds": false,
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": true,
@@ -17273,7 +17622,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
+    "filers": [
+      "05b98fff-e4ca-4114-b8ec-7218effc982e"
+    ],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -17309,7 +17660,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
+    "filers": [
+      "05b98fff-e4ca-4114-b8ec-7218effc982e"
+    ],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -17370,6 +17723,7 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "129-20",
     "updatedAt": "2020-11-30T22:57:58.406Z",
     "completedAt": "2020-11-30T22:58:08.206Z",
@@ -17432,7 +17786,6 @@
     "entityName": "Case",
     "caseCaption": "Test Petitioner, Petitioner",
     "sk": "case|1338-20",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "1338-20",
     "orderForRatification": false,
@@ -17458,8 +17811,9 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "otherFilers": [],
-    "sortableDocketNumber": 20001338,
+    "sortableDocketNumber": 2020001338,
     "noticeOfTrialDate": "2021-02-16T15:38:54.239Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": null,
@@ -17488,7 +17842,6 @@
     "entityName": "Case",
     "caseCaption": "Case is ready for trial",
     "sk": "case|150-12",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "150-12",
     "orderForRatification": false,
@@ -17514,8 +17867,9 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "otherFilers": [],
-    "sortableDocketNumber": 12000150,
+    "sortableDocketNumber": 2012000150,
     "noticeOfTrialDate": "2021-02-16T16:37:16.782Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Washington, District of Columbia, 1613493436635",
@@ -17665,7 +18019,6 @@
     "entityName": "Case",
     "caseCaption": "Case is ready for trial and blocked",
     "sk": "case|151-12",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "151-12",
     "orderForRatification": false,
@@ -17692,8 +18045,9 @@
     "docketNumberSuffix": null,
     "blockedReason": "legacy blocked",
     "otherFilers": [],
-    "sortableDocketNumber": 12000151,
+    "sortableDocketNumber": 2012000151,
     "noticeOfTrialDate": "2021-02-16T16:37:17.283Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Washington, District of Columbia, 1613493436635",
@@ -17848,7 +18202,6 @@
     "entityName": "Case",
     "caseCaption": "Case is ready for trial with deadline",
     "sk": "case|152-12",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "152-12",
     "orderForRatification": false,
@@ -17874,8 +18227,9 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "otherFilers": [],
-    "sortableDocketNumber": 12000152,
+    "sortableDocketNumber": 2012000152,
     "noticeOfTrialDate": "2021-02-16T16:37:17.670Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Washington, District of Columbia, 1613493436635",
@@ -18022,7 +18376,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|301-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "301-21W",
     "orderForRatification": false,
@@ -18048,8 +18401,9 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "otherFilers": [],
-    "sortableDocketNumber": 21000301,
+    "sortableDocketNumber": 2021000301,
     "noticeOfTrialDate": "2021-04-06T19:45:32.912Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -18084,7 +18438,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -18112,7 +18468,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -18190,7 +18548,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|302-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "302-21W",
     "orderForRatification": false,
@@ -18216,8 +18573,9 @@
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
     "otherFilers": [],
-    "sortableDocketNumber": 21000302,
+    "sortableDocketNumber": 2021000302,
     "noticeOfTrialDate": "2021-04-22T18:38:58.092Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -18276,7 +18634,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -18304,7 +18664,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -18401,7 +18763,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -18429,7 +18793,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -18518,7 +18884,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|303-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "303-21W",
     "orderForRatification": false,
@@ -18544,8 +18909,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000303,
+    "sortableDocketNumber": 2021000303,
     "noticeOfTrialDate": "2021-04-27T17:12:53.623Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -18650,7 +19016,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -18678,7 +19046,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -18735,7 +19105,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|304-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "304-21W",
     "orderForRatification": false,
@@ -18761,8 +19130,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000304,
+    "sortableDocketNumber": 2021000304,
     "noticeOfTrialDate": "2021-04-27T20:50:58.072Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -18843,7 +19213,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -18895,7 +19267,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -18952,7 +19326,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|305-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "305-21W",
     "orderForRatification": false,
@@ -18978,8 +19351,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000305,
+    "sortableDocketNumber": 2021000305,
     "noticeOfTrialDate": "2021-05-04T17:17:08.075Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -19060,7 +19434,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -19112,7 +19488,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -19169,7 +19547,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|306-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "306-21W",
     "orderForRatification": false,
@@ -19195,8 +19572,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000306,
+    "sortableDocketNumber": 2021000306,
     "noticeOfTrialDate": "2021-05-14T17:32:46.045Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -19301,7 +19679,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -19328,7 +19708,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -19384,7 +19766,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|307-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "307-21W",
     "orderForRatification": false,
@@ -19410,8 +19791,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000307,
+    "sortableDocketNumber": 2021000307,
     "noticeOfTrialDate": "2021-05-25T13:09:44.662Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -19492,7 +19874,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -19543,7 +19927,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -19599,7 +19985,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|308-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "308-21W",
     "orderForRatification": false,
@@ -19625,8 +20010,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000308,
+    "sortableDocketNumber": 2021000308,
     "noticeOfTrialDate": "2021-05-25T13:23:58.954Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -19731,7 +20117,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -19758,7 +20146,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -19814,7 +20204,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|309-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "309-21W",
     "orderForRatification": false,
@@ -19840,8 +20229,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000309,
+    "sortableDocketNumber": 2021000309,
     "noticeOfTrialDate": "2021-05-28T15:15:34.673Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -19877,7 +20267,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -19949,7 +20341,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -20029,7 +20423,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|310-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "310-21W",
     "orderForRatification": false,
@@ -20055,8 +20448,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000310,
+    "sortableDocketNumber": 2021000310,
     "noticeOfTrialDate": "2021-06-07T20:28:11.380Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -20137,7 +20531,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -20188,7 +20584,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -20236,6 +20634,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|d48e3364-ab16-4c79-8857-80239d1a418c",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "310-21W",
     "updatedAt": "2021-06-07T20:28:16.124Z",
     "completedAt": "2021-06-07T20:28:16.318Z",
@@ -20342,7 +20741,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|311-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "311-21W",
     "orderForRatification": false,
@@ -20368,8 +20766,9 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000311,
+    "sortableDocketNumber": 2021000311,
     "noticeOfTrialDate": "2021-06-14T15:16:20.513Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -20474,7 +20873,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -20501,7 +20902,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -20517,6 +20920,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|234a49d8-f304-42d6-8bd8-020563c77d16",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "311-21W",
     "updatedAt": "2021-06-14T15:16:23.112Z",
     "completedAt": "2021-06-14T15:16:23.253Z",
@@ -20655,7 +21059,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|312-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "312-21W",
     "orderForRatification": false,
@@ -20680,7 +21083,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000312,
+    "sortableDocketNumber": 2021000312,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -20762,7 +21166,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -20789,7 +21195,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -20829,6 +21237,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|3be01a88-d59e-464b-833f-6cf9e1126a65",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "312-21W",
     "updatedAt": "2021-10-25T18:55:28.576Z",
     "completedAt": "2021-10-25T18:55:28.700Z",
@@ -20965,7 +21374,6 @@
     "entityName": "Case",
     "caseCaption": "Hanae Guerrero, Petitioner",
     "sk": "case|313-21",
-    "orderForCds": false,
     "docketNumberWithSuffix": "313-21",
     "orderForRatification": true,
     "petitioners": [
@@ -20989,8 +21397,9 @@
     ],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 21000313,
+    "sortableDocketNumber": 2021000313,
     "mailingDate": "22-Dec-1993",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": true,
     "preferredTrialCity": "San Diego, California",
@@ -21083,7 +21492,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -21120,7 +21531,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -21157,7 +21570,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -21175,6 +21590,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2bab4861-ead9-424d-929a-19ad1acc2356",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "313-21",
     "updatedAt": "2021-10-25T18:57:31.746Z",
     "completedAt": "2021-10-25T18:57:31.747Z",
@@ -21213,6 +21629,7 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|dcbdaca4-0bcc-4726-95e7-09b9dc59241d",
+    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "313-21",
     "updatedAt": "2021-10-25T18:56:28.866Z",
     "completedAt": "2021-10-25T18:56:39.991Z",
@@ -21260,7 +21677,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|314-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "314-21W",
     "orderForRatification": false,
@@ -21285,7 +21701,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000314,
+    "sortableDocketNumber": 2021000314,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -21391,7 +21808,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -21418,7 +21837,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -21466,6 +21887,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|d716e1a9-529d-472d-924c-bd27b9efdcab",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "314-21W",
     "updatedAt": "2021-10-29T13:04:35.896Z",
     "completedAt": "2021-10-29T13:04:35.996Z",
@@ -21572,7 +21994,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|315-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "315-21W",
     "orderForRatification": false,
@@ -21597,7 +22018,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000315,
+    "sortableDocketNumber": 2021000315,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -21679,7 +22101,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -21730,7 +22154,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -21746,6 +22172,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|c91e875b-2a86-4318-a490-43d63a70ecd4",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "315-21W",
     "updatedAt": "2021-10-29T13:39:47.812Z",
     "completedAt": "2021-10-29T13:39:47.918Z",
@@ -21884,7 +22311,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|316-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "316-21W",
     "orderForRatification": false,
@@ -21909,7 +22335,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000316,
+    "sortableDocketNumber": 2021000316,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -21991,7 +22418,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -22042,7 +22471,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -22090,6 +22521,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|99da1552-ddba-4ed0-a5d1-5aa8b706686f",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "316-21W",
     "updatedAt": "2021-12-01T23:43:55.483Z",
     "completedAt": "2021-12-01T23:43:55.598Z",
@@ -22196,7 +22628,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|317-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "317-21W",
     "orderForRatification": false,
@@ -22221,7 +22652,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000317,
+    "sortableDocketNumber": 2021000317,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -22303,7 +22735,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -22354,7 +22788,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -22402,6 +22838,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|5ea01459-12d0-456d-8ce8-b91b2709c037",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "317-21W",
     "updatedAt": "2021-12-02T13:52:45.800Z",
     "completedAt": "2021-12-02T13:52:45.888Z",
@@ -22508,7 +22945,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|318-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "318-21W",
     "orderForRatification": false,
@@ -22533,7 +22969,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000318,
+    "sortableDocketNumber": 2021000318,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -22639,7 +23076,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -22666,7 +23105,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -22682,6 +23123,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|afda1ef3-86f3-41ca-b038-967fac6b6e91",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "318-21W",
     "updatedAt": "2021-12-02T16:16:32.112Z",
     "completedAt": "2021-12-02T16:16:32.227Z",
@@ -22820,7 +23262,6 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|319-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "319-21W",
     "orderForRatification": false,
@@ -22845,7 +23286,8 @@
     ],
     "initialDocketNumberSuffix": "W",
     "docketNumberSuffix": "W",
-    "sortableDocketNumber": 21000319,
+    "sortableDocketNumber": 2021000319,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
@@ -22927,7 +23369,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -22954,7 +23398,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -22994,6 +23440,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0e522fe6-ae74-4af2-9456-bf9d6cb3e82d",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "319-21W",
     "updatedAt": "2021-12-02T16:26:44.864Z",
     "completedAt": "2021-12-02T16:26:44.977Z",
@@ -23131,7 +23578,6 @@
     "entityName": "Case",
     "caseCaption": "Rand al'Thor, Petitioner",
     "sk": "case|320-21",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "320-21S",
     "orderForRatification": false,
@@ -23155,7 +23601,8 @@
     ],
     "initialDocketNumberSuffix": "S",
     "docketNumberSuffix": "S",
-    "sortableDocketNumber": 22000102,
+    "sortableDocketNumber": 2021000320,
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Milwaukee, Wisconsin",
@@ -23270,7 +23717,9 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -23309,7 +23758,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-08T15:19:17.214Z",
@@ -23349,7 +23800,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "A",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
@@ -23386,7 +23839,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-05T15:19:17.229Z",
@@ -23429,6 +23884,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0b76f194-4661-4993-9b57-3e5f98193bd9",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "320-21S",
     "updatedAt": "2022-10-28T20:45:59.209Z",
     "completedAt": "2022-10-28T20:46:18.747Z",
@@ -23508,7 +23964,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -23564,6 +24022,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "320-21S",
     "updatedAt": "2021-11-09T15:22:52.474Z",
     "completedAt": "2021-11-09T15:22:52.475Z",
@@ -23602,6 +24061,7 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|64f31afa-7aff-4243-b795-d7e79a057692",
+    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "320-21S",
     "updatedAt": "2021-11-05T15:09:29.304Z",
     "completedAt": "2021-11-08T15:19:17.250Z",
@@ -23644,7 +24104,6 @@
     "entityName": "Case",
     "caseCaption": "The Sixth Migrated Case",
     "sk": "case|69312-87",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "69312-87",
     "orderForRatification": false,
@@ -23687,8 +24146,9 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "otherFilers": [],
-    "sortableDocketNumber": 87069312,
+    "sortableDocketNumber": 1987069312,
     "noticeOfTrialDate": "2021-02-16T16:29:48.990Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Washington, District of Columbia",
@@ -23868,7 +24328,6 @@
     "entityName": "Case",
     "caseCaption": "The Sixth Migrated Case",
     "sk": "case|999-15",
-    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "999-15",
     "orderForRatification": false,
@@ -23913,9 +24372,10 @@
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
-    "sortableDocketNumber": 15000999,
+    "sortableDocketNumber": 2015000999,
     "trialDate": "2020-11-27T05:00:00.000Z",
     "noticeOfTrialDate": "2021-02-16T16:16:19.660Z",
+    "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Washington, District of Columbia",
@@ -24200,7 +24660,9 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatepractitioner@example.com"
@@ -24217,6 +24679,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|4a3e2ec3-f9d8-40f3-abf9-526aab1e8c46",
+    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "999-15",
     "updatedAt": "2021-12-02T16:18:37.515Z",
     "completedAt": "2021-12-02T16:18:37.515Z",
@@ -24302,6 +24765,11 @@
     "pk": "docketNumberCounter-2022"
   },
   {
+    "sk": "docketNumberCounter-2023",
+    "id": 1,
+    "pk": "docketNumberCounter-2023"
+  },
+  {
     "sk": "document-search-limiter-configuration",
     "windowTime": 1000,
     "pk": "document-search-limiter-configuration",
@@ -24312,6 +24780,11 @@
     "id": 1,
     "pk": "document-search-limiter",
     "expiresAt": 1638454069047
+  },
+  {
+    "sk": "e-consent-fields-enabled-feature-flag",
+    "current": true,
+    "pk": "e-consent-fields-enabled-feature-flag"
   },
   {
     "sk": "LasVegasNevada-H-B-20190816132910-107-19",
@@ -24515,11 +24988,6 @@
       "00039-serve-autoserved-docketentries.js"
     ],
     "pk": "migrationSchema"
-  },
-  {
-    "sk": "e-consent-fields-enabled-feature-flag",
-    "current": true,
-    "pk": "e-consent-fields-enabled-feature-flag"
   },
   {
     "sk": "multi-docketable-paper-filings",
@@ -27145,7 +27613,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -28243,7 +28713,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -29045,6 +29517,10 @@
     "pk": "section|carluzzosChambers"
   },
   {
+    "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "pk": "section|caseServicesSupervisor"
+  },
+  {
     "sk": "user|23dd8806-c0c7-4265-81f0-5f264ef78248",
     "pk": "section|clerkofcourt"
   },
@@ -29070,6 +29546,10 @@
   },
   {
     "sk": "user|2805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "section|docket"
+  },
+  {
+    "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
     "pk": "section|docket"
   },
   {
@@ -29157,6 +29637,10 @@
     "pk": "section|mowrysChambers"
   },
   {
+    "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "pk": "section|petitions"
+  },
+  {
     "sk": "user|3805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "section|petitions"
   },
@@ -29195,90 +29679,330 @@
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|0d943468-bc2e-4631-84e3-b084cf5b1fbb",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc"
   },
   {
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|208a959f-9526-4db5-b262-e58c476a4604",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defee"
   },
   {
     "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defef"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
   },
   {
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "6b6975cf-2b10-4e84-bcae-91e162d2f9d1"
   },
   {
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "7c6975cf-2b10-4e84-bcae-91e162d2f9ee"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "9c943468-bc2e-4631-84e3-b084cf5b1faa"
   },
   {
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|a3bee7c0-bd98-4504-890b-b00eb398e547",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "a3bee7c0-bd98-4504-890b-b00eb398e547"
   },
   {
     "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|b4bee7c0-bd98-4504-890b-b00eb398e547",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "b4bee7c0-bd98-4504-890b-b00eb398e547"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|c5bee7c0-bd98-4504-890b-b00eb398e547",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "c5bee7c0-bd98-4504-890b-b00eb398e547"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|c7220f03-e46e-4d5e-8e1d-a640e64df552",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "c7220f03-e46e-4d5e-8e1d-a640e64df552"
   },
   {
     "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|f3b04943-8ea8-422b-8990-dec3ca644c83",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "f3b04943-8ea8-422b-8990-dec3ca644c83"
   },
@@ -32036,7 +32760,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -33280,6 +34006,16 @@
     "email": "irspractitioner2@example.com"
   },
   {
+    "role": "caseServicesSupervisor",
+    "entityName": "User",
+    "name": "Test Case Services Supervisor",
+    "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "section": "caseServicesSupervisor",
+    "pk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "userId": "35959d1a-0981-40b2-a93d-f65c7977db52",
+    "email": "caseservicessupervisor@example.com"
+  },
+  {
     "role": "petitionsclerk",
     "entityName": "User",
     "sk": "user|3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -33339,17 +34075,6 @@
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-20",
     "status": "New"
-  },
-  {
-    "createdAt": "2020-01-21T16:41:39.474Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|999-15",
-    "caseCaption": "The Sixth Migrated Case",
-    "sk": "case|999-15",
-    "docketNumberWithSuffix": "999-15",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "999-15",
-    "status": "Calendared"
   },
   {
     "createdAt": "2019-03-01T22:53:50.097Z",
@@ -33556,6 +34281,17 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-22",
     "status": "Closed"
+  },
+  {
+    "createdAt": "2023-03-13T22:23:32.843Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|101-23",
+    "sk": "case|101-23",
+    "docketNumberWithSuffix": "101-23W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "101-23",
+    "status": "New"
   },
   {
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -34215,6 +34951,17 @@
     "status": "General Docket - At Issue (Ready for Trial)"
   },
   {
+    "createdAt": "2020-01-21T16:41:39.474Z",
+    "entityName": "UserCase",
+    "gsi1pk": "user-case|999-15",
+    "caseCaption": "The Sixth Migrated Case",
+    "sk": "case|999-15",
+    "docketNumberWithSuffix": "999-15",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "999-15",
+    "status": "Calendared"
+  },
+  {
     "admissionsStatus": "Active",
     "lastName": "Practitioner",
     "role": "privatePractitioner",
@@ -34470,32 +35217,6 @@
   },
   {
     "role": "petitioner",
-    "address2": "Blandtowne, AK 90210",
-    "phone": "234-234-2345",
-    "address1": "123 Domestic Bliss Lane",
-    "entityName": "User",
-    "name": "Test Petitioner 7",
-    "sk": "user|d3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "section": "petitioner",
-    "pk": "user|d3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "userId": "d3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "email": "petitioner7@example.com"
-  },
-  {
-    "role": "petitioner",
-    "address2": "Blandtowne, AK 90210",
-    "phone": "234-234-2345",
-    "address1": "123 Domestic Bliss Lane",
-    "entityName": "User",
-    "name": "Test Petitioner 8",
-    "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "section": "petitioner",
-    "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "email": "petitioner8@example.com"
-  },
-  {
-    "role": "petitioner",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
     "address1": "3202 Elk Avenue",
@@ -34547,6 +35268,19 @@
     "pk": "user|d1f8a729-cbfa-4d22-a09b-73743a12f188",
     "userId": "d1f8a729-cbfa-4d22-a09b-73743a12f188",
     "email": "trialclerk1@example.com"
+  },
+  {
+    "role": "petitioner",
+    "address2": "Blandtowne, AK 90210",
+    "phone": "234-234-2345",
+    "address1": "123 Domestic Bliss Lane",
+    "entityName": "User",
+    "name": "Test Petitioner 7",
+    "sk": "user|d3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "section": "petitioner",
+    "pk": "user|d3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "userId": "d3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "email": "petitioner7@example.com"
   },
   {
     "judgeTitle": "Judge",
@@ -34655,6 +35389,19 @@
     "pk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "userId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "email": "judgefieri@example.com"
+  },
+  {
+    "role": "petitioner",
+    "address2": "Blandtowne, AK 90210",
+    "phone": "234-234-2345",
+    "address1": "123 Domestic Bliss Lane",
+    "entityName": "User",
+    "name": "Test Petitioner 8",
+    "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "section": "petitioner",
+    "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "email": "petitioner8@example.com"
   },
   {
     "role": "trialclerk",

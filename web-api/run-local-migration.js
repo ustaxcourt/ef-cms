@@ -1,7 +1,10 @@
 const AWS = require('aws-sdk');
+const createApplicationContext = require('./src/applicationContext');
 const {
   processItems,
 } = require('./workflow-terraform/migration/main/lambdas/migration-segments');
+
+const applicationContext = createApplicationContext({});
 
 (async () => {
   const dynamo = new AWS.DynamoDB({
@@ -28,6 +31,9 @@ const {
     })
     .promise()
     .then(async results => {
-      await processItems({ documentClient, items: results.Items });
+      await processItems(applicationContext, {
+        documentClient,
+        items: results.Items,
+      });
     });
 })();
