@@ -1,8 +1,8 @@
 const {
   INITIAL_DOCUMENT_TYPES,
-} = require('../../../../../shared/src/business/entities/EntityConstants');
+} = require('../../../../../../shared/src/business/entities/EntityConstants');
 const { migrateItems } = require('./0007-update-corporate-disclosure-document');
-const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
+const { MOCK_CASE } = require('../../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
   let documentClient;
