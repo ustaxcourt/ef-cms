@@ -385,10 +385,10 @@ export const formattedWorkQueue = (get, applicationContext) => {
     highPriorityDirection = ['desc', 'asc'];
 
     const caseStatusSortRank = {
-      [STATUS_TYPES.jurisdictionRetained]: 1,
-      [STATUS_TYPES.assignedMotion]: 2,
-      [STATUS_TYPES.assignedCase]: 3,
-      [STATUS_TYPES.submitted]: 4,
+      [STATUS_TYPES.submitted]: 1,
+      [STATUS_TYPES.assignedCase]: 2,
+      [STATUS_TYPES.assignedMotion]: 3,
+      [STATUS_TYPES.jurisdictionRetained]: 4,
     };
 
     workQueue = orderBy(
