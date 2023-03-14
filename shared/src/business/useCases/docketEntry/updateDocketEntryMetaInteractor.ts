@@ -174,12 +174,12 @@ export const updateDocketEntryMetaInteractor = async (
     .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   if (shouldGenerateCoversheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
+    // await applicationContext.getPersistenceGateway().updateDocketEntry({
+    //   applicationContext,
+    //   docketEntryId: docketEntryEntity.docketEntryId,
+    //   docketNumber,
+    //   document: docketEntryEntity.validate(),
+    // });
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()
@@ -191,19 +191,20 @@ export const updateDocketEntryMetaInteractor = async (
 
     caseEntity.updateDocketEntry(updatedDocketEntry);
   } else if (shouldRemoveExistingCoverSheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
-    const updatedDocketEntry = await applicationContext
+    // await applicationContext.getPersistenceGateway().updateDocketEntry({
+    //   applicationContext,
+    //   docketEntryId: docketEntryEntity.docketEntryId,
+    //   docketNumber,
+    //   document: docketEntryEntity.validate(),
+    // });
+    const { numberOfPages } = await applicationContext
       .getUseCaseHelpers()
       .removeCoversheet(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
       });
-    caseEntity.updateDocketEntry(updatedDocketEntry);
+    docketEntryEntity.setNumberOfPages(numberOfPages);
+    caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
   const result = await applicationContext

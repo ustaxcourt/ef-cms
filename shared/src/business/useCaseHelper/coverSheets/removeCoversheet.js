@@ -1,90 +1,39 @@
-const { Case } = require('../../entities/cases/Case');
-
-/**
- * a helper function which removes a coversheet from a pdf and returns the new pdf data
- *
- * @param {object} options the providers object
- * @param {object} options.applicationContext the application context
- * @param {object} options.pdfData the original document pdf data
- * @returns {object} the new pdf with coversheet removed
- */
-exports.removeCoverFromPdf = async ({ applicationContext, pdfData }) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
-  const pdfDoc = await PDFDocument.load(pdfData);
-
-  pdfDoc.removePage(0);
-
-  const newPdfData = await pdfDoc.save();
-  const numberOfPages = pdfDoc.getPageCount();
-
-  return {
-    numberOfPages,
-    pdfData: newPdfData,
-  };
-};
-
 /**
  * removeCoversheet
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketEntryId the docket entry id
- * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise<*>} updated docket entry entity
  */
-exports.removeCoversheet = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
-) => {
+exports.removeCoversheet = async (applicationContext, { docketEntryId }) => {
   let pdfData;
   try {
-    const { Body } = await applicationContext
+    ({ Body: pdfData } = await applicationContext
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
         Key: docketEntryId,
       })
-      .promise();
-    pdfData = Body;
+      .promise());
   } catch (err) {
     err.message = `${err.message} docket entry id is ${docketEntryId}`;
     throw err;
   }
 
-  const { numberOfPages, pdfData: newPdfData } =
-    await exports.removeCoverFromPdf({
-      applicationContext,
-      pdfData,
-    });
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const pdfDoc = await PDFDocument.load(pdfData);
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  pdfDoc.removePage(0);
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
-  docketEntryEntity.setAsProcessingStatusAsCompleted();
-  docketEntryEntity.setNumberOfPages(numberOfPages);
-
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber: caseEntity.docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
-  });
+  const pdfWithoutCoversheet = await pdfDoc.save();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: newPdfData,
+    document: pdfWithoutCoversheet,
     key: docketEntryId,
   });
 
-  return docketEntryEntity;
+  return { numberOfPages: pdfDoc.getPageCount() };
 };
