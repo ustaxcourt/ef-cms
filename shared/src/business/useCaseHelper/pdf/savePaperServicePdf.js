@@ -6,7 +6,7 @@
  * @returns {Object} the service information
  */
 exports.savePaperServicePdf = async ({ applicationContext, document }) => {
-  let hasPaper = !!document.getPages().length;
+  let hasPaper = !!document.getPageCount();
   let docketEntryId = null;
   let pdfInfo = null;
 
