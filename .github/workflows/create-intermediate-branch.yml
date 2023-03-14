@@ -6,6 +6,10 @@ on:
     type:
       - opened
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   create-intermediate-branch:
     runs-on: ubuntu-latest
@@ -18,58 +22,73 @@ jobs:
           git config --local user.name "Joshua Abu"
 
       - name: Check if intermediate branch exists
+        id: check_branch
+        outputs:
+          flexion_branch_exists: ${{ steps.check_branch.outputs.flexion_branch_exists }}
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          intermediate_branch_exists=false
+          flexion_remote_address=https://github.com/flexion/ef-cms.git
 
-          git fetch origin
-          if [ git rev-parse --verify "${intermediate_branch}" ]
-          then
-            intermediate_branch_exists=true
-            echo "Branch ${intermediate_branch} exists"
-          else
-            echo "Branch ${intermediate_branch} does not exist at all"
-          fi
+          git fetch --all
 
-      - name: Create Intermediate branch
-        run: |
-          destination_branch=experimental3
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          echo "VALUE OF intermediate_branch_exists FIRST, ${intermediate_branch_exists} *****"
+          # set flexion remote branch
+          git remote add flexion ${flexion_remote_address} 
 
-          if [ $intermediate_branch_exists==false ]
-          then
-            # Get the base branch
-            git checkout $destination_branch
-            git pull
-
-            # Create a copy of the destination branch
-            git checkout -b "${intermediate_branch}"
-
-            # Merge the feature branch into the intermediate branch
-            git merge "origin/${feature_branch}"
-
-            # Push the new intermediate to remote
-            git push -u origin "${intermediate_branch}"
-          fi
-
-      - name: Make PR of Intermediate branch to Tests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          destination_branch=experimental3
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          echo "VALUE OF intermediate_branch_exists SECONDly, ${intermediate_branch_exists} *****"
+          item=git ls-remote --heads ${flexion_remote_address} {intermediate_branch}
+          echo "ITEM*****, ${item}"
 
 
-          if [ $intermediate_branch_exists==false ]
-          then
-            sudo apt-get update
-            sudo apt-get install hub
 
-            pr_title="${feature_branch} intermediate to experimental3"
-            hub pull-request -b ${destination_branch} -m "$pr_title"
-          fi
+          # check flexion branches to see if its related intermediate branch exists
+          # can we also just check if a PR is already opened vs checking 
+
+          # if [ git rev-parse --verify "${intermediate_branch}" ]
+          # then
+          #   flexion_branch_exists=true >> "$GITHUB_OUTPUT"
+          #   echo "Branch ${intermediate_branch} exists"
+          # else
+          #   echo "Branch ${intermediate_branch} does not exist at all"
+          # fi
+
+      # - name: Create Intermediate branch
+      #   run: |
+      #     destination_branch=experimental3
+      #     feature_branch=${{ github.head_ref }}
+      #     intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+      #     echo "VALUE OF intermediate_branch_exists FIRST, ${intermediate_branch_exists} *****"
+
+      #     if [ $intermediate_branch_exists==false ]
+      #     then
+      #       # Get the base branch
+      #       git checkout $destination_branch
+      #       git pull
+
+      #       # Create a copy of the destination branch
+      #       git checkout -b "${intermediate_branch}"
+
+      #       # Merge the feature branch into the intermediate branch
+      #       git merge "origin/${feature_branch}"
+
+      #       # Push the new intermediate to remote
+      #       git push -u origin "${intermediate_branch}"
+      #     fi
+
+      # - name: Make PR of Intermediate branch to Tests
+      # needs:
+      # env:
+      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # run: |
+      #   destination_branch=experimental3
+      #   feature_branch=${{ github.head_ref }}
+      #   intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+      #   echo "VALUE OF intermediate_branch_exists SECONDly, ${intermediate_branch_exists} *****"
+
+      #   if [ $intermediate_branch_exists==false ]
+      #   then
+      #     sudo apt-get update
+      #     sudo apt-get install hub
+
+      #     pr_title="${feature_branch} intermediate to experimental3"
+      #     hub pull-request -b ${destination_branch} -m "$pr_title"
+      #   fi
