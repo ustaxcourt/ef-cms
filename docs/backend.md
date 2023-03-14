@@ -13,18 +13,6 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   ├── elasticsearch-indexes.js // all of the indices on the cluster
 │   ├── elasticsearch-settings.js // the main settings
 │   └── ... // other scripts
-├── migration-cron-terraform
-│   ├── bin
-│   │   ├── deploy-app.sh // used for deploying the cron lambda
-│   └── main
-│       ├── lambdas // the lambda containing the node logic
-│       ├── main.tf // the main terraform entrypoint
-├── migration-terraform
-│   ├── bin
-│   │   ├── deploy-app.sh // used for deploying the migration code
-│   └── main
-│       ├── lambdas // the lambda containing the node logic
-│       ├── main.tf  // the main terraform entrypoint
 ├── performance-testing
 │   └── find-judge.js
 ├── runtimes // used to build up the lambda layers
@@ -79,6 +67,31 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   │   ├── main.tf // the main terraform entrypoint
 │   └── template
 │       ├── main.tf // the main terraform entrypoint for the template
+├── workflow-terraform
+│   ├── migration
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the migration code
+│   │   └── main
+│   │       ├── lambdas // the lambda containing the node logic
+│   │       ├── main.tf  // the main terraform entrypoint
+│   ├── migration-cron
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the cron lambda
+│   │   │   └──  main
+│   │   │       ├── lambdas // the lambda containing the node logic
+│   │   │       ├── main.tf // the main terraform entrypoint
+│   ├── reindex-cron
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the cron lambda
+│   │   │   └──  main
+│   │   │       ├── lambdas // the lambda containing the node logic
+│   │   │       ├── main.tf // the main terraform entrypoint
+│   ├── switch-colors-cron
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the cron lambda
+│   │   │   └──  main
+│   │   │       ├── lambdas // the lambda containing the node logic
+│   │   │       ├── main.tf // the main terraform entrypoint
 ├── streams-local.js // sets up the dynamo streams locally
 ├── swagger.json // the swagger .json we update when api endpoints are changed or added
 ├── switch-cognito-triggers-color.js // used to switch the color of the cognito triggers
