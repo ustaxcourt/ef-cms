@@ -68,16 +68,15 @@ jobs:
           git push -u origin "${intermediate_branch}"
 
       - name: Make PR of Intermediate branch to Test
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        destination_branch=experimental3
-        feature_branch=${{ github.head_ref }}
-        intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          destination_branch=experimental3
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-        sudo apt-get update
-        sudo apt-get install hub
+          sudo apt-get update
+          sudo apt-get install hub
 
-        pr_title="${feature_branch} intermediate to experimental3"
-        hub pull-request -b ${destination_branch} -m "$pr_title"
-
+          pr_title="${feature_branch} intermediate to experimental3"
+          hub pull-request -b ${destination_branch} -m "$pr_title"
