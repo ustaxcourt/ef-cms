@@ -43,8 +43,8 @@ jobs:
           fi
 
   create-intermediate-branch:
-    runs-on: ubuntu-latest
     if: ${{ check-for-intermediate-branch.outputs.intermediate_branch_exists == false }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Create Intermediate branch
