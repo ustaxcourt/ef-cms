@@ -24,12 +24,12 @@ const { createISODateString } = require('../../utilities/DateHandler');
 exports.createAndServeNoticeDocketEntry = async (
   applicationContext,
   {
+    additionalDocketEntryInfo = {},
     caseEntity,
     documentInfo,
     newPdfDoc,
     noticePdf,
     userId,
-    additionalDocketEntryInfo = {},
   },
 ) => {
   const docketEntryId = applicationContext.getUniqueId();

@@ -704,6 +704,7 @@ Case.VALIDATION_RULES = {
   sealedDate: JoiValidationConstants.ISO_DATE.optional()
     .allow(null)
     .description('When the case was sealed from the public.'),
+
   sortableDocketNumber: joi
     .number()
     .required()
@@ -1660,16 +1661,28 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 /**
  * @param {Object} options the options argument
  * @param {Array} options.consolidatedCases an array of consolidated cases
- * @param {Function} isPartyOfCase a function used to know if a userId is part of the case
  * @param {String} userId the user's id
  * @returns {boolean} true if the user is a party of the case
  */
-const isPetitionerPartOfGroup = function ({
-  consolidatedCases,
-  isPartyOfCase,
-  userId,
-}) {
-  return consolidatedCases.some(aCase => !!isPartyOfCase(aCase, userId));
+const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
+  return consolidatedCases.some(aCase =>
+    userIsDirectlyAssociated({ aCase, userId }),
+  );
+};
+
+/**
+ * @param {Object} options the options argument
+ * @param {Object} options.aCase A Case
+ * @param {String} options.userId the user's id
+ * @returns {boolean} true if the user is a party of the case
+ */
+const userIsDirectlyAssociated = function ({ aCase, userId }) {
+  const userIsPartyToCase = [
+    ...(aCase.petitioners || []),
+    ...(aCase.privatePractitioners || []),
+    ...(aCase.irsPractitioners || []),
+  ].some(user => user?.userId === userId || user?.contactId === userId);
+  return userIsPartyToCase;
 };
 
 /**
@@ -2489,9 +2502,10 @@ module.exports = {
   isClosed,
   isClosedStatus,
   isLeadCase,
-  isPetitionerPartOfGroup,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  isUserPartOfGroup,
   shouldGenerateNoticesForCase,
   updatePetitioner,
+  userIsDirectlyAssociated,
 };
