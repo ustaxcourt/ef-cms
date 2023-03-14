@@ -384,7 +384,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
     highPriorityField = ['highPriority', 'trialDate'];
     highPriorityDirection = ['desc', 'asc'];
 
-    const rank = {
+    const caseStatusSortRank = {
       [STATUS_TYPES.jurisdictionRetained]: 1,
       [STATUS_TYPES.assignedMotion]: 2,
       [STATUS_TYPES.assignedCase]: 3,
@@ -395,7 +395,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueue,
       [
         ...highPriorityField,
-        i => rank[i.caseStatus],
+        workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
         sortField,
         'docketNumber',
       ],
