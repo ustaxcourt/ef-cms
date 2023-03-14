@@ -32,8 +32,8 @@ jobs:
           git remote add flexion ${flexion_remote_address} 
 
           # get intermediate branch related commits in both repos
-          sha_of_int_branch_in_flexion=$(git ls-remote ${flexion_remote_address} ${intermediate_branch})
-          sha_of_int_branch_in_court=$(git ls-remote ${court_remote_address} ${intermediate_branch})
+          sha_of_int_branch_in_flexion=$(git ls-remote $flexion_remote_address} $intermediate_branch)
+          sha_of_int_branch_in_court=$(git ls-remote $court_remote_address $intermediate_branch)
           echo "sha_of_int_branch_in_court**, ${sha_of_int_branch_in_court}"
           echo "sha_of_int_branch_in_flexion**, ${sha_of_int_branch_in_flexion}"
 
