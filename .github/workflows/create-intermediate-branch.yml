@@ -14,7 +14,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Check if intermediate branch exists
         run: |
-
         feature_branch=${{ github.head_ref }}
         intermediate_branch="${feature_branch}-intermediate-to-experimental3"
         intermediate_branch_exists=false
@@ -33,10 +32,8 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          intermediate_branch_exists=false
-          
-          git fetch --unshallow
-          
+          echo "VALUE OF intermediate_branch_exists FIRST, ${intermediate_branch_exists} *****"
+
           if [ $intermediate_branch_exists==false ]
           then
             # Get the base branch
@@ -60,7 +57,8 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          intermediate_branch_exists=false
+          echo "VALUE OF intermediate_branch_exists SECOND, ${intermediate_branch_exists} *****"
+
 
           if [ $intermediate_branch_exists==false ]
           then
