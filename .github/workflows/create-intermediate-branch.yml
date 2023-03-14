@@ -13,7 +13,8 @@ permissions:
 jobs:
   create-intermediate-branch:
     runs-on: ubuntu-latest
-
+    outputs:
+      flexion_branch_exists: ${{ steps.check_branch.outputs.flexion_branch_exists }}
     steps:
       - uses: actions/checkout@v3
       - name: Set Git config
@@ -23,8 +24,6 @@ jobs:
 
       - name: Check if intermediate branch exists
         id: check_branch
-        outputs:
-          flexion_branch_exists: ${{ steps.check_branch.outputs.flexion_branch_exists }}
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
