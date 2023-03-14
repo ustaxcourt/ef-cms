@@ -202,7 +202,6 @@ export const updateDocketEntryMetaInteractor = async (
       .removeCoversheet(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
-        filingDateUpdated,
       });
     caseEntity.updateDocketEntry(updatedDocketEntry);
   }
