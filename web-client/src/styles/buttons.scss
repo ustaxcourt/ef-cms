@@ -185,6 +185,14 @@ table.ustc-table .ustc-button--unstyled {
     box-shadow: 10px 0 0 0 color($theme-color-primary) inset;
     color: color($theme-color-base-darkest);
     text-decoration: none;
+
+    &:disabled {
+      text-decoration: none;
+    }
+  }
+
+  &:disabled {
+    text-decoration: none;
   }
 }
 
