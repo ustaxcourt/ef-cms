@@ -15,7 +15,7 @@ describe('canRequestAccessAction', () => {
       modules: {
         presenter,
       },
-      props: { isAssociated: false },
+      props: { isDirectlyAssociated: false },
       state: { caseDetail: { docketNumber: '123-45' } },
     });
 
@@ -27,7 +27,7 @@ describe('canRequestAccessAction', () => {
       modules: {
         presenter,
       },
-      props: { isAssociated: 'yep' },
+      props: { isDirectlyAssociated: 'yep' },
       state: { caseDetail: { docketNumber: '123-45' } },
     });
 

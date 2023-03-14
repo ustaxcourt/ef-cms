@@ -7,7 +7,6 @@ const {
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const DATE = '2018-11-21T20:49:28.192Z';
@@ -102,10 +101,15 @@ describe('createTrialSessionAndWorkingCopy', () => {
     });
 
     it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
+      const trialSessionToCreate = new TrialSession(trialSessionToAdd, {
+        applicationContext,
+      });
+      delete trialSessionToCreate.trialSessionId;
+
       await expect(
         createTrialSessionAndWorkingCopy({
           applicationContext,
-          trialSessionToAdd: omit(trialSessionToAdd, 'trialSessionId'),
+          trialSessionToAdd: trialSessionToCreate,
         }),
       ).rejects.toThrow(
         'The TrialSessionWorkingCopy entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',

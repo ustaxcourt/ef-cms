@@ -20,7 +20,6 @@ if [[ -z "$CIRCLECI" ]]; then
 fi
 
 
-URL=http://localhost:8000/shell ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
 
 npm run build:assets

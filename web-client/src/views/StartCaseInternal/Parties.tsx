@@ -80,7 +80,7 @@ export const Parties = connect(
           <div className="subsection contacts">
             <Contacts
               bind="form"
-              contactsHelper="startCaseInternalContactsHelper"
+              contactsHelper="internalPetitionPartiesHelper"
               parentView="StartCaseInternal"
               showPrimaryContact={startCaseInternalHelper.showPrimaryContact}
               showSecondaryContact={

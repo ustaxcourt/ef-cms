@@ -6,6 +6,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
@@ -138,6 +139,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         eventCode: 'M115',
         filers: [getContactPrimary(caseDetail).contactId],
         hasSupportingDocuments: true,
+        objections: OBJECTIONS_OPTIONS_MAP.NO,
         primaryDocumentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         scenario: 'Nonstandard H',
         secondaryDocument: {

@@ -182,8 +182,10 @@ export const updatePetitionerInformationInteractor = async (
     contactId: oldCaseContact.contactId,
     contactType: oldCaseContact.contactType,
     email: oldCaseContact.email,
+    hasConsentedToEService: oldCaseContact.hasConsentedToEService,
     hasEAccess: oldCaseContact.hasEAccess,
     isAddressSealed: oldCaseContact.isAddressSealed,
+    paperPetitionEmail: oldCaseContact.paperPetitionEmail,
     sealedAndUnavailable: oldCaseContact.sealedAndUnavailable,
     ...editableFields,
   });

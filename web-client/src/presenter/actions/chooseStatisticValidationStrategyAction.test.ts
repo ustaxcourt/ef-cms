@@ -36,4 +36,16 @@ describe('chooseStatisticValidationStrategyAction', () => {
     expect(addEditStatisticMock).not.toHaveBeenCalled();
     expect(startCaseMock).toHaveBeenCalled();
   });
+
+  it('should call path.startCase when statisticIndex is 0', async () => {
+    await runAction(chooseStatisticValidationStrategyAction, {
+      modules: { presenter },
+      state: {
+        modal: { statisticIndex: 0 },
+      },
+    });
+
+    expect(addEditStatisticMock).not.toHaveBeenCalled();
+    expect(startCaseMock).toHaveBeenCalled();
+  });
 });

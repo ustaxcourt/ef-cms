@@ -9,7 +9,7 @@ describe('setDefaultStartCaseInternalFormAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.form.procedureType to the default', async () => {
+  it('should set default fields', async () => {
     const result = await runAction(setDefaultStartCaseInternalFormAction, {
       modules: {
         presenter,
@@ -18,6 +18,8 @@ describe('setDefaultStartCaseInternalFormAction', () => {
     });
 
     expect(result.state.form.procedureType).toEqual(DEFAULT_PROCEDURE_TYPE);
+    expect(result.state.form.hasVerifiedIrsNotice).toEqual(false);
+    expect(result.state.form.isPaper).toEqual(true);
   });
 
   it('does not override procedureType if it is already present on the form', async () => {
@@ -29,17 +31,6 @@ describe('setDefaultStartCaseInternalFormAction', () => {
     });
 
     expect(result.state.form.procedureType).toEqual('A procedure type');
-  });
-
-  it('sets state.form.hasVerifiedIrsNotice to false by default', async () => {
-    const result = await runAction(setDefaultStartCaseInternalFormAction, {
-      modules: {
-        presenter,
-      },
-      state: { form: {} },
-    });
-
-    expect(result.state.form.hasVerifiedIrsNotice).toEqual(false);
   });
 
   it('does not override hasVerifiedIrsNotice if it is already present on the form', async () => {

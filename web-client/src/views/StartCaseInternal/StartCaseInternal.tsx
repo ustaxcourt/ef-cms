@@ -47,7 +47,7 @@ export const StartCaseInternal = connect(
               <div className="grid-col-5">
                 <Tabs
                   bind="currentViewMetadata.startCaseInternal.tab"
-                  className="container-tabs no-full-border-bottom flex tab-button-h3"
+                  className="container-tabs no-full-border-bottom flex tab-button-h3 overflow-hidden"
                 >
                   <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />

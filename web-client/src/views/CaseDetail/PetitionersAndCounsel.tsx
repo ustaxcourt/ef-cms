@@ -6,6 +6,7 @@ import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PetitionersAndCounsel = connect(
   {
@@ -67,13 +68,43 @@ export const PetitionersAndCounsel = connect(
                     )}
                   </span>
                   {petitioner.formattedPendingEmail}
+
+                  {petitioner.showPaperPetitionEmail && (
+                    <>
+                      <p className="semi-bold margin-bottom-0">
+                        Petition email address
+                      </p>
+                      <span
+                        className={classNames(
+                          petitioner.isAddressSealed &&
+                            'margin-left-205 sealed-address',
+                          'margin-top-4 word-wrap-break-word',
+                        )}
+                      >
+                        {petitioner.isAddressSealed && (
+                          <span
+                            aria-label="sealed paper petition email"
+                            className="sealed-contact-icon"
+                          >
+                            <FontAwesomeIcon
+                              className="margin-right-05"
+                              icon={['fas', 'lock']}
+                              size="sm"
+                            />
+                          </span>
+                        )}
+                        {petitioner.formattedPaperPetitionEmail}
+                      </span>
+                    </>
+                  )}
+
                   {petitioner.serviceIndicator && (
-                    <div className="margin-top-4">
+                    <span className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">
                         Service preference
                       </p>
                       {petitioner.serviceIndicator}
-                    </div>
+                    </span>
                   )}
                   <h4 className="margin-top-3">Counsel</h4>
                   {petitioner.hasCounsel &&

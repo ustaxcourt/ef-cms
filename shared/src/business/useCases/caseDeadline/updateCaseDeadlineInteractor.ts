@@ -1,4 +1,4 @@
-import { CaseDeadline } from '../../entities/CaseDeadline';
+import { CaseDeadline, CaseDeadlineClass } from '../../entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -15,7 +15,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const updateCaseDeadlineInteractor = async (
   applicationContext: IApplicationContext,
-  { caseDeadline }: { caseDeadline: TCaseDeadline },
+  { caseDeadline }: { caseDeadline: CaseDeadlineClass },
 ) => {
   const user = applicationContext.getCurrentUser();
 
