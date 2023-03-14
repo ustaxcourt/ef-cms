@@ -40,7 +40,7 @@ jobs:
 
           if [ -n "${item}" ]
           then
-            flexion_branch_exists=true >> "$GITHUB_OUTPUT"
+            "flexion_branch_exists=true" >> "$GITHUB_OUTPUT"
             echo "BUILD ENV VARIABLE AFTER SETTING, *** ${{ steps.check_branch.outputs.flexion_branch_exists }} !!!"
 
             echo "Branch ${intermediate_branch} exists"
