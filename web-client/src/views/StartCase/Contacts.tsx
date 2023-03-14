@@ -17,33 +17,29 @@ export const Contacts = connect(
     wrapperClassName,
   }) {
     return (
-      <React.Fragment>
+      <>
         {showPrimaryContact && (
-          <>
-            <ContactPrimary
-              bind={bind}
-              contactsHelper={contactsHelper}
-              parentView={parentView}
-              wrapperClassName={wrapperClassName}
-              onBlur={onBlur}
-              onChange={onChange}
-            />
-          </>
+          <ContactPrimary
+            bind={bind}
+            contactsHelper={contactsHelper}
+            parentView={parentView}
+            wrapperClassName={wrapperClassName}
+            onBlur={onBlur}
+            onChange={onChange}
+          />
         )}
         {showSecondaryContact && (
-          <>
-            <ContactSecondary
-              bind={bind}
-              contactsHelper={contactsHelper}
-              parentView={parentView}
-              useSameAsPrimary={useSameAsPrimary}
-              wrapperClassName={wrapperClassName}
-              onBlur={onBlur}
-              onChange={onChange}
-            />
-          </>
+          <ContactSecondary
+            bind={bind}
+            contactsHelper={contactsHelper}
+            parentView={parentView}
+            useSameAsPrimary={useSameAsPrimary}
+            wrapperClassName={wrapperClassName}
+            onBlur={onBlur}
+            onChange={onChange}
+          />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

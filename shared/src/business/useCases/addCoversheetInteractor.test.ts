@@ -1,6 +1,7 @@
 import {
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
@@ -56,6 +57,7 @@ describe('addCoversheetInteractor', () => {
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
         lodged: true,
+        objections: OBJECTIONS_OPTIONS_MAP.NO,
       },
     ],
     docketNumber: '102-19',

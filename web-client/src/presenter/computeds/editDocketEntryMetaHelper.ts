@@ -8,7 +8,8 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
+  const { AMENDMENT_EVENT_CODES, INTERNAL_CATEGORY_MAP } =
+    applicationContext.getConstants();
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
@@ -18,8 +19,6 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     'Motion to Withdraw as Counsel',
     'Application to Take Deposition',
   ];
-
-  const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   let categoryInformation;
   find(
@@ -50,7 +49,7 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     primary: optionsForCategory,
     showObjection:
       objectionDocumentTypes.includes(form.documentType) ||
-      (amendmentEventCodes.includes(form.eventCode) &&
+      (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     strickenAtFormatted,
     strickenBy,
