@@ -15,7 +15,7 @@ exports.removeCoverFromPdf = async ({ applicationContext, pdfData }) => {
   pdfDoc.removePage(0);
 
   const newPdfData = await pdfDoc.save();
-  const numberOfPages = pdfDoc.getPages().length;
+  const numberOfPages = pdfDoc.getPageCount();
 
   return {
     numberOfPages,
