@@ -12,15 +12,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Initialize variables
-        run: |
-          destination_branch=experimental3
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          intermediate_branch_exists=false
-
       - name: Check if intermediate branch exists
         run: |
+
+        feature_branch=${{ github.head_ref }}
+        intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+        intermediate_branch_exists=false
+
           git fetch origin
           if [ git rev-parse --verify "${intermediate_branch}" ]
           then
@@ -32,11 +30,16 @@ jobs:
 
       - name: Create Intermediate branch
         run: |
-          echo "INT ANSWER, ${intermediate_branch}"
+          destination_branch=experimental3
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch_exists=false
+          
+          git fetch --unshallow
+          
           if [ $intermediate_branch_exists==false ]
           then
             # Get the base branch
-            git fetch --unshallow
             git checkout $destination_branch
             git pull
 
@@ -54,6 +57,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          destination_branch=experimental3
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch_exists=false
+
           if [ $intermediate_branch_exists==false ]
           then
             sudo apt-get update
