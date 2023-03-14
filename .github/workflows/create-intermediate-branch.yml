@@ -14,9 +14,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Check if intermediate branch exists
         run: |
-        feature_branch=${{ github.head_ref }}
-        intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-        intermediate_branch_exists=false
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch_exists=false
 
           git fetch origin
           if [ git rev-parse --verify "${intermediate_branch}" ]
