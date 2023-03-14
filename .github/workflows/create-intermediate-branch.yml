@@ -16,6 +16,7 @@ jobs:
         run: |
           git config --local user.email "jabu@flexion.us"
           git config --local user.name "Joshua Abu"
+
       - name: Check if intermediate branch exists
         run: |
           feature_branch=${{ github.head_ref }}
@@ -61,7 +62,7 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          echo "VALUE OF intermediate_branch_exists SECOND, ${intermediate_branch_exists} *****"
+          echo "VALUE OF intermediate_branch_exists SECONDly, ${intermediate_branch_exists} *****"
 
 
           if [ $intermediate_branch_exists==false ]
