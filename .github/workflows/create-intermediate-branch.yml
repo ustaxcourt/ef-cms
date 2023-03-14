@@ -7,10 +7,10 @@ on:
       - opened
 
 jobs:
-  create-intermediate-branch:
+  check-for-intermediate-branch:
     runs-on: ubuntu-latest
     outputs:
-      flexion_branch_exists: ${{ steps.check_branch.outputs.flexion_branch_exists }}
+      intermediate_branch_exists: ${{ steps.check_branch.outputs.intermediate_branch_exists }}
     steps:
       - uses: actions/checkout@v3
       - name: Set Git config
@@ -18,75 +18,66 @@ jobs:
           git config --local user.email "jabu@flexion.us"
           git config --local user.name "Joshua Abu"
 
-      - name: Check if intermediate branch exists
+      - name: Set flag
         id: check_branch
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
           flexion_remote_address=https://github.com/flexion/ef-cms.git
+          court_remote_address=https://github.com/ustaxcourt/ef-cms.git
 
           git fetch --all
 
           # set flexion remote branch
           git remote add flexion ${flexion_remote_address} 
 
-          item=$(git ls-remote ${flexion_remote_address} ${intermediate_branch})
-          echo "ITEM*****, ${item}"
+          # get intermediate branch related commits in both repos
+          sha_of_int_branch_in_flexion=$(git ls-remote ${flexion_remote_address} ${intermediate_branch})
+          sha_of_int_branch_in_court=$(git ls-remote ${court_remote_address} ${intermediate_branch})
 
-
-
-          # check flexion branches to see if its related intermediate branch exists
-          # can we also just check if a PR is already opened vs checking?
-
-          if [ -n "${item}" ]
+          if [ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]
           then
-            echo "flexion_branch_exists=true" >> "$GITHUB_OUTPUT"
-            echo "BUILD ENV VARIABLE AFTER SETTING, *** ${{ steps.check_branch.outputs.flexion_branch_exists }} !!!"
-
-            echo "Branch ${intermediate_branch} exists"
+            "intermediate_branch_exists=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Branch ${intermediate_branch} does not exist at all"
+            "intermediate_branch_exists=false" >> "$GITHUB_OUTPUT"
           fi
 
+  create-intermediate-branch:
+    runs-on: ubuntu-latest
+    if: ${{ check-for-intermediate-branch.outputs.intermediate_branch_exists == false }}
+    steps:
+      - uses: actions/checkout@v3
       - name: Create Intermediate branch
         run: |
-          echo "BUILD ENV VARIABLE, *** ${{ steps.check_branch.outputs.flexion_branch_exists }} !!!"
-          # destination_branch=experimental3
-          # feature_branch=${{ github.head_ref }}
-          # intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          # echo "VALUE OF intermediate_branch_exists FIRST, ${intermediate_branch_exists} *****"
+          destination_branch=experimental3
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-          # if [ $intermediate_branch_exists==false ]
-          # then
-          #   # Get the base branch
-          #   git checkout $destination_branch
-          #   git pull
+          # Get the base branch
+          git fetch origin
+          git checkout $destination_branch
+          git pull
 
-          #   # Create a copy of the destination branch
-          #   git checkout -b "${intermediate_branch}"
+          # Create a copy of the destination branch
+          git checkout -b $intermediate_branch
 
-          #   # Merge the feature branch into the intermediate branch
-          #   git merge "origin/${feature_branch}"
+          # Merge the feature branch into the intermediate branch
+          git merge "origin/${feature_branch}"
 
-          #   # Push the new intermediate to remote
-          #   git push -u origin "${intermediate_branch}"
-          # fi
+          # Push the new intermediate to remote
+          git push -u origin "${intermediate_branch}"
 
-      # - name: Make PR of Intermediate branch to Tests
-      # needs:
-      # env:
-      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # run: |
-      #   destination_branch=experimental3
-      #   feature_branch=${{ github.head_ref }}
-      #   intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-      #   echo "VALUE OF intermediate_branch_exists SECONDly, ${intermediate_branch_exists} *****"
+      - name: Make PR of Intermediate branch to Test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        destination_branch=experimental3
+        feature_branch=${{ github.head_ref }}
+        intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-      #   if [ $intermediate_branch_exists==false ]
-      #   then
-      #     sudo apt-get update
-      #     sudo apt-get install hub
+        sudo apt-get update
+        sudo apt-get install hub
 
-      #     pr_title="${feature_branch} intermediate to experimental3"
-      #     hub pull-request -b ${destination_branch} -m "$pr_title"
-      #   fi
+        pr_title="${feature_branch} intermediate to experimental3"
+        hub pull-request -b ${destination_branch} -m "$pr_title"
+
