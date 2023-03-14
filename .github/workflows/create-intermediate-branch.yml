@@ -42,12 +42,12 @@ jobs:
           then
             echo "intermediate_branch_exists=true" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} exists"
-            echo "GITHUB_OUTPUT in IF ${intermediate_branch} exists"
+            echo "GITHUB_OUTPUT in IF +  ${GITHUB_OUTPUT}"
 
           else
             echo "intermediate_branch_exists=false" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} DOES NOT exists"
-            echo "GITHUB_OUTPUT in ELSE ${intermediate_branch} exists"
+            echo "GITHUB_OUTPUT in ELSE ${GITHUB_OUTPUT}"
           fi
 
   create-intermediate-branch:
