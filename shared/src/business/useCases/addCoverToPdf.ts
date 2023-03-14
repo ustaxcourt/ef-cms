@@ -64,7 +64,7 @@ export const addCoverToPdf = async ({
   }
 
   const newPdfData = await pdfDoc.save();
-  const numberOfPages = pdfDoc.getPages().length;
+  const numberOfPages = pdfDoc.getPageCount();
 
   return {
     consolidatedCases: coverSheetData.consolidatedCases,
