@@ -208,7 +208,7 @@ describe('updateCase', () => {
     caseToUpdate.orderForAmendedPetition = true;
     caseToUpdate.orderForAmendedPetitionAndFilingFee = true;
     caseToUpdate.orderForFilingFee = true;
-    caseToUpdate.orderForOds = true;
+    caseToUpdate.orderForCds = true;
     caseToUpdate.orderForRatification = true;
     caseToUpdate.orderToShowCause = true;
 
@@ -227,7 +227,7 @@ describe('updateCase', () => {
     expect(result.orderForAmendedPetition).toBeTruthy();
     expect(result.orderForAmendedPetitionAndFilingFee).toBeTruthy();
     expect(result.orderForFilingFee).toBeTruthy();
-    expect(result.orderForOds).toBeTruthy();
+    expect(result.orderForCds).toBeTruthy();
     expect(result.orderForRatification).toBeTruthy();
     expect(result.orderToShowCause).toBeTruthy();
   });

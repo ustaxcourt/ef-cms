@@ -89,7 +89,7 @@ describe('View and manage the deadlines of a case', () => {
         expect.objectContaining({
           docketEntryId: expect.anything(),
           eventCode: 'DISC',
-          eventCodeDescription: 'Ownership Disclosure Statement',
+          eventCodeDescription: 'Corporate Disclosure Statement',
           filedBy: 'Petr. Daenerys Stormborn',
           filingDate: expect.anything(),
           index: 3,

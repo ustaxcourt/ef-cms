@@ -10,17 +10,6 @@ type TRawPenalty = {
   penaltyType: string;
 };
 
-type TDynamoRecord = {
-  pk: string;
-  sk: string;
-  gsi1pk?: string;
-  ttl?: number;
-  [key: string]: any;
-};
-
-type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;
-type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
-
 type TSectionWorkItem = {
   createdAt: string;
   docketEntry: RawDocketEntry[];
@@ -183,7 +172,7 @@ type TCase = {
   orderForAmendedPetition: boolean;
   orderForAmendedPetitionAndFilingFee: boolean;
   orderForFilingFee: boolean;
-  orderForOds: boolean;
+  orderForCds: boolean;
   orderForRatification: boolean;
   orderToShowCause: boolean;
   partyType: string;

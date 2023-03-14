@@ -82,8 +82,8 @@ export const StartCaseInternal = connect(
                       title: 'RQT',
                     },
                     {
-                      documentType: 'ownershipDisclosureFile',
-                      title: 'ODS',
+                      documentType: 'corporateDisclosureFile',
+                      title: 'CDS',
                     },
                     {
                       documentType: 'applicationForWaiverOfFilingFeeFile',

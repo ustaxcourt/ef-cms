@@ -27,10 +27,10 @@ describe('reviewSavedPetitionHelper', () => {
       },
     });
     expect(result).toMatchObject({
+      corporateDisclosureFile: undefined,
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: 'No requested place of trial',
@@ -55,7 +55,7 @@ describe('reviewSavedPetitionHelper', () => {
             },
             {
               documentType:
-                INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+                INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
             },
             { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
             {
@@ -79,12 +79,12 @@ describe('reviewSavedPetitionHelper', () => {
         documentType:
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
       },
+      corporateDisclosureFile: {
+        documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+      },
       hasIrsNoticeFormatted: 'Yes',
       irsNoticeDateFormatted: '01/04/20',
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: {
-        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-      },
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
@@ -155,10 +155,10 @@ describe('reviewSavedPetitionHelper', () => {
     });
 
     expect(result).toMatchObject({
+      corporateDisclosureFile: undefined,
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: 'No requested place of trial',
@@ -182,10 +182,10 @@ describe('reviewSavedPetitionHelper', () => {
     });
 
     expect(result).toMatchObject({
+      corporateDisclosureFile: undefined,
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: mockCity,

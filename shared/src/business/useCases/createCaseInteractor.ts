@@ -52,7 +52,7 @@ const addPetitionDocketEntryToCase = ({
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
+ * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
  * @param {string} providers.petitionFileId the id of the petition file
  * @param {object} providers.petitionMetadata the petition metadata
  * @param {string} providers.stinFileId the id of the stin file
@@ -61,12 +61,12 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: IApplicationContext,
   {
-    ownershipDisclosureFileId,
+    corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
   }: {
-    ownershipDisclosureFileId: string;
+    corporateDisclosureFileId: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
@@ -213,15 +213,15 @@ export const createCaseInteractor = async (
 
   caseToAdd.addDocketEntry(stinDocketEntryEntity);
 
-  if (ownershipDisclosureFileId) {
-    const odsDocketEntryEntity = new DocketEntry(
+  if (corporateDisclosureFileId) {
+    const cdsDocketEntryEntity = new DocketEntry(
       {
         contactPrimary: caseToAdd.getContactPrimary(),
         contactSecondary: caseToAdd.getContactSecondary(),
-        docketEntryId: ownershipDisclosureFileId,
-        documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        docketEntryId: corporateDisclosureFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
         filers,
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
@@ -232,7 +232,7 @@ export const createCaseInteractor = async (
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
-    caseToAdd.addDocketEntry(odsDocketEntryEntity);
+    caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({

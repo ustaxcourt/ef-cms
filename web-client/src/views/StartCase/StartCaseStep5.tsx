@@ -146,23 +146,23 @@ export const StartCaseStep5 = connect(
                           </div>
                         </div>
 
-                        {form.ownershipDisclosureFile && (
+                        {form.corporateDisclosureFile && (
                           <div className="margin-top-3 margin-bottom-3">
                             <span
                               className="usa-label usa-label-display margin-top-3"
                               htmlFor="filing-parties"
                             >
-                              Ownership Disclosure Statement
+                              Corporate Disclosure Statement
                             </span>
                             <div>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
-                                    file={form.ownershipDisclosureFile}
-                                    id="ods-preview-button"
+                                    file={form.corporateDisclosureFile}
+                                    id="cds-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
-                                    title="Ownership Disclosure Statement"
+                                    title="Corporate Disclosure Statement"
                                   />
                                 </div>
                               </div>

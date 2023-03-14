@@ -80,7 +80,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          ownershipDisclosureFile: {},
+          corporateDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
@@ -94,7 +94,7 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      ownershipDisclosureFile: {},
+      corporateDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,
@@ -105,7 +105,7 @@ describe('createCaseAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an ODS form) with the petition metadata and files and call the success path  finished', async () => {
+  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files and call the success path  finished', async () => {
     filePetitionInteractor.mockReturnValue({
       caseDetail: {
         ...MOCK_CASE,
@@ -152,8 +152,8 @@ describe('createCaseAction', () => {
           {
             createdAt: '2020-12-21T22:13:58.658Z',
             docketEntryId: 'aaec01d8-98e7-4534-959f-6c384c4cf0e0',
-            documentTitle: 'Ownership Disclosure Statement',
-            documentType: 'Ownership Disclosure Statement',
+            documentTitle: 'Corporate Disclosure Statement',
+            documentType: 'Corporate Disclosure Statement',
             entityName: 'DocketEntry',
             eventCode: 'DISC',
             filedBy: 'Petr. Com Pan Nee',
@@ -181,7 +181,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          ownershipDisclosureFile: {},
+          corporateDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
@@ -195,14 +195,14 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      ownershipDisclosureFile: {},
+      corporateDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and ODS
+    expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
     expect(successStub).toHaveBeenCalled();
   });
 
@@ -217,7 +217,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          ownershipDisclosureFile: {},
+          corporateDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
@@ -231,7 +231,7 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      ownershipDisclosureFile: {},
+      corporateDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,

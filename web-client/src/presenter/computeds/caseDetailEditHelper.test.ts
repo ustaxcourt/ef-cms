@@ -240,27 +240,27 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showOwnershipDisclosureStatement true, sets document id if partyType is corporation', () => {
+  it('sets showCorporateDisclosureStatement true, sets document id if partyType is corporation', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
           docketEntries: [
             {
               docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
-              documentType: 'Ownership Disclosure Statement',
+              documentType: 'Corporate Disclosure Statement',
             },
           ],
           partyType: PARTY_TYPES.corporation,
         },
       },
     });
-    expect(result.showOwnershipDisclosureStatement).toBeTruthy();
-    expect(result.ownershipDisclosureStatementDocumentId).toEqual(
+    expect(result.showCorporateDisclosureStatement).toBeTruthy();
+    expect(result.corporateDisclosureStatementDocumentId).toEqual(
       '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
     );
   });
 
-  it('sets showOwnershipDisclosureStatement true if partyType is corporation but there is no document for ODS', () => {
+  it('sets showCorporateDisclosureStatement true if partyType is corporation but there is no document for CDS', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
@@ -274,10 +274,10 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOwnershipDisclosureStatement).toBeTruthy();
+    expect(result.showCorporateDisclosureStatement).toBeTruthy();
   });
 
-  it('sets showOwnershipDisclosureStatement false if partyType is petitioner', () => {
+  it('sets showCorporateDisclosureStatement false if partyType is petitioner', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
@@ -285,7 +285,7 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOwnershipDisclosureStatement).toBeFalsy();
+    expect(result.showCorporateDisclosureStatement).toBeFalsy();
   });
 
   it('sets showReadOnlyTrialLocation true if isPaper is undefined and preferred trial city is selected', () => {
