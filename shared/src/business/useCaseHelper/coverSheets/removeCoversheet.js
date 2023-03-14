@@ -36,19 +36,6 @@ exports.removeCoversheet = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  const caseEntity = new Case(caseRecord, { applicationContext });
-
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
   let pdfData;
   try {
     const { Body } = await applicationContext
@@ -70,16 +57,27 @@ exports.removeCoversheet = async (
       pdfData,
     });
 
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);
-
-  const updatedDocketEntryEntity = docketEntryEntity.validate();
 
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    document: updatedDocketEntryEntity.toRawObject(),
+    document: docketEntryEntity.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -88,5 +86,5 @@ exports.removeCoversheet = async (
     key: docketEntryId,
   });
 
-  return updatedDocketEntryEntity;
+  return docketEntryEntity;
 };
