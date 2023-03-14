@@ -323,6 +323,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
   let { assignmentFilterValue } = get(state.screenMetadata);
+  let { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
 
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
@@ -372,10 +373,8 @@ export const formattedWorkQueue = (get, applicationContext) => {
       outbox: 'desc',
     },
   };
-
   const sortField =
     sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
-
   const sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
@@ -384,13 +383,39 @@ export const formattedWorkQueue = (get, applicationContext) => {
   if (workQueueToDisplay.box == 'inbox') {
     highPriorityField = ['highPriority', 'trialDate'];
     highPriorityDirection = ['desc', 'asc'];
-  }
 
-  workQueue = orderBy(
-    workQueue,
-    [...highPriorityField, sortField, 'docketNumber'],
-    [...highPriorityDirection, sortDirection, 'asc'],
-  );
+    const rank = {
+      [STATUS_TYPES.jurisdictionRetained]: 1,
+      [STATUS_TYPES.assignedMotion]: 2,
+      [STATUS_TYPES.assignedCase]: 3,
+      [STATUS_TYPES.submitted]: 4,
+    };
+
+    workQueue = orderBy(
+      workQueue,
+      [
+        ...highPriorityField,
+        i => rank[i.caseStatus],
+        sortField,
+        'docketNumber',
+      ],
+      [
+        ...highPriorityDirection,
+        'asc',
+        'asc',
+        'asc',
+        'asc',
+        sortDirection,
+        'asc',
+      ],
+    );
+  } else {
+    workQueue = orderBy(
+      workQueue,
+      [...highPriorityField, sortField, 'docketNumber'],
+      [...highPriorityDirection, sortDirection, 'asc'],
+    );
+  }
 
   return workQueue;
 };
