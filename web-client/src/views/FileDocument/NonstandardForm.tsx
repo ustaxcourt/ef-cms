@@ -4,13 +4,15 @@ import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { get } from 'lodash';
 import { props, sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const NonstandardForm = connect(
   {
     caseDetail: state.caseDetail,
     form: state.form,
+    getOrdinalValuesForUploadIteration:
+      state.getOrdinalValuesForUploadIteration,
     helper: state[props.helper],
     level: props.level,
     namespace: props.namespace,
@@ -22,6 +24,7 @@ export const NonstandardForm = connect(
   function NonstandardForm({
     caseDetail,
     form,
+    getOrdinalValuesForUploadIteration,
     helper,
     level,
     namespace,
@@ -29,6 +32,19 @@ export const NonstandardForm = connect(
     validateSequence,
     validationErrors,
   }) {
+    useEffect(() => {
+      const input = window.document.getElementById('other-iteration');
+      if (input) {
+        input.addEventListener('keydown', keydownTriggered, false);
+      }
+    });
+
+    const keydownTriggered = e => {
+      if (e.keyCode < 48 || e.keyCode > 57) {
+        e.preventDefault();
+      }
+    };
+
     namespace = namespace ? `${namespace}.` : '';
     return (
       <div className="nonstandard-form">
@@ -168,42 +184,65 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].ordinalField && (
-          <FormGroup errorText={validationErrors?.ordinalValue}>
-            <fieldset
-              className="usa-fieldset margin-bottom-0"
-              id={`${namespace}ordinal-field-radios`}
+          <FormGroup className="grid-row grid-gap">
+            <FormGroup
+              className="grid-col-6 margin-bottom-0"
+              errorText={validationErrors?.ordinalValue}
             >
-              <legend htmlFor={`${namespace}ordinal-field-radios`}>
+              <label
+                className="usa-label"
+                htmlFor={`${namespace}ordinal-field-select`}
+              >
                 {helper[level].ordinalField}
-              </legend>
-              {['First', 'Second', 'Third'].map(ordinalValue => (
-                <div className="usa-radio usa-radio__inline" key={ordinalValue}>
-                  <input
-                    checked={
-                      get(form, `${namespace}ordinalValue`, '') === ordinalValue
-                    }
-                    className="usa-radio__input"
-                    id={`${namespace}${ordinalValue}`}
-                    name={`${namespace}ordinalValue`}
-                    type="radio"
-                    value={ordinalValue}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-radio__label"
-                    htmlFor={`${namespace}${ordinalValue}`}
-                  >
+              </label>
+              <select
+                className="usa-select"
+                id={`${namespace}ordinal-field-select`}
+                name="ordinalValue"
+                value={form.ordinalValue}
+                onChange={e => {
+                  updateSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateSequence();
+                }}
+              >
+                <option value="">- Select -</option>
+                {getOrdinalValuesForUploadIteration.map(ordinalValue => (
+                  <option key={ordinalValue} value={ordinalValue}>
                     {ordinalValue}
-                  </label>
-                </div>
-              ))}
-            </fieldset>
+                  </option>
+                ))}
+              </select>
+            </FormGroup>
+            {form.ordinalValue === 'Other' && (
+              <FormGroup
+                className="grid-col-6"
+                errorText={validationErrors?.otherIteration}
+              >
+                <label className="usa-label" htmlFor="other-iteration">
+                  Iteration
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input margin-0"
+                  id="other-iteration"
+                  name="otherIteration"
+                  placeholder="Number"
+                  type="number"
+                  value={form.otherIteration || ''}
+                  onBlur={() => validateSequence()}
+                  onChange={e => {
+                    updateSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validateSequence();
+                  }}
+                />
+              </FormGroup>
+            )}
           </FormGroup>
         )}
       </div>
