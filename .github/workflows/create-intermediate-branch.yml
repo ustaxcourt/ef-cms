@@ -34,10 +34,12 @@ jobs:
           # get intermediate branch related commits in both repos
           sha_of_int_branch_in_flexion=$(git ls-remote ${flexion_remote_address} ${intermediate_branch})
           sha_of_int_branch_in_court=$(git ls-remote ${court_remote_address} ${intermediate_branch})
-
-          if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
+          evaluation=$([ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ])
+          echo "Evaluations, ${evaluation}"
+          if [evaluation]
           then
             echo "intermediate_branch_exists=true" >> "$GITHUB_OUTPUT"
+            echo "Branch "
           else
             echo "intermediate_branch_exists=false" >> "$GITHUB_OUTPUT"
           fi
