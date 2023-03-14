@@ -40,42 +40,6 @@ describe('DocketEntry entity', () => {
     expect(entry.stampData).toEqual({});
   });
 
-  describe('generateFiledBy', () => {
-    it('should update filedBy when the docket entry has not been served', () => {
-      const myDoc = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          filers: [mockPrimaryId, mockSecondaryId],
-          isLegacyServed: undefined,
-          servedAt: undefined,
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(myDoc.filedBy).toEqual(
-        `Petrs. ${MOCK_PETITIONERS[0].name} & ${MOCK_PETITIONERS[1].name}`,
-      );
-    });
-
-    it('should not update filedBy when the docket entry has been served', () => {
-      const mockFiledBy =
-        'This filed by should not be updated by the constructor';
-      const myDoc = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          filedBy: mockFiledBy,
-          filers: [mockPrimaryId, mockSecondaryId],
-          isLegacyServed: undefined,
-          servedAt: '2019-08-25T05:00:00.000Z',
-          servedParties: 'Test Petitioner',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(myDoc.filedBy).toEqual(mockFiledBy);
-    });
-  });
-
   describe('signedAt', () => {
     it('should implicitly set a signedAt for Notice event codes', () => {
       const myDoc = new DocketEntry(
