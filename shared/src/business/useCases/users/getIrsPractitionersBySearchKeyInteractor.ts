@@ -33,5 +33,7 @@ export const getIrsPractitionersBySearchKeyInteractor = async (
       type: 'irsPractitioner',
     });
 
-  return IrsPractitioner.validateRawCollection(users, { applicationContext });
+  return IrsPractitioner.validateRawCollection(users, {
+    applicationContext,
+  });
 };

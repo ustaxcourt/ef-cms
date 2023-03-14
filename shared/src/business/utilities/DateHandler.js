@@ -19,6 +19,8 @@ const FORMATS = {
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
+  UNIX_TIMESTAMP_SECONDS: 'X',
+  WEEK: 'W',
   YEAR: 'yyyy',
   YEAR_TWO_DIGIT: 'yy',
   YYYYMM: 'yyyy-MM',
@@ -239,9 +241,11 @@ const formatNow = formatStr => {
 /**
  * @param {string} a the first date to be compared
  * @param {string} b the second date to be compared
+ * @param {object} options options provider
+ * @param {boolean} options.exact whether to return the exact number of ms between a and b (default false)
  * @returns {number} difference between date a and date b
  */
-const dateStringsCompared = (a, b) => {
+const dateStringsCompared = (a, b, options = { exact: false }) => {
   const simpleDateLength = 10; // e.g. YYYY-MM-DD
 
   if (a.length == simpleDateLength || b.length == simpleDateLength) {
@@ -261,7 +265,10 @@ const dateStringsCompared = (a, b) => {
   const dt2 = prepareDateFromString(b);
   const differenceInMillis = dt1.diff(dt2, 'millisecond').milliseconds;
 
-  if (Math.abs(differenceInMillis) < millisecondsDifferenceThreshold) {
+  if (
+    !options.exact &&
+    Math.abs(differenceInMillis) < millisecondsDifferenceThreshold
+  ) {
     // treat as equal time stamps
     return 0;
   }
