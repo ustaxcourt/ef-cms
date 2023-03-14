@@ -10,7 +10,7 @@ jobs:
   check-for-intermediate-branch:
     runs-on: ubuntu-latest
     outputs:
-      intermediate_branch_exists: ${{ steps.check_branch.outputs.intermediate_branch_exists }}
+      skip-creation-of-intermediate-branch: ${{ steps.check_branch.outputs.skip-creation-of-intermediate-branch }}
     steps:
       - uses: actions/checkout@v3
       - name: Set Git config
@@ -37,25 +37,22 @@ jobs:
           echo "sha_of_int_branch_in_court**, ${sha_of_int_branch_in_court}"
           echo "sha_of_int_branch_in_flexion**, ${sha_of_int_branch_in_flexion}"
 
-          # if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
-          if [[ -n "${sha_of_int_branch_in_flexion}" ]]
+          if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
           then
-            echo "intermediate_branch_exists=true" >> "$GITHUB_OUTPUT"
+            echo "skip-creation-of-intermediate-branch=true" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} exists"
             echo "GITHUB_OUTPUT in IF +  ${GITHUB_OUTPUT}"
-            echo "intermediate_branch_exists +++ ${{ jobs.check-for-intermediate-branch.outputs.intermediate_branch_exists}"
 
 
           else
-            echo "intermediate_branch_exists=false" >> "$GITHUB_OUTPUT"
+            echo "skip-creation-of-intermediate-branch=false" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} DOES NOT exists"
             echo "GITHUB_OUTPUT in ELSE ${GITHUB_OUTPUT}"
-            echo "intermediate_branch_exists +++ ${{ jobs.check-for-intermediate-branch.outputs.intermediate_branch_exists}"
           fi
 
   create-intermediate-branch:
     needs: check-for-intermediate-branch
-    if: ${{ needs.check-for-intermediate-branch.outputs.intermediate_branch_exists == false }}
+    if: ${{ needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch == true }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
