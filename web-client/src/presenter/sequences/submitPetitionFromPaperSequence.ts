@@ -10,6 +10,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPaperPetitionDatesSequence } from './setPaperPetitionDatesSequence';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -37,6 +38,7 @@ export const submitPetitionFromPaperSequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
+          setCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           showProgressSequenceDecorator([
             setCaseTypeAction,

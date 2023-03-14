@@ -24,6 +24,8 @@ export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
+export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
+
 // city, state, optional unique ID (generated automatically in testing files)
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -74,6 +76,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage:
       'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
     key: 'consolidated-cases-group-access-petitioner',
+  },
+  E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
+    key: 'e-consent-fields-enabled-feature-flag',
   },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
@@ -603,6 +608,8 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
+
+export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
 
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
