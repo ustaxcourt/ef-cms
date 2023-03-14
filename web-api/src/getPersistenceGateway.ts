@@ -151,7 +151,6 @@ import {
 } from '../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from '../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode';
 import { updateMessage } from '../../shared/src/persistence/dynamo/messages/updateMessage';
-import { updateOutboxItemCaseStatus } from '../../shared/src/persistence/dynamo/workitems/updateOutboxItemCaseStatus';
 import { updatePractitionerUser } from '../../shared/src/persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from '../../shared/src/persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from '../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -160,12 +159,6 @@ import { updateUserCaseMapping } from '../../shared/src/persistence/dynamo/cases
 import { updateUserCaseNote } from '../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserEmail } from '../../shared/src/persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from '../../shared/src/persistence/dynamo/users/updateUserRecords';
-import { updateWorkItemAssociatedJudge } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge';
-import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus';
-import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
-import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
-import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
-import { updateWorkItemTrialLocation } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialLocation';
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
@@ -263,7 +256,6 @@ const gatewayMethods = {
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updateMessage,
-    updateOutboxItemCaseStatus,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
     updateTrialSession,
@@ -272,12 +264,6 @@ const gatewayMethods = {
     updateUserCaseNote,
     updateUserEmail,
     updateUserRecords,
-    updateWorkItemAssociatedJudge,
-    updateWorkItemCaseStatus,
-    updateWorkItemCaseTitle,
-    updateWorkItemDocketNumberSuffix,
-    updateWorkItemTrialDate,
-    updateWorkItemTrialLocation,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
