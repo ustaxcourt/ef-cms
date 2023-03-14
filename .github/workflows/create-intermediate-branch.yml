@@ -29,7 +29,7 @@ jobs:
           git fetch --all
 
           # set flexion remote branch
-          git remote add flexion ${flexion_remote_address} 
+          git remote add flexion $flexion_remote_address
 
           # get intermediate branch related commits in both repos
           sha_of_int_branch_in_flexion=$(git ls-remote $flexion_remote_address $intermediate_branch)
@@ -43,11 +43,14 @@ jobs:
             echo "intermediate_branch_exists=true" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} exists"
             echo "GITHUB_OUTPUT in IF +  ${GITHUB_OUTPUT}"
+            echo "intermediate_branch_exists +++ ${{ jobs.check-for-intermediate-branch.outputs.intermediate_branch_exists}"
+
 
           else
             echo "intermediate_branch_exists=false" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} DOES NOT exists"
             echo "GITHUB_OUTPUT in ELSE ${GITHUB_OUTPUT}"
+            echo "intermediate_branch_exists +++ ${{ jobs.check-for-intermediate-branch.outputs.intermediate_branch_exists}"
           fi
 
   create-intermediate-branch:
