@@ -37,14 +37,17 @@ jobs:
           echo "sha_of_int_branch_in_court**, ${sha_of_int_branch_in_court}"
           echo "sha_of_int_branch_in_flexion**, ${sha_of_int_branch_in_flexion}"
 
-          evaluation=$([ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ])
-          echo "Evaluations, ${evaluation}"
-          if [[ $evaluation ]]
+          # if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
+          if [[ -n "${sha_of_int_branch_in_flexion}" ]]
           then
             echo "intermediate_branch_exists=true" >> "$GITHUB_OUTPUT"
-            echo "Branch "
+            echo "Branch ${intermediate_branch} exists"
+            echo "GITHUB_OUTPUT in IF ${intermediate_branch} exists"
+
           else
             echo "intermediate_branch_exists=false" >> "$GITHUB_OUTPUT"
+            echo "Branch ${intermediate_branch} DOES NOT exists"
+            echo "GITHUB_OUTPUT in ELSE ${intermediate_branch} exists"
           fi
 
   create-intermediate-branch:
