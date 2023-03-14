@@ -1,7 +1,8 @@
-const AWS = require('aws-sdk');
-const {
-  processItems,
-} = require('./workflow-terraform/migration/main/lambdas/migration-segments');
+import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
+import AWS from 'aws-sdk';
+import createApplicationContext from './src/applicationContext';
+
+const applicationContext = createApplicationContext({});
 
 (async () => {
   const dynamo = new AWS.DynamoDB({
@@ -21,13 +22,18 @@ const {
 
   await documentClient
     .scan({
-      ExclusiveStartKey: null,
+      ExclusiveStartKey: undefined,
       Segment: 0,
-      TableName: process.env.SOURCE_TABLE,
+      TableName: process.env.SOURCE_TABLE!,
       TotalSegments: 1,
     })
     .promise()
     .then(async results => {
-      await processItems({ documentClient, items: results.Items });
+      await processItems(applicationContext, {
+        documentClient,
+        items: results.Items,
+        ranMigrations: undefined,
+        segment: undefined,
+      });
     });
 })();

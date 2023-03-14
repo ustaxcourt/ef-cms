@@ -1,3 +1,5 @@
+import { TDynamoRecord } from '../../../shared/src/persistence/dynamo/dynamoTypes';
+
 const case105_23: TCase & TDynamoRecord = {
   associatedJudge: 'Chief Judge',
   caseCaption: 'Armand Fulton, Petitioner',
@@ -20,8 +22,8 @@ const case105_23: TCase & TDynamoRecord = {
   orderDesignatingPlaceOfTrial: false,
   orderForAmendedPetition: false,
   orderForAmendedPetitionAndFilingFee: false,
+  orderForCds: false,
   orderForFilingFee: true,
-  orderForOds: false,
   orderForRatification: false,
   orderToShowCause: false,
   partyType: 'Petitioner',
@@ -190,8 +192,8 @@ const case106_23: TCase & TDynamoRecord = {
   orderDesignatingPlaceOfTrial: false,
   orderForAmendedPetition: false,
   orderForAmendedPetitionAndFilingFee: false,
+  orderForCds: false,
   orderForFilingFee: true,
-  orderForOds: false,
   orderForRatification: false,
   orderToShowCause: false,
   partyType: 'Petitioner',
