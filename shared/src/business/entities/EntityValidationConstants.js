@@ -434,16 +434,8 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
     .description('The name of the user that sent the WorkItem'),
   sentBySection: JoiValidationConstants.STRING.optional(),
   sentByUserId: JoiValidationConstants.UUID.optional(),
-  trialDate: joi.alternatives().conditional('caseStatus', {
-    is: JoiValidationConstants.STRING.valid(CASE_STATUS_TYPES.calendared),
-    otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
-    then: JoiValidationConstants.ISO_DATE.required(),
-  }),
-  trialLocation: joi.alternatives().conditional('caseStatus', {
-    is: JoiValidationConstants.STRING.valid(CASE_STATUS_TYPES.calendared),
-    otherwise: JoiValidationConstants.STRING.optional().allow(null),
-    then: JoiValidationConstants.STRING.required(),
-  }),
+  trialDate: joi.string().optional().allow(null),
+  trialLocation: joi.string().optional().allow(null),
   updatedAt: JoiValidationConstants.ISO_DATE.required(),
   workItemId: JoiValidationConstants.UUID.required(),
 };
