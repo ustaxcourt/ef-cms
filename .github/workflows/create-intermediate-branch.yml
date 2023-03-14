@@ -48,7 +48,7 @@ jobs:
 
       - name: Create Intermediate branch
         run: |
-          echo "BUILD ENV VARIABLE ${{ steps.check_branch.outputs.flexion_branch_exists }}
+          echo "BUILD ENV VARIABLE, *** ${{ steps.check_branch.outputs.flexion_branch_exists }} !!!"
           # destination_branch=experimental3
           # feature_branch=${{ github.head_ref }}
           # intermediate_branch="${feature_branch}-intermediate-to-experimental3"
