@@ -55,7 +55,7 @@ jobs:
 
   create-intermediate-branch:
     needs: check-for-intermediate-branch
-    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == true
+    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
