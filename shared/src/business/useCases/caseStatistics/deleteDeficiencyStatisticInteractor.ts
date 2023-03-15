@@ -28,6 +28,8 @@ export const deleteDeficiencyStatisticInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+
   const newCase = new Case(oldCase, { applicationContext });
   newCase.deleteStatistic(statisticId);
 
@@ -36,6 +38,7 @@ export const deleteDeficiencyStatisticInteractor = async (
     .updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: newCase,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

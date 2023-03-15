@@ -58,6 +58,9 @@ export const removeConsolidatedCasesInteractor = async (
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases);
 
     for (let newConsolidatedCaseToUpdate of newConsolidatedCases) {
+      const oldCaseCopy = applicationContext
+        .getUtilities()
+        .cloneAndFreeze(newConsolidatedCaseToUpdate);
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         applicationContext,
       });
@@ -66,12 +69,16 @@ export const removeConsolidatedCasesInteractor = async (
       updateCasePromises.push(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: caseEntity,
+          newCase: caseEntity,
+          oldCaseCopy,
         }),
       );
     }
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(newConsolidatedCases[0]);
     const caseEntity = new Case(newConsolidatedCases[0], {
       applicationContext,
     });
@@ -80,7 +87,8 @@ export const removeConsolidatedCasesInteractor = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity,
+        newCase: caseEntity,
+        oldCaseCopy,
       }),
     );
   }
@@ -99,13 +107,18 @@ export const removeConsolidatedCasesInteractor = async (
       );
     }
 
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(caseToRemove);
+
     const caseEntity = new Case(caseToRemove, { applicationContext });
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity,
+        newCase: caseEntity,
+        oldCaseCopy,
       }),
     );
   }

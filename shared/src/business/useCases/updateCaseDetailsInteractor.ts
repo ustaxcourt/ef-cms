@@ -129,7 +129,7 @@ export const updateCaseDetailsInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCaseEntity,
+      newCase: newCaseEntity,
       oldCaseCopy,
     });
 

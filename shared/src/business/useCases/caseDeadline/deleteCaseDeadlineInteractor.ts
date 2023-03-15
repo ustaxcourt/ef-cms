@@ -27,11 +27,15 @@ export const deleteCaseDeadlineInteractor = async (
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
 
-  const caseToUpdate = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  let updatedCase = new Case(caseToUpdate, { applicationContext });
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
+
+  let updatedCase = new Case(caseRecord, { applicationContext });
 
   await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,
@@ -50,7 +54,8 @@ export const deleteCaseDeadlineInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: updatedCase,
+      newCase: updatedCase,
+      oldCaseCopy,
     });
   return new Case(result, { applicationContext }).validate().toRawObject();
 };

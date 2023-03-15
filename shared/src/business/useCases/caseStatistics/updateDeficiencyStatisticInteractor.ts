@@ -63,6 +63,8 @@ export const updateDeficiencyStatisticInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+
   const statisticEntity = new Statistic(
     {
       determinationDeficiencyAmount,
@@ -85,7 +87,8 @@ export const updateDeficiencyStatisticInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      newCase,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

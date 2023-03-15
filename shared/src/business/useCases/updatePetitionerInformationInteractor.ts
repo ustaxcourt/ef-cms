@@ -17,14 +17,14 @@ import { aggregatePartiesForService } from '../utilities/aggregatePartiesForServ
 import { defaults, pick } from 'lodash';
 
 export const getIsUserAuthorized = ({
-  oldCase,
+  caseRecord,
   updatedPetitionerData,
   user,
 }) => {
   let isRepresentingCounsel = false;
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
-      oldCase,
+      caseRecord,
       updatedPetitionerData?.contactId,
     );
 
@@ -109,12 +109,16 @@ export const updatePetitionerInformationInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  const oldCase = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
+
   const hasAuthorization = getIsUserAuthorized({
-    oldCase,
+    caseRecord,
     updatedPetitionerData,
     user,
   });
@@ -123,13 +127,13 @@ export const updatePetitionerInformationInteractor = async (
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
-  if (oldCase.status === CASE_STATUS_TYPES.new) {
+  if (caseRecord.status === CASE_STATUS_TYPES.new) {
     throw new Error(
-      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
+      `Case with docketNumber ${caseRecord.docketNumber} has not been served`,
     );
   }
   const oldCaseContact = getPetitionerById(
-    oldCase,
+    caseRecord,
     updatedPetitionerData.contactId,
   );
 
@@ -172,7 +176,7 @@ export const updatePetitionerInformationInteractor = async (
 
   const caseToUpdateContacts = new Case(
     {
-      ...oldCase,
+      ...caseRecord,
     },
     { applicationContext },
   );
@@ -295,6 +299,7 @@ export const updatePetitionerInformationInteractor = async (
     .updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: caseEntity,
+      oldCaseCopy,
     });
 
   return {

@@ -38,6 +38,8 @@ export const updateQcCompleteForTrialInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+
   const newCase = new Case(oldCase, { applicationContext });
 
   newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
@@ -46,7 +48,8 @@ export const updateQcCompleteForTrialInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      newCase,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

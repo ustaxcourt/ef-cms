@@ -30,6 +30,10 @@ export const saveCaseNoteInteractor = async (
       docketNumber,
     });
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
+
   const caseToUpdate = new Case(
     { ...caseRecord, caseNote },
     {
@@ -43,7 +47,8 @@ export const saveCaseNoteInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate,
+      newCase: caseToUpdate,
+      oldCaseCopy,
     });
 
   return new Case(result, { applicationContext }).validate().toRawObject();

@@ -35,13 +35,14 @@ export const fileCourtIssuedOrderInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const caseToUpdate = await applicationContext
+  const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+  const newCase = new Case(oldCase, { applicationContext });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
 
@@ -72,7 +73,7 @@ export const fileCourtIssuedOrderInteractor = async (
   }
 
   if (documentMetadata.documentContents) {
-    documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
+    documentMetadata.documentContents += ` ${newCase.docketNumberWithSuffix} ${newCase.caseCaption}`;
 
     const documentContentsId = applicationContext.getUniqueId();
 
@@ -116,12 +117,15 @@ export const fileCourtIssuedOrderInteractor = async (
   );
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  caseEntity.addDocketEntry(docketEntryEntity);
+  newCase.addDocketEntry(docketEntryEntity);
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
+  const updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      newCase,
+      oldCaseCopy,
+    });
 
   if (documentMetadata.parentMessageId) {
     const messages = await applicationContext
@@ -147,5 +151,5 @@ export const fileCourtIssuedOrderInteractor = async (
     });
   }
 
-  return caseEntity.toRawObject();
+  return updatedCase.validate().toRawObject();
 };

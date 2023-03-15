@@ -29,6 +29,9 @@ export const deleteCaseNoteInteractor = async (
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
   delete caseRecord.caseNote;
 
@@ -36,7 +39,8 @@ export const deleteCaseNoteInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseRecord,
+      newCase: caseRecord,
+      oldCaseCopy,
     });
 
   return new Case(result, { applicationContext }).validate().toRawObject();

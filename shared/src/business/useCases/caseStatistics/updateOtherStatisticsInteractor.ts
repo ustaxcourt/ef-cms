@@ -32,6 +32,7 @@ export const updateOtherStatisticsInteractor = async (
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
 
   const newCase = new Case(
     { ...oldCase, damages, litigationCosts },
@@ -42,7 +43,8 @@ export const updateOtherStatisticsInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      newCase,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

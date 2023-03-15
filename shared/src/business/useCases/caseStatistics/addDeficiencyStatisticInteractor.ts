@@ -56,9 +56,13 @@ export const addDeficiencyStatisticInteractor = async (
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
 
-  const oldCase = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
   const statisticEntity = new Statistic(
     {
@@ -74,14 +78,15 @@ export const addDeficiencyStatisticInteractor = async (
     { applicationContext },
   ).validate();
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(caseRecord, { applicationContext });
   newCase.addStatistic(statisticEntity);
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      newCase,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
