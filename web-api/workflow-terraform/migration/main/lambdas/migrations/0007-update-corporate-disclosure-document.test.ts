@@ -1,6 +1,6 @@
 import { INITIAL_DOCUMENT_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../../shared/src/test/mockCase';
-const { migrateItems } = require('./0007-update-corporate-disclosure-document');
+import { migrateItems } from './0007-update-corporate-disclosure-document';
 
 describe('migrateItems', () => {
   let documentClient;
@@ -83,6 +83,27 @@ describe('migrateItems', () => {
       previousDocument: {
         ...mockItem.previousDocument,
         documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+      },
+    });
+  });
+
+  it('should modify docket entry items with previousDocument that has documentType "Order for Ownership Disclosure Statement", updating documentType', async () => {
+    const mockItem = {
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      previousDocument: {
+        documentTitle: 'Order for Ownership Disclosure Statement',
+        documentType: 'Order for Ownership Disclosure Statement',
+      },
+      sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const results = await migrateItems([mockItem], documentClient);
+
+    expect(results[0]).toEqual({
+      ...mockItem,
+      previousDocument: {
+        ...mockItem.previousDocument,
+        documentType: 'Order for Corporate Disclosure Statement',
       },
     });
   });

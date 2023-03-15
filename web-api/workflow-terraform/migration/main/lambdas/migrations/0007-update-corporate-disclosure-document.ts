@@ -25,6 +25,12 @@ export const migrateItems = items => {
       ) {
         item.previousDocument.documentType =
           INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType;
+      } else if (
+        item.previousDocument?.documentType ===
+        'Order for Ownership Disclosure Statement'
+      ) {
+        item.previousDocument.documentType =
+          'Order for Corporate Disclosure Statement';
       }
     } else if (isCase(item) && item.orderForOds !== undefined) {
       item.orderForCds = item.orderForOds;
