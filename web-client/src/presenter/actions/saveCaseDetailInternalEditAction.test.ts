@@ -76,7 +76,7 @@ describe('saveCaseDetailInternalEditAction', () => {
 
     const formWithComputedDates = {
       ...caseDetail,
-      ownershipDisclosureFile: {},
+      corporateDisclosureFile: {},
     };
 
     await runAction(saveCaseDetailInternalEditAction, {
@@ -94,7 +94,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     const uploadedDocument = formWithComputedDates.docketEntries.find(
       document =>
         document.documentType ===
-        INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+        INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     );
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
@@ -102,8 +102,8 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toBeUndefined();
     expect(uploadedDocument).toEqual({
       docketEntryId: mockUploadedKey,
-      documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentTitle,
-      documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+      documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentTitle,
+      documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     });
   });
 
