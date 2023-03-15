@@ -51,7 +51,7 @@ jobs:
           fi
       - name: LOGS FOR DEBUGGING CUZ YOU BUGGIN
         run: |
-          echo "FLAG IS: ${{jobs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch}}"
+          echo "FLAG IS: ${{ steps.check_branch.outputs.skip-creation-of-intermediate-branch }}"
 
   # create-intermediate-branch:
   #   needs: check-for-intermediate-branch
