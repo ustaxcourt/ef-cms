@@ -52,17 +52,16 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          current_branch=$(git branch --show-current)
           # Get the base branch
           git pull
-          echo "CURRENT BRANCH 1, $current_branch"
+          echo "CURRENT BRANCH 1, $(git branch --show-current)"
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}"
-          echo "CURRENT BRANCH 2, ${current_branch}"
+          echo "CURRENT BRANCH 2, $(git branch --show-current)"
 
 
-          echo "FEATURE BRANCH ******, ${feature_branch}"
+          echo "FEATURE BRANCH ******, ${{ github.head_ref }}"
 
           # Merge the feature branch into the intermediate branch
           git pull --no-rebase --no-edit origin $feature_branch
