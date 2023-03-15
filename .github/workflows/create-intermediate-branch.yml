@@ -53,7 +53,7 @@ jobs:
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
           # Get the base branch
-          git pull
+          git fetch --all
           echo "CURRENT BRANCH 1, $(git branch --show-current)"
 
           # Create a copy of the destination branch
