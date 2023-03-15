@@ -49,43 +49,48 @@ jobs:
             echo "Branch ${intermediate_branch} DOES NOT exists"
             echo "GITHUB_OUTPUT in ELSE ${GITHUB_OUTPUT}"
           fi
-
-  create-intermediate-branch:
-    needs: check-for-intermediate-branch
-    if: ${{ needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch == true }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Create Intermediate branch
+      - name: LOGS FOR DEBUGGING CUZ YOU BUGGIN
         run: |
-          destination_branch=experimental3
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          echo "FLAG IS: ${needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch}"
 
-          # Get the base branch
-          git fetch origin
-          git checkout $destination_branch
-          git pull
+  # create-intermediate-branch:
+  #   needs: check-for-intermediate-branch
+  #   run: |
+  #     echo "FLAG IS: ${needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch}"
+  # if: needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch == true
+  # runs-on: ubuntu-latest
+  # steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Create Intermediate branch
+  #     run: |
+  #       destination_branch=experimental3
+  #       feature_branch=${{ github.head_ref }}
+  #       intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-          # Create a copy of the destination branch
-          git checkout -b $intermediate_branch
+  #       # Get the base branch
+  #       git fetch origin
+  #       git checkout $destination_branch
+  #       git pull
 
-          # Merge the feature branch into the intermediate branch
-          git merge "origin/${feature_branch}"
+  #       # Create a copy of the destination branch
+  #       git checkout -b $intermediate_branch
 
-          # Push the new intermediate to remote
-          git push -u origin "${intermediate_branch}"
+  #       # Merge the feature branch into the intermediate branch
+  #       git merge "origin/${feature_branch}"
 
-      - name: Make PR of Intermediate branch to Test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          destination_branch=experimental3
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+  #       # Push the new intermediate to remote
+  #       git push -u origin "${intermediate_branch}"
 
-          sudo apt-get update
-          sudo apt-get install hub
+  #   - name: Make PR of Intermediate branch to Test
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: |
+  #       destination_branch=experimental3
+  #       feature_branch=${{ github.head_ref }}
+  #       intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-          pr_title="${feature_branch} intermediate to experimental3"
-          hub pull-request -b ${destination_branch} -m "$pr_title"
+  #       sudo apt-get update
+  #       sudo apt-get install hub
+
+  #       pr_title="${feature_branch} intermediate to experimental3"
+  #       hub pull-request -b ${destination_branch} -m "$pr_title"
