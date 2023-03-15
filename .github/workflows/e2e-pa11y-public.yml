@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - dependency-updates
+      - 9803-bug
 
 jobs:
   e2e_pa11y_public:
