@@ -5,7 +5,7 @@ import {
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
-  TRawTrialSession,
+  RawTrialSession,
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
@@ -336,7 +336,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   }: {
     docketNumber: string;
     jobId: string;
-    trialSession: TRawTrialSession;
+    trialSession: RawTrialSession;
     userId: string;
   },
 ) => {
