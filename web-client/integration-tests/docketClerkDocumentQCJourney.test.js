@@ -37,7 +37,7 @@ describe('Docket Clerk Document QC Journey', () => {
     trialDate: {
       day: '20',
       month: '01',
-      year: '2067',
+      year: '2040',
     },
     trialLocation,
   };
