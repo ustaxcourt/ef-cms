@@ -141,6 +141,8 @@ export const completeDocketEntryQCInteractor = async (
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
     },
     { applicationContext, petitioners: caseToUpdate.petitioners },
@@ -220,7 +222,7 @@ export const completeDocketEntryQCInteractor = async (
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
-
+  console.log('workItemToUpdate***', workItemToUpdate);
   await applicationContext
     .getPersistenceGateway()
     .saveWorkItemForDocketClerkFilingExternalDocument({
