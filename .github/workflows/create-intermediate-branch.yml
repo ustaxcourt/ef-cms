@@ -60,7 +60,7 @@ jobs:
           git checkout -b "${intermediate_branch}"
 
           # Merge the feature branch into the intermediate branch
-          git pull origin $feature_branch
+          git merge $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
