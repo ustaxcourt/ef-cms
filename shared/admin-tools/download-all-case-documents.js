@@ -62,11 +62,8 @@ const generateFilename = ({
   let numSealed = 0;
   let numError = 0;
   for (const docketEntry of caseEntity.docketEntries) {
-    if (
-      !docketEntry.isFileAttached ||
-      !docketEntry.index ||
-      !docketEntry.servedAt
-    ) {
+    if (!docketEntry.isFileAttached || !docketEntry.index) {
+      console.log('did not download docket entry', docketEntry);
       continue;
     }
     const sealed =
