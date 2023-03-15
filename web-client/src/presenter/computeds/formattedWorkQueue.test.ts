@@ -486,6 +486,39 @@ describe('formattedWorkQueue', () => {
     expect(result[4].workItemId).toEqual('d');
   });
 
+  it.only('sorts by receivedAt in ascending order within case status on the inbox', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            highPriority: false,
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'newer',
+          },
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            highPriority: false,
+            receivedAt: '2000-01-17T15:27:55.801Z',
+            workItemId: 'older',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('older');
+    expect(result[1].workItemId).toEqual('newer');
+  });
+
   describe('Consolidate Group Cases', () => {
     it('should show the work item to not be a part of a consolidated group', () => {
       const result = runCompute(formattedWorkQueue, {
