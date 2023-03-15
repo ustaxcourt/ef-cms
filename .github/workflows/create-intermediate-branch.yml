@@ -47,6 +47,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: 'experimental3'
+      - name: Set Git config
+        run: |
+          git config --local user.email "jabu@flexion.us"
+          git config --local user.name "Joshua Abu"
+          git config pull.rebase false
+
       - name: Create Intermediate branch
         run: |
           destination_branch=experimental3
@@ -64,7 +70,7 @@ jobs:
           echo "FEATURE BRANCH ******, ${{ github.head_ref }}"
 
           # Merge the feature branch into the intermediate branch
-          git pull --no-rebase --no-edit --allow-unrelated-histories origin $feature_branch
+          git pull --no-edit --allow-unrelated-histories origin $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
