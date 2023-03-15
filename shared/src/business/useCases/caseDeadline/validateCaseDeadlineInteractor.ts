@@ -10,7 +10,7 @@ import { CaseDeadline } from '../../entities/CaseDeadline';
  */
 export const validateCaseDeadlineInteractor = (
   applicationContext,
-  { caseDeadline }: { caseDeadline: TCaseDeadline },
+  { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
   const errors = new CaseDeadline(caseDeadline, {
     applicationContext,

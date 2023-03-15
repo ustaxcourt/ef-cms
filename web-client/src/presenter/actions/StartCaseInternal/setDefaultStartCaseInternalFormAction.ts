@@ -41,4 +41,6 @@ export const setDefaultStartCaseInternalFormAction = ({
   if (!statistics) {
     store.set(state.form.statistics, []);
   }
+
+  store.set(state.form.isPaper, true);
 };

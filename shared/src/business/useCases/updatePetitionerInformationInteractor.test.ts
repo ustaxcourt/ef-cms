@@ -338,6 +338,26 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toBe('test2@example.com');
   });
 
+  it("should not update the user's paper petition email and e-service consent information", async () => {
+    mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
+    mockPetitioners[0].hasConsentedToEService = true;
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.petitioners[0],
+    ).toMatchObject({
+      hasConsentedToEService: true,
+      paperPetitionEmail: 'paperPetitionEmail@example.com',
+    });
+  });
+
   it('should update petitioner additionalName when it is passed in', async () => {
     const mockAdditionalName = 'Tina Belcher';
 

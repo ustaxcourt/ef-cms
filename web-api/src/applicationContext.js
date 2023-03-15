@@ -11,14 +11,6 @@ const {
   addressLabelCoverSheet,
 } = require('../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet');
 const {
-  calculateDifferenceInDays,
-  calculateISODate,
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} = require('../../shared/src/business/utilities/DateHandler');
-const {
   CASE_STATUS_TYPES,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
@@ -41,24 +33,6 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext');
 const {
-  cloneAndFreeze,
-} = require('../../shared/src/business/utilities/cloneAndFreeze');
-const {
-  combineTwoPdfs,
-} = require('../../shared/src/business/utilities/documentGenerators/combineTwoPdfs');
-const {
-  compareCasesByDocketNumber,
-  formatCase: formatCaseForTrialSession,
-  getFormattedTrialSessionDetails,
-} = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
-const {
-  compareISODateStrings,
-  compareStrings,
-} = require('../../shared/src/business/utilities/sortFunctions');
-const {
-  copyPagesAndAppendToTargetPdf,
-} = require('../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf');
-const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
 const {
@@ -74,37 +48,8 @@ const {
   documentUrlTranslator,
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
-  filterWorkItemsForUser,
-} = require('../../shared/src/business/utilities/filterWorkItemsForUser');
-const {
-  formatJudgeName,
-} = require('../../shared/src/business/utilities/getFormattedJudgeName');
-const {
-  getAddressPhoneDiff,
-  getDocumentTypeForAddressChange,
-} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
-const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
-const {
-  getCropBox,
-} = require('../../shared/src/business/utilities/getCropBox');
-const {
-  getDescriptionDisplay,
-} = require('../../shared/src/business/utilities/getDescriptionDisplay');
-const {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} = require('../../shared/src/business/utilities/getWorkQueueFilters');
-const {
-  getDocumentTitleWithAdditionalInfo,
-} = require('../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo');
-const {
-  getFormattedCaseDetail,
-} = require('../../shared/src/business/utilities/getFormattedCaseDetail');
-const {
-  getStampBoxCoordinates,
-} = require('../../shared/src/business/utilities/getStampBoxCoordinates');
 const {
   IrsPractitioner,
 } = require('../../shared/src/business/entities/IrsPractitioner');
@@ -163,9 +108,6 @@ const {
   retrySendNotificationToConnections,
 } = require('../../shared/src/notifications/retrySendNotificationToConnections');
 const {
-  scrapePdfContents,
-} = require('../../shared/src/business/utilities/scrapePdfContents');
-const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -190,18 +132,6 @@ const {
   sendUpdatePetitionerCasesMessage,
 } = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
 const {
-  serveCaseDocument,
-} = require('../../shared/src/business/utilities/serveCaseDocument');
-const {
-  setConsolidationFlagsForDisplay,
-} = require('../../shared/src/business/utilities/setConsolidationFlagsForDisplay');
-const {
-  setServiceIndicatorsForCase,
-} = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
-const {
-  setupPdfDocument,
-} = require('../../shared/src/business/utilities/setupPdfDocument');
-const {
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators/standingPretrialOrder');
 const {
@@ -223,32 +153,24 @@ const {
   updatePetitionerCasesInteractor,
 } = require('../../shared/src/business/useCases/users/updatePetitionerCasesInteractor');
 const {
-  uploadToS3,
-} = require('../../shared/src/business/utilities/uploadToS3');
-const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { Client } = require('@opensearch-project/opensearch');
-
-const {
-  Case,
-  isLeadCase,
-  isSealedCase,
-} = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getPersistenceGateway } = require('./getPersistenceGateway');
 const { getUseCaseHelpers } = require('./getUseCaseHelpers');
 const { getUseCases } = require('./getUseCases');
+const { getUtilities } = require('./getUtilities');
 const { Message } = require('../../shared/src/business/entities/Message');
 const { scan } = require('../../shared/src/persistence/dynamodbClientService');
 const { User } = require('../../shared/src/business/entities/User');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
-
 const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -716,44 +638,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
-    getUtilities: () => {
-      return {
-        calculateDifferenceInDays,
-        calculateISODate,
-        cloneAndFreeze,
-        combineTwoPdfs,
-        compareCasesByDocketNumber,
-        compareISODateStrings,
-        compareStrings,
-        copyPagesAndAppendToTargetPdf,
-        createISODateString,
-        filterWorkItemsForUser,
-        formatCaseForTrialSession,
-        formatDateString,
-        formatJudgeName,
-        formatNow,
-        getAddressPhoneDiff,
-        getCropBox,
-        getDescriptionDisplay,
-        getDocQcSectionForUser,
-        getDocumentTitleWithAdditionalInfo,
-        getDocumentTypeForAddressChange,
-        getFormattedCaseDetail,
-        getFormattedTrialSessionDetails,
-        getStampBoxCoordinates,
-        getWorkQueueFilters,
-        isLeadCase,
-        isPending: DocketEntry.isPending,
-        isSealedCase,
-        prepareDateFromString,
-        scrapePdfContents,
-        serveCaseDocument,
-        setConsolidationFlagsForDisplay,
-        setServiceIndicatorsForCase,
-        setupPdfDocument,
-        uploadToS3,
-      };
-    },
+    getUtilities,
     isAuthorized,
     isCurrentColorActive,
     logger: {

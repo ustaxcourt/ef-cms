@@ -64,8 +64,8 @@ export const saveCaseDetailInternalEditInteractor = async (
     orderForAmendedPetition: caseToUpdate.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
       caseToUpdate.orderForAmendedPetitionAndFilingFee,
+    orderForCds: caseToUpdate.orderForCds,
     orderForFilingFee: caseToUpdate.orderForFilingFee,
-    orderForOds: caseToUpdate.orderForOds,
     orderForRatification: caseToUpdate.orderForRatification,
     orderToShowCause: caseToUpdate.orderToShowCause,
     partyType: caseToUpdate.partyType,

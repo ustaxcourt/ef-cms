@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   ordersAndNoticesInDraftsCodes,
@@ -19,14 +20,17 @@ describe('reviewSavedPetitionHelper', () => {
   it('should return the default form values if there are no changes to the form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
     expect(result).toMatchObject({
+      corporateDisclosureFile: undefined,
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: 'No requested place of trial',
@@ -41,6 +45,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           docketEntries: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
@@ -49,7 +55,7 @@ describe('reviewSavedPetitionHelper', () => {
             },
             {
               documentType:
-                INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+                INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
             },
             { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
             {
@@ -73,12 +79,12 @@ describe('reviewSavedPetitionHelper', () => {
         documentType:
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
       },
+      corporateDisclosureFile: {
+        documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+      },
       hasIrsNoticeFormatted: 'Yes',
       irsNoticeDateFormatted: '01/04/20',
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: {
-        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-      },
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
@@ -98,6 +104,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           docketEntries: [
             {
               documentType:
@@ -123,6 +131,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
         },
@@ -137,15 +147,18 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns a message when preferred trial city has not been selected', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
 
     expect(result).toMatchObject({
+      corporateDisclosureFile: undefined,
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: 'No requested place of trial',
@@ -161,16 +174,18 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           preferredTrialCity: mockCity,
         },
       },
     });
 
     expect(result).toMatchObject({
+      corporateDisclosureFile: undefined,
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       ordersAndNoticesNeeded: [],
-      ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: mockCity,
@@ -186,6 +201,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
+            contactPrimary: { hasConsentedToEService: true },
+            contactSecondary: { hasConsentedToEService: true },
             [orderOrNotice]: true,
           },
         },
@@ -202,6 +219,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
+            contactPrimary: { hasConsentedToEService: true },
+            contactSecondary: { hasConsentedToEService: true },
             [orderOrNoticeInDraft]: true,
           },
         },
@@ -218,7 +237,10 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns showStatistics false if the statistics array is not present on the form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+        },
       },
     });
 
@@ -228,7 +250,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns showStatistics false if the statistics array is present on the form but has length 0', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { statistics: [] },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          statistics: [],
+        },
       },
     });
 
@@ -238,7 +264,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns showStatistics true if the statistics array is present on the form and has length greater than 0', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { statistics: [{ yearOrPeriod: 'Year' }] },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          statistics: [{ yearOrPeriod: 'Year' }],
+        },
       },
     });
 
@@ -249,6 +279,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
           statistics: [
             {
               irsDeficiencyAmount: 123,
@@ -284,7 +316,11 @@ describe('reviewSavedPetitionHelper', () => {
   it('adds the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is true', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { orderForAmendedPetition: true },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          orderForAmendedPetition: true,
+        },
       },
     });
 
@@ -296,12 +332,137 @@ describe('reviewSavedPetitionHelper', () => {
   it('does not add the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is false', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: { orderForAmendedPetition: false },
+        form: {
+          contactPrimary: { hasConsentedToEService: true },
+          contactSecondary: { hasConsentedToEService: true },
+          orderForAmendedPetition: false,
+        },
       },
     });
 
     expect(result.ordersAndNoticesInDraft).not.toBe([
       'Order for Amended Petition',
     ]);
+  });
+
+  describe('E-service Consent label', () => {
+    it('should return E-service consent text for primary and secondary contacts when hasConsentedToEService is true', () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            contactPrimary: {
+              hasConsentedToEService: true,
+              paperPetitionEmail: 'aCoolEmail@example.com',
+            },
+            contactSecondary: {
+              hasConsentedToEService: true,
+              paperPetitionEmail: 'anotherCoolEmail@example.com',
+            },
+          },
+        },
+      });
+
+      expect(result.eServiceConsentTextForPrimaryContact).toBe(
+        'E-service consent',
+      );
+      expect(result.eServiceConsentTextForSecondaryContact).toBe(
+        'E-service consent',
+      );
+    });
+
+    it('should return No e-service consent text for primary and secondary contacts when hasConsentedToEService is false', () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            contactPrimary: {
+              hasConsentedToEService: false,
+              paperPetitionEmail: 'aCoolEmail@example.com',
+            },
+            contactSecondary: {
+              hasConsentedToEService: false,
+              paperPetitionEmail: 'anotherCoolEmail@example.com',
+            },
+          },
+        },
+      });
+
+      expect(result.eServiceConsentTextForPrimaryContact).toBe(
+        'No e-service consent',
+      );
+      expect(result.eServiceConsentTextForSecondaryContact).toBe(
+        'No e-service consent',
+      );
+    });
+
+    it('should not return e-service text for the secondary petitioner when it does not exist', () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            contactPrimary: {
+              hasConsentedToEService: true,
+              paperPetitionEmail: undefined,
+            },
+          },
+        },
+      });
+
+      expect(result.eServiceConsentTextForSecondaryContact).toBeUndefined();
+    });
+  });
+
+  it('should NOT display electronic service consent text when paper petition email has not been provided and the contact has NOT consented to electronic service', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+            true,
+        },
+        form: {
+          contactPrimary: {
+            hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
+          },
+          contactSecondary: {
+            hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
+          },
+        },
+      },
+    });
+
+    expect(result.shouldDisplayEConsentTextForPrimaryContact).toBe(false);
+    expect(result.shouldDisplayEConsentTextForSecondaryContact).toBe(false);
+  });
+
+  it('should NOT display electronic service consent text when the feature flag is disabled', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+            false,
+        },
+        form: {
+          contactPrimary: {
+            hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
+          },
+          contactSecondary: {
+            hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
+          },
+        },
+      },
+    });
+
+    expect(result.shouldDisplayEConsentTextForPrimaryContact).toBeUndefined();
+    expect(result.shouldDisplayEConsentTextForSecondaryContact).toBeUndefined();
   });
 });

@@ -1,10 +1,5 @@
-import {
-  IValidationEntity,
-  TStaticValidationMethods,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from '../JoiValidationDecorator';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
@@ -61,8 +56,7 @@ export type TCaseOrder = {
   removedFromTrialDate?: string;
 };
 
-export class TrialSessionClass {
-  public entityName: string;
+export class TrialSession extends JoiValidationEntity {
   public address1: string;
   public address2: string;
   public alternateTrialClerkName: string;
@@ -239,15 +233,11 @@ export class TrialSessionClass {
   };
 
   constructor(rawSession, { applicationContext }) {
-    this.init(rawSession, { applicationContext });
-  }
+    super('TrialSession');
 
-  init(rawSession, { applicationContext }) {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    this.entityName = 'TrialSession';
-
     this.address1 = rawSession.address1;
     this.address2 = rawSession.address2;
     this.alternateTrialClerkName = rawSession.alternateTrialClerkName;
@@ -314,6 +304,46 @@ export class TrialSessionClass {
       };
     }
   }
+
+  getErrorToMessageMap() {
+    return TrialSession.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getValidationRules() {
+    return {
+      ...TrialSession.validationRules.COMMON,
+      caseOrder: joi.array().items(
+        joi.object().keys({
+          calendarNotes: JoiValidationConstants.STRING.max(200)
+            .optional()
+            .allow('', null),
+          disposition: JoiValidationConstants.STRING.max(100).when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+          docketNumber:
+            JoiValidationConstants.DOCKET_NUMBER.required().description(
+              'Docket number of the case.',
+            ),
+          isManuallyAdded: joi.boolean().optional(),
+          removedFromTrial: joi.boolean().optional(),
+          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+        }),
+      ),
+    } as object;
+  }
+
   /**
    *
    * @param {string} swingSessionId the id of the swing session to associate with the session
@@ -484,10 +514,9 @@ export class TrialSessionClass {
    * @returns {Array} A list of property names of the trial session that are empty
    */
   getEmptyFields() {
-    const missingProperties =
-      TrialSessionClass.PROPERTIES_REQUIRED_FOR_CALENDARING[
-        this.proceedingType
-      ].filter(property => isEmpty(this[property]));
+    const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING[
+      this.proceedingType
+    ].filter(property => isEmpty(this[property]));
 
     return missingProperties;
   }
@@ -513,43 +542,6 @@ export class TrialSessionClass {
   }
 }
 
-joiValidationDecorator(
-  TrialSessionClass,
-  joi.object().keys({
-    ...TrialSessionClass.validationRules.COMMON,
-    caseOrder: joi.array().items(
-      joi.object().keys({
-        calendarNotes: JoiValidationConstants.STRING.max(200)
-          .optional()
-          .allow('', null),
-        disposition: JoiValidationConstants.STRING.max(100).when(
-          'removedFromTrial',
-          {
-            is: true,
-            otherwise: joi.optional().allow(null),
-            then: joi.required(),
-          },
-        ),
-        docketNumber:
-          JoiValidationConstants.DOCKET_NUMBER.required().description(
-            'Docket number of the case.',
-          ),
-        isManuallyAdded: joi.boolean().optional(),
-        removedFromTrial: joi.boolean().optional(),
-        removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
-          'removedFromTrial',
-          {
-            is: true,
-            otherwise: joi.optional().allow(null),
-            then: joi.required(),
-          },
-        ),
-      }),
-    ),
-  }),
-  TrialSessionClass.VALIDATION_ERROR_MESSAGES,
-);
-
 /**
  * Determines if the scope of the trial session is standalone remote
  *
@@ -560,12 +552,4 @@ export const isStandaloneRemoteSession = function (sessionScope) {
   return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
 };
 
-export type TRawTrialSession = ExcludeMethods<TrialSessionClass>;
-
-export const TrialSession: typeof TrialSessionClass &
-  TStaticValidationMethods<TRawTrialSession> =
-  validEntityDecorator(TrialSessionClass);
-
-// eslint-disable-next-line no-redeclare
-export interface TrialSessionClass
-  extends IValidationEntity<TrialSessionClass> {}
+export type RawTrialSession = ExcludeMethods<TrialSession>;
