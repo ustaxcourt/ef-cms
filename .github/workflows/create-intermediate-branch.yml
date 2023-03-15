@@ -7,44 +7,41 @@ on:
       - opened
 
 jobs:
-  check-for-intermediate-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set Git config
-        run: |
-          git config --local user.email "jabu@flexion.us"
-          git config --local user.name "Joshua Abu"
+  # check-for-intermediate-branch:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set Git config
+  #       run: |
+  #         git config --local user.email "jabu@flexion.us"
+  #         git config --local user.name "Joshua Abu"
 
-      - name: Set flag
-        id: check_branch
-        run: |
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          flexion_remote_address=https://github.com/flexion/ef-cms.git
-          court_remote_address=https://github.com/ustaxcourt/ef-cms.git
+  #     - name: Set flag
+  #       id: check_branch
+  #       run: |
+  #         feature_branch=${{ github.head_ref }}
+  #         intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+  #         flexion_remote_address=https://github.com/flexion/ef-cms.git
+  #         court_remote_address=https://github.com/ustaxcourt/ef-cms.git
 
-          git fetch --all
+  #         git fetch --all
 
-          # set flexion remote branch
-          git remote add flexion $flexion_remote_address
+  #         # get intermediate branch related commits in both repos
+  #         sha_of_int_branch_in_flexion=$(git ls-remote $flexion_remote_address $intermediate_branch)
+  #         sha_of_int_branch_in_court=$(git ls-remote $court_remote_address $intermediate_branch)
 
-          # get intermediate branch related commits in both repos
-          sha_of_int_branch_in_flexion=$(git ls-remote $flexion_remote_address $intermediate_branch)
-          sha_of_int_branch_in_court=$(git ls-remote $court_remote_address $intermediate_branch)
-
-          if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
-          then
-            echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
-          fi
+  #         if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
+  #         then
+  #           echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
+  #         else
+  #           echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
+  #         fi
 
   create-intermediate-branch:
-    needs: check-for-intermediate-branch
-    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
+    # needs: check-for-intermediate-branch
+    # if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -58,10 +55,10 @@ jobs:
           git fetch origin
 
           # Create a copy of the destination branch
-          git checkout -b $intermediate_branch
+          git checkout -b $intermediate_branch $destination_branch
 
           # Merge the feature branch into the intermediate branch
-          git merge "origin/${feature_branch}"
+          git merge $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
@@ -72,7 +69,6 @@ jobs:
         run: |
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           sudo apt-get update
           sudo apt-get install hub
