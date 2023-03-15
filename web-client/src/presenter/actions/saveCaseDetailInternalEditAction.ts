@@ -30,7 +30,7 @@ export const saveCaseDetailInternalEditAction = async ({
     {
       applicationForWaiverOfFilingFeeFile:
         caseToUpdate['applicationForWaiverOfFilingFeeFile'],
-      ownershipDisclosureFile: caseToUpdate['ownershipDisclosureFile'],
+      corporateDisclosureFile: caseToUpdate['corporateDisclosureFile'],
       petitionFile: caseToUpdate['petitionFile'],
       requestForPlaceOfTrialFile: caseToUpdate['requestForPlaceOfTrialFile'],
       stinFile: caseToUpdate['stinFile'],
