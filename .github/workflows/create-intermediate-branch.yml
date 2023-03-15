@@ -34,35 +34,20 @@ jobs:
           # get intermediate branch related commits in both repos
           sha_of_int_branch_in_flexion=$(git ls-remote $flexion_remote_address $intermediate_branch)
           sha_of_int_branch_in_court=$(git ls-remote $court_remote_address $intermediate_branch)
-          echo "sha_of_int_branch_in_court**, ${sha_of_int_branch_in_court}"
-          echo "sha_of_int_branch_in_flexion**, ${sha_of_int_branch_in_flexion}"
 
           if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
           then
             echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
-            echo "Branch ${intermediate_branch} exists"
-            echo "GITHUB_OUTPUT in IF +  ${GITHUB_OUTPUT}"
-
-
           else
             echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
-            echo "Branch ${intermediate_branch} DOES NOT exists"
-            echo "GITHUB_OUTPUT in ELSE ${GITHUB_OUTPUT}"
           fi
-      - name: LOGS FOR DEBUGGING CUZ YOU BUGGIN
-        run: |
-          echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
 
   create-intermediate-branch:
     needs: check-for-intermediate-branch
     if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: 'test'
-
       - name: Create Intermediate branch
         run: |
           destination_branch=experimental3
