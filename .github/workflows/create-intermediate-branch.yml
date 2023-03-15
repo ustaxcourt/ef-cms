@@ -52,7 +52,7 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          current_branch=${(git branch --show-current)}
+          current_branch=$(git branch --show-current)
           # Get the base branch
           git pull
           echo "CURRENT BRANCH 1, $current_branch"
