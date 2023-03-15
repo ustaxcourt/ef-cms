@@ -35,7 +35,9 @@ export const sealCaseContactAddressInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const oldCaseCopy = cloneDeep(deepFreeze(caseRecord));
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
 
   const caseEntity = new Case(caseRecord, {
     applicationContext,
