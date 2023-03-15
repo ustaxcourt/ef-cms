@@ -57,8 +57,12 @@ jobs:
     needs: check-for-intermediate-branch
     if: needs.check-for-intermediate-branch.outputs.create-branch-flag == true
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: 'test'
+
       - name: Create Intermediate branch
         run: |
           destination_branch=experimental3
@@ -67,8 +71,6 @@ jobs:
 
           # Get the base branch
           git fetch origin
-          git checkout $destination_branch
-          git pull
 
           # Create a copy of the destination branch
           git checkout -b $intermediate_branch
