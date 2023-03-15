@@ -222,7 +222,7 @@ export const completeDocketEntryQCInteractor = async (
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
-  console.log('workItemToUpdate***', workItemToUpdate);
+
   await applicationContext
     .getPersistenceGateway()
     .saveWorkItemForDocketClerkFilingExternalDocument({
