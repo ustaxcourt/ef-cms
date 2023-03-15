@@ -5,6 +5,7 @@ import {
   isLeadCase,
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
+import { UserCase } from '../entities/UserCase';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { getCasesForUserInteractorOld } from './getCasesForUserInteractorOld';
 import { uniqBy } from 'lodash';
@@ -90,7 +91,18 @@ const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
       } else {
         return compareISODateStrings(b.createdAt, a.createdAt);
       }
-    });
+    })
+    .map(nestedCase => ({
+      ...new UserCase(nestedCase).toRawObject(),
+      consolidatedCases: nestedCase.consolidatedCases
+        ? nestedCase.consolidatedCases.map(consolidatedCase => ({
+            ...new UserCase(consolidatedCase),
+            isRequestingUserAssociated:
+              consolidatedCase.isRequestingUserAssociated,
+          }))
+        : undefined,
+      isRequestingUserAssociated: nestedCase.isRequestingUserAssociated,
+    }));
 };
 
 /**
