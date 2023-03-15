@@ -430,6 +430,62 @@ describe('formattedWorkQueue', () => {
     expect(result[3].workItemId).toEqual('d');
   });
 
+  it('sorts by case status (submitted, assignedCase, assignedMotion, then jurisdictionRetained) after high priority work items', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            highPriority: false,
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'c',
+          },
+          {
+            ...baseWorkItem,
+            highPriority: true,
+            receivedAt: '2019-02-17T15:27:55.801Z',
+            trialDate: '2019-01-17T00:00:00.000Z',
+            workItemId: 'b',
+          },
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.assignedCase,
+            highPriority: false,
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'a',
+          },
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.jurisdictionRetained,
+            highPriority: false,
+            receivedAt: '2019-04-17T15:27:55.801Z',
+            workItemId: 'd',
+          },
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.assignedMotion,
+            highPriority: false,
+            receivedAt: '2019-04-17T15:27:55.801Z',
+            workItemId: 'e',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('b');
+    expect(result[1].workItemId).toEqual('c');
+    expect(result[2].workItemId).toEqual('a');
+    expect(result[3].workItemId).toEqual('e');
+    expect(result[4].workItemId).toEqual('d');
+  });
+
   describe('Consolidate Group Cases', () => {
     it('should show the work item to not be a part of a consolidated group', () => {
       const result = runCompute(formattedWorkQueue, {
