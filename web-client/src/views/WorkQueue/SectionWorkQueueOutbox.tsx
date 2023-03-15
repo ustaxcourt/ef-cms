@@ -16,10 +16,6 @@ export const SectionWorkQueueOutbox = connect(
     users,
     workQueueHelper,
   }) {
-    console.log(
-      'formattedWorkQueue in Outbox/Processed:::',
-      formattedWorkQueue,
-    );
     return (
       <React.Fragment>
         <WorkQueueAssignments showSendToBar={false} users={users} />
