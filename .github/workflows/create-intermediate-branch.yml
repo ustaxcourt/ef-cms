@@ -57,7 +57,7 @@ jobs:
           git pull
 
           # Create a copy of the destination branch
-          git checkout -b $intermediate_branch
+          git checkout -b "${intermediate_branch}"
 
           # Merge the feature branch into the intermediate branch
           git pull "origin/${feature_branch}"
