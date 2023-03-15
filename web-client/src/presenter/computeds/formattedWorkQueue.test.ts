@@ -430,7 +430,7 @@ describe('formattedWorkQueue', () => {
     expect(result[3].workItemId).toEqual('d');
   });
 
-  it('sorts by case status (submitted, assignedCase, assignedMotion, then jurisdictionRetained) after high priority work items on the inbox', () => {
+  it('sorts inbox work items by case status rankings (submitted, assignedCase, assignedMotion, then jurisdictionRetained) after high priority', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -486,7 +486,7 @@ describe('formattedWorkQueue', () => {
     expect(result[4].workItemId).toEqual('d');
   });
 
-  it('sorts by receivedAt in ascending order within case status on the inbox', () => {
+  it('sorts inbox work items by receivedAt in ascending order within a high rankedcase status', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(docketClerkUser),
