@@ -24,6 +24,8 @@ export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
+export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
+
 // city, state, optional unique ID (generated automatically in testing files)
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -74,6 +76,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage:
       'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
     key: 'consolidated-cases-group-access-petitioner',
+  },
+  E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
+    key: 'e-consent-fields-enabled-feature-flag',
   },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
@@ -408,6 +413,14 @@ export const INTERNAL_DOCUMENTS_ARRAY = flatten(
   Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 );
 
+export const MOTION_EVENT_CODES = [
+  ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+    return entry.eventCode;
+  }),
+  'M116',
+  'M112',
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -515,6 +528,7 @@ export const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
 export const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
+  motions: 'Motions',
   orders: 'Orders',
 };
 
@@ -530,9 +544,9 @@ export const INITIAL_DOCUMENT_TYPES = {
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
   },
-  ownershipDisclosure: {
-    documentTitle: 'Ownership Disclosure Statement',
-    documentType: 'Ownership Disclosure Statement',
+  corporateDisclosure: {
+    documentTitle: 'Corporate Disclosure Statement',
+    documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
   },
   petition: {
@@ -550,7 +564,7 @@ export const INITIAL_DOCUMENT_TYPES = {
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
-  ownershipDisclosure: 'ownershipDisclosureFile',
+  corporateDisclosure: 'corporateDisclosureFile',
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
@@ -559,8 +573,8 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-  ownershipDisclosureFile:
-    INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+  corporateDisclosureFile:
+    INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
   requestForPlaceOfTrialFile:
     INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -603,6 +617,8 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
+
+export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
 
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(

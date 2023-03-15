@@ -41,7 +41,6 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
       secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
     });
 

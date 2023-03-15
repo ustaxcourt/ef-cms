@@ -14,8 +14,8 @@ export const initialFilingDocumentTabs = [
     title: 'RQT',
   },
   {
-    documentType: 'ownershipDisclosureFile',
-    title: 'ODS',
+    documentType: 'corporateDisclosureFile',
+    title: 'CDS',
   },
   {
     documentType: 'applicationForWaiverOfFilingFeeFile',
@@ -28,9 +28,9 @@ export const petitionQcHelper = (get, applicationContext) => {
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
 
-  const hasODS = !!documents.find(
+  const hasCDS = !!documents.find(
     doc =>
-      doc.eventCode === INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+      doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
 
   let documentTabsToDisplay = [...initialFilingDocumentTabs];
@@ -38,8 +38,8 @@ export const petitionQcHelper = (get, applicationContext) => {
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-    ownershipDisclosureFile:
-      INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+    corporateDisclosureFile:
+      INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
     requestForPlaceOfTrialFile:
       INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -57,9 +57,9 @@ export const petitionQcHelper = (get, applicationContext) => {
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
-      if (tab.title === 'ODS') {
-        // Do not display ODS tab if one wasn't filed electronically
-        return hasODS;
+      if (tab.title === 'CDS') {
+        // Do not display CDS tab if one wasn't filed electronically
+        return hasCDS;
       } else {
         // Do not display APW and RQT tabs for electronic filing
         return tab.title !== 'APW' && tab.title !== 'RQT';
