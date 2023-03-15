@@ -250,13 +250,18 @@ export const updateTrialSessionInteractor = async (
       });
     }
 
-    serviceInfo = await applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf({
-        applicationContext,
-        document: paperServicePdfsCombined,
-      });
-    pdfUrl = serviceInfo.url;
+    const paperServicePdfData = await paperServicePdfsCombined.save();
+    const hasPaper = !!paperServicePdfData.getPageCount();
+
+    if (hasPaper) {
+      ({ url: pdfUrl } = await applicationContext
+        .getUseCaseHelpers()
+        .saveFileAndGenerateUrl({
+          applicationContext,
+          file: paperServicePdfData,
+          useTempBucket: true,
+        }));
+    }
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
