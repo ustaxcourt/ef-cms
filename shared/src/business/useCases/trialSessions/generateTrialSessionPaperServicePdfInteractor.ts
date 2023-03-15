@@ -44,18 +44,21 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     });
   }
 
-  const paperServicePdfData = await paperServiceDocumentsPdf.save();
   const hasPaper = !!paperServiceDocumentsPdf.getPageCount();
+  const paperServicePdfData = await paperServiceDocumentsPdf.save();
+
+  let docketEntryId,
+    pdfUrl = null;
 
   if (hasPaper) {
-    const { fileId: docketEntryId, url } = await applicationContext
+    ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl({
         applicationContext,
         file: paperServicePdfData,
         useTempBucket: true,
-      });
-
-    return { docketEntryId, hasPaper, url };
+      }));
   }
+
+  return { docketEntryId, hasPaper, pdfUrl };
 };
