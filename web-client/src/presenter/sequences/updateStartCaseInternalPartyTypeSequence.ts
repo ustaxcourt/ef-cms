@@ -1,6 +1,6 @@
 import { resetContactsAction } from '../actions/resetContactsAction';
 import { setFormValueAction } from '../actions/setFormValueAction';
-import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
+import { updateOrderForCdsAction } from '../actions/StartCaseInternal/updateOrderForCdsAction';
 
 /**
  * set state.form.partyType to the passed
@@ -9,6 +9,6 @@ import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrde
  */
 export const updateStartCaseInternalPartyTypeSequence = [
   setFormValueAction,
-  updateOrderForOdsAction,
+  updateOrderForCdsAction,
   resetContactsAction,
 ];
