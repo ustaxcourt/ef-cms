@@ -68,8 +68,9 @@ jobs:
 
 
           # Create a copy of the destination branch
-          git pull upstream test
           git checkout -b "${intermediate_branch}"
+          git pull upstream test
+
           echo "CURRENT BRANCH 2, $(git branch --show-current)"
 
 
