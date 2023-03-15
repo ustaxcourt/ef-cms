@@ -85,9 +85,6 @@ export const formatWorkItem = ({
     applicationContext,
     workItem: result,
   });
-  console.log(result.formattedCaseStatus);
-
-  // result.formattedCaseStatus = result.caseStatus;
 
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
