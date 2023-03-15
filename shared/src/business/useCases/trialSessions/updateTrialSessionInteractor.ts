@@ -230,8 +230,7 @@ export const updateTrialSessionInteractor = async (
     });
   }
 
-  let pdfUrl = null;
-  let serviceInfo = null;
+  let hasPaper, pdfUrl;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     const calendaredCases = currentTrialSession.caseOrder.filter(
       c => !c.removedFromTrial,
@@ -250,7 +249,7 @@ export const updateTrialSessionInteractor = async (
       });
     }
 
-    const hasPaper = !!paperServicePdfsCombined.getPageCount();
+    hasPaper = !!paperServicePdfsCombined.getPageCount();
     const paperServicePdfData = await paperServicePdfsCombined.save();
 
     if (hasPaper) {
@@ -277,7 +276,7 @@ export const updateTrialSessionInteractor = async (
     applicationContext,
     message: {
       action: 'update_trial_session_complete',
-      hasPaper: serviceInfo?.hasPaper,
+      hasPaper,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },
