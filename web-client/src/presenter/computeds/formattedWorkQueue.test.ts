@@ -430,7 +430,7 @@ describe('formattedWorkQueue', () => {
     expect(result[3].workItemId).toEqual('d');
   });
 
-  it('sorts by case status (submitted, assignedCase, assignedMotion, then jurisdictionRetained) after high priority work items', () => {
+  it('sorts by case status (submitted, assignedCase, assignedMotion, then jurisdictionRetained) after high priority work items on the inbox', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(docketClerkUser),

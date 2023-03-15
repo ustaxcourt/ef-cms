@@ -373,17 +373,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
       outbox: 'desc',
     },
   };
-  const sortField =
-    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
-  const sortDirection =
+  let sortField = sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
+  let sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [];
   let highPriorityDirection = [];
   if (workQueueToDisplay.box == 'inbox') {
-    highPriorityField = ['highPriority', 'trialDate'];
-    highPriorityDirection = ['desc', 'asc'];
-
     const caseStatusSortRank = {
       [STATUS_TYPES.submitted]: 1,
       [STATUS_TYPES.assignedCase]: 2,
@@ -391,31 +387,21 @@ export const formattedWorkQueue = (get, applicationContext) => {
       [STATUS_TYPES.jurisdictionRetained]: 4,
     };
 
-    workQueue = orderBy(
-      workQueue,
-      [
-        ...highPriorityField,
-        workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-        sortField,
-        'docketNumber',
-      ],
-      [
-        ...highPriorityDirection,
-        'asc',
-        'asc',
-        'asc',
-        'asc',
-        sortDirection,
-        'asc',
-      ],
-    );
-  } else {
-    workQueue = orderBy(
-      workQueue,
-      [...highPriorityField, sortField, 'docketNumber'],
-      [...highPriorityDirection, sortDirection, 'asc'],
-    );
+    highPriorityField = ['highPriority', 'trialDate'];
+    highPriorityDirection = ['desc', 'asc'];
+
+    sortField = [
+      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
+      sortField,
+    ];
+    sortDirection = ['asc', sortDirection];
   }
+
+  workQueue = orderBy(
+    workQueue,
+    [...highPriorityField, ...sortField, 'docketNumber'],
+    [...highPriorityDirection, ...sortDirection, 'asc'],
+  );
 
   return workQueue;
 };
