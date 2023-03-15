@@ -7,6 +7,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
+import { cloneAndFreeze } from '../../shared/src/business/utilities/cloneAndFreeze';
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -46,6 +47,7 @@ import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 const utilities = {
   calculateDifferenceInDays,
   calculateISODate,
+  cloneAndFreeze,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
