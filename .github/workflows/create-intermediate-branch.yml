@@ -57,11 +57,18 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          court_remote_address=https://github.com/ustaxcourt/ef-cms.git
+
           # Get the base branch
           git fetch --all
           echo "CURRENT BRANCH 1, $(git branch --show-current)"
 
+          #add courts remote address
+          git remote add upstream $court_remote_address
+
+
           # Create a copy of the destination branch
+          git pull upstream test
           git checkout -b "${intermediate_branch}"
           echo "CURRENT BRANCH 2, $(git branch --show-current)"
 
