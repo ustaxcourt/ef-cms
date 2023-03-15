@@ -143,7 +143,6 @@ export const docketClerkCreatesATrialSession = (
     });
 
     if (overrides.trialDate) {
-      console.log('overrides***', overrides);
       await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
         key: 'startDateMonth',
         value: overrides.trialDate.month,
