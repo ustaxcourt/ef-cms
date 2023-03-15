@@ -50,5 +50,20 @@ export const unauthedUserViewsFilteredDocketRecord = cerebralTest => {
 
     expect(formattedDocketEntriesOnDocketRecord.length).toBe(1);
     expect(formattedDocketEntriesOnDocketRecord[0].eventCode).toBe('OD');
+
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'sessionMetadata.docketRecordFilter',
+      value: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions,
+    });
+
+    ({ formattedDocketEntriesOnDocketRecord } = runCompute(
+      publicCaseDetailHelper,
+      {
+        state: cerebralTest.getState(),
+      },
+    ));
+
+    expect(formattedDocketEntriesOnDocketRecord.length).toBe(1);
+    expect(formattedDocketEntriesOnDocketRecord[0].eventCode).toBe('M000');
   });
 };
