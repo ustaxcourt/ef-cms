@@ -10,7 +10,7 @@ jobs:
   check-for-intermediate-branch:
     runs-on: ubuntu-latest
     outputs:
-      skip-creation-of-intermediate-branch: ${{ steps.check_branch.outputs.skip-creation-of-intermediate-branch }}
+      create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
     steps:
       - uses: actions/checkout@v3
       - name: Set Git config
@@ -39,24 +39,24 @@ jobs:
 
           if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
           then
-            echo "skip-creation-of-intermediate-branch=true" >> "$GITHUB_OUTPUT"
+            echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} exists"
             echo "GITHUB_OUTPUT in IF +  ${GITHUB_OUTPUT}"
 
 
           else
-            echo "skip-creation-of-intermediate-branch=false" >> "$GITHUB_OUTPUT"
+            echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
             echo "Branch ${intermediate_branch} DOES NOT exists"
             echo "GITHUB_OUTPUT in ELSE ${GITHUB_OUTPUT}"
           fi
       - name: LOGS FOR DEBUGGING CUZ YOU BUGGIN
         run: |
-          echo "FLAG IS: ${{ steps.check_branch.outputs.skip-creation-of-intermediate-branch }}"
+          echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
 
   create-intermediate-branch:
-    runs-on: ubuntu-latest
     needs: check-for-intermediate-branch
-    if: needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch == false
+    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == true
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Create Intermediate branch
