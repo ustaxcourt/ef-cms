@@ -13,7 +13,7 @@ export const updateMessage = ({
   message,
 }: {
   applicationContext: IApplicationContext;
-  message: TMessageData;
+  message: RawMessage;
 }) =>
   put({
     Item: {
