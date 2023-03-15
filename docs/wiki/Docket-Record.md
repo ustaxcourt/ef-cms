@@ -21,7 +21,7 @@
 ### Index
 **Petition and initial documents**
 * eFiled and paper-filed Petition and initial documents display an index number associated when filed (i.e. before they are served to IRS)
-* Initial documents (RQT, ODS, APW) filed after the Petition will display an index number only after service
+* Initial documents (RQT, CDS, APW) filed after the Petition will display an index number only after service
 
 **Paper-filed documents**
 * Docket entry does not have index number until the document is served

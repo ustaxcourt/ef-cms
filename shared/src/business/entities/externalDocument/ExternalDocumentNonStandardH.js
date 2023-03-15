@@ -43,6 +43,7 @@ ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES = {
 ExternalDocumentNonStandardH.schema = {
   ...baseExternalDocumentValidation,
   secondaryDocument: joi.object().required(),
+  secondaryDocumentFile: joi.object().optional(),
 };
 
 joiValidationDecorator(

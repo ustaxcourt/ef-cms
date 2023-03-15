@@ -195,19 +195,34 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
 };
 
 /**
- * gets the contact view options based on partyType
+ * gets the contact view options based on form.partyType
  *
  * @param {Function} get the cerebral get function used
- * @param {object} applicationContext the application context
  * for getting state.caseDetail.partyType and state.constants
+ * @param {object} applicationContext the application context
  * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
-export const caseDetailEditContactsHelper = (get, applicationContext) => {
-  const partyType = get(state.form.partyType);
-  const { PARTY_TYPES } = applicationContext.getConstants();
+export const internalPetitionPartiesHelper = (get, applicationContext) => {
+  const { ALLOWLIST_FEATURE_FLAGS, PARTY_TYPES } =
+    applicationContext.getConstants();
+  const user = applicationContext.getCurrentUser();
+
+  const { isPaper, partyType } = get(state.form);
+  const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+    ],
+  );
+
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
+
+  const showPaperPetitionEmailFieldAndConsentBox =
+    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !!isPaper && !isExternalUser;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
-  return contacts;
+  return { ...contacts, showPaperPetitionEmailFieldAndConsentBox };
 };
