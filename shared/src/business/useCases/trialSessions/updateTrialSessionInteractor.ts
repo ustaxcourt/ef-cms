@@ -250,8 +250,8 @@ export const updateTrialSessionInteractor = async (
       });
     }
 
+    const hasPaper = !!paperServicePdfsCombined.getPageCount();
     const paperServicePdfData = await paperServicePdfsCombined.save();
-    const hasPaper = !!paperServicePdfData.getPageCount();
 
     if (hasPaper) {
       ({ url: pdfUrl } = await applicationContext

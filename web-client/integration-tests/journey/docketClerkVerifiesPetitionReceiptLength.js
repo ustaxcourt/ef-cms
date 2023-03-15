@@ -29,7 +29,7 @@ export const docketClerkVerifiesPetitionReceiptLength = (
 
     const pdfDoc = await PDFDocument.load(new Uint8Array(buffer));
 
-    const numberOfPages = pdfDoc.getPagesCount();
+    const numberOfPages = pdfDoc.getPageCount();
 
     expect(numberOfPages).toEqual(expectedLength);
 
