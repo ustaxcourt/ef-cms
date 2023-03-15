@@ -47,8 +47,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   const hasPaper = !!paperServiceDocumentsPdf.getPageCount();
   const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
-  let docketEntryId,
-    pdfUrl = null;
+  let docketEntryId, pdfUrl;
 
   if (hasPaper) {
     ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
