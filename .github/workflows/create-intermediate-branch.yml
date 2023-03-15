@@ -59,7 +59,7 @@ jobs:
     steps:
       - name: LOGS IN CREATION
         run: |
-          echo "FLAG IS: ${needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch}"
+          echo "FLAG IS: ${{needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch}}"
   # if: needs.check-for-intermediate-branch.outputs.skip-creation-of-intermediate-branch == true
 
   # steps:
