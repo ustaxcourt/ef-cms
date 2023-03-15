@@ -486,7 +486,7 @@ describe('formattedWorkQueue', () => {
     expect(result[4].workItemId).toEqual('d');
   });
 
-  it.only('sorts by receivedAt in ascending order within case status on the inbox', () => {
+  it('sorts by receivedAt in ascending order within case status on the inbox', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -495,16 +495,34 @@ describe('formattedWorkQueue', () => {
             ...baseWorkItem,
             assigneeId: docketClerkUser.userId,
             caseStatus: STATUS_TYPES.submitted,
+            docketEntry: {
+              ...baseWorkItem.docketEntry,
+              receivedAt: '2007-01-17T15:27:55.801Z',
+            },
             highPriority: false,
-            receivedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'middle',
+          },
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            docketEntry: {
+              ...baseWorkItem.docketEntry,
+              receivedAt: '2019-01-17T15:27:55.801Z',
+            },
+            highPriority: false,
             workItemId: 'newer',
           },
           {
             ...baseWorkItem,
             assigneeId: docketClerkUser.userId,
             caseStatus: STATUS_TYPES.submitted,
+            createdAt: '2000-01-17T15:27:55.801Z',
+            docketEntry: {
+              ...baseWorkItem.docketEntry,
+              receivedAt: '2000-01-17T15:27:55.801Z',
+            },
             highPriority: false,
-            receivedAt: '2000-01-17T15:27:55.801Z',
             workItemId: 'older',
           },
         ],
@@ -516,7 +534,8 @@ describe('formattedWorkQueue', () => {
     });
 
     expect(result[0].workItemId).toEqual('older');
-    expect(result[1].workItemId).toEqual('newer');
+    expect(result[1].workItemId).toEqual('middle');
+    expect(result[2].workItemId).toEqual('newer');
   });
 
   describe('Consolidate Group Cases', () => {
