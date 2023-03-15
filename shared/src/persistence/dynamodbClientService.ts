@@ -310,6 +310,7 @@ export const queryFull = async ({
   ExpressionAttributeValues,
   IndexName,
   KeyConditionExpression,
+  ReadConsistent = false,
   ...params
 }: {
   applicationContext: IApplicationContext;
@@ -318,6 +319,7 @@ export const queryFull = async ({
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
   KeyConditionExpression: string;
+  ReadConsistent?: boolean;
 }): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
   let lastKey = null;
@@ -333,6 +335,7 @@ export const queryFull = async ({
         ExpressionAttributeValues,
         IndexName,
         KeyConditionExpression,
+        ReadConsistent,
         TableName: getTableName({
           applicationContext,
         }),

@@ -13,9 +13,11 @@ import { queryFull } from '../../dynamodbClientService';
 export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
+  readConsistent = false,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
+  readConsistent?: boolean;
 }) => {
   const caseItems = await queryFull({
     ExpressionAttributeNames: {
@@ -25,6 +27,7 @@ export const getCaseByDocketNumber = async ({
       ':pk': `case|${docketNumber}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    ReadConsistent: readConsistent,
     applicationContext,
   });
 

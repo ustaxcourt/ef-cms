@@ -2,6 +2,9 @@ const diff = require('diff-arrays-of-objects');
 const {
   fieldsToOmitBeforePersisting,
 } = require('../../../persistence/dynamo/cases/createCase');
+const {
+  shouldGenerateDocketRecordIndex,
+} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { Case } = require('../../entities/cases/Case');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
@@ -21,7 +24,7 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<function>} the persistence functions required to complete this action
  */
-const updateCaseDocketEntries = ({
+const updateCaseDocketEntries = async ({
   applicationContext,
   caseToUpdate,
   oldCase,
@@ -50,6 +53,37 @@ const updateCaseDocketEntries = ({
     ],
     { applicationContext, petitioners: caseToUpdate.petitioners },
   );
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  const mostRecentCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+      readConsistent: true,
+    });
+
+  // fix docket entry collisions
+  addedDocketEntries.forEach(addedDocketEntry => {
+    if (
+      addedDocketEntry.isOnDocketRecord &&
+      shouldGenerateDocketRecordIndex({
+        caseDetail: caseEntity,
+        docketEntry: {
+          ...addedDocketEntry,
+          index: undefined,
+        },
+      }) &&
+      mostRecentCase.docketEntries.find(
+        de =>
+          de.docketEntryId !== addedDocketEntry.docketEntryId &&
+          de.index === addedDocketEntry.index,
+      )
+    ) {
+      addedDocketEntry.index = caseEntity.generateNextDocketRecordIndex();
+    }
+  });
 
   return validDocketEntries.map(
     doc =>
@@ -599,19 +633,26 @@ const updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
-      // readConsistent
+      readConsistent: true,
     });
 
   const mostRecentCaseUpdated = {
     ...mostRecentCase,
-    ...caseDifference,
   };
+  Object.keys(caseDifference).forEach(key => {
+    mostRecentCaseUpdated[key] = caseToUpdate[key];
+  });
+
+  // console.log(JSON.stringify(mostRecentCaseUpdated));
 
   const validUpdatedCase = new Case(mostRecentCaseUpdated, {
     applicationContext,
   }).validate();
 
-  return applicationContext
+  const caseToReturn = await applicationContext
     .getPersistenceGateway()
     .updateCase({ applicationContext, caseToUpdate: validUpdatedCase });
+  // console.log(JSON.stringify(caseToReturn));
+
+  return caseToReturn;
 };
