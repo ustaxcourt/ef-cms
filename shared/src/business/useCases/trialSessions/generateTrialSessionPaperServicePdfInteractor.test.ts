@@ -84,22 +84,4 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       pdfUrl: mockPdfUrl,
     });
   });
-
-  // it('should return null when pdfUrl is undefined', async () => {
-  //   applicationContext
-  //     .getUseCaseHelpers()
-  //     .saveFileAndGenerateUrl.mockResolvedValue({
-  //       fileId: mockDocketEntryId,
-  //       url: undefined,
-  //     });
-
-  //   const result = await generateTrialSessionPaperServicePdfInteractor(
-  //     applicationContext,
-  //     {
-  //       trialNoticePdfsKeys,
-  //     },
-  //   );
-
-  //   expect(result.pdfUrl).toBeNull();
-  // });
 });
