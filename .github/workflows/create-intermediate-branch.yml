@@ -61,6 +61,7 @@ jobs:
 
 
           # Create a copy of the destination branch
+          # git pull origin $destination_branch
           git checkout -b "${intermediate_branch}"
 
           echo "CURRENT BRANCH 2, $(git branch --show-current)"
@@ -70,7 +71,7 @@ jobs:
 
           # Merge the feature branch into the intermediate branch
           # git pull --rebase --no-edit --allow-unrelated-histories origin $feature_branch
-          git pull -r --no-edit origin $feature_branch
+          git pull --no-rebase --no-edit origin $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
