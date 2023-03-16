@@ -59,17 +59,9 @@ jobs:
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
           court_remote_address=https://github.com/ustaxcourt/ef-cms.git
 
-          # Get the base branch
-          git fetch --all
-          echo "CURRENT BRANCH 1, $(git branch --show-current)"
-
-          #add courts remote address to make sure exp3 has the latest from test
-          # git remote add upstream $court_remote_address
-
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}"
-          # git pull upstream test
 
           echo "CURRENT BRANCH 2, $(git branch --show-current)"
 
@@ -77,7 +69,8 @@ jobs:
           echo "FEATURE BRANCH ******, ${{ github.head_ref }}"
 
           # Merge the feature branch into the intermediate branch
-          git pull --rebase --no-edit --allow-unrelated-histories origin $feature_branch
+          # git pull --rebase --no-edit --allow-unrelated-histories origin $feature_branch
+          git pull origin $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
