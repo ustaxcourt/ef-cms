@@ -64,14 +64,14 @@ export const startCaseHelper = (get, applicationContext) => {
         ? 'Did you receive a notice from the IRS?'
         : 'Do you have a notice from the IRS?',
     showBusinessFilingTypeOptions: form.filingType === 'A business',
+    showCorporateDisclosure: form.partyType && form.filingType === 'A business',
+    showCorporateDisclosureValid: form.corporateDisclosureFile,
     showEstateFilingOptions: form.otherType === 'An estate or trust',
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
     showMinorIncompetentFilingOptions:
       form.otherType === 'A minor or legally incompetent person',
     showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
     showOtherFilingTypeOptions: form.filingType === CASE_TYPES_MAP.other,
-    showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
-    showOwnershipDisclosureValid: form.ownershipDisclosureFile,
     showPetitionFileValid: form.petitionFile,
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse' ||
