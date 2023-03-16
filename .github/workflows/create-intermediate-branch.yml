@@ -46,20 +46,24 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: 'test'
+          fetch-depth: '0'
+
+      - name: Set Git config
+        run: |
+          git config --local user.email "michael.marcotte@ustaxcourt.gov"
+          git config --local user.name "Mike Marcotte"
+
       - name: Create Intermediate branch
         run: |
-          destination_branch=test
+          destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
-
-          # Get the base branch
-          git pull
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}"
 
           # Merge the feature branch into the intermediate branch
-          git pull "origin/${feature_branch}"
+          git pull --strategy ort --no-rebase origin $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
@@ -68,7 +72,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          destination_branch=test
+          destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
 
           sudo apt-get update
