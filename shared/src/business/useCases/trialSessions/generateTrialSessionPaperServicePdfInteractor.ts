@@ -57,6 +57,11 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
         file: paperServicePdfData,
         useTempBucket: true,
       }));
+
+    applicationContext.logger.info(
+      `generated the printable paper service pdf at ${pdfUrl}`,
+      { pdfUrl },
+    );
   }
 
   return { docketEntryId, hasPaper, pdfUrl };
