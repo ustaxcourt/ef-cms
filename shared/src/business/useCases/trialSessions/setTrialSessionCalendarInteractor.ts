@@ -26,7 +26,7 @@ const removeManuallyAddedCaseFromTrialSession = ({
   });
 
   const oldCaseCopy = applicationContext
-    .getUtilties()
+    .getUtilities()
     .cloneAndFreeze(caseRecord);
 
   const caseEntity = new Case(caseRecord, { applicationContext });
