@@ -151,5 +151,5 @@ export const fileCourtIssuedOrderInteractor = async (
     });
   }
 
-  return updatedCase.validate().toRawObject();
+  return updatedCase;
 };
