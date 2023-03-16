@@ -187,6 +187,7 @@ table.ustc-table .ustc-button--unstyled {
     text-decoration: none;
 
     &:disabled {
+      border-bottom: 1px solid color($theme-color-base-lighter);
       text-decoration: none;
     }
   }
