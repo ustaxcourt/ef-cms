@@ -129,6 +129,10 @@ const setNoticeForCase = async ({
   trialSessionEntity,
   userId,
 }) => {
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseRecord);
+
   const caseEntity = new Case(caseRecord, { applicationContext });
   const { procedureType } = caseRecord;
 
@@ -309,7 +313,8 @@ const setNoticeForCase = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 
   const hasPages = newPdfDoc.getPages().length > 0;

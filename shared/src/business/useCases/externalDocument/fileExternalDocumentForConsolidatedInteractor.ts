@@ -59,6 +59,9 @@ export const fileExternalDocumentForConsolidatedInteractor = async (
   const consolidatedCaseEntities = consolidatedCases.map(consolidatedCase => {
     const { docketNumber } = consolidatedCase;
     const caseEntity = new Case(consolidatedCase, { applicationContext });
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(consolidatedCase);
 
     if (docketNumbersForFiling.includes(consolidatedCase.docketNumber)) {
       // this serves the purpose of offering two different
@@ -68,7 +71,7 @@ export const fileExternalDocumentForConsolidatedInteractor = async (
       casesForDocumentFiling.push(caseEntity);
     }
 
-    return caseEntity;
+    return { caseEntity, oldCaseCopy };
   });
 
   const caseWithLowestDocketNumber = Case.sortByDocketNumber(
@@ -156,7 +159,7 @@ export const fileExternalDocumentForConsolidatedInteractor = async (
         { applicationContext },
       ).toRawObject();
 
-      for (let caseEntity of consolidatedCaseEntities) {
+      for (let { caseEntity, oldCaseCopy } of consolidatedCaseEntities) {
         const isFilingDocumentForCase = docketNumbersForDocumentFiling.includes(
           caseEntity.docketNumber,
         );
@@ -248,7 +251,8 @@ export const fileExternalDocumentForConsolidatedInteractor = async (
           .getUseCaseHelpers()
           .updateCaseAndAssociations({
             applicationContext,
-            caseToUpdate: caseEntity,
+            newCase: caseEntity,
+            oldCaseCopy,
           });
       } // consolidatedCases
     }

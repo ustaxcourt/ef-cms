@@ -66,6 +66,8 @@ export const removeCaseFromTrialInteractor = async (
       docketNumber,
     });
 
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(myCase);
+
   const caseEntity = new Case(myCase, { applicationContext });
 
   if (!caseEntity.isHearing(trialSessionId)) {
@@ -98,7 +100,8 @@ export const removeCaseFromTrialInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

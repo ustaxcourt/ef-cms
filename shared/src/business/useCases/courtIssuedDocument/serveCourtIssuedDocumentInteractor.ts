@@ -57,6 +57,10 @@ export const serveCourtIssuedDocumentInteractor = async (
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
   }
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(subjectCase);
+
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
@@ -121,6 +125,7 @@ export const serveCourtIssuedDocumentInteractor = async (
 
   let serviceResults;
   let caseEntities = [subjectCaseEntity];
+  const oldCaseCopies = [oldCaseCopy];
 
   try {
     for (const docketNumber of docketNumbers) {
@@ -132,10 +137,13 @@ export const serveCourtIssuedDocumentInteractor = async (
         });
 
       caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      oldCaseCopies.push(
+        applicationContext.getUtilities().cloneAndFreeze(caseToUpdate),
+      );
     }
 
     caseEntities = await Promise.all(
-      caseEntities.map(caseEntity => {
+      caseEntities.map((caseEntity, i) => {
         const docketEntryEntity = new DocketEntry(
           {
             ...docketEntryToServe,
@@ -153,6 +161,7 @@ export const serveCourtIssuedDocumentInteractor = async (
             applicationContext,
             caseEntity,
             docketEntryEntity,
+            oldCaseCopy: oldCaseCopies[i],
             subjectCaseDocketNumber,
             user,
           });

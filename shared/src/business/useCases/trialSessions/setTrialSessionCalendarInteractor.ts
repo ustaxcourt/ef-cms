@@ -25,13 +25,18 @@ const removeManuallyAddedCaseFromTrialSession = ({
     docketNumber: caseRecord.docketNumber,
   });
 
+  const oldCaseCopy = applicationContext
+    .getUtilties()
+    .cloneAndFreeze(caseRecord);
+
   const caseEntity = new Case(caseRecord, { applicationContext });
 
   caseEntity.removeFromTrialWithAssociatedJudge();
 
   return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 };
 
@@ -116,6 +121,9 @@ export const setTrialSessionCalendarInteractor = async (
    * @returns {Promise} the promise of the updateCase call
    */
   const setManuallyAddedCaseAsCalendared = caseRecord => {
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(caseRecord);
     const caseEntity = new Case(caseRecord, { applicationContext });
 
     caseEntity.setAsCalendared(trialSessionEntity);
@@ -129,7 +137,8 @@ export const setTrialSessionCalendarInteractor = async (
       }),
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity,
+        newCase: caseEntity,
+        oldCaseCopy,
       }),
     ]);
   };
@@ -141,6 +150,9 @@ export const setTrialSessionCalendarInteractor = async (
    * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
    */
   const setTrialSessionCalendarForEligibleCase = caseRecord => {
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(caseRecord);
     const caseEntity = new Case(caseRecord, { applicationContext });
 
     caseEntity.setAsCalendared(trialSessionEntity);
@@ -155,7 +167,8 @@ export const setTrialSessionCalendarInteractor = async (
       }),
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity,
+        newCase: caseEntity,
+        oldCaseCopy,
       }),
       applicationContext
         .getPersistenceGateway()

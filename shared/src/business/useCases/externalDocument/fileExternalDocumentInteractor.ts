@@ -43,6 +43,10 @@ export const fileExternalDocumentInteractor = async (
       docketNumber,
     });
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
+
   let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
@@ -174,7 +178,8 @@ export const fileExternalDocumentInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 
   for (let workItem of workItems) {

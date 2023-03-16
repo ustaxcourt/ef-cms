@@ -34,11 +34,12 @@ export const editPaperFilingInteractor = async (
 
   authorizeRequest(applicationContext);
 
-  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
-    applicationContext,
-    docketEntryId: request.docketEntryId,
-    docketNumber: request.documentMetadata.docketNumber,
-  });
+  const { caseEntity, docketEntryEntity, oldCaseCopy } =
+    await getDocketEntryToEdit({
+      applicationContext,
+      docketEntryId: request.docketEntryId,
+      docketNumber: request.documentMetadata.docketNumber,
+    });
 
   validateDocketEntryCanBeEdited({
     docketEntry: docketEntryEntity,
@@ -54,6 +55,7 @@ export const editPaperFilingInteractor = async (
     applicationContext,
     caseEntity,
     docketEntryEntity,
+    oldCaseCopy,
     request,
   });
 };
@@ -84,11 +86,13 @@ const saveForLaterStrategy = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  oldCaseCopy,
   request,
 }: {
   applicationContext: IApplicationContext;
   request: IEditPaperFilingRequest;
   caseEntity: TCaseEntity;
+  oldCaseCopy: object;
   docketEntryEntity: DocketEntry;
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -113,7 +117,8 @@ const saveForLaterStrategy = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 
   const { clientConnectionId, docketEntryId } = request;
@@ -137,11 +142,13 @@ const multiDocketServeStrategy = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  oldCaseCopy,
   request,
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCaseEntity;
   docketEntryEntity: DocketEntry;
+  oldCaseCopy: object;
   request: IEditPaperFilingRequest;
 }) => {
   validateDocketEntryCanBeServed({
@@ -161,6 +168,13 @@ const multiDocketServeStrategy = async ({
     consolidatedCase => new Case(consolidatedCase, { applicationContext }),
   );
 
+  const oldCaseCopies = [
+    oldCaseCopy,
+    ...consolidatedCaseRecords.map(
+      applicationContext.getUtilities().cloneAndFreeze,
+    ),
+  ];
+
   validateMultiDocketPaperFilingRequest({
     caseEntity,
     consolidatedCases: consolidatedCaseEntities,
@@ -177,6 +191,7 @@ const multiDocketServeStrategy = async ({
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
     message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
+    oldCaseCopies,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
@@ -186,11 +201,13 @@ const singleDocketServeStrategy = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  oldCaseCopy,
   request,
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCaseEntity;
   docketEntryEntity: DocketEntry;
+  oldCaseCopy: object;
   request: IEditPaperFilingRequest;
 }) => {
   validateDocketEntryCanBeServed({
@@ -198,6 +215,7 @@ const singleDocketServeStrategy = async ({
   });
 
   const caseEntitiesToFileOn = [caseEntity];
+  const oldCaseCopies = [oldCaseCopy];
 
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -208,6 +226,7 @@ const singleDocketServeStrategy = async ({
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
     message: DOCUMENT_SERVED_MESSAGES.GENERIC,
+    oldCaseCopies,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
@@ -221,6 +240,7 @@ const serveDocketEntry = async ({
   docketEntryEntity,
   documentMetadata,
   message,
+  oldCaseCopies,
   subjectCaseEntity,
   userId,
 }: {
@@ -230,6 +250,7 @@ const serveDocketEntry = async ({
   docketEntryEntity: DocketEntry;
   documentMetadata: any;
   userId: string;
+  oldCaseCopies: any[];
   subjectCaseEntity: TCaseEntity;
   message: string;
 }) => {
@@ -256,13 +277,14 @@ const serveDocketEntry = async ({
     });
 
     caseEntitiesToFileOn = await Promise.all(
-      caseEntitiesToFileOn.map(aCase =>
+      caseEntitiesToFileOn.map((aCase, i) =>
         applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
           applicationContext,
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             applicationContext,
           }),
+          oldCaseCopy: oldCaseCopies[i],
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         }),
@@ -474,6 +496,7 @@ const getDocketEntryToEdit = async ({
 }): Promise<{
   caseEntity: TCaseEntity;
   docketEntryEntity: DocketEntry;
+  oldCaseCopy: object;
 }> => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -482,11 +505,15 @@ const getDocketEntryToEdit = async ({
       docketNumber,
     });
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  return { caseEntity, docketEntryEntity };
+  return { caseEntity, docketEntryEntity, oldCaseCopy };
 };

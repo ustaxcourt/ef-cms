@@ -75,6 +75,10 @@ const generateChangeOfAddressForPractitioner = async ({
           applicationContext,
           docketNumber,
         });
+      const oldCaseCopy = applicationContext
+        .getUtilities()
+        .cloneAndFreeze(userCase);
+
       let caseEntity = new Case(userCase, { applicationContext });
 
       const practitionerName = updatedName || user.name;
@@ -120,7 +124,8 @@ const generateChangeOfAddressForPractitioner = async ({
         .getUseCaseHelpers()
         .updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: caseEntity,
+          newCase: caseEntity,
+          oldCaseCopy,
         });
       updatedCases.push(updatedCase);
     } catch (error) {

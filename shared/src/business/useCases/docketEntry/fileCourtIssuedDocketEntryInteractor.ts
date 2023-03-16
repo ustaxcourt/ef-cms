@@ -85,6 +85,10 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           docketNumber,
         });
 
+      const oldCaseCopy = applicationContext
+        .getUtilities()
+        .cloneAndFreeze(caseToUpdate);
+
       let caseEntity = new Case(caseToUpdate, { applicationContext });
 
       const docketEntryEntity = new DocketEntry(
@@ -164,7 +168,8 @@ export const fileCourtIssuedDocketEntryInteractor = async (
       const saveItems = [
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: caseEntity,
+          newCase: caseEntity,
+          oldCaseCopy,
         }),
       ];
 

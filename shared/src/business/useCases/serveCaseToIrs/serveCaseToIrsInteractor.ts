@@ -474,6 +474,10 @@ export const serveCaseToIrsInteractor = async (
       docketNumber,
     });
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToBatch);
+
   let caseEntity = new Case(caseToBatch, { applicationContext });
 
   caseEntity.markAsSentToIRS();
@@ -611,7 +615,8 @@ export const serveCaseToIrsInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 
   return urlToReturn;

@@ -48,6 +48,10 @@ export const addCaseToTrialSessionInteractor = async (
       docketNumber,
     });
 
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseDetails);
+
   const caseEntity = new Case(caseDetails, { applicationContext });
 
   const trialSessionEntity = new TrialSession(trialSession, {
@@ -88,7 +92,8 @@ export const addCaseToTrialSessionInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
 
   await applicationContext.getPersistenceGateway().updateTrialSession({

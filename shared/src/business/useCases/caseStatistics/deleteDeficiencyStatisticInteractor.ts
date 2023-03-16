@@ -37,7 +37,7 @@ export const deleteDeficiencyStatisticInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      newCase,
       oldCaseCopy,
     });
 

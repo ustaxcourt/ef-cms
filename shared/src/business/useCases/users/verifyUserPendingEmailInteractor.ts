@@ -90,6 +90,10 @@ export const updateCasesForPetitioner = async ({
     ),
   );
 
+  const oldCases = rawCasesToUpdate.map(
+    applicationContext.getUtilities().cloneAndFreeze,
+  );
+
   const validatedCasesToUpdateInPersistence = [];
   for (let rawCaseData of rawCasesToUpdate) {
     validatedCasesToUpdateInPersistence.push(
@@ -104,10 +108,11 @@ export const updateCasesForPetitioner = async ({
     validatedCasesToUpdateInPersistence.filter(Boolean);
 
   return Promise.all(
-    filteredCasesToUpdateInPersistence.map(caseToUpdate =>
+    filteredCasesToUpdateInPersistence.map((caseToUpdate, i) =>
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate,
+        newCase: caseToUpdate,
+        oldCaseCopy: oldCases[i],
       }),
     ),
   );
@@ -172,6 +177,10 @@ export const updatePractitionerCases = async ({
     ),
   );
 
+  const oldCaseCopies = casesToUpdate.map(
+    applicationContext.getUtilities().cloneAndFreeze,
+  );
+
   const validCasesToUpdate = casesToUpdate
     .map(caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -203,7 +212,8 @@ export const updatePractitionerCases = async ({
     const validatedCaseToUpdate = validCasesToUpdate[idx];
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: validatedCaseToUpdate,
+      newCase: validatedCaseToUpdate,
+      oldCaseCopy: oldCaseCopies[idx],
     });
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({

@@ -128,6 +128,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
 
   let caseEntities = [];
   let serviceResults;
+  const oldCaseCopies = [];
 
   try {
     for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
@@ -139,10 +140,13 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
         });
 
       caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      oldCaseCopies.push(
+        applicationContext.getUtilities().cloneAndFreeze(caseToUpdate),
+      );
     }
 
     caseEntities = await Promise.all(
-      caseEntities.map(caseEntity => {
+      caseEntities.map((caseEntity, i) => {
         const docketEntryEntity = new DocketEntry(
           {
             ...omit(docketEntryToServe, 'filedBy'),
@@ -191,6 +195,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
             applicationContext,
             caseEntity,
             docketEntryEntity,
+            oldCaseCopy: oldCaseCopies[i],
             subjectCaseDocketNumber,
             user,
           });

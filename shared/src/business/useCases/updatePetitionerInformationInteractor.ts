@@ -298,7 +298,7 @@ export const updatePetitionerInformationInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
       oldCaseCopy,
     });
 

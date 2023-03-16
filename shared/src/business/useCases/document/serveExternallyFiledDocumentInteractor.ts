@@ -129,6 +129,10 @@ export const serveExternallyFiledDocumentInteractor = async (
             docketNumber,
           });
 
+        const oldCaseCopy = applicationContext
+          .getUtilities()
+          .cloneAndFreeze(rawCaseToUpdate);
+
         const caseEntity = new Case(rawCaseToUpdate, {
           applicationContext,
         });
@@ -159,6 +163,7 @@ export const serveExternallyFiledDocumentInteractor = async (
             applicationContext,
             caseEntity,
             docketEntryEntity,
+            oldCaseCopy,
             subjectCaseDocketNumber,
             user,
           });

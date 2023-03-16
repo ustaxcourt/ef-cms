@@ -53,7 +53,7 @@ export const archiveCorrespondenceDocumentInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
     oldCaseCopy,
   });
 };

@@ -12,13 +12,11 @@ exports.fileAndServeDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  oldCaseCopy,
   subjectCaseDocketNumber,
   user,
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
-  const oldCaseCopy = applicationContext
-    .getUtilities()
-    .cloneAndFreeze(caseEntity.toRawObject());
 
   docketEntryEntity.setAsServed(servedParties.all);
 

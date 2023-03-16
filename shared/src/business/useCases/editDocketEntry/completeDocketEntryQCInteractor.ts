@@ -88,6 +88,9 @@ export const completeDocketEntryQCInteractor = async (
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
@@ -355,7 +358,8 @@ export const completeDocketEntryQCInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity,
+    newCase: caseEntity,
+    oldCaseCopy,
   });
 
   if (isNewCoverSheetNeeded) {

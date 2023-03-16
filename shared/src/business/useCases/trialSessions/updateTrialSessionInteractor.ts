@@ -23,6 +23,9 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       applicationContext,
       docketNumber,
     });
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
   if (
@@ -93,7 +96,8 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
   }
 

@@ -72,6 +72,9 @@ export const deleteTrialSessionInteractor = async (
         applicationContext,
         docketNumber: order.docketNumber,
       });
+    const oldCaseCopy = applicationContext
+      .getUtilities()
+      .cloneAndFreeze(myCase);
 
     const caseEntity = new Case(myCase, { applicationContext });
 
@@ -89,7 +92,8 @@ export const deleteTrialSessionInteractor = async (
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity,
+      newCase: caseEntity,
+      oldCaseCopy,
     });
   }
 
