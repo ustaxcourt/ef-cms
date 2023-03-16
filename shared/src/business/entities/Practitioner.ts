@@ -33,8 +33,9 @@ export class Practitioner extends User {
   public serviceIndicator: string;
   public updatedEmail: string;
 
-  constructor(rawUser, options) {
+  constructor(rawUser, options?) {
     super(rawUser, options);
+    this.entityName = entityName;
     this.additionalPhone = rawUser.additionalPhone;
     this.admissionsDate = rawUser.admissionsDate;
     this.admissionsStatus = rawUser.admissionsStatus;
@@ -245,3 +246,9 @@ const roleMap = {
   IRS: ROLES.irsPractitioner,
   Private: ROLES.privatePractitioner,
 };
+
+declare global {
+  type RawPractitioner = ExcludeMethods<Practitioner>;
+}
+
+export const entityName = 'Practitioner';

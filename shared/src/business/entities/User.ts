@@ -199,3 +199,10 @@ export class User extends JoiValidationEntity {
     return User.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export const { USER_CONTACT_VALIDATION_RULES, VALIDATION_ERROR_MESSAGES } =
+  User;
+
+declare global {
+  type RawUser = ExcludeMethods<User>;
+}
