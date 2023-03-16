@@ -2,6 +2,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkAddsDocketEntryForMotion } from '../integration-tests/journey/docketClerkAddsDocketEntryForMotion';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkAddsStipulatedDecisionDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsStipulatedDecisionDocketEntryFromOrder';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
@@ -78,6 +79,11 @@ describe('unauthed user searches for case', () => {
     docketClerkSignsOrder(testClient);
     docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
     docketClerkServesDocument(testClient, 1);
+  });
+
+  describe('Docket clerk creates and serves a motion (should be viewable to the public)', () => {
+    loginAs(testClient, 'docketclerk@example.com');
+    docketClerkAddsDocketEntryForMotion(testClient);
   });
 
   describe('Docket clerk creates a transcript but does not serve it (transcripts are unservable, should not be viewable to the public)', () => {

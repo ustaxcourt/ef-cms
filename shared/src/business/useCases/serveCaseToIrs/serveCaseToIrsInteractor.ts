@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
@@ -24,7 +25,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
-import { remove } from 'lodash';
+import { random, remove } from 'lodash';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -125,6 +126,12 @@ const createPetitionWorkItems = async ({
   });
 };
 
+const generateAccessCode = () => {
+  const randomNumber = random(0, 999999);
+  const accessCode = ('000000' + randomNumber).slice(-6);
+  return accessCode;
+};
+
 const generateNoticeOfReceipt = async ({
   applicationContext,
   caseEntity,
@@ -141,14 +148,17 @@ const generateNoticeOfReceipt = async ({
 
   const contactPrimary = caseEntity.getContactPrimary();
 
+  let accessCode = generateAccessCode();
+
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: contactPrimary,
+        accessCode,
         caseCaptionExtension,
         caseTitle,
+        contact: contactPrimary,
         docketNumberWithSuffix,
         preferredTrialCity,
         receivedAtFormatted: applicationContext
@@ -166,15 +176,38 @@ const generateNoticeOfReceipt = async ({
     applicationContext,
     caseEntity,
   });
-  if (contactSecondary && addressesAreDifferent) {
+
+  const isSetupForEService = contactInfo => {
+    return (
+      contactInfo.hasConsentedToEService && !!contactInfo.paperPetitionEmail
+    );
+  };
+
+  const petitionerIsSetupForEService =
+    contactSecondary &&
+    [contactPrimary, contactSecondary].some(contact => {
+      return isSetupForEService(contact) === true;
+    });
+
+  const shouldGenerateNotrForSecondary =
+    addressesAreDifferent || petitionerIsSetupForEService;
+
+  if (shouldGenerateNotrForSecondary) {
+    if (
+      contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
+    ) {
+      accessCode = generateAccessCode();
+    }
+
     secondaryContactNotrPdfData = await applicationContext
       .getDocumentGenerators()
       .noticeOfReceiptOfPetition({
         applicationContext,
         data: {
-          address: contactSecondary,
+          accessCode,
           caseCaptionExtension,
           caseTitle,
+          contact: contactSecondary,
           docketNumberWithSuffix,
           preferredTrialCity,
           receivedAtFormatted: applicationContext

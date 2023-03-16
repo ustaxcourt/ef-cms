@@ -131,7 +131,7 @@ export abstract class JoiValidationEntity {
 
     Object.defineProperty(this, 'schema', {
       enumerable: false,
-      value: joi.object().keys(rules),
+      value: rules.validate ? rules : joi.object().keys(rules),
       writable: true,
     });
   }
@@ -232,7 +232,14 @@ export abstract class JoiValidationEntity {
     return this.validate({ applicationContext, logErrors: true });
   }
 
-  static validateRawCollection(collection: any, args: any) {
-    throw new Error('not implemented!');
+  static validateRawCollection<T extends JoiValidationEntity>(
+    this: new (someVar: any, someArgs: any) => T,
+    collection: any[] = [],
+    args: any,
+  ) {
+    return collection.map(
+      rawEntity =>
+        new this(rawEntity, args).validate().toRawObject() as ExcludeMethods<T>,
+    );
   }
 }
