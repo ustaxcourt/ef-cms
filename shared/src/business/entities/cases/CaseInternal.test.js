@@ -132,16 +132,16 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(true);
     });
 
-    it('creates a valid petition with partyType Corporation and an ods file', () => {
+    it('creates a valid petition with partyType Corporation and an cds file', () => {
       const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
+          corporateDisclosureFile: { anObject: true },
+          corporateDisclosureFileSize: 1,
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
-          ownershipDisclosureFile: { anObject: true },
-          ownershipDisclosureFileSize: 1,
           partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
@@ -170,7 +170,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(true);
     });
 
-    it('creates a valid petition with partyType Corporation and an order for ods instead of an ods file', () => {
+    it('creates a valid petition with partyType Corporation and an order for cds instead of an cds file', () => {
       const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
@@ -178,7 +178,7 @@ describe('CaseInternal entity', () => {
           caseType: CASE_TYPES_MAP.other,
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
-          orderForOds: true,
+          orderForCds: true,
           partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
@@ -251,7 +251,7 @@ describe('CaseInternal entity', () => {
       ).toEqual(VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFile);
     });
 
-    it('fails validation if partyType is Corporation and orderForOds is undefined', () => {
+    it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
       const caseInternal = new CaseInternal(
         {
           partyType: PARTY_TYPES.corporation,
@@ -260,22 +260,22 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
+        caseInternal.getFormattedValidationErrors().corporateDisclosureFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
-    it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForOds is false', () => {
+    it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
       const caseInternal = new CaseInternal(
         {
-          orderForOds: false,
+          orderForCds: false,
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         { applicationContext },
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
+        caseInternal.getFormattedValidationErrors().corporateDisclosureFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
@@ -311,19 +311,19 @@ describe('CaseInternal entity', () => {
       );
     });
 
-    it('fails validation if ownershipDisclosureFile is set, but ownershipDisclosureFileSize is not', () => {
+    it('fails validation if corporateDisclosureFile is set, but corporateDisclosureFileSize is not', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          ownershipDisclosureFile: new File([], 'test.pdf'),
+          corporateDisclosureFile: new File([], 'test.pdf'),
           receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
+        caseInternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
@@ -378,9 +378,9 @@ describe('CaseInternal entity', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
+          corporateDisclosureFile: { anObject: true },
+          corporateDisclosureFileSize: 1,
           mailingDate: 'test',
-          ownershipDisclosureFile: { anObject: true },
-          ownershipDisclosureFileSize: 1,
           partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
@@ -419,10 +419,10 @@ describe('CaseInternal entity', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
+          corporateDisclosureFile: { anObject: true },
+          corporateDisclosureFileSize: 1,
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: false,
-          ownershipDisclosureFile: { anObject: true },
-          ownershipDisclosureFileSize: 1,
           partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
