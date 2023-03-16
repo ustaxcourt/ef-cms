@@ -48,7 +48,7 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
-const { clone, cloneDeep, compact, includes, isEmpty } = require('lodash');
+const { clone, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -156,7 +156,7 @@ Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
 ) {
-  caseDecorator(this, cloneDeep(rawCase), { applicationContext, filtered });
+  caseDecorator(this, rawCase, { applicationContext, filtered });
 };
 
 const caseDecorator = (
