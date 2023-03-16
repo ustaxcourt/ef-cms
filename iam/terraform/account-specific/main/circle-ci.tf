@@ -111,6 +111,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Sid": "Acm",
       "Effect": "Allow",
       "Action": [
+        "acm:GetCertificate",
         "acm:RequestCertificate",
         "acm:ListCertificates",
         "acm:AddTagsToCertificate",
