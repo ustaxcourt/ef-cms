@@ -1,6 +1,6 @@
-exports.updateTrialDateOnWorkItems = async ({
+exports.updateTrialLocationOnWorkItems = async ({
   applicationContext,
-  trialDate,
+  trialLocation,
   workItemId,
 }) => {
   const workItems = await applicationContext
@@ -10,8 +10,8 @@ exports.updateTrialDateOnWorkItems = async ({
   const workItemUpdates = workItems.map(workItem =>
     applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord({
       applicationContext,
-      attributeKey: 'trialDate',
-      attributeValue: trialDate,
+      attributeKey: 'trialLocation',
+      attributeValue: trialLocation,
       pk: workItem.pk,
       sk: workItem.sk,
     }),
