@@ -10,6 +10,9 @@ const {
 const {
   migrateItems: migration0006,
 } = require('./migrations/0006-reformat-sortable-docket-number');
+const {
+  migrateItems: migration0007,
+} = require('./migrations/0007-update-corporate-disclosure-document');
 
 // MODIFY THIS ARRAY TO ADD NEW MIGRATIONS OR REMOVE OLD ONES
 const migrationsToRun = [
@@ -28,6 +31,10 @@ const migrationsToRun = [
   {
     key: '0006-reformat-sortable-docket-number.js',
     script: migration0006,
+  },
+  {
+    key: '0007-update-corporate-disclosure-document.ts',
+    script: migration0007,
   },
 ];
 

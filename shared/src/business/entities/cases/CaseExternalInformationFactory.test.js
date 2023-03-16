@@ -294,7 +294,7 @@ describe('CaseExternalInformationFactory entity', () => {
       });
     });
 
-    it('requires ownershipDisclosureFile if filingType is A business', () => {
+    it('requires corporateDisclosureFile if filingType is A business', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -312,11 +312,11 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual(caseExternalErrorMessages.ownershipDisclosureFile);
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
+      ).toEqual(caseExternalErrorMessages.corporateDisclosureFile);
     });
 
-    it('does not require ownershipDisclosureFile if filingType is not A business', () => {
+    it('does not require corporateDisclosureFile if filingType is not A business', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -334,7 +334,7 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
       ).toBeUndefined();
     });
 
