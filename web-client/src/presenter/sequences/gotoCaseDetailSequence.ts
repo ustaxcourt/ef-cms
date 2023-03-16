@@ -43,6 +43,16 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   setDocketEntryIdAction,
   showModalFromQueryAction,
   parallel([
+    [
+      getFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS
+          .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
+      ),
+      setFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS
+          .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
+      ),
+    ],
     [getTrialSessionsOnCaseAction, setTrialSessionsAction],
     [getJudgeForCurrentUserAction, setJudgeUserAction],
     [fetchUserNotificationsSequence],
