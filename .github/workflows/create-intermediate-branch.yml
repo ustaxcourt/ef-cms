@@ -69,7 +69,7 @@ jobs:
           echo "FEATURE BRANCH ******, ${{ github.head_ref }}"
 
           # Merge the feature branch into the intermediate branch
-          git pull --rebase --no-edit --allow-unrelated-histories origin $feature_branch
+          # git pull --rebase --no-edit --allow-unrelated-histories origin $feature_branch
           git pull -r --no-edit origin $feature_branch
 
           # Push the new intermediate to remote
