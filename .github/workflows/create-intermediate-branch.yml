@@ -61,7 +61,7 @@ jobs:
 
 
           # Create a copy of the destination branch
-          # git pull origin $destination_branch
+          git pull origin $destination_branch
           git checkout -b "${intermediate_branch}"
 
           echo "CURRENT BRANCH 1, $(git branch --show-current)"
