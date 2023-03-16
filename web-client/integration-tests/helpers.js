@@ -20,6 +20,7 @@ import {
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
+import { cloneAndFreeze } from '../../shared/src/business/utilities/cloneAndFreeze';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import {
@@ -245,6 +246,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getUtilities: () => ({
       calculateDifferenceInDays,
       calculateISODate,
+      cloneAndFreeze,
       createISODateString,
       formatDateString,
       formatNow,

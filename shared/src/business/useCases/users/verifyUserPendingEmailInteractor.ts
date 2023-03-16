@@ -90,12 +90,13 @@ export const updateCasesForPetitioner = async ({
     ),
   );
 
-  const oldCases = rawCasesToUpdate.map(
-    applicationContext.getUtilities().cloneAndFreeze,
-  );
-
+  const oldCaseCopies = [];
   const validatedCasesToUpdateInPersistence = [];
   for (let rawCaseData of rawCasesToUpdate) {
+    oldCaseCopies.push(
+      applicationContext.getUtilities().cloneAndFreeze(rawCaseData),
+    );
+
     validatedCasesToUpdateInPersistence.push(
       await updateCaseEntityAndGenerateChange({
         applicationContext,
@@ -112,7 +113,7 @@ export const updateCasesForPetitioner = async ({
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
         newCase: caseToUpdate,
-        oldCaseCopy: oldCases[i],
+        oldCaseCopy: oldCaseCopies[i],
       }),
     ),
   );
