@@ -58,22 +58,12 @@ jobs:
           destination_branch=experimental3
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          court_remote_address=https://github.com/ustaxcourt/ef-cms.git
-
 
           # Create a copy of the destination branch
-          # git pull origin $destination_branch
           git checkout -b "${intermediate_branch}"
 
-          echo "CURRENT BRANCH 1, $(git branch --show-current)"
-
-
-          echo "FEATURE BRANCH ******, ${{ github.head_ref }}"
-
           # Merge the feature branch into the intermediate branch
-          # git pull --rebase --no-edit --allow-unrelated-histories origin $feature_branch
-          git pull --strategy ort --no-rebase origin $feature_branch
-          echo "CURRENT BRANCH 2, $(git branch --show-current)"
+          git pull --strategy ort origin $feature_branch
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
