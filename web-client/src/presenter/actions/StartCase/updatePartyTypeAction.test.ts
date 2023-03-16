@@ -143,7 +143,7 @@ describe('updatePartyTypeAction', () => {
     );
   });
 
-  it('resets the state.form.ownershipDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
+  it('resets the state.form.corporateDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
@@ -158,17 +158,17 @@ describe('updatePartyTypeAction', () => {
           },
           form: {
             businessType: 'some value',
+            corporateDisclosureFile: 'a file',
             filingType: 'Not A business',
-            ownershipDisclosureFile: 'a file',
           },
         },
       ),
     );
     expect(state.form.businessType).toBeUndefined();
-    expect(state.form.ownershipDisclosureFile).toBeUndefined();
+    expect(state.form.corporateDisclosureFile).toBeUndefined();
   });
 
-  it('does not clear the petition.ownershipDisclosureFile and form.businessType when form.filingType is "A business"', async () => {
+  it('does not clear the petition.corporateDisclosureFile and form.businessType when form.filingType is "A business"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
@@ -183,14 +183,14 @@ describe('updatePartyTypeAction', () => {
           },
           form: {
             businessType: 'some value',
+            corporateDisclosureFile: 'a file',
             filingType: 'A business',
-            ownershipDisclosureFile: 'a file',
           },
         },
       ),
     );
     expect(state.form.businessType).toEqual('some value');
-    expect(state.form.ownershipDisclosureFile).toEqual('a file');
+    expect(state.form.corporateDisclosureFile).toEqual('a file');
   });
 
   it('sets form.contactPrimary and form.contactSecondary to empty objects if the party type was overridden', async () => {
