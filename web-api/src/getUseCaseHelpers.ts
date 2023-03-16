@@ -44,6 +44,7 @@ import { updateCaseTitleOnWorkItems } from '../../shared/src/business/useCaseHel
 import { updateDocketNumberSuffixOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems';
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 import { updateTrialDateOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems';
+import { updateTrialLocationOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialLocationOnWorkItems';
 
 const useCaseHelpers = {
   addDocketEntryForSystemGeneratedOrder,
@@ -91,6 +92,7 @@ const useCaseHelpers = {
   updateDocketNumberSuffixOnWorkItems,
   updateInitialFilingDocuments,
   updateTrialDateOnWorkItems,
+  updateTrialLocationOnWorkItems,
 };
 
 export const getUseCaseHelpers = () => useCaseHelpers;

@@ -2,14 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  updateDocketNumberSuffixOnWorkItems,
-} = require('./updateDocketNumberSuffixOnWorkItems');
+  updateTrialLocationOnWorkItems,
+} = require('./updateTrialLocationOnWorkItems');
 const { faker } = require('@faker-js/faker');
 
-describe('updateDocketNumberSuffixOnWorkItems', () => {
+describe('updateTrialLocationOnWorkItems', () => {
   const workItemsResults = [
-    { docketNumber: '101-20', pk: 'hi', sk: 'there', workItemId: 'abc' },
-    { docketNumber: '101-20', pk: 'some', sk: 'body', workItemId: 'abc' },
+    { docketNumber: '101-20', pk: 'sharpest', sk: 'tool', workItemId: 'abc' },
+    { docketNumber: '101-20', pk: 'in', sk: 'the shed', workItemId: 'abc' },
   ];
   beforeAll(() => {
     applicationContext
@@ -19,11 +19,11 @@ describe('updateDocketNumberSuffixOnWorkItems', () => {
 
   it('gets work items using the workItemId and calls update for each in the results', async () => {
     const workItemId = faker.datatype.uuid();
-    const docketNumberSuffix = 'ZZ';
+    const trialLocation = 'Phoenix, Arizona';
 
-    await updateDocketNumberSuffixOnWorkItems({
+    await updateTrialLocationOnWorkItems({
       applicationContext,
-      docketNumberSuffix,
+      trialLocation,
       workItemId,
     });
     expect(
@@ -39,8 +39,8 @@ describe('updateDocketNumberSuffixOnWorkItems', () => {
         .mock.calls[0][0],
     ).toMatchObject({
       applicationContext,
-      attributeKey: 'docketNumberSuffix',
-      attributeValue: docketNumberSuffix,
+      attributeKey: 'trialLocation',
+      attributeValue: trialLocation,
       pk: workItemsResults[0].pk,
       sk: workItemsResults[0].sk,
     });
@@ -49,8 +49,8 @@ describe('updateDocketNumberSuffixOnWorkItems', () => {
         .mock.calls[1][0],
     ).toMatchObject({
       applicationContext,
-      attributeKey: 'docketNumberSuffix',
-      attributeValue: docketNumberSuffix,
+      attributeKey: 'trialLocation',
+      attributeValue: trialLocation,
       pk: workItemsResults[1].pk,
       sk: workItemsResults[1].sk,
     });
