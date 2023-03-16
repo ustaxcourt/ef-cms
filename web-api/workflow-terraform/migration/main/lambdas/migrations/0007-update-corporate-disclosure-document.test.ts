@@ -1,12 +1,8 @@
-const {
-  INITIAL_DOCUMENT_TYPES,
-} = require('../../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0007-update-corporate-disclosure-document');
-const { MOCK_CASE } = require('../../../../../../shared/src/test/mockCase');
+import { INITIAL_DOCUMENT_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../../shared/src/test/mockCase';
+import { migrateItems } from './0007-update-corporate-disclosure-document';
 
 describe('migrateItems', () => {
-  let documentClient;
-
   it('should return and not modify records that are NOT docket records', async () => {
     const mockItems = [
       {
@@ -18,7 +14,7 @@ describe('migrateItems', () => {
         sk: 'case|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
       },
     ];
-    const results = await migrateItems(mockItems, documentClient);
+    const results = await migrateItems(mockItems);
 
     expect(results).toEqual(mockItems);
   });
@@ -31,7 +27,7 @@ describe('migrateItems', () => {
       sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual(mockItem);
   });
@@ -44,7 +40,7 @@ describe('migrateItems', () => {
       sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual({
       ...mockItem,
@@ -60,7 +56,7 @@ describe('migrateItems', () => {
       sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual({
       ...mockItem,
@@ -78,7 +74,7 @@ describe('migrateItems', () => {
       sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual({
       ...mockItem,
@@ -99,7 +95,7 @@ describe('migrateItems', () => {
       sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual({
       ...mockItem,
@@ -117,7 +113,7 @@ describe('migrateItems', () => {
       sk: `case|${MOCK_CASE.docketNumber}`,
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual({
       ...mockItem,
@@ -132,7 +128,7 @@ describe('migrateItems', () => {
       sk: `case|${MOCK_CASE.docketNumber}`,
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual({
       ...mockItem,
@@ -146,7 +142,7 @@ describe('migrateItems', () => {
       sk: `case|${MOCK_CASE.docketNumber}`,
     };
 
-    const results = await migrateItems([mockItem], documentClient);
+    const results = await migrateItems([mockItem]);
 
     expect(results[0]).toEqual(mockItem);
   });
