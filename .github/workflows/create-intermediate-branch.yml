@@ -27,7 +27,7 @@ jobs:
           # get intermediate branch related commits in both repos
           sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
 
-          if [[ -n "${sha_of_int_branch" ]]
+          if [[ -n "${sha_of_int_branch}" ]]
           then
             echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
           else
