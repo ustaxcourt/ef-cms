@@ -39,7 +39,7 @@ describe('createCaseFromPaperAction', () => {
       state: {
         form: {
           applicationForWaiverOfFilingFeeFile: {},
-          ownershipDisclosureFile: {},
+          corporateDisclosureFile: {},
           petitionFile: {},
           requestForPlaceOfTrialFile: {},
           stinFile: {},
@@ -60,7 +60,7 @@ describe('createCaseFromPaperAction', () => {
         .calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
-      ownershipDisclosureFile: {},
+      corporateDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,
@@ -84,7 +84,7 @@ describe('createCaseFromPaperAction', () => {
       },
       state: {
         form: {
-          ownershipDisclosureFile: {},
+          corporateDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
@@ -103,7 +103,7 @@ describe('createCaseFromPaperAction', () => {
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      ownershipDisclosureFile: {},
+      corporateDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,

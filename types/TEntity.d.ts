@@ -31,53 +31,6 @@ type TSectionWorkItem = {
   sentBy: string;
 };
 
-type TMessageData = {
-  attachments: {
-    documentId: string;
-  }[];
-  caseStatus: string;
-  caseTitle: string;
-  completedAt: string;
-  completedBy: string;
-  completedBySection: string;
-  completedByUserId: string;
-  completedMessage: string;
-  createdAt: string;
-  leadDocketNumber: string;
-  docketNumber: string;
-  docketNumberWithSuffix: string;
-  from: string;
-  fromSection: string;
-  fromUserId: string;
-  isCompleted: boolean;
-  isRead: boolean;
-  isRepliedTo: string;
-  message: string;
-  messageId: string;
-  parentMessageId: string;
-  subject: string;
-  to: string;
-  toSection: string;
-  toUserId: string;
-};
-
-type TMessageEntity = {
-  markAsCompleted: ({
-    message,
-    user,
-  }: {
-    message: string;
-    user: {
-      name: string;
-      userId: string;
-      section: string;
-    };
-  }) => void;
-  validate: () => {
-    toRawObject: () => TMessageData;
-  };
-} & TMessageData;
-
 type TUserContact = {
   address1: string;
   address2: string;
@@ -183,7 +136,7 @@ type TCase = {
   orderForAmendedPetition: boolean;
   orderForAmendedPetitionAndFilingFee: boolean;
   orderForFilingFee: boolean;
-  orderForOds: boolean;
+  orderForCds: boolean;
   orderForRatification: boolean;
   orderToShowCause: boolean;
   partyType: string;
