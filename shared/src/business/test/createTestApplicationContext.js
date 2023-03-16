@@ -199,6 +199,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { cloneAndFreeze } = require('../utilities/cloneAndFreeze');
 const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -293,6 +294,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(caseHasServedDocketEntries),
     caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
+    cloneAndFreeze: jest.fn().mockImplementation(cloneAndFreeze),
     combineTwoPdfs: jest.fn().mockImplementation(combineTwoPdfs),
     compareCasesByDocketNumber: jest
       .fn()
