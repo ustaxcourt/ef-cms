@@ -27,7 +27,7 @@ exports.associateIrsPractitionerToCase = async ({
     });
 
   if (!isAssociated) {
-    const caseRecord = await applicationContext
+    const oldCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
@@ -35,9 +35,9 @@ exports.associateIrsPractitionerToCase = async ({
       });
     const oldCaseCopy = applicationContext
       .getUtilities()
-      .cloneAndFreeze(caseRecord);
+      .cloneAndFreeze(oldCase);
 
-    const userCaseEntity = new UserCase(caseRecord);
+    const userCaseEntity = new UserCase(oldCase);
 
     await applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
@@ -46,18 +46,18 @@ exports.associateIrsPractitionerToCase = async ({
       userId: user.userId,
     });
 
-    const caseEntity = new Case(caseRecord, { applicationContext });
+    const newCase = new Case(oldCase, { applicationContext });
 
-    caseEntity.attachIrsPractitioner(
+    newCase.attachIrsPractitioner(
       new IrsPractitioner({ ...user, serviceIndicator }),
     );
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      newCase,
       oldCaseCopy,
     });
 
-    return caseEntity.toRawObject();
+    return newCase.toRawObject();
   }
 };
