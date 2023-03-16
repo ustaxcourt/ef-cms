@@ -63,13 +63,13 @@ jobs:
           git fetch --all
           echo "CURRENT BRANCH 1, $(git branch --show-current)"
 
-          #add courts remote address
-          git remote add upstream $court_remote_address
+          #add courts remote address to make sure exp3 has the latest from test
+          # git remote add upstream $court_remote_address
 
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}"
-          git pull upstream test
+          # git pull upstream test
 
           echo "CURRENT BRANCH 2, $(git branch --show-current)"
 
