@@ -9,15 +9,10 @@ import {
   US_STATES_OTHER,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
-import {
-  VALIDATION_ERROR_MESSAGES as USER_VALIDATION_ERROR_MESSAGES,
-  userDecorator,
-  userValidation,
-} from './User';
+import { User } from './User';
 import joi from 'joi';
 
-export class Practitioner extends JoiValidationEntity {
+export class Practitioner extends User {
   public additionalPhone: string;
   public admissionsDate: string;
   public admissionsStatus: string;
@@ -38,9 +33,8 @@ export class Practitioner extends JoiValidationEntity {
   public serviceIndicator: string;
   public updatedEmail: string;
 
-  constructor(rawUser, { filtered = false } = {}) {
-    super('Practitioner');
-    userDecorator(this, rawUser, filtered);
+  constructor(rawUser, options) {
+    super(rawUser, options);
     this.additionalPhone = rawUser.additionalPhone;
     this.admissionsDate = rawUser.admissionsDate;
     this.admissionsStatus = rawUser.admissionsStatus;
@@ -70,7 +64,7 @@ export class Practitioner extends JoiValidationEntity {
   }
 
   static VALIDATION_ERROR_MESSAGES = {
-    ...USER_VALIDATION_ERROR_MESSAGES,
+    ...User.VALIDATION_ERROR_MESSAGES,
     admissionsDate: [
       {
         contains: 'must be less than or equal to',
@@ -114,7 +108,7 @@ export class Practitioner extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      ...userValidation,
+      ...super.getValidationRules(),
       additionalPhone: JoiValidationConstants.STRING.max(100)
         .optional()
         .allow(null)
@@ -208,7 +202,7 @@ export class Practitioner extends JoiValidationEntity {
   }
 
   toRawObject() {
-    const result = super.toRawObjectFromJoi();
+    const result = super.toRawObject() as any;
 
     // We don't want to persist these values as they are only used for validation
     result.confirmEmail = undefined;
