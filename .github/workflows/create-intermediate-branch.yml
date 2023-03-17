@@ -22,16 +22,11 @@ jobs:
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
-          flexion_remote_address=https://github.com/flexion/ef-cms.git
-          court_remote_address=https://github.com/ustaxcourt/ef-cms.git
 
-          git fetch --all
+          # check for an already existing intermediate branch
+          sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
 
-          # get intermediate branch related commits in both repos
-          sha_of_int_branch_in_flexion=$(git ls-remote $flexion_remote_address $intermediate_branch)
-          sha_of_int_branch_in_court=$(git ls-remote $court_remote_address $intermediate_branch)
-
-          if [[ -n "${sha_of_int_branch_in_flexion}" || -n "${sha_of_int_branch_in_court}" ]]
+          if [[ -n "${sha_of_int_branch}" ]]
           then
             echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
           else
@@ -42,6 +37,8 @@ jobs:
     needs: check-for-intermediate-branch
     if: needs.check-for-intermediate-branch.outputs.create-branch-flag == "true"
     runs-on: ubuntu-latest
+    outputs:
+      pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -65,6 +62,12 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git pull --strategy ort --no-rebase origin $feature_branch
 
+          # create a commit with unresolved merge conflicts (if any)
+          if [[ -n $(git status --porcelain | grep '^UU') ]]; then
+            git add .
+            git commit -m "MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
+          fi
+
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
 
@@ -79,4 +82,12 @@ jobs:
           sudo apt-get install hub
 
           pr_title="${feature_branch} intermediate to test"
-          hub pull-request -b ${destination_branch} -m "$pr_title"
+          PR_LINK=$(hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test")
+
+          echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
+
+      - name: Close PR with comment
+        uses: peter-evans/close-pull@v2
+        with:
+          pull-request-number: ${{ github.event.pull_request.number }}
+          comment: "Auto Closing this PR. An intermediate branch has been created. Here's the link: ${{ steps.get_pr_link.outputs.pr_link }}."
