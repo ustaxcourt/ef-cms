@@ -66,11 +66,8 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git pull --strategy ort --no-rebase origin $feature_branch
 
-          # create a commit with unresolved merge conflicts
-          if [[ -n $(git status --porcelain | grep '^UU') ]]; then
-            git add .
-            git commit -m "MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
-          fi
+          # create empty commit to trigger workflow
+          git commit --allow-empty -m "Empty commit to trigger workflow in new intermediate branch"
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
@@ -86,7 +83,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install hub
 
-          pr_title="${feature_branch} intermediate to experimental3"
           PR_LINK=$(hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test")
 
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
