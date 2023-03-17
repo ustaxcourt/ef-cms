@@ -293,6 +293,47 @@ describe('getCasesForUserInteractor', () => {
       ];
       expect(actualOrder).toEqual(expectedOrder);
     });
+
+    it('should not include docket entries for consolidated cases', async () => {
+      memberCase1.petitioners = [];
+      leadCase.petitioners = [];
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesForUser.mockResolvedValue([
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedCase3,
+          unconsolidatedClosedCase1,
+          unconsolidatedClosedCase2,
+          memberCase2,
+        ]);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesByLeadDocketNumber.mockResolvedValue(
+          consolidatedGroupLeadCase11119,
+        );
+
+      const userCases = await getCasesForUserInteractor(applicationContext);
+
+      expect(unconsolidatedCase1.docketEntries).toBeDefined();
+      expect(unconsolidatedCase2.docketEntries).toBeDefined();
+      expect(unconsolidatedCase3.docketEntries).toBeDefined();
+      expect(unconsolidatedClosedCase1.docketEntries).toBeDefined();
+      expect(unconsolidatedClosedCase2.docketEntries).toBeDefined();
+      expect(memberCase2.docketEntries).toBeDefined();
+
+      ['closedCaseList', 'openCaseList'].forEach(caseGroup => {
+        userCases[caseGroup].forEach(userCase => {
+          expect(userCase.docketEntries).toBeUndefined();
+          expect(userCase.docketNumber).toBeDefined();
+        });
+      });
+
+      expect(userCases.closedCaseList.length).toBe(2);
+      expect(userCases.openCaseList.length).toBe(4);
+    });
   });
 
   describe('Non Consolidated Cases', () => {
