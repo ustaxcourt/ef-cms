@@ -37,44 +37,49 @@ jobs:
         run: |
           echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
 
-  # create-intermediate-branch:
-  #   needs: check-for-intermediate-branch
-  #   if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         ref: 'experimental3'
-  #         fetch-depth: '0'
-  #     - name: Set Git config
-  #       run: |
-  #         git config --local user.email "jabu@flexion.us"
-  #         git config --local user.name "Joshua Abu"
+  create-intermediate-branch:
+    needs: check-for-intermediate-branch
+    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: 'experimental3'
+          fetch-depth: '0'
+      - name: Set Git config
+        run: |
+          git config --local user.email "jabu@flexion.us"
+          git config --local user.name "Joshua Abu"
 
-  #     - name: Create Intermediate branch
-  #       run: |
-  #         destination_branch=${{ github.base_ref }}
-  #         feature_branch=${{ github.head_ref }}
-  #         intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+      - name: Create Intermediate branch
+        run: |
+          destination_branch=${{ github.base_ref }}
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-  #         # Create a copy of the destination branch
-  #         git checkout -b "${intermediate_branch}"
+          # Create a copy of the destination branch
+          git checkout -b "${intermediate_branch}"
 
-  #         # Merge the feature branch into the intermediate branch
-  #         git pull --strategy ort --no-rebase origin $feature_branch
+          # Merge the feature branch into the intermediate branch
+          git pull --strategy ort --no-rebase origin $feature_branch
 
-  #         # Push the new intermediate to remote
-  #         git push -u origin "${intermediate_branch}"
+          if [[ -n $(git status --porcelain | grep '^UU') ]]; then
+            git add .
+            git commit -m "COMMIT TO TRIGGER SOMETHING"
+          fi
 
-  #     - name: Make PR of Intermediate branch to Test
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       run: |
-  #         destination_branch=${{ github.base_ref }}
-  #         feature_branch=${{ github.head_ref }}
+          # Push the new intermediate to remote
+          git push -u origin "${intermediate_branch}"
 
-  #         sudo apt-get update
-  #         sudo apt-get install hub
+      - name: Make PR of Intermediate branch to Test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          destination_branch=${{ github.base_ref }}
+          feature_branch=${{ github.head_ref }}
 
-  #         pr_title="${feature_branch} intermediate to experimental3"
-  #         hub pull-request -b ${destination_branch} -m "$pr_title"
+          sudo apt-get update
+          sudo apt-get install hub
+
+          pr_title="${feature_branch} intermediate to experimental3"
+          hub pull-request -b ${destination_branch} -m "$pr_title"
