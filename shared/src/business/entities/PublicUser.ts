@@ -1,4 +1,4 @@
-import { JoiValidationConstants } from './JoiValidationConstants';
+import { JoiValidationEntity } from './JoiValidationEntity';
 import { ROLES } from './EntityConstants';
 import { User } from './User';
 
@@ -8,10 +8,14 @@ import { User } from './User';
  * @param {object} rawUser the raw user data
  * @constructor
  */
-export class PublicUser extends User {
-  constructor(rawUser, options?) {
-    super(rawUser, options);
-    this.entityName = 'PublicUser';
+export class PublicUser extends JoiValidationEntity {
+  public name: string;
+  public role: string;
+  public judgeFullName: string;
+  public judgeTitle: string;
+
+  constructor(rawUser) {
+    super('PublicUser');
     this.name = rawUser.name;
     this.role = rawUser.role;
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
@@ -27,9 +31,6 @@ export class PublicUser extends User {
   }
 
   getValidationRules() {
-    return {
-      ...super.getValidationRules(),
-      entityName: JoiValidationConstants.STRING.valid('PublicUser').required(),
-    };
+    return User.BASE_USER_VALIDATION as any;
   }
 }
