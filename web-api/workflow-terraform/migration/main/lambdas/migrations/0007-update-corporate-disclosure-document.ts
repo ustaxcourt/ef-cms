@@ -1,6 +1,4 @@
-const {
-  INITIAL_DOCUMENT_TYPES,
-} = require('../../../../../../shared/src/business/entities/EntityConstants');
+import { INITIAL_DOCUMENT_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
 
 const isDocketEntry = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('docket-entry|');
