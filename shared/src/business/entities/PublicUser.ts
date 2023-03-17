@@ -1,3 +1,4 @@
+import { JoiValidationConstants } from './JoiValidationConstants';
 import { ROLES } from './EntityConstants';
 import { User } from './User';
 
@@ -10,7 +11,6 @@ import { User } from './User';
 export class PublicUser extends User {
   constructor(rawUser, options?) {
     super(rawUser, options);
-    this.entityName = 'PublicUser';
     this.name = rawUser.name;
     this.role = rawUser.role;
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
@@ -23,5 +23,12 @@ export class PublicUser extends User {
     return {
       role: 'Role is required',
     } as any;
+  }
+
+  getValidationRules() {
+    return {
+      ...super.getValidationRules(),
+      entityName: JoiValidationConstants.STRING.valid('PublicUser').required(),
+    };
   }
 }
