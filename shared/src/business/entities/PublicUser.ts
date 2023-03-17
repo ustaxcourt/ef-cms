@@ -11,6 +11,7 @@ import { User } from './User';
 export class PublicUser extends User {
   constructor(rawUser, options?) {
     super(rawUser, options);
+    this.entityName = 'PublicUser';
     this.name = rawUser.name;
     this.role = rawUser.role;
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
