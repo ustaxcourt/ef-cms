@@ -65,7 +65,7 @@ const updateCaseDocketEntries = async ({
     });
 
   // fix docket entry collisions
-  addedDocketEntries.forEach(addedDocketEntry => {
+  validDocketEntries.forEach(addedDocketEntry => {
     if (
       addedDocketEntry.isOnDocketRecord &&
       shouldGenerateDocketRecordIndex({
@@ -84,6 +84,8 @@ const updateCaseDocketEntries = async ({
       addedDocketEntry.index = caseEntity.generateNextDocketRecordIndex();
     }
   });
+
+  // console.log('validDocketEntries', validDocketEntries);
 
   return validDocketEntries.map(
     doc =>
@@ -601,6 +603,7 @@ exports.updateCaseAndAssociations = async ({
   });
 
   await Promise.all(persistenceRequests);
+  await new Promise(resolve => setTimeout(resolve)); // need to let the event loop do something?
 
   return updateCase({
     applicationContext,
@@ -642,6 +645,8 @@ const updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   Object.keys(caseDifference).forEach(key => {
     mostRecentCaseUpdated[key] = caseToUpdate[key];
   });
+
+  // console.log('mostRecentCaseUpdated', JSON.stringify(mostRecentCaseUpdated));
 
   // console.log(JSON.stringify(mostRecentCaseUpdated));
 
