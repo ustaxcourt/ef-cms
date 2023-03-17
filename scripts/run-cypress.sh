@@ -80,7 +80,7 @@ else
   echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
 fi
 
-CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.js"
+CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.ts"
 echo "${CONFIG_FILE}"
 
 if [ -n "${INTEGRATION}" ]; then

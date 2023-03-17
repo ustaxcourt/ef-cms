@@ -13,6 +13,13 @@
   - filesToInclude: ```web-client/integration-tests```
 1. Commit all changes and push.
 
+## Steps to convert cypress tests to Typescript
+1. Move cypress-integration, cypress-readonly, cypress-smoketests into the cypress foleder
+1. Commit all files
+1. Rename all .js files to .ts files in cypress
+  - Navigate to cypress/ in the terminal and run: ```find . -iname "*.js" -exec rename -f 's/\.js/\.ts/' {} \;```
+1. 
+
 ## Steps For Deployment Day
 1. Communicate that we are starting switch over.
 1. Pause all merges into staging
