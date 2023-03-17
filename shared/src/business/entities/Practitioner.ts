@@ -203,7 +203,7 @@ export class Practitioner extends User {
   }
 
   toRawObject() {
-    const result = super.toRawObject() as any;
+    const result = super.toRawObjectFromJoi() as any;
 
     // We don't want to persist these values as they are only used for validation
     result.confirmEmail = undefined;

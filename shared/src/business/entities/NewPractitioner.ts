@@ -5,7 +5,7 @@ import joi from 'joi';
 export class NewPractitioner extends Practitioner {
   constructor(rawUser, options?) {
     super(rawUser, options);
-    this.entityName = 'NewPractitioner';
+    this.entityName = 'Practitioner';
   }
 
   static VALIDATION_ERROR_MESSAGES = {
