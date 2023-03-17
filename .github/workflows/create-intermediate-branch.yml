@@ -92,7 +92,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          head_branch=${{ github.head_ref }}
+          head_branch="${{ github.head_ref }}-intermediate-to-test"
           base_branch=${{ github.base_ref }}
 
           PR_NUMBER=$(hub pr list -b $base_branch -h $head_branch --format="%I")
