@@ -60,8 +60,8 @@ const updateCaseDocketEntries = async ({
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
+      consistentRead: true,
       docketNumber: caseToUpdate.docketNumber,
-      readConsistent: true,
     });
 
   // fix docket entry collisions
@@ -632,8 +632,8 @@ const updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
+      consistentRead: true,
       docketNumber: caseToUpdate.docketNumber,
-      readConsistent: true,
     });
 
   const mostRecentCaseUpdated = {

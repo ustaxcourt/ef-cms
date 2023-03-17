@@ -306,11 +306,11 @@ export const scan = async params => {
  */
 export const queryFull = async ({
   applicationContext,
+  ConsistentRead = false,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
   IndexName,
   KeyConditionExpression,
-  ReadConsistent = false,
   ...params
 }: {
   applicationContext: IApplicationContext;
@@ -319,7 +319,7 @@ export const queryFull = async ({
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
   KeyConditionExpression: string;
-  ReadConsistent?: boolean;
+  ConsistentRead?: boolean;
 }): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
   let lastKey = null;
@@ -330,12 +330,12 @@ export const queryFull = async ({
     const subsetResults = await applicationContext
       .getDocumentClient()
       .query({
+        ConsistentRead,
         ExclusiveStartKey: lastKey,
         ExpressionAttributeNames,
         ExpressionAttributeValues,
         IndexName,
         KeyConditionExpression,
-        ReadConsistent,
         TableName: getTableName({
           applicationContext,
         }),
