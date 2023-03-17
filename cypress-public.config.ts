@@ -22,8 +22,8 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/cypress-integration/integration/public/*.cy.js',
-    supportFile: 'cypress/cypress-integration/support/index.js',
+    specPattern: 'cypress/cypress-integration/integration/public/*.cy.ts',
+    supportFile: 'cypress/cypress-integration/support/index.ts',
     testIsolation: false,
   },
   fixturesFolder: 'cypress/cypress-integration/fixtures',
