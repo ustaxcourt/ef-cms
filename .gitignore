@@ -21,12 +21,8 @@ aws/lambdas/*.zip
 aws/lambdas/RotateInfoIndices/dist
 coverage/
 cypress/downloads
-cypress-smoketests/screenshots
-cypress-smoketests/videos
-cypress-integration/screenshots
-cypress-integration/videos
-cypress-readonly/screenshots
-cypress-readonly/videos
+cypress/**/screenshots
+cypress/**/videos
 dist-public/
 dist/
 gen.conf
