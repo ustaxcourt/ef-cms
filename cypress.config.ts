@@ -1,9 +1,8 @@
-const {
-  getEmailVerificationToken,
-} = require('./cypress-integration/support/database');
-const { defineConfig } = require('cypress');
+import { defineConfig } from 'cypress';
+import { getEmailVerificationToken } from './cypress/cypress-integration/support/database';
 
-module.exports = defineConfig({
+// eslint-disable-next-line import/no-default-export
+export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
   e2e: {
