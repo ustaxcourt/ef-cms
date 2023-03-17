@@ -65,7 +65,7 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git pull --strategy ort --no-rebase origin $feature_branch
 
-          # create a commit to 
+          # create a commit with unresolved merge conflicts
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
             git add .
             git commit -m "MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
@@ -75,6 +75,7 @@ jobs:
           git push -u origin "${intermediate_branch}"
 
       - name: Make PR of Intermediate branch to Test
+        id: make_pr_id
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -88,6 +89,7 @@ jobs:
           hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test"
 
       - name: Get PR number of intermediate branch
+        needs: make_pr_id
         id: get_pr_number
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
