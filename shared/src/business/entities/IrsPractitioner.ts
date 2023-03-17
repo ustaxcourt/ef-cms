@@ -1,10 +1,5 @@
-import {
-  IValidationEntity,
-  TStaticValidationMethods,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from './JoiValidationDecorator';
 import { JoiValidationConstants } from './JoiValidationConstants';
+import { JoiValidationEntity } from './JoiValidationEntity';
 import { Practitioner } from './Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
 import {
@@ -16,17 +11,13 @@ import joi from 'joi';
 
 export const entityName = 'IrsPractitioner';
 
-export class IrsPractitionerClass {
+export class IrsPractitioner extends JoiValidationEntity {
   public barNumber: string;
   public serviceIndicator: string;
-  public entityName: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawUser, { filtered = false } = {}) {
-    this.entityName = entityName;
-  }
-
-  init(rawUser, { filtered = false } = {}) {
+    super('IrsPractitioner');
     userDecorator(this, rawUser, filtered);
     this.barNumber = rawUser.barNumber;
     this.serviceIndicator =
@@ -52,21 +43,16 @@ export class IrsPractitionerClass {
     token: JoiValidationConstants.STRING.optional(),
     userId: JoiValidationConstants.UUID.required(),
   });
+
+  getValidationRules() {
+    return IrsPractitioner.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return VALIDATION_ERROR_MESSAGES;
+  }
 }
-
-joiValidationDecorator(
-  IrsPractitionerClass,
-  IrsPractitionerClass.VALIDATION_RULES,
-  VALIDATION_ERROR_MESSAGES,
-);
-
-export const IrsPractitioner: typeof IrsPractitionerClass &
-  TStaticValidationMethods<RawIrsPractitioner> =
-  validEntityDecorator(IrsPractitionerClass);
 
 declare global {
-  type RawIrsPractitioner = ExcludeMethods<IrsPractitionerClass>;
+  type RawIrsPractitioner = ExcludeMethods<IrsPractitioner>;
 }
-// eslint-disable-next-line no-redeclare
-export interface IrsPractitionerClass
-  extends IValidationEntity<IrsPractitionerClass> {}
