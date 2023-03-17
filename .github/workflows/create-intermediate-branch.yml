@@ -94,7 +94,9 @@ jobs:
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
-          PR_NUMBER=$(hub pr list -s all --format="%i %t%n" | grep -i "$intermediate_branch" | awk '{print $1}')
+          pr_title="${feature_branch} intermediate to experimental3"
+
+          PR_NUMBER=$(hub pr list -b $base_branch -h $head_branch} --format="%I")
 
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
