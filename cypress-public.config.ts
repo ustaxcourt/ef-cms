@@ -1,11 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  setAllowedTerminalIpAddresses,
-} = require('./cypress-integration/support/database');
-const { defineConfig } = require('cypress');
+import { defineConfig } from 'cypress';
+import { setAllowedTerminalIpAddresses } from './cypress/cypress-integration/support/database';
+import fs from 'fs';
+import path from 'path';
 
-module.exports = defineConfig({
+// eslint-disable-next-line import/no-default-export
+export default defineConfig({
   defaultCommandTimeout: 20000,
   e2e: {
     baseUrl: 'http://localhost:5678',
@@ -23,19 +22,19 @@ module.exports = defineConfig({
         },
       });
     },
-    specPattern: 'cypress-integration/integration/public/*.cy.js',
-    supportFile: 'cypress-integration/support/index.js',
+    specPattern: 'cypress/cypress-integration/integration/public/*.cy.js',
+    supportFile: 'cypress/cypress-integration/support/index.js',
     testIsolation: false,
   },
-  fixturesFolder: 'cypress-integration/fixtures',
+  fixturesFolder: 'cypress/cypress-integration/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
   },
   requestTimeout: 12000,
-  screenshotsFolder: 'cypress-integration/screenshots',
+  screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: false,
-  videosFolder: 'cypress-integration/videos',
+  videosFolder: 'cypress/cypress-integration/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
 });
