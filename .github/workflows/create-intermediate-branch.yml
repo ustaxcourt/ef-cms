@@ -89,6 +89,8 @@ jobs:
 
       - name: Get PR number of intermediate branch
         id: get_pr_number
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="$feature_branch-intermediate-to-experimental3"
