@@ -7,39 +7,39 @@ on:
       - opened
 
 jobs:
-  # check-for-intermediate-branch:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Set Git config
-  #       run: |
-  #         git config --local user.email "jabu@flexion.us"
-  #         git config --local user.name "Joshua Abu"
+  check-for-intermediate-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Git config
+        run: |
+          git config --local user.email "jabu@flexion.us"
+          git config --local user.name "Joshua Abu"
 
-  #     - name: Set flag
-  #       id: check_branch
-  #       run: |
-  #         feature_branch=${{ github.head_ref }}
-  #         intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+      - name: Set flag
+        id: check_branch
+        run: |
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-  #         # get intermediate branch related commits in both repos
-  #         sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
+          # get intermediate branch related commits in both repos
+          sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
 
-  #         if [[ -n "${sha_of_int_branch}" ]]
-  #         then
-  #           echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
-  #         else
-  #           echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
-  #         fi
-  #     - name: LOG FLAG
-  #       run: |
-  #         echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
+          if [[ -n "${sha_of_int_branch}" ]]
+          then
+            echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: LOG FLAG
+        run: |
+          echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
 
   create-intermediate-branch:
-    # needs: check-for-intermediate-branch
-    # if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
+    needs: check-for-intermediate-branch
+    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
     runs-on: ubuntu-latest
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
@@ -91,20 +91,8 @@ jobs:
 
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
-      # - name: Get PR number of intermediate branch
-      #   id: get_pr_link
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     head_branch="${{ github.head_ref }}-intermediate-to-test"
-      #     base_branch=${{ github.base_ref }}
-
-      #     pr_link=$(hub pr list -b $base_branch -h $head_branch --format="%I")
-
-      #     echo "pr_link=$pr_link" >> "$GITHUB_OUTPUT"
-
       - name: Close PR with comment
         uses: peter-evans/close-pull@v2
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
-          comment: "Auto Closing this PR. An intermediate branch has been created. Here's the PR number #${{ steps.get_pr_link.outputs.pr_link }}"
+          comment: "Auto Closing this PR. An intermediate branch has been created. Here's the link: ${{ steps.get_pr_link.outputs.pr_link }}."
