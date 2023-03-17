@@ -276,7 +276,7 @@ describe('User entity', () => {
     expect(user.pendingEmailVerificationToken).toBeUndefined();
   });
 
-  it('should NOT filter out pendingEmailVerificationToken by default when calling userDecorator.', () => {
+  it('should NOT filter out pendingEmailVerificationToken by default when calling userDecorator', () => {
     const user = new User({
       ...mockValidUser,
       pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
