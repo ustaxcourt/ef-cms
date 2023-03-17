@@ -603,7 +603,7 @@ exports.updateCaseAndAssociations = async ({
   });
 
   await Promise.all(persistenceRequests);
-  await new Promise(resolve => setTimeout(resolve)); // need to let the event loop do something?
+  await new Promise(resolve => setTimeout(resolve, 500)); // need to let the event loop do something?
 
   return updateCase({
     applicationContext,
