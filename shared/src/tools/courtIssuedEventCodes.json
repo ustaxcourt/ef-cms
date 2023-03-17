@@ -248,8 +248,8 @@
   },
   {
     "eventCode": "OODS",
-    "documentType": "Order for Ownership Disclosure Statement",
-    "documentTitle": "Order for Ownership Disclosure Statement by [Date]",
+    "documentType": "Order for Corporate Disclosure Statement",
+    "documentTitle": "Order for Corporate Disclosure Statement by [Date]",
     "scenario": "Type E",
     "isOrder": true,
     "requiresSignature": true
