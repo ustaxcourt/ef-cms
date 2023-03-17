@@ -42,7 +42,8 @@ jobs:
     # if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
     runs-on: ubuntu-latest
     outputs:
-      pr_number: ${{ steps.get_pr_number.outputs.pr_number }}
+      pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -75,7 +76,7 @@ jobs:
           git push -u origin "${intermediate_branch}"
 
       - name: Make PR of Intermediate branch to Test
-        id: make_pr_id
+        id: get_pr_link
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -86,23 +87,24 @@ jobs:
           sudo apt-get install hub
 
           pr_title="${feature_branch} intermediate to experimental3"
-          hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test"
+          PR_LINK=$(hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test")
 
-      - name: Get PR number of intermediate branch
-        needs: make_pr_id
-        id: get_pr_number
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          head_branch="${{ github.head_ref }}-intermediate-to-test"
-          base_branch=${{ github.base_ref }}
+          echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
-          PR_NUMBER=$(hub pr list -b $base_branch -h $head_branch --format="%I")
+      # - name: Get PR number of intermediate branch
+      #   id: get_pr_link
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     head_branch="${{ github.head_ref }}-intermediate-to-test"
+      #     base_branch=${{ github.base_ref }}
 
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+      #     pr_link=$(hub pr list -b $base_branch -h $head_branch --format="%I")
+
+      #     echo "pr_link=$pr_link" >> "$GITHUB_OUTPUT"
 
       - name: Close PR with comment
         uses: peter-evans/close-pull@v2
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
-          comment: "Auto Closing this PR. An intermediate branch has been created. Here's the PR number #${{ steps.get_pr_number.outputs.pr_number }}"
+          comment: "Auto Closing this PR. An intermediate branch has been created. Here's the PR number #${{ steps.get_pr_link.outputs.pr_link }}"
