@@ -6,7 +6,7 @@ AWS.config.region = 'us-east-1';
 
 const {
   seedLocalDatabase,
-} = require('../../web-api/storage/scripts/seedLocalDatabase');
+} = require('../../../web-api/storage/scripts/seedLocalDatabase');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   credentials: {
