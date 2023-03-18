@@ -3,6 +3,9 @@ import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 
+/**
+ * Correspondence class
+ */
 export class Correspondence extends JoiValidationEntity {
   public archived: boolean;
   public correspondenceId: string;
