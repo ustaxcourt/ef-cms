@@ -8,11 +8,12 @@ exports.updateCaseStatusOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemCaseStatus({
+    applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord({
       applicationContext,
-      caseStatus,
-      docketNumber: workItem.docketNumber,
-      workItemId: workItem.workItemId,
+      attributeKey: 'caseStatus',
+      attributeValue: caseStatus,
+      pk: workItem.pk,
+      sk: workItem.sk,
     }),
   );
 

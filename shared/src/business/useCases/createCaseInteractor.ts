@@ -38,6 +38,8 @@ const addPetitionDocketEntryToCase = ({
       section: PETITIONS_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,
+      trialDate: caseToAdd.trialDate,
+      trialLocation: caseToAdd.trialLocation,
     },
     { applicationContext },
   );
@@ -129,6 +131,7 @@ export const createCaseInteractor = async (
     },
     {
       applicationContext,
+      isNewCase: true,
     },
   );
 
