@@ -1,5 +1,6 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
+import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -173,6 +174,11 @@ export const formattedTrialSessions = (get, applicationContext) => {
           session.term === selectedTerm && session.termYear == selectedTermYear,
       ),
       'trialLocation',
+    );
+
+    sessionsByTerm = formatTrialSessionDisplayOptions(
+      sessionsByTerm,
+      applicationContext,
     );
   }
 
