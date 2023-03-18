@@ -13,7 +13,6 @@ export class Correspondence extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('Correspondence');
-
     this.archived = rawProps.archived;
     this.correspondenceId = rawProps.correspondenceId;
     this.documentTitle = rawProps.documentTitle;
