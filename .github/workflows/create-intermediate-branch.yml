@@ -7,35 +7,7 @@ on:
       - opened
 
 jobs:
-  check-for-intermediate-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set Git config
-        run: |
-          git config --local user.email "michael.marcotte@ustaxcourt.gov"
-          git config --local user.name "Mike Marcotte"
-      - name: Set flag to determine new branch creation
-        id: check_branch
-        run: |
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-test"
-
-          # check for an already existing intermediate branch
-          sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
-
-          if [[ -n "${sha_of_int_branch}" ]]
-          then
-            echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
-          fi
-
   create-intermediate-branch:
-    needs: check-for-intermediate-branch
-    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == "true"
     runs-on: ubuntu-latest
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
@@ -67,9 +39,6 @@ jobs:
             git add .
             git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
           fi
-
-          # commit to re-trigger test after merge
-          git commit --allow-empty -m "${feature_branch}: Empty commit to re-trigger tests"
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
