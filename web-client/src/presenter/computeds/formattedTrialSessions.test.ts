@@ -4,9 +4,11 @@ import {
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { applicationContext } from '../../applicationContext';
+import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+jest.mock('./addToTrialSessionModalHelper.ts');
 
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -126,6 +128,8 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Jacksonville, FL',
       },
     ];
+
+    formatTrialSessionDisplayOptions.mockImplementation(session => session);
   });
 
   it('does not error if user is undefined', () => {
@@ -316,6 +320,21 @@ describe('formattedTrialSessions', () => {
         userIsAssignedToSession: false,
       },
     ]);
+  });
+
+  it('makes a call to format display text on sessionsByTerm', () => {
+    runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        form: {
+          term: 'Winter',
+        },
+        trialSessions: TRIAL_SESSIONS_LIST,
+        user: testJudgeUser,
+      },
+    });
+
+    expect(formatTrialSessionDisplayOptions).toHaveBeenCalled();
   });
 
   it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
