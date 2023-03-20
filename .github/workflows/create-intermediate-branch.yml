@@ -43,7 +43,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
-      create-pr-flag: ${{ steps.pr_check.outputs.create-pr-flag }}
 
     steps:
       - uses: actions/checkout@v3
@@ -95,10 +94,10 @@ jobs:
 
       - name: LOG the diff
         run: |
-          echo "FLAG IS: ${{ steps.pr_check.outputs.create-branch-flag  }}"
+          echo "FLAG IS: ${{ steps.pr_check.outputs.create-pr-flag  }}"
 
       - name: Make PR of Intermediate branch to Test
-        if: steps.pr_check.outputs.create-branch-flag == 'true'
+        if: steps.pr_check.outputs.create-pr-flag == 'true'
         id: get_pr_link
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
