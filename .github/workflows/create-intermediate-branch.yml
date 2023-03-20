@@ -7,42 +7,43 @@ on:
       - opened
 
 jobs:
-  check-for-intermediate-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set Git config
-        run: |
-          git config --local user.email "jabu@flexion.us"
-          git config --local user.name "Joshua Abu"
+  # check-for-intermediate-branch:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     create-branch-flag: ${{ steps.check_branch.outputs.create-branch-flag }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set Git config
+  #       run: |
+  #         git config --local user.email "jabu@flexion.us"
+  #         git config --local user.name "Joshua Abu"
 
-      - name: Set flag
-        id: check_branch
-        run: |
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+  #     - name: Set flag
+  #       id: check_branch
+  #       run: |
+  #         feature_branch=${{ github.head_ref }}
+  #         intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-          # get intermediate branch related commits in both repos
-          sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
+  #         # get intermediate branch related commits in both repos
+  #         sha_of_int_branch=$(git ls-remote origin $intermediate_branch)
 
-          if [[ -n "${sha_of_int_branch}" ]]
-          then
-            echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: LOG FLAG
-        run: |
-          echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
+  #         if [[ -n "${sha_of_int_branch}" ]]
+  #         then
+  #           echo "create-branch-flag=false" >> "$GITHUB_OUTPUT"
+  #         else
+  #           echo "create-branch-flag=true" >> "$GITHUB_OUTPUT"
+  #         fi
+  #     - name: LOG FLAG
+  #       run: |
+  #         echo "FLAG IS: ${{ steps.check_branch.outputs.create-branch-flag }}"
 
   create-intermediate-branch:
-    needs: check-for-intermediate-branch
-    if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
+    # needs: check-for-intermediate-branch
+    # if: needs.check-for-intermediate-branch.outputs.create-branch-flag == 'true'
     runs-on: ubuntu-latest
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
+      create-pr-flag: ${{ steps.pr_check.outputs.create-pr-flag }}
 
     steps:
       - uses: actions/checkout@v3
@@ -66,13 +67,32 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git pull --strategy ort --no-rebase origin $feature_branch
 
-          # create empty commit to trigger workflow
-          git commit --allow-empty -m "Empty commit to trigger workflow in new intermediate branch"
+          # create a commit with unresolved merge conflicts
+          if [[ -n $(git status --porcelain | grep '^UU') ]]; then
+            git add .
+            git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
+          fi
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
 
+      - name: Check if PR should be created
+        id: pr_check
+        run: |
+          destination_branch=${{ github.base_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+
+          diff_of_branch=$(git diff $destination_branch $intermediate_branch)
+
+          if [[ -n "${diff_of_branch}" ]]
+          then
+            echo "create-pr-flag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "create-pr-flag=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Make PR of Intermediate branch to Test
+        if: steps.pr_check.outputs.create-branch-flag == 'true'
         id: get_pr_link
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
