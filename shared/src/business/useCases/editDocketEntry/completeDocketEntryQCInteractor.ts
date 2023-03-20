@@ -51,6 +51,41 @@ export const needsNewCoversheet = ({
 };
 
 /**
+ * will wrap a function with logic to acquire a lock and delete a lock after finishing.
+ */
+function lockHof(cb) {
+  return async function (
+    applicationContext: IApplicationContext,
+    { entryMetadata }: { entryMetadata: any },
+  ) {
+    const lockName = `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`;
+
+    let results;
+    try {
+      await applicationContext
+        .getPersistenceGateway()
+        .acquireLock({ applicationContext, lockName })
+        .catch(() => {
+          throw new InvalidRequest('The document is currently being updated');
+        });
+      results = await cb(applicationContext, { entryMetadata });
+    } catch (error) {
+      if (error.code !== 'ConditionalCheckFailedException') {
+        await applicationContext
+          .getPersistenceGateway()
+          .deleteLock({ applicationContext, lockName });
+      }
+      throw error;
+    } finally {
+      await applicationContext
+        .getPersistenceGateway()
+        .deleteLock({ applicationContext, lockName });
+    }
+    return results;
+  };
+}
+
+/**
  * completeDocketEntryQCInteractor
  *
  * @param {object} applicationContext the application context
@@ -58,7 +93,7 @@ export const needsNewCoversheet = ({
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-export const completeDocketEntryQCInteractor = async (
+const completeDocketEntryQC = async (
   applicationContext: IApplicationContext,
   { entryMetadata }: { entryMetadata: any },
 ) => {
@@ -69,6 +104,8 @@ export const completeDocketEntryQCInteractor = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
   const {
     docketEntryId,
@@ -374,3 +411,5 @@ export const completeDocketEntryQCInteractor = async (
     paperServicePdfUrl,
   };
 };
+
+export const completeDocketEntryQCInteractor = lockHof(completeDocketEntryQC);
