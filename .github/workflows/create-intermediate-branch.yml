@@ -73,7 +73,7 @@ jobs:
           fi
 
           # commit to re-trigger test after merge
-          git commit --allow-empty -m "My empty commit with a message"
+          git commit --allow-empty -m "${feature_branch}: Empty commit to re-trigger tests"
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
