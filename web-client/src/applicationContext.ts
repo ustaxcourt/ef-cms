@@ -35,7 +35,7 @@ import {
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
-} from '../../shared/src/sharedAppContext.js';
+} from '../../shared/src/sharedAppContext';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
