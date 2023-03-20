@@ -80,6 +80,7 @@ jobs:
         id: pr_check
         run: |
           destination_branch=${{ github.base_ref }}
+          feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           diff_of_branch=$(git diff $destination_branch $intermediate_branch)
