@@ -84,6 +84,7 @@ jobs:
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           diff_of_branch=$(git diff $destination_branch $intermediate_branch)
+          echo "diff_of_branch, $diff_of_branch"
 
           if [[ -n "${diff_of_branch}" ]]
           then
@@ -91,6 +92,10 @@ jobs:
           else
             echo "create-pr-flag=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: LOG the diff
+        run: |
+          echo "FLAG IS: ${{ steps.pr_check.outputs.create-branch-flag  }}"
 
       - name: Make PR of Intermediate branch to Test
         if: steps.pr_check.outputs.create-branch-flag == 'true'
