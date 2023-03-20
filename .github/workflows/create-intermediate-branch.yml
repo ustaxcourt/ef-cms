@@ -104,11 +104,12 @@ jobs:
         run: |
           destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
+          pr_title="${feature_branch} Intermediate TO experimental3"
 
           sudo apt-get update
           sudo apt-get install hub
 
-          PR_LINK=$(hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test")
+          PR_LINK=$(hub pull-request -b $destination_branch -m "$pr_title" -l "to $destination_branch")
 
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
