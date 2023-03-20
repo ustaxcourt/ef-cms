@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 const React = require('react');
 const { PrimaryHeader } = require('../components/PrimaryHeader');
-const { ReportsHeader } = require('../components/ReportsHeader.jsx');
+const { ReportsHeader } = require('../components/ReportsHeader.tsx');
 
 export const CaseInventoryReport = ({
   formattedCases,
