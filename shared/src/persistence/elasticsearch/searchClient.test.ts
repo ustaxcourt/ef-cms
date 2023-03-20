@@ -28,7 +28,7 @@ jest.mock('./helpers/formatMessageResult', () => ({
 jest.mock('./helpers/formatDocketEntryResult', () => ({
   formatDocketEntryResult: jest.fn(),
 }));
-jest.mock('./helpers/formatWorkItemResult.js', () => ({
+jest.mock('./helpers/formatWorkItemResult.ts', () => ({
   formatWorkItemResult: jest.fn(),
 }));
 

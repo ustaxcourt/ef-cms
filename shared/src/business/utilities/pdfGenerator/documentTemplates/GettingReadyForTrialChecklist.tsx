@@ -1,6 +1,6 @@
 const React = require('react');
-const { PretrialMemorandum } = require('../components/PretrialMemorandum.jsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
+const { PretrialMemorandum } = require('../components/PretrialMemorandum.tsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 
 export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
   return (

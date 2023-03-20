@@ -1,7 +1,7 @@
 const React = require('react');
 
-import { OrderDocketHeader } from '../components/OrderDocketHeader.jsx';
-import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader.jsx';
+import { OrderDocketHeader } from '../components/OrderDocketHeader.tsx';
+import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader.tsx';
 
 export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
   return (
