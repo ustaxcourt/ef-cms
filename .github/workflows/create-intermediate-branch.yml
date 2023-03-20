@@ -72,6 +72,9 @@ jobs:
             git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
           fi
 
+          # commit to re-trigger test after merge
+          git commit --allow-empty -m "My empty commit with a message"
+
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
 
