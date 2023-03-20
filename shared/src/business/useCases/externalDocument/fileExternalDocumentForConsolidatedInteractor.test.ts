@@ -5,7 +5,7 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase.js';
+import { MOCK_CASE } from '../../../test/mockCase.ts';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileExternalDocumentForConsolidatedInteractor } from './fileExternalDocumentForConsolidatedInteractor';
 
