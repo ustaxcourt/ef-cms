@@ -62,31 +62,52 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git pull --strategy ort --no-rebase origin $feature_branch
 
-          # create a commit with unresolved merge conflicts (if any)
+          # create a commit with unresolved merge conflicts
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
             git add .
-            git commit -m "MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
+            git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
           fi
+
+          # commit to re-trigger test after merge
+          git commit --allow-empty -m "${feature_branch}: Empty commit to re-trigger tests"
 
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
 
+      - name: Check if PR should be created
+        id: pr_check
+        run: |
+          destination_branch=${{ github.base_ref }}
+          intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
+
+          diff_of_branch=$(git diff $destination_branch $intermediate_branch)
+
+          if [[ -n "${diff_of_branch}" ]]
+          then
+            echo "create-pr-flag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "create-pr-flag=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Make PR of Intermediate branch to Test
+        if: steps.pr_check.outputs.create-pr-flag == 'true'
+        id: get_pr_link
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
+          pr_title="${feature_branch} Intermediate To Test"
 
           sudo apt-get update
           sudo apt-get install hub
 
-          pr_title="${feature_branch} intermediate to test"
-          PR_LINK=$(hub pull-request -b ${destination_branch} -m "$pr_title" -l "to test")
+          PR_LINK=$(hub pull-request -b $destination_branch -m "$pr_title" -l "to $destination_branch")
 
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
       - name: Close PR with comment
+        if: steps.pr_check.outputs.create-pr-flag == 'true'
         uses: peter-evans/close-pull@v2
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
