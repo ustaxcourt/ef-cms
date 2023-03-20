@@ -1,8 +1,8 @@
-name: Create an intermediate branch to test
+name: Create an intermediate branch to experimental3
 
 on:
   pull_request:
-    branches: [test]
+    branches: [experimental3]
     type:
       - opened
 
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: 'test'
+          ref: 'experimental3'
           fetch-depth: '0'
 
       - name: Set Git config
@@ -29,7 +29,7 @@ jobs:
       - name: Create Intermediate branch
         run: |
           feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-test"
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}"
@@ -50,7 +50,7 @@ jobs:
         id: pr_check
         run: |
           destination_branch=${{ github.base_ref }}
-          intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
+          intermediate_branch="${{ github.head_ref }}-intermediate-to-experimental3"
 
           diff_of_branch=$(git diff $destination_branch $intermediate_branch)
 
@@ -61,7 +61,7 @@ jobs:
             echo "create-pr-flag=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Make PR of Intermediate branch to Test
+      - name: Make PR of Intermediate branch to experimental3
         if: steps.pr_check.outputs.create-pr-flag == 'true'
         id: get_pr_link
         env:
@@ -69,7 +69,7 @@ jobs:
         run: |
           destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
-          pr_title="${feature_branch} Intermediate To Test"
+          pr_title="${feature_branch} Intermediate To experimental3"
 
           sudo apt-get update
           sudo apt-get install hub
