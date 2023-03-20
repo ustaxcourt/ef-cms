@@ -1,6 +1,6 @@
 const React = require('react');
-const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
-const { ReportsHeader } = require('../components/ReportsHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+const { ReportsHeader } = require('../components/ReportsHeader.tsx');
 
 export const TrialCalendar = ({ cases = [], sessionDetail }) => {
   return (
