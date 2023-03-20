@@ -1,6 +1,6 @@
 const React = require('react');
-const { OrderDocketHeader } = require('../components/OrderDocketHeader.jsx');
-const { OrderPrimaryHeader } = require('../components/OrderPrimaryHeader.jsx');
+const { OrderDocketHeader } = require('../components/OrderDocketHeader.tsx');
+const { OrderPrimaryHeader } = require('../components/OrderPrimaryHeader.tsx');
 
 export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
   return (

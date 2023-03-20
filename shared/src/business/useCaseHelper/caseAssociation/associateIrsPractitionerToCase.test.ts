@@ -13,7 +13,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase.js');
+const { MOCK_CASE } = require('../../../test/mockCase.ts');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('associateIrsPractitionerToCase', () => {
