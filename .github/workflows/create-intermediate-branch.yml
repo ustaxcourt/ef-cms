@@ -6,16 +6,29 @@ on:
     type:
       - opened
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   create-intermediate-branch:
     runs-on: ubuntu-latest
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
     steps:
+      - name: Check out head repository
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: '0'
+          repository: flexion/ef-cms
+
+      - name: Check out Court's repository
       - uses: actions/checkout@v3
         with:
           ref: 'test'
           fetch-depth: '0'
+          repository: ustaxcourt/ef-cms
 
       - name: Set Git config
         run: |
