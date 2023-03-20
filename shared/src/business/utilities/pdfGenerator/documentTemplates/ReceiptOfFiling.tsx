@@ -2,8 +2,8 @@
 const React = require('react');
 const {
   CompressedDocketHeader,
-} = require('../components/CompressedDocketHeader.jsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
+} = require('../components/CompressedDocketHeader.tsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 
 const DocumentRow = ({ document }) => {
   const hasAttachments = !!document.attachments;
