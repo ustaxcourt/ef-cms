@@ -7,7 +7,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { IrsPractitioner } from '../../entities/IrsPractitioner';
-import { MOCK_CASE } from '../../../test/mockCase.js';
+import { MOCK_CASE } from '../../../test/mockCase.ts';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
