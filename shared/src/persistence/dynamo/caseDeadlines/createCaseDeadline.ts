@@ -1,4 +1,3 @@
-import { CaseDeadlineClass } from '../../../business/entities/CaseDeadline';
 import { put } from '../../dynamodbClientService';
 
 /**
@@ -14,7 +13,7 @@ export const createCaseDeadline = ({
   caseDeadline,
 }: {
   applicationContext: IApplicationContext;
-  caseDeadline: CaseDeadlineClass;
+  caseDeadline: RawCaseDeadline;
 }) => {
   const { caseDeadlineId, docketNumber } = caseDeadline;
   return Promise.all([

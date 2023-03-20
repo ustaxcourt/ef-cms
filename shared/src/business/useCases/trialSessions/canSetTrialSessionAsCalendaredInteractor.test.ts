@@ -2,7 +2,7 @@ import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
+import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
 
@@ -31,7 +31,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
     expect(() =>
       canSetTrialSessionAsCalendaredInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL as TRawTrialSession,
+        trialSession: MOCK_TRIAL as RawTrialSession,
       }),
     ).toThrow('Unauthorized');
   });
@@ -47,7 +47,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
     const result = canSetTrialSessionAsCalendaredInteractor(
       applicationContext,
       {
-        trialSession: MOCK_TRIAL as TRawTrialSession,
+        trialSession: MOCK_TRIAL as RawTrialSession,
       },
     );
 
@@ -84,7 +84,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
           meetingId: '4',
           password: '42',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        } as TRawTrialSession,
+        } as RawTrialSession,
       },
     );
 

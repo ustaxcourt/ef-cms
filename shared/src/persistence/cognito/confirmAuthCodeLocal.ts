@@ -1,5 +1,5 @@
 import { sign } from 'jsonwebtoken';
-import { userMap } from '../../test/mockUserTokenMap.js';
+import { userMap } from '../../test/mockUserTokenMap.ts';
 
 export const confirmAuthCodeLocal = ({ code }) => {
   const email = code.toLowerCase();
