@@ -234,49 +234,7 @@ export class TrialSession extends JoiValidationEntity {
 
   constructor(rawSession, { applicationContext }) {
     super('TrialSession');
-    this.init(rawSession, { applicationContext });
-  }
 
-  getErrorToMessageMap() {
-    return TrialSession.VALIDATION_ERROR_MESSAGES;
-  }
-
-  getValidationRules() {
-    return {
-      ...TrialSession.validationRules.COMMON,
-      caseOrder: joi.array().items(
-        joi.object().keys({
-          calendarNotes: JoiValidationConstants.STRING.max(200)
-            .optional()
-            .allow('', null),
-          disposition: JoiValidationConstants.STRING.max(100).when(
-            'removedFromTrial',
-            {
-              is: true,
-              otherwise: joi.optional().allow(null),
-              then: joi.required(),
-            },
-          ),
-          docketNumber:
-            JoiValidationConstants.DOCKET_NUMBER.required().description(
-              'Docket number of the case.',
-            ),
-          isManuallyAdded: joi.boolean().optional(),
-          removedFromTrial: joi.boolean().optional(),
-          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
-            'removedFromTrial',
-            {
-              is: true,
-              otherwise: joi.optional().allow(null),
-              then: joi.required(),
-            },
-          ),
-        }),
-      ),
-    };
-  }
-
-  init(rawSession, { applicationContext }) {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -346,6 +304,46 @@ export class TrialSession extends JoiValidationEntity {
       };
     }
   }
+
+  getErrorToMessageMap() {
+    return TrialSession.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getValidationRules() {
+    return {
+      ...TrialSession.validationRules.COMMON,
+      caseOrder: joi.array().items(
+        joi.object().keys({
+          calendarNotes: JoiValidationConstants.STRING.max(200)
+            .optional()
+            .allow('', null),
+          disposition: JoiValidationConstants.STRING.max(100).when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+          docketNumber:
+            JoiValidationConstants.DOCKET_NUMBER.required().description(
+              'Docket number of the case.',
+            ),
+          isManuallyAdded: joi.boolean().optional(),
+          removedFromTrial: joi.boolean().optional(),
+          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+        }),
+      ),
+    } as object;
+  }
+
   /**
    *
    * @param {string} swingSessionId the id of the swing session to associate with the session
@@ -542,12 +540,6 @@ export class TrialSession extends JoiValidationEntity {
     this.sessionStatus = SESSION_STATUS_TYPES.closed;
     return this;
   }
-
-  static validateRawCollection(collection: TRawTrialSession[] = [], args: any) {
-    return collection.map(rawEntity =>
-      new TrialSession(rawEntity, args).validate().toRawObject(),
-    );
-  }
 }
 
 /**
@@ -560,4 +552,4 @@ export const isStandaloneRemoteSession = function (sessionScope) {
   return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
 };
 
-export type TRawTrialSession = ExcludeMethods<TrialSession>;
+export type RawTrialSession = ExcludeMethods<TrialSession>;

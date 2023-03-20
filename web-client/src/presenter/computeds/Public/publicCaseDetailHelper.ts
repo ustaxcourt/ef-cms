@@ -89,8 +89,11 @@ export const formatDocketEntryOnDocketRecord = (
 };
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
-  const { ORDER_EVENT_CODES, PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } =
-    applicationContext.getConstants();
+  const {
+    MOTION_EVENT_CODES,
+    ORDER_EVENT_CODES,
+    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  } = applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
   const isTerminalUser = get(state.isTerminalUser);
   const { docketRecordFilter } = get(state.sessionMetadata);
@@ -120,6 +123,13 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     formattedDocketEntriesOnDocketRecord =
       formattedDocketEntriesOnDocketRecord.filter(entry =>
         ORDER_EVENT_CODES.includes(entry.eventCode),
+      );
+  } else if (
+    docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions
+  ) {
+    formattedDocketEntriesOnDocketRecord =
+      formattedDocketEntriesOnDocketRecord.filter(entry =>
+        MOTION_EVENT_CODES.includes(entry.eventCode),
       );
   }
 

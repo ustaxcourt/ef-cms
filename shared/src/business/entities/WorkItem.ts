@@ -1,15 +1,10 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
-import {
-  IValidationEntity,
-  TStaticValidationMethods,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from './JoiValidationDecorator';
+import { JoiValidationEntity } from './JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
 import { pick } from 'lodash';
 
-export class WorkItemClass {
+export class WorkItem extends JoiValidationEntity {
   public assigneeId: string;
   public assigneeName: string;
   public associatedJudge: string;
@@ -37,15 +32,11 @@ export class WorkItemClass {
   public trialDate?: string;
   public trialLocation?: string;
   public updatedAt: string;
-  public entityName: string;
   public workItemId: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawWorkItem, { applicationContext }) {
-    this.entityName = 'WorkItem';
-  }
-
-  init(rawWorkItem, { applicationContext }) {
+    super('WorkItem');
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -164,15 +155,16 @@ export class WorkItemClass {
     this.isRead = true;
     return this;
   }
+
+  getValidationRules() {
+    return WORK_ITEM_VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return {};
+  }
 }
-
-joiValidationDecorator(WorkItemClass, WORK_ITEM_VALIDATION_RULES);
-
-export const WorkItem: typeof WorkItemClass &
-  TStaticValidationMethods<RawWorkItem> = validEntityDecorator(WorkItemClass);
 
 declare global {
-  type RawWorkItem = ExcludeMethods<WorkItemClass>;
+  type RawWorkItem = ExcludeMethods<WorkItem>;
 }
-// eslint-disable-next-line no-redeclare
-export interface WorkItemClass extends IValidationEntity<WorkItemClass> {}

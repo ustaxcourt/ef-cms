@@ -322,7 +322,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterWorkItemsForUser: jest.fn(),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseForTrialSession: jest

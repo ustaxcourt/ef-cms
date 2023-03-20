@@ -1,14 +1,9 @@
 import { CASE_STATUS_TYPES } from './EntityConstants';
-import {
-  IValidationEntity,
-  TStaticValidationMethods,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from './JoiValidationDecorator';
+import { JoiValidationEntity } from './JoiValidationEntity';
 import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { pick } from 'lodash';
 
-export class OutboxItemClass {
+export class OutboxItem extends JoiValidationEntity {
   public entityName: string;
   public caseStatus: string;
   public caseTitle: string;
@@ -28,10 +23,7 @@ export class OutboxItemClass {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawOutboxItem: RawOutboxItem, { applicationContext }) {
-    this.entityName = 'OutboxItem';
-  }
-
-  init(rawOutboxItem: RawOutboxItem, { applicationContext }) {
+    super('OutboxItem');
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -70,16 +62,16 @@ export class OutboxItemClass {
     this.workItemId =
       rawOutboxItem.workItemId || applicationContext.getUniqueId();
   }
+
+  getValidationRules() {
+    return OUTBOX_ITEM_VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return {};
+  }
 }
-
-joiValidationDecorator(OutboxItemClass, OUTBOX_ITEM_VALIDATION_RULES);
-
-export const OutboxItem: typeof OutboxItemClass &
-  TStaticValidationMethods<RawOutboxItem> =
-  validEntityDecorator(OutboxItemClass);
 
 declare global {
-  type RawOutboxItem = ExcludeMethods<OutboxItemClass>;
+  type RawOutboxItem = ExcludeMethods<OutboxItem>;
 }
-// eslint-disable-next-line no-redeclare
-export interface OutboxItemClass extends IValidationEntity<OutboxItemClass> {}
