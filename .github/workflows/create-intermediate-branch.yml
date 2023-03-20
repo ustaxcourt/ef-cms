@@ -1,10 +1,14 @@
-name: Create an intermediate branch to experimental3
+name: Create an intermediate branch to test
 
 on:
   pull_request:
-    branches: [experimental3]
+    branches: [test]
     type:
       - opened
+
+permissions:
+  pull-requests: write
+  contents: write
 
 jobs:
   create-intermediate-branch:
@@ -14,19 +18,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: 'experimental3'
+          ref: 'test'
           fetch-depth: '0'
 
       - name: Set Git config
         run: |
-          git config --local user.email "jabu@flexion.us"
-          git config --local user.name "Joshua Abu"
+          git config --local user.email "michael.marcotte@ustaxcourt.gov"
+          git config --local user.name "Mike Marcotte"
 
       - name: Create Intermediate branch
         run: |
-          destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch="${feature_branch}-intermediate-to-test"
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}"
@@ -47,7 +50,7 @@ jobs:
         id: pr_check
         run: |
           destination_branch=${{ github.base_ref }}
-          intermediate_branch="${{ github.head_ref }}-intermediate-to-experimental3"
+          intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
 
           diff_of_branch=$(git diff $destination_branch $intermediate_branch)
 
