@@ -92,8 +92,8 @@ export const updatePartyTypeAction = ({
   }
 
   if (get(state.form.filingType) !== 'A business') {
-    // clear the ownership disclosure file and business type
-    store.unset(state.form.ownershipDisclosureFile);
+    // clear the corporate disclosure file and business type
+    store.unset(state.form.corporateDisclosureFile);
     store.unset(state.form.businessType);
   }
 };
