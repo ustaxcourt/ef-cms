@@ -12,7 +12,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case.js';
+import { Case, getContactPrimary } from '../../entities/cases/Case.ts';
 import {
   FORMATS,
   formatDateString,
