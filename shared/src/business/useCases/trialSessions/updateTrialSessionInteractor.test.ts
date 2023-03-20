@@ -22,11 +22,12 @@ describe('updateTrialSessionInteractor', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
 
-    applicationContext.getUseCaseHelpers().savePaperServicePdf.mockReturnValue({
-      docketEntryId: '',
-      hasPaper: false,
-      url: 'www.example.com',
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue({
+        fileId: 'fef6cbf1-8589-46f9-a52e-285a21cac9b3',
+        url: 'www.example.com',
+      });
   });
 
   beforeEach(() => {
