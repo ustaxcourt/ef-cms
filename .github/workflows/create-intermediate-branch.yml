@@ -79,8 +79,7 @@ jobs:
         id: pr_check
         run: |
           destination_branch=${{ github.base_ref }}
-          feature_branch=${{ github.head_ref }}
-          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+          intermediate_branch="${{ github.head_ref }}-intermediate-to-experimental3"
 
           diff_of_branch=$(git diff $destination_branch $intermediate_branch)
 
@@ -109,7 +108,6 @@ jobs:
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
       - name: Close PR with comment
-        needs: steps.get_pr_link
         if: steps.pr_check.outputs.create-pr-flag == 'true'
         uses: peter-evans/close-pull@v2
         with:
