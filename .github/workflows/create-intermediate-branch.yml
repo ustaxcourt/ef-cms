@@ -83,7 +83,6 @@ jobs:
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           diff_of_branch=$(git diff $destination_branch $intermediate_branch)
-          echo "diff_of_branch, $diff_of_branch"
 
           if [[ -n "${diff_of_branch}" ]]
           then
@@ -91,10 +90,6 @@ jobs:
           else
             echo "create-pr-flag=false" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: LOG the diff
-        run: |
-          echo "FLAG IS: ${{ steps.pr_check.outputs.create-pr-flag  }}"
 
       - name: Make PR of Intermediate branch to Test
         if: steps.pr_check.outputs.create-pr-flag == 'true'
@@ -114,6 +109,8 @@ jobs:
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
       - name: Close PR with comment
+        needs: steps.get_pr_link
+        if: steps.pr_check.outputs.create-pr-flag == 'true'
         uses: peter-evans/close-pull@v2
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
