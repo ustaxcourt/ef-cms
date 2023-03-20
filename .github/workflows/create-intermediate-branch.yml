@@ -6,10 +6,6 @@ on:
     type:
       - opened
 
-permissions:
-  pull-requests: write
-  contents: write
-
 jobs:
   create-intermediate-branch:
     runs-on: ubuntu-latest
