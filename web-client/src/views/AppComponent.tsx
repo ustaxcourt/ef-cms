@@ -19,9 +19,11 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
+import { ChangePasswordLocal } from './ChangePasswordLocal';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
+import { CreateNewAccountLocal } from './CreateNewAccountLocal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
@@ -113,9 +115,11 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
+  ChangePasswordLocal,
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,
+  CreateNewAccountLocal,
   CreateOrder,
   CreatePractitionerUser,
   DashboardChambers,
