@@ -1,6 +1,44 @@
 import { getTableName } from '../../dynamodbClientService';
 
 /**
+ * will wrap a function with logic to acquire a lock and delete a lock after finishing.
+ */
+export function withLocking(
+  cb: (applicationContext: IApplicationContext, options: any) => any,
+  getLockName,
+  onLockError,
+) {
+  return async function (
+    applicationContext: IApplicationContext,
+    options: any,
+  ) {
+    const lockName = getLockName(options);
+
+    let results;
+    try {
+      await applicationContext
+        .getPersistenceGateway()
+        .acquireLock({ applicationContext, lockName })
+        .catch(err => {
+          if (err.code === 'ConditionalCheckFailedException') {
+            throw onLockError;
+          } else {
+            throw err;
+          }
+        });
+      results = await cb(applicationContext, options);
+    } catch (error) {
+      if (error.code !== 'ConditionalCheckFailedException') {
+        await applicationContext
+          .getPersistenceGateway()
+          .deleteLock({ applicationContext, lockName });
+      }
+      throw error;
+    }
+    return results;
+  };
+}
+/**
  * tries to acquire a lock from a dynamodb table
  */
 export async function acquireLock({
@@ -27,7 +65,7 @@ export async function acquireLock({
     })
     .promise();
 
-  if (lock.ttl <= Date.now()) {
+  if (lock && lock.ttl <= Date.now()) {
     await deleteLock({ applicationContext, lockName });
   }
 

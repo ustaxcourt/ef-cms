@@ -23,6 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -51,41 +52,6 @@ export const needsNewCoversheet = ({
 };
 
 /**
- * will wrap a function with logic to acquire a lock and delete a lock after finishing.
- */
-function lockHof(cb) {
-  return async function (
-    applicationContext: IApplicationContext,
-    { entryMetadata }: { entryMetadata: any },
-  ) {
-    const lockName = `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`;
-
-    let results;
-    try {
-      await applicationContext
-        .getPersistenceGateway()
-        .acquireLock({ applicationContext, lockName })
-        .catch(() => {
-          throw new InvalidRequest('The document is currently being updated');
-        });
-      results = await cb(applicationContext, { entryMetadata });
-    } catch (error) {
-      if (error.code !== 'ConditionalCheckFailedException') {
-        await applicationContext
-          .getPersistenceGateway()
-          .deleteLock({ applicationContext, lockName });
-      }
-      throw error;
-    } finally {
-      await applicationContext
-        .getPersistenceGateway()
-        .deleteLock({ applicationContext, lockName });
-    }
-    return results;
-  };
-}
-
-/**
  * completeDocketEntryQCInteractor
  *
  * @param {object} applicationContext the application context
@@ -104,8 +70,6 @@ const completeDocketEntryQC = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  await new Promise(resolve => setTimeout(resolve, 5000));
 
   const {
     docketEntryId,
@@ -412,4 +376,9 @@ const completeDocketEntryQC = async (
   };
 };
 
-export const completeDocketEntryQCInteractor = lockHof(completeDocketEntryQC);
+export const completeDocketEntryQCInteractor = withLocking(
+  completeDocketEntryQC,
+  ({ entryMetadata }) =>
+    `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`,
+  new InvalidRequest('The document is currently being updated'),
+);
