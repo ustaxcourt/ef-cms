@@ -1,5 +1,6 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { get } from 'lodash';
@@ -184,66 +185,132 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].ordinalField && (
-          <FormGroup className="grid-row grid-gap">
-            <FormGroup
-              className="grid-col-6 margin-bottom-0"
-              errorText={validationErrors?.ordinalValue}
-            >
-              <label
-                className="usa-label"
-                htmlFor={`${namespace}ordinal-field-select`}
-              >
-                {helper[level].ordinalField}
-              </label>
-              <select
-                className="usa-select"
-                id={`${namespace}ordinal-field-select`}
-                name="ordinalValue"
-                value={form.ordinalValue}
-                onChange={e => {
-                  updateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                  validateSequence();
-                }}
-              >
-                <option value="">- Select -</option>
-                {getOrdinalValuesForUploadIteration.map(ordinalValue => (
-                  <option key={ordinalValue} value={ordinalValue}>
-                    {ordinalValue}
-                  </option>
-                ))}
-              </select>
-            </FormGroup>
-            {form.ordinalValue === 'Other' && (
-              <FormGroup
-                className="grid-col-6"
-                errorText={validationErrors?.otherIteration}
-              >
-                <label className="usa-label" htmlFor="other-iteration">
-                  Iteration
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input margin-0"
-                  id="other-iteration"
-                  name="otherIteration"
-                  placeholder="Number"
-                  type="number"
-                  value={form.otherIteration || ''}
-                  onBlur={() => validateSequence()}
-                  onChange={e => {
-                    updateSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                    validateSequence();
-                  }}
-                />
+          <>
+            <NonMobile>
+              <FormGroup className="grid-row grid-gap">
+                <FormGroup
+                  className="grid-col-6 margin-bottom-0"
+                  errorText={validationErrors?.ordinalValue}
+                >
+                  <label
+                    className="usa-label"
+                    htmlFor={`${namespace}ordinal-field-select`}
+                  >
+                    {helper[level].ordinalField}
+                  </label>
+                  <select
+                    className="usa-select"
+                    id={`${namespace}ordinal-field-select`}
+                    name="ordinalValue"
+                    value={form.ordinalValue}
+                    onChange={e => {
+                      updateSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                  >
+                    <option value="">- Select -</option>
+                    {getOrdinalValuesForUploadIteration.map(ordinalValue => (
+                      <option key={ordinalValue} value={ordinalValue}>
+                        {ordinalValue}
+                      </option>
+                    ))}
+                  </select>
+                </FormGroup>
+                {form.ordinalValue === 'Other' && (
+                  <FormGroup
+                    className="grid-col-6"
+                    errorText={validationErrors?.otherIteration}
+                  >
+                    <label className="usa-label" htmlFor="other-iteration">
+                      Iteration
+                    </label>
+                    <input
+                      autoCapitalize="none"
+                      className="usa-input margin-0"
+                      id="other-iteration"
+                      name="otherIteration"
+                      placeholder="Number"
+                      type="number"
+                      value={form.otherIteration || ''}
+                      onBlur={() => validateSequence()}
+                      onChange={e => {
+                        updateSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validateSequence();
+                      }}
+                    />
+                  </FormGroup>
+                )}
               </FormGroup>
-            )}
-          </FormGroup>
+            </NonMobile>
+            <Mobile>
+              <FormGroup>
+                <FormGroup
+                  className="margin-bottom-0"
+                  errorText={validationErrors?.ordinalValue}
+                >
+                  <label
+                    className="usa-label"
+                    htmlFor={`${namespace}ordinal-field-select`}
+                  >
+                    {helper[level].ordinalField}
+                  </label>
+                  <select
+                    className="usa-select"
+                    id={`${namespace}ordinal-field-select`}
+                    name="ordinalValue"
+                    value={form.ordinalValue}
+                    onChange={e => {
+                      updateSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                  >
+                    <option value="">- Select -</option>
+                    {getOrdinalValuesForUploadIteration.map(ordinalValue => (
+                      <option key={ordinalValue} value={ordinalValue}>
+                        {ordinalValue}
+                      </option>
+                    ))}
+                  </select>
+                </FormGroup>
+                {form.ordinalValue === 'Other' && (
+                  <FormGroup
+                    errorText={validationErrors?.otherIteration}
+                    id="other-iteration-field"
+                  >
+                    <label className="usa-label" htmlFor="other-iteration">
+                      Iteration
+                    </label>
+                    <input
+                      autoCapitalize="none"
+                      className="usa-input margin-0"
+                      id="other-iteration"
+                      name="otherIteration"
+                      placeholder="Number"
+                      type="number"
+                      value={form.otherIteration || ''}
+                      onBlur={() => validateSequence()}
+                      onChange={e => {
+                        updateSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validateSequence();
+                      }}
+                    />
+                  </FormGroup>
+                )}
+              </FormGroup>
+            </Mobile>
+          </>
         )}
       </div>
     );
