@@ -1,5 +1,6 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { connect } from '@cerebral/react';
@@ -200,29 +201,8 @@ export const ContactSecondary = connect(
                   }}
                 />
               </FormGroup>
-              <FormGroup>
-                <input
-                  checked={
-                    data.contactSecondary.hasConsentedToEService || false
-                  }
-                  className="usa-checkbox__input"
-                  id="electronic-service-consent-secondary"
-                  name="contactSecondary.hasConsentedToEService"
-                  type="checkbox"
-                  onChange={e => {
-                    updateFormValueAndSecondaryContactInfoSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="electronic-service-consent-secondary"
-                >
-                  E-service consent
-                </label>
-              </FormGroup>
+
+              <EConsent bind={bind} contactType="contactSecondary" />
             </>
           )}
 
