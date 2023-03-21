@@ -52,6 +52,9 @@ const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
+  changePasswordLocalInteractor,
+} = require('../../shared/src/business/useCases/auth/changePasswordLocalInteractor');
+const {
   checkEmailAvailabilityInteractor,
 } = require('../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor');
 const {
@@ -99,6 +102,9 @@ const {
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
+const {
+  createUserInteractorLocal,
+} = require('../../shared/src/business/useCases/users/createUserInteractorLocal');
 const {
   deleteCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor');
@@ -601,6 +607,7 @@ const useCases = {
   blockCaseFromTrialInteractor,
   caseAdvancedSearchInteractor,
   casePublicSearchInteractor,
+  changePasswordLocalInteractor,
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
@@ -617,6 +624,7 @@ const useCases = {
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   createUserInteractor,
+  createUserInteractorLocal,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,

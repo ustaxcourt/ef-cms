@@ -319,9 +319,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getCognito: () => {
       if (environment.stage === 'local') {
-        console.log('111111111111111');
         if (process.env.USE_COGNITO_LOCAL === 'true') {
-          console.log('222222222222222');
           return new CognitoIdentityServiceProvider({
             endpoint: 'http://localhost:9229/',
             httpOptions: {
@@ -332,7 +330,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
             region: 'local',
           });
         } else {
-          console.log('33333333333');
           return {
             adminCreateUser: () => ({
               promise: () => ({

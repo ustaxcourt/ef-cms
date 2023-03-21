@@ -1,7 +1,7 @@
 import * as client from '../../dynamodbClientService';
 import { ROLES } from '../../../business/entities/EntityConstants';
 
-const createUserRecords = async ({
+export const createUserRecords = async ({
   applicationContext,
   newUser,
   userId,
@@ -35,34 +35,46 @@ export const createNewPetitionerUser = async ({
 }) => {
   const { userId } = user;
 
+  const baseCreateUserParams = {
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'email',
+        Value: user.pendingEmail,
+      },
+      {
+        Name: 'custom:role',
+        Value: ROLES.petitioner,
+      },
+      {
+        Name: 'name',
+        Value: user.name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: user.userId,
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: user.pendingEmail,
+  };
+
+  const createUserParamsLocal = {
+    ...baseCreateUserParams,
+    DesiredDeliveryMediums: ['EMAIL'],
+    Username: user.userId,
+  };
+
+  const createUserParams = process.env.USE_COGNITO_LOCAL
+    ? createUserParamsLocal
+    : baseCreateUserParams;
+
   await applicationContext
     .getCognito()
-    .adminCreateUser({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.pendingEmail,
-        },
-        {
-          Name: 'custom:role',
-          Value: ROLES.petitioner,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.pendingEmail,
-    })
+    .adminCreateUser(createUserParams)
     .promise();
 
   const newUser = await createUserRecords({
