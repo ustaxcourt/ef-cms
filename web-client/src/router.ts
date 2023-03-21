@@ -1261,9 +1261,9 @@ const router = {
     );
 
     registerRoute(
-      '/reports/custom-case-inventory',
+      '/reports/custom-case',
       ifHasAccess({ app }, () => {
-        setPageTitle('Custom Case Inventory');
+        setPageTitle('Custom Case Report');
         return app.getSequence('gotoCustomCaseReportSequence')();
       }),
     );
