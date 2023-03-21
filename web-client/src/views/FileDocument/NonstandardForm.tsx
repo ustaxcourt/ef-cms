@@ -40,7 +40,7 @@ export const NonstandardForm = connect(
     });
 
     const keydownTriggered = e => {
-      if (e.keyCode < 48 || e.keyCode > 57) {
+      if (e.keyCode > 57) {
         e.preventDefault();
       }
     };
