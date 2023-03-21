@@ -42,7 +42,6 @@ Penalty.VALIDATION_RULES = joi.object().keys({
     .description('Penalty name.'),
   penaltyAmount: joi
     .number()
-    .positive()
     .allow(0)
     .required()
     .description('The dollar amount of the penalty.'),
