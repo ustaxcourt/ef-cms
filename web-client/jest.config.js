@@ -9,7 +9,7 @@ module.exports = {
     '!src/index-public.js',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
-    '!src/applicationContext.js',
+    '!src/applicationContext',
     '!src/applicationContextPublic.js',
     '!src/applicationContextTriggers.js',
     '!src/router.js',
