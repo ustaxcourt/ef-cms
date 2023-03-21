@@ -126,7 +126,7 @@ export const isUserAlreadyCreated = async ({
       .promise();
     return true;
   } catch (e) {
-    if (e.code === 'UserNotFoundException') {
+    if (e.code.includes('UserNotFoundException')) {
       return false;
     } else {
       throw e;
@@ -158,34 +158,56 @@ export const createOrUpdateUser = async ({
   });
 
   if (!userExists) {
+    const baseCreateUserParams = {
+      MessageAction: 'SUPPRESS',
+      TemporaryPassword: password,
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: user.email,
+        },
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+        {
+          Name: 'name',
+          Value: user.name,
+        },
+      ],
+      UserPoolId: userPoolId,
+      Username: user.email,
+    };
+
+    const createUserParamsLocal = {
+      ...baseCreateUserParams,
+      DesiredDeliveryMediums: ['EMAIL'],
+      UserAttributes: [
+        ...baseCreateUserParams.UserAttributes,
+        {
+          Name: 'custom:userId',
+          Value: user.userId,
+        },
+      ],
+      Username: user.userId,
+    };
+
+    const createUserParams = process.env.USE_COGNITO_LOCAL
+      ? createUserParamsLocal
+      : baseCreateUserParams;
+
     const response = await applicationContext
       .getCognito()
-      .adminCreateUser({
-        MessageAction: 'SUPPRESS',
-        TemporaryPassword: password,
-        UserAttributes: [
-          {
-            Name: 'email_verified',
-            Value: 'True',
-          },
-          {
-            Name: 'email',
-            Value: user.email,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-        ],
-        UserPoolId: userPoolId,
-        Username: user.email,
-      })
+      .adminCreateUser(createUserParams)
       .promise();
-    userId = response.User.Username;
+
+    userId = process.env.USE_COGNITO_LOCAL
+      ? user.userId
+      : response.User.Username;
   } else {
     const response = await applicationContext
       .getCognito()
@@ -213,11 +235,12 @@ export const createOrUpdateUser = async ({
   }
 
   if (disableCognitoUser) {
+    const username = process.env.USE_COGNITO_LOCAL ? user.email : userId;
     await applicationContext
       .getCognito()
       .adminDisableUser({
         UserPoolId: userPoolId,
-        Username: userId,
+        Username: username,
       })
       .promise();
   }
