@@ -507,6 +507,7 @@ workflows:
           filters:
             branches:
               only:
+                - test
                 - develop
                 - irs
                 - staging
