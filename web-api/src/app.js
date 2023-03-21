@@ -96,6 +96,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  changePasswordLocalLambda,
+} = require('./auth/changePasswordLocalLambda');
+const {
   checkEmailAvailabilityLambda,
 } = require('./users/checkEmailAvailabilityLambda');
 const {
@@ -461,6 +464,7 @@ const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
+const { createUserLambdaLocal } = require('./users/createUserLambdaLocal');
 const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
@@ -1229,6 +1233,10 @@ if (process.env.IS_LOCAL) {
   );
   // This endpoint is used for locally invoking the cognito triggers
   app.post('/cognito-triggers-local', cognitoTriggersLocalLambda);
+  // This endpoint is used creating new users using local cognito
+  app.post('/users/local', lambdaWrapper(createUserLambdaLocal));
+
+  app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 }
 
 exports.app = app;
