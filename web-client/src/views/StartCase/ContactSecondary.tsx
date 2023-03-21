@@ -3,6 +3,7 @@ import { Country } from './Country';
 import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
+import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -171,37 +172,7 @@ export const ContactSecondary = connect(
 
           {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
             <>
-              <FormGroup
-                errorText={
-                  validationErrors.contactSecondary &&
-                  validationErrors.contactSecondary.paperPetitionEmail
-                }
-              >
-                <label
-                  className="usa-label"
-                  htmlFor="paper-petition-email-secondary"
-                >
-                  Petition email address{' '}
-                  <span className="usa-hint">(optional)</span>
-                </label>
-                <input
-                  className="usa-input"
-                  id="paper-petition-email-secondary"
-                  name="contactSecondary.paperPetitionEmail"
-                  type="email"
-                  value={data.contactSecondary.paperPetitionEmail || ''}
-                  onBlur={() => {
-                    onBlurSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueAndSecondaryContactInfoSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
-
+              <PaperPetitionEmail bind={bind} contactType="contactSecondary" />
               <EConsent bind={bind} contactType="contactSecondary" />
             </>
           )}

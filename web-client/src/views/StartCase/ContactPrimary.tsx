@@ -3,6 +3,7 @@ import { Country } from './Country';
 import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
+import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -134,35 +135,6 @@ export const ContactPrimary = connect(
       </FormGroup>
     );
 
-    const paperPetitionEmail = () => (
-      <FormGroup
-        errorText={
-          validationErrors.contactPrimary &&
-          validationErrors.contactPrimary.paperPetitionEmail
-        }
-      >
-        <label className="usa-label" htmlFor="paper-petition-email-primary">
-          Petition email address <span className="usa-hint">(optional)</span>
-        </label>
-        <input
-          className="usa-input"
-          id="paper-petition-email-primary"
-          name="contactPrimary.paperPetitionEmail"
-          type="email"
-          value={data.contactPrimary.paperPetitionEmail || ''}
-          onBlur={() => {
-            onBlurSequence();
-          }}
-          onChange={e => {
-            updateFormValueAndSecondaryContactInfoSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-        />
-      </FormGroup>
-    );
-
     return (
       <>
         {parentView === 'StartCase' ? (
@@ -235,9 +207,12 @@ export const ContactPrimary = connect(
             />
           )}
 
-          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox &&
-            (paperPetitionEmail(),
-            (<EConsent bind={bind} contactType="contactPrimary" />))}
+          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
+            <>
+              <PaperPetitionEmail bind={bind} contactType="contactPrimary" />
+              <EConsent bind={bind} contactType="contactPrimary" />
+            </>
+          )}
 
           <FormGroup
             className="phone-input"
