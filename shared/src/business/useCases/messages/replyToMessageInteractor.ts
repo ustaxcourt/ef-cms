@@ -91,7 +91,7 @@ export const replyToMessage = async (
     message: validatedRawMessage,
   });
 
-  return validatedRawMessage as TMessageData[];
+  return validatedRawMessage;
 };
 
 /**
