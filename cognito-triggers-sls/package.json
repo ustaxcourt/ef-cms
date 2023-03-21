@@ -1,0 +1,19 @@
+{
+  "name": "cognito-triggers-sls",
+  "version": "2.2.0",
+  "description": "A Node.js starter for Serverless Framework with ES6 and TypeScript support",
+  "main": "handler.js",
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnomalyInnovations/serverless-nodejs-starter.git"
+  },
+  "dependencies": { "axios": "^1.2.2" },
+  "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.266.1",
+    "serverless-bundle": "6.0.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-offline": "^12.0.4"
+  }
+}
