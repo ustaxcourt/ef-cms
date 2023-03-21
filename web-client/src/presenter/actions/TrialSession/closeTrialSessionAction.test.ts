@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { closeTrialSessionAction } from './closeTrialSessionAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
