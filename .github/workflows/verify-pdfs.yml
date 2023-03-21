@@ -1,4 +1,4 @@
-name: Node.js CI - Lint
+name: Node.js CI - PDF Tests
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - dependency-updates
 
 jobs:
-  Lint:
+  Client:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,5 @@ jobs:
           node-version: '16'
       - name: NPM Install
         run: npm ci
-      - name: Lint
-        run: npm run lint
-      - name: Shellcheck
-        run: ./run-shellcheck.sh
+      - name: Verify PDFs
+        run: npm run test:document-generation
