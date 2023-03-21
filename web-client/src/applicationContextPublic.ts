@@ -38,7 +38,7 @@ import {
   getCognitoLoginUrl,
   getEnvironment,
   getPublicSiteUrl,
-} from '../../shared/src/sharedAppContext.js';
+} from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
