@@ -34,14 +34,9 @@ export const AddressDisplay = connect(
           contact.isAddressSealed && 'sealed-address',
         )}
       >
-        {[contact.address1, contact.address2, contact.address3].map(
-          addr =>
-            addr && (
-              <span className="address-line" key={addr}>
-                {addr}
-              </span>
-            ),
-        )}
+        <span className="address-line">{contact.address1}</span>
+        <span className="address-line">{contact.address2}</span>
+        <span className="address-line">{contact.address3}</span>
         <span className="address-line">
           {contact.city && `${contact.city}, `}
           {contact.state} {contact.postalCode}

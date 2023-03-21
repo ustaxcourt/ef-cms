@@ -5,6 +5,6 @@ export const deleteWorkItem = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: WorkItem;
+  workItem: RawWorkItem;
 }) =>
   deleteByGsi({ applicationContext, gsi: `work-item|${workItem.workItemId}` });
