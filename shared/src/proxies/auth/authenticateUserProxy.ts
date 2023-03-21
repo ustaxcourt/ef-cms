@@ -8,10 +8,13 @@ const { post } = require('../requests');
  * @param {object} auth.code the OAuth2 authorization code
  * @returns {Promise<*>} the promise of the api call
  */
-exports.authenticateUserInteractor = (applicationContext, { code }) => {
+exports.authenticateUserInteractor = (
+  applicationContext,
+  { code, cognitoLocal },
+) => {
   return post({
     applicationContext,
-    body: { code },
+    body: { code, cognitoLocal },
     endpoint: '/auth/login',
     options: {
       withCredentials: true,
