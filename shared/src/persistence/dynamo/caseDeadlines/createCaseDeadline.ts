@@ -13,7 +13,7 @@ export const createCaseDeadline = ({
   caseDeadline,
 }: {
   applicationContext: IApplicationContext;
-  caseDeadline: TCaseDeadline;
+  caseDeadline: RawCaseDeadline;
 }) => {
   const { caseDeadlineId, docketNumber } = caseDeadline;
   return Promise.all([

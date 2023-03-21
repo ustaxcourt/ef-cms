@@ -13,7 +13,7 @@ export const saveWorkItem = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: WorkItem;
+  workItem: RawWorkItem;
 }) =>
   put({
     Item: {

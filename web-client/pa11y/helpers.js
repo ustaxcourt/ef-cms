@@ -13,14 +13,12 @@ const getOnly = urls => {
   return urls;
 };
 
-const setTimeouts =
-  (timeout = 60000) =>
-  urls => {
-    return urls.map(url => ({
-      ...url,
-      timeout,
-    }));
+const setTimeouts = url => {
+  return {
+    ...url,
+    timeout: 60000,
   };
+};
 
 module.exports = {
   getOnly,

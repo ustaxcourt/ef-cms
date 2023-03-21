@@ -2,7 +2,7 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
-import { DocketEntryClass } from '../entities/DocketEntry';
+import { DocketEntry } from '../entities/DocketEntry';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { isLeadCase } from '../entities/cases/Case';
 import { omit } from 'lodash';
@@ -34,7 +34,7 @@ export const generateCoverSheetData = async ({
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;
   stampData?: any;
   useInitialData: boolean;

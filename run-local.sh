@@ -20,7 +20,6 @@ if [[ -z "$CIRCLECI" ]]; then
 fi
 
 
-URL=http://localhost:8000/shell ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
 
 npm run build:assets
@@ -68,10 +67,7 @@ if [ -n "${USE_COGNITO_LOCAL}" ]; then
   npm run start:cognito-triggers-local &
 fi
 
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/streams-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/websockets-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
