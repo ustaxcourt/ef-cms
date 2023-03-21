@@ -9,18 +9,15 @@ export const DateRangePickerComponent = ({
   endDateOptional,
   endLabel,
   endName,
-  endPickerCls,
   endValue,
   onChangeEnd,
   onChangeStart,
-  pickerSpacer,
   rangePickerCls,
   showHint,
   startDateErrorText,
   startDateOptional,
   startLabel,
   startName,
-  startPickerCls,
   startValue,
 }) => {
   const dateRangePickerRef = useRef();
@@ -91,13 +88,18 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  const Spacer = pickerSpacer;
   const displayHint = showHint !== undefined ? showHint : true;
 
   return (
     <FormGroup formGroupRef={dateRangePickerRef}>
-      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
-        <div className={startPickerCls}>
+      <div
+        className={classNames(
+          'usa-date-range-picker',
+          rangePickerCls,
+          'grid-row',
+        )}
+      >
+        <div className="grid-col">
           <FormGroup
             errorText={startDateErrorText}
             formGroupRef={startDatePickerRef}
@@ -130,9 +132,7 @@ export const DateRangePickerComponent = ({
           </FormGroup>
         </div>
 
-        {Spacer && <Spacer />}
-
-        <div className={endPickerCls}>
+        <div className="grid-col">
           <FormGroup
             errorText={endDateErrorText}
             formGroupRef={endDatePickerRef}
