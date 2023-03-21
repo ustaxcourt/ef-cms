@@ -101,7 +101,7 @@ const internalFieldsBlocked = () => {
     cerebralTest.getState('caseDetail.orderForAmendedPetitionAndFilingFee'),
   ).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.orderForFilingFee')).toBeUndefined();
-  expect(cerebralTest.getState('caseDetail.orderForOds')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.orderForCds')).toBeUndefined();
   expect(
     cerebralTest.getState('caseDetail.orderForRatification'),
   ).toBeUndefined();

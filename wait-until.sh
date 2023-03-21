@@ -15,7 +15,6 @@ do
   set +e
   code=$(curl -sL -w "%{http_code}\\n" "$URL" -o /dev/null)
   set -e
-  echo "code = $code"
 
   echo -e "\nWaiting for $URL to be hosted...\n"
   if [ "$code" = "$check_code" ]

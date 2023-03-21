@@ -2,8 +2,8 @@ import { clearModalSequence } from './clearModalSequence';
 import { getFormValueDocumentAction } from '../actions/getFormValueDocumentAction';
 import { removeScannedPdfAction } from '../actions/removeScannedPdfAction';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
+import { updateOrderForCdsAction } from '../actions/StartCaseInternal/updateOrderForCdsAction';
 import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
-import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
 
 export const removeScannedPdfSequence = [
   removeScannedPdfAction,
@@ -11,5 +11,5 @@ export const removeScannedPdfSequence = [
   ...clearModalSequence,
   getFormValueDocumentAction,
   updateOrderForDesignatingPlaceOfTrialAction,
-  updateOrderForOdsAction,
+  updateOrderForCdsAction,
 ];
