@@ -13,6 +13,7 @@ import {
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
+  MOTION_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
@@ -37,7 +38,7 @@ import {
   getCognitoLoginUrl,
   getEnvironment,
   getPublicSiteUrl,
-} from '../../shared/src/sharedAppContext.js';
+} from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
@@ -128,6 +129,7 @@ const frozenConstants = deepFreeze({
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
+  MOTION_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,

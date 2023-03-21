@@ -264,6 +264,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
   const {
     DOCKET_RECORD_FILTER_OPTIONS,
     EXHIBIT_EVENT_CODES,
+    MOTION_EVENT_CODES,
     ORDER_EVENT_CODES,
   } = applicationContext.getConstants();
 
@@ -286,6 +287,11 @@ export const formattedDocketEntries = (get, applicationContext) => {
     case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
       result.formattedDocketEntries = result.formattedDocketEntries.filter(
         entry => EXHIBIT_EVENT_CODES.includes(entry.eventCode),
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.motions:
+      result.formattedDocketEntries = result.formattedDocketEntries.filter(
+        entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
       );
       break;
     case DOCKET_RECORD_FILTER_OPTIONS.orders:
