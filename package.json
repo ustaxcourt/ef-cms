@@ -189,6 +189,7 @@
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
     "start:client": "WATCH=true IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn npm run start:client:esbuild",
+    "start:client:cognito-local": "WATCH=true IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn USE_COGNITO_LOCAL=true npm run start:client:esbuild",
     "start:client:esbuild": "node esbuild.config.mjs",
     "start:cognito-triggers-local": "cd cognito-triggers-sls && npx sls offline",
     "start:madge": "node ./graph-generators/index.js",

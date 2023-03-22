@@ -15,9 +15,9 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 export const loginWithCognitoLocalSequence = showProgressSequenceDecorator([
   authenticateUserAction,
   {
-    error: [setAlertErrorAction],
     newPasswordRequired: [navigateToPathAction],
-    success: [
+    no: [setAlertErrorAction],
+    yes: [
       decodeTokenAction,
       setTokenAction,
       // do we need this if not refreshing locally?
