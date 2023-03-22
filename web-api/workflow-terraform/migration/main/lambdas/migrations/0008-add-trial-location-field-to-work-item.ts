@@ -1,60 +1,41 @@
 // // this is needed for various utility functions and writing to dynamo
-//  createApplicationContext = require('../../../../src/applicationContext');
+import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
+import createApplicationContext from '../../../../../src/applicationContext';
 
-// // a utility function for combining all the separate case dynamo records into a single case object
-// const {
-//   aggregateCaseItems,
-// } = require('../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
+const {
+  WorkItem,
+} = require('../../../../../../shared/src/business/entities/WorkItem');
 
-// // since we will be adding a field to the case, we need to bring in the case entity to validate our data.
-// const {
-//   Case,
-// } = require('../../../../../shared/src/business/entities/cases/Case');
+const { queryFullCase } = require('../utilities');
 
-// // a utility function for fetching all records associated with a case
-// const { queryFullCase } = require('../utilities');
+const applicationContext = createApplicationContext({});
 
-// // create a new application context
-// const applicationContext = createApplicationContext({});
+const isWorkItem = item => {
+  return item.pk.startsWith('case|') && item.sk.startsWith('work-item|');
+};
 
-// // a filter to know when we should modify a record
-// const isCaseRecord = item => {
-//   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
-// };
+export const migrateItems = async (items, documentClient) => {
+  const itemsAfter = [];
 
-// // this function will be ran by the migration lambda
-// const migrateItems = async (items, documentClient) => {
-//   // keep track of all the modified and unchanged records
-//   const itemsAfter = [];
+  for (const item of items) {
+    if (isWorkItem(item)) {
+      const fullCase = await queryFullCase(documentClient, item.docketNumber);
+      const caseRecord = aggregateCaseItems(fullCase);
+      const theWorkItem = new WorkItem(
+        {
+          ...item,
+          trialLocation: caseRecord.trialLocation,
+        },
+        {
+          applicationContext,
+        },
+      ).validateWithLogging(applicationContext);
 
-  
-//   for (const item of items) {
-//     // we only care about modifying cases
-//     if (isCaseRecord(item)) {
-//       // get all the case records
-//       const fullCase = await queryFullCase(documentClient, item.docketNumber);
+      item.trialLocation = theWorkItem.trialLocation;
+    }
 
-//       // combine them all together
-//       const caseRecord = aggregateCaseItems(fullCase);
+    itemsAfter.push(item);
+  }
 
-//       // construct a new case entity, default adjourned to false and validate
-//       const theCase = new Case({
-//           caseRecord, 
-//           adjourned: false
-//       }, {
-//         applicationContext,
-//       }).validateWithLogging(applicationContext); // validating the entity is the most important step
-
-//       item.adjourned = theCase.adjourned;
-//     }
-
-//     // push the record into the array to later be returned at the end of this function
-//     itemsAfter.push(item);
-//   }
-
-//   // return those items to be written to the destination dynamo table
-//   return itemsAfter;
-// };
-
-// // the migration script must export a migrateItems function
-// exports.migrateItems = migrateItems;
+  return itemsAfter;
+};
