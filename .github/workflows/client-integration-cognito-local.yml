@@ -62,7 +62,7 @@ jobs:
           URL=http://localhost:9200/efcms-message ./wait-until.sh
           URL=http://localhost:9200/efcms-work-item ./wait-until.sh
           URL=http://localhost:9000/ ./wait-until.sh
-          export TESTFILES=$(circleci tests glob "web-client/integration-tests-cognito-local/*.test.js")
+          export TESTFILES="web-client/integration-tests-cognito-local/*.test.js"
           npm run test:client:integration:cognito-local:ci
       - name: Store Video Artifacts
         uses: actions/upload-artifact@v3
