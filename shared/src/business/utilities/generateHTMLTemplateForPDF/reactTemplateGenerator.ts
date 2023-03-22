@@ -1,103 +1,103 @@
 require('regenerator-runtime');
 require('@babel/register')({
-  extensions: ['.jsx'],
+  extensions: ['.tsx'],
   presets: ['@babel/preset-react', '@babel/preset-env'],
 });
 
 // Documents
 const {
   AddressLabelCoverSheet,
-} = require('../pdfGenerator/documentTemplates/AddressLabelCoverSheet.jsx');
+} = require('../pdfGenerator/documentTemplates/AddressLabelCoverSheet.tsx');
 const {
   CaseInventoryReport,
-} = require('../pdfGenerator/documentTemplates/CaseInventoryReport.jsx');
+} = require('../pdfGenerator/documentTemplates/CaseInventoryReport.tsx');
 const {
   ChangeOfAddress,
-} = require('../pdfGenerator/documentTemplates/ChangeOfAddress.jsx');
+} = require('../pdfGenerator/documentTemplates/ChangeOfAddress.tsx');
 const {
   CoverSheet,
-} = require('../pdfGenerator/documentTemplates/CoverSheet.jsx');
+} = require('../pdfGenerator/documentTemplates/CoverSheet.tsx');
 const {
   DatePrintedFooter,
-} = require('../pdfGenerator/components/DatePrintedFooter.jsx');
+} = require('../pdfGenerator/components/DatePrintedFooter.tsx');
 const {
   DateServedFooter,
-} = require('../pdfGenerator/components/DateServedFooter.jsx');
+} = require('../pdfGenerator/components/DateServedFooter.tsx');
 const {
   DocketRecord,
-} = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
+} = require('../pdfGenerator/documentTemplates/DocketRecord.tsx');
 const {
   GettingReadyForTrialChecklist,
-} = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.jsx');
+} = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.tsx');
 const {
   NoticeOfChangeOfTrialJudge,
-} = require('../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge.jsx');
+} = require('../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge.tsx');
 const {
   NoticeOfChangeToInPersonProceeding,
 } = require('../pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding');
 const {
   NoticeOfChangeToRemoteProceeding,
-} = require('../pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding.jsx');
+} = require('../pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding.tsx');
 const {
   NoticeOfDocketChange,
-} = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
+} = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.tsx');
 const {
   NoticeOfReceiptOfPetition,
-} = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.jsx');
+} = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.tsx');
 const {
   NoticeOfTrialIssued,
-} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssued.jsx');
+} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssued.tsx');
 const {
   NoticeOfTrialIssuedInPerson,
-} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson.jsx');
+} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson.tsx');
 const {
   PageMetaHeaderDocket,
-} = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
+} = require('../pdfGenerator/components/PageMetaHeaderDocket.tsx');
 const {
   PendingReport,
-} = require('../pdfGenerator/documentTemplates/PendingReport.jsx');
+} = require('../pdfGenerator/documentTemplates/PendingReport.tsx');
 const {
   PractitionerCaseList,
-} = require('../pdfGenerator/documentTemplates/PractitionerCaseList.jsx');
+} = require('../pdfGenerator/documentTemplates/PractitionerCaseList.tsx');
 const {
   PretrialMemorandum,
-} = require('../pdfGenerator/components/PretrialMemorandum.jsx');
+} = require('../pdfGenerator/components/PretrialMemorandum.tsx');
 const {
   PrintableTrialSessionWorkingCopyMetaHeader,
-} = require('../pdfGenerator/components/PrintableTrialSessionWorkingCopyMetaHeader.jsx');
+} = require('../pdfGenerator/components/PrintableTrialSessionWorkingCopyMetaHeader.tsx');
 const {
   PrintableWorkingCopySessionList,
-} = require('../pdfGenerator/documentTemplates/PrintableWorkingCopySessionList.jsx');
+} = require('../pdfGenerator/documentTemplates/PrintableWorkingCopySessionList.tsx');
 const {
   ReceiptOfFiling,
-} = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
+} = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.tsx');
 const {
   ReportsMetaHeader,
-} = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
+} = require('../pdfGenerator/components/ReportsMetaHeader.tsx');
 const {
   StandingPretrialOrder,
-} = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
+} = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.tsx');
 const {
   StandingPretrialOrderForSmallCase,
-} = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase.jsx');
+} = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase.tsx');
 const {
   TrialCalendar,
-} = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
+} = require('../pdfGenerator/documentTemplates/TrialCalendar.tsx');
 const {
   TrialSessionPlanningReport,
-} = require('../pdfGenerator/documentTemplates/TrialSessionPlanningReport.jsx');
-const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
+} = require('../pdfGenerator/documentTemplates/TrialSessionPlanningReport.tsx');
+const { Order } = require('../pdfGenerator/documentTemplates/Order.tsx');
 
 // Emails
 const {
   BouncedEmailAlert,
-} = require('../emailGenerator/emailTemplates/BouncedEmailAlert.jsx');
+} = require('../emailGenerator/emailTemplates/BouncedEmailAlert.tsx');
 const {
   DocumentService,
-} = require('../emailGenerator/emailTemplates/DocumentService.jsx');
+} = require('../emailGenerator/emailTemplates/DocumentService.tsx');
 const {
   PetitionService,
-} = require('../emailGenerator/emailTemplates/PetitionService.jsx');
+} = require('../emailGenerator/emailTemplates/PetitionService.tsx');
 
 const React = require('react');
 const ReactDOM = require('react-dom/server');

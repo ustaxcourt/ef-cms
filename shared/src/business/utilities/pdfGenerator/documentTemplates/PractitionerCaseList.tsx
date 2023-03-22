@@ -1,5 +1,5 @@
 const React = require('react');
-const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 
 export const PractitionerCaseList = ({
   barNumber,
