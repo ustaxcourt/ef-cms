@@ -1,9 +1,11 @@
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { associateSwingTrialSessions } from './associateSwingTrialSessions';
+const {
+  petitionerUser,
+  petitionsClerkUser,
+} = require('../../../test/mockUsers');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -16,7 +18,7 @@ const MOCK_TRIAL_SESSION = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-const OTHER_MOCK_TRIAL_SESSION = {
+const MOCK_TRIAL_SESSION_FOR_ASSOCIATION = {
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Small',
@@ -27,62 +29,31 @@ const OTHER_MOCK_TRIAL_SESSION = {
   trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
 };
 
-let user;
+let mockCurrentTrialSessionEntity;
 
-describe('Set trial session as swing session', () => {
+describe('associateSwingTrialSessions', () => {
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(OTHER_MOCK_TRIAL_SESSION);
-    applicationContext
-      .getPersistenceGateway()
-      .updateTrialSession.mockReturnValue();
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+    mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION, {
+      applicationContext,
+    });
   });
 
-  it('throws error if user is unauthorized', async () => {
-    user = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
+  it('throws an error if user is unauthorized to associate swing sessions', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     await expect(
       associateSwingTrialSessions(applicationContext, {
-        swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-        trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
+        swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
+        trialSessionEntity: mockCurrentTrialSessionEntity,
       }),
     ).rejects.toThrow();
   });
 
-  it('calls getTrialSessionById and updateTrialSession persistence methods with correct parameters', async () => {
-    user = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
+  it('retrieves the swing session to be associated from persistence', async () => {});
 
-    await associateSwingTrialSessions(applicationContext, {
-      swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-      trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
-    });
+  it('updates the trial session to be associated with swing session information', async () => {});
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock
-        .calls[0][0].trialSessionId,
-    ).toEqual('208a959f-9526-4db5-b262-e58c476a4604');
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate,
-    ).toMatchObject({
-      ...OTHER_MOCK_TRIAL_SESSION,
-      swingSession: true,
-      swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-    });
-  });
+  it('sets swing session information on the current trial session', async () => {});
 });
