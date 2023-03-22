@@ -30,7 +30,6 @@ jobs:
       - name: LOG BRANCHES
         run: |
           echo "feature branch, ${{ github.head_ref }}"
-          echo "ACTION REPO, ${{ github.action_repository }}"
           echo "REGULAR REPO, ${{ github.repository }}"
           echo "PULL REQUEST EVENT INFO, ${{ toJSON(github.event) }}"
 
@@ -39,13 +38,15 @@ jobs:
           destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
-          upstream_head_branch=${{ github.event.pull_request.head.repo.clone_url }}
+          head_repo=${{ github.event.pull_request.head.repo.clone_url }}
+
+          git add remote head_remote $head_repo
 
           # Create a copy of the destination branch
           # git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          git pull --strategy ort --no-rebase $upstream_head_branch $feature_branch
+          git pull --strategy ort --no-rebase $head_remote $feature_branch
 
           # create a commit with unresolved merge conflicts
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
@@ -54,39 +55,42 @@ jobs:
           fi
 
           # Push the new intermediate to remote
-          git push -u origin "${intermediate_branch}"
+          git push -u $head_remote "${intermediate_branch}"
 
-      # - name: Check if PR should be created
-      #   id: pr_check
-      #   run: |
-      #     destination_branch=${{ github.base_ref }}
-      #     intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
+      - name: Check if PR should be created
+        id: pr_check
+        run: |
+          destination_branch=${{ github.base_ref }}
+          intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
+          head_repo=${{ github.event.pull_request.head.repo.clone_url }}
 
-      #     diff_of_branch=$(git diff $destination_branch $intermediate_branch)
+          git add remote head_remote $head_repo
 
-      #     if [[ -n "${diff_of_branch}" ]]
-      #     then
-      #       echo "create-int-pr-flag=true" >> "$GITHUB_OUTPUT"
-      #     else
-      #       echo "create-int-pr-flag=false" >> "$GITHUB_OUTPUT"
-      #     fi
+          diff_of_branch=$(git diff "origin/${destination_branch} ${head_remote}/${intermediate_branch})
 
-      # - name: Make PR of Intermediate branch to test
-      #   if: steps.pr_check.outputs.create-int-pr-flag == 'true'
-      #   id: get_pr_link
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     destination_branch=${{ github.base_ref }}
-      #     feature_branch=${{ github.head_ref }}
-      #     pr_title="${feature_branch} Intermediate To test"
+          if [[ -n "${diff_of_branch}" ]]
+          then
+            echo "create-int-pr-flag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "create-int-pr-flag=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      #     sudo apt-get update
-      #     sudo apt-get install hub
+      - name: Make PR of Intermediate branch to test
+        if: steps.pr_check.outputs.create-int-pr-flag == 'true'
+        id: get_pr_link
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          destination_branch=${{ github.base_ref }}
+          feature_branch=${{ github.head_ref }}
+          pr_title="${feature_branch} Intermediate To test"
 
-      #     PR_LINK=$(hub pull-request -b $destination_branch -m "$pr_title" -l "to $destination_branch")
+          sudo apt-get update
+          sudo apt-get install hub
 
-      #     echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
+          PR_LINK=$(hub pull-request -b $destination_branch -m "$pr_title" -l "to $destination_branch")
+
+          echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
       # - name: Close PR with comment
       #   if: steps.pr_check.outputs.create-int-pr-flag == 'true'
