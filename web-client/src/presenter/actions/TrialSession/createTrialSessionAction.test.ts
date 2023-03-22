@@ -79,11 +79,11 @@ describe('createTrialSessionAction', () => {
       applicationContext.getUseCases().createTrialSessionInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
+      applicationContext.getUseCases().associateSwingTrialSessions,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().associateSwingTrialSessions.mock
+        .calls[0][1],
     ).toMatchObject({
       swingSessionId: '123',
       trialSessionId: '456',

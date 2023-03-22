@@ -3,7 +3,7 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { setTrialSessionAsSwingSessionInteractor } from './setTrialSessionAsSwingSessionInteractor';
+import { associateSwingTrialSessions } from './associateSwingTrialSessions';
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -48,7 +48,7 @@ describe('Set trial session as swing session', () => {
     };
 
     await expect(
-      setTrialSessionAsSwingSessionInteractor(applicationContext, {
+      associateSwingTrialSessions(applicationContext, {
         swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
         trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
       }),
@@ -61,7 +61,7 @@ describe('Set trial session as swing session', () => {
       userId: 'petitionsclerk',
     };
 
-    await setTrialSessionAsSwingSessionInteractor(applicationContext, {
+    await associateSwingTrialSessions(applicationContext, {
       swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
     });
