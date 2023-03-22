@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @returns {object} next path based on if modal has statistic index
  */
 export const chooseStatisticValidationStrategyAction = ({ get, path }) => {
-  return get(state.modal.statisticIndex)
+  return get(state.modal.statisticIndex) >= 0
     ? path.startCase()
     : path.addEditStatistic();
 };

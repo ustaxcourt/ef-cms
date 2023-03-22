@@ -18,7 +18,7 @@ export const scanHelper = (get, applicationContext) => {
 
   let applicationForWaiverOfFilingFeeFileCompleted;
   let petitionFileCompleted;
-  let ownershipDisclosureFileCompleted;
+  let corporateDisclosureFileCompleted;
   let stinFileCompleted;
   let requestForPlaceOfTrialFileCompleted;
 
@@ -37,10 +37,10 @@ export const scanHelper = (get, applicationContext) => {
       documents: formCaseDocuments,
     });
 
-  ownershipDisclosureFileCompleted =
-    !!get(state.form.ownershipDisclosureFile) ||
+  corporateDisclosureFileCompleted =
+    !!get(state.form.corporateDisclosureFile) ||
     !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.ownershipDisclosureFile,
+      documentType: INITIAL_DOCUMENT_TYPES_MAP.corporateDisclosureFile,
       documents: formCaseDocuments,
     });
 
@@ -68,13 +68,13 @@ export const scanHelper = (get, applicationContext) => {
 
   return {
     applicationForWaiverOfFilingFeeFileCompleted,
+    corporateDisclosureFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(
       user &&
       user.role &&
       applicationContext.getUtilities().isInternalUser(user.role)
     ),
-    ownershipDisclosureFileCompleted,
     petitionFileCompleted,
     requestForPlaceOfTrialFileCompleted,
     scanFeatureEnabled,

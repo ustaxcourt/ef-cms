@@ -8,6 +8,7 @@ import { state } from 'cerebral';
  */
 export const resetAddPaperFilingAction = ({ store }) => {
   store.set(state.isEditingDocketEntry, false);
+  store.set(state.form.isPaper, true);
   store.set(state.form.lodged, false);
   store.set(state.form.filersMap, {});
   store.set(state.form.filers, []);
