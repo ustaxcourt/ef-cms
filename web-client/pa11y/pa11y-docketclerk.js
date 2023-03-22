@@ -47,7 +47,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #has-other-filing-party to be visible',
+      'wait for #has-other-filing-party-label to be visible',
       'click element label#has-other-filing-party-label',
       'wait for input#other-filing-party to be visible',
     ],
@@ -72,8 +72,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for element #certificate-of-service to be visible',
-      'click element #certificate-of-service+label',
+      'wait for element #certificate-of-service-label to be visible',
+      'click element #certificate-of-service-label',
       'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',

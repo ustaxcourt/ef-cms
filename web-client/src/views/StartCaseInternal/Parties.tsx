@@ -69,7 +69,11 @@ export const Parties = connect(
                 });
               }}
             />
-            <label className="usa-checkbox__label" htmlFor="order-for-cds">
+            <label
+              className="usa-checkbox__label"
+              htmlFor="order-for-cds"
+              id="order-for-cds-label"
+            >
               Order for Corporate Disclosure Statement
             </label>
           </div>
