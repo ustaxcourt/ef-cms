@@ -10802,6 +10802,7 @@
         "updatedCaseStatus": "New"
       }
     ],
+    "orderForCds": false,
     "filingType": "Myself",
     "docketNumberWithSuffix": "102-22W",
     "orderForRatification": false,
