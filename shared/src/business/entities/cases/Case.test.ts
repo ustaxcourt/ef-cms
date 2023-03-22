@@ -1348,6 +1348,4 @@ describe('Case entity', () => {
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
   });
-
-  describe;
 });
