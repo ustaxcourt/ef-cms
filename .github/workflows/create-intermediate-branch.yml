@@ -31,17 +31,18 @@ jobs:
           # git config --local user.email "jabu@flexion.us"
           # git config --local user.name "Joshua Abu"
 
-      - name: Check out head repository
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.action_repository }}
-          ref: ${{ github.head_ref }}
+      # - name: Check out head repository
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: ${{ github.action_repository }}
+      #     ref: ${{ github.head_ref }}
 
       - name: LOG BRANCHES
         run: |
           echo "feature branch, ${{ github.head_ref }}"
           echo "ACTION REPO, ${{ github.action_repository }}"
           echo "REGULAR REPO, ${{ github.repository }}"
+          echo "PULL REQUEST EVENT INFO, ${{ toJSON(github.event) }}"
 
       # - name: Create Intermediate branch
       #   run: |
