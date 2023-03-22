@@ -818,6 +818,14 @@ const router = {
       }),
     );
 
+    registerRoute('/create-new-account-local', () => {
+      return app.getSequence('goToCreateAccountLocalSequence')();
+    });
+
+    registerRoute('/change-password-local', () => {
+      return app.getSequence('gotoChangePasswordLocalSequence')();
+    });
+
     registerRoute(
       '/users/create-practitioner',
       ifHasAccess({ app }, () => {
