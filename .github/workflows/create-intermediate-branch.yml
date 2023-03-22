@@ -28,18 +28,18 @@ jobs:
           git config --local user.email "michael.marcotte@ustaxcourt.gov"
           git config --local user.name "Mike Marcotte"
 
+      - name: Check out the base repo
+        uses: actions/checkout@v3
+        with:
+          ref: 'test'
+          fetch-depth: '0'
+
       - name: Create and save a copy of feature branch
         run: |
           feature_branch_copy="${{ github.head_ref }}-copy"
 
           git checkout -b $feature_branch_copy
           git push origin $feature_branch_copy
-
-      - name: Check out the base repo
-        uses: actions/checkout@v3
-        with:
-          ref: 'test'
-          fetch-depth: '0'
 
       - name: LOG BRANCHES
         run: |
