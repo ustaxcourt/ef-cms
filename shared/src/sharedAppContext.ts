@@ -24,6 +24,10 @@ const getUniqueId = () => {
   return uuidv4();
 };
 
+const getCognitoLocalEnabled = () => {
+  return !!process.env.USE_COGNITO_LOCAL;
+};
+
 const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
 
 module.exports = {
@@ -42,6 +46,7 @@ module.exports = {
     },
   },
   clerkOfCourtNameForSigning,
+  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getEnvironment,
   getPublicSiteUrl,
