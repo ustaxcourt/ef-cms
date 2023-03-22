@@ -48,10 +48,22 @@ describe('ExternalDocumentNonStandardG', () => {
         category: 'Answer',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Amendment to Answer',
-        ordinalValue: 'First',
+        ordinalValue: '1',
         scenario: 'Nonstandard G',
       });
       expect(extDoc.getDocumentTitle()).toEqual('First Amendment to Answer');
+    });
+
+    it('should generate title with an otherIteration defined when ordinalValue is "Other"', () => {
+      const extDoc = ExternalDocumentFactory({
+        category: 'Answer',
+        documentTitle: '[First, Second, etc.] Amendment to Answer',
+        documentType: 'Amendment to Answer',
+        ordinalValue: 'Other',
+        otherIteration: 50,
+        scenario: 'Nonstandard G',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('Fiftieth Amendment to Answer');
     });
   });
 });
