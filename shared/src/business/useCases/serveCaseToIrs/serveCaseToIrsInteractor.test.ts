@@ -7,10 +7,12 @@ import {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
+  PAYMENT_STATUS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
+import { Case, getContactPrimary } from '../../entities/cases/Case.ts';
 import {
   FORMATS,
   formatDateString,
@@ -23,7 +25,6 @@ import {
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
 import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
-import { getContactPrimary } from '../../entities/cases/Case';
 import { getFakeFile } from '../../test/getFakeFile';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 
@@ -228,7 +229,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
-        .calls[1][0].data.address,
+        .calls[1][0].data.contact,
     ).toMatchObject({
       address1: '123 Side St',
       name: 'Test Petitioner Secondary',
@@ -257,6 +258,232 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
     ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should generate a second notice of receipt of petition with different access codes when contactSecondary.address is the same as contactPrimary.address, but the contactPrimary does NOT want e service (no paperPetitionEmail) but contactSecondary is setup for e service (has paperPetitionEmail set)', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        { ...MOCK_CASE.petitioners[0], hasConsentedToEService: false },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUtilities().getAddressPhoneDiff,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.contact,
+    ).toMatchObject({
+      address1: '123 Main St',
+    });
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.contact,
+    ).toMatchObject({
+      address1: '123 Main St',
+    });
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).not.toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+  });
+
+  it('should generate a second notice of receipt of petition when contactSecondary.address is the same as contactPrimary.address, and the secondary has no email or e access', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: false,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: undefined,
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should generate a second notice of receipt of petition with different access codes when both have e access to the same paperPetitionEmail AND have the same address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should generate a second notice of receipt of petition with the same access code when both have e access to the same paperPetitionEmail BUT not the same address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          address1: 'addy 1',
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should generate a second notice of receipt of petition when both have e access but they have different paperPetitionEmail', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          hasConsentedToEService: true,
+          paperPetitionEmail: 'testing1@example.com',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          hasConsentedToEService: true,
+          name: 'Test Petitioner Secondary',
+          paperPetitionEmail: 'testing@example.com',
+          phone: '1234547',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data.accessCode,
+    ).not.toEqual(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.accessCode,
+    );
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('should generate the receipt like normal even if a trial city is undefined', async () => {
@@ -289,6 +516,51 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
     ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should add Filing Fee Waived document to case entity when petitionPaymentStatus === PAYMENT_STATUS.WAIVED', async () => {
+    const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
+
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+      petitionPaymentWaivedDate: '2019-08-25T05:00:00.000Z',
+      preferredTrialCity: null,
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(addDocketEntrySpy.mock.calls[0][0].documentTitle).toEqual(
+      'Filing Fee Waived',
+    );
+  });
+
+  it('should add Filing Fee Paid document to case entity when petitionPaymentStatus === PAYMENT_STATUS.PAID', async () => {
+    const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
+
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      petitionPaymentDate: '2019-08-25T05:00:00.000Z',
+      petitionPaymentMethod: 'check',
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      preferredTrialCity: null,
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(addDocketEntrySpy.mock.calls[0][0].documentTitle).toEqual(
+      'Filing Fee Paid',
+    );
   });
 
   describe('clinic letters', () => {

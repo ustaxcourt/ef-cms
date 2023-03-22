@@ -4,79 +4,11 @@
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
 */
 
-type TCaseDeadline = {
-  associatedJudge: string;
-  caseDeadlineId: number;
-  createdAt: Date;
-  deadlineDate: Date;
-  description: string;
-  docketNumber: string;
-  sortableDocketNumber: string;
-};
-
 type TRawPenalty = {
   name: string;
   penaltyAmount: number;
   penaltyType: string;
 };
-
-type TPractitionerDocument = {
-  categoryType: string;
-  categoryName: string;
-  location: string;
-  practitionerDocumentFileId: string;
-};
-
-type TPractitionerDocumentEntity = {
-  validate(): TPractitionerDocumentEntity;
-  toRawObject(): TPractitionerDocument;
-} & TPractitionerDocument;
-
-type WorkItem = {
-  createdAt: string;
-  assigneeId: string;
-  docketEntry: Partial<RawDocketEntry>;
-  assigneeName: string;
-  associatedJudge: string;
-  caseIsInProgress: boolean;
-  caseStatus: string;
-  caseTitle: string;
-  completedBy: string;
-  completedByUserId: string;
-  completedMessage: string;
-  docketNumberWithSuffix: string;
-  entityName: string;
-  highPriority: boolean;
-  isInitializeCase: boolean;
-  docketNumber: string;
-  workItemId: string;
-  completedAt: string;
-  updatedAt: string;
-  gsi1pk: string;
-  inProgress: boolean;
-};
-
-type TOutboxItem = {
-  caseStatus: string;
-  caseTitle: string;
-  completedAt: string;
-  completedBy: string;
-  caseIsInProgress: boolean;
-  docketEntry: RawDocketEntry;
-  docketNumber: string;
-  highPriority: boolean;
-  inProgress: boolean;
-  leadDocketNumber: string;
-  section: string;
-  trialDate: string;
-  workItemId: string;
-} & WorkItem;
-
-type TOutboxItemEntity = {
-  validate(): TOutboxItemEntity;
-  isValid(): boolean;
-  toRawObject(): TOutboxItem;
-} & TOutboxItem;
 
 type TDynamoRecord = {
   pk: string;
@@ -86,7 +18,7 @@ type TDynamoRecord = {
   [key: string]: any;
 };
 
-type OutboxDynamoRecord = TOutboxItem & TDynamoRecord;
+type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;
 type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
 
 type TSectionWorkItem = {
@@ -98,53 +30,6 @@ type TSectionWorkItem = {
   section: string;
   sentBy: string;
 };
-
-type TMessageData = {
-  attachments: {
-    documentId: string;
-  }[];
-  caseStatus: string;
-  caseTitle: string;
-  completedAt: string;
-  completedBy: string;
-  completedBySection: string;
-  completedByUserId: string;
-  completedMessage: string;
-  createdAt: string;
-  leadDocketNumber: string;
-  docketNumber: string;
-  docketNumberWithSuffix: string;
-  from: string;
-  fromSection: string;
-  fromUserId: string;
-  isCompleted: boolean;
-  isRead: boolean;
-  isRepliedTo: string;
-  message: string;
-  messageId: string;
-  parentMessageId: string;
-  subject: string;
-  to: string;
-  toSection: string;
-  toUserId: string;
-};
-
-type TMessageEntity = {
-  markAsCompleted: ({
-    message,
-    user,
-  }: {
-    message: string;
-    user: {
-      name: string;
-      userId: string;
-      section: string;
-    };
-  }) => void;
-  validate: () => {
-    toRawObject: () => TMessageData;
-  };
-} & TMessageData;
 
 type TUserContact = {
   address1: string;
@@ -251,7 +136,7 @@ type TCase = {
   orderForAmendedPetition: boolean;
   orderForAmendedPetitionAndFilingFee: boolean;
   orderForFilingFee: boolean;
-  orderForOds: boolean;
+  orderForCds: boolean;
   orderForRatification: boolean;
   orderToShowCause: boolean;
   partyType: string;

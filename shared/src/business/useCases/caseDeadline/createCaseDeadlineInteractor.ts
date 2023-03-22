@@ -16,7 +16,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const createCaseDeadlineInteractor = async (
   applicationContext: IApplicationContext,
-  { caseDeadline }: { caseDeadline: TCaseDeadline },
+  { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
   const user = applicationContext.getCurrentUser();
 

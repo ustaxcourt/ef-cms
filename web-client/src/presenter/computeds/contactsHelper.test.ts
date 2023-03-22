@@ -1,30 +1,24 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
-import {
-  petitionerUser,
-  privatePractitionerUser,
-} from '../../../../shared/src/test/mockUsers';
+import { privatePractitionerUser } from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const contactsHelper = withAppContextDecorator(
-  contactsHelperComputed,
-  applicationContext,
-);
-
 describe('contactsHelper', () => {
-  describe('user role petitioner', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser = () => petitionerUser;
-    });
+  const contactsHelper = withAppContextDecorator(
+    contactsHelperComputed,
+    applicationContext,
+  );
 
+  describe('user role petitioner', () => {
     it('should validate form view information for party type Conservator', () => {
       const result = runCompute(contactsHelper, {
         state: {
           form: { partyType: PARTY_TYPES.conservator },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
@@ -41,6 +35,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         header: 'Tell Us About Yourself',
         nameLabel: 'Name',
@@ -55,6 +50,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result).toMatchObject({
         contactPrimary: {
           displayPhone: true,
@@ -72,7 +68,9 @@ describe('contactsHelper', () => {
 
   describe('user role private practitioner', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser = () => privatePractitionerUser;
+      applicationContext.getCurrentUser.mockReturnValue(
+        privatePractitionerUser,
+      );
     });
 
     it('should validate form view information for party type Partnership (as the Tax Matters Partner)', () => {
@@ -83,6 +81,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         displaySecondaryName: true,
         header: 'Tell Us About the Tax Matters Partner',
@@ -99,6 +98,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result.contactPrimary).toMatchObject({
         header: 'Tell Us About the Petitioner',
         nameLabel: 'Name',
@@ -113,6 +113,7 @@ describe('contactsHelper', () => {
           },
         },
       });
+
       expect(result).toMatchObject({
         contactPrimary: {
           displayPhone: true,

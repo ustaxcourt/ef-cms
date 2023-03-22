@@ -34,7 +34,7 @@ export const DocumentViewer = connect(
               <div className="grid-row padding-left-205 grid-header">
                 <div className="grid-col-2 text-align-center">Index</div>
                 <div className="grid-col-3">Filed</div>
-                <div className="grid-col-5">Filings and proceedings</div>
+                <div className="grid-col-5">Filings and Proceedings</div>
                 <div className="grid-col-2"></div>
               </div>
               <div className="document-viewer--documents-list">

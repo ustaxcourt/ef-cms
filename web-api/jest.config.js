@@ -5,7 +5,7 @@ module.exports = {
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
     'src/**/*.{js,ts}',
-    'migration-terraform/main/lambdas/migrations/*.{js,ts}',
+    'workflow-terraform/migration/main/lambdas/migrations/*.{js,ts}',
     '!src/applicationContext.{js,ts}',
     '!src/getUseCases.{js,ts}',
     '!src/getUseCaseHelpers.{js,ts}',

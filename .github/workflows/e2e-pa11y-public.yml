@@ -47,7 +47,7 @@ jobs:
           mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
           ./wait-until-services.sh
-          URL=http://localhost:5000/ ./wait-until.sh
+          URL=http://localhost:5000/public-api/health ./wait-until.sh
           sleep 10
           npm run test:pa11y:public --node-flags --max-old-space-size=1536
           npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
