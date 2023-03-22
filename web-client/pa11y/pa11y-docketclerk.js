@@ -95,6 +95,18 @@ module.exports = [
   {
     actions: [
       'wait for #tab-case-information to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #tab-case-information',
+      'wait for #tab-history to be visible',
+      'click element #tab-history',
+      'wait for .case-status-history to be visible',
+    ],
+    notes: 'checks a11y on the case status history table',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-22&info=case-status-history-table',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
       'wait for #tab-parties to be visible',
       'click element #tab-parties',
