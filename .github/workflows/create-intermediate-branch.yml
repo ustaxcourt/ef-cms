@@ -19,7 +19,7 @@ jobs:
       - name: Check out the head repo
         uses: actions/checkout@v3
         with:
-          repository: ${{ github.event.pull_request.head.repo.clone_url }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
           fetch-depth: '0'
 
@@ -30,7 +30,6 @@ jobs:
 
       - name: Create and save a copy of feature branch
         run: |
-          feature_branch=${{ github.head_ref }}
           feature_branch_copy="${{ github.head_ref }}-copy"
 
           git checkout -b $feature_branch_copy
