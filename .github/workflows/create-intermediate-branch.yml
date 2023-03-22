@@ -39,7 +39,7 @@ jobs:
           destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
-          upstream_head_branch=${{ github.event.head.repo.clone_url }}
+          upstream_head_branch=${{ fromJSON(github.event.head.repo.clone_url) }}
 
           # Create a copy of the destination branch
           # git checkout -b $intermediate_branch
