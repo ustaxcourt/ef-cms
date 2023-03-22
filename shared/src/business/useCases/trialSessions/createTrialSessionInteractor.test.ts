@@ -107,6 +107,24 @@ describe('createTrialSessionInteractor', () => {
     expect(result.isCalendared).toEqual(true);
   });
 
+  it('shoud associate swing trial sessions when needed', async () => {
+    await createTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL,
+        swingSession: true,
+        swingSessionId: '1234',
+      } as RawTrialSession,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
+        .calls[0][1].swingSessionId,
+    ).toEqual('1234');
+  });
+
   it('shoud not set the trial session as calendared when it is a Regular session type', async () => {
     const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL as RawTrialSession,
