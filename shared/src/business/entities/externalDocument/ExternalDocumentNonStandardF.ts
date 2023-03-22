@@ -8,6 +8,9 @@ const {
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
 const {
+  transformFormValueToTitleCaseOrdinal,
+} = require('../../utilities/transformFormValueToTitleCaseOrdinal');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
@@ -23,13 +26,16 @@ function ExternalDocumentNonStandardF() {}
 ExternalDocumentNonStandardF.prototype.init = function init(rawProps) {
   externalDocumentDecorator(this, rawProps);
   this.ordinalValue = rawProps.ordinalValue;
+  this.otherIteration = rawProps.otherIteration;
   this.previousDocument = rawProps.previousDocument;
 };
 
 ExternalDocumentNonStandardF.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    this.ordinalValue,
+    this.ordinalValue === 'Other'
+      ? transformFormValueToTitleCaseOrdinal(this.otherIteration)
+      : transformFormValueToTitleCaseOrdinal(this.ordinalValue),
     this.previousDocument
       ? this.previousDocument.documentTitle ||
           this.previousDocument.documentType
@@ -44,6 +50,11 @@ ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES = {
 ExternalDocumentNonStandardF.schema = {
   ...baseExternalDocumentValidation,
   ordinalValue: JoiValidationConstants.STRING.required(),
+  otherIteration: joi.when('ordinalValue', {
+    is: 'Other',
+    otherwise: joi.optional(),
+    then: JoiValidationConstants.STRING.max(3).required(),
+  }),
   previousDocument: joi
     .object()
     .keys({

@@ -141,6 +141,8 @@ export const completeDocketEntryQCInteractor = async (
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
     },
     { applicationContext, petitioners: caseToUpdate.petitioners },

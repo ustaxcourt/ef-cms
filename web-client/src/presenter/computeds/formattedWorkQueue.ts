@@ -81,6 +81,11 @@ export const formatWorkItem = ({
     }
   }
 
+  result.formattedCaseStatus = setFormattedCaseStatus({
+    applicationContext,
+    workItem: result,
+  });
+
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
   result.consolidatedIconTooltipText = consolidatedIconTooltipText;
@@ -323,6 +328,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
   let { assignmentFilterValue } = get(state.screenMetadata);
+  let { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
 
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
@@ -372,25 +378,64 @@ export const formattedWorkQueue = (get, applicationContext) => {
       outbox: 'desc',
     },
   };
-
-  const sortField =
-    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
-
-  const sortDirection =
+  let sortField = sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
+  let sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [];
   let highPriorityDirection = [];
   if (workQueueToDisplay.box == 'inbox') {
+    const caseStatusSortRank = {
+      [STATUS_TYPES.submitted]: 1,
+      [STATUS_TYPES.assignedCase]: 2,
+      [STATUS_TYPES.assignedMotion]: 3,
+      [STATUS_TYPES.jurisdictionRetained]: 4,
+    };
+
     highPriorityField = ['highPriority', 'trialDate'];
     highPriorityDirection = ['desc', 'asc'];
+
+    sortField = [
+      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
+      sortField,
+    ];
+    sortDirection = ['asc', sortDirection];
   }
 
   workQueue = orderBy(
     workQueue,
-    [...highPriorityField, sortField, 'docketNumber'],
-    [...highPriorityDirection, sortDirection, 'asc'],
+    [...highPriorityField, ...sortField, 'docketNumber'],
+    [...highPriorityDirection, ...sortDirection, 'asc'],
   );
 
   return workQueue;
+};
+
+const setFormattedCaseStatus = ({ applicationContext, workItem }) => {
+  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
+  let formattedCaseStatus = workItem.caseStatus;
+
+  if (
+    workItem.caseStatus === STATUS_TYPES.calendared &&
+    workItem.trialLocation &&
+    workItem.trialDate
+  ) {
+    let formattedTrialLocation = '';
+    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      formattedTrialLocation = applicationContext
+        .getUtilities()
+        .abbreviateState(workItem.trialLocation ?? '');
+    } else {
+      formattedTrialLocation = workItem.trialLocation;
+    }
+
+    const formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(workItem.trialDate, 'MMDDYY');
+
+    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+  }
+
+  return formattedCaseStatus;
 };
