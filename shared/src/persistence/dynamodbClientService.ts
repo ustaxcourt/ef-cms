@@ -40,7 +40,7 @@ const filterEmptyStrings = params => {
   return params;
 };
 
-const getTableName = ({ applicationContext }): string =>
+export const getTableName = ({ applicationContext }): string =>
   (applicationContext.environment &&
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&

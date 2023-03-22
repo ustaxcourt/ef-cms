@@ -532,6 +532,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
+    acquireLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
@@ -542,6 +543,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
+    deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
