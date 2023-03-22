@@ -1231,9 +1231,9 @@ if (process.env.IS_LOCAL) {
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
-  // This endpoint is used for locally invoking the cognito triggers
+  // This following endpoints are used by cognito-local
   app.post('/cognito-triggers-local', cognitoTriggersLocalLambda);
-  // This endpoint is used creating new users using local cognito
+
   app.post('/users/local', lambdaWrapper(createUserLambdaLocal));
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));

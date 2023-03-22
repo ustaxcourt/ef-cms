@@ -1,4 +1,3 @@
-// const { genericHandler } = require('../../../src/genericHandler');
 const { handler } = require('./cognito-triggers');
 
 /**
@@ -8,12 +7,5 @@ const { handler } = require('./cognito-triggers');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.cognitoTriggersLocalLambda = async event => {
-  //   genericHandler(event, async () => {
-  //     await handler(event.body);
-  //   });
-  console.log('?????event', event);
-  event = event.body;
-  console.log('?????event.body', event);
-  //   event = JSON.parse(event);
-  await handler(event);
+  await handler(event.body);
 };
