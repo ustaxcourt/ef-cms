@@ -35,6 +35,7 @@ export const validateSelectDocumentTypeAction = ({
       'serviceDate',
       'trialLocation',
       'ordinalValue',
+      'otherIteration',
     ];
 
     return path.error({
