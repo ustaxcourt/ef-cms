@@ -2,6 +2,7 @@ import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities
 import {
   MAX_TITLE_LENGTH,
   getOptionsForCategory,
+  getOrdinalValuesForUploadIteration,
   getPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
@@ -263,6 +264,31 @@ describe('selectDocumentTypeHelper', () => {
         textInputLabel: "Judge's Name",
         textInputLabel2: 'Decision Notes',
       });
+    });
+  });
+
+  describe('getOrdinalValuesForUploadIteration', () => {
+    it('should return a list of numbers 1-15 as strings and "Other"', () => {
+      const result = getOrdinalValuesForUploadIteration();
+
+      expect(result).toEqual([
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        'Other',
+      ]);
     });
   });
 
