@@ -40,7 +40,7 @@ jobs:
           intermediate_branch="${feature_branch}-intermediate-to-test"
           head_repo=${{ github.event.pull_request.head.repo.clone_url }}
 
-          git add remote head_remote $head_repo
+          git remote add head_remote $head_repo
 
           # Create a copy of the destination branch
           # git checkout -b $intermediate_branch
@@ -64,7 +64,7 @@ jobs:
           intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
           head_repo=${{ github.event.pull_request.head.repo.clone_url }}
 
-          git add remote head_remote $head_repo
+          git remote add head_remote $head_repo
 
           diff_of_branch=$(git diff "origin/${destination_branch} ${head_remote}/${intermediate_branch})
 
