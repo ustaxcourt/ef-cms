@@ -80,7 +80,7 @@ describe('ExternalDocumentNonStandardI', () => {
         documentType: 'Amendment [anything]',
         freeText: 'Test',
         ordinalValue: 'Other',
-        otherIteration: '50',
+        otherIteration: 50,
         scenario: 'Nonstandard I',
       });
       expect(extDoc.getDocumentTitle()).toEqual('Fiftieth Amendment to Test');

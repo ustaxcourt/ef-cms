@@ -92,7 +92,7 @@ describe('ExternalDocumentNonStandardF', () => {
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
         ordinalValue: 'Other',
-        otherIteration: '50',
+        otherIteration: 50,
         scenario: 'Nonstandard F',
       });
       expect(extDoc.getDocumentTitle()).toEqual('Fiftieth Amended');
