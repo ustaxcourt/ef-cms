@@ -43,10 +43,10 @@ jobs:
           git remote add head_remote $head_repo
 
           # Create a copy of the destination branch
-          # git checkout -b $intermediate_branch
+          git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          git pull --strategy ort --no-rebase $head_remote $feature_branch
+          git pull --strategy ort --no-rebase head_remote $feature_branch
 
           # create a commit with unresolved merge conflicts
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
@@ -55,7 +55,7 @@ jobs:
           fi
 
           # Push the new intermediate to remote
-          git push -u $head_remote "${intermediate_branch}"
+          git push -u head_remote "${intermediate_branch}"
 
       - name: Check if PR should be created
         id: pr_check
@@ -64,9 +64,7 @@ jobs:
           intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
           head_repo=${{ github.event.pull_request.head.repo.clone_url }}
 
-          git remote add head_remote $head_repo
-
-          diff_of_branch=$(git diff "origin/${destination_branch} ${head_remote}/${intermediate_branch})
+          diff_of_branch=$(git diff "origin/${destination_branch} head_remote/${intermediate_branch})
 
           if [[ -n "${diff_of_branch}" ]]
           then
