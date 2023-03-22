@@ -9,7 +9,7 @@ const {
 
 const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../shared/src/business/entities/EntityConstants');
+} = require('../../../shared/src/business/entities/EntityConstants');
 
 const { noticeOfAttachmentsInNatureOfEvidence } =
   SYSTEM_GENERATED_DOCUMENT_TYPES;
