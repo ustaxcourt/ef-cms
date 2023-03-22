@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
- * @returns {string} document title
+ * @returns {string|void} document title
  */
 export const generateExternalDocumentTitle = (
   applicationContext: IApplicationContext,
@@ -24,6 +24,8 @@ export const generateExternalDocumentTitle = (
   }
 
   const externalDocument = ExternalDocumentFactory(documentMetadata);
-
-  return externalDocument.getDocumentTitle();
+  const errors = externalDocument.getFormattedValidationErrors();
+  if (!errors) {
+    return externalDocument.getDocumentTitle();
+  }
 };
