@@ -33,8 +33,8 @@ export const authenticateUserAction = async ({
         path: '/change-password-local',
       });
     }
-    return path.error({ alertError: { title: response.alertError } });
+    return path.no({ alertError: { title: response.alertError } });
   } else {
-    return path.success({ token: response.token });
+    return path.yes({ token: response.token });
   }
 };
