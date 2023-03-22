@@ -1,6 +1,7 @@
-const baseConfig = require('../jest.config');
-module.exports = {
-  ...baseConfig,
+import type { Config } from 'jest';
+
+const config: Config = {
+  clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
@@ -17,6 +18,8 @@ module.exports = {
     '!src/app-local.{js,ts}',
     '!src/app-public-local.{js,ts}',
   ],
+  coverageDirectory: './coverage',
+  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 97,
@@ -26,5 +29,10 @@ module.exports = {
     },
   },
   testEnvironment: 'node',
+  transform: {
+    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+  },
   verbose: false,
 };
+// eslint-disable-next-line import/no-default-export
+export default config;
