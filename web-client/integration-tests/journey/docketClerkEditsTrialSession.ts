@@ -1,9 +1,6 @@
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../../src/presenter/computeds/formattedTrialSessionDetails';
 import { runCompute } from 'cerebral/test';
-import {
-  waitForExpectedItem,
-  waitForLoadingComponentToHide,
-} from '../helpers.js';
+import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedTrialSessionDetails = withAppContextDecorator(
