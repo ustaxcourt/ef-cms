@@ -35,6 +35,8 @@ jobs:
           fetch-depth: '0'
 
       - name: Create and save a copy of feature branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           feature_branch_copy="${{ github.head_ref }}-copy"
 
@@ -48,6 +50,8 @@ jobs:
           echo "PULL REQUEST EVENT INFO, ${{ toJSON(github.event) }}"
 
       - name: Create Intermediate branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
@@ -105,9 +109,9 @@ jobs:
 
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
-      # - name: Close PR with comment
-      #   if: steps.pr_check.outputs.create-int-pr-flag == 'true'
-      #   uses: peter-evans/close-pull@v2
-      #   with:
-      #     pull-request-number: ${{ github.event.pull_request.number }}
-      #     comment: "Auto Closing this PR. An intermediate branch has been created. Here's the link: ${{ steps.get_pr_link.outputs.pr_link }}."
+      - name: Close PR with comment
+        if: steps.pr_check.outputs.create-int-pr-flag == 'true'
+        uses: peter-evans/close-pull@v2
+        with:
+          pull-request-number: ${{ github.event.pull_request.number }}
+          comment: "Auto Closing this PR. An intermediate branch has been created. Here's the link: ${{ steps.get_pr_link.outputs.pr_link }}."
