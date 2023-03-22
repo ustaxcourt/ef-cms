@@ -16,16 +16,31 @@ jobs:
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
     steps:
-      - name: Check out the base repo
+      - name: Check out the head repo
         uses: actions/checkout@v3
         with:
-          ref: 'test'
+          repository: ${{ github.event.pull_request.head.repo.clone_url }}
+          ref: ${{ github.head_ref }}
           fetch-depth: '0'
 
       - name: Set Git config
         run: |
           git config --local user.email "michael.marcotte@ustaxcourt.gov"
           git config --local user.name "Mike Marcotte"
+
+      - name: Create and save a copy of feature branch
+        run: |
+          feature_branch=${{ github.head_ref }}
+          feature_branch_copy="${{ github.head_ref }}-copy"
+
+          git checkout -b $feature_branch_copy
+          git push origin $feature_branch_copy
+
+      - name: Check out the base repo
+        uses: actions/checkout@v3
+        with:
+          ref: 'test'
+          fetch-depth: '0'
 
       - name: LOG BRANCHES
         run: |
@@ -39,14 +54,15 @@ jobs:
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
           head_repo=${{ github.event.pull_request.head.repo.clone_url }}
+          feature_branch_copy="${{ github.head_ref }}-copy"
 
-          git remote add head_remote $head_repo
+          # git remote add head_remote $head_repo
 
           # Create a copy of the destination branch
           git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          git pull --strategy ort --no-rebase head_remote $feature_branch
+          git pull --strategy ort --no-rebase origin $feature_branch_copy
 
           # create a commit with unresolved merge conflicts
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
@@ -55,7 +71,7 @@ jobs:
           fi
 
           # Push the new intermediate to remote
-          git push -u head_remote "${intermediate_branch}"
+          git push -u origin "${intermediate_branch}"
 
       - name: Check if PR should be created
         id: pr_check
@@ -64,7 +80,7 @@ jobs:
           intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
           head_repo=${{ github.event.pull_request.head.repo.clone_url }}
 
-          diff_of_branch=$(git diff "origin/${destination_branch} head_remote/${intermediate_branch})
+          diff_of_branch=$(git diff $destination_branch $intermediate_branch)
 
           if [[ -n "${diff_of_branch}" ]]
           then
