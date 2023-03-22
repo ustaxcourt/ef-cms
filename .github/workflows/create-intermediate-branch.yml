@@ -20,22 +20,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'test'
-          repository: ${{ github.repository }}
           fetch-depth: '0'
 
       - name: Set Git config
         run: |
           git config --local user.email "michael.marcotte@ustaxcourt.gov"
           git config --local user.name "Mike Marcotte"
-
-          # git config --local user.email "jabu@flexion.us"
-          # git config --local user.name "Joshua Abu"
-
-      # - name: Check out head repository
-      #   uses: actions/checkout@v3
-      #   with:
-      #     repository: ${{ github.action_repository }}
-      #     ref: ${{ github.head_ref }}
 
       - name: LOG BRANCHES
         run: |
@@ -44,27 +34,27 @@ jobs:
           echo "REGULAR REPO, ${{ github.repository }}"
           echo "PULL REQUEST EVENT INFO, ${{ toJSON(github.event) }}"
 
-      # - name: Create Intermediate branch
-      #   run: |
-      #     destination_branch=${{ github.base_ref }}
-      #     feature_branch=${{ github.head_ref }}
-      #     intermediate_branch="${feature_branch}-intermediate-to-test"
-      #     upstream_head_branch=${{github.repository}}
+      - name: Create Intermediate branch
+        run: |
+          destination_branch=${{ github.base_ref }}
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-test"
+          upstream_head_branch=${{ github.event.head.repo.clone_url }}
 
-      #     # Create a copy of the destination branch
-      #     # git checkout $intermediate_branch
+          # Create a copy of the destination branch
+          # git checkout -b $intermediate_branch
 
-      #     # Merge the feature branch into the intermediate branch
-      #     git pull --strategy ort --no-rebase $upstream_head_branch $feature_branch
+          # Merge the feature branch into the intermediate branch
+          git pull --strategy ort --no-rebase $upstream_head_branch $feature_branch
 
-      #     # create a commit with unresolved merge conflicts
-      #     if [[ -n $(git status --porcelain | grep '^UU') ]]; then
-      #       git add .
-      #       git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
-      #     fi
+          # create a commit with unresolved merge conflicts
+          if [[ -n $(git status --porcelain | grep '^UU') ]]; then
+            git add .
+            git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
+          fi
 
-      #     # Push the new intermediate to remote
-      #     git push -u origin "${intermediate_branch}"
+          # Push the new intermediate to remote
+          git push -u origin "${intermediate_branch}"
 
       # - name: Check if PR should be created
       #   id: pr_check
@@ -76,13 +66,13 @@ jobs:
 
       #     if [[ -n "${diff_of_branch}" ]]
       #     then
-      #       echo "create-pr-flag=true" >> "$GITHUB_OUTPUT"
+      #       echo "create-int-pr-flag=true" >> "$GITHUB_OUTPUT"
       #     else
-      #       echo "create-pr-flag=false" >> "$GITHUB_OUTPUT"
+      #       echo "create-int-pr-flag=false" >> "$GITHUB_OUTPUT"
       #     fi
 
       # - name: Make PR of Intermediate branch to test
-      #   if: steps.pr_check.outputs.create-pr-flag == 'true'
+      #   if: steps.pr_check.outputs.create-int-pr-flag == 'true'
       #   id: get_pr_link
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +89,7 @@ jobs:
       #     echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
       # - name: Close PR with comment
-      #   if: steps.pr_check.outputs.create-pr-flag == 'true'
+      #   if: steps.pr_check.outputs.create-int-pr-flag == 'true'
       #   uses: peter-evans/close-pull@v2
       #   with:
       #     pull-request-number: ${{ github.event.pull_request.number }}
