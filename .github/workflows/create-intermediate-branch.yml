@@ -41,7 +41,6 @@ jobs:
           feature_branch_copy="${{ github.head_ref }}-copy"
 
           git checkout -b $feature_branch_copy
-          git push origin $feature_branch_copy
 
       - name: LOG BRANCHES
         run: |
@@ -65,7 +64,8 @@ jobs:
           git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          git pull --strategy ort --no-rebase origin $feature_branch_copy
+          # git pull --strategy ort --no-rebase origin $feature_branch_copy
+          git merge $feature_branch_copy
 
           # create a commit with unresolved merge conflicts
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
