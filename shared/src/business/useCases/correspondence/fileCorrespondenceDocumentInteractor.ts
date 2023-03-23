@@ -46,15 +46,12 @@ export const fileCorrespondenceDocumentInteractor = async (
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const correspondenceEntity = new Correspondence(
-    {
-      ...documentMetadata,
-      correspondenceId: primaryDocumentFileId,
-      filedBy: user.name,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
+  const correspondenceEntity = new Correspondence({
+    ...documentMetadata,
+    correspondenceId: primaryDocumentFileId,
+    filedBy: user.name,
+    userId: user.userId,
+  });
 
   caseEntity.fileCorrespondence(correspondenceEntity);
 
