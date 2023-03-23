@@ -1,7 +1,11 @@
 import { CASE_STATUS_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
+import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
+jest.mock(
+  '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems',
+);
 import { migrateItems } from './0008-add-trial-location-field-to-work-item';
-// const MOCK_CASE = require('../../../../../../shared/src/test/mockCase');
-// import { MOCK_CASE } from '../../../../../../shared/src/test/mockCase';
+import { queryFullCase } from '../utilities/queryFullCase';
+jest.mock('../utilities/queryFullCase');
 
 let MOCK_CASE_RECORD;
 let documentClientMock;
@@ -18,15 +22,6 @@ describe('migrateItems', () => {
       trialDate: '2020-03-01T00:00:00.000Z',
       trialLocation: 'Washington, District of Columbia',
       trialSessionId: '7805d1ab-18d0-43ec-bafb-654e83405410',
-    };
-
-    documentClientMock = {
-      query: jest.fn().mockReturnValue({
-        promise: () => ({
-          Items: [MOCK_CASE_RECORD],
-          LastEvaluatedKey: '1',
-        }),
-      }),
     };
   });
 
@@ -73,24 +68,12 @@ describe('migrateItems', () => {
   });
 
   it('should modify Work Items that have a caseStatus of Calendared, adding the case\'s property "trialLocation" to the Work Item', async () => {
-    jest.mock('../utilities/queryFullCase', () => {
-      return {
-        pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
-        sk: `case|${MOCK_CASE_RECORD.docketNumber}`,
-        trialLocation: `${MOCK_CASE_RECORD.trialLocation}`,
-      };
+    (queryFullCase as jest.Mock).mockResolvedValue({
+      pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
+      sk: `case|${MOCK_CASE_RECORD.docketNumber}`,
+      trialLocation: `${MOCK_CASE_RECORD.trialLocation}`,
     });
-
-    jest.mock(
-      '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems',
-      () => {
-        return {
-          pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
-          sk: `case|${MOCK_CASE_RECORD.docketNumber}`,
-          trialLocation: `${MOCK_CASE_RECORD.trialLocation}`,
-        };
-      },
-    );
+    (aggregateCaseItems as jest.Mock).mockResolvedValue(MOCK_CASE_RECORD);
 
     const mockItems = [
       {
@@ -99,7 +82,10 @@ describe('migrateItems', () => {
       },
       {
         caseStatus: CASE_STATUS_TYPES.calendared,
+        docketNumber: MOCK_CASE_RECORD.docketNumber,
         pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
+        section: 'Docket',
+        sentBy: 'You',
         sk: 'work-item|6d74eadc-0181-4ff5-826c-123432e8733d',
       },
       {
@@ -117,9 +103,11 @@ describe('migrateItems', () => {
 
     expect(results[1]).toEqual({
       caseStatus: CASE_STATUS_TYPES.calendared,
+      docketNumber: MOCK_CASE_RECORD.docketNumber,
       pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
+      section: 'Docket',
+      sentBy: 'You',
       sk: 'work-item|6d74eadc-0181-4ff5-826c-123432e8733d',
-      trialLocation: `${MOCK_CASE_RECORD.trialLocation}`,
     });
   });
 });
