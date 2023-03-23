@@ -54,7 +54,7 @@ jobs:
           echo "REMOTE BRANCH 1, $(git remote -v)"
 
           # Create a copy of test
-          git checkout -b $intermediate_branch
+          git checkout -b "$intermediate_branch"
 
           # Merge the feature branch into the intermediate branch
           # git pull --strategy ort --no-rebase $feature_branch_repo $feature_branch
