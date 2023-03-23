@@ -1,4 +1,3 @@
-/* eslint-disable jest/valid-expect */
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   DOCKET_SECTION,
@@ -604,7 +603,7 @@ describe('completeDocketEntryQCInteractor', () => {
         return Promise.reject(error);
       });
 
-    expect(() =>
+    await expect(() =>
       completeDocketEntryQCInteractor(applicationContext, {
         entryMetadata: {
           ...caseRecord.docketEntries[0],
