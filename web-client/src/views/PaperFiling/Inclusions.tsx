@@ -62,6 +62,7 @@ export const Inclusions = connect(
             <label
               className="usa-checkbox__label"
               htmlFor="certificate-of-service"
+              id="certificate-of-service-label"
             >
               Certificate of Service
             </label>
