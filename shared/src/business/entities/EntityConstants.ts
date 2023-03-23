@@ -105,9 +105,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
     key: 'multi-docketable-paper-filings',
   },
-  PDFJS_EXPRESS_VIEWER: {
-    key: 'pdfjs-express-viewer-enabled',
-  },
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
