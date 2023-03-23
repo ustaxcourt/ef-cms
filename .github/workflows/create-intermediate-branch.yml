@@ -92,6 +92,7 @@ jobs:
           delete-branch: true
           title: '[INTERMEDIATE BRANCH CREATED]'
           branch: '${{ github.head_ref }}-intermediate-to-test'
+          base: test
           branch-suffix: timestamp
           labels: 'to test'
           body: |
