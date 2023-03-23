@@ -7,7 +7,7 @@ const createUserRecords = async ({
   userId,
 }: {
   applicationContext: IApplicationContext;
-  newUser: TUser;
+  newUser: RawUser;
   userId: string;
 }) => {
   await client.put({
@@ -31,7 +31,7 @@ export const createNewPetitionerUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: RawUser;
 }) => {
   const { userId } = user;
 

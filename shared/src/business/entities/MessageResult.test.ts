@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
-const { MessageResult } = require('./MessageResult');
+import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
+import { MessageResult } from './MessageResult';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('MessageResult', () => {
   const mockRawMessageResult = {
