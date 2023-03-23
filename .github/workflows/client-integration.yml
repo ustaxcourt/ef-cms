@@ -62,7 +62,7 @@ jobs:
           URL=http://localhost:9200/efcms-message ./wait-until.sh
           URL=http://localhost:9200/efcms-work-item ./wait-until.sh
           URL=http://localhost:9000/ ./wait-until.sh
-          export TESTFILES=$(node split-tests.js)
+          export TESTFILES=$(npx ts-node split-tests.ts)
           npm run test:client:integration:ci
       - name: Store Video Artifacts
         uses: actions/upload-artifact@v3
