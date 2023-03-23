@@ -1,11 +1,7 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('./JoiValidationDecorator');
-const { Case } = require('./cases/Case');
-const { createISODateString } = require('../utilities/DateHandler');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
+import { Case } from './cases/Case';
+import { JoiValidationConstants } from './JoiValidationConstants';
+import { JoiValidationEntity } from './JoiValidationEntity';
+import { createISODateString } from '../utilities/DateHandler';
 
 /**
  * UserCase Entity
@@ -14,33 +10,44 @@ const { JoiValidationConstants } = require('./JoiValidationConstants');
  * @param {object} rawUserCase the raw user-case data
  * @constructor
  */
-function UserCase() {
-  this.entityName = 'UserCase';
+export class UserCase extends JoiValidationEntity {
+  public caseCaption: string;
+  public createdAt: string;
+  public docketNumber: string;
+  public docketNumberWithSuffix: string;
+  public leadDocketNumber: string;
+  public status: string;
+  public closedDate: string;
+
+  constructor(rawUserCase) {
+    super('UserCase');
+    this.caseCaption = rawUserCase.caseCaption;
+    this.createdAt = rawUserCase.createdAt || createISODateString();
+    this.docketNumber = rawUserCase.docketNumber;
+    this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
+    this.leadDocketNumber = rawUserCase.leadDocketNumber;
+    this.status = rawUserCase.status;
+    this.closedDate = rawUserCase.closedDate;
+  }
+
+  getValidationRules() {
+    return {
+      caseCaption: Case.VALIDATION_RULES.caseCaption,
+      closedDate: Case.VALIDATION_RULES.closedDate,
+      createdAt: Case.VALIDATION_RULES.createdAt,
+      docketNumber: Case.VALIDATION_RULES.docketNumber,
+      docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
+      entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
+      leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
+      status: Case.VALIDATION_RULES.status,
+    };
+  }
+
+  getErrorToMessageMap() {
+    return Case.VALIDATION_ERROR_MESSAGES;
+  }
 }
 
-UserCase.prototype.init = function init(rawUserCase) {
-  this.caseCaption = rawUserCase.caseCaption;
-  this.createdAt = rawUserCase.createdAt || createISODateString();
-  this.docketNumber = rawUserCase.docketNumber;
-  this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
-  this.leadDocketNumber = rawUserCase.leadDocketNumber;
-  this.status = rawUserCase.status;
-  this.closedDate = rawUserCase.closedDate;
-};
-
-joiValidationDecorator(
-  UserCase,
-  joi.object().keys({
-    caseCaption: Case.VALIDATION_RULES.caseCaption,
-    closedDate: Case.VALIDATION_RULES.closedDate,
-    createdAt: Case.VALIDATION_RULES.createdAt,
-    docketNumber: Case.VALIDATION_RULES.docketNumber,
-    docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
-    entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
-    leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
-    status: Case.VALIDATION_RULES.status,
-  }),
-  Case.VALIDATION_ERROR_MESSAGES,
-);
-
-exports.UserCase = validEntityDecorator(UserCase);
+declare global {
+  type RawUserCase = ExcludeMethods<UserCase>;
+}

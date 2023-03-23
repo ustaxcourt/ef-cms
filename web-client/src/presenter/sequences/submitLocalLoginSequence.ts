@@ -8,7 +8,6 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
-import { setupConfigSequence } from './setupConfigSequence';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const submitLocalLoginSequence = showProgressSequenceDecorator([
@@ -20,11 +19,7 @@ export const submitLocalLoginSequence = showProgressSequenceDecorator([
   setUserPermissionsAction,
   getMaintenanceModeAction,
   {
-    maintenanceOff: [
-      setupConfigSequence,
-      clearAlertsAction,
-      navigateToPathAction,
-    ],
+    maintenanceOff: [clearAlertsAction, navigateToPathAction],
     maintenanceOn: [navigateToMaintenanceAction],
   },
 ]);
