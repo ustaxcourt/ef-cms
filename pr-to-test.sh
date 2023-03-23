@@ -28,7 +28,8 @@ git pull -n $COURT_REPO test
 
 # handle merge conflicts (if any)
 if [[ -n $(git status --porcelain | grep '^UU') ]]; then
-    # EXIT
+    echo "THERE ARE MERGE CONFLICTS"
+    exit
 fi
 
 git push origin $INTERMEDIATE_BRANCH

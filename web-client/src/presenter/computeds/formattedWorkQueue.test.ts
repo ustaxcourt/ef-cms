@@ -10,8 +10,13 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedWorkQueue', () => {
-  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
-    applicationContext.getConstants();
+  const {
+    CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
+    DOCKET_SECTION,
+    STATUS_TYPES,
+    TRIAL_SESSION_SCOPE_TYPES,
+  } = applicationContext.getConstants();
 
   let globalUser;
   let screenMetadata = {};
@@ -589,5 +594,62 @@ describe('formattedWorkQueue', () => {
       expect(result[0].inLeadCase).toBe(false);
       expect(result[0].consolidatedIconTooltipText).toBe('Consolidated case');
     });
+  });
+
+  it('should format the trialDate and trialLocation on the formattedWorkItem when caseStatus is Calendared', () => {
+    const trialDate = '2025-01-01T16:29:13.122Z';
+    const trialLocation = 'Austin, Texas';
+    const formattedTrialDate = '01/01/25';
+    const formattedTrialLocation = 'Austin, TX';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.calendared,
+            trialDate,
+            trialLocation,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result[0].formattedCaseStatus).toBe(
+      `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`,
+    );
+  });
+
+  it('should format the trialDate and trialLocation on the formattedWorkItem when caseStatus is Calendared and standAloneRemote', () => {
+    const trialDate = '2025-01-01T16:29:13.122Z';
+    const trialLocation = TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            trialDate,
+            trialLocation,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().abbreviateState,
+    ).not.toHaveBeenCalled();
+
+    expect(result[0].formattedCaseStatus).toBe(result[0].caseStatus);
   });
 });

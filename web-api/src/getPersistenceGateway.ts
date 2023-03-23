@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
+import {
+  acquireLock,
+  deleteLock,
+} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from '../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from '../../shared/src/persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from '../../shared/src/persistence/dynamo/cases/associateUserWithCase';
@@ -71,7 +75,7 @@ import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persiste
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
-import { getDocumentQCInboxForUser } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser';
+import { getDocumentQCInboxForUser } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser';
 import { getDocumentQCServedForSection } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection';
 import { getDocumentQCServedForUser } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser';
 import { getDownloadPolicyUrl } from '../../shared/src/persistence/s3/getDownloadPolicyUrl';
@@ -138,6 +142,7 @@ import { setMessageAsRead } from '../../shared/src/persistence/dynamo/messages/s
 import { setPriorityOnAllWorkItems } from '../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
+import { updateAttributeOnDynamoRecord } from '../../shared/src/persistence/dynamo/workitems/updateAttributeOnDynamoRecord';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from '../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from '../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing';
@@ -158,11 +163,6 @@ import { updateUserCaseMapping } from '../../shared/src/persistence/dynamo/cases
 import { updateUserCaseNote } from '../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserEmail } from '../../shared/src/persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from '../../shared/src/persistence/dynamo/users/updateUserRecords';
-import { updateWorkItemAssociatedJudge } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge';
-import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus';
-import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
-import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
-import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
@@ -250,6 +250,7 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
+    updateAttributeOnDynamoRecord,
     updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
@@ -267,24 +268,22 @@ const gatewayMethods = {
     updateUserCaseNote,
     updateUserEmail,
     updateUserRecords,
-    updateWorkItemAssociatedJudge,
-    updateWorkItemCaseStatus,
-    updateWorkItemCaseTitle,
-    updateWorkItemDocketNumberSuffix,
-    updateWorkItemTrialDate,
   }),
   // methods below are not known to create or update "entity" records
+  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createPractitionerDocument,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
+  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
@@ -332,6 +331,8 @@ const gatewayMethods = {
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocumentByFileId,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
