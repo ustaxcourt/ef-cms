@@ -1,6 +1,4 @@
-const {
-  transformFormValueToTitleCaseOrdinal,
-} = require('./transformFormValueToTitleCaseOrdinal');
+import { transformFormValueToTitleCaseOrdinal } from './transformFormValueToTitleCaseOrdinal';
 
 describe('transformFormValueToTitleCaseOrdinal', () => {
   it('should generate title with an otherIteration defined when ordinalValue is "Other"', () => {

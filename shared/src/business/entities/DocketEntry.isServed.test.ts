@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry, isServed } = require('./DocketEntry');
+import { DocketEntry, isServed } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isServed', () => {
   it('should return false when servedAt is undefined and isLegacyServed is false', () => {

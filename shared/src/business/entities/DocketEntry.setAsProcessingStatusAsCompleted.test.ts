@@ -1,7 +1,7 @@
-const { A_VALID_DOCKET_ENTRY } = require('./DocketEntry.test');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
-const { DOCUMENT_PROCESSING_STATUS_OPTIONS } = require('./EntityConstants');
+import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from './EntityConstants';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('setAsProcessingStatusAsCompleted', () => {
   it('sets the docket entry processing status as completed', () => {
