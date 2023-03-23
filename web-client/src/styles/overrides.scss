@@ -222,6 +222,10 @@ option:first-child {
   width: calc(100% + 1.9rem);
 }
 
+.usa-checkbox__input {
+  position: fixed;
+}
+
 .no-bottom-margin {
   margin-bottom: 0;
 }

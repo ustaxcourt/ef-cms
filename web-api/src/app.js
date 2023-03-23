@@ -171,9 +171,6 @@ const {
   fileExternalDocumentToCaseLambda,
 } = require('./documents/fileExternalDocumentToCaseLambda');
 const {
-  fileExternalDocumentToConsolidatedCasesLambda,
-} = require('./documents/fileExternalDocumentToConsolidatedCasesLambda');
-const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
@@ -630,10 +627,6 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.post(
     '/case-documents/:docketNumber/external-document',
     lambdaWrapper(fileExternalDocumentToCaseLambda),
-  );
-  app.post(
-    '/case-documents/consolidated/:leadDocketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',
