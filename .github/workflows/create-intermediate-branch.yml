@@ -16,31 +16,27 @@ jobs:
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
     steps:
-      - name: Check out the head repo
+      - name: Check out the feature branch repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
           fetch-depth: '0'
-
-      - name: Check out the base repo
-        uses: actions/checkout@v3
-        with:
-          ref: 'test'
-          fetch-depth: '0'
-
       - name: Set Git config
         run: |
           git config --local user.email "michael.marcotte@ustaxcourt.gov"
           git config --local user.name "Mike Marcotte"
 
-      - name: Create and save a copy of feature branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save a copy of feature branch
         run: |
           feature_branch_copy="${{ github.head_ref }}-copy"
-
           git checkout -b $feature_branch_copy
+
+      - name: Check out the Court's repo
+        uses: actions/checkout@v3
+        with:
+          ref: 'test'
+          fetch-depth: '0'
 
       - name: Create Intermediate branch
         env:
@@ -56,10 +52,10 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git merge $feature_branch_copy
 
-          # create a commit with unresolved merge conflicts
+          # create a commit with unresolved merge conflicts (if any)
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
             git add .
-            git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
+            git commit -m "${feature_branch}: MERGE CONFLICTS - PLEASE RESOLVE!" --no-verify
           fi
 
       - name: Check if PR should be created
