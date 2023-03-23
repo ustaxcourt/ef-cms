@@ -40,62 +40,63 @@ export const DocumentViewer = connect(
               <div className="document-viewer--documents-list">
                 {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
-                    // TODO: should live in a computed
-                    if (entry.isFileAttached) {
-                      return (
-                        <Button
-                          className={classNames(
-                            'usa-button--unstyled attachment-viewer-button',
-                            viewDocumentId === entry.docketEntryId && 'active',
-                          )}
-                          isActive={viewDocumentId === entry.docketEntryId}
-                          key={entry.docketEntryId}
-                          onClick={() => {
-                            setViewerDocumentToDisplaySequence({
-                              viewerDocumentToDisplay: entry,
-                            });
-                          }}
+                    return (
+                      <Button
+                        className={classNames(
+                          'usa-button--unstyled attachment-viewer-button',
+                          viewDocumentId === entry.docketEntryId && 'active',
+                        )}
+                        disabled={!entry.isFileAttached}
+                        isActive={viewDocumentId === entry.docketEntryId}
+                        key={entry.docketEntryId}
+                        onClick={() => {
+                          setViewerDocumentToDisplaySequence({
+                            viewerDocumentToDisplay: entry,
+                          });
+                        }}
+                      >
+                        <div
+                          className="grid-row margin-left-205"
+                          title={entry.toolTipText}
                         >
-                          <div className="grid-row margin-left-205">
-                            <div className="grid-col-2 text-align-center">
-                              {entry.index}
-                            </div>
-                            <div
+                          <div className="grid-col-2 text-align-center">
+                            {entry.index}
+                          </div>
+                          <div
+                            className={classNames(
+                              'grid-col-3',
+                              entry.isStricken && 'stricken-docket-record',
+                            )}
+                          >
+                            {entry.createdAtFormatted}
+                            {entry.qcNeeded && (
+                              <FontAwesomeIcon
+                                className="top-neg-2px fa-icon-red float-right position-relative"
+                                icon={['fa', 'star']}
+                                title="is untouched"
+                              />
+                            )}
+                          </div>
+                          <div className="grid-col-5">
+                            <span
                               className={classNames(
-                                'grid-col-3',
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
-                              {entry.createdAtFormatted}
-                              {entry.qcNeeded && (
-                                <FontAwesomeIcon
-                                  className="top-neg-2px fa-icon-red float-right position-relative"
-                                  icon={['fa', 'star']}
-                                  title="is untouched"
-                                />
-                              )}
-                            </div>
-                            <div className="grid-col-5">
-                              <span
-                                className={classNames(
-                                  entry.isStricken && 'stricken-docket-record',
-                                )}
-                              >
-                                {entry.descriptionDisplay}
-                              </span>
-                              {entry.isStricken && ' (STRICKEN)'}
-                            </div>
-                            <div className="grid-col-2 padding-left-105">
-                              {entry.showNotServed && (
-                                <span className="text-semibold not-served">
-                                  Not served
-                                </span>
-                              )}
-                            </div>
+                              {entry.descriptionDisplay}
+                            </span>
+                            {entry.isStricken && ' (STRICKEN)'}
                           </div>
-                        </Button>
-                      );
-                    }
+                          <div className="grid-col-2 padding-left-105">
+                            {entry.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </Button>
+                    );
                   },
                 )}
               </div>

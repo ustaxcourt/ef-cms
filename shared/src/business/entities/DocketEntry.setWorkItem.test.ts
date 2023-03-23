@@ -1,11 +1,8 @@
-const {
-  A_VALID_DOCKET_ENTRY,
-  MOCK_PETITIONERS,
-} = require('./DocketEntry.test');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
-const { DocketEntry } = require('./DocketEntry');
-const { WorkItem } = require('./WorkItem');
+import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
+import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
+import { DocketEntry } from './DocketEntry';
+import { WorkItem } from './WorkItem';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('setWorkItem', () => {
   it('should set work item on docket entry to the passed in work item and validate the nested work item', () => {
@@ -19,7 +16,7 @@ describe('setWorkItem', () => {
       {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         assigneeName: 'bob',
-        caseStatus: CASE_STATUS_TYPES.NEW,
+        caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
         docketEntry: A_VALID_DOCKET_ENTRY,
         docketNumber: '101-18',
