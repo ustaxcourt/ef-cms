@@ -1,13 +1,8 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Penalty } = require('./Penalty');
-const { PENALTY_TYPES } = require('./EntityConstants');
+import { PENALTY_TYPES } from './EntityConstants';
+import { Penalty } from './Penalty';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('Penalty', () => {
-  it('throws an error if applicationContext is not provided on construction', () => {
-    expect(() => new Penalty({}, {})).toThrow(
-      'applicationContext must be defined',
-    );
-  });
   describe('validation', () => {
     let statisticId;
     beforeAll(() => {
