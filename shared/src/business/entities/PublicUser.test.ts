@@ -1,4 +1,4 @@
-const { PublicUser, VALIDATION_ERROR_MESSAGES } = require('./PublicUser');
+import { PublicUser } from './PublicUser';
 
 describe('PublicUser entity', () => {
   describe('validation', () => {
@@ -6,7 +6,7 @@ describe('PublicUser entity', () => {
       const publicUser = new PublicUser({});
 
       expect(publicUser.getFormattedValidationErrors()).toMatchObject({
-        role: VALIDATION_ERROR_MESSAGES.role,
+        role: 'Role is required',
       });
     });
   });

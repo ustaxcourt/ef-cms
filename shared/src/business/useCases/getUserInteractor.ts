@@ -22,7 +22,7 @@ import { User } from '../entities/User';
 
 export const getUserInteractor = async (
   applicationContext: IApplicationContext,
-): Promise<TUser | TPractitioner | RawIrsPractitioner> => {
+): Promise<RawUser | RawPractitioner | RawIrsPractitioner> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await applicationContext

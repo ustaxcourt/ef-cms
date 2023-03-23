@@ -1,10 +1,10 @@
-const {
+import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   ROLES,
-} = require('./EntityConstants');
-const { User, userDecorator } = require('./User');
+} from './EntityConstants';
+import { User } from './User';
 
 describe('User entity', () => {
   const mockValidUser = {
@@ -277,14 +277,7 @@ describe('User entity', () => {
   });
 
   it('should NOT filter out pendingEmailVerificationToken by default when calling userDecorator', () => {
-    /**
-     * constructor - mock user entity to test userDecorator
-     */
-    function MockUser(rawUser) {
-      userDecorator(this, rawUser);
-    }
-
-    const user = new MockUser({
+    const user = new User({
       ...mockValidUser,
       pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
