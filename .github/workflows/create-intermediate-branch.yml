@@ -85,6 +85,7 @@ jobs:
       #     echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
+        if: steps.pr_check.outputs.create-int-pr-flag == 'true'
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
