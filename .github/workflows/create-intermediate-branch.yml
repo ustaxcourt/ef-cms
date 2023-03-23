@@ -31,6 +31,7 @@ jobs:
         run: |
 
           echo "CURENT BRANCH HEAD****, $(git branch --show-current)"
+          echo "CURENT REPOSITORY****, ${{ github.repository }}"
 
           feature_branch_copy="${{ github.head_ref }}-copy"
           git branch $feature_branch_copy
@@ -52,6 +53,7 @@ jobs:
 
           echo "CURENT BRANCH 1, $(git branch --show-current)"
           echo "REMOTE BRANCH 1, $(git remote -v)"
+          echo "CURENT REPOSITORY****, ${{ github.repository }}"
 
           # Create a copy of test
           git checkout -b "$intermediate_branch"
