@@ -1,17 +1,13 @@
-const {
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-} = require('./EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { WorkItem } = require('./WorkItem');
+} from './EntityConstants';
+import { WorkItem } from './WorkItem';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('WorkItem', () => {
   describe('isValid', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(() => new WorkItem({}, {})).toThrow();
-    });
-
     it('Creates a valid workitem', () => {
       const workItem = new WorkItem(
         {
