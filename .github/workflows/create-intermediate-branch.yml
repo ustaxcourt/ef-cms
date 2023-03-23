@@ -23,16 +23,16 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: '0'
 
-      - name: Set Git config
-        run: |
-          git config --local user.email "michael.marcotte@ustaxcourt.gov"
-          git config --local user.name "Mike Marcotte"
-
       - name: Check out the base repo
         uses: actions/checkout@v3
         with:
           ref: 'test'
           fetch-depth: '0'
+
+      - name: Set Git config
+        run: |
+          git config --local user.email "michael.marcotte@ustaxcourt.gov"
+          git config --local user.name "Mike Marcotte"
 
       - name: Create and save a copy of feature branch
         env:
@@ -42,29 +42,18 @@ jobs:
 
           git checkout -b $feature_branch_copy
 
-      - name: LOG BRANCHES
-        run: |
-          echo "feature branch, ${{ github.head_ref }}"
-          echo "REGULAR REPO, ${{ github.repository }}"
-          echo "PULL REQUEST EVENT INFO, ${{ toJSON(github.event) }}"
-
       - name: Create Intermediate branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
-          head_repo=${{ github.event.pull_request.head.repo.clone_url }}
           feature_branch_copy="${{ github.head_ref }}-copy"
-
-          # git remote add head_remote $head_repo
 
           # Create a copy of the destination branch
           git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          # git pull --strategy ort --no-rebase origin $feature_branch_copy
           git merge $feature_branch_copy
 
           # create a commit with unresolved merge conflicts
@@ -73,17 +62,12 @@ jobs:
             git commit -m "${feature_branch}: MERGE CONFLICTS: PLEASE RESOLVE!" --no-verify
           fi
 
-          # Push the new intermediate to remote
-          # git push -u origin "${intermediate_branch}"
-
       - name: Check if PR should be created
         id: pr_check
         run: |
-          destination_branch=${{ github.base_ref }}
           intermediate_branch="${{ github.head_ref }}-intermediate-to-test"
-          head_repo=${{ github.event.pull_request.head.repo.clone_url }}
 
-          diff_of_branch=$(git diff $destination_branch $intermediate_branch)
+          diff_of_branch=$(git diff test $intermediate_branch)
 
           if [[ -n "${diff_of_branch}" ]]
           then
@@ -98,7 +82,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          destination_branch=${{ github.base_ref }}
           feature_branch=${{ github.head_ref }}
           pr_title="${feature_branch} Intermediate To test"
           intermediate_branch="${feature_branch}-intermediate-to-test"
@@ -106,7 +89,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install hub
 
-          PR_LINK=$(hub pull-request -b $destination_branch -h $intermediate_branch -m "$pr_title" -l "to $destination_branch")
+          PR_LINK=$(hub pull-request -b test -h $intermediate_branch -m "$pr_title" -l "to $destination_branch")
 
           echo "pr_link=$PR_LINK" >> "$GITHUB_OUTPUT"
 
