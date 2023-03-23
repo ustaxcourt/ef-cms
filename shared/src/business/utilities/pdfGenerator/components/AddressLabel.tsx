@@ -7,6 +7,7 @@ export const AddressLabel = ({
   address3,
   city,
   country,
+  countryType,
   inCareOf,
   name,
   postalCode,
@@ -39,7 +40,7 @@ export const AddressLabel = ({
       <div>
         {city}, {state} {postalCode}
       </div>
-      <div>{country}</div>
+      <div>{countryType === 'international' && country}</div>
     </div>
   );
 };
