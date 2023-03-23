@@ -1,9 +1,6 @@
-const {
-  A_VALID_DOCKET_ENTRY,
-  MOCK_PETITIONERS,
-} = require('./DocketEntry.test');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isAutoServed', () => {
   it('should return true if the documentType is an external document and the documentTitle does not contain Simultaneous', () => {
