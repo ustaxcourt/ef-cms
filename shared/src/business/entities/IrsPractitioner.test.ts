@@ -1,9 +1,9 @@
-const {
+import {
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('./EntityConstants');
-const { IrsPractitioner } = require('./IrsPractitioner');
+} from './EntityConstants';
+import { IrsPractitioner } from './IrsPractitioner';
 
 describe('IrsPractitioner', () => {
   it('Creates a valid IrsPractitioner', () => {
