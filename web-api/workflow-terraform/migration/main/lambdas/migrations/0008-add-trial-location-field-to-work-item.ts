@@ -20,19 +20,13 @@ export const migrateItems = async (items, documentClient) => {
     if (isWorkItem(item) && item.caseStatus === CASE_STATUS_TYPES.calendared) {
       const fullCase = await queryFullCase(documentClient, item.docketNumber);
       const caseRecord = aggregateCaseItems(fullCase);
-      //   const caseDetail = await applicationContext
-      //     .getUseCases()
-      //     .getCaseInteractor(applicationContext, {
-      //       docketNumber: item.docketNumber,
-      //     });
 
-      console.log(caseRecord);
+      console.log(caseDetail);
 
       const theWorkItem = new WorkItem(
         {
           ...item,
           trialLocation: caseRecord.trialLocation,
-          //   trialLocation: caseDetail.trialLocation,
         },
         {
           applicationContext,
