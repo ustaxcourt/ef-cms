@@ -13,15 +13,12 @@ const isWorkItem = item => {
 };
 
 export const migrateItems = async (items, documentClient) => {
-  // export const migrateItems = async items => {
   const itemsAfter = [];
 
   for (const item of items) {
     if (isWorkItem(item) && item.caseStatus === CASE_STATUS_TYPES.calendared) {
       const fullCase = await queryFullCase(documentClient, item.docketNumber);
       const caseRecord = aggregateCaseItems(fullCase);
-
-      console.log(caseDetail);
 
       const theWorkItem = new WorkItem(
         {
