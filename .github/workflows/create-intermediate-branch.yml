@@ -16,31 +16,15 @@ jobs:
     outputs:
       pr_link: ${{ steps.get_pr_link.outputs.pr_link }}
     steps:
-      - name: Check out the feature branch repo
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
-          fetch-depth: '0'
-      - name: Set Git config
-        run: |
-          git config --local user.email "michael.marcotte@ustaxcourt.gov"
-          git config --local user.name "Mike Marcotte"
-
-      - name: Save a copy of feature branch
-        run: |
-
-          echo "CURENT BRANCH HEAD****, $(git branch --show-current)"
-          echo "CURENT REPOSITORY****, ${{ github.repository }}"
-
-          feature_branch_copy="${{ github.head_ref }}-copy"
-          git branch $feature_branch_copy
-
       - name: Check out the Court's repo
         uses: actions/checkout@v3
         with:
           ref: 'test'
           fetch-depth: '0'
+      - name: Set Git config
+        run: |
+          git config --local user.email "michael.marcotte@ustaxcourt.gov"
+          git config --local user.name "Mike Marcotte"
 
       - name: Create Intermediate branch
         env:
@@ -61,8 +45,6 @@ jobs:
           # Merge the feature branch into the intermediate branch
           git pull --strategy ort --no-rebase $feature_branch_repo $feature_branch
           # git merge --allow-unrelated-histories $feature_branch
-
-          git pull $feature_branch_copy $intermediate_branch
 
           # create a commit with unresolved merge conflicts (if any)
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
