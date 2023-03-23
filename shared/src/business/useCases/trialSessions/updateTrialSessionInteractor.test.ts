@@ -449,7 +449,7 @@ describe('updateTrialSessionInteractor', () => {
     });
   });
 
-  it('should make a call to associate swing sessions when needed', async () => {
+  it('should associate swing trial sessions when the current trial session has a swing session', async () => {
     const mockSwingSessionId = '06419775-e726-4c3b-a7e0-193d379fa39d';
 
     await updateTrialSessionInteractor(applicationContext, {
