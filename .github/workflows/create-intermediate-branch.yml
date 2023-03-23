@@ -50,7 +50,7 @@ jobs:
           git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          git merge $feature_branch_copy
+          git merge --allow-unrelated-histories $feature_branch_copy
 
           # create a commit with unresolved merge conflicts (if any)
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
