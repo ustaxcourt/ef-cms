@@ -48,7 +48,7 @@ jobs:
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
-          feature_branch_repo=${{ github.event.pull_request.head.repo.full_name }}
+          feature_branch_repo=${{ github.event.pull_request.head.repo.clone_url }}
           feature_branch_copy="${{ github.head_ref }}-copy"
 
           echo "CURENT BRANCH 1, $(git branch --show-current)"
