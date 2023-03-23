@@ -24534,11 +24534,6 @@
     "pk": "multi-docketable-paper-filings"
   },
   {
-    "sk": "pdfjs-express-viewer-enabled",
-    "current": false,
-    "pk": "pdfjs-express-viewer-enabled"
-  },
-  {
     "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "pk": "privatePractitioner|Alden Rivas"
   },
