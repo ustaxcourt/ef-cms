@@ -58,6 +58,13 @@ describe('DocketEntryFactory', () => {
     ).toEqual(undefined);
   });
 
+  it('should not require an other iteration value', () => {
+    expect(
+      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
+        .otherIteration,
+    ).toEqual(undefined);
+  });
+
   it('should require received date be entered', () => {
     expect(
       DocketEntryFactory(rawEntity).getFormattedValidationErrors().dateReceived,
