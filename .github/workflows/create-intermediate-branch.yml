@@ -29,8 +29,11 @@ jobs:
 
       - name: Save a copy of feature branch
         run: |
+
+          echo "CURENT BRANCH HEAD****, $(git branch --show-current)"
+
           feature_branch_copy="${{ github.head_ref }}-copy"
-          git checkout -b $feature_branch_copy
+          git branch $feature_branch_copy
 
       - name: Check out the Court's repo
         uses: actions/checkout@v3
@@ -44,13 +47,20 @@ jobs:
         run: |
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-test"
+          feature_branch_repo=${{ github.event.pull_request.head.repo.full_name }}
           feature_branch_copy="${{ github.head_ref }}-copy"
 
-          # Create a copy of the destination branch
+          echo "CURENT BRANCH 1, $(git branch --show-current)"
+          echo "REMOTE BRANCH 1, $(git remote -v)"
+
+          # Create a copy of test
           git checkout -b $intermediate_branch
 
           # Merge the feature branch into the intermediate branch
-          git merge --allow-unrelated-histories $feature_branch_copy
+          # git pull --strategy ort --no-rebase $feature_branch_repo $feature_branch
+          # git merge --allow-unrelated-histories $feature_branch
+
+          git pull $feature_branch_copy $intermediate_branch
 
           # create a commit with unresolved merge conflicts (if any)
           if [[ -n $(git status --porcelain | grep '^UU') ]]; then
