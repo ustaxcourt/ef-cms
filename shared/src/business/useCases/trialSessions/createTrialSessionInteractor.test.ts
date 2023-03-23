@@ -107,7 +107,7 @@ describe('createTrialSessionInteractor', () => {
     expect(result.isCalendared).toEqual(true);
   });
 
-  it('shoud associate swing trial sessions when needed', async () => {
+  it('should associate swing trial sessions when the current trial session has a swing session', async () => {
     await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
