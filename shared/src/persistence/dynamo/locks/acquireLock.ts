@@ -2,6 +2,11 @@ import { getTableName } from '../../dynamodbClientService';
 
 /**
  * will wrap a function with logic to acquire a lock and delete a lock after finishing.
+ *
+ * @param {function} cb the original function to wrap
+ * @param {function} getLockName a function which is passes the original args for getting the lock suffix
+ * @param {error} onLockError the error object to throw if a lock is already in use
+ * @returns {object} the item that was retrieved
  */
 export function withLocking(
   cb: (applicationContext: IApplicationContext, options: any) => any,
