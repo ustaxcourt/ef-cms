@@ -52,6 +52,9 @@ jobs:
             git commit -m "${feature_branch}: MERGE CONFLICTS - PLEASE RESOLVE!" --no-verify
           fi
 
+          # push intermediate branch
+          git push origin $intermediate_branch
+
       - name: Check if PR should be created
         id: pr_check
         run: |
