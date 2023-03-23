@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { connect } from '@cerebral/react';
@@ -19,7 +18,6 @@ export const SelectDocumentType = connect(
     completeDocumentSelectSequence,
     fileDocumentHelper,
     formCancelToggleCancelSequence,
-    showModal,
   }) {
     return (
       <React.Fragment>
@@ -59,9 +57,6 @@ export const SelectDocumentType = connect(
             </div>
           </div>
         </div>
-        {showModal === 'CheckConsolidatedCasesModal' && (
-          <CheckConsolidatedCasesModal />
-        )}
       </React.Fragment>
     );
   },
