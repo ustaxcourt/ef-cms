@@ -59,7 +59,7 @@ jobs:
           git checkout -b "$intermediate_branch"
 
           # Merge the feature branch into the intermediate branch
-          # git pull --strategy ort --no-rebase $feature_branch_repo $feature_branch
+          git pull --strategy ort --no-rebase $feature_branch_repo $feature_branch
           # git merge --allow-unrelated-histories $feature_branch
 
           git pull $feature_branch_copy $intermediate_branch
