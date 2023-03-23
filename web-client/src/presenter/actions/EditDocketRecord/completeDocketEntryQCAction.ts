@@ -79,6 +79,8 @@ export const completeDocketEntryQCAction = async ({
       updatedDocument,
     });
   } catch (error) {
-    return path.error();
+    return path.error({
+      error,
+    });
   }
 };

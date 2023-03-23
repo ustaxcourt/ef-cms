@@ -52,8 +52,8 @@ ExternalDocumentNonStandardF.schema = {
   ordinalValue: JoiValidationConstants.STRING.required(),
   otherIteration: joi.when('ordinalValue', {
     is: 'Other',
-    otherwise: joi.optional(),
-    then: JoiValidationConstants.STRING.max(3).required(),
+    otherwise: joi.optional().allow(null),
+    then: joi.number().max(999).required(),
   }),
   previousDocument: joi
     .object()

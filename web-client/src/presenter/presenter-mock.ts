@@ -1,6 +1,9 @@
 import { baseState } from './state';
 
 export const presenter = {
-  providers: {},
+  providers: {
+    applicationContext: null,
+  },
+  sequences: {},
   state: baseState,
 };
