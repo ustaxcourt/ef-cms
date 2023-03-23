@@ -115,7 +115,7 @@ In Dawson, all of our UIs are hosted in CloudFront.  When we deploy our applicat
 
 ## CloudWatch
 
-CloudWatch is a service which allows the aggrigation and metrics of logs from various other AWS services we use.  By default, when you deploy a lambda function, it creates something called a log group and multiple log streams as new requests hit your lambda function.  These streams will contain all the logs your lambda generates which you can search through at a later time.
+CloudWatch is a service which allows the aggregation and metrics of logs from various other AWS services we use.  By default, when you deploy a lambda function, it creates something called a log group and multiple log streams as new requests hit your lambda function.  These streams will contain all the logs your lambda generates which you can search through at a later time.
 
 In Dawson, we forward most of our CloudWatch directly to our logging / kibana AWS OpenSearch (elasticsearch) cluster.  Kibana provides a much more user friendly interface to search through logs.  It also allows you to drill down into specific logs by date, user, etc.  Kibana is provided by default when you create a cluster in AWS.
 
