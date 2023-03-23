@@ -38,13 +38,10 @@ export const updateCorrespondenceDocumentInteractor = async (
     correspondenceId: documentMetadata.correspondenceId,
   });
 
-  const updatedCorrespondenceEntity = new Correspondence(
-    {
-      ...currentCorrespondenceDocument,
-      documentTitle: documentMetadata.documentTitle,
-    },
-    { applicationContext },
-  );
+  const updatedCorrespondenceEntity = new Correspondence({
+    ...currentCorrespondenceDocument,
+    documentTitle: documentMetadata.documentTitle,
+  });
 
   caseEntity.updateCorrespondence(updatedCorrespondenceEntity);
 

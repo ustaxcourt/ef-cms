@@ -142,9 +142,6 @@ const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
-  fileExternalDocumentForConsolidatedInteractor,
-} = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentForConsolidatedInteractor');
-const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
@@ -628,7 +625,6 @@ const useCases = {
   fileCorrespondenceDocumentInteractor,
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
-  fileExternalDocumentForConsolidatedInteractor,
   fileExternalDocumentInteractor,
   forwardMessageInteractor,
   generateDocketRecordPdfInteractor,
