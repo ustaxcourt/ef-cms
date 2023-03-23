@@ -1,4 +1,4 @@
-name: Create an intermediate branch to test
+name: Create Intermediate branch to test (if necessary)
 
 on:
   pull_request:
@@ -69,6 +69,7 @@ jobs:
 
           diff_of_branch=$(git diff test $intermediate_branch)
 
+          echo "DIFF, $diff_of_branch"
           if [[ -n "${diff_of_branch}" ]]
           then
             echo "create-int-pr-flag=true" >> "$GITHUB_OUTPUT"
