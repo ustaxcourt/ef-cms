@@ -1,10 +1,10 @@
-const {
+import {
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('./EntityConstants');
-const { getTextByCount } = require('../utilities/getTextByCount');
-const { Practitioner } = require('./Practitioner');
+} from './EntityConstants';
+import { Practitioner } from './Practitioner';
+import { getTextByCount } from '../utilities/getTextByCount';
 
 describe('Practitioner', () => {
   const mockUpdatedEmail = 'hello@example.com';
@@ -63,7 +63,7 @@ describe('Practitioner', () => {
 
   it('Creates an invalid Practitioner with missing required fields', () => {
     const user = new Practitioner({
-      role: ROLES.Practitioner,
+      role: ROLES.privatePractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -171,8 +171,9 @@ describe('Practitioner', () => {
 
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toEqual({
-      practitionerNotes:
-        Practitioner.VALIDATION_ERROR_MESSAGES.practitionerNotes[0].message,
+      practitionerNotes: (
+        Practitioner.VALIDATION_ERROR_MESSAGES.practitionerNotes[0] as any
+      ).message,
     });
   });
 

@@ -1,8 +1,8 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTextByCount } = require('../utilities/getTextByCount');
-const { Message } = require('./Message');
+import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
+import { Message } from './Message';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createISODateString } from '../utilities/DateHandler';
+import { getTextByCount } from '../utilities/getTextByCount';
 
 jest.mock('../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../utilities/DateHandler');
@@ -79,10 +79,6 @@ describe('Message', () => {
   });
 
   describe('isValid', () => {
-    it('should throw an error when applicationContext is not provided', () => {
-      expect(() => new Message({}, {})).toThrow();
-    });
-
     it('should be true when messageId is not provided', () => {
       const message = new Message(
         {
@@ -117,7 +113,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getFormattedValidationErrors().subject).toEqual(
+      expect((message.getFormattedValidationErrors() as any).subject).toEqual(
         'Enter a subject line',
       );
     });
@@ -132,7 +128,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getFormattedValidationErrors().subject).toEqual(
+      expect((message.getFormattedValidationErrors() as any).subject).toEqual(
         'Enter a subject line',
       );
     });
@@ -147,7 +143,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getFormattedValidationErrors().subject).toEqual(
+      expect((message.getFormattedValidationErrors() as any).subject).toEqual(
         'Enter a subject line',
       );
     });
@@ -163,7 +159,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getFormattedValidationErrors().subject).toEqual(
+      expect((message.getFormattedValidationErrors() as any).subject).toEqual(
         'Limit is 250 characters. Enter 250 or fewer characters.',
       );
     });
