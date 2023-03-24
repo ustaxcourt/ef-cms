@@ -3,6 +3,7 @@ import {
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
   INITIAL_DOCUMENT_TYPES,
+  OPINION_PAMPHLET_EVENT_CODE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -348,13 +349,13 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showReceivedDate).toBeTruthy();
   });
 
-  it('should set showAttachmentAndServiceFields to false when the document event code is TCRP', () => {
+  it(`should set showAttachmentAndServiceFields to false when the document event code is ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         ...state,
         docketEntryId: '123',
         form: {
-          eventCode: 'TCRP',
+          eventCode: OPINION_PAMPHLET_EVENT_CODE,
         },
       },
     });
@@ -362,7 +363,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showAttachmentAndServiceFields).toBe(false);
   });
 
-  it('should set showAttachmentAndServiceFields to true when the document event code is NOT TCRP', () => {
+  it(`should set showAttachmentAndServiceFields to true when the document event code is NOT ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         ...state,
