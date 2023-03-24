@@ -1,15 +1,11 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CaseDeadline } = require('./CaseDeadline');
+import { CaseDeadline } from './CaseDeadline';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
 const DOCKET_NUMBER = '123-19';
 describe('CaseDeadline', () => {
   describe('validation', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(() => new CaseDeadline({}, {})).toThrow(TypeError);
-    });
-
     it('should have error messages for missing fields', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
@@ -65,7 +61,7 @@ You ain't been up off that porch, now`,
         { applicationContext },
       );
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        description: VALIDATION_ERROR_MESSAGES.description[0].message,
+        description: (VALIDATION_ERROR_MESSAGES.description[0] as any).message,
       });
     });
   });

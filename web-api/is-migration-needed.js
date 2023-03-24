@@ -16,7 +16,10 @@ const docClient = new AWS.DynamoDB.DocumentClient({
 const getFilesInDirectory = dir => {
   const files = fs.readdirSync(dir);
   return files.filter(
-    file => !file.endsWith('.test.js') && !file.startsWith('0000'),
+    file =>
+      !file.endsWith('.test.js') &&
+      !file.endsWith('.test.ts') &&
+      !file.startsWith('0000'),
   );
 };
 

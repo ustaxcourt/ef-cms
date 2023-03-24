@@ -131,6 +131,7 @@ export const createCaseInteractor = async (
     },
     {
       applicationContext,
+      isNewCase: true,
     },
   );
 

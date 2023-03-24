@@ -1,4 +1,4 @@
-const { DocketEntry } = require('./DocketEntry');
+import { DocketEntry } from './DocketEntry';
 
 describe('isPending', () => {
   it('should return true if docketEntry is pending and is served', () => {
