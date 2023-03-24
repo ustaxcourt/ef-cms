@@ -1,5 +1,6 @@
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { chambersUser, judgeUser } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
 import { runCompute } from 'cerebral/test';
@@ -248,12 +249,14 @@ describe('formattedTrialSessionDetails', () => {
       });
     });
 
-    it('should be true when trial session start date is in the future and it is NOT closed', () => {
+    it('should be true when trial session start date is in the future, it is NOT closed, the user is not a chambers role', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
         startDate: FUTURE_DATE,
       };
+
+      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
       const result = runCompute(formattedTrialSessionDetails, {
         state: {
@@ -263,6 +266,26 @@ describe('formattedTrialSessionDetails', () => {
 
       expect(result).toMatchObject({
         canEdit: true,
+      });
+    });
+
+    it('should be false when trial session start date is in the future, it is NOT closed, the user is a chambers role', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: FUTURE_DATE,
+      };
+
+      applicationContext.getCurrentUser.mockReturnValue(chambersUser);
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canEdit: false,
       });
     });
 

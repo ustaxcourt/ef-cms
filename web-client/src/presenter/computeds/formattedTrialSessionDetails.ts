@@ -14,8 +14,12 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     });
 
   if (formattedTrialSession) {
-    const { DATE_FORMATS, SESSION_STATUS_GROUPS, TRIAL_SESSION_SCOPE_TYPES } =
-      applicationContext.getConstants();
+    const {
+      DATE_FORMATS,
+      SESSION_STATUS_GROUPS,
+      TRIAL_SESSION_SCOPE_TYPES,
+      USER_ROLES,
+    } = applicationContext.getConstants();
 
     formattedTrialSession.showOpenCases =
       formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.open;
@@ -41,12 +45,17 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       const nowDateFormatted = applicationContext
         .getUtilities()
         .formatNow(DATE_FORMATS.YYYYMMDD);
+
+      const user = applicationContext.getCurrentUser();
+      const isChambersUser = user.role === USER_ROLES.chambers;
+
       const trialDateInFuture = trialDateFormatted > nowDateFormatted;
       formattedTrialSession.canDelete =
         trialDateInFuture && !formattedTrialSession.isCalendared;
       formattedTrialSession.canEdit =
         trialDateInFuture &&
-        formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed;
+        formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
+        !isChambersUser;
 
       const allCases = formattedTrialSession.caseOrder || [];
       const inactiveCases = allCases.filter(
