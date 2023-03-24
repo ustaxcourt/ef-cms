@@ -18,7 +18,7 @@ import { createPractitionerUser } from '../../utilities/createPractitionerUser';
  */
 export const createUserInteractor = async (
   applicationContext: IApplicationContext,
-  { user }: { user: TUser & { barNumber: string; password: string } },
+  { user }: { user: RawUser & { barNumber: string; password: string } },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
 
@@ -42,10 +42,10 @@ export const createUserInteractor = async (
     if (user.barNumber === '') {
       delete user.barNumber;
     }
-    userEntity = new User(
-      { ...user, userId: applicationContext.getUniqueId() },
-      { applicationContext },
-    );
+    userEntity = new User({
+      ...user,
+      userId: applicationContext.getUniqueId(),
+    });
   }
 
   const { userId } = await applicationContext

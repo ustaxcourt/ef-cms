@@ -169,10 +169,13 @@ export default function ({
       watch: watch
         ? {
             onRebuild(error) {
+              if (error) {
+                console.error(error);
+                return;
+              }
               replaceHtmlFile();
               clients.forEach(res => res.write('data: update\n\n'));
               clients.length = 0;
-              error && console.error(error);
             },
           }
         : false,

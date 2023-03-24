@@ -36,7 +36,7 @@ export const docketClerkEditsDocketEntryNonstandardG = cerebralTest => {
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'ordinalValue',
-      value: 'First',
+      value: '1',
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
