@@ -138,7 +138,7 @@ describe('migrateItems', () => {
     });
   });
 
-  it('should modify OutboxItems that have a caseStatus of Calendared, adding the case\'s property "trialLocation" to the Work Item', async () => {
+  it('should modify OutboxItems that have a caseStatus of Calendared, adding the case\'s property "trialLocation" to the OutboxItem', async () => {
     const mockItems = [
       {
         pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
