@@ -64,23 +64,6 @@ describe('Penalty', () => {
       );
     });
 
-    it('should fail if penaltyAmount is a negative number', () => {
-      const penalty = new Penalty(
-        {
-          name: 'Penalty 1 (IRS)',
-          penaltyAmount: -422.68,
-          penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
-          statisticId,
-        },
-        { applicationContext },
-      );
-
-      expect(penalty.isValid()).toBe(false);
-      expect(Object.keys(penalty.getFormattedValidationErrors())).toContain(
-        'penaltyAmount',
-      );
-    });
-
     it('should fail if penaltyType is undefined', () => {
       const penalty = new Penalty(
         {
@@ -135,6 +118,20 @@ describe('Penalty', () => {
           name: 'Penalty 1 (Court)',
           penaltyAmount: 100.0,
           penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+          statisticId,
+        },
+        { applicationContext },
+      );
+
+      expect(penalty.isValid()).toBe(true);
+    });
+
+    it('should pass if penaltyAmount is a negative number', () => {
+      const penalty = new Penalty(
+        {
+          name: 'Penalty 1 (IRS)',
+          penaltyAmount: -422.68,
+          penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
           statisticId,
         },
         { applicationContext },
