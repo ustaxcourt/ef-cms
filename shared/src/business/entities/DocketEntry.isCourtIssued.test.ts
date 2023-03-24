@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isCourtIssued', () => {
   it('should return false when the docketEntry.eventCode is NOT in the list of court issued documents', () => {
