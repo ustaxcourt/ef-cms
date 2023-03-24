@@ -168,16 +168,11 @@ export default function ({
       splitting: true,
       watch: watch
         ? {
-            onRebuild(error, result) {
+            onRebuild(error) {
               replaceHtmlFile();
               clients.forEach(res => res.write('data: update\n\n'));
               clients.length = 0;
               error && console.error(error);
-
-              fs.writeFileSync(
-                'metadata.json',
-                JSON.stringify(result.metafile, null, 2),
-              );
             },
           }
         : false,
