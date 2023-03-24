@@ -24,7 +24,7 @@ export const prioritizeCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -32,9 +32,9 @@ export const prioritizeCaseInteractor = async (
     });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (caseEntity.isCalendared()) {
     throw new Error('Cannot set a calendared case as high priority');
@@ -59,7 +59,7 @@ export const prioritizeCaseInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

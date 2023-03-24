@@ -23,14 +23,12 @@ export const sealCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
 
-  const caseRecord = await applicationContext
+  const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const oldCaseCopy = applicationContext
-    .getUtilities()
-    .cloneAndFreeze(caseRecord);
-  const newCase = new Case(caseRecord, { applicationContext });
+  const newCase = new Case(oldCase, { applicationContext });
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
 
   newCase.setAsSealed();
 
@@ -38,7 +36,7 @@ export const sealCaseInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase,
+      caseToUpdate: newCase,
       oldCaseCopy,
     });
 

@@ -53,22 +53,22 @@ export const updateDocketEntryMetaInteractor = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
 
-  if (!caseRecord) {
+  if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  let caseEntity = new Case(caseRecord, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
@@ -215,7 +215,7 @@ export const updateDocketEntryMetaInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

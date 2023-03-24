@@ -26,7 +26,7 @@ export const deleteCounselFromCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -35,7 +35,7 @@ export const deleteCounselFromCaseInteractor = async (
 
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
   const userToDelete = await applicationContext
     .getPersistenceGateway()
@@ -44,7 +44,7 @@ export const deleteCounselFromCaseInteractor = async (
       userId,
     });
 
-  let caseEntity = new Case(caseRecord, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToDelete.role === ROLES.privatePractitioner) {
     caseEntity.removePrivatePractitioner(userToDelete);
@@ -68,7 +68,7 @@ export const deleteCounselFromCaseInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

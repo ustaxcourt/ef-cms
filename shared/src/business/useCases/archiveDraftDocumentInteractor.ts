@@ -27,7 +27,7 @@ export const archiveDraftDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -35,9 +35,9 @@ export const archiveDraftDocumentInteractor = async (
     });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const docketEntryToArchive = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -58,7 +58,7 @@ export const archiveDraftDocumentInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

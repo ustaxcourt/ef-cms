@@ -87,7 +87,7 @@ export const updateDeficiencyStatisticInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase,
+      caseToUpdate: newCase,
       oldCaseCopy,
     });
 

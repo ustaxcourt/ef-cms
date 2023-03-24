@@ -35,7 +35,7 @@ const removeManuallyAddedCaseFromTrialSession = ({
 
   return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase: caseEntity,
+    caseToUpdate: caseEntity,
     oldCaseCopy,
   });
 };
@@ -137,7 +137,7 @@ export const setTrialSessionCalendarInteractor = async (
       }),
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        newCase: caseEntity,
+        caseToUpdate: caseEntity,
         oldCaseCopy,
       }),
     ]);
@@ -167,7 +167,7 @@ export const setTrialSessionCalendarInteractor = async (
       }),
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        newCase: caseEntity,
+        caseToUpdate: caseEntity,
         oldCaseCopy,
       }),
       applicationContext

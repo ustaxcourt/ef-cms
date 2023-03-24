@@ -17,14 +17,14 @@ import { aggregatePartiesForService } from '../utilities/aggregatePartiesForServ
 import { defaults, pick } from 'lodash';
 
 export const getIsUserAuthorized = ({
-  caseRecord,
+  oldCase,
   updatedPetitionerData,
   user,
 }) => {
   let isRepresentingCounsel = false;
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
-      caseRecord,
+      oldCase,
       updatedPetitionerData?.contactId,
     );
 
@@ -109,16 +109,14 @@ export const updatePetitionerInformationInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  const caseRecord = await applicationContext
+  const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const oldCaseCopy = applicationContext
-    .getUtilities()
-    .cloneAndFreeze(caseRecord);
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
 
   const hasAuthorization = getIsUserAuthorized({
-    caseRecord,
+    oldCase,
     updatedPetitionerData,
     user,
   });
@@ -127,13 +125,13 @@ export const updatePetitionerInformationInteractor = async (
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
-  if (caseRecord.status === CASE_STATUS_TYPES.new) {
+  if (oldCase.status === CASE_STATUS_TYPES.new) {
     throw new Error(
-      `Case with docketNumber ${caseRecord.docketNumber} has not been served`,
+      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
     );
   }
   const oldCaseContact = getPetitionerById(
-    caseRecord,
+    oldCase,
     updatedPetitionerData.contactId,
   );
 
@@ -176,7 +174,7 @@ export const updatePetitionerInformationInteractor = async (
 
   const caseToUpdateContacts = new Case(
     {
-      ...caseRecord,
+      ...oldCase,
     },
     { applicationContext },
   );
@@ -298,7 +296,7 @@ export const updatePetitionerInformationInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

@@ -69,7 +69,7 @@ export const removeConsolidatedCasesInteractor = async (
       updateCasePromises.push(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          newCase: caseEntity,
+          caseToUpdate: caseEntity,
           oldCaseCopy,
         }),
       );
@@ -87,7 +87,7 @@ export const removeConsolidatedCasesInteractor = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        newCase: caseEntity,
+        caseToUpdate: caseEntity,
         oldCaseCopy,
       }),
     );
@@ -117,7 +117,7 @@ export const removeConsolidatedCasesInteractor = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        newCase: caseEntity,
+        caseToUpdate: caseEntity,
         oldCaseCopy,
       }),
     );

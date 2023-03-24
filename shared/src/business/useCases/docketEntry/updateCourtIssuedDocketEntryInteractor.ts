@@ -102,7 +102,7 @@ export const updateCourtIssuedDocketEntryInteractor = async (
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     }),
   ];

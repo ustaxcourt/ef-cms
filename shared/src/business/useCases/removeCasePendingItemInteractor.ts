@@ -24,19 +24,19 @@ export const removeCasePendingItemInteractor = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
-  let updatedCaseEntity = new Case(caseRecord, { applicationContext });
+    .cloneAndFreeze(caseToUpdate);
 
-  updatedCaseEntity.docketEntries.forEach(docketEntry => {
+  caseToUpdate.docketEntries.forEach(docketEntry => {
     if (docketEntry.docketEntryId === docketEntryId) {
       docketEntry.pending = false;
     }
   });
+  let updatedCaseEntity = new Case(caseToUpdate, { applicationContext });
 
   updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -47,7 +47,7 @@ export const removeCasePendingItemInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase: updatedCaseEntity,
+    caseToUpdate: updatedCaseEntity,
     oldCaseCopy,
   });
 

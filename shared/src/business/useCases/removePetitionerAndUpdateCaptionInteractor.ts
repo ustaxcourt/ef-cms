@@ -34,24 +34,24 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  let caseEntity = new Case(caseRecord, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (caseRecord.status === CASE_STATUS_TYPES.new) {
+  if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
-      `Case with docketNumber ${caseRecord.docketNumber} has not been served`,
+      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
     );
   }
 
   if (caseEntity.petitioners.length <= 1) {
     throw new Error(
-      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseRecord.docketNumber}`,
+      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
     );
   }
 
@@ -77,7 +77,7 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

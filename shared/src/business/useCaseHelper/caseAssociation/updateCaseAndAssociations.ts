@@ -561,12 +561,12 @@ const updateCaseDeadlines = async ({
  */
 exports.updateCaseAndAssociations = async ({
   applicationContext,
-  newCase,
+  caseToUpdate,
   oldCaseCopy,
 }) => {
-  const caseEntity = newCase.validate
-    ? newCase
-    : new Case(newCase, { applicationContext });
+  const caseEntity = caseToUpdate.validate
+    ? caseToUpdate
+    : new Case(caseToUpdate, { applicationContext });
 
   const validRawNewCaseEntity = caseEntity.validate().toRawObject();
 

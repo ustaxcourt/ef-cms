@@ -35,7 +35,7 @@ export const updateCounselOnCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -44,7 +44,7 @@ export const updateCounselOnCaseInteractor = async (
 
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
   const userToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -53,7 +53,7 @@ export const updateCounselOnCaseInteractor = async (
       userId,
     });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
@@ -89,7 +89,7 @@ export const updateCounselOnCaseInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

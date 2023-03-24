@@ -168,7 +168,7 @@ export const fileCourtIssuedDocketEntryInteractor = async (
       const saveItems = [
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          newCase: caseEntity,
+          caseToUpdate: caseEntity,
           oldCaseCopy,
         }),
       ];

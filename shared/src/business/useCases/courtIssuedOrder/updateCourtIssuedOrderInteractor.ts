@@ -34,18 +34,20 @@ export const updateCourtIssuedOrderInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const oldCase = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
 
-  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = newCase.getDocketEntryById({
+  const currentDocument = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryIdToEdit,
   });
 
@@ -122,13 +124,13 @@ export const updateCourtIssuedOrderInteractor = async (
   // we always un-sign the order document on updates because the court user will need to sign it again
   docketEntryEntity.unsignDocument();
 
-  newCase.updateDocketEntry(docketEntryEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   const result = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

@@ -38,13 +38,11 @@ export const updateCaseContextInteractor = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const caseRecord = await applicationContext
+  const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-  const oldCaseCopy = applicationContext
-    .getUtilities()
-    .cloneAndFreeze(caseRecord);
-  const newCase = new Case(caseRecord, { applicationContext });
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+  const newCase = new Case(oldCase, { applicationContext });
 
   if (caseCaption) {
     newCase.setCaseCaption(caseCaption);
@@ -56,7 +54,7 @@ export const updateCaseContextInteractor = async (
 
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
-  if (caseStatus && caseStatus !== oldCaseCopy.status) {
+  if (caseStatus && caseStatus !== oldCase.status) {
     const date = applicationContext.getUtilities().createISODateString();
     newCase.setCaseStatus({
       changedBy: user.name,
@@ -64,14 +62,14 @@ export const updateCaseContextInteractor = async (
       updatedCaseStatus: caseStatus,
     });
 
-    if (oldCaseCopy.status === CASE_STATUS_TYPES.calendared) {
+    if (oldCase.status === CASE_STATUS_TYPES.calendared) {
       const disposition = `Status was changed to ${caseStatus}`;
 
       const trialSession = await applicationContext
         .getPersistenceGateway()
         .getTrialSessionById({
           applicationContext,
-          trialSessionId: caseRecord.trialSessionId,
+          trialSessionId: oldCase.trialSessionId,
         });
 
       const trialSessionEntity = new TrialSession(trialSession, {
@@ -80,7 +78,7 @@ export const updateCaseContextInteractor = async (
 
       trialSessionEntity.removeCaseFromCalendar({
         disposition,
-        docketNumber: caseRecord.docketNumber,
+        docketNumber: oldCase.docketNumber,
       });
 
       await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -90,7 +88,7 @@ export const updateCaseContextInteractor = async (
 
       newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
     } else if (
-      caseRecord.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
+      oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
     ) {
       await applicationContext
         .getPersistenceGateway()
@@ -100,7 +98,7 @@ export const updateCaseContextInteractor = async (
         });
     }
 
-    if (newCase.isReadyForTrial() && !caseRecord.trialSessionId) {
+    if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({
@@ -115,7 +113,7 @@ export const updateCaseContextInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase,
+      caseToUpdate: newCase,
       oldCaseCopy,
     });
 

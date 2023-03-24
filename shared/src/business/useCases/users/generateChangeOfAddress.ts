@@ -124,7 +124,7 @@ const generateChangeOfAddressForPractitioner = async ({
         .getUseCaseHelpers()
         .updateCaseAndAssociations({
           applicationContext,
-          newCase: caseEntity,
+          caseToUpdate: caseEntity,
           oldCaseCopy,
         });
       updatedCases.push(updatedCase);

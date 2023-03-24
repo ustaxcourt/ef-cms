@@ -30,7 +30,7 @@ export const addPetitionerToCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized for adding petitioner to case');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -38,9 +38,9 @@ export const addPetitionerToCaseInteractor = async (
     });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (caseEntity.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -60,7 +60,7 @@ export const addPetitionerToCaseInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

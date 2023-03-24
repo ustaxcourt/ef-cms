@@ -41,22 +41,26 @@ export const updateContactInteractor = async (
     state: contactInfo.state,
   };
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
 
-  if (!caseRecord) {
+  if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  let caseEntity = new Case(caseRecord, { applicationContext });
-
+  let caseEntity = new Case(
+    {
+      ...caseToUpdate,
+    },
+    { applicationContext },
+  );
   const oldCaseContact = cloneDeep(
     caseEntity.getPetitionerById(contactInfo.contactId),
   );
@@ -220,7 +224,7 @@ export const updateContactInteractor = async (
   if (shouldUpdateCase) {
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
   }

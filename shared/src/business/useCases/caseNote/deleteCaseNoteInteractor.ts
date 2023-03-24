@@ -39,7 +39,7 @@ export const deleteCaseNoteInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseRecord,
+      caseToUpdate: caseRecord,
       oldCaseCopy,
     });
 

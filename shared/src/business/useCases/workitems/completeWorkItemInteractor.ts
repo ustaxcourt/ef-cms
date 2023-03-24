@@ -63,22 +63,24 @@ export const completeWorkItemInteractor = async (
     workItem: completedWorkItem,
   });
 
-  const oldCase = await applicationContext
+  const caseObject = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: completedWorkItem.docketNumber,
     });
 
-  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseObject);
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const caseToUpdate = new Case(caseObject, { applicationContext });
 
   const workItemEntity = new WorkItem(completedWorkItem, {
     applicationContext,
   });
 
-  newCase.docketEntries.forEach(doc => {
+  caseToUpdate.docketEntries.forEach(doc => {
     if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
       doc.workItem = workItemEntity;
     }
@@ -86,7 +88,7 @@ export const completeWorkItemInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase,
+    caseToUpdate,
     oldCaseCopy,
   });
 

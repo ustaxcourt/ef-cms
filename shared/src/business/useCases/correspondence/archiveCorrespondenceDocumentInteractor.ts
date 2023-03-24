@@ -32,13 +32,15 @@ export const archiveCorrespondenceDocumentInteractor = async (
     key: correspondenceId,
   });
 
-  const oldCase = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
+  const oldCaseCopy = applicationContext
+    .getUtilities()
+    .cloneAndFreeze(caseToUpdate);
 
-  const caseEntity = new Case(oldCase, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
   const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
   );
@@ -53,7 +55,7 @@ export const archiveCorrespondenceDocumentInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase: caseEntity,
+    caseToUpdate: caseEntity,
     oldCaseCopy,
   });
 };

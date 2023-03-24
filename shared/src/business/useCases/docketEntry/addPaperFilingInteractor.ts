@@ -87,7 +87,7 @@ export const addPaperFilingInteractor = async (
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const oldCase = await applicationContext
+    const rawCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
@@ -96,8 +96,8 @@ export const addPaperFilingInteractor = async (
 
     const oldCaseCopy = applicationContext
       .getUtilities()
-      .cloneAndFreeze(oldCase);
-    let newCase = new Case(oldCase, { applicationContext });
+      .cloneAndFreeze(rawCase);
+    let caseEntity = new Case(rawCase, { applicationContext });
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -112,12 +112,12 @@ export const addPaperFilingInteractor = async (
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
         userId: user.userId,
       },
-      { applicationContext, petitioners: newCase.petitioners },
+      { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    const servedParties = aggregatePartiesForService(newCase);
+    const servedParties = aggregatePartiesForService(caseEntity);
 
-    if (isLeadCase(newCase)) {
+    if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
     }
 
@@ -129,18 +129,18 @@ export const addPaperFilingInteractor = async (
       {
         assigneeId: user.userId,
         assigneeName: user.name,
-        associatedJudge: newCase.associatedJudge,
-        caseStatus: newCase.status,
-        caseTitle: Case.getCaseTitle(newCase.caseCaption),
+        associatedJudge: caseEntity.associatedJudge,
+        caseStatus: caseEntity.status,
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
-        docketNumber: newCase.docketNumber,
-        docketNumberWithSuffix: newCase.docketNumberWithSuffix,
+        docketNumber: caseEntity.docketNumber,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
-        leadDocketNumber: newCase.leadDocketNumber,
+        leadDocketNumber: caseEntity.leadDocketNumber,
         section: user.section,
         sentBy: user.name,
         sentBySection: user.section,
@@ -175,20 +175,20 @@ export const addPaperFilingInteractor = async (
         });
     }
 
-    newCase.addDocketEntry(docketEntryEntity);
+    caseEntity.addDocketEntry(docketEntryEntity);
 
-    newCase = await applicationContext
+    caseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
         applicationContext,
-        caseEntity: newCase,
+        caseEntity,
       });
 
-    caseEntities.push(newCase);
+    caseEntities.push(caseEntity);
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
   }

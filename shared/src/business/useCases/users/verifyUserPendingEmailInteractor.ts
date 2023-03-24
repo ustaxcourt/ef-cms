@@ -112,7 +112,7 @@ export const updateCasesForPetitioner = async ({
     filteredCasesToUpdateInPersistence.map((caseToUpdate, i) =>
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        newCase: caseToUpdate,
+        caseToUpdate: caseToUpdate,
         oldCaseCopy: oldCaseCopies[i],
       }),
     ),
@@ -213,7 +213,7 @@ export const updatePractitionerCases = async ({
     const validatedCaseToUpdate = validCasesToUpdate[idx];
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase: validatedCaseToUpdate,
+      caseToUpdate: validatedCaseToUpdate,
       oldCaseCopy: oldCaseCopies[idx],
     });
 

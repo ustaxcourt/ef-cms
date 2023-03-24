@@ -47,7 +47,7 @@ export const saveCaseNoteInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseToUpdate,
+      caseToUpdate,
       oldCaseCopy,
     });
 

@@ -178,7 +178,7 @@ export const fileExternalDocumentInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase: caseEntity,
+    caseToUpdate: caseEntity,
     oldCaseCopy,
   });
 

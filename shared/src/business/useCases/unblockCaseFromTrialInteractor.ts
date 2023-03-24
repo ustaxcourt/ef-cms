@@ -23,7 +23,7 @@ export const unblockCaseFromTrialInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -31,8 +31,8 @@ export const unblockCaseFromTrialInteractor = async (
     });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
-  const caseEntity = new Case(caseRecord, { applicationContext });
+    .cloneAndFreeze(caseToUpdate);
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   caseEntity.unsetAsBlocked();
 
@@ -50,7 +50,7 @@ export const unblockCaseFromTrialInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

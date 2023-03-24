@@ -19,7 +19,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     const caseEntity = entity.validate();
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 
@@ -37,18 +37,18 @@ export const checkForReadyForTrialCasesInteractor = async (
   const updatedCases = [];
 
   for (const { docketNumber } of caseCatalog) {
-    const caseRecord = await applicationContext
+    const caseToCheck = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
         docketNumber,
       });
 
-    if (caseRecord) {
+    if (caseToCheck) {
+      const caseEntity = new Case(caseToCheck, { applicationContext });
       const oldCaseCopy = applicationContext
         .getUtilities()
-        .cloneAndFreeze(caseRecord);
-      const caseEntity = new Case(caseRecord, { applicationContext });
+        .cloneAndFreeze(caseToCheck);
 
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();

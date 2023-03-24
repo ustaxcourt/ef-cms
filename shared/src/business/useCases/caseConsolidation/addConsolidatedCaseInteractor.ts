@@ -27,11 +27,11 @@ export const addConsolidatedCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  if (!caseRecord) {
+  if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
@@ -51,17 +51,17 @@ export const addConsolidatedCaseInteractor = async (
   let allCasesToConsolidate = [];
 
   if (
-    caseRecord.leadDocketNumber &&
-    caseRecord.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
+    caseToUpdate.leadDocketNumber &&
+    caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
     allCasesToConsolidate = await applicationContext
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber({
         applicationContext,
-        leadDocketNumber: caseRecord.leadDocketNumber,
+        leadDocketNumber: caseToUpdate.leadDocketNumber,
       });
   } else {
-    allCasesToConsolidate = [caseRecord];
+    allCasesToConsolidate = [caseToUpdate];
   }
 
   if (caseToConsolidateWith.leadDocketNumber) {
@@ -94,7 +94,7 @@ export const addConsolidatedCaseInteractor = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        newCase: caseEntity,
+        caseToUpdate: caseEntity,
         oldCaseCopy,
       }),
     );

@@ -41,19 +41,17 @@ export const updateCaseDetailsInteractor = async (
     statistics: caseDetails.statistics,
   };
 
-  const caseRecord = await applicationContext
+  const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
-  const oldCaseCopy = applicationContext
-    .getUtilities()
-    .cloneAndFreeze(caseRecord);
+  const oldCaseCopy = applicationContext.getUtilities().cloneAndFreeze(oldCase);
   const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
     editableFields.petitionPaymentStatus === PAYMENT_STATUS.WAIVED;
 
   const newCaseEntity = new Case(
     {
-      ...caseRecord,
+      ...oldCase,
       ...editableFields,
       petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
       petitionPaymentMethod: isPaid
@@ -66,7 +64,7 @@ export const updateCaseDetailsInteractor = async (
     { applicationContext },
   );
 
-  if (caseRecord.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
+  if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
       newCaseEntity.addDocketEntry(
         new DocketEntry(
@@ -105,7 +103,7 @@ export const updateCaseDetailsInteractor = async (
   }
 
   if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(caseRecord, { applicationContext });
+    const oldCaseEntity = new Case(oldCase, { applicationContext });
     const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
       ? oldCaseEntity.generateTrialSortTags()
       : {};
@@ -129,7 +127,7 @@ export const updateCaseDetailsInteractor = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      newCase: newCaseEntity,
+      caseToUpdate: newCaseEntity,
       oldCaseCopy,
     });
 

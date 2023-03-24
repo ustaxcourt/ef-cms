@@ -24,7 +24,7 @@ export const createCaseDeadlineInteractor = async (
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
-  const caseRecord = await applicationContext
+  const caseDetail = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -32,9 +32,9 @@ export const createCaseDeadlineInteractor = async (
     });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseDetail);
 
-  let caseEntity = new Case(caseRecord, { applicationContext });
+  let caseEntity = new Case(caseDetail, { applicationContext });
 
   const newCaseDeadline = new CaseDeadline(
     { ...caseDeadline, associatedJudge: caseEntity.associatedJudge },
@@ -57,7 +57,7 @@ export const createCaseDeadlineInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase: caseEntity,
+    caseToUpdate: caseEntity,
     oldCaseCopy,
   });
 

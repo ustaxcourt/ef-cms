@@ -29,7 +29,7 @@ exports.associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -37,14 +37,14 @@ exports.associatePrivatePractitionerToCase = async ({
     });
   const oldCaseCopy = applicationContext
     .getUtilities()
-    .cloneAndFreeze(caseRecord);
+    .cloneAndFreeze(caseToUpdate);
 
-  const isPrivatePractitionerOnCase = caseRecord.privatePractitioners?.some(
+  const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,
   );
 
   if (!isAssociated) {
-    const userCaseEntity = new UserCase(caseRecord);
+    const userCaseEntity = new UserCase(caseToUpdate);
 
     await applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
@@ -53,7 +53,7 @@ exports.associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-    const caseEntity = new Case(caseRecord, { applicationContext });
+    const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     const { petitioners } = caseEntity;
 
@@ -73,7 +73,7 @@ exports.associatePrivatePractitionerToCase = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      newCase: caseEntity,
+      caseToUpdate: caseEntity,
       oldCaseCopy,
     });
 

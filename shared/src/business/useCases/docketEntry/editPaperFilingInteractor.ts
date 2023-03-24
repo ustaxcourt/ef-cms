@@ -117,7 +117,7 @@ const saveForLaterStrategy = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    newCase: caseEntity,
+    caseToUpdate: caseEntity,
     oldCaseCopy,
   });
 
