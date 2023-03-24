@@ -1,3 +1,4 @@
+import { TDynamoRecord } from './dynamo/dynamoTypes';
 import { chunk, isEmpty } from 'lodash';
 
 /**
@@ -39,7 +40,7 @@ const filterEmptyStrings = params => {
   return params;
 };
 
-const getTableName = ({ applicationContext }): string =>
+export const getTableName = ({ applicationContext }): string =>
   (applicationContext.environment &&
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&

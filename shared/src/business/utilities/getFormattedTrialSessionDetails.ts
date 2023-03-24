@@ -117,6 +117,7 @@ const compareCasesByDocketNumber = (a, b) => {
 
 exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
+exports.getSortableDocketNumber = getSortableDocketNumber;
 
 exports.getFormattedTrialSessionDetails = ({
   applicationContext,

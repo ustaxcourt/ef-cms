@@ -84,13 +84,13 @@ echo "Updating judge with last name: ${NEW_JUDGE_NAME} to Chief Judge"
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
 aws cognito-idp admin-update-user-attributes \
-    --user-pool-id ${USER_POOL_ID} \
-    --region ${REGION} \
-    --username ${OLD_JUDGE_ID} \
-    --user-attributes Name="name",Value="Judge ${OLD_JUDGE_NAME}"
+    --user-pool-id "${USER_POOL_ID}" \
+    --region "${REGION}" \
+    --username "${OLD_JUDGE_ID}" \
+    --user-attributes "Name=\"name\",Value=\"Judge ${OLD_JUDGE_NAME}\""
 
 aws cognito-idp admin-update-user-attributes \
-    --user-pool-id ${USER_POOL_ID} \
-    --region ${REGION} \
-    --username ${NEW_JUDGE_ID} \
-    --user-attributes Name="name",Value="Chief Judge ${NEW_JUDGE_NAME}"
+    --user-pool-id "${USER_POOL_ID}" \
+    --region "${REGION}" \
+    --username "${NEW_JUDGE_ID}" \
+    --user-attributes "Name=\"name\",Value=\"Chief Judge ${NEW_JUDGE_NAME}\""
