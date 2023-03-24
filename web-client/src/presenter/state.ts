@@ -326,6 +326,7 @@ export const baseState = {
     stampApplied: false,
     stampData: null,
   },
+  pdfPreviewUrl: '',
   pendingReports: {},
   permissions: null,
   practitionerDetail: {},
@@ -362,6 +363,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
@@ -378,3 +380,11 @@ export const state = {
   ...helpers,
   ...baseState,
 };
+
+declare global {
+  type State = typeof state & {
+    constants: ReturnType<typeof getConstants>;
+    modal: any;
+    screenMetadata: any;
+  };
+}
