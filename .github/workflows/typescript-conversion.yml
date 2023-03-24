@@ -1,0 +1,34 @@
+name: Node.js CI - shared
+
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
+
+jobs:
+  Shared:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout USTC Staging
+        uses: actions/checkout@v3
+        with:
+          repository: ustaxcourt/ef-cms
+          ref: staging
+          path: stagingBranch
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+        with:
+          path: branchToBeCompared
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Shared
+        run: |
+          ls
+          cd stagingBranch
+          ls
+          cd ..
+          cd branchToBeCompared
+          ls
