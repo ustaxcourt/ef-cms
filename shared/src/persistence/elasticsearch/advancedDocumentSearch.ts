@@ -25,6 +25,7 @@ exports.advancedDocumentSearch = async ({
   endDate,
   from = 0,
   isExternalUser,
+  isOpinionPamhplet = false,
   isOpinionSearch = false,
   judge,
   keyword,
@@ -126,16 +127,26 @@ exports.advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
-      exists: {
-        field: 'servedAt',
+  let documentFilter;
+
+  if (isOpinionPamhplet) {
+    documentFilter = [
+      { term: { 'entityName.S': 'DocketEntry' } },
+      { term: { 'isFileAttached.BOOL': true } },
+      { terms: { 'eventCode.S': documentEventCodes } },
+    ];
+  } else {
+    documentFilter = [
+      { term: { 'entityName.S': 'DocketEntry' } },
+      {
+        exists: {
+          field: 'servedAt',
+        },
       },
-    },
-    { term: { 'isFileAttached.BOOL': true } },
-    { terms: { 'eventCode.S': documentEventCodes } },
-  ];
+      { term: { 'isFileAttached.BOOL': true } },
+      { terms: { 'eventCode.S': documentEventCodes } },
+    ];
+  }
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');

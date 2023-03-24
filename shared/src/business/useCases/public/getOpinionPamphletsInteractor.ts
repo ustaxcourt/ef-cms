@@ -1,10 +1,4 @@
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
-import {
-  createEndOfDayISO,
-  createISODateString,
-  createStartOfDayISO,
-  deconstructDate,
-} from '../../utilities/DateHandler';
+import { OPINION_PAMPHLET_EVENT_CODE } from '../../entities/EntityConstants';
 
 /**
  * getOpinionPamphletsInteractor
@@ -15,19 +9,13 @@ import {
 export const getOpinionPamphletsInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  //todo - actual implementation
-  const { day, month, year } = deconstructDate(createISODateString());
-  const currentDateStart = createStartOfDayISO({ day, month, year });
-  const currentDateEnd = createEndOfDayISO({ day, month, year });
-
   const { results } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      endDate: currentDateEnd,
-      isOpinionSearch: true,
-      startDate: currentDateStart,
+      documentEventCodes: [OPINION_PAMPHLET_EVENT_CODE],
+      isOpinionPamhplet: true,
     });
+
   return results;
 };
