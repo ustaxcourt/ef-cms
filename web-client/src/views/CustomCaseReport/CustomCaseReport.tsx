@@ -16,7 +16,10 @@ export const CustomCaseReport = connect({}, function CustomCaseReport() {
           <h1>Custom Case Report</h1>
         </div>
         <div className="grid-col-4">
-          <DateRangePickerComponent />
+          <DateRangePickerComponent
+            endLabel="Case created end date"
+            startLabel="Case created start date"
+          />
         </div>
       </section>
     </>

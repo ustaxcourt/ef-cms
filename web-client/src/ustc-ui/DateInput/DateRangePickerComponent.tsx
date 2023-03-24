@@ -13,7 +13,6 @@ export const DateRangePickerComponent = ({
   onChangeEnd,
   onChangeStart,
   rangePickerCls,
-  showHint,
   startDateErrorText,
   startDateOptional,
   startLabel,
@@ -32,6 +31,13 @@ export const DateRangePickerComponent = ({
       startDatePickerRef.current &&
       endDatePickerRef.current &&
       dateRangePickerRef.current
+    ) {
+      datePicker.on(startDatePickerRef.current);
+      datePicker.on(endDatePickerRef.current);
+      dateRangePicker.on(dateRangePickerRef.current);
+    } else if (
+      startDatePickerRef.current ||
+      (endDatePickerRef.current && dateRangePickerRef.current)
     ) {
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
@@ -88,8 +94,6 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  const displayHint = showHint !== undefined ? showHint : true;
-
   return (
     <FormGroup formGroupRef={dateRangePickerRef}>
       <div
@@ -114,17 +118,13 @@ export const DateRangePickerComponent = ({
                 <span className="usa-hint">(optional)</span>
               )}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${startName}-date-start-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
                 className="usa-input"
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
+                placeholder="MM/DD/YYYY"
                 ref={startDateInputRef}
                 type="text"
               />
@@ -145,17 +145,13 @@ export const DateRangePickerComponent = ({
               {endLabel || 'End date'}{' '}
               {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${endName}-date-end-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
+                placeholder="MM/DD/YYYY"
                 ref={endDateInputRef}
                 type="text"
               />
