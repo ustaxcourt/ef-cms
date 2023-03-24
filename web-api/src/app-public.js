@@ -133,7 +133,10 @@ app.get(
   lambdaWrapper(todaysOrdersLambda),
 );
 //todo
-// app.get('/public-api/opinion-pamphlets', lambdaWrapper(opinionPamphletsLambda));
+// app.get(
+//   '/public-api/opinion-pamphlets',
+//   lambdaWrapper(getOpinionPamphletsLambda),
+// );
 
 app.get(
   '/public-api/docket-number-search/:docketNumber',
