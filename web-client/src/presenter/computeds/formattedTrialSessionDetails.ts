@@ -1,7 +1,3 @@
-import {
-  SESSION_STATUS_TYPES,
-  SESSION_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from 'cerebral';
 
@@ -17,6 +13,8 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     const {
       DATE_FORMATS,
       SESSION_STATUS_GROUPS,
+      SESSION_STATUS_TYPES,
+      SESSION_TYPES,
       TRIAL_SESSION_SCOPE_TYPES,
       USER_ROLES,
     } = applicationContext.getConstants();
