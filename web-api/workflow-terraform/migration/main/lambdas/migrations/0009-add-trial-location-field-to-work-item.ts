@@ -1,6 +1,9 @@
 import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
 const createApplicationContext = require('../../../../../src/applicationContext');
 const {
+  OutboxItem,
+} = require('../../../../../../shared/src/business/entities/OutboxItem');
+const {
   WorkItem,
 } = require('../../../../../../shared/src/business/entities/WorkItem');
 import { CASE_STATUS_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
@@ -10,6 +13,11 @@ const applicationContext = createApplicationContext({});
 
 const isWorkItem = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('work-item|');
+};
+const isOutboxItem = item => {
+  return (
+    item.pk.startsWith('user-outbox|') || item.pk.startsWith('section-outbox|')
+  );
 };
 
 export const migrateItems = async (items, documentClient) => {
@@ -31,6 +39,26 @@ export const migrateItems = async (items, documentClient) => {
       ).validateWithLogging(applicationContext);
 
       item.trialLocation = theWorkItem.trialLocation;
+    }
+
+    if (
+      isOutboxItem(item) &&
+      item.caseStatus === CASE_STATUS_TYPES.calendared
+    ) {
+      const fullCase = await queryFullCase(documentClient, item.docketNumber);
+      const caseRecord = aggregateCaseItems(fullCase);
+
+      const theOutboxItem = new OutboxItem(
+        {
+          ...item,
+          trialLocation: caseRecord.trialLocation,
+        },
+        {
+          applicationContext,
+        },
+      ).validateWithLogging(applicationContext);
+
+      item.trialLocation = theOutboxItem.trialLocation;
     }
 
     itemsAfter.push(item);
