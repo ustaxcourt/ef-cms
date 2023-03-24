@@ -1,4 +1,4 @@
-name: Node.js CI - shared
+name: Typescript Reduce Type Errors
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - dependency-updates
 
 jobs:
-  Shared:
+  CompareTypeErrors:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Shared
+      - name: Compare type errors between shared and current branch
         run: |
           ls
           cd stagingBranch
