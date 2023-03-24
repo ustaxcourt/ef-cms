@@ -71,7 +71,11 @@ export const removeCaseFromTrialInteractor = async (
   const caseEntity = new Case(myCase, { applicationContext });
 
   if (!caseEntity.isHearing(trialSessionId)) {
-    caseEntity.removeFromTrial(caseStatus, associatedJudge);
+    caseEntity.removeFromTrial({
+      associatedJudge,
+      changedBy: user.name,
+      updatedCaseStatus: caseStatus,
+    });
 
     await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,

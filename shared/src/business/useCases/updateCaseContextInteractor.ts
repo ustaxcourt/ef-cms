@@ -49,17 +49,22 @@ export const updateCaseContextInteractor = async (
   if (caseCaption) {
     newCase.setCaseCaption(caseCaption);
   }
-  if (caseStatus) {
-    newCase.setCaseStatus(caseStatus);
-  }
+
   if (associatedJudge) {
     newCase.setAssociatedJudge(associatedJudge);
   }
 
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
-  if (caseStatus !== caseRecord.status) {
-    if (caseRecord.status === CASE_STATUS_TYPES.calendared) {
+  if (caseStatus && caseStatus !== oldCaseCopy.status) {
+    const date = applicationContext.getUtilities().createISODateString();
+    newCase.setCaseStatus({
+      changedBy: user.name,
+      date,
+      updatedCaseStatus: caseStatus,
+    });
+
+    if (oldCaseCopy.status === CASE_STATUS_TYPES.calendared) {
       const disposition = `Status was changed to ${caseStatus}`;
 
       const trialSession = await applicationContext

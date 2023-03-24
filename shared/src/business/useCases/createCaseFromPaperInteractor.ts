@@ -19,7 +19,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   applicationContext: IApplicationContext;
   caseToAdd: TCaseEntity;
   docketEntryEntity: DocketEntry;
-  user: TUser;
+  user: RawUser;
 }) => {
   const workItemEntity = new WorkItem(
     {
@@ -118,6 +118,7 @@ export const createCaseFromPaperInteractor = async (
     },
     {
       applicationContext,
+      isNewCase: true,
     },
   );
 

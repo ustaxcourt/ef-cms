@@ -78,7 +78,7 @@ export const deleteTrialSessionInteractor = async (
 
     const caseEntity = new Case(myCase, { applicationContext });
 
-    caseEntity.removeFromTrial();
+    caseEntity.removeFromTrial({});
 
     if (caseEntity.isReadyForTrial()) {
       await applicationContext
