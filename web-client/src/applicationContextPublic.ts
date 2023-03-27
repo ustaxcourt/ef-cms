@@ -44,6 +44,7 @@ import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicS
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
   createISODateString,
+  deconstructDate,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
@@ -191,6 +192,7 @@ const applicationContextPublic = {
     return {
       compareCasesByDocketNumber,
       createISODateString,
+      deconstructDate,
       formatDateString,
       formatDocketEntry,
       getContactPrimary,
