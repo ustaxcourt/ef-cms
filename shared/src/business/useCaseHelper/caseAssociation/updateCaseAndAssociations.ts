@@ -89,8 +89,6 @@ const updateCaseDocketEntries = async ({
     }
   });
 
-  // console.log('validDocketEntries', validDocketEntries);
-
   return validDocketEntries.map(
     doc =>
       function updateCaseDocketEntries_cb() {
