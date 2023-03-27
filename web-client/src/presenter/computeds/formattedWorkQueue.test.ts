@@ -569,8 +569,6 @@ describe('formattedWorkQueue', () => {
       },
     });
 
-    console.log('result', result);
-
     expect(result[0].workItemId).toEqual('a');
     expect(result[1].workItemId).toEqual('c');
     expect(result[2].workItemId).toEqual('b');
@@ -613,8 +611,6 @@ describe('formattedWorkQueue', () => {
         },
       },
     });
-
-    console.log('result', result);
 
     expect(result[0].workItemId).toEqual('a');
     expect(result[1].workItemId).toEqual('c');
