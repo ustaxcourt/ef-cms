@@ -10,26 +10,31 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 
 describe('removePdfFromDocketEntryInteractor', () => {
+  const now = applicationContext.getUtilities().createISODateString();
   const MOCK_CASE = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.other,
-    createdAt: applicationContext.getUtilities().createISODateString(),
+    createdAt: now,
     docketEntries: [
       {
+        createdAt: now,
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: now,
         isFileAttached: true,
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
       {
+        createdAt: now,
         docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491',
         docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: now,
         isFileAttached: false,
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
@@ -128,13 +133,17 @@ describe('removePdfFromDocketEntryInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const docketEntry = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        entry => entry.docketEntryId === '7805d1ab-18d0-43ec-bafb-654e83405416',
-      );
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
 
-    expect(docketEntry.isFileAttached).toEqual(false);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      isFileAttached: false,
+    });
   });
 
   it('does not modify the docketEntry or case if the isFileAttachedFlag is false', async () => {
