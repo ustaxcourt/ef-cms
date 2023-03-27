@@ -19,27 +19,33 @@ describe('fileCourtIssuedOrderInteractor', () => {
     createdAt: '',
     docketEntries: [
       {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        createdAt: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '000ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: '2019-03-01T21:40:46.415Z',
         userId: mockUserId,
       },
       {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        createdAt: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: '2019-03-01T21:40:46.415Z',
         userId: mockUserId,
       },
       {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        createdAt: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '222ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: '2019-03-01T21:40:46.415Z',
         userId: mockUserId,
       },
     ],
@@ -121,9 +127,21 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
-    ).toEqual(4);
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: caseRecord.docketNumber,
+      documentType: 'Order to Show Cause',
+      eventCode: 'OSC',
+      signedAt: '2019-03-01T21:40:46.415Z',
+      signedByUserId: mockUserId,
+      signedJudgeName: 'Dredd',
+    });
   });
 
   it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
@@ -145,15 +163,24 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
-    ).toEqual(4);
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3],
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
     ).toMatchObject({
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: caseRecord.docketNumber,
+      documentTitle: 'Order to do anything',
+      documentType: 'Order',
       draftOrderState: { freeText: 'Order to do anything' },
+      eventCode: 'O',
       freeText: 'Order to do anything',
+      signedAt: '2019-03-01T21:40:46.415Z',
+      signedByUserId: mockUserId,
+      signedJudgeName: 'Dredd',
     });
   });
 
@@ -178,16 +205,20 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].draftOrderState.documentContents,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document.draftOrderState.documentContents,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].draftOrderState.editorDelta,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document.draftOrderState.editorDelta,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].draftOrderState.richText,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document.draftOrderState.richText,
     ).toBeUndefined();
   });
 
@@ -206,17 +237,12 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
-    ).toEqual(4);
-    const result =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3];
-    expect(result).toMatchObject({ freeText: 'Notice to be nice' });
-    expect(result.signedAt).toBeTruthy();
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      freeText: 'Notice to be nice',
+      signedAt: '2019-03-01T21:40:46.415Z',
+    });
   });
 
   it('should store documentMetadata.documentContents in S3 and delete from data sent to persistence', async () => {
@@ -240,12 +266,16 @@ describe('fileCourtIssuedOrderInteractor', () => {
       useTempBucket: false,
     });
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].documentContents,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document.documentContents,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3],
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
     ).toMatchObject({
       documentContentsId: expect.anything(),
       draftOrderState: {},
@@ -408,17 +438,14 @@ describe('fileCourtIssuedOrderInteractor', () => {
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    const lastDocumentIndex =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length - 1;
-
-    const newlyFiledDocument =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[lastDocumentIndex];
-
-    expect(newlyFiledDocument).toMatchObject({
-      isDraft: true,
-    });
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({ isDraft: true });
   });
 
   it('should throw an error if fails to parse pdf', async () => {
