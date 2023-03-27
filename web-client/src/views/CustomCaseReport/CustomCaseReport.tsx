@@ -23,9 +23,17 @@ export const CustomCaseReport = connect({}, function CustomCaseReport() {
         </div>
         <div className="grid-col-4">
           <DateRangePickerComponent
+            endDateOptional={false}
             endLabel="Case created end date"
+            endName="caseCreationEndDate"
+            endValue=""
             orientation="horizontal"
+            startDateOptional={false}
             startLabel="Case created start date"
+            startName="caseCreationStartDate"
+            startValue=""
+            onChangeEnd={() => {}}
+            onChangeStart={() => {}}
           />
         </div>
         <div className="grid-col-6">
