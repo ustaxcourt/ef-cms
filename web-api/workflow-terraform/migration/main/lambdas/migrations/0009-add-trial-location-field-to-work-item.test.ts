@@ -113,6 +113,7 @@ describe('migrateItems', () => {
         section: 'Docket',
         sentBy: 'You',
         sk: 'work-item|6d74eadc-0181-4ff5-826c-123432e8733d',
+        trialDate: undefined,
       },
       {
         pk: `case|${MOCK_CASE_RECORD.docketNumber}`,
@@ -134,7 +135,8 @@ describe('migrateItems', () => {
       section: 'Docket',
       sentBy: 'You',
       sk: 'work-item|6d74eadc-0181-4ff5-826c-123432e8733d',
-      trialLocation: 'Washington, District of Columbia',
+      trialDate: MOCK_CASE_RECORD.trialDate,
+      trialLocation: MOCK_CASE_RECORD.trialLocation,
     });
   });
 
@@ -172,7 +174,8 @@ describe('migrateItems', () => {
       section: 'Docket',
       sentBy: 'You',
       sk: '2018-11-21T20:49:28.192Z',
-      trialLocation: 'Washington, District of Columbia',
+      trialDate: MOCK_CASE_RECORD.trialDate,
+      trialLocation: MOCK_CASE_RECORD.trialLocation,
     });
   });
 });
