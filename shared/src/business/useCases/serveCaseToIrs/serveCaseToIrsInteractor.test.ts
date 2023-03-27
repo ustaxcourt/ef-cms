@@ -1092,8 +1092,8 @@ describe('serveCaseToIrsInteractor', () => {
     });
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0].docketEntryId,
-    ).toEqual(MOCK_NOTR_ID);
+        .calls[1][0].docketEntryId,
+    ).toBe(MOCK_NOTR_ID);
   });
 
   it('should call serveCaseDocument for every initially filed document', async () => {
