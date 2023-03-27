@@ -102,7 +102,9 @@ export const IndividualWorkQueueInbox = connect(
                       {item.docketEntry.filedBy}
                     </td>
                   )}
-                  <td className="message-queue-row">{item.caseStatus}</td>
+                  <td className="message-queue-row">
+                    {item.formattedCaseStatus}
+                  </td>
                 </tr>
               </tbody>
             );

@@ -1,7 +1,9 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
+import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -194,6 +196,7 @@ export const ContactPrimary = connect(
               onChange="updateFormValueAndSecondaryContactInfoSequence"
             />
           )}
+
           {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress
@@ -206,59 +209,11 @@ export const ContactPrimary = connect(
 
           {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
             <>
-              <FormGroup
-                errorText={
-                  validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.paperPetitionEmail
-                }
-              >
-                <label
-                  className="usa-label"
-                  htmlFor="paper-petition-email-primary"
-                >
-                  Petition email address{' '}
-                  <span className="usa-hint">(optional)</span>
-                </label>
-                <input
-                  className="usa-input"
-                  id="paper-petition-email-primary"
-                  name="contactPrimary.paperPetitionEmail"
-                  type="email"
-                  value={data.contactPrimary.paperPetitionEmail || ''}
-                  onBlur={() => {
-                    onBlurSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueAndSecondaryContactInfoSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
-              <FormGroup>
-                <input
-                  checked={data.contactPrimary.hasConsentedToEService || false}
-                  className="usa-checkbox__input"
-                  id="electronic-service-consent-primary"
-                  name="contactPrimary.hasConsentedToEService"
-                  type="checkbox"
-                  onChange={e => {
-                    updateFormValueAndSecondaryContactInfoSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="electronic-service-consent-primary"
-                >
-                  E-service consent
-                </label>
-              </FormGroup>
+              <PaperPetitionEmail bind={bind} contactType="contactPrimary" />
+              <EConsent bind={bind} contactType="contactPrimary" />
             </>
           )}
+
           <FormGroup
             className="phone-input"
             errorText={
