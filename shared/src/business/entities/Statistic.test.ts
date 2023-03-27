@@ -1,9 +1,9 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Statistic } = require('./Statistic');
+import { Statistic } from './Statistic';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('Statistic', () => {
   it('throws an error if applicationContext is not provided on construction', () => {
-    expect(() => new Statistic({}, {})).toThrow(
+    expect(() => new Statistic({}, {} as any)).toThrow(
       'applicationContext must be defined',
     );
   });
@@ -80,8 +80,9 @@ describe('Statistic', () => {
       );
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod:
-          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0].message,
+        lastDateOfPeriod: (
+          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0] as any
+        ).message,
       });
     });
 

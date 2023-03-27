@@ -1,10 +1,4 @@
-const {
-  A_VALID_DOCKET_ENTRY,
-  MOCK_PETITIONERS,
-  mockPrimaryId,
-  mockSecondaryId,
-} = require('./DocketEntry.test');
-const {
+import {
   AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   EVENT_CODES_REQUIRING_SIGNATURE,
@@ -13,9 +7,15 @@ const {
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
-} = require('./EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+} from './EntityConstants';
+import {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+  mockPrimaryId,
+  mockSecondaryId,
+} from './DocketEntry.test';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('validate', () => {
   const mockUserId = applicationContext.getUniqueId();
