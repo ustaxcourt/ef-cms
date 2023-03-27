@@ -43,6 +43,7 @@ export const state = {
   },
   isPublic: true,
   isTerminalUser: false,
+  opinionPamphlets: [],
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
