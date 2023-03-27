@@ -1027,11 +1027,6 @@ describe('serveCaseToIrsInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls.length,
-    ).toBe(3);
-
     const expectedDocketEntries = [
       {
         documentTitle:
@@ -1058,6 +1053,16 @@ describe('serveCaseToIrsInteractor', () => {
         isOnDocketRecord: true,
       },
     ];
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+        .calls.length,
+    ).toBe(3);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(expectedDocketEntries.length);
 
     expectedDocketEntries.forEach((docketEntry, idx) => {
       expect(
