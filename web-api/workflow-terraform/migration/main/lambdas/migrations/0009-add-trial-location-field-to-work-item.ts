@@ -24,7 +24,6 @@ export const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
 
   for (const item of items) {
-    console.log('items in migration****', item);
     if (isWorkItem(item) && item.caseStatus === CASE_STATUS_TYPES.calendared) {
       const fullCase = await queryFullCase(documentClient, item.docketNumber);
       const caseRecord = aggregateCaseItems(fullCase);
@@ -48,7 +47,6 @@ export const migrateItems = async (items, documentClient) => {
       isOutboxItem(item) &&
       item.caseStatus === CASE_STATUS_TYPES.calendared
     ) {
-      console.log('items in 2nd if****', item);
       const fullCase = await queryFullCase(documentClient, item.docketNumber);
       const caseRecord = aggregateCaseItems(fullCase);
 
