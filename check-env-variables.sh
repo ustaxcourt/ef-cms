@@ -65,5 +65,3 @@ if [[ $quiet -eq 0 ]]; then
     fi
   fi
 fi
-
-echo "THE END"
