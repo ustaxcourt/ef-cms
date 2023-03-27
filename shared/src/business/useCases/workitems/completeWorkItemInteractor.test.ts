@@ -124,17 +124,18 @@ describe('completeWorkItemInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries,
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          workItem: expect.objectContaining({
-            docketNumber: mockWorkItem.docketNumber,
-            workItemId: mockWorkItem.workItemId,
-          }),
-        }),
-      ]),
-    );
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].docketEntryId,
+    ).toEqual(MOCK_CASE.docketEntries[0].docketEntryId);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      workItem: {
+        docketNumber: mockWorkItem.docketNumber,
+        workItemId: mockWorkItem.workItemId,
+      },
+    });
   });
 });
