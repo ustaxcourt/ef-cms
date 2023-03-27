@@ -3,7 +3,6 @@ import {
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
   INITIAL_DOCUMENT_TYPES,
-  OPINION_PAMPHLET_EVENT_CODE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -13,6 +12,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 describe('addCourtIssuedDocketEntryHelper', () => {
   const {
+    OPINION_PAMPHLET_EVENT_CODE,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
     USER_ROLES,
@@ -29,6 +29,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
     ],
     EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
+    OPINION_PAMPHLET_EVENT_CODE,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
     USER_ROLES: {
