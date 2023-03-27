@@ -30,6 +30,8 @@ export const getDocumentQCServedForUserInteractor = async (
       userId,
     });
 
+  console.log('INDIVIDUAL Outbox records***** ', workItems);
+
   const filteredWorkItems = workItems.filter(workItem =>
     user.role === ROLES.petitionsClerk ? !!workItem.section : true,
   );
