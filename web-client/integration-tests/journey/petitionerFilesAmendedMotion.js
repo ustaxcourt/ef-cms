@@ -58,7 +58,7 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'ordinalValue',
-        value: 'First',
+        value: '1',
       },
     );
     const caseDetail = cerebralTest.getState('caseDetail');

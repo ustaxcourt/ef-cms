@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isPendingOnCreation', () => {
   beforeAll(() => {
@@ -7,7 +7,7 @@ describe('isPendingOnCreation', () => {
   });
 
   afterAll(() => {
-    DocketEntry.isPendingOnCreation.mockRestore();
+    (DocketEntry.isPendingOnCreation as jest.Mock).mockRestore();
   });
 
   it('respects any defined "pending" value', () => {

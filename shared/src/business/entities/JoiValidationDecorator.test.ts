@@ -1,12 +1,12 @@
-const joi = require('joi');
-const {
+import { Case } from './cases/Case';
+import { JoiValidationConstants } from './JoiValidationConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('./JoiValidationDecorator');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('./cases/Case');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
+} from './JoiValidationDecorator';
+import joi from 'joi';
 
 /**
  * fake entity constructor
@@ -237,7 +237,7 @@ describe('Joi Validation Decorator', () => {
   });
 
   it('should have access to the schema without instantiating the entity', () => {
-    expect(MockEntity2.getSchema()).toEqual(MockEntity2Schema);
+    expect((MockEntity2 as any).getSchema()).toEqual(MockEntity2Schema);
   });
 
   it('should validate a raw collection', () => {
@@ -252,7 +252,9 @@ describe('Joi Validation Decorator', () => {
       name: 'Two',
     });
 
-    expect(MockEntity1.validateRawCollection([obj1, obj2], {})).toEqual([
+    expect(
+      (MockEntity1 as any).validateRawCollection([obj1, obj2], {}),
+    ).toEqual([
       {
         entityName: 'MockEntity1',
         favoriteNumber: 1,
@@ -285,7 +287,7 @@ describe('Joi Validation Decorator', () => {
     let error;
 
     try {
-      MockEntity1.validateRawCollection([obj1, obj2], {});
+      (MockEntity1 as any).validateRawCollection([obj1, obj2], {});
     } catch (err) {
       error = err;
     }
@@ -295,7 +297,7 @@ describe('Joi Validation Decorator', () => {
   });
 
   it('should return an empty array when calling validateRawCollection with an empty collection', () => {
-    expect(MockEntity1.validateRawCollection([], {})).toEqual([]);
+    expect((MockEntity1 as any).validateRawCollection([], {})).toEqual([]);
   });
 
   describe('validateWithLogging', () => {
