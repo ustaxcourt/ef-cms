@@ -14,7 +14,7 @@ export const getOpinionPamphletsInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: [OPINION_PAMPHLET_EVENT_CODE],
-      isOpinionPamhplet: true,
+      requireServedDate: false,
     });
 
   return results;

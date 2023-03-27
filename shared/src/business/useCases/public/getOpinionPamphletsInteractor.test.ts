@@ -55,8 +55,8 @@ describe('getOpinionPamphletsInteractor', () => {
     ).toEqual([OPINION_PAMPHLET_EVENT_CODE]);
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].isOpinionPamhplet,
-    ).toBe(true);
+        .calls[0][0].requireServedDate,
+    ).toBe(false);
   });
 
   it('should return a list of opinion pamphlets docket entries', async () => {
