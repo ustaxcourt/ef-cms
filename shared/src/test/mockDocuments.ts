@@ -25,7 +25,7 @@ export const MOCK_DOCUMENTS = [
     documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
     eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
     filingDate: '2018-03-01T05:00:00.000Z',
-    index: 3,
+    index: 0,
     isFileAttached: true,
     processingStatus: 'pending',
     receivedAt: '2018-03-01T05:00:00.000Z',

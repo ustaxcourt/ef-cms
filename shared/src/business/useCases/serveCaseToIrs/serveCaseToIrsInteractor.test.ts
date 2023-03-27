@@ -969,11 +969,12 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeDefined();
   });
 
-  it('should set isOnDocketRecord true for all initially filed documents except for the petition and stin file', async () => {
+  it('should set isOnDocketRecord true for all initially filed documents except for the stin file', async () => {
     const mockCaseWithoutServedDocketEntries = {
       ...MOCK_CASE,
       docketEntries: [
-        MOCK_CASE.docketEntries[0],
+        MOCK_CASE.docketEntries[0], // Petition
+        MOCK_CASE.docketEntries[1], // STIN
         {
           createdAt: '2018-11-21T20:49:28.192Z',
           docketEntryId: 'ea10afeb-f189-4657-a862-c607a091beaa',
@@ -994,7 +995,8 @@ describe('serveCaseToIrsInteractor', () => {
     const mockCaseWithServedDocketEntries = {
       ...mockCaseWithoutServedDocketEntries,
       docketEntries: [
-        MOCK_CASE.docketEntries[0],
+        MOCK_CASE.docketEntries[0], // Petition
+        MOCK_CASE.docketEntries[1], // STIN
         {
           createdAt: '2018-11-21T20:49:28.192Z',
           docketEntryId: 'ea10afeb-f189-4657-a862-c607a091beaa',
@@ -1018,8 +1020,7 @@ describe('serveCaseToIrsInteractor', () => {
       .getCaseByDocketNumber.mockReturnValueOnce(
         mockCaseWithoutServedDocketEntries,
       )
-      .mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce(mockCaseWithServedDocketEntries)
+      .mockReturnValueOnce(mockCaseWithoutServedDocketEntries)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries);
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -1027,20 +1028,11 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries,
-    ).toMatchObject([
-      {
-        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
-        index: 1,
-        isOnDocketRecord: true,
-      },
-      {
-        documentTitle:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
-        index: 2,
-        isOnDocketRecord: true,
-      },
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+        .calls.length,
+    ).toBe(3);
+
+    const expectedDocketEntries = [
       {
         documentTitle:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition
@@ -1048,7 +1040,32 @@ describe('serveCaseToIrsInteractor', () => {
         index: 3,
         isOnDocketRecord: true,
       },
-    ]);
+      {
+        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
+        index: 1,
+        isOnDocketRecord: true,
+      },
+      {
+        documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        index: 0,
+        isOnDocketRecord: false,
+      },
+      {
+        documentTitle:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
+        index: 2,
+        isOnDocketRecord: true,
+      },
+    ];
+
+    expectedDocketEntries.forEach((docketEntry, idx) => {
+      expect(
+        applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls[
+          idx
+        ][0].document,
+      ).toMatchObject(docketEntry);
+    });
   });
 
   it('should serve the NOTR to parties on the case', async () => {
