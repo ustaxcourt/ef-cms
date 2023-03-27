@@ -101,6 +101,7 @@ import { showSortableHeaders } from './computeds/showSortableHeaders';
 import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
+import { statisticConfirmationTextHelper } from './computeds/statisticConfirmationTextHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
 import { templateHelper } from './computeds/templateHelper';
@@ -220,6 +221,7 @@ const helpers = {
   sortableColumnHelper,
   startCaseHelper,
   startCaseInternalHelper,
+  statisticConfirmationTextHelper,
   statisticsFormHelper,
   statisticsHelper,
   templateHelper,

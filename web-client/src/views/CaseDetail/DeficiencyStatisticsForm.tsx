@@ -11,6 +11,7 @@ export const DeficiencyStatisticsForm = connect(
     form: state.form,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
+    statisticConfirmationTextHelper: state.statisticConfirmationTextHelper,
     updateAddDeficiencyFormValueSequence:
       sequences.updateAddDeficiencyFormValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -21,6 +22,7 @@ export const DeficiencyStatisticsForm = connect(
   function DeficiencyStatisticsForm({
     form,
     showCalculatePenaltiesModalSequence,
+    statisticConfirmationTextHelper,
     updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence,
@@ -126,6 +128,14 @@ export const DeficiencyStatisticsForm = connect(
                   name="irsDeficiencyAmount"
                   value={form.irsDeficiencyAmount || ''}
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}
+                  onKeyDown={e => {
+                    const MINUS_SIGN = 45;
+                    // if ([MINUS_SIGN].includes(e.keyCode)) {
+                    // showConfirmationText();
+                    // } else {
+                    //   clearConfirmationText();
+                    // }
+                  }}
                   onValueChange={values => {
                     updateFormValueSequence({
                       key: 'irsDeficiencyAmount',
@@ -133,6 +143,18 @@ export const DeficiencyStatisticsForm = connect(
                     });
                   }}
                 />
+                {statisticConfirmationTextHelper.showConfirmationText && (
+                  <span
+                    className="usa-form-group--error text-primary-vivid"
+                    // key={
+                    //   statisticConfirmationTextHelper.NEGATIVE_NUMBER_CONFIRMATION_TEXT
+                    // }
+                  >
+                    {
+                      statisticConfirmationTextHelper.NEGATIVE_NUMBER_CONFIRMATION_TEXT
+                    }
+                  </span>
+                )}
               </FormGroup>
             </div>
 
