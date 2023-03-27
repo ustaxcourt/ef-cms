@@ -54,6 +54,10 @@ const updateCaseDocketEntries = async ({
     { applicationContext, petitioners: caseToUpdate.petitioners },
   );
 
+  if (validDocketEntries.length === 0) {
+    return [];
+  }
+
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const mostRecentCase = await applicationContext

@@ -83,9 +83,32 @@ describe('updateCaseAndAssociations', () => {
       .updateCase.mockImplementation(updateCaseMock);
   });
 
-  it('gets the old case before passing it to updateCase persistence method', async () => {
+  it('does not call the updateCase persistence method if caseToUpdate is the same as the oldCaseCopy', async () => {
     const caseToUpdate = {
       ...validMockCase,
+    };
+    const oldCase = {
+      ...validMockCase,
+    };
+
+    await updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate,
+      oldCaseCopy: oldCase,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('only calls the updateCase persistence method if caseToUpdate has changes from the oldCaseCopy', async () => {
+    const caseToUpdate = {
+      ...validMockCase,
+      status: CASE_STATUS_TYPES.generalDocket,
     };
     const oldCase = {
       ...validMockCase,
@@ -97,11 +120,9 @@ describe('updateCaseAndAssociations', () => {
     await updateCaseAndAssociations({
       applicationContext,
       caseToUpdate,
+      oldCaseCopy: oldCase,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -111,10 +132,37 @@ describe('updateCaseAndAssociations', () => {
     ).toMatchObject({ applicationContext, caseToUpdate });
   });
 
+  it('only calls the getCaseByDocketNumber persistence method if caseToUpdate has changes from the oldCaseCopy', async () => {
+    const caseToUpdate = {
+      ...validMockCase,
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
+    const oldCase = {
+      ...validMockCase,
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+    await updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate,
+      oldCaseCopy: oldCase,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
+  });
+
   it('always sends valid entities to the updateCase persistence method', async () => {
     await updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: validMockCase,
+      caseToUpdate: {
+        ...validMockCase,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      oldCaseCopy: validMockCase,
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -139,6 +187,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           associatedJudge: 'Judge Arnold',
         },
+        oldCaseCopy: validMockCase,
       }),
     ).rejects.toThrow('query problem');
 
@@ -241,11 +290,12 @@ describe('updateCaseAndAssociations', () => {
     await updateCaseAndAssociations({
       applicationContext,
       caseToUpdate,
+      oldCaseCopy: oldCase,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-    ).toMatchObject({ applicationContext, caseToUpdate });
+      applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
+    ).toBe(0);
     expect(
       applicationContext.getPersistenceGateway().removeCaseFromHearing,
     ).toHaveBeenCalledTimes(2);
@@ -271,21 +321,19 @@ describe('updateCaseAndAssociations', () => {
         docketEntries: MOCK_DOCUMENTS,
       };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(caseToUpdate);
+      expect(
+        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      ).not.toHaveBeenCalled();
 
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
+        oldCaseCopy: caseToUpdate,
       });
 
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
       ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToUpdate });
     });
 
     it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
@@ -314,11 +362,8 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
+        oldCaseCopy: oldCase,
       });
-
-      expect(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToUpdate });
 
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -342,6 +387,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           associatedJudge: 'Judge Dredd',
         },
+        oldCaseCopy: validMockCase,
       });
 
       expect(
@@ -360,6 +406,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           caseType: CASE_TYPES_MAP.whistleblower,
         },
+        oldCaseCopy: validMockCase,
       });
 
       expect(
@@ -379,6 +426,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           caseCaption: 'Some caption changed',
         },
+        oldCaseCopy: validMockCase,
       });
 
       expect(
@@ -397,6 +445,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           status: CASE_STATUS_TYPES.generalDocket,
         },
+        oldCaseCopy: validMockCase,
       });
 
       expect(
@@ -416,6 +465,7 @@ describe('updateCaseAndAssociations', () => {
           trialDate: '2021-01-02T05:22:16.001Z',
           trialSessionId: faker.datatype.uuid(),
         },
+        oldCaseCopy: validMockCase,
       });
 
       expect(
@@ -434,10 +484,6 @@ describe('updateCaseAndAssociations', () => {
         trialSessionId: faker.datatype.uuid(),
       };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(oldCase);
-
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
@@ -445,6 +491,7 @@ describe('updateCaseAndAssociations', () => {
           trialDate: undefined,
           trialSessionId: undefined,
         },
+        oldCaseCopy: oldCase,
       });
 
       expect(
@@ -459,12 +506,10 @@ describe('updateCaseAndAssociations', () => {
 
   describe('correspondences', () => {
     it('does not call updateCaseCorrespondence if all correspondences are unchanged', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(validMockCase);
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: validMockCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway().updateCaseCorrespondence,
@@ -501,6 +546,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
+        oldCaseCopy: validMockCase,
       });
 
       expect(
@@ -526,16 +572,11 @@ describe('updateCaseAndAssociations', () => {
       { applicationContext },
     );
 
-    beforeAll(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
-    });
-
     it('does not call updateIrsPractitionerOnCase or removeIrsPractitionerOnCase if all IRS practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: mockCaseWithIrsPractitioners,
+        oldCaseCopy: mockCaseWithIrsPractitioners,
       });
       expect(
         applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
@@ -558,6 +599,7 @@ describe('updateCaseAndAssociations', () => {
           ...mockCaseWithIrsPractitioners,
           irsPractitioners: [updatedPractitioner],
         },
+        oldCaseCopy: mockCaseWithIrsPractitioners,
       });
 
       expect(
@@ -583,6 +625,7 @@ describe('updateCaseAndAssociations', () => {
           ...mockCaseWithIrsPractitioners,
           irsPractitioners: [],
         },
+        oldCaseCopy: mockCaseWithIrsPractitioners,
       });
 
       expect(
@@ -603,7 +646,7 @@ describe('updateCaseAndAssociations', () => {
 
   describe('Private practitioners', () => {
     const practitionerId = applicationContext.getUniqueId();
-    const mockCaseWithIrsPractitioners = new Case(
+    const mockCaseWithPrivatePractitioners = new Case(
       {
         ...MOCK_CASE,
         privatePractitioners: [
@@ -618,16 +661,11 @@ describe('updateCaseAndAssociations', () => {
       { applicationContext },
     );
 
-    beforeAll(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
-    });
-
     it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: mockCaseWithIrsPractitioners,
+        caseToUpdate: mockCaseWithPrivatePractitioners,
+        oldCaseCopy: mockCaseWithPrivatePractitioners,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -649,9 +687,10 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
-          ...mockCaseWithIrsPractitioners,
+          ...mockCaseWithPrivatePractitioners,
           privatePractitioners: [updatedPractitioner],
         },
+        oldCaseCopy: mockCaseWithPrivatePractitioners,
       });
 
       expect(
@@ -676,9 +715,10 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
-          ...mockCaseWithIrsPractitioners,
+          ...mockCaseWithPrivatePractitioners,
           privatePractitioners: [],
         },
+        oldCaseCopy: mockCaseWithPrivatePractitioners,
       });
 
       expect(
@@ -713,6 +753,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: validMockCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
@@ -738,6 +779,7 @@ describe('updateCaseAndAssociations', () => {
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             status: 'Submitted',
           },
+          oldCaseCopy: validMockCase,
         }),
       ).rejects.toThrow('entity was invalid');
       expect(
@@ -758,6 +800,7 @@ describe('updateCaseAndAssociations', () => {
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             status: 'Submitted',
           },
+          oldCaseCopy: validMockCase,
         }),
       ).resolves.not.toThrow();
       expect(
@@ -773,9 +816,6 @@ describe('updateCaseAndAssociations', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(validMockCase);
-      applicationContext
-        .getPersistenceGateway()
         .getUserCaseMappingsByDocketNumber.mockReturnValue([
           {
             docketNumber: '101-20',
@@ -789,6 +829,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: validMockCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -807,6 +848,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -824,6 +866,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -841,6 +884,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -858,6 +902,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -874,9 +919,6 @@ describe('updateCaseAndAssociations', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(validMockCase);
-      applicationContext
-        .getPersistenceGateway()
         .getCaseDeadlinesByDocketNumber.mockReturnValue([
           { ...mockDeadline, pk: 'abc|987', sk: 'user-case|123' },
         ]);
@@ -889,6 +931,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -907,6 +950,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
+        oldCaseCopy: validMockCase,
       });
       expect(
         applicationContext.getPersistenceGateway()
