@@ -24,6 +24,7 @@ export const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
 
   for (const item of items) {
+    console.log('items in migration****', item);
     if (isWorkItem(item) && item.caseStatus === CASE_STATUS_TYPES.calendared) {
       const fullCase = await queryFullCase(documentClient, item.docketNumber);
       const caseRecord = aggregateCaseItems(fullCase);
@@ -31,6 +32,7 @@ export const migrateItems = async (items, documentClient) => {
       const theWorkItem = new WorkItem(
         {
           ...item,
+          trialDate: item.trialDate ?? caseRecord.trialDate,
           trialLocation: caseRecord.trialLocation,
         },
         {
@@ -39,18 +41,21 @@ export const migrateItems = async (items, documentClient) => {
       ).validateWithLogging(applicationContext);
 
       item.trialLocation = theWorkItem.trialLocation;
+      item.trialDate = theWorkItem.trialDate;
     }
 
     if (
       isOutboxItem(item) &&
       item.caseStatus === CASE_STATUS_TYPES.calendared
     ) {
+      console.log('items in 2nd if****', item);
       const fullCase = await queryFullCase(documentClient, item.docketNumber);
       const caseRecord = aggregateCaseItems(fullCase);
 
       const theOutboxItem = new OutboxItem(
         {
           ...item,
+          trialDate: item.trialDate ?? caseRecord.trialDate,
           trialLocation: caseRecord.trialLocation,
         },
         {
@@ -59,6 +64,7 @@ export const migrateItems = async (items, documentClient) => {
       ).validateWithLogging(applicationContext);
 
       item.trialLocation = theOutboxItem.trialLocation;
+      item.trialDate = theOutboxItem.trialDate;
     }
 
     itemsAfter.push(item);
