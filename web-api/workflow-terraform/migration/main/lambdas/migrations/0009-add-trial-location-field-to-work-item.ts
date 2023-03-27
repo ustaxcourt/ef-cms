@@ -31,6 +31,7 @@ export const migrateItems = async (items, documentClient) => {
       const theWorkItem = new WorkItem(
         {
           ...item,
+          trialDate: item.trialDate ?? caseRecord.trialDate,
           trialLocation: caseRecord.trialLocation,
         },
         {
@@ -39,6 +40,7 @@ export const migrateItems = async (items, documentClient) => {
       ).validateWithLogging(applicationContext);
 
       item.trialLocation = theWorkItem.trialLocation;
+      item.trialDate = theWorkItem.trialDate;
     }
 
     if (
@@ -51,6 +53,7 @@ export const migrateItems = async (items, documentClient) => {
       const theOutboxItem = new OutboxItem(
         {
           ...item,
+          trialDate: item.trialDate ?? caseRecord.trialDate,
           trialLocation: caseRecord.trialLocation,
         },
         {
@@ -59,6 +62,7 @@ export const migrateItems = async (items, documentClient) => {
       ).validateWithLogging(applicationContext);
 
       item.trialLocation = theOutboxItem.trialLocation;
+      item.trialDate = theOutboxItem.trialDate;
     }
 
     itemsAfter.push(item);
