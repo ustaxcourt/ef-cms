@@ -7,17 +7,27 @@ import dateRangePicker from '../../../../node_modules/uswds/src/js/components/da
 export const DateRangePickerComponent = ({
   endDateErrorText,
   endDateOptional,
-  endLabel,
   endName,
   endValue,
   onChangeEnd,
   onChangeStart,
-  rangePickerCls,
+  orientation = 'vertical',
   startDateErrorText,
   startDateOptional,
-  startLabel,
   startName,
   startValue,
+}: {
+  endDateErrorText: string;
+  endDateOptional: boolean;
+  endName: string;
+  endValue: string;
+  onChangeEnd: Function;
+  onChangeStart: Function;
+  startDateErrorText: string;
+  startDateOptional: boolean;
+  startName: string;
+  startValue: string;
+  orientation: 'vertical' | 'horizontal';
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -99,8 +109,7 @@ export const DateRangePickerComponent = ({
       <div
         className={classNames(
           'usa-date-range-picker',
-          rangePickerCls,
-          'grid-row',
+          orientation === 'horizontal' ? 'grid-row' : undefined,
         )}
       >
         <div className="grid-col">
@@ -113,7 +122,7 @@ export const DateRangePickerComponent = ({
               htmlFor={`${startName}-date-start`}
               id={`${startName}-date-start-label`}
             >
-              {startLabel || 'Start date'}{' '}
+              {'Start date '}
               {startDateOptional && (
                 <span className="usa-hint">(optional)</span>
               )}
@@ -142,7 +151,7 @@ export const DateRangePickerComponent = ({
               htmlFor={`${endName}-date-end`}
               id={`${endName}-date-end-label`}
             >
-              {endLabel || 'End date'}{' '}
+              {'End date '}
               {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
             <div className="usa-date-picker">
