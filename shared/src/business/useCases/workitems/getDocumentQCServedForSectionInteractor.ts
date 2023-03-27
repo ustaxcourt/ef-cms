@@ -38,8 +38,6 @@ export const getDocumentQCServedForSectionInteractor = async (
       section,
     });
 
-  console.log('Section Outbox records***** ', workItems);
-
   const filteredWorkItems = workItems
     .filter(workItem =>
       user.role === ROLES.petitionsClerk ? !!workItem.section : true,
