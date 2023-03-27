@@ -8,6 +8,8 @@ import React from 'react';
 
 export const DeficiencyStatisticsForm = connect(
   {
+    checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
+    // confirmationText: state.confirmationText,
     form: state.form,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
@@ -20,6 +22,8 @@ export const DeficiencyStatisticsForm = connect(
     validationErrors: state.validationErrors,
   },
   function DeficiencyStatisticsForm({
+    checkForNegativeValueSequence,
+    // confirmationText,
     form,
     showCalculatePenaltiesModalSequence,
     statisticConfirmationTextHelper,
@@ -118,7 +122,13 @@ export const DeficiencyStatisticsForm = connect(
 
           <div className="grid-row grid-gap-2">
             <div className="grid-col-3">
-              <FormGroup errorText={validationErrors.irsDeficiencyAmount}>
+              <FormGroup
+                confirmationText={
+                  statisticConfirmationTextHelper.confirmationText
+                    .irsDeficiencyAmount
+                }
+                errorText={validationErrors.irsDeficiencyAmount}
+              >
                 <label className="usa-label" htmlFor="irs-deficiency-amount">
                   Deficiency (IRS Notice)
                 </label>
@@ -128,33 +138,17 @@ export const DeficiencyStatisticsForm = connect(
                   name="irsDeficiencyAmount"
                   value={form.irsDeficiencyAmount || ''}
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                  onKeyDown={e => {
-                    const MINUS_SIGN = 45;
-                    // if ([MINUS_SIGN].includes(e.keyCode)) {
-                    // showConfirmationText();
-                    // } else {
-                    //   clearConfirmationText();
-                    // }
-                  }}
                   onValueChange={values => {
                     updateFormValueSequence({
                       key: 'irsDeficiencyAmount',
                       value: values.value,
                     });
+                    checkForNegativeValueSequence({
+                      key: 'irsDeficiencyAmount',
+                      value: values.value,
+                    });
                   }}
                 />
-                {statisticConfirmationTextHelper.showConfirmationText && (
-                  <span
-                    className="usa-form-group--error text-primary-vivid"
-                    // key={
-                    //   statisticConfirmationTextHelper.NEGATIVE_NUMBER_CONFIRMATION_TEXT
-                    // }
-                  >
-                    {
-                      statisticConfirmationTextHelper.NEGATIVE_NUMBER_CONFIRMATION_TEXT
-                    }
-                  </span>
-                )}
               </FormGroup>
             </div>
 
