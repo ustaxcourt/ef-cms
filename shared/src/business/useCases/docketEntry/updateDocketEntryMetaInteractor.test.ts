@@ -11,10 +11,13 @@ describe('updateDocketEntryMetaInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
 
   const baseDocketEntry = {
+    createdAt: '2011-02-22T00:01:00.000Z',
     docketNumber: MOCK_CASE.docketNumber,
     filedBy: 'Test Petitioner',
     filers: [getContactPrimary(MOCK_CASE).contactId],
     filingDate: '2011-02-22T00:01:00.000Z',
+    isMinuteEntry: false,
+    isOnDocketRecord: true,
     userId: mockUserId,
   };
 
@@ -227,7 +230,17 @@ describe('updateDocketEntryMetaInteractor', () => {
       servedAt: '2020-01-01T00:01:00.000Z',
     };
 
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockImplementation(() => ({
+        ...mockDocketEntries[0],
+        ...editedFields,
+        entityName: 'DocketEntry',
+        isMinuteEntry: false,
+        processingStatus: 'complete',
+      }));
+
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
         ...editedFields,
@@ -235,14 +248,19 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updatedDocketEntry = result.docketEntries.find(
-      record => record.index === 1,
-    );
-    expect(updatedDocketEntry).toMatchObject(editedFields);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({ index: 1, ...editedFields });
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
         freeText: undefined,
@@ -250,10 +268,15 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updatedDocketEntry = result.docketEntries.find(
-      record => record.index === 1,
-    );
-    expect(updatedDocketEntry.freeText).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({ freeText: undefined, index: 1 });
   });
 
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
@@ -465,7 +488,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
         pending: true,
@@ -473,17 +496,22 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updatedDocketEntry = result.docketEntries.find(
-      record => record.index === 1,
-    );
-    expect(updatedDocketEntry.pending).toBeTruthy();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({ index: 1, pending: true });
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
   });
 
   it('should update the previousDocument', async () => {
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
         previousDocument: {
@@ -493,10 +521,14 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updatedDocketEntry = result.docketEntries.find(
-      record => record.index === 1,
-    );
-    expect(updatedDocketEntry.previousDocument).toBeDefined();
-    expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({ index: 1, previousDocument: { documentType: 'Order' } });
   });
 });

@@ -178,13 +178,6 @@ export const updateDocketEntryMetaInteractor = async (
     .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   if (shouldGenerateCoversheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
-
     const updatedDocketEntry = await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
@@ -195,12 +188,6 @@ export const updateDocketEntryMetaInteractor = async (
 
     caseEntity.updateDocketEntry(updatedDocketEntry);
   } else if (shouldRemoveExistingCoverSheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
     const updatedDocketEntry = await applicationContext
       .getUseCaseHelpers()
       .removeCoversheet(applicationContext, {
