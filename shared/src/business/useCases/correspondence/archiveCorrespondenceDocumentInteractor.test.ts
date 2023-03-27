@@ -81,12 +81,8 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.correspondence,
-    ).toEqual([]);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.archivedCorrespondences,
-    ).toEqual([{ ...mockCorrespondence, archived: true }]);
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
+        .calls[0][0].correspondence,
+    ).toMatchObject({ ...mockCorrespondence, archived: true });
   });
 });
