@@ -36,6 +36,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
    - Increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
    - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
+     - If you are on an M1 Machine, make sure to set the environment variable `DOCKER_DEFAULT_PLATFORM=linux/amd64`.
    - Deploy as normal by triggering a CircleCI workflow
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed

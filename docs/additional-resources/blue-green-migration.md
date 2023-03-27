@@ -6,6 +6,15 @@ Every deployment, whether it's to production or a development environment, is a 
 
 Additionally, for deployments that require change in the data schema or elasticsearch mappings in order for the application to function, we build an empty copy of the data stores (DynamoDB and Elasticsearch). Then we perform a migration of information from currently running DynamoDB database table (*source table*) into the newly created, empty one (*destination table*). This migration passes all of the data through a lambda to update and verify the data before saving it into the destination table.
 
+## -> The Shortcut <-
+
+You can run a migration with the following two steps:
+
+1. Use the [environment switcher](docs/additional-resources/environment-switcher.md) to point to the environment where you're running a migration.
+2. Run `./setup-for-blue-green-migration.sh --force`.
+
+No additional manual steps are required.
+
 ## Automated Migration Steps
 
 **All of the automated migration steps are now handled by CircleCI, as defined in `config.yml`.**
