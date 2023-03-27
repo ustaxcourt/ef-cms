@@ -174,6 +174,7 @@ export default function ({
                 return;
               }
               replaceHtmlFile();
+
               clients.forEach(res => res.write('data: update\n\n'));
               clients.length = 0;
             },
