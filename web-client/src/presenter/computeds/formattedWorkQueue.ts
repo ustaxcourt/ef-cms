@@ -392,20 +392,18 @@ export const formattedWorkQueue = (get, applicationContext) => {
       [STATUS_TYPES.jurisdictionRetained]: 4,
     };
 
-    highPriorityField = ['highPriority', 'trialDate'];
-    highPriorityDirection = ['desc', 'asc'];
-
-    sortField = [
+    highPriorityField = [
+      'highPriority',
+      'trialDate',
       workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-      sortField,
     ];
-    sortDirection = ['asc', sortDirection];
+    highPriorityDirection = ['desc', 'asc', 'asc'];
   }
 
   workQueue = orderBy(
     workQueue,
-    [...highPriorityField, ...sortField, 'docketNumber'],
-    [...highPriorityDirection, ...sortDirection, 'asc'],
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
   );
 
   return workQueue;
