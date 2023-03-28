@@ -184,6 +184,9 @@ export const DeficiencyStatisticsForm = connect(
           <div className="grid-row grid-gap-2">
             <div className="grid-col-3">
               <FormGroup
+                confirmationText={
+                  confirmationText?.determinationDeficiencyAmount
+                }
                 errorText={validationErrors.determinationDeficiencyAmount}
               >
                 <label
@@ -200,6 +203,10 @@ export const DeficiencyStatisticsForm = connect(
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}
                   onValueChange={values => {
                     updateFormValueSequence({
+                      key: 'determinationDeficiencyAmount',
+                      value: values.value,
+                    });
+                    checkForNegativeValueSequence({
                       key: 'determinationDeficiencyAmount',
                       value: values.value,
                     });
