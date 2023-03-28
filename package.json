@@ -286,7 +286,6 @@
     "decimal.js": "^10.4.3",
     "dynamodb-admin": "^4.5.0",
     "dynamodb-streams-readable": "^2.0.1",
-    "english-ordinals": "^2.4.0",
     "esbuild-plugin-babel-cached": "^0.2.3",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.0.2",
