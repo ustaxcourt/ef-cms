@@ -67,6 +67,7 @@ describe('formattedTrialSessions', () => {
         term: 'Fall',
         termYear: '2019',
         trialLocation: 'Hartford, Connecticut',
+        trialSessionId: '1',
       },
       {
         caseOrder: [],
@@ -79,6 +80,7 @@ describe('formattedTrialSessions', () => {
         term: 'Winter',
         trialClerk: { name: '10', userId: '10' },
         trialLocation: 'Knoxville, TN',
+        trialSessionId: '2',
       },
       {
         caseOrder: [],
@@ -91,6 +93,7 @@ describe('formattedTrialSessions', () => {
         swingSession: true,
         term: 'Winter',
         trialLocation: 'Jacksonville, FL',
+        trialSessionId: '3',
       },
       {
         caseOrder: [],
@@ -102,6 +105,7 @@ describe('formattedTrialSessions', () => {
         swingSession: true,
         term: 'Summer',
         trialLocation: 'Memphis, TN',
+        trialSessionId: '4',
       },
       {
         caseOrder: [],
@@ -300,10 +304,12 @@ describe('formattedTrialSessions', () => {
         swingSession: true,
         term: 'Winter',
         trialLocation: 'Jacksonville, FL',
+        trialSessionId: '3',
         userIsAssignedToSession: false,
       },
       {
         caseOrder: [],
+        formattedEstimatedEndDate: undefined,
         formattedNoticeIssuedDate: undefined,
         formattedStartDate: '11/25/19',
         judge: { name: '2', userId: '2' },
@@ -317,6 +323,7 @@ describe('formattedTrialSessions', () => {
         term: 'Winter',
         trialClerk: { name: '10', userId: '10' },
         trialLocation: 'Knoxville, TN',
+        trialSessionId: '2',
         userIsAssignedToSession: false,
       },
     ]);
@@ -335,6 +342,27 @@ describe('formattedTrialSessions', () => {
     });
 
     expect(formatTrialSessionDisplayOptions).toHaveBeenCalled();
+  });
+
+  it('removes the current trial session from the sessionsByTerm when state.trialSessionId is defined', () => {
+    const { sessionsByTerm } = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        form: {
+          term: 'Winter',
+        },
+        trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId,
+        trialSessions: TRIAL_SESSIONS_LIST,
+        user: testJudgeUser,
+      },
+    });
+
+    expect(
+      sessionsByTerm.find(
+        session =>
+          session.trialSessionId === TRIAL_SESSIONS_LIST[1].trialSessionId,
+      ),
+    ).toBeUndefined();
   });
 
   it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
