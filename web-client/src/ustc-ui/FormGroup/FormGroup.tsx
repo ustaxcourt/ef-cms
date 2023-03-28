@@ -7,7 +7,7 @@ export const FormGroup = connect(function FormGroup(props) {
     props;
 
   let hasError = false;
-  let hasConfirmation = false;
+  let hasConfirmation = !!confirmationText;
 
   if (Array.isArray(errorText)) {
     hasError = errorText.some(text => !!text);
