@@ -23,6 +23,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { switchErrorActionFactory } from '../actions/switchErrorActionFactory';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const completeDocketEntryQCSequence = [
@@ -60,13 +61,28 @@ export const completeDocketEntryQCSequence = [
           setPreviousDocumentDocketEntryAction,
           generateTitleAction,
           completeDocketEntryQCAction,
-          setPdfPreviewUrlAction,
-          setCaseAction,
-          setAlertSuccessAction,
-          setPaperServicePartiesAction,
-          setSaveAlertsForNavigationAction,
-          navigateToDocumentQCAction,
-          clearErrorAlertsAction,
+          {
+            error: [
+              switchErrorActionFactory({
+                'currently being updated': 'completed',
+              }),
+              {
+                completed: [
+                  setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
+                ],
+                default: [setShowModalFactoryAction('GenericErrorModal')],
+              },
+            ],
+            success: [
+              setPdfPreviewUrlAction,
+              setCaseAction,
+              setAlertSuccessAction,
+              setPaperServicePartiesAction,
+              setSaveAlertsForNavigationAction,
+              navigateToDocumentQCAction,
+              clearErrorAlertsAction,
+            ],
+          },
         ]),
       },
     ],
