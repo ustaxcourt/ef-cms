@@ -25,7 +25,7 @@ describe('reportMenuHelper', () => {
         state: getBaseState({ role: ROLES.judge }),
       });
 
-      expect(result.showActivityReport).toBe(true);
+      expect(result.showActivityReport).toBeTruthy();
     });
 
     it('should be true when the current user is a chambers user', () => {
@@ -33,7 +33,7 @@ describe('reportMenuHelper', () => {
         state: getBaseState({ role: ROLES.chambers }),
       });
 
-      expect(result.showActivityReport).toBe(true);
+      expect(result.showActivityReport).toBeTruthy();
     });
 
     it('should be false when the current user is NOT a judge or chambers user', () => {
@@ -41,7 +41,18 @@ describe('reportMenuHelper', () => {
         state: getBaseState({ role: ROLES.petitionsClerk }),
       });
 
-      expect(result.showActivityReport).toBe(false);
+      expect(result.showActivityReport).toBeFalsy();
+    });
+
+    it('should be false when permissions is undefined because the user has logged out', () => {
+      const result = runCompute(reportMenuHelper, {
+        state: {
+          ...getBaseState(undefined),
+          permissions: undefined,
+        },
+      });
+
+      expect(result.showActivityReport).toBeFalsy();
     });
   });
 

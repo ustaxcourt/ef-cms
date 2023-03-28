@@ -9,6 +9,6 @@ export const reportMenuHelper = get => {
 
   return {
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
-    showActivityReport: permissions.JUDGE_ACTIVITY_REPORT,
+    showActivityReport: permissions?.JUDGE_ACTIVITY_REPORT,
   };
 };
