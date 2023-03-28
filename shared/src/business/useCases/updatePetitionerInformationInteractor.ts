@@ -193,7 +193,7 @@ export const updatePetitionerInformationInteractor = async (
   });
 
   //send back through the constructor so the contacts are created with the contact constructor
-  let caseEntity = new Case(
+  const caseEntity = new Case(
     {
       ...caseToUpdateContacts.toRawObject(),
     },
@@ -251,15 +251,13 @@ export const updatePetitionerInformationInteractor = async (
         email: updatedPetitionerData.updatedEmail,
       });
     if (isEmailAvailable) {
-      caseEntity = await applicationContext
-        .getUseCaseHelpers()
-        .createUserForContact({
-          applicationContext,
-          caseEntity,
-          contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
-          name: oldCaseContact.name,
-        });
+      await applicationContext.getUseCaseHelpers().createUserForContact({
+        applicationContext,
+        caseEntity,
+        contactId: updatedPetitionerData.contactId,
+        email: updatedPetitionerData.updatedEmail,
+        name: oldCaseContact.name,
+      });
     } else {
       const contactId = await applicationContext
         .getUseCaseHelpers()

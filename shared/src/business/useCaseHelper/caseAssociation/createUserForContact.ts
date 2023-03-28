@@ -14,7 +14,6 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} options.caseEntity the case entity to modify and return
  * @param {string} options.email the email address for the user we are attaching to the case
  * @param {string} options.name the name of the user to update the case with
- * @returns {Case} the updated case entity
  */
 exports.createUserForContact = async ({
   applicationContext,
@@ -59,6 +58,4 @@ exports.createUserForContact = async ({
     userCase: userCaseEntity.validate().toRawObject(),
     userId: userRaw.userId,
   });
-
-  return caseEntity;
 };
