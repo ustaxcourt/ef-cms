@@ -442,7 +442,7 @@ const updateAndSaveWorkItem = async ({
 }: {
   applicationContext: IApplicationContext;
   docketEntry: DocketEntry;
-  user: TUser;
+  user: RawUser;
 }): Promise<void> => {
   const { workItem } = docketEntry;
   workItem.docketEntry = docketEntry.toRawObject();

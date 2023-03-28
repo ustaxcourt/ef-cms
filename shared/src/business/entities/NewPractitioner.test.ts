@@ -1,5 +1,5 @@
-const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
-const { NewPractitioner } = require('./NewPractitioner');
+import { COUNTRY_TYPES, ROLES } from './EntityConstants';
+import { NewPractitioner } from './NewPractitioner';
 
 describe('NewPractitioner', () => {
   const mockPractitioner = {
@@ -25,7 +25,7 @@ describe('NewPractitioner', () => {
     lastName: 'Practitioner',
     originalBarState: 'IL',
     practitionerType: 'Attorney',
-    role: ROLES.NewPractitioner,
+    role: ROLES.privatePractitioner,
   };
 
   it('Creates a valid NewPractitioner with all required fields', () => {
@@ -35,7 +35,7 @@ describe('NewPractitioner', () => {
 
   it('Creates an invalid NewPractitioner with missing required fields', () => {
     const user = new NewPractitioner({
-      role: ROLES.NewPractitioner,
+      role: ROLES.privatePractitioner,
     });
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toMatchObject({
