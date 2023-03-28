@@ -292,11 +292,13 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
+      applicationContext.getPersistenceGateway().removeCaseFromHearing,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
       docketNumber: MOCK_CASE.docketNumber,
-      hearings: [],
     });
   });
 
