@@ -125,7 +125,7 @@ export const DeficiencyStatisticsForm = connect(
               <FormGroup
                 confirmationText={
                   statisticConfirmationTextHelper.confirmationText
-                    .irsDeficiencyAmount
+                    ?.irsDeficiencyAmount
                 }
                 errorText={validationErrors.irsDeficiencyAmount}
               >
@@ -143,6 +143,9 @@ export const DeficiencyStatisticsForm = connect(
                       key: 'irsDeficiencyAmount',
                       value: values.value,
                     });
+                    console.log(
+                      'About to call checkForNegativeValueSequence*****',
+                    );
                     checkForNegativeValueSequence({
                       key: 'irsDeficiencyAmount',
                       value: values.value,
