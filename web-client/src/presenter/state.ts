@@ -89,6 +89,7 @@ import { practitionerSearchFormHelper } from './computeds/practitionerSearchForm
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
+import { reportMenuHelper } from './computeds/reportMenuHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -208,6 +209,7 @@ const helpers = {
   printPaperServiceHelper,
   recentMessagesHelper,
   removeFromTrialSessionModalHelper,
+  reportMenuHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
