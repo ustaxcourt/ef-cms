@@ -13,7 +13,7 @@ module.exports = {
       type: 'join',
     },
     'completedAt.S': {
-      type: 'text',
+      type: 'date',
     },
     'completedBy.S': {
       type: 'text',

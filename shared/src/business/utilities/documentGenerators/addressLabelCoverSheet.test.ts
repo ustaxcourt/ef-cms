@@ -13,8 +13,8 @@ describe('addressLabelCoverSheet', () => {
         applicationContext,
         data: {
           address1: '123 Some Street',
+          address2: 'Apt. 1B',
           city: 'Some City',
-          country: 'USA',
           docketNumberWithSuffix: '123-45S',
           name: 'Test Person',
           postalCode: '89890',

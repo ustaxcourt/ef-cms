@@ -67,6 +67,10 @@ describe('getCasesForUserInteractor', () => {
     applicationContext.getCurrentUser.mockResolvedValue({
       userId,
     });
+
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(true);
   });
   describe('Consolidated cases', () => {
     beforeEach(() => {
