@@ -63,6 +63,3 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
     showPamphletsForYear,
   };
 };
-
-//filed datwe same for all tcrps tacross diff cases that refer to one papmhlet
-//last name of primary petr/ just business name a-z
