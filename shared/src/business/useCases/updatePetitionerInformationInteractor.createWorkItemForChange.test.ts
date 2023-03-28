@@ -81,27 +81,26 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[0],
-          address1: 'A Changed Street',
-        },
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        address1: 'A Changed Street',
       },
-    );
+    });
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      additionalInfo: 'for Test Primary Petitioner',
+      eventCode: 'NCA',
+      workItem: expect.anything(),
+    });
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
   });
 
   it('should NOT create a work item for the NCA when the petitioner is represented and their service preference is NOT paper', async () => {
@@ -114,26 +113,26 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[0],
-          address1: 'A Changed Street',
-        },
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        address1: 'A Changed Street',
       },
-    );
+    });
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      additionalInfo: 'for Test Primary Petitioner',
+      eventCode: 'NCA',
+      workItem: undefined,
+    });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
   });
 
   it('should create a work item for the NCA when the petitioner is represented and their service preference is paper', async () => {
@@ -146,28 +145,27 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[0],
-          address1: 'A Changed Street',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        address1: 'A Changed Street',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-    );
+    });
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      additionalInfo: 'for Test Primary Petitioner',
+      eventCode: 'NCA',
+      workItem: expect.anything(),
+    });
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
   });
 
   it('should create a work item for the NCA when the petitioner is represented and a private practitioner on the case requests paper service', async () => {
@@ -182,26 +180,25 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[1],
-          address1: 'A Changed Street',
-        },
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[1],
+        address1: 'A Changed Street',
       },
-    );
+    });
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      additionalInfo: 'for Test Secondary Petitioner',
+      eventCode: 'NCA',
+      workItem: expect.anything(),
+    });
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Secondary Petitioner',
-    );
   });
 });
