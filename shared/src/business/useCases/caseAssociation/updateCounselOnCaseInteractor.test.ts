@@ -237,7 +237,6 @@ describe('updateCounselOnCaseInteractor', () => {
     await updateCounselOnCaseInteractor(applicationContext, {
       docketNumber: '123-19',
       userData: {
-        email: 'not.editable@example.com',
         name: 'Saul Goodman',
         representing: [],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -265,5 +264,25 @@ describe('updateCounselOnCaseInteractor', () => {
         userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
       }),
     ).rejects.toThrow('User is not a practitioner');
+  });
+
+  it('throws an error if the the userId of the Petitioner is not found on the case', async () => {
+    await expect(
+      updateCounselOnCaseInteractor(applicationContext, {
+        docketNumber: '123-19',
+        userData: {
+          email: 'not.editable@example.com',
+          name: 'Saul Goodman',
+          representing: [
+            '9d914ca2-7876-43a7-acfa-ccb645717e11',
+            '12345abc-7876-43a7-acfa-ccb645717e11',
+          ],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
+      }),
+    ).rejects.toThrow(
+      'Cannot find petitioner 12345abc-7876-43a7-acfa-ccb645717e11 on case',
+    );
   });
 });

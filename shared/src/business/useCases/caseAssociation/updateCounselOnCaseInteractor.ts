@@ -56,6 +56,8 @@ export const updateCounselOnCaseInteractor = async (
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
+    const petitionerContactIds = [];
+
     caseEntity.updatePrivatePractitioner({
       representing: editableFields.representing,
       userId,
@@ -74,6 +76,13 @@ export const updateCounselOnCaseInteractor = async (
         petitioner.serviceIndicator = serviceIsPaper
           ? SERVICE_INDICATOR_TYPES.SI_PAPER
           : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
+      petitionerContactIds.push(petitioner.contactId);
+    });
+
+    editableFields.representing.forEach(contactId => {
+      if (!petitionerContactIds.includes(contactId)) {
+        throw new Error(`Cannot find petitioner ${contactId} on case`);
       }
     });
   } else if (userToUpdate.role === ROLES.irsPractitioner) {
