@@ -30,19 +30,25 @@ describe('updateCourtIssuedOrderInteractor', () => {
         userId: mockUserId,
       },
       {
+        createdAt: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: '2019-03-01T21:40:46.415Z',
+        receivedAt: '2019-03-01T21:40:46.415Z',
         userId: mockUserId,
       },
       {
+        createdAt: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filingDate: '2019-03-01T21:40:46.415Z',
+        receivedAt: '2019-03-01T21:40:46.415Z',
         userId: mockUserId,
       },
     ],
@@ -141,24 +147,17 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
-    ).toEqual(3);
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        caseToUpdate: expect.objectContaining({
-          docketEntries: expect.arrayContaining([
-            expect.objectContaining({
-              documentType: 'Order of Dismissal for Lack of Jurisdiction',
-              eventCode: 'ODJ',
-              freeText: 'Order of Dismissal for Lack of Jurisdiction',
-            }),
-          ]),
-        }),
-      }),
-    );
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      documentType: 'Order of Dismissal for Lack of Jurisdiction',
+      eventCode: 'ODJ',
+      freeText: 'Order of Dismissal for Lack of Jurisdiction',
+    });
   });
 
   it('should not populate free text for OSCP', async () => {
@@ -292,24 +291,17 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
-    ).toEqual(3);
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        caseToUpdate: expect.objectContaining({
-          docketEntries: expect.arrayContaining([
-            expect.objectContaining({
-              documentType: 'Notice',
-              eventCode: 'A',
-              freeText: undefined,
-            }),
-          ]),
-        }),
-      }),
-    );
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      documentType: 'Notice',
+      eventCode: 'A',
+      freeText: undefined,
+    });
   });
 
   it('stores documentContents in S3 if present', async () => {
