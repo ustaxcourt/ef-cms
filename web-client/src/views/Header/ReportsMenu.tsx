@@ -41,18 +41,20 @@ export const ReportsMenu = connect(
         </button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
-            <li className="usa-nav__submenu-item">
-              <a
-                href="/reports/activity"
-                id="activity-report-btn"
-                onClick={() => {
-                  resetHeaderAccordionsSequence();
-                  toggleMobileMenuSequence();
-                }}
-              >
-                Activity
-              </a>
-            </li>
+            {reportMenuHelper.showActivityReport && (
+              <li className="usa-nav__submenu-item">
+                <a
+                  href="/reports/activity"
+                  id="activity-report-btn"
+                  onClick={() => {
+                    resetHeaderAccordionsSequence();
+                    toggleMobileMenuSequence();
+                  }}
+                >
+                  Activity
+                </a>
+              </li>
+            )}
             <li className="usa-nav__submenu-item">
               <Button
                 link
