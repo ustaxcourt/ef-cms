@@ -113,6 +113,7 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 
 export const formattedTrialSessions = (get, applicationContext) => {
   const judgeId = get(state.judgeUser.userId);
+  const currentTrialSessionId = get(state.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();
 
   // filter trial sessions
@@ -180,6 +181,12 @@ export const formattedTrialSessions = (get, applicationContext) => {
       sessionsByTerm,
       applicationContext,
     );
+
+    if (currentTrialSessionId) {
+      sessionsByTerm = sessionsByTerm.filter(
+        session => session.trialSessionId !== currentTrialSessionId,
+      );
+    }
   }
 
   return {
