@@ -33,7 +33,7 @@ export const FormGroup = connect(function FormGroup(props) {
   const renderSingleConfirmation = () => {
     return (
       confirmationText && (
-        <span className="text-confirmation-message">{confirmationText}</span>
+        <span className="ustc-confirmation-message">{confirmationText}</span>
       )
     );
   };
@@ -42,17 +42,17 @@ export const FormGroup = connect(function FormGroup(props) {
     <div
       className={classNames(
         'usa-form-group',
+        hasConfirmation && 'ustc-form-group--confirmation',
         hasError && 'usa-form-group--error',
-        hasConfirmation && 'form-group-confirmation',
         className,
       )}
       id={id}
       ref={formGroupRef}
     >
       {children}
-      {hasConfirmation && renderSingleConfirmation()}
       {Array.isArray(errorText) && renderMultipleErrors()}
       {!Array.isArray(errorText) && renderSingleError()}
+      {hasConfirmation && renderSingleConfirmation()}
     </div>
   );
 });
