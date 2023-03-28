@@ -491,8 +491,8 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[0],
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       documentType: 'Notice of Change of Address',
