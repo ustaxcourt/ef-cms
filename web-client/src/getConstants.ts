@@ -140,7 +140,7 @@ const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
 const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
 
 const NEGATIVE_VALUE_CONFIRMATION_TEXT =
-  'You are entering a negative value, please confirm before saving';
+  'You are entering a negative value, please confirm before saving.';
 
 export const getConstants = () => ({
   ADC_SECTION,
