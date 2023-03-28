@@ -87,7 +87,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
     ).toHaveBeenCalled();
   });
 });
