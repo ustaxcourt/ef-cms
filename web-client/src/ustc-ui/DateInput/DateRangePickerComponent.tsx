@@ -9,19 +9,29 @@ export const DateRangePickerComponent = ({
   endDateOptional,
   endLabel,
   endName,
-  endPickerCls,
   endValue,
   onChangeEnd,
   onChangeStart,
-  pickerSpacer,
-  rangePickerCls,
-  showHint,
+  orientation = 'vertical',
   startDateErrorText,
   startDateOptional,
   startLabel,
   startName,
-  startPickerCls,
   startValue,
+}: {
+  endDateErrorText?: string;
+  endDateOptional: boolean;
+  endLabel?: string;
+  endName: string;
+  endValue: string;
+  onChangeEnd: Function;
+  onChangeStart: Function;
+  orientation: 'vertical' | 'horizontal';
+  startDateErrorText?: string;
+  startDateOptional: boolean;
+  startLabel?: string;
+  startName: string;
+  startValue: string;
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -35,6 +45,13 @@ export const DateRangePickerComponent = ({
       startDatePickerRef.current &&
       endDatePickerRef.current &&
       dateRangePickerRef.current
+    ) {
+      datePicker.on(startDatePickerRef.current);
+      datePicker.on(endDatePickerRef.current);
+      dateRangePicker.on(dateRangePickerRef.current);
+    } else if (
+      startDatePickerRef.current ||
+      (endDatePickerRef.current && dateRangePickerRef.current)
     ) {
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
@@ -91,13 +108,15 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  const Spacer = pickerSpacer;
-  const displayHint = showHint !== undefined ? showHint : true;
-
   return (
     <FormGroup formGroupRef={dateRangePickerRef}>
-      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
-        <div className={startPickerCls}>
+      <div
+        className={classNames(
+          'usa-date-range-picker',
+          orientation === 'horizontal' ? 'grid-row' : undefined,
+        )}
+      >
+        <div className="grid-col">
           <FormGroup
             errorText={startDateErrorText}
             formGroupRef={startDatePickerRef}
@@ -112,17 +131,13 @@ export const DateRangePickerComponent = ({
                 <span className="usa-hint">(optional)</span>
               )}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${startName}-date-start-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
                 className="usa-input"
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
+                placeholder="MM/DD/YYYY"
                 ref={startDateInputRef}
                 type="text"
               />
@@ -130,9 +145,7 @@ export const DateRangePickerComponent = ({
           </FormGroup>
         </div>
 
-        {Spacer && <Spacer />}
-
-        <div className={endPickerCls}>
+        <div className="grid-col">
           <FormGroup
             errorText={endDateErrorText}
             formGroupRef={endDatePickerRef}
@@ -145,17 +158,13 @@ export const DateRangePickerComponent = ({
               {endLabel || 'End date'}{' '}
               {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${endName}-date-end-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
+                placeholder="MM/DD/YYYY"
                 ref={endDateInputRef}
                 type="text"
               />
