@@ -58,4 +58,6 @@ exports.createUserForContact = async ({
     userCase: userCaseEntity.validate().toRawObject(),
     userId: userRaw.userId,
   });
+
+  return rawCase;
 };

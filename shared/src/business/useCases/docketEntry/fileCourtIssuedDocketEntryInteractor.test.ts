@@ -31,33 +31,42 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
       docketEntries: [
         {
+          createdAt: '2019-03-01T21:40:46.415Z',
           docketEntryId: 'a01afa63-931e-4999-99f0-c892c51292d6',
           docketNumber: '45678-18',
           documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
+          filingDate: '2019-03-01T21:40:46.415Z',
+          receivedAt: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
           userId: mockUserId,
         },
         {
+          createdAt: '2019-03-01T21:40:46.415Z',
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: '45678-18',
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
+          filingDate: '2019-03-01T21:40:46.415Z',
+          receivedAt: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
           userId: mockUserId,
         },
         {
+          createdAt: '2019-03-01T21:40:46.415Z',
           docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           docketNumber: '45678-18',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
           eventCode: TRANSCRIPT_EVENT_CODE,
+          filingDate: '2019-03-01T21:40:46.415Z',
+          receivedAt: '2019-03-01T21:40:46.415Z',
           userId: mockUserId,
         },
       ],
@@ -157,7 +166,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).toEqual('109-19');
   });
 
-  it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
+  it('should call updateDocketEntry with the docket entry set as pending if the document is a tracked document', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       docketNumbers: [],
       documentMeta: {
@@ -172,14 +181,13 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     } as any);
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    const { caseToUpdate } =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
-    const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
-      d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
-    );
-    expect(docketEntryInCaseToUpdate).toMatchObject({
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
       docketEntryId: caseRecord.docketEntries[1].docketEntryId,
       filingDate: '2011-03-01T21:40:46.415Z',
       pending: true,
