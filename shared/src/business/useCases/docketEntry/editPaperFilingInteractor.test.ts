@@ -295,13 +295,10 @@ describe('editPaperFilingInteractor', () => {
             isSavingForLater: false,
           });
 
-          const updatedDocketEntry = applicationContext
-            .getPersistenceGateway()
-            .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-              d => d.docketEntryId === mockDocketEntryId,
-            );
-
-          expect(updatedDocketEntry).toMatchObject({
+          expect(
+            applicationContext.getPersistenceGateway().updateDocketEntry.mock
+              .calls[0][0].document,
+          ).toMatchObject({
             docketEntryId: mockDocketEntryId,
             docketNumber: caseRecord.docketEntries[0].docketNumber,
             documentTitle: 'My Edited Document',
