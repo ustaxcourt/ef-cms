@@ -35,4 +35,5 @@ export const setDefaultPenaltiesAction = ({ get, props, store }) => {
   store.set(state.modal.penalties, initialPenalties);
   store.set(state.modal.penaltyNameLabel, penaltyNameLabel);
   store.set(state.modal.statisticId, statisticId);
+  store.set(state.confirmationText.penalties, []);
 };
