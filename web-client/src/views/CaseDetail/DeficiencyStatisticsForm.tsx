@@ -9,11 +9,10 @@ import React from 'react';
 export const DeficiencyStatisticsForm = connect(
   {
     checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
-    // confirmationText: state.confirmationText,
+    confirmationText: state.confirmationText,
     form: state.form,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
-    statisticConfirmationTextHelper: state.statisticConfirmationTextHelper,
     updateAddDeficiencyFormValueSequence:
       sequences.updateAddDeficiencyFormValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -23,10 +22,9 @@ export const DeficiencyStatisticsForm = connect(
   },
   function DeficiencyStatisticsForm({
     checkForNegativeValueSequence,
-    // confirmationText,
+    confirmationText,
     form,
     showCalculatePenaltiesModalSequence,
-    statisticConfirmationTextHelper,
     updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence,
@@ -123,10 +121,7 @@ export const DeficiencyStatisticsForm = connect(
           <div className="grid-row grid-gap-2">
             <div className="grid-col-3">
               <FormGroup
-                confirmationText={
-                  statisticConfirmationTextHelper.confirmationText
-                    ?.irsDeficiencyAmount
-                }
+                confirmationText={confirmationText?.irsDeficiencyAmount}
                 errorText={validationErrors.irsDeficiencyAmount}
               >
                 <label className="usa-label" htmlFor="irs-deficiency-amount">
@@ -143,9 +138,6 @@ export const DeficiencyStatisticsForm = connect(
                       key: 'irsDeficiencyAmount',
                       value: values.value,
                     });
-                    console.log(
-                      'About to call checkForNegativeValueSequence*****',
-                    );
                     checkForNegativeValueSequence({
                       key: 'irsDeficiencyAmount',
                       value: values.value,
