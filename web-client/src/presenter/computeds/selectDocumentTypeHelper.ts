@@ -123,6 +123,15 @@ export const getOptionsForCategory = ({
   return options;
 };
 
+const range = size => {
+  return [...Array(size).keys()].map(i => (i + 1).toString());
+};
+
+export const getOrdinalValuesForUploadIteration = () => {
+  const iterationList = range(15);
+  return [...iterationList, 'Other'];
+};
+
 export const MAX_TITLE_LENGTH = 100;
 export const getPreviouslyFiledDocuments = (
   applicationContext,

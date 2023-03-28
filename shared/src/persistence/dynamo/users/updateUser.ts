@@ -5,7 +5,7 @@ export const updateUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: RawUser;
 }) => {
   await client.put({
     Item: {

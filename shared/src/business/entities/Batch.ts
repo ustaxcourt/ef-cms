@@ -1,61 +1,59 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('./JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
-/**
- * constructor
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.rawBatch the raw batch data
- * @constructor
- */
-function Batch() {}
+import { JoiValidationConstants } from './JoiValidationConstants';
+import { JoiValidationEntity } from './JoiValidationEntity';
+import { createISODateString } from '../utilities/DateHandler';
+import joi from 'joi';
 
-Batch.prototype.init = function init({ applicationContext, rawBatch }) {
-  this.entityName = 'Batch';
-  this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
-  this.batchIndex = rawBatch.batchIndex || 0;
-  this.createdAt = rawBatch.createdAt || createISODateString();
-  this.pages = rawBatch.pages || [];
-};
+export class Batch extends JoiValidationEntity {
+  public batchId: string;
+  public batchIndex: string;
+  public createdAt: string;
+  public pages: any[];
 
-/**
- * adds a page to current Batch
- *
- * @param {object} page the page to add
- * @returns {Batch} the batch entity after the page is added
- */
-Batch.prototype.addPage = function (page) {
-  this.pages.push(page);
-  return this;
-};
+  constructor({ applicationContext, rawBatch }) {
+    super('Batch');
 
-/**
- * clears all pages within this Batch
- *
- * @returns {Batch} the batch entity after the pages are cleared
- */
-Batch.prototype.clear = function () {
-  this.pages = [];
-  return this;
-};
+    this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
+    this.batchIndex = rawBatch.batchIndex || 0;
+    this.createdAt = rawBatch.createdAt || createISODateString();
+    this.pages = rawBatch.pages || [];
+  }
 
-Batch.VALIDATION_ERROR_MESSAGES = {
-  batchIndex: 'Invalid batch index',
-  pages: 'At least one page is required',
-};
+  /**
+   * adds a page to current Batch
+   *
+   * @param {object} page the page to add
+   * @returns {Batch} the batch entity after the page is added
+   */
+  addPage(page) {
+    this.pages.push(page);
+    return this;
+  }
 
-Batch.schema = joi.object().keys({
-  batchId: JoiValidationConstants.UUID.required(),
-  batchIndex: joi.number().integer().min(0).required(),
-  createdAt: JoiValidationConstants.ISO_DATE.required(),
-  pages: joi.array().min(1).required(),
-});
+  /**
+   * clears all pages within this Batch
+   *
+   * @returns {Batch} the batch entity after the pages are cleared
+   */
+  clear() {
+    this.pages = [];
+    return this;
+  }
 
-joiValidationDecorator(Batch, Batch.schema, Batch.VALIDATION_ERROR_MESSAGES);
+  static VALIDATION_ERROR_MESSAGES = {
+    batchIndex: 'Invalid batch index',
+    pages: 'At least one page is required',
+  };
 
-module.exports = { Batch: validEntityDecorator(Batch) };
+  getValidationRules() {
+    return joi.object().keys({
+      batchId: JoiValidationConstants.UUID.required(),
+      batchIndex: joi.number().integer().min(0).required(),
+      createdAt: JoiValidationConstants.ISO_DATE.required(),
+      pages: joi.array().min(1).required(),
+    });
+  }
+
+  getErrorToMessageMap() {
+    return Batch.VALIDATION_ERROR_MESSAGES;
+  }
+}
