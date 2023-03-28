@@ -40,7 +40,28 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
     }),
   );
 
-  return { pamphletPeriods, pamphletsByDate };
+  // pamphletPeriods.forEach(year => {
+  //   Object.keys(pamphletsByDate).forEach(filingDateKey => {
+  //     if (filingDateKey.split('-')[0] === year) {
+  //       pamphletsByDate[filingDateKey].year = year;
+  //     }
+  //   });
+  // });
+
+  const showPamphletsForYear = ({ filingDateKey, year }) => {
+    if (filingDateKey.split('-')[0] === year) {
+      return true;
+    }
+  };
+
+  const filingDateKeys = Object.keys(pamphletsByDate);
+
+  return {
+    filingDateKeys,
+    pamphletPeriods,
+    pamphletsByDate,
+    showPamphletsForYear,
+  };
 };
 
 //filed datwe same for all tcrps tacross diff cases that refer to one papmhlet
