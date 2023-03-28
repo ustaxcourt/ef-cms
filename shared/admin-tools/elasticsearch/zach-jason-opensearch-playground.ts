@@ -2,11 +2,11 @@
 
 import { computeDate } from '../../src/business/utilities/DateHandler';
 import { pinkLog } from '../../src/tools/pinkLog';
-import { searchAll } from '../../src/persistence/elasticsearch/searchClient';
+import { search } from '../../src/persistence/elasticsearch/searchClient';
 import createApplicationContext from '../../../web-api/src/applicationContext';
 
 const getAllCases = async ({ applicationContext }) => {
-  const { results } = await searchAll({
+  const { results } = await search({
     applicationContext,
     searchParameters: {
       body: {
@@ -22,9 +22,9 @@ const getAllCases = async ({ applicationContext }) => {
                 },
               },
               // {
-              //   match: {
-              //     'isPaper.BOOL': false,
-              //   },
+              // match: {
+              //   'blocked.BOOL': false,
+              // },
               // },
               // {
               //   match: {
@@ -34,10 +34,10 @@ const getAllCases = async ({ applicationContext }) => {
             ],
           },
         },
-        size: 1000,
         sort: [{ 'receivedAt.S': 'asc' }],
       },
       index: 'efcms-case',
+      size: 10000,
     },
   });
   return results;
@@ -48,14 +48,16 @@ const getAllCases = async ({ applicationContext }) => {
   const start = Date.now();
   const petitions = await getAllCases({ applicationContext });
   const end = Date.now();
-  pinkLog(petitions.length);
+  pinkLog('length: ', petitions.length);
   pinkLog('time****', (end - start) / 1000);
 })();
 
-// not queryable:
+// not query-able:
 // isPaper: boolean
 // createdAt: Date
 // caseType: String
 
 // Questions
 // why is new not in the Figma as an option for Case Status
+
+// Count API
