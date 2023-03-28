@@ -177,7 +177,7 @@ describe('updateCaseDetailsInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       });
 
-    const result = await updateCaseDetailsInteractor(applicationContext, {
+    await updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -186,12 +186,12 @@ describe('updateCaseDetailsInteractor', () => {
       docketNumber: mockCase.docketNumber,
     });
 
-    const waivedDocument = result.docketEntries.find(
-      entry =>
-        entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
-    );
-
-    expect(waivedDocument).toBeTruthy();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+    });
   });
 
   it('should create a docket entry when moved from unpaid to paid', async () => {
@@ -202,7 +202,7 @@ describe('updateCaseDetailsInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       });
 
-    const result = await updateCaseDetailsInteractor(applicationContext, {
+    await updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
@@ -212,12 +212,12 @@ describe('updateCaseDetailsInteractor', () => {
       docketNumber: mockCase.docketNumber,
     });
 
-    const paidDocument = result.docketEntries.find(
-      entry =>
-        entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
-    );
-
-    expect(paidDocument).toBeTruthy();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
+    ).toMatchObject({
+      documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+    });
   });
 
   it('should not create a docket entry when payment status remains unpaid', async () => {
