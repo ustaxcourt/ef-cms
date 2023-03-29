@@ -88,6 +88,9 @@ module.exports = {
     'privatePractitioners.L.M.userId.S': {
       type: 'keyword',
     },
+    'procedureType.S': {
+      type: 'keyword',
+    },
     'receivedAt.S': {
       type: 'date',
     },
