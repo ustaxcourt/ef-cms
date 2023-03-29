@@ -201,7 +201,7 @@ export const NonstandardForm = connect(
                   <select
                     className="usa-select"
                     id={`${namespace}ordinal-field-select`}
-                    name="ordinalValue"
+                    name={`${namespace}ordinalValue`}
                     value={form.ordinalValue}
                     onChange={e => {
                       updateSequence({
@@ -266,7 +266,7 @@ export const NonstandardForm = connect(
                   <select
                     className="usa-select"
                     id={`${namespace}ordinal-field-select`}
-                    name="ordinalValue"
+                    name={`${namespace}ordinalValue`}
                     value={form.ordinalValue}
                     onChange={e => {
                       updateSequence({
