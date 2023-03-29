@@ -3,12 +3,7 @@ import { state } from 'cerebral';
 
 export const opinionPamphletsHelper = (get, applicationContext) => {
   const opinionPamphlets = get(state.opinionPamphlets);
-  // const opinionPamphletsFormatted = orderBy(
-  //   opinionPamphlets,
-  //   ['filingDate'],
-  //   ['desc'],
-  // );
-  //order by filing date descending
+
   const pamphletsByDate = {};
 
   opinionPamphlets.forEach(pamphlet => {
@@ -40,14 +35,6 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
     }),
   );
 
-  // pamphletPeriods.forEach(year => {
-  //   Object.keys(pamphletsByDate).forEach(filingDateKey => {
-  //     if (filingDateKey.split('-')[0] === year) {
-  //       pamphletsByDate[filingDateKey].year = year;
-  //     }
-  //   });
-  // });
-
   const showPamphletsForYear = ({ filingDateKey, year }) => {
     if (filingDateKey.split('-')[0] === year) {
       return true;
@@ -56,8 +43,13 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
 
   const filingDateKeys = Object.keys(pamphletsByDate);
 
+  const pamhpletToDisplay = filingDateKey => {
+    return pamphletsByDate[filingDateKey][0];
+  };
+
   return {
     filingDateKeys,
+    pamhpletToDisplay,
     pamphletPeriods,
     pamphletsByDate,
     showPamphletsForYear,
