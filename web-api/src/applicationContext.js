@@ -579,7 +579,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         pdfJsCache.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
         return pdfJsCache;
       } else {
-        pdfJsCache = require('pdf');
+        pdfJsCache = require('../terraform/template/lambdas/dist/pdfjs-dist/pdf.js');
         pdfJsCache.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
         return pdfJsCache;
       }
