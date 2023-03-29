@@ -133,6 +133,7 @@ import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
+import { gotoCustomCaseReportSequence } from './sequences/gotoCustomCaseReportSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocketEntryQcSequence } from './sequences/gotoDocketEntryQcSequence';
 import { gotoEditCaseDetailsSequence } from './sequences/gotoEditCaseDetailsSequence';
@@ -659,6 +660,7 @@ export const presenter = {
     gotoContactSequence,
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
+    gotoCustomCaseReportSequence,
     gotoDashboardSequence,
     gotoDocketEntryQcSequence,
     gotoEditCaseDetailsSequence,
