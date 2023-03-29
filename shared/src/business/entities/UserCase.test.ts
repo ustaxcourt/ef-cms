@@ -1,5 +1,5 @@
-const { prepareDateFromString } = require('../utilities/DateHandler');
-const { UserCase } = require('./UserCase');
+import { UserCase } from './UserCase';
+import { prepareDateFromString } from '../utilities/DateHandler';
 
 const validUserCase = {
   caseCaption: 'Guy Fieri, Petitioner',

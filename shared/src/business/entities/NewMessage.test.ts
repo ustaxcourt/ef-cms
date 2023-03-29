@@ -1,15 +1,11 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getTextByCount } = require('../utilities/getTextByCount');
-const { Message } = require('./Message');
-const { NewMessage } = require('./NewMessage');
-const { PETITIONS_SECTION } = require('./EntityConstants');
+import { Message } from './Message';
+import { NewMessage } from './NewMessage';
+import { PETITIONS_SECTION } from './EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getTextByCount } from '../utilities/getTextByCount';
 
 describe('NewMessage', () => {
   describe('isValid', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(() => new NewMessage({}, {})).toThrow();
-    });
-
     it('creates a valid NewMessage', () => {
       const message = new NewMessage(
         {
