@@ -62,7 +62,7 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
