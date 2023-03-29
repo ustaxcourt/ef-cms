@@ -1,10 +1,11 @@
 import { OPINION_PAMPHLET_EVENT_CODE } from '../../entities/EntityConstants';
+import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
 
 /**
  * getOpinionPamphletsInteractor
  *
  * @param {object} applicationContext application context object
- * @returns {array} an array of opinion pamphlets (if any)
+ * @returns {array} an array of opinion pamphlets
  */
 export const getOpinionPamphletsInteractor = async (
   applicationContext: IApplicationContext,
@@ -17,5 +18,7 @@ export const getOpinionPamphletsInteractor = async (
       requireServedDate: false,
     });
 
-  return results;
+  return PublicDocumentSearchResult.validateRawCollection(results, {
+    applicationContext,
+  });
 };

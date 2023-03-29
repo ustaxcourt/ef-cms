@@ -25,10 +25,11 @@ export const OpinionPamphlets = connect(
                 <h2>{period}</h2>
 
                 {opinionPamphletsHelper.filingDateKeys.map(filingDateKey => {
-                  const show = opinionPamphletsHelper.showPamphletsForYear({
-                    filingDateKey,
-                    year: period,
-                  });
+                  const show =
+                    opinionPamphletsHelper.shouldShowPamphletsForYear({
+                      filingDateKey,
+                      year: period,
+                    });
                   if (show) {
                     return (
                       <div className=" grid-row grid-gap" key={filingDateKey}>
@@ -41,11 +42,11 @@ export const OpinionPamphlets = connect(
                             onClick={() => {
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId:
-                                  opinionPamphletsHelper.pamhpletToDisplay(
+                                  opinionPamphletsHelper.getPamhpletToDisplay(
                                     filingDateKey,
                                   ).docketEntryId,
                                 docketNumber:
-                                  opinionPamphletsHelper.pamhpletToDisplay(
+                                  opinionPamphletsHelper.getPamhpletToDisplay(
                                     filingDateKey,
                                   ).docketNumber,
                                 isPublic: true,
@@ -54,7 +55,7 @@ export const OpinionPamphlets = connect(
                             }}
                           >
                             {
-                              opinionPamphletsHelper.pamhpletToDisplay(
+                              opinionPamphletsHelper.getPamhpletToDisplay(
                                 filingDateKey,
                               ).documentTitle
                             }
@@ -64,7 +65,7 @@ export const OpinionPamphlets = connect(
                         <div className="grid-col-2 text-right">
                           Filed:{' '}
                           {
-                            opinionPamphletsHelper.pamhpletToDisplay(
+                            opinionPamphletsHelper.getPamhpletToDisplay(
                               filingDateKey,
                             ).filingDate
                           }
@@ -86,7 +87,7 @@ export const OpinionPamphlets = connect(
                             {opinionPamphletsHelper.pamphletsByDate[
                               filingDateKey
                             ].map(pamphlet => {
-                              const htmlStuff = (
+                              return (
                                 <tr key={pamphlet.docketEntryId}>
                                   <td>{pamphlet.docketNumber}</td>
                                   <td>{pamphlet.caseCaption}</td>
@@ -94,7 +95,6 @@ export const OpinionPamphlets = connect(
                                   <td>{pamphlet.pageCount}</td>
                                 </tr>
                               );
-                              return htmlStuff;
                             })}
                           </tbody>
                         </table>

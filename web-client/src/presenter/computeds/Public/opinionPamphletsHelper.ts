@@ -1,11 +1,11 @@
 import { isEmpty, orderBy, uniq } from 'lodash';
 import { state } from 'cerebral';
 
-export const opinionPamphletsHelper = (get, applicationContext) => {
-  const opinionPamphlets = get(state.opinionPamphlets);
-
-  const pamphletsByDate = {};
-
+const groupPamphletsByFilingDate = ({
+  applicationContext,
+  opinionPamphlets,
+}) => {
+  let pamphletGroups = {};
   opinionPamphlets.forEach(pamphlet => {
     pamphlet.formattedFilingDate = applicationContext
       .getUtilities()
@@ -15,43 +15,54 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(pamphlet.filingDate, 'MMDDYY');
 
-    if (isEmpty(pamphletsByDate[pamphlet.formattedFilingDate])) {
-      pamphletsByDate[pamphlet.formattedFilingDate] = [pamphlet];
+    if (isEmpty(pamphletGroups[pamphlet.formattedFilingDate])) {
+      pamphletGroups[pamphlet.formattedFilingDate] = [pamphlet];
     } else {
-      pamphletsByDate[pamphlet.formattedFilingDate].push(pamphlet);
+      pamphletGroups[pamphlet.formattedFilingDate].push(pamphlet);
     }
   });
+  return pamphletGroups;
+};
 
-  const filedPamphletDatesSorted = orderBy(
+export const opinionPamphletsHelper = (get, applicationContext) => {
+  const opinionPamphlets: any = get(state.opinionPamphlets);
+
+  const pamphletsByDate = groupPamphletsByFilingDate({
+    applicationContext,
+    opinionPamphlets,
+  });
+
+  //list of filing dates sorted desc
+  const filedPamphletDatesSorted: string[] = orderBy(
     Object.keys(pamphletsByDate),
     ['filingDate'],
     ['desc'],
   );
 
-  const pamphletPeriods = uniq(
+  //list of unique years
+  const pamphletPeriods: string[] = uniq(
     filedPamphletDatesSorted.map(filingDate => {
       const b = applicationContext.getUtilities().deconstructDate(filingDate);
-      return b.year;
+      return b?.year;
     }),
   );
 
-  const showPamphletsForYear = ({ filingDateKey, year }) => {
-    if (filingDateKey.split('-')[0] === year) {
-      return true;
-    }
-  };
-
+  //maybe key value sitch where key is year and value is array of filing dates for that year
   const filingDateKeys = Object.keys(pamphletsByDate);
 
-  const pamhpletToDisplay = filingDateKey => {
+  const shouldShowPamphletsForYear = ({ filingDateKey, year }): Boolean => {
+    return filingDateKey.split('-')[0] === year;
+  };
+
+  const getPamhpletToDisplay = (filingDateKey: string): any => {
     return pamphletsByDate[filingDateKey][0];
   };
 
   return {
     filingDateKeys,
-    pamhpletToDisplay,
+    getPamhpletToDisplay,
     pamphletPeriods,
     pamphletsByDate,
-    showPamphletsForYear,
+    shouldShowPamphletsForYear,
   };
 };
