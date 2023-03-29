@@ -28,8 +28,8 @@ export const submitAddDeficiencyStatisticsSequence = [
         {
           error: [setAlertErrorAction],
           success: [
-            clearConfirmationTextAction,
             clearFormAction,
+            clearConfirmationTextAction,
             setSaveAlertsForNavigationAction,
             setAlertSuccessAction,
             navigateToCaseDetailCaseInformationActionFactory('statistics'),
