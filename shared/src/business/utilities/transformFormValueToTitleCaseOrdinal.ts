@@ -1,4 +1,4 @@
-const ordinals = require('english-ordinals');
+import { getOrdinal } from 'english-ordinals';
 
 /**
  * Transforms a form value as a string into an ordinal, in title case
@@ -6,8 +6,8 @@ const ordinals = require('english-ordinals');
  * @param  {string} formValue the formValue to transform
  * @returns {string|void} the formValue as an ordinal in title case
  */
-const transformFormValueToTitleCaseOrdinal = formValue => {
-  let splitNumberIntoWords = ordinals.getOrdinal(formValue).split(' ');
+export const transformFormValueToTitleCaseOrdinal = formValue => {
+  let splitNumberIntoWords = getOrdinal(formValue).split(' ');
 
   let wordWithHyphen = splitNumberIntoWords.find(word => word.includes('-'));
   if (wordWithHyphen) {
@@ -35,6 +35,3 @@ const capitalizeWordAfterHyphen = wordWithHyphen => {
   splitWordWithHyphen = splitWordWithHyphen.join('-');
   return splitWordWithHyphen;
 };
-
-exports.transformFormValueToTitleCaseOrdinal =
-  transformFormValueToTitleCaseOrdinal;

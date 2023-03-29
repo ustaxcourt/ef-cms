@@ -21,7 +21,7 @@ export const updatePetitionerCases = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: RawUser;
 }) => {
   const petitionerDocketNumbers = await applicationContext
     .getPersistenceGateway()
