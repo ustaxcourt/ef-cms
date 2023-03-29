@@ -1,8 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * unsets the modal state
- * state.modal used for temp modal state
+ * sets the penalties confirmation message on state to an empty array.
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for setting showModal
