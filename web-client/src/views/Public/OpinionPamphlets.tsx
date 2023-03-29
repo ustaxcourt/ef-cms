@@ -31,34 +31,44 @@ export const OpinionPamphlets = connect(
                   });
                   if (show) {
                     return (
-                      <div key={filingDateKey}>
-                        <Button
-                          link
-                          aria-label={`View PDF: ${opinionPamphletsHelper.pamphletsByDate[filingDateKey][0].documentTitle}`}
-                          className="margin-bottom-2 text-left line-height-standard padding-0"
-                          target="_blank"
-                          onClick={() => {
-                            openCaseDocumentDownloadUrlSequence({
-                              docketEntryId:
-                                opinionPamphletsHelper.pamphletsByDate[
-                                  filingDateKey
-                                ][0].docketEntryId,
-                              docketNumber:
-                                opinionPamphletsHelper.pamphletsByDate[
-                                  filingDateKey
-                                ][0].docketNumber,
-                              isPublic: true,
-                              //same or new?
-                              useSameTab: false,
-                            });
-                          }}
-                        >
+                      <div className=" grid-row grid-gap" key={filingDateKey}>
+                        <div className="grid-col-4">
+                          <Button
+                            link
+                            aria-label={`View PDF: ${opinionPamphletsHelper.pamphletsByDate[filingDateKey][0].documentTitle}`}
+                            className="margin-bottom-2 text-left line-height-standard padding-0"
+                            target="_blank"
+                            onClick={() => {
+                              openCaseDocumentDownloadUrlSequence({
+                                docketEntryId:
+                                  opinionPamphletsHelper.pamhpletToDisplay(
+                                    filingDateKey,
+                                  ).docketEntryId,
+                                docketNumber:
+                                  opinionPamphletsHelper.pamhpletToDisplay(
+                                    filingDateKey,
+                                  ).docketNumber,
+                                isPublic: true,
+                                useSameTab: false,
+                              });
+                            }}
+                          >
+                            {
+                              opinionPamphletsHelper.pamhpletToDisplay(
+                                filingDateKey,
+                              ).documentTitle
+                            }
+                          </Button>
+                        </div>
+                        <div className="grid-col-6"></div>
+                        <div className="grid-col-2 text-right">
+                          Filed:{' '}
                           {
-                            opinionPamphletsHelper.pamphletsByDate[
-                              filingDateKey
-                            ][0].documentTitle
+                            opinionPamphletsHelper.pamhpletToDisplay(
+                              filingDateKey,
+                            ).filingDate
                           }
-                        </Button>
+                        </div>
                         <table
                           aria-label="docket record"
                           className="usa-table case-detail ustc-table responsive-table"
@@ -69,7 +79,7 @@ export const OpinionPamphlets = connect(
                             <tr>
                               <th>Docket No.</th>
                               <th>Case</th>
-                              <th>Page</th>
+                              <th className="text-right">Page</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -80,7 +90,7 @@ export const OpinionPamphlets = connect(
                                 <tr key={pamphlet.docketEntryId}>
                                   <td>{pamphlet.docketNumber}</td>
                                   <td>{pamphlet.caseCaption}</td>
-                                  {/* TODO: update this property during 9967 */}
+                                  {/* TODO: update this property with work done in 9967 */}
                                   <td>{pamphlet.pageCount}</td>
                                 </tr>
                               );
