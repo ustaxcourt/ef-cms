@@ -52,14 +52,12 @@ export const CalculatePenaltiesModal = connect(
           })}
         {penalties &&
           penalties.map((penalty, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            // <div className="margin-top-3" key={index}>
             <FormGroup
               className="margin-top-3"
               confirmationText={
                 confirmationText?.penalties[index]?.penaltyAmount
               }
-              key={index}
+              key={penalty.name}
             >
               <label className="usa-label" htmlFor={`penalty_${index}`}>
                 Penalty {index + 1} {penaltyNameLabel}
@@ -81,7 +79,6 @@ export const CalculatePenaltiesModal = connect(
                 }}
               />
             </FormGroup>
-            // </div>
           ))}
         {showAddAnotherPenaltyButton && (
           <Button
