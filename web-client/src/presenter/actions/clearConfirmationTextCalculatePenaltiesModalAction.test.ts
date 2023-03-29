@@ -6,10 +6,10 @@ describe('clearConfirmationTextForCalculatePenaltiesModalAction', () => {
     const { state } = await runAction(
       clearConfirmationTextForCalculatePenaltiesModalAction,
       {
-        state: { confirmationText: { penalties: ['something'] } },
+        state: { confirmationText: { penalties: { 0: 'something' } } },
       },
     );
 
-    expect(state.confirmationText.penalties).toBe([]);
+    expect(state.confirmationText.penalties).toEqual({});
   });
 });

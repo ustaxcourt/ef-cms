@@ -9,5 +9,5 @@ import { state } from 'cerebral';
 export const clearConfirmationTextForCalculatePenaltiesModalAction = ({
   store,
 }) => {
-  store.set(state.confirmationText.penalties, []);
+  store.set(state.confirmationText.penalties, {});
 };
