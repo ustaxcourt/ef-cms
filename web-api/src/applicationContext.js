@@ -265,7 +265,6 @@ let sesCache;
 let sqsCache;
 let searchClientCache;
 let notificationServiceCache;
-let pdfJsCache;
 
 const entitiesByName = {
   Case,
@@ -570,19 +569,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return notificationServiceCache;
     },
     getPdfJs: () => {
-      if (pdfJsCache) {
-        return pdfJsCache;
-      }
-
-      if (environment.stage === 'local') {
-        pdfJsCache = require('pdfjs-dist/legacy/build/pdf');
-        pdfJsCache.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
-        return pdfJsCache;
-      } else {
-        pdfJsCache = require('pdf');
-        pdfJsCache.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
-        return pdfJsCache;
-      }
+      const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
+      return pdfjsLib;
     },
     getPdfLib: () => {
       return pdfLib;
