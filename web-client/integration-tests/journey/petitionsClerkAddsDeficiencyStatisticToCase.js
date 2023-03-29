@@ -1,5 +1,7 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { Statistic } from '../../../shared/src/business/entities/Statistic';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { getConstants } from '../../src/getConstants';
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
   return it('petitions clerk adds deficiency statistic to case after QCing', async () => {
@@ -24,8 +26,21 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.irsDeficiencyAmount',
-      value: 1000,
+      value: '-1000',
     });
+    await cerebralTest.runSequence('checkForNegativeValueSequence', {
+      key: 'statistics.0.irsDeficiencyAmount',
+      value: '-1000',
+    });
+
+    console.log('confirm:', cerebralTest.getState(confirmationText));
+    const confirmationTextForIrsDeficiencyAmount = cerebralTest.getState(
+      confirmationText.statistics[0].irsDeficiencyAmount,
+    );
+
+    expect(confirmationTextForIrsDeficiencyAmount).toBe(
+      applicationContext.getConstants().NEGATIVE_VALUE_CONFIRMATION_TEXT,
+    );
 
     let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
 
