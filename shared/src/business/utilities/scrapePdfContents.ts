@@ -11,22 +11,13 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
 
   try {
     pdfjsLib = await applicationContext.getPdfJs();
-    applicationContext.logger.info('we have loaded pdfJsLib', { pdfjsLib });
 
     const document = await pdfjsLib.getDocument(pdfBuffer).promise;
-    applicationContext.logger.info('we have loaded a document', {
-      document,
-      numPages: document.numPages,
-    });
 
     let scrapedText = '';
 
     for (let i = 1; i <= document.numPages; i++) {
       const page = await document.getPage(i);
-      applicationContext.logger.info('we have loaded a page', {
-        page,
-      });
-
       const pageTextContent = await page.getTextContent({
         disableCombineTextItems: false,
         normalizeWhitespace: false,
