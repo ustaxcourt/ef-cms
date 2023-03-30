@@ -59,12 +59,14 @@ describe('opinionPamphletsHelper', () => {
           docketEntryId: 2,
           filingDateWithFullYear: '2022-02-05',
           formattedFilingDate: '02/05/22',
+          sortingName: 'Hroub',
         },
         {
           ...mockTCRP,
           docketEntryId: 4,
           filingDateWithFullYear: '2022-02-05',
           formattedFilingDate: '02/05/22',
+          sortingName: 'Hroub',
         },
       ],
       '2023-03-11': [
@@ -73,6 +75,7 @@ describe('opinionPamphletsHelper', () => {
           docketEntryId: 1,
           filingDateWithFullYear: '2023-03-11',
           formattedFilingDate: '03/11/23',
+          sortingName: 'Hroub',
         },
       ],
       '2023-07-05': [
@@ -81,6 +84,7 @@ describe('opinionPamphletsHelper', () => {
           docketEntryId: 3,
           filingDateWithFullYear: '2023-07-05',
           formattedFilingDate: '07/05/23',
+          sortingName: 'Hroub',
         },
       ],
     });
@@ -108,6 +112,7 @@ describe('opinionPamphletsHelper', () => {
         docketEntryId: 2,
         filingDateWithFullYear: '2022-02-05',
         formattedFilingDate: '02/05/22',
+        sortingName: 'Hroub',
       });
     });
   });
