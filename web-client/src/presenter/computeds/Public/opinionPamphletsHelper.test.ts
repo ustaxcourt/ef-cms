@@ -46,12 +46,6 @@ describe('opinionPamphletsHelper', () => {
     };
   });
 
-  it('should extract unique filing years from the list of opinion pamhplets in state', () => {
-    const { pamphletPeriods } = runCompute(opinionPamphletsHelper, { state });
-
-    expect(pamphletPeriods).toEqual(['2023', '2022']);
-  });
-
   it('should organize opinion pamphlets by filing date', () => {
     const { pamphletsByDate } = runCompute(opinionPamphletsHelper, { state });
 
@@ -89,10 +83,15 @@ describe('opinionPamphletsHelper', () => {
     });
   });
 
-  it('should return a list of all unique filing dates', () => {
-    const { filingDateKeys } = runCompute(opinionPamphletsHelper, { state });
+  it('should create a map of unique filing period years with their associated filing dates', () => {
+    const { yearAndFilingDateMap } = runCompute(opinionPamphletsHelper, {
+      state,
+    });
 
-    expect(filingDateKeys).toEqual(['2023-03-11', '2022-02-05', '2023-07-05']);
+    expect(yearAndFilingDateMap).toEqual({
+      '2022': ['2022-02-05'],
+      '2023': ['2023-03-11', '2023-07-05'],
+    });
   });
 
   describe('getPamhpletToDisplay', () => {
@@ -107,40 +106,6 @@ describe('opinionPamphletsHelper', () => {
         filingDate: '02/05/22',
         formattedFilingDate: '2022-02-05',
       });
-    });
-  });
-
-  describe('shouldShowPamphletsForYear', () => {
-    it('should be true when the filing date is from the year that was passed in', () => {
-      const { shouldShowPamphletsForYear } = runCompute(
-        opinionPamphletsHelper,
-        {
-          state,
-        },
-      );
-
-      expect(
-        shouldShowPamphletsForYear({
-          filingDateKey: '2022-02-05',
-          year: '2022',
-        }),
-      ).toBe(true);
-    });
-
-    it('should be false when the filing date is NOT from the year that was passed in', () => {
-      const { shouldShowPamphletsForYear } = runCompute(
-        opinionPamphletsHelper,
-        {
-          state,
-        },
-      );
-
-      expect(
-        shouldShowPamphletsForYear({
-          filingDateKey: '2022-02-05',
-          year: '2030',
-        }),
-      ).toBe(false);
     });
   });
 });

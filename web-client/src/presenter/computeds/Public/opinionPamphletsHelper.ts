@@ -1,4 +1,4 @@
-import { isEmpty, orderBy, uniq } from 'lodash';
+import { isEmpty, uniq } from 'lodash';
 import { state } from 'cerebral';
 
 const groupPamphletsByFilingDate = ({
@@ -26,43 +26,41 @@ const groupPamphletsByFilingDate = ({
 
 export const opinionPamphletsHelper = (get, applicationContext) => {
   const opinionPamphlets: any = get(state.opinionPamphlets);
+  const yearAndFilingDateMap = {};
 
   const pamphletsByDate = groupPamphletsByFilingDate({
     applicationContext,
     opinionPamphlets,
   });
 
-  //list of filing dates sorted desc
-  const filedPamphletDatesSorted: string[] = orderBy(
-    Object.keys(pamphletsByDate),
-    ['filingDate'],
-    ['desc'],
-  );
+  const uniqueFilingDates = Object.keys(pamphletsByDate);
 
-  //list of unique years
   const pamphletPeriods: string[] = uniq(
-    filedPamphletDatesSorted.map(filingDate => {
+    uniqueFilingDates.map(filingDate => {
       const b = applicationContext.getUtilities().deconstructDate(filingDate);
       return b?.year;
     }),
   );
 
-  //maybe key value sitch where key is year and value is array of filing dates for that year
-  const filingDateKeys = Object.keys(pamphletsByDate);
-
-  const shouldShowPamphletsForYear = ({ filingDateKey, year }): Boolean => {
-    return filingDateKey.split('-')[0] === year;
-  };
+  uniqueFilingDates.forEach(filingDate => {
+    pamphletPeriods.forEach(year => {
+      if (filingDate.split('-')[0] === year) {
+        if (isEmpty(yearAndFilingDateMap[year])) {
+          yearAndFilingDateMap[year] = [filingDate];
+        } else {
+          yearAndFilingDateMap[year].push(filingDate);
+        }
+      }
+    });
+  });
 
   const getPamhpletToDisplay = (filingDateKey: string): any => {
     return pamphletsByDate[filingDateKey][0];
   };
 
   return {
-    filingDateKeys,
     getPamhpletToDisplay,
-    pamphletPeriods,
     pamphletsByDate,
-    shouldShowPamphletsForYear,
+    yearAndFilingDateMap,
   };
 };
