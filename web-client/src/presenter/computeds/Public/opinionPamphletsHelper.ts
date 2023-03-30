@@ -1,5 +1,23 @@
-import { isEmpty, uniq } from 'lodash';
+import { isEmpty, orderBy, uniq } from 'lodash';
 import { state } from 'cerebral';
+
+// --pamphletsGroupedByFilingDate - each array -arrange cases by petr last name alphabetivsly
+//sort years desc
+//sort filing date keys desc
+const sortCasesByPetitionerName = pamphletsGroupedByFilingDate => {
+  Object.keys(pamphletsGroupedByFilingDate).forEach(filingDateKey => {
+    pamphletsGroupedByFilingDate[filingDateKey].map(tcrp => {
+      const firstPetitonerName = tcrp.caseCaption.split(',')[0].split(' ');
+      tcrp.sortingName = firstPetitonerName[firstPetitonerName.length - 1];
+    });
+
+    pamphletsGroupedByFilingDate[filingDateKey] = orderBy(
+      pamphletsGroupedByFilingDate[filingDateKey],
+      'sortingName',
+      'asc',
+    );
+  });
+};
 
 const groupPamphletsByFilingDate = ({
   applicationContext,
@@ -59,6 +77,8 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
   const getPamhpletToDisplay = (filingDateKey: string): any => {
     return pamphletsGroupedByFilingDate[filingDateKey][0];
   };
+
+  sortCasesByPetitionerName(pamphletsGroupedByFilingDate);
 
   return {
     getPamhpletToDisplay,
