@@ -48,15 +48,6 @@ export const createTrialSessionAction = async ({
       .createTrialSessionInteractor(applicationContext, {
         trialSession: { ...trialSession, estimatedEndDate, startDate },
       });
-
-    if (trialSession.swingSession && trialSession.swingSessionId) {
-      await applicationContext
-        .getUseCases()
-        .setTrialSessionAsSwingSessionInteractor(applicationContext, {
-          swingSessionId: result.trialSessionId,
-          trialSessionId: trialSession.swingSessionId,
-        });
-    }
   } catch (err) {
     return path.error({
       alertError: {
