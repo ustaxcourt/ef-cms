@@ -10795,6 +10795,13 @@
     "entityName": "Case",
     "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|102-22",
+    "caseStatusHistory": [
+      {
+        "date": "2022-12-21T19:03:01.908Z",
+        "changedBy": "Docketclerk",
+        "updatedCaseStatus": "New"
+      }
+    ],
     "filingType": "Myself",
     "docketNumberWithSuffix": "102-22W",
     "orderForRatification": false,
@@ -24993,11 +25000,6 @@
     "sk": "multi-docketable-paper-filings",
     "current": true,
     "pk": "multi-docketable-paper-filings"
-  },
-  {
-    "sk": "pdfjs-express-viewer-enabled",
-    "current": false,
-    "pk": "pdfjs-express-viewer-enabled"
   },
   {
     "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",

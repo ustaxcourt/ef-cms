@@ -246,6 +246,9 @@ export const getFormattedDocketEntry = ({
       ? 'Unseal to the public and parties of this case'
       : 'Unseal to the public'
     : 'Seal to the public';
+  formattedResult.toolTipText = !formattedResult.isFileAttached
+    ? 'No Document View'
+    : undefined;
 
   return formattedResult;
 };

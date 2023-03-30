@@ -260,7 +260,12 @@ export const updateTrialSessionInteractor = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    updatedTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
+    applicationContext
+      .getUseCaseHelpers()
+      .associateSwingTrialSessions(applicationContext, {
+        swingSessionId: trialSession.swingSessionId,
+        trialSessionEntity: updatedTrialSessionEntity,
+      });
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
