@@ -152,6 +152,7 @@ import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditU
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuccessSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
+import { gotoJudgeActivityReportSequence } from './sequences/gotoJudgeActivityReportSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
@@ -678,6 +679,7 @@ export const presenter = {
     gotoFileDocumentSequence,
     gotoFilePetitionSuccessSequence,
     gotoIdleLogoutSequence,
+    gotoJudgeActivityReportSequence,
     gotoLoginSequence,
     gotoMaintenanceSequence,
     gotoMessageDetailSequence,
