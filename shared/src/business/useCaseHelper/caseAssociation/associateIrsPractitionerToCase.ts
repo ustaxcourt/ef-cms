@@ -52,7 +52,7 @@ exports.associateIrsPractitionerToCase = async ({
       new IrsPractitioner({ ...user, serviceIndicator }),
     );
 
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: caseEntity,
       oldCaseCopy,
