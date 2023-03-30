@@ -5,35 +5,18 @@ import { getOpinionPamphletsInteractor } from './getOpinionPamphletsInteractor';
 describe('getOpinionPamphletsInteractor', () => {
   const mockOpinionPamphlets = [
     {
-      _score: 8.051047,
       caseCaption: 'Idola Flowers, Donor, Petitioner',
-      contactPrimary: {
-        address1: '27 South Cowley Extension',
-        address2: 'Ab sed culpa aliquam',
-        address3: 'Sunt nihil pariatur',
-        city: 'Ullamco culpa eos n',
-        contactId: '1566ea80-1d95-42bc-b006-7fc55c698dea',
-        countryType: 'domestic',
-        isAddressSealed: false,
-        name: 'Idola Flowers',
-        phone: '+1 (166) 728-1619',
-        postalCode: '64258',
-        sealedAndUnavailable: false,
-        serviceIndicator: 'Paper',
-        state: 'VA',
-      },
       docketEntryId: 'f5ed9568-7510-427f-b392-aa5b724aca30',
       docketNumber: '121-20',
       docketNumberWithSuffix: '121-20',
       documentTitle: 'Order to Show Cause blah blah blah',
       documentType: 'Order to Show Cause',
+      entityName: 'PublicDocumentSearchResult',
       eventCode: 'OSC',
       filingDate: '2020-12-22T17:46:10.158Z',
-      irsPractitioners: [],
       isSealed: false,
       isStricken: false,
       numberOfPages: 1,
-      privatePractitioners: [],
       signedJudgeName: 'Maurice B. Foley',
     },
   ];
@@ -62,6 +45,6 @@ describe('getOpinionPamphletsInteractor', () => {
   it('should return a list of opinion pamphlets docket entries', async () => {
     const results = await getOpinionPamphletsInteractor(applicationContext);
 
-    expect(results).toBe(mockOpinionPamphlets);
+    expect(results).toMatchObject(mockOpinionPamphlets);
   });
 });
