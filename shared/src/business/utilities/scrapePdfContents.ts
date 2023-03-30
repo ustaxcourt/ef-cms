@@ -8,11 +8,14 @@ const { isEmpty } = require('lodash');
  */
 const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
   let pdfjsLib;
-
+  applicationContext.logger.info('scrapePdfContents');
   try {
     pdfjsLib = await applicationContext.getPdfJs();
+    applicationContext.logger.info('got pdfjsLib', { pdfjsLib });
 
     const document = await pdfjsLib.getDocument(pdfBuffer).promise;
+
+    applicationContext.logger.info('got document', { document });
 
     let scrapedText = '';
 
