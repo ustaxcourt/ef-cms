@@ -10,7 +10,7 @@
 export const checkForNegativeValueAction = ({ path, props }) => {
   const { value } = props;
 
-  if (value.charAt(0) === '-') {
+  if (value.charAt(0) === '-' && value.charAt(1)) {
     return path.set();
   }
 
