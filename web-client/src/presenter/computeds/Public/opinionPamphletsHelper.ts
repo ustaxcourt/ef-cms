@@ -7,18 +7,20 @@ const groupPamphletsByFilingDate = ({
 }) => {
   let pamphletGroups = {};
   opinionPamphlets.forEach(pamphlet => {
-    pamphlet.formattedFilingDate = applicationContext
+    pamphlet.filingDateWithFullYear = applicationContext
       .getUtilities()
       .formatDateString(pamphlet.filingDate, 'YYYYMMDD');
 
-    pamphlet.filingDate = applicationContext
+    pamphlet.formattedFilingDate = applicationContext
       .getUtilities()
       .formatDateString(pamphlet.filingDate, 'MMDDYY');
 
-    if (isEmpty(pamphletGroups[pamphlet.formattedFilingDate])) {
-      pamphletGroups[pamphlet.formattedFilingDate] = [pamphlet];
+    delete pamphlet.filingDate;
+
+    if (isEmpty(pamphletGroups[pamphlet.filingDateWithFullYear])) {
+      pamphletGroups[pamphlet.filingDateWithFullYear] = [pamphlet];
     } else {
-      pamphletGroups[pamphlet.formattedFilingDate].push(pamphlet);
+      pamphletGroups[pamphlet.filingDateWithFullYear].push(pamphlet);
     }
   });
   return pamphletGroups;
@@ -28,12 +30,12 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
   const opinionPamphlets: any = get(state.opinionPamphlets);
   const yearAndFilingDateMap = {};
 
-  const pamphletsByDate = groupPamphletsByFilingDate({
+  const pamphletsGroupedByFilingDate = groupPamphletsByFilingDate({
     applicationContext,
     opinionPamphlets,
   });
 
-  const uniqueFilingDates = Object.keys(pamphletsByDate);
+  const uniqueFilingDates = Object.keys(pamphletsGroupedByFilingDate);
 
   const pamphletPeriods: string[] = uniq(
     uniqueFilingDates.map(filingDate => {
@@ -55,12 +57,12 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
   });
 
   const getPamhpletToDisplay = (filingDateKey: string): any => {
-    return pamphletsByDate[filingDateKey][0];
+    return pamphletsGroupedByFilingDate[filingDateKey][0];
   };
 
   return {
     getPamhpletToDisplay,
-    pamphletsByDate,
+    pamphletsGroupedByFilingDate,
     yearAndFilingDateMap,
   };
 };
