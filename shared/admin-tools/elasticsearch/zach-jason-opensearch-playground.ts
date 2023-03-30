@@ -5,7 +5,7 @@ import { pinkLog } from '../../src/tools/pinkLog';
 import { search } from '../../src/persistence/elasticsearch/searchClient';
 import createApplicationContext from '../../../web-api/src/applicationContext';
 
-const getAllCases = async ({ applicationContext }) => {
+const getAllCases = async ({ applicationContext, params }) => {
   const { results } = await search({
     applicationContext,
     searchParameters: {
@@ -46,7 +46,14 @@ const getAllCases = async ({ applicationContext }) => {
 (async () => {
   const applicationContext = createApplicationContext({});
   const start = Date.now();
-  const petitions = await getAllCases({ applicationContext });
+  const params = {
+    caseStatuses: [],
+    caseTypes: [],
+    createEndDate: '',
+    createStartDate: '',
+    paperFilingMethods: [],
+  };
+  const petitions = await getAllCases({ applicationContext, params });
   const end = Date.now();
   pinkLog('length: ', petitions.length);
   pinkLog('time****', (end - start) / 1000);
