@@ -8,7 +8,7 @@ export const associateUserWithCase = ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  userCase: TCase;
+  userCase: RawUserCase;
   userId: string;
 }) =>
   put({
