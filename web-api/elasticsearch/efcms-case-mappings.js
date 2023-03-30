@@ -1,7 +1,7 @@
 module.exports = {
   properties: {
     'associatedJudge.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'automaticBlocked.BOOL': {
       type: 'boolean',
@@ -25,7 +25,7 @@ module.exports = {
       type: 'text',
     },
     'caseType.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'closedDate.S': {
       type: 'date',
