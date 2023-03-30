@@ -1,3 +1,5 @@
+import { OPINION_PAMPHLET_EVENT_CODE } from '../../business/entities/EntityConstants';
+
 /* eslint-disable max-lines */
 const {
   applicationContext,
@@ -41,12 +43,12 @@ describe('advancedDocumentSearch', () => {
   const opinionEventCodes = ['MOP', 'TCOP'];
 
   const documentFilter = [
-    { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
         field: 'servedAt',
       },
     },
+    { term: { 'entityName.S': 'DocketEntry' } },
     { term: { 'isFileAttached.BOOL': true } },
   ];
 
@@ -276,6 +278,34 @@ describe('advancedDocumentSearch', () => {
     ).toEqual([
       { term: { 'isStricken.BOOL': true } },
       { term: { 'isSealed.BOOL': true } },
+    ]);
+  });
+
+  it('must not include servedAt when requireServedDate is false', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: [OPINION_PAMPHLET_EVENT_CODE],
+      requireServedDate: false,
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toEqual([
+      {
+        term: {
+          'entityName.S': 'DocketEntry',
+        },
+      },
+      {
+        term: {
+          'isFileAttached.BOOL': true,
+        },
+      },
+      {
+        terms: {
+          'eventCode.S': [OPINION_PAMPHLET_EVENT_CODE],
+        },
+      },
     ]);
   });
 
