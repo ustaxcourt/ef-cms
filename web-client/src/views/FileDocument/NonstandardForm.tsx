@@ -202,7 +202,7 @@ export const NonstandardForm = connect(
                     className="usa-select"
                     id={`${namespace}ordinal-field-select`}
                     name={`${namespace}ordinalValue`}
-                    value={form.ordinalValue}
+                    value={get(form, `${namespace}ordinalValue`)}
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
@@ -219,22 +219,25 @@ export const NonstandardForm = connect(
                     ))}
                   </select>
                 </FormGroup>
-                {form.ordinalValue === 'Other' && (
+                {get(form, `${namespace}ordinalValue`) === 'Other' && (
                   <FormGroup
                     className="grid-col-6"
                     errorText={validationErrors?.otherIteration}
                   >
-                    <label className="usa-label" htmlFor="other-iteration">
+                    <label
+                      className="usa-label"
+                      htmlFor={`${namespace}other-iteration`}
+                    >
                       Iteration
                     </label>
                     <input
                       autoCapitalize="none"
                       className="usa-input margin-0"
-                      id="other-iteration"
-                      name="otherIteration"
+                      id={`${namespace}other-iteration`}
+                      name={`${namespace}otherIteration`}
                       placeholder="Number"
                       type="number"
-                      value={form.otherIteration || ''}
+                      value={get(form, `${namespace}otherIteration`) || ''}
                       onBlur={() => validateSequence()}
                       onChange={e => {
                         updateSequence({
@@ -264,7 +267,7 @@ export const NonstandardForm = connect(
                     className="usa-select"
                     id={`${namespace}ordinal-field-select`}
                     name={`${namespace}ordinalValue`}
-                    value={form.ordinalValue}
+                    value={get(form, `${namespace}ordinalValue`)}
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
@@ -281,22 +284,25 @@ export const NonstandardForm = connect(
                     ))}
                   </select>
                 </FormGroup>
-                {form.ordinalValue === 'Other' && (
+                {get(form, `${namespace}ordinalValue`) === 'Other' && (
                   <FormGroup
                     errorText={validationErrors?.otherIteration}
                     id="other-iteration-field"
                   >
-                    <label className="usa-label" htmlFor="other-iteration">
+                    <label
+                      className="usa-label"
+                      htmlFor={`${namespace}other-iteration`}
+                    >
                       Iteration
                     </label>
                     <input
                       autoCapitalize="none"
                       className="usa-input margin-0"
-                      id="other-iteration"
-                      name="otherIteration"
+                      id={`${namespace}other-iteration`}
+                      name={`${namespace}otherIteration`}
                       placeholder="Number"
                       type="number"
-                      value={form.otherIteration || ''}
+                      value={get(form, `${namespace}otherIteration`) || ''}
                       onBlur={() => validateSequence()}
                       onChange={e => {
                         updateSequence({
