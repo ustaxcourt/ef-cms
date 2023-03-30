@@ -78,16 +78,16 @@ export class Statistic extends JoiValidationEntity {
       .alternatives()
       .conditional('determinationTotalPenalties', {
         is: joi.exist().not(null),
-        otherwise: joi.number().positive().allow(0).optional().allow(null),
-        then: joi.number().positive().allow(0).required(),
+        otherwise: joi.number().optional().allow(null),
+        then: joi.number().required(),
       })
       .description('The amount of the deficiency determined by the Court.'),
     determinationTotalPenalties: joi
       .alternatives()
       .conditional('determinationDeficiencyAmount', {
         is: joi.exist().not(null),
-        otherwise: joi.number().positive().allow(0).optional().allow(null),
-        then: joi.number().positive().allow(0).required(),
+        otherwise: joi.number().optional().allow(null),
+        then: joi.number().required(),
       })
       .description(
         'The total amount of penalties for the period or year determined by the Court.',
@@ -95,14 +95,10 @@ export class Statistic extends JoiValidationEntity {
     entityName: JoiValidationConstants.STRING.valid('Statistic').required(),
     irsDeficiencyAmount: joi
       .number()
-      .positive()
-      .allow(0)
       .required()
       .description('The amount of the deficiency on the IRS notice.'),
     irsTotalPenalties: joi
       .number()
-      .positive()
-      .allow(0)
       .required()
       .description(
         'The total amount of penalties for the period or year on the IRS notice.',
