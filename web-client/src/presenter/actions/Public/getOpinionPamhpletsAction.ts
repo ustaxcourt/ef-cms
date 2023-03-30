@@ -9,6 +9,5 @@ export const getOpinionPamhpletsAction = async ({ applicationContext }) => {
   const opinionPamphlets = await applicationContext
     .getUseCases()
     .getOpinionPamphletsInteractor(applicationContext);
-
   return { opinionPamphlets };
 };
