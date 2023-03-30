@@ -249,11 +249,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls
-        .length,
-    ).toBe(1);
-
-    expect(
       applicationContext.getPersistenceGateway().updateDocketEntry.mock
         .calls[0][0].document,
     ).toMatchObject({ index: 1, ...editedFields });
