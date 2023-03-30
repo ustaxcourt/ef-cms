@@ -89,6 +89,7 @@ import { practitionerSearchFormHelper } from './computeds/practitionerSearchForm
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
+import { reportMenuHelper } from './computeds/reportMenuHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -208,6 +209,7 @@ const helpers = {
   printPaperServiceHelper,
   recentMessagesHelper,
   removeFromTrialSessionModalHelper,
+  reportMenuHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
@@ -326,6 +328,7 @@ export const baseState = {
     stampApplied: false,
     stampData: null,
   },
+  pdfPreviewUrl: '',
   pendingReports: {},
   permissions: null,
   practitionerDetail: {},
@@ -362,6 +365,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
@@ -378,3 +382,11 @@ export const state = {
   ...helpers,
   ...baseState,
 };
+
+declare global {
+  type State = typeof state & {
+    constants: ReturnType<typeof getConstants>;
+    modal: any;
+    screenMetadata: any;
+  };
+}

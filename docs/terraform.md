@@ -237,7 +237,7 @@ Here is an outline of what some of these files do at a high level:
     │   ├── migration-segments.js // the lambda used to process the dynamo segments
     │   ├── migration.js // the live migration process
     │   ├── migrations // contains all the migration scripts used for processing the dynamodb items
-    │   ├── migrationsToRun.js // a list of all the migration scripts we want to run
+    │   ├── migrationsToRun.ts // a list of all the migration scripts we want to run
     │   ├── utilities.js // contains all the utility functions used by the migration scripts
     ├── main.tf // main entry file
     ├── migration-segments.tf // the resources needed for the migration-segments lambda

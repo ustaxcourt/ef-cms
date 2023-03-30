@@ -4,7 +4,7 @@ import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWork
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection';
-import { docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection';
+import { docketClerkVerifiesConsolidatedGroupInformationForDocumentQC } from './journey/docketClerkVerifiesConsolidatedGroupInformationForDocumentQC';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
@@ -34,44 +34,40 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'inbox', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'inbox',
+    queue: 'section',
+  });
 
   docketClerkAssignWorkItemToSelf(cerebralTest, leadCaseDocketNumber);
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'inbox', queue: 'my' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'inbox',
+    queue: 'my',
+  });
 
   docketClerkQCsDocketEntry(cerebralTest);
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'outbox', queue: 'my' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'outbox',
+    queue: 'my',
+  });
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'outbox', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'outbox',
+    queue: 'section',
+  });
 
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
 
   docketClerkAddsAnUnservableDocument(cerebralTest);
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'outbox', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'outbox',
+    queue: 'section',
+  });
 
+  // Document QC External filed document on Non-lead Case
   loginAs(cerebralTest, 'privatepractitioner@example.com');
 
   it('sets the docketNumber', () => {
@@ -126,17 +122,15 @@ describe('Docket clerk consolidated case work item journey', () => {
     leadCaseDocketNumber,
   );
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'inProgress', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'inProgress',
+    queue: 'section',
+  });
 
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    leadCaseDocketNumber,
-    { box: 'inProgress', queue: 'my' },
-  );
+  docketClerkVerifiesConsolidatedGroupInformationForDocumentQC(cerebralTest, {
+    box: 'inProgress',
+    queue: 'my',
+  });
 
   // Document QC Internal filed document on Non-lead Case
 
