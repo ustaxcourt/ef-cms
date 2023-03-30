@@ -6,20 +6,20 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
- * setTrialSessionAsSwingSessionInteractor
+ * associateSwingTrialSessions
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.swingSessionId the id of the trial session to add as a swing session
- * @param {string} providers.trialSessionId the trial session to add the swing session to
- * @returns {Promise} the promise of the updateTrialSession call
+ * @param {string} providers.trialSession the trial session to add the swing session to
+ * @returns {Object} the updated trial session object
  */
-export const setTrialSessionAsSwingSessionInteractor = async (
+export const associateSwingTrialSessions = async (
   applicationContext: IApplicationContext,
   {
     swingSessionId,
-    trialSessionId,
-  }: { swingSessionId: string; trialSessionId: string },
+    trialSessionEntity,
+  }: { swingSessionId: string; trialSessionEntity: TrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -27,22 +27,23 @@ export const setTrialSessionAsSwingSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
+  const swingTrialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
-      trialSessionId,
+      trialSessionId: swingSessionId,
     });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
+  const swingSessionEntity = new TrialSession(swingTrialSession, {
     applicationContext,
   });
 
   trialSessionEntity.setAsSwingSession(swingSessionId);
+  swingSessionEntity.setAsSwingSession(trialSessionEntity.trialSessionId);
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    trialSessionToUpdate: swingSessionEntity.validate().toRawObject(),
   });
 
   return trialSessionEntity.validate().toRawObject();

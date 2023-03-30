@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Batch } = require('./Batch');
-const { Scan } = require('./Scan');
+import { Batch } from './Batch';
+import { Scan } from './Scan';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = Scan;
 
