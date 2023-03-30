@@ -40,4 +40,17 @@ describe('checkForNegativeValueAction', () => {
 
     expect(presenter.providers.path.unset).toHaveBeenCalled();
   });
+
+  it('should call the unset path when the value only has a "-"', async () => {
+    await runAction(checkForNegativeValueAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        value: '-',
+      },
+    });
+
+    expect(presenter.providers.path.unset).toHaveBeenCalled();
+  });
 });
