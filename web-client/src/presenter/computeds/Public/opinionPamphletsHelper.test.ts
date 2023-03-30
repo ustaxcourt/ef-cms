@@ -47,37 +47,40 @@ describe('opinionPamphletsHelper', () => {
   });
 
   it('should organize opinion pamphlets by filing date', () => {
-    const { pamphletsByDate } = runCompute(opinionPamphletsHelper, { state });
+    const { pamphletsGroupedByFilingDate } = runCompute(
+      opinionPamphletsHelper,
+      { state },
+    );
 
-    expect(pamphletsByDate).toEqual({
+    expect(pamphletsGroupedByFilingDate).toEqual({
       '2022-02-05': [
         {
           ...mockTCRP,
           docketEntryId: 2,
-          filingDate: '02/05/22',
-          formattedFilingDate: '2022-02-05',
+          filingDateWithFullYear: '2022-02-05',
+          formattedFilingDate: '02/05/22',
         },
         {
           ...mockTCRP,
           docketEntryId: 4,
-          filingDate: '02/05/22',
-          formattedFilingDate: '2022-02-05',
+          filingDateWithFullYear: '2022-02-05',
+          formattedFilingDate: '02/05/22',
         },
       ],
       '2023-03-11': [
         {
           ...mockTCRP,
           docketEntryId: 1,
-          filingDate: '03/11/23',
-          formattedFilingDate: '2023-03-11',
+          filingDateWithFullYear: '2023-03-11',
+          formattedFilingDate: '03/11/23',
         },
       ],
       '2023-07-05': [
         {
           ...mockTCRP,
           docketEntryId: 3,
-          filingDate: '07/05/23',
-          formattedFilingDate: '2023-07-05',
+          filingDateWithFullYear: '2023-07-05',
+          formattedFilingDate: '07/05/23',
         },
       ],
     });
@@ -103,8 +106,8 @@ describe('opinionPamphletsHelper', () => {
       expect(getPamhpletToDisplay('2022-02-05')).toEqual({
         ...mockTCRP,
         docketEntryId: 2,
-        filingDate: '02/05/22',
-        formattedFilingDate: '2022-02-05',
+        filingDateWithFullYear: '2022-02-05',
+        formattedFilingDate: '02/05/22',
       });
     });
   });

@@ -31,7 +31,7 @@ export const OpinionPamphlets = connect(
                           <div className="grid-col-4">
                             <Button
                               link
-                              aria-label={`View PDF: ${opinionPamphletsHelper.pamphletsByDate[filingDateKey][0].documentTitle}`}
+                              aria-label={`View PDF: ${opinionPamphletsHelper.pamphletsGroupedByFilingDate[filingDateKey][0].documentTitle}`}
                               className="margin-bottom-2 text-left line-height-standard padding-0"
                               target="_blank"
                               onClick={() => {
@@ -62,7 +62,7 @@ export const OpinionPamphlets = connect(
                             {
                               opinionPamphletsHelper.getPamhpletToDisplay(
                                 filingDateKey,
-                              ).filingDate
+                              ).formattedFilingDate
                             }
                           </div>
                           <table
@@ -79,7 +79,7 @@ export const OpinionPamphlets = connect(
                               </tr>
                             </thead>
                             <tbody>
-                              {opinionPamphletsHelper.pamphletsByDate[
+                              {opinionPamphletsHelper.pamphletsGroupedByFilingDate[
                                 filingDateKey
                               ].map(pamphlet => {
                                 return (
