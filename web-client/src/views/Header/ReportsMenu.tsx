@@ -44,8 +44,7 @@ export const ReportsMenu = connect(
             {reportMenuHelper.showActivityReport && (
               <li className="usa-nav__submenu-item">
                 <a
-                  href="/reports/activity"
-                  id="activity-report-btn"
+                  href="/reports/judge-activity-report"
                   onClick={() => {
                     resetHeaderAccordionsSequence();
                     toggleMobileMenuSequence();
