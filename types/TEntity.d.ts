@@ -32,21 +32,6 @@ type TUserContact = {
   state: string;
 };
 
-type TUser = {
-  email: string;
-  name: string;
-  pendingEmail?: string;
-  section: string;
-  role: string;
-  token: string;
-  userId: string;
-  isUpdatingInformation: boolean;
-  pendingEmailVerificationToken?: string;
-  judgeFullName?: string;
-  judgeTitle?: string;
-  contact?: TUserContact;
-};
-
 type TTrialSessionWorkingCopyData = {
   caseMetadata: any;
   filters: {
@@ -198,7 +183,7 @@ type TPractitioner = {
   serviceIndicator: string;
   updatedEmail: string;
   role: string;
-} & TUser;
+} & RawUser;
 
 interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];

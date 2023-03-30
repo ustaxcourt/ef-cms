@@ -1,13 +1,13 @@
-const {
+import {
+  FORMATS,
   calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
   formatDateString,
-  FORMATS,
-} = require('../utilities/DateHandler');
-const { formatNow } = require('../utilities/DateHandler');
-const { MOTION_DISPOSITIONS } = require('./EntityConstants');
-const { Stamp } = require('./Stamp');
+  formatNow,
+} from '../utilities/DateHandler';
+import { MOTION_DISPOSITIONS } from './EntityConstants';
+import { Stamp } from './Stamp';
 
 const { VALIDATION_ERROR_MESSAGES } = Stamp;
 

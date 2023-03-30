@@ -1,5 +1,5 @@
-const { getServedPartiesCode } = require('./DocketEntry');
-const { PARTIES_CODES, ROLES } = require('./EntityConstants');
+import { PARTIES_CODES, ROLES } from './EntityConstants';
+import { getServedPartiesCode } from './DocketEntry';
 
 describe('getServedPartiesCode', () => {
   it('returns undefined if servedParties is undefined', () => {

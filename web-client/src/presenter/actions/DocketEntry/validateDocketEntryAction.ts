@@ -68,6 +68,7 @@ export const validateDocketEntryAction = ({
       'serviceDate',
       'trialLocation',
       'ordinalValue',
+      'otherIteration',
       'certificateOfServiceDate',
       'objections',
       'filers',

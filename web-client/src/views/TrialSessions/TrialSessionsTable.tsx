@@ -10,7 +10,7 @@ export const TrialSessionsTable = connect(
     formattedTrialSessions:
       state.formattedTrialSessions.filteredTrialSessions[props.filter],
     proceedingTypes: state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
-    trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
+    trialSessionTypes: state.constants.SESSION_TYPES,
     trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessionsTable({
