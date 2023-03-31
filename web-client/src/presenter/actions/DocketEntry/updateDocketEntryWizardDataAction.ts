@@ -90,6 +90,7 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.serviceDateYear);
       store.unset(state.form.trialLocation);
       store.unset(state.form.ordinalValue);
+      store.unset(state.form.otherIteration);
       store.unset(state.form.freeText);
       store.unset(state.form.secondaryDocument);
       store.unset(state.form.objections);
@@ -107,6 +108,7 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.secondaryDocument.serviceDate);
       store.unset(state.form.secondaryDocument.trialLocation);
       store.unset(state.form.secondaryDocument.ordinalValue);
+      store.unset(state.form.secondaryDocument.otherIteration);
       store.unset(state.form.secondaryDocument.freeText);
 
       if (!props.value) {
