@@ -10,8 +10,8 @@ import { fakeFile } from '../helpers';
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
   {
-    shouldServe = true,
     overrides = { trialLocation: 'Birmingham, Alabama' },
+    shouldServe = true,
   } = {},
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
@@ -99,12 +99,12 @@ export const petitionsClerkCreatesNewCase = (
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFile',
+      key: 'corporateDisclosureFile',
       value: fakeFile,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFileSize',
+      key: 'corporateDisclosureFileSize',
       value: 1,
     });
 

@@ -21,7 +21,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: S3RVER
       CIRCLECI: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -46,10 +46,15 @@ jobs:
           npm ci
           mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+          ./wait-for-dynamo.sh
           URL=http://localhost:1234 ./wait-until.sh
           URL=http://localhost:4000/api/swagger ./wait-until.sh
-          URL=http://localhost:8000/shell ./wait-until.sh
-          URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
+          URL=http://localhost:9200/efcms-case ./wait-until.sh
+          URL=http://localhost:9200/efcms-case-deadline ./wait-until.sh
+          URL=http://localhost:9200/efcms-docket-entry ./wait-until.sh
+          URL=http://localhost:9200/efcms-user ./wait-until.sh
+          URL=http://localhost:9200/efcms-message ./wait-until.sh
+          URL=http://localhost:9200/efcms-work-item ./wait-until.sh
           sleep 20
           npm run test:pa11y:1 --node-flags --max-old-space-size=1024
           npm run test:pa11y:2 --node-flags --max-old-space-size=1024

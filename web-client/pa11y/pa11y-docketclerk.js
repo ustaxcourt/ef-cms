@@ -47,7 +47,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #has-other-filing-party to be visible',
+      'wait for #has-other-filing-party-label to be visible',
       'click element label#has-other-filing-party-label',
       'wait for input#other-filing-party to be visible',
     ],
@@ -68,13 +68,12 @@ module.exports = [
       'wait for element table.case-inventory to be visible',
     ],
     notes: 'checks a11y of case inventory report builder',
-    timeout: 60000,
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/case-inventory-report',
   },
   {
     actions: [
-      'wait for element #certificate-of-service to be visible',
-      'click element #certificate-of-service+label',
+      'wait for element #certificate-of-service-label to be visible',
+      'click element #certificate-of-service-label',
       'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
@@ -92,6 +91,18 @@ module.exports = [
     ],
     notes: 'checks a11y of case context edit dialog',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-19&info=case-context-edit',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #tab-case-information',
+      'wait for #tab-history to be visible',
+      'click element #tab-history',
+      'wait for .case-status-history to be visible',
+    ],
+    notes: 'checks a11y on the case status history table',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-22&info=case-status-history-table',
   },
   {
     actions: [

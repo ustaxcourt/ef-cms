@@ -12,11 +12,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import {
-  IValidationEntity,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from './JoiValidationDecorator';
+import { JoiValidationEntity } from './JoiValidationEntity';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
@@ -24,7 +20,7 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
-export class DocketEntryClass {
+export class DocketEntry extends JoiValidationEntity {
   public entityName: string;
   public action?: string;
   public additionalInfo?: string;
@@ -70,13 +66,16 @@ export class DocketEntryClass {
   public sealedTo?: string;
   public filers: string[];
   public ordinalValue?: string;
+  public otherIteration?: string;
   public otherFilingParty?: string;
   public partyIrsPractitioner?: string;
   public processingStatus: string;
   public receivedAt: string;
   public relationship?: string;
   public scenario?: string;
-  public secondaryDocument?: string;
+  public secondaryDocument?: {
+    secondaryDocumentInfo: string;
+  };
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -111,30 +110,18 @@ export class DocketEntryClass {
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
   constructor(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    rawDocketEntry: any,
-    {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      applicationContext,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      petitioners,
-    }: { applicationContext: IApplicationContext; petitioners?: any[] },
-  ) {
-    this.entityName = 'DocketEntry';
-  }
-
-  init(
     rawDocketEntry,
     {
       applicationContext,
-      petitioners = [],
       filtered = false,
+      petitioners = [],
     }: {
       applicationContext: IApplicationContext;
-      petitioners: any[];
+      petitioners?: any[];
       filtered?: boolean;
     },
   ) {
+    super('DocketEntry');
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -191,6 +178,7 @@ export class DocketEntryClass {
     this.sealedTo = rawDocketEntry.sealedTo;
     this.filers = rawDocketEntry.filers || [];
     this.ordinalValue = rawDocketEntry.ordinalValue;
+    this.otherIteration = rawDocketEntry.otherIteration;
     this.otherFilingParty = rawDocketEntry.otherFilingParty;
     this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
     this.processingStatus = rawDocketEntry.processingStatus || 'pending';
@@ -462,7 +450,7 @@ and contact info from the raw docket entry
    * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
    */
   isCourtIssued() {
-    return DocketEntryClass.isCourtIssued(this.eventCode);
+    return DocketEntry.isCourtIssued(this.eventCode);
   }
 
   static isCourtIssued(eventCode: string): boolean {
@@ -544,6 +532,22 @@ and contact info from the raw docket entry
         ))
     );
   }
+
+  getValidationRules() {
+    return DOCKET_ENTRY_VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return {
+      filedBy: [
+        {
+          contains: 'must be less than or equal to',
+          message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+        },
+        'Enter a filed by',
+      ],
+    };
+  }
 }
 
 /**
@@ -562,7 +566,7 @@ export const isServed = function (rawDocketEntry) {
  * @param {Array} servedParties List of parties that have been served
  * @returns {String} served parties code
  */
-export const getServedPartiesCode = servedParties => {
+export const getServedPartiesCode = (servedParties?: any[]) => {
   let servedPartiesCode = undefined;
   if (servedParties && servedParties.length > 0) {
     if (
@@ -577,21 +581,6 @@ export const getServedPartiesCode = servedParties => {
   return servedPartiesCode;
 };
 
-joiValidationDecorator(DocketEntryClass, DOCKET_ENTRY_VALIDATION_RULES, {
-  filedBy: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-    },
-    'Enter a filed by',
-  ],
-});
-
-export const DocketEntry: typeof DocketEntryClass =
-  validEntityDecorator(DocketEntryClass);
-
 declare global {
-  type RawDocketEntry = ExcludeMethods<DocketEntryClass>;
+  type RawDocketEntry = ExcludeMethods<DocketEntry>;
 }
-// eslint-disable-next-line no-redeclare
-export interface DocketEntryClass extends IValidationEntity<DocketEntryClass> {}

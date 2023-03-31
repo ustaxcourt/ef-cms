@@ -8,10 +8,10 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   {
-    trialLocation = 'Birmingham, Alabama',
-    procedureType = 'Small',
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
+    procedureType = 'Small',
+    trialLocation = 'Birmingham, Alabama',
   } = {},
   formOverrides = [],
 ) => {
@@ -46,19 +46,19 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: 1,
     },
     {
-      key: 'odsFile',
+      key: 'cdsFile',
       value: fakeFile,
     },
     {
-      key: 'odsFileSize',
+      key: 'cdsFileSize',
       value: 1,
     },
     {
-      key: 'ownershipDisclosureFile',
+      key: 'corporateDisclosureFile',
       value: fakeFile,
     },
     {
-      key: 'ownershipDisclosureFileSize',
+      key: 'corporateDisclosureFileSize',
       value: 1,
     },
     {

@@ -39,6 +39,7 @@ import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimar
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
+import { checkForNegativeValueSequence } from './sequences/checkForNegativeValueSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
@@ -344,12 +345,10 @@ import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
-import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
-import { setupConfigSequence } from './sequences/setupConfigSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
@@ -413,6 +412,7 @@ import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
+import { toggleUseContactPrimaryAddressSequence } from './sequences/toggleUseContactPrimaryAddressSequence';
 import { toggleUseExistingAddressSequence } from './sequences/toggleUseExistingAddressSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
@@ -567,6 +567,7 @@ export const presenter = {
     caseInventoryReportLoadMoreSequence,
     cerebralBindSimpleSetStateSequence,
     changeTabAndSetViewerDocumentToDisplaySequence,
+    checkForNegativeValueSequence,
     chooseModalWizardStepSequence,
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
@@ -870,12 +871,10 @@ export const presenter = {
     setPendingReportSelectedJudgeSequence,
     setSelectedAddressOnFormSequence,
     setSelectedBatchIndexSequence,
-    setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,
     setViewerCorrespondenceToDisplaySequence,
     setViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
-    setupConfigSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
     showMoreClosedCasesSequence,
@@ -938,6 +937,7 @@ export const presenter = {
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     toggleUsaBannerDetailsSequence,
+    toggleUseContactPrimaryAddressSequence,
     toggleUseExistingAddressSequence,
     toggleWorkingCopySortSequence,
     unauthorizedErrorSequence,

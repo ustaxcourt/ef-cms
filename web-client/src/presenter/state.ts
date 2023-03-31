@@ -12,7 +12,6 @@ import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
-import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
@@ -22,6 +21,7 @@ import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
+import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -63,8 +63,10 @@ import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionD
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
+import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
+import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -98,7 +100,6 @@ import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper
 import { showSortableHeaders } from './computeds/showSortableHeaders';
 import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
-import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
@@ -133,7 +134,6 @@ const helpers = {
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,
-  caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailHeaderHelper,
   caseDetailHelper,
@@ -143,6 +143,7 @@ const helpers = {
   caseInventoryReportHelper,
   caseSearchBoxHelper,
   caseSearchNoMatchesHelper,
+  caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
@@ -181,8 +182,10 @@ const helpers = {
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
+  getOrdinalValuesForUploadIteration,
   getTrialCityName,
   headerHelper,
+  internalPetitionPartiesHelper,
   internalTypesHelper,
   loadingHelper,
   menuHelper,
@@ -216,7 +219,6 @@ const helpers = {
   showSortableHeaders,
   sortableColumnHelper,
   startCaseHelper,
-  startCaseInternalContactsHelper,
   startCaseInternalHelper,
   statisticsFormHelper,
   statisticsHelper,

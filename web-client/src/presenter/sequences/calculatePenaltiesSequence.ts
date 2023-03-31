@@ -1,5 +1,6 @@
 import { calculatePenaltiesAction } from '../actions/calculatePenaltiesAction';
 import { chooseStatisticValidationStrategyAction } from '../actions/chooseStatisticValidationStrategyAction';
+import { clearConfirmationTextForCalculatePenaltiesModalAction } from '../actions/clearConfirmationTextForCalculatePenaltiesModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
 import { setTotalPenaltiesAmountForStatisticAction } from '../actions/setTotalPenaltiesAmountForStatisticAction';
@@ -14,12 +15,13 @@ export const calculatePenaltiesSequence = [
     error: [setModalErrorAction],
     success: [
       setTotalPenaltiesAmountForStatisticAction,
-      clearModalStateAction,
       chooseStatisticValidationStrategyAction,
       {
-        addEditStatistic: [validateAddDeficiencyStatisticsSequence],
-        startCase: [validatePetitionFromPaperSequence],
+        addEditStatistic: validateAddDeficiencyStatisticsSequence,
+        startCase: validatePetitionFromPaperSequence,
       },
+      clearModalStateAction,
+      clearConfirmationTextForCalculatePenaltiesModalAction,
     ],
   },
 ];

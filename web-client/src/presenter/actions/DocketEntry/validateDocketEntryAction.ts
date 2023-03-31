@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -15,6 +16,7 @@ export const validateDocketEntryAction = ({
   path,
 }) => {
   const entryMetadata = get(state.form);
+  const { AMICUS_BRIEF_EVENT_CODE } = applicationContext.getConstants();
 
   let errors = applicationContext.getUseCases().validateDocketEntryInteractor({
     entryMetadata,
@@ -42,6 +44,16 @@ export const validateDocketEntryAction = ({
     errors.serviceDate = errors.serviceDate || 'Enter a four-digit year';
   }
 
+  if (
+    entryMetadata.eventCode === AMICUS_BRIEF_EVENT_CODE &&
+    isEmpty(entryMetadata.otherFilingParty)
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+    errors.otherFilingParty = 'Enter the name of the amicus curiae';
+  }
+
   if (!errors) {
     return path.success();
   } else {
@@ -56,6 +68,7 @@ export const validateDocketEntryAction = ({
       'serviceDate',
       'trialLocation',
       'ordinalValue',
+      'otherIteration',
       'certificateOfServiceDate',
       'objections',
       'filers',

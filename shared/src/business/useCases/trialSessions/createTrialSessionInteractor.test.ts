@@ -2,7 +2,7 @@ import {
   ROLES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../entities/EntityConstants';
-import { TRawTrialSession } from '../../entities/trialSessions/TrialSession';
+import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createTrialSessionInteractor } from './createTrialSessionInteractor';
@@ -44,7 +44,7 @@ describe('createTrialSessionInteractor', () => {
 
     await expect(
       createTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL as TRawTrialSession,
+        trialSession: MOCK_TRIAL as RawTrialSession,
       }),
     ).rejects.toThrow();
   });
@@ -58,14 +58,14 @@ describe('createTrialSessionInteractor', () => {
 
     await expect(
       createTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL as TRawTrialSession,
+        trialSession: MOCK_TRIAL as RawTrialSession,
       }),
     ).rejects.toThrow('');
   });
 
   it('should successfully create a trial session', async () => {
     await createTrialSessionInteractor(applicationContext, {
-      trialSession: MOCK_TRIAL as TRawTrialSession,
+      trialSession: MOCK_TRIAL as RawTrialSession,
     });
 
     expect(
@@ -78,7 +78,7 @@ describe('createTrialSessionInteractor', () => {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Motion/Hearing',
-      } as TRawTrialSession,
+      } as RawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(true);
@@ -90,7 +90,7 @@ describe('createTrialSessionInteractor', () => {
         ...MOCK_TRIAL,
         sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
         sessionType: 'Something Else',
-      } as TRawTrialSession,
+      } as RawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(true);
@@ -101,15 +101,33 @@ describe('createTrialSessionInteractor', () => {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Special',
-      } as TRawTrialSession,
+      } as RawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(true);
   });
 
+  it('should associate swing trial sessions when the current trial session has a swing session', async () => {
+    await createTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL,
+        swingSession: true,
+        swingSessionId: '1234',
+      } as RawTrialSession,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
+        .calls[0][1].swingSessionId,
+    ).toEqual('1234');
+  });
+
   it('shoud not set the trial session as calendared when it is a Regular session type', async () => {
     const result = await createTrialSessionInteractor(applicationContext, {
-      trialSession: MOCK_TRIAL as TRawTrialSession,
+      trialSession: MOCK_TRIAL as RawTrialSession,
     });
 
     expect(result.isCalendared).toEqual(false);

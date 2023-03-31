@@ -41,7 +41,6 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
       secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
     });
 
@@ -55,7 +54,7 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     });
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.ordinalValue',
-      value: 'First',
+      value: '1',
     });
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.previousDocument',
