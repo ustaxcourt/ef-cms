@@ -1,22 +1,24 @@
 #!/usr/bin/env node
 /* eslint-disable import/no-default-export */
 /* eslint-disable promise/no-nesting */
-import { createServer, request } from 'http';
-
-const clients = [];
 import { clean } from 'esbuild-plugin-clean';
 import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import autoprefixer from 'autoprefixer';
 import babel from 'esbuild-plugin-babel-cached';
 import esbuild from 'esbuild';
+import livereload from 'livereload';
 import postcss from 'postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import resolve from 'esbuild-plugin-resolve';
 
-import fs from 'fs';
-
 const watch = !!process.env.WATCH;
+
+let server;
+
+if (watch) {
+  server = livereload.createServer();
+}
 
 const env = {
   API_URL: process.env.API_URL,
@@ -52,12 +54,9 @@ const env = {
  */
 export default async function ({
   entryPoint,
-  hostPort,
   indexName,
-  jsRegex,
   outdir,
   replaceHtmlFile,
-  servePort,
 }) {
   const sassMap = new Map();
 
@@ -166,14 +165,10 @@ export default async function ({
       {
         name: 'name-goes-here',
         setup(build) {
-          let count = 0;
-          build.onEnd(result => {
-            // replaceHtmlFile();
-
-            console.log('# of clients', clients.length);
-            clients.forEach(res => res.write('data: update\n\n'));
-            clients.length = 0;
-            // }
+          build.onEnd(() => {
+            console.log('replacing html from setup');
+            replaceHtmlFile();
+            server?.refresh('index.html');
           });
         },
       },
@@ -182,249 +177,5 @@ export default async function ({
     splitting: true,
   });
 
-  await ctx
-    .watch()
-    .catch(() => process.exit(1))
-    .then(() => {
-      // replaceHtmlFile();
-    });
-
-  if (watch) {
-    console.log('watch!');
-    ctx.serve({ port: servePort, servedir: outdir }).then(() => {
-      createServer((req, res) => {
-        const { headers, method, url } = req;
-
-        if (req.url === '/esbuild') {
-          return clients.push(
-            res.writeHead(200, {
-              'Cache-Control': 'no-cache',
-              Connection: 'keep-alive',
-              'Content-Type': 'text/event-stream',
-            }),
-          );
-        }
-
-        let pathWithouthQuery = url.includes('?') ? url.split('?')[0] : url;
-        const path = ~pathWithouthQuery.split('/').pop().indexOf('.')
-          ? url
-          : '/index.html'; //for PWA with router
-
-        req.pipe(
-          request(
-            {
-              headers,
-              hostname: 'localhost',
-              method,
-              path,
-              port: servePort,
-            },
-            prxRes => {
-              // const jsRegex = /index\.[A-Z0-9]+\.js/;
-              if (jsRegex.test(url)) {
-                const jsReloadCode =
-                  ' (() => new EventSource("/esbuild").onmessage = () => location.reload())();';
-
-                const newHeaders = {
-                  ...prxRes.headers,
-                  'content-length':
-                    parseInt(prxRes.headers['content-length'], 10) +
-                    jsReloadCode.length,
-                };
-
-                res.writeHead(prxRes.statusCode, newHeaders);
-                res.write(jsReloadCode);
-              } else {
-                res.writeHead(prxRes.statusCode, prxRes.headers);
-              }
-              prxRes.pipe(res, { end: true });
-            },
-          ),
-          { end: true },
-        );
-      }).listen(hostPort);
-    });
-  }
-
-  // esbuild
-  //   .build({
-  //     bundle: true,
-  //     define: {
-  //       global: 'window',
-  //       'process.version': '""',
-  //       ...Object.entries(env).reduce((acc, [key, value]) => {
-  //         acc[`process.env.${key}`] = value ? JSON.stringify(value) : '""';
-  //         return acc;
-  //       }, {}),
-  //     },
-  //     entryNames: '[name].[hash]',
-  //     entryPoints: [`web-client/src/${entryPoint}`],
-  //     format: 'esm',
-  //     loader: {
-  //       '.html': 'text',
-  //       '.pdf': 'file',
-  //       '.png': 'dataurl',
-  //       '.svg': 'dataurl',
-  //       '.ttf': 'file',
-  //       '.woff': 'file',
-  //       '.woff2': 'file',
-  //     },
-  //     logLevel: 'info',
-  //     metafile: true,
-  //     minify: process.env.USTC_ENV === 'prod',
-  //     outdir,
-  //     plugins: [
-  //       clean({
-  //         patterns: [`./${outdir}/*`],
-  //       }),
-  //       resolve({
-  //         crypto: 'crypto-browserify',
-  //         stream: 'stream-browserify',
-  //         // util: 'util/',
-  //       }),
-  //       sassPlugin({
-  //         async transform(source, resolveDir, filePath) {
-  //           let value = sassMap.get(filePath);
-  //           if (!value || value.source !== source) {
-  //             const { css } = await postcss([
-  //               autoprefixer,
-  //               postcssPresetEnv({ stage: 0 }),
-  //             ]).process(source, { from: undefined });
-  //             value = { css, source };
-  //             sassMap.set(filePath, value);
-  //           }
-  //           return value.css;
-  //         },
-  //       }),
-  //       babel({
-  //         config: {
-  //           ignore: ['node_modules'],
-  //           plugins: [
-  //             'babel-plugin-cerebral',
-  //             'transform-html-import-require-to-string',
-  //           ],
-  //           presets: [
-  //             [
-  //               '@babel/preset-env',
-  //               {
-  //                 targets: {
-  //                   esmodules: true,
-  //                 },
-  //               },
-  //             ],
-  //             [
-  //               '@babel/preset-react',
-  //               {
-  //                 runtime: 'automatic',
-  //               },
-  //             ],
-  //           ],
-  //           sourceType: 'unambiguous',
-  //           targets: 'defaults',
-  //         },
-  //         filter: /\.(js|ts|jsx|tsx)$/,
-  //       }),
-  //       copy({
-  //         assets: [
-  //           {
-  //             from: ['web-client/src/favicons'],
-  //             keepStructure: true,
-  //             to: ['.'],
-  //           },
-  //           {
-  //             from: ['web-client/src/site.webmanifest'],
-  //             keepStructure: true,
-  //             to: ['.'],
-  //           },
-  //           {
-  //             from: ['web-client/src/deployed-date.txt'],
-  //             keepStructure: true,
-  //             to: ['.'],
-  //           },
-  //           {
-  //             from: [`web-client/src/${indexName}`],
-  //             keepStructure: true,
-  //             to: ['.'],
-  //           },
-  //         ],
-  //       }),
-  //     ],
-  //     sourcemap: process.env.USTC_ENV !== 'prod',
-  //     splitting: true,
-  //     watch: watch
-  //       ? {
-  //           onRebuild(error) {
-  //             if (error) {
-  //               console.error(error);
-  //               return;
-  //             }
-  //             replaceHtmlFile();
-
-  //             clients.forEach(res => res.write('data: update\n\n'));
-  //             clients.length = 0;
-  //           },
-  //         }
-  //       : false,
-  //   })
-  //   .catch(() => process.exit(1))
-
-  //   .then(() => {
-  //     replaceHtmlFile();
-
-  //     if (watch) {
-  //       esbuild.serve({ port: servePort, servedir: outdir }, {}).then(() => {
-  //         createServer((req, res) => {
-  //           const { headers, method, url } = req;
-
-  //           if (req.url === '/esbuild') {
-  //             return clients.push(
-  //               res.writeHead(200, {
-  //                 'Cache-Control': 'no-cache',
-  //                 Connection: 'keep-alive',
-  //                 'Content-Type': 'text/event-stream',
-  //               }),
-  //             );
-  //           }
-
-  //           let pathWithouthQuery = url.includes('?') ? url.split('?')[0] : url;
-  //           const path = ~pathWithouthQuery.split('/').pop().indexOf('.')
-  //             ? url
-  //             : '/index.html'; //for PWA with router
-
-  //           req.pipe(
-  //             request(
-  //               {
-  //                 headers,
-  //                 hostname: 'localhost',
-  //                 method,
-  //                 path,
-  //                 port: servePort,
-  //               },
-  //               prxRes => {
-  //                 // const jsRegex = /index\.[A-Z0-9]+\.js/;
-  //                 if (jsRegex.test(url)) {
-  //                   const jsReloadCode =
-  //                     ' (() => new EventSource("/esbuild").onmessage = () => location.reload())();';
-
-  //                   const newHeaders = {
-  //                     ...prxRes.headers,
-  //                     'content-length':
-  //                       parseInt(prxRes.headers['content-length'], 10) +
-  //                       jsReloadCode.length,
-  //                   };
-
-  //                   res.writeHead(prxRes.statusCode, newHeaders);
-  //                   res.write(jsReloadCode);
-  //                 } else {
-  //                   res.writeHead(prxRes.statusCode, prxRes.headers);
-  //                 }
-  //                 prxRes.pipe(res, { end: true });
-  //               },
-  //             ),
-  //             { end: true },
-  //           );
-  //         }).listen(hostPort);
-  //       });
-  //     }
-  //   });
+  await ctx.watch().catch(() => process.exit(1));
 }
