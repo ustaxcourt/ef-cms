@@ -3,7 +3,7 @@
 # Usage
 #   used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
-if [[ -z "$CIRCLECI" ]]; then
+if [[ -z "$CI" ]]; then
   echo "killing dynamo if already running"
   pkill -f DynamoDBLocal
 
@@ -64,7 +64,7 @@ fi
 
 nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
-if [ ! -e "$CIRCLECI" ]; then
+if [ ! -e "$CI" ]; then
   echo "killing dynamodb local"
   pkill -P "$DYNAMO_PID"
   pkill -P "$ESEARCH_PID"
