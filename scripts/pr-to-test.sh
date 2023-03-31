@@ -11,6 +11,7 @@ git switch -c "$INTERMEDIATE_BRANCH"
 git pull --no-edit "$COURT_REPO" test
 
 # catch merge conflict and fix in current intermediate branch
+# shellcheck disable=SC2143
 if [[ -n $(git status --porcelain | grep '^UU') ]]; then
     echo "Merge conflict detected. Please resolve the conflict and try again."
     exit 1
