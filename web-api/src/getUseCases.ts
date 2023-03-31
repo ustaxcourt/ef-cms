@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+
+import { getCustomCaseInventoryReportInteractor } from '../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 /* eslint-disable max-lines */
 const {
   addCaseToTrialSessionInteractor,
@@ -656,6 +658,7 @@ const useCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
