@@ -216,6 +216,9 @@ const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
+  getCustomCaseInventoryReportLambda,
+} = require('./reports/getCustomCaseInventoryReportLambda');
+const {
   getDocumentContentsForDocketEntryLambda,
 } = require('./documents/getDocumentContentsForDocketEntryLambda');
 const {
@@ -972,6 +975,10 @@ app.get(
   app.get(
     '/reports/case-inventory-report',
     lambdaWrapper(getCaseInventoryReportLambda),
+  );
+  app.get(
+    '/reports/custom-case-inventory-report',
+    lambdaWrapper(getCustomCaseInventoryReportLambda),
   );
   app.get(
     '/reports/printable-case-inventory-report',
