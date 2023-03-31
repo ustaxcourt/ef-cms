@@ -39,9 +39,11 @@ jobs:
         with:
           port: 8000
           cors: '*'
-      - name: Web Client - Integration Tests
+      - name: Install Node Dependencies
         run: |
           npm ci
+      - name: Web Client - Integration Tests
+        run: |
           mkdir -p /tmp/web-client
           npm run start:api:ci > /tmp/web-client/server-output.txt &
           ./wait-for-dynamo.sh
