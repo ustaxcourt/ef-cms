@@ -47,3 +47,9 @@ else
 fi
 
 nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+
+if [[ -z "$CI" ]]; then
+  echo "Stopping dynamodb and elasticsearch"
+  pkill -P "$DYNAMO_PID"
+  pkill -P "$ESEARCH_PID"
+fi
