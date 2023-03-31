@@ -16,15 +16,6 @@ jobs:
         ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     env:
       CI: true
-      SKIP_CACHE_INVALIDATION: true
-      TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-      QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
-      DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-      S3_ENDPOINT: http://localhost:9000
-      MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
-      CIRCLECI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
