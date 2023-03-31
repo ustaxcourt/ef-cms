@@ -3,6 +3,10 @@
 # Usage
 #   used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
+export ELASTICSEARCH_HOST=localhost
+export ELASTICSEARCH_ENDPOINT=http://localhost:9200
+export DYNAMODB_ENDPOINT=http://localhost:8000
+
 if [[ -z "$CI" ]]; then
   echo "killing dynamo if already running"
   pkill -f DynamoDBLocal
@@ -19,14 +23,10 @@ if [[ -z "$CI" ]]; then
   ESEARCH_PID=$!
 fi
 
-
 URL=http://localhost:9200/ ./wait-until.sh
 
 npm run build:assets
 
-export ELASTICSEARCH_HOST=localhost
-export ELASTICSEARCH_ENDPOINT=http://localhost:9200
-export DYNAMODB_ENDPOINT=http://localhost:8000
 
 # these exported values expire when script terminates
 # shellcheck disable=SC1091
@@ -55,11 +55,6 @@ fi
 
 if [ "${exitCode}" != 0 ]; then                   
   echo "Seed data is invalid!". 1>&2 && exit 1
-fi
-
-
-if [[ -z "${RUN_DIR}" ]]; then
-  RUN_DIR="src"
 fi
 
 nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
