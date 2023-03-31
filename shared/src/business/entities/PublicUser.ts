@@ -1,10 +1,6 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('./JoiValidationDecorator');
-const { baseUserValidation: userValidation } = require('./User');
-const { ROLES } = require('./EntityConstants');
+import { JoiValidationEntity } from './JoiValidationEntity';
+import { ROLES } from './EntityConstants';
+import { User } from './User';
 
 /**
  * constructor
@@ -12,35 +8,29 @@ const { ROLES } = require('./EntityConstants');
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function PublicUser() {}
+export class PublicUser extends JoiValidationEntity {
+  public name: string;
+  public role: string;
+  public judgeFullName: string;
+  public judgeTitle: string;
 
-PublicUser.prototype.init = function init(rawUser) {
-  this.entityName = 'PublicUser';
-  userDecorator(this, rawUser);
-};
-
-const userDecorator = (obj, rawObj) => {
-  obj.name = rawObj.name;
-  obj.role = rawObj.role;
-  if (obj.role === ROLES.judge || obj.role === ROLES.legacyJudge) {
-    obj.judgeFullName = rawObj.judgeFullName;
-    obj.judgeTitle = rawObj.judgeTitle;
+  constructor(rawUser) {
+    super('PublicUser');
+    this.name = rawUser.name;
+    this.role = rawUser.role;
+    if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
+      this.judgeFullName = rawUser.judgeFullName;
+      this.judgeTitle = rawUser.judgeTitle;
+    }
   }
-};
 
-const VALIDATION_ERROR_MESSAGES = {
-  role: 'Role is required',
-};
+  getErrorToMessageMap() {
+    return {
+      role: 'Role is required',
+    } as any;
+  }
 
-joiValidationDecorator(
-  PublicUser,
-  joi.object().keys(userValidation),
-  VALIDATION_ERROR_MESSAGES,
-);
-
-module.exports = {
-  PublicUser: validEntityDecorator(PublicUser),
-  VALIDATION_ERROR_MESSAGES,
-  userDecorator,
-  userValidation,
-};
+  getValidationRules() {
+    return User.BASE_USER_VALIDATION as any;
+  }
+}

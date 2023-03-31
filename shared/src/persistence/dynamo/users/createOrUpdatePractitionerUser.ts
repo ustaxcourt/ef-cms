@@ -57,7 +57,7 @@ export const createOrUpdatePractitionerUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: RawUser;
 }) => {
   let userId = applicationContext.getUniqueId();
   const practitionerRoleTypes = [

@@ -8,7 +8,6 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
-import { setupConfigSequence } from './setupConfigSequence';
 import { startRefreshIntervalAction } from '../actions/startRefreshIntervalAction';
 
 /**
@@ -31,7 +30,6 @@ export const loginWithCodeSequence = [
           getUserAction,
           setUserAction,
           setUserPermissionsAction,
-          setupConfigSequence,
           navigateToPathAction,
         ],
         maintenanceOn: [navigateToMaintenanceAction],
