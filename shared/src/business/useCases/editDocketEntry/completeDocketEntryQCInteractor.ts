@@ -123,6 +123,7 @@ export const completeDocketEntryQCInteractor = async (
     objections: entryMetadata.objections,
     ordinalValue: entryMetadata.ordinalValue,
     otherFilingParty: entryMetadata.otherFilingParty,
+    otherIteration: entryMetadata.otherIteration,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,

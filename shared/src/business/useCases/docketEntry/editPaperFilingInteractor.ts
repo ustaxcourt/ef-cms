@@ -402,6 +402,7 @@ const updateDocketEntry = async ({
     objections: documentMetadata.objections,
     ordinalValue: documentMetadata.ordinalValue,
     otherFilingParty: documentMetadata.otherFilingParty,
+    otherIteration: documentMetadata.otherIteration,
     partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
     pending: documentMetadata.pending,
     receivedAt: documentMetadata.receivedAt,
