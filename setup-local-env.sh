@@ -15,3 +15,6 @@ export DYNAMODB_TABLE_NAME=efcms-local
 export USER_LIMITER_THRESHOLD='5000'
 export IP_LIMITER_THRESHOLD='5000'
 export EFCMS_DOMAIN=localhost
+export ELASTICSEARCH_HOST=localhost
+export ELASTICSEARCH_ENDPOINT=http://localhost:9200
+export DYNAMODB_ENDPOINT=http://localhost:8000
