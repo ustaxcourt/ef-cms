@@ -48,15 +48,15 @@ export const PartyInformation = connect(
             </select>
           </div>
         </div>
-        {caseDetailEditHelper.showOwnershipDisclosureStatement && (
+        {caseDetailEditHelper.showCorporateDisclosureStatement && (
           <div className="subsection">
             <FormGroup>
               <div className="order-checkbox">
                 <input
-                  checked={form.orderForOds}
+                  checked={form.orderForCds}
                   className="usa-checkbox__input"
-                  id="order-for-ods"
-                  name="orderForOds"
+                  id="order-for-cds"
+                  name="orderForCds"
                   type="checkbox"
                   onChange={e => {
                     updateFormValueSequence({
@@ -65,8 +65,12 @@ export const PartyInformation = connect(
                     });
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="order-for-ods">
-                  Order for Ownership Disclosure Statement
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="order-for-cds"
+                  id="order-for-cds-label"
+                >
+                  Order for Corporate Disclosure Statement
                 </label>
               </div>
             </FormGroup>
@@ -77,7 +81,7 @@ export const PartyInformation = connect(
           <div className="subsection contacts">
             <Contacts
               bind="form"
-              contactsHelper="caseDetailEditContactsHelper"
+              contactsHelper="internalPetitionPartiesHelper"
               parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}

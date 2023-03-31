@@ -38,7 +38,7 @@ import { getChromiumBrowser } from '../../shared/src/business/utilities/getChrom
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
-import { getUniqueId } from '../../shared/src/sharedAppContext.js';
+import { getUniqueId } from '../../shared/src/sharedAppContext';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
   image1,
@@ -766,8 +766,8 @@ export const uploadPetition = async (
     stinFileId,
   };
 
-  if (overrides.ownershipDisclosureFileId) {
-    data.ownershipDisclosureFileId = overrides.ownershipDisclosureFileId;
+  if (overrides.corporateDisclosureFileId) {
+    data.corporateDisclosureFileId = overrides.corporateDisclosureFileId;
   }
 
   const response = await axios.post('http://localhost:4000/cases', data, {
@@ -796,7 +796,7 @@ export const loginAs = (cerebralTest, user) =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
+export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {

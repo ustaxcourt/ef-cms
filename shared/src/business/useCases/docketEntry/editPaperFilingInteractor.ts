@@ -3,7 +3,7 @@ import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
-import { DocketEntry, DocketEntryClass } from '../../entities/DocketEntry';
+import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -89,7 +89,7 @@ const saveForLaterStrategy = async ({
   applicationContext: IApplicationContext;
   request: IEditPaperFilingRequest;
   caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  docketEntryEntity: DocketEntry;
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -141,7 +141,7 @@ const multiDocketServeStrategy = async ({
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
 }) => {
   validateDocketEntryCanBeServed({
@@ -190,7 +190,7 @@ const singleDocketServeStrategy = async ({
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
 }) => {
   validateDocketEntryCanBeServed({
@@ -227,7 +227,7 @@ const serveDocketEntry = async ({
   applicationContext: IApplicationContext;
   caseEntitiesToFileOn: TCaseEntity[];
   clientConnectionId: string;
-  docketEntryEntity: DocketEntryClass;
+  docketEntryEntity: DocketEntry;
   documentMetadata: any;
   userId: string;
   subjectCaseEntity: TCaseEntity;
@@ -247,7 +247,7 @@ const serveDocketEntry = async ({
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
 
-    const updatedDocketEntryEntity = await updateDocketEntry({
+    const updatedDocketEntry = await updateDocketEntry({
       applicationContext,
       caseEntity: subjectCaseEntity,
       docketEntry: docketEntryEntity,
@@ -260,7 +260,9 @@ const serveDocketEntry = async ({
         applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
           applicationContext,
           caseEntity: aCase,
-          docketEntryEntity: cloneDeep(updatedDocketEntryEntity),
+          docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
+            applicationContext,
+          }),
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         }),
@@ -272,7 +274,7 @@ const serveDocketEntry = async ({
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities: caseEntitiesToFileOn,
-        docketEntryId: updatedDocketEntryEntity.docketEntryId,
+        docketEntryId: updatedDocketEntry.docketEntryId,
       });
 
     const paperServicePdfUrl = paperServiceResult?.pdfUrl;
@@ -319,7 +321,7 @@ const validateDocketEntryCanBeEdited = ({
   docketEntry,
   docketEntryId,
 }: {
-  docketEntry: DocketEntryClass;
+  docketEntry: DocketEntry;
   docketEntryId: string;
 }): void => {
   if (!docketEntry) {
@@ -376,10 +378,10 @@ const updateDocketEntry = async ({
 }: {
   applicationContext: IApplicationContext;
   caseEntity: TCaseEntity;
-  docketEntry: DocketEntryClass;
+  docketEntry: DocketEntry;
   documentMetadata: any;
   userId: string;
-}): Promise<DocketEntryClass> => {
+}): Promise<DocketEntry> => {
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
     additionalInfo: documentMetadata.additionalInfo,
@@ -400,6 +402,7 @@ const updateDocketEntry = async ({
     objections: documentMetadata.objections,
     ordinalValue: documentMetadata.ordinalValue,
     otherFilingParty: documentMetadata.otherFilingParty,
+    otherIteration: documentMetadata.otherIteration,
     partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
     pending: documentMetadata.pending,
     receivedAt: documentMetadata.receivedAt,
@@ -407,7 +410,7 @@ const updateDocketEntry = async ({
     serviceDate: documentMetadata.serviceDate,
   };
 
-  const updatedDocketEntryEntity: DocketEntryClass = new DocketEntry(
+  const updatedDocketEntryEntity: DocketEntry = new DocketEntry(
     {
       ...docketEntry,
       ...editableFields,
@@ -439,8 +442,8 @@ const updateAndSaveWorkItem = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  docketEntry: DocketEntryClass;
-  user: TUser;
+  docketEntry: DocketEntry;
+  user: RawUser;
 }): Promise<void> => {
   const { workItem } = docketEntry;
   workItem.docketEntry = docketEntry.toRawObject();
@@ -471,7 +474,7 @@ const getDocketEntryToEdit = async ({
   docketEntryId: string;
 }): Promise<{
   caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  docketEntryEntity: DocketEntry;
 }> => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()

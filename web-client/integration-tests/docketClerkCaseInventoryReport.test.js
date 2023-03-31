@@ -30,6 +30,7 @@ describe('case inventory report journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {
+    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('openCaseInventoryReportModalSequence');
 
     const caseInventoryReportHelper = withAppContextDecorator(
@@ -145,6 +146,7 @@ describe('case inventory report journey', () => {
     let updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
+
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.new + 1,
     );

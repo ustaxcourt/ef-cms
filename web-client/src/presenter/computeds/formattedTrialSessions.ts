@@ -1,5 +1,6 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
+import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -112,6 +113,7 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 
 export const formattedTrialSessions = (get, applicationContext) => {
   const judgeId = get(state.judgeUser.userId);
+  const currentTrialSessionId = get(state.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();
 
   // filter trial sessions
@@ -174,6 +176,17 @@ export const formattedTrialSessions = (get, applicationContext) => {
       ),
       'trialLocation',
     );
+
+    sessionsByTerm = formatTrialSessionDisplayOptions(
+      sessionsByTerm,
+      applicationContext,
+    );
+
+    if (currentTrialSessionId) {
+      sessionsByTerm = sessionsByTerm.filter(
+        session => session.trialSessionId !== currentTrialSessionId,
+      );
+    }
   }
 
   return {

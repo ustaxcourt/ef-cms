@@ -56,8 +56,8 @@ export const formatDateIfToday = (
 
 export const formatWorkItem = ({
   applicationContext,
-  workItem = {},
   isSelected,
+  workItem = {},
 }) => {
   const { COURT_ISSUED_EVENT_CODES, ORDER_TYPES_MAP } =
     applicationContext.getConstants();
@@ -323,6 +323,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
   let { assignmentFilterValue } = get(state.screenMetadata);
+  let { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
 
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
@@ -372,18 +373,26 @@ export const formattedWorkQueue = (get, applicationContext) => {
       outbox: 'desc',
     },
   };
-
-  const sortField =
-    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
-
-  const sortDirection =
+  let sortField = sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
+  let sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [];
   let highPriorityDirection = [];
   if (workQueueToDisplay.box == 'inbox') {
-    highPriorityField = ['highPriority', 'trialDate'];
-    highPriorityDirection = ['desc', 'asc'];
+    const caseStatusSortRank = {
+      [STATUS_TYPES.submitted]: 1,
+      [STATUS_TYPES.assignedCase]: 2,
+      [STATUS_TYPES.assignedMotion]: 3,
+      [STATUS_TYPES.jurisdictionRetained]: 4,
+    };
+
+    highPriorityField = [
+      'highPriority',
+      'trialDate',
+      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
+    ];
+    highPriorityDirection = ['desc', 'asc', 'asc'];
   }
 
   workQueue = orderBy(

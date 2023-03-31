@@ -51,7 +51,7 @@ export const assignWorkItemsInteractor = async (
       workItemId,
     });
 
-  const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
+  const workItemEntity = new WorkItem(workItemRecord, {
     applicationContext,
   });
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });

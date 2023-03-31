@@ -39,7 +39,7 @@ export const editPractitionerDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized for creating practitioner user');
   }
 
-  const documentEntity: TPractitionerDocumentEntity = new PractitionerDocument(
+  const documentEntity = new PractitionerDocument(
     {
       categoryName: documentMetadata.categoryName,
       categoryType: documentMetadata.categoryType,

@@ -44,7 +44,13 @@ export const AllCases = connect(
                       'margin-left-2': item.shouldIndent,
                     })}
                   >
-                    <ConsolidatedCaseIcon caseItem={item} />
+                    <ConsolidatedCaseIcon
+                      consolidatedIconTooltipText={
+                        item.consolidatedIconTooltipText
+                      }
+                      inConsolidatedGroup={item.inConsolidatedGroup}
+                      showLeadCaseIcon={item.isLeadCase}
+                    />
                   </span>
                 </td>
                 <td>

@@ -1,7 +1,9 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
+import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -17,6 +19,8 @@ export const ContactSecondary = connect(
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
+    toggleUseContactPrimaryAddressSequence:
+      sequences.toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
@@ -31,6 +35,7 @@ export const ContactSecondary = connect(
     onChange,
     onChangeSequence,
     parentView,
+    toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence,
     useSameAsPrimary,
     validationErrors,
@@ -86,6 +91,7 @@ export const ContactSecondary = connect(
                     key: e.target.name,
                     value: e.target.checked,
                   });
+                  toggleUseContactPrimaryAddressSequence();
                 }}
               />
               <label
@@ -163,6 +169,14 @@ export const ContactSecondary = connect(
               onChange={onChange}
             />
           )}
+
+          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
+            <>
+              <PaperPetitionEmail bind={bind} contactType="contactSecondary" />
+              <EConsent bind={bind} contactType="contactSecondary" />
+            </>
+          )}
+
           {contactsHelper.contactSecondary.displayPhone && (
             <FormGroup
               errorText={

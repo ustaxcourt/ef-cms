@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -39,21 +39,11 @@ const SectionWorkQueueInProgressRow = React.memo(
             </td>
           )}
           <td className="consolidated-case-column">
-            {item.inConsolidatedGroup && (
-              <span
-                className="fa-layers fa-fw"
-                title={item.consolidatedIconTooltipText}
-              >
-                <Icon
-                  aria-label={item.consolidatedIconTooltipText}
-                  className="fa-icon-blue"
-                  icon="copy"
-                />
-                {item.inLeadCase && (
-                  <span className="fa-inverse lead-case-icon-text">L</span>
-                )}
-              </span>
-            )}
+            <ConsolidatedCaseIcon
+              consolidatedIconTooltipText={item.consolidatedIconTooltipText}
+              inConsolidatedGroup={item.inConsolidatedGroup}
+              showLeadCaseIcon={item.inLeadCase}
+            />
           </td>
           <td className="message-queue-row">
             <CaseLink formattedCase={item} />

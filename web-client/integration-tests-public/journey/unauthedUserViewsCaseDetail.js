@@ -24,64 +24,79 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(6);
-    expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject([
-      {
-        descriptionDisplay: 'Petition',
-        hasDocument: true,
-        servedPartiesCode: 'R',
-        showDocumentDescriptionWithoutLink: true,
-        showLinkToDocument: false,
-        showServed: true,
-      },
-      {
-        descriptionDisplay: 'Request for Place of Trial at Seattle, Washington',
-        hasDocument: false,
-        servedPartiesCode: undefined,
-        showDocumentDescriptionWithoutLink: true,
-        showLinkToDocument: false,
-      },
-      {
-        descriptionDisplay: 'Notice of Receipt of Petition',
-        eventCode: 'NOTR',
-        hasDocument: true,
-        servedPartiesCode: 'P',
-        showLinkToDocument: false,
-        showServed: true,
-      },
-      {
-        descriptionDisplay:
-          'Order of Dismissal Entered, Judge Buch for Something',
-        hasDocument: true,
-        servedPartiesCode: 'B',
-        showDocumentDescriptionWithoutLink: false,
-        showLinkToDocument: true,
-        showServed: true,
-      },
-      {
-        descriptionDisplay: 'Transcript of Anything on 01-01-2019',
-        hasDocument: true,
-        servedPartiesCode: undefined,
-        showDocumentDescriptionWithoutLink: true,
-        showLinkToDocument: false,
-        showServed: false,
-      },
-      {
-        descriptionDisplay:
-          'Stipulated Decision Entered, Judge Ashford Anything',
-        hasDocument: true,
-        servedPartiesCode: 'B',
-        showDocumentDescriptionWithoutLink: true,
-        showLinkToDocument: false,
-        showServed: true,
-      },
-    ]);
+    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(7);
+    expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          descriptionDisplay: 'Petition',
+          hasDocument: true,
+          servedPartiesCode: 'R',
+          showDocumentDescriptionWithoutLink: true,
+          showLinkToDocument: false,
+          showServed: true,
+        }),
+        expect.objectContaining({
+          descriptionDisplay:
+            'Request for Place of Trial at Seattle, Washington',
+          hasDocument: false,
+          servedPartiesCode: undefined,
+          showDocumentDescriptionWithoutLink: true,
+          showLinkToDocument: false,
+        }),
+        expect.objectContaining({
+          descriptionDisplay: 'Notice of Receipt of Petition',
+          eventCode: 'NOTR',
+          hasDocument: true,
+          servedPartiesCode: 'P',
+          showLinkToDocument: false,
+          showServed: true,
+        }),
+        expect.objectContaining({
+          descriptionDisplay:
+            'Motion making my way downtown, walking fast, all tests pass',
+          hasDocument: true,
+          servedPartiesCode: 'B',
+          showDocumentDescriptionWithoutLink: true,
+          showLinkToDocument: false,
+          showServed: true,
+        }),
+        expect.objectContaining({
+          descriptionDisplay:
+            'Order of Dismissal Entered, Judge Buch for Something',
+          hasDocument: true,
+          servedPartiesCode: 'B',
+          showDocumentDescriptionWithoutLink: false,
+          showLinkToDocument: true,
+          showServed: true,
+        }),
+        expect.objectContaining({
+          descriptionDisplay: 'Transcript of Anything on 01-01-2019',
+          hasDocument: true,
+          servedPartiesCode: undefined,
+          showDocumentDescriptionWithoutLink: true,
+          showLinkToDocument: false,
+          showServed: false,
+        }),
+        expect.objectContaining({
+          descriptionDisplay:
+            'Stipulated Decision Entered, Judge Ashford Anything',
+          hasDocument: true,
+          servedPartiesCode: 'B',
+          showDocumentDescriptionWithoutLink: true,
+          showLinkToDocument: false,
+          showServed: true,
+        }),
+      ]),
+    );
 
-    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(6);
+    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(7);
     expect(helper.formattedCaseDetail.docketEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentType: 'Petition',
+        }),
+        expect.objectContaining({
+          documentType: 'Motion',
         }),
         expect.objectContaining({
           documentType:

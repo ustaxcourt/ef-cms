@@ -27,7 +27,7 @@ export const petitionsClerkVerifiesConsolidatedCaseIndicatorSentMessagesBox = (
     expect(foundMessage).toMatchObject({
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
-      leadCase: false,
+      isLeadCase: false,
     });
   });
 };

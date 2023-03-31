@@ -14,8 +14,10 @@ Terraform code in Dawson is separated into different directories to help reduce 
 - `./web-client/terraform/` (For the UI, CloudFront, etc)
 - `./iam/terraform/environment-specific` (For environment-specific IAM roles) 
 - `./iam/terraform/account-specific` (For account-specific IAM roles) 
-- `./web-api/migration-terraform` (For the migration setup)
-- `./web-api/migration-cron-terraform` (For the migration cron setup)
+- `./web-api/workflow-terraform/migration` (For the migration setup)
+- `./web-api/workflow-terraform/migration-cron` (For the migration cron setup)
+- `./web-api/workflow-terraform/reindex-cron` (For the reindex cron setup)
+- `./web-api/workflow-terraform/switch-colors-cron` (For the color switch cron setup)
 
 and each of these directories are deployed via the following npm scripts:
 
@@ -23,8 +25,10 @@ and each of these directories are deployed via the following npm scripts:
 - `npm run deploy:ui exp1` (runs terraform in `./web-client/terraform/`)
 - `npm run deploy:environment-specific exp1` (runs terraform in `./iam/terraform/environment-specific/`)
 - `npm run deploy:account-specific` (runs terraform in `./iam/terraform/account-specific/`)
-- `npm run deploy:migration` (runs terraform in `./web-api/migration-terraform/`)
-- `npm run deploy:migration-cron` (runs terraform in `./web-api/migration-cron-terraform/`)
+- `npm run deploy:migration` (runs terraform in `./web-api/workflow-terraform/migration/`)
+- `npm run deploy:migration-cron` (runs terraform in `./web-api/workflow-terraform/migration-cron/`)
+- `npm run deploy:reindex-cron` (runs terraform in `./web-api/workflow-terraform/reindex-cron/`)
+- `npm run deploy:switch-colors-cron` (runs terraform in `./web-api/workflow-terraform/switch-colors-cron/`)
 
 These various terraform deployment will be explained in detail later in the following sections, but for right now we should note that our terraform directories extend a common directory / file structure:
 
@@ -41,7 +45,7 @@ These various terraform deployment will be explained in detail later in the foll
 │   ├── variables.tf // a definition of all variables of this terraform directory
 ```
 
-The `variables.tf` file is used to defined the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
+The `variables.tf` file is used to define the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
 
 The `outputs.tf` is useful to understand because we often define certain outputs from modules that are pass around throughout the terraform code.  For example, assume the `outputs.tf` contains the following code:
 
@@ -217,9 +221,9 @@ Here is a preview of the account-specific terraform directory and the purpose of
 
 ### Migration Terraform
 
-The `./web-api/migration-terraform` directory contains the definitions for setting up the migration code necessary to run the blue-green migration.  
+The `./web-api/workflow-terraform/migration` directory contains the definitions for setting up the migration code necessary to run the blue-green migration.  
 
-To understand this terraform directory you need to understand how the blue-green migration works.  First, we deploy a lambda which we call `migration-segments` which is used for processing a small `segment` of the dynamodb table.  This segment will process each record and modify the record if needed via our migration scripts which can be located at `web-api/migration-terraform/main/lambdas/migrations`.  Additionally, we also deploy a `migration` lambda which runs on records when user modifies the old dynamodb table.  We sometimes call this the `live migration process`.  This allows us to potentially keep the system online and working while a migration is running.  After we've finished setting up the migration infrastructure, we will run a script which will publish a bunch of events to an SQS queue which will be consumed by the `migration-segments` lambda.
+To understand this terraform directory you need to understand how the blue-green migration works.  First, we deploy a lambda which we call `migration-segments` which is used for processing a small `segment` of the dynamodb table.  This segment will process each record and modify the record if needed via our migration scripts which can be located at `web-api/workflow-terraform/migration/main/lambdas/migrations`.  Additionally, we also deploy a `migration` lambda which runs on records when user modifies the old dynamodb table.  We sometimes call this the `live migration process`.  This allows us to potentially keep the system online and working while a migration is running.  After we've finished setting up the migration infrastructure, we will run a script which will publish a bunch of events to an SQS queue which will be consumed by the `migration-segments` lambda.
 
 
 Here is an outline of what some of these files do at a high level:
@@ -244,7 +248,7 @@ Here is an outline of what some of these files do at a high level:
 ### Migration Cron Terraform
 
 
-The `./web-api/migration-cron-terraform` directory contains the definitions for setting up a cron lambda which runs every minute to check if a migration is done running on an envrionment.  To understand the purpose of this terraform directory, we need some background information about our blue-green migrations.
+The `./web-api/workflow-terraform/migration-cron` directory contains the definitions for setting up a cron lambda which runs every minute to check if a migration is done running on an envrionment.  To understand the purpose of this terraform directory, we need some background information about our blue-green migrations.
 
 As we are working on stories and bugs, we often need to do what we call a blue-green migration which is a Dawson process for migrating our data from one source dynamodb table (alpha/beta) to another destination table while modifying the records as they are passed over.  Additionally, we need a fresh elasticsearch cluster to be re-indexed via our `streams` lambda while this data is being migrated over to the destination dynamodb table.  This entire process can take up to 5 hours.
 

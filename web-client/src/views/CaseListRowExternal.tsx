@@ -1,6 +1,7 @@
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ConsolidatedCaseIcon } from '../ustc-ui/Icon/ConsolidatedCaseIcon';
 import React from 'react';
+import classNames from 'classnames';
 
 const getCaseRow = ({
   formattedCase,
@@ -12,16 +13,20 @@ const getCaseRow = ({
     <React.Fragment key={formattedCase.docketNumber}>
       <tr>
         <td>
-          {formattedCase.isLeadCase && (
-            <>
-              <span className="usa-sr-only">Lead Case</span>
-              <FontAwesomeIcon
-                className="margin-right-1 icon-consolidated"
-                icon="copy"
-                size="1x"
-              />
-            </>
-          )}
+          <span
+            className={classNames({
+              'margin-left-2':
+                formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
+            })}
+          >
+            <ConsolidatedCaseIcon
+              consolidatedIconTooltipText={
+                formattedCase.consolidatedIconTooltipText
+              }
+              inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+              showLeadCaseIcon={formattedCase.isLeadCase}
+            />
+          </span>
         </td>
         <td className="hide-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>

@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createTrialSessionAction } from './createTrialSessionAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -60,34 +60,6 @@ describe('createTrialSessionAction', () => {
     });
 
     expect(errorStub.mock.calls.length).toEqual(1);
-  });
-
-  it('calls setTrialSessionAsSwingSession if swingSession is true and swingSessionId is set', async () => {
-    await runAction(createTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          ...MOCK_TRIAL,
-          swingSession: true,
-          swingSessionId: '456',
-        },
-      },
-    });
-    expect(
-      applicationContext.getUseCases().createTrialSessionInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
-        .mock.calls[0][1],
-    ).toMatchObject({
-      swingSessionId: '123',
-      trialSessionId: '456',
-    });
   });
 
   it('removes the estimatedEndDateMonth, Day, Year from the trialSession', async () => {

@@ -1,6 +1,7 @@
 import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/assignPetitionToAuthenticatedUserAction';
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearConfirmationTextStatisticsAction } from '../actions/clearConfirmationTextStatisticsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
@@ -10,6 +11,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPaperPetitionDatesSequence } from './setPaperPetitionDatesSequence';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -37,6 +39,7 @@ export const submitPetitionFromPaperSequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
+          setCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           showProgressSequenceDecorator([
             setCaseTypeAction,
@@ -44,6 +47,7 @@ export const submitPetitionFromPaperSequence = [
             {
               error: [openFileUploadErrorModal],
               success: [
+                clearConfirmationTextStatisticsAction,
                 setCaseAction,
                 assignPetitionToAuthenticatedUserAction,
                 getPetitionIdAction,

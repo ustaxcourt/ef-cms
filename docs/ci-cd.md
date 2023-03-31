@@ -86,7 +86,7 @@ All of our actions are defined in [.github/workflows](https://github.com/ustaxco
 Here is an example of our `test:client:unit` action:
 
 ```yml
-# client.yml
+#  client.yml
 name: Node.js CI
 on: [pull_request]
 jobs:
@@ -96,7 +96,7 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

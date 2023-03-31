@@ -1,7 +1,9 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
+import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -194,6 +196,7 @@ export const ContactPrimary = connect(
               onChange="updateFormValueAndSecondaryContactInfoSequence"
             />
           )}
+
           {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress
@@ -203,6 +206,14 @@ export const ContactPrimary = connect(
               onChange={onChange}
             />
           )}
+
+          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
+            <>
+              <PaperPetitionEmail bind={bind} contactType="contactPrimary" />
+              <EConsent bind={bind} contactType="contactPrimary" />
+            </>
+          )}
+
           <FormGroup
             className="phone-input"
             errorText={

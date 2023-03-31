@@ -14,7 +14,6 @@ export const unsetAddressOnFormAction = ({ store }) => {
   store.unset(state.form.contact.state);
   store.unset(state.form.contact.postalCode);
   store.unset(state.form.contact.country);
-  store.unset(state.form.contact.countryType);
 
   store.unset(state.screenMetadata.petitionerAddresses);
 };

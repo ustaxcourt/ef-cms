@@ -179,7 +179,8 @@ describe('Document title journey', () => {
       documentType: 'Amendment [anything]',
       eventCode: 'ADMT',
       filers: [contactPrimary.contactId],
-      ordinalValue: 'First',
+      ordinalValue: 'Other',
+      otherIteration: '16',
       primaryDocumentFile: fakeFile,
       scenario: 'Nonstandard F',
     };
@@ -236,7 +237,7 @@ describe('Document title journey', () => {
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
-      'First Amendment to Exhibit(s) Is this pool safe for diving? It deep ends.',
+      'Sixteenth Amendment to Exhibit(s) Is this pool safe for diving? It deep ends.',
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

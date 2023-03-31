@@ -1,13 +1,16 @@
 import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
+import { clearConfirmationTextStatisticsAction } from '../actions/clearConfirmationTextStatisticsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getConstants } from '../../getConstants';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
 import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -16,6 +19,14 @@ import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
 const gotoStartCaseInternal = [
+  getFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG
+      .key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG
+      .key,
+  ),
   setStartInternalCaseDefaultTabAction,
   setDefaultStartCaseInternalFormAction,
   setDocumentUploadModeAction('scan'),
@@ -31,6 +42,7 @@ const gotoStartCaseExternal = [
 export const gotoStartCaseWizardSequence =
   startWebSocketConnectionSequenceDecorator([
     clearFormAction,
+    clearConfirmationTextStatisticsAction,
     clearScreenMetadataAction,
     prepareFormAction,
     stopShowValidationAction,

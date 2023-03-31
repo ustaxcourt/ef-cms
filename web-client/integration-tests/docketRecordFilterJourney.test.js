@@ -1,4 +1,5 @@
 import { DOCKET_RECORD_FILTER_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkAddsDocketEntryForMotion } from './journey/docketClerkAddsDocketEntryForMotion';
 import { docketClerkAddsDocketEntryForTrialExhibit } from './journey/docketClerkAddsDocketEntryForTrialExhibit';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -37,6 +38,7 @@ describe('Docket Record Filter Journey', () => {
   });
   docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryForMotion(cerebralTest);
 
   it('docket clerk views docket record filtered for all document types', async () => {
     expect(cerebralTest.getState('sessionMetadata.docketRecordFilter')).toBe(
@@ -72,6 +74,25 @@ describe('Docket Record Filter Journey', () => {
       filteredDocketEntriesOnDocketRecord
         .formattedDocketEntriesOnDocketRecord[0].eventCode,
     ).toBe('TE');
+  });
+
+  it('docket clerk views docket record filtered for motion document types', async () => {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'sessionMetadata.docketRecordFilter',
+      value: DOCKET_RECORD_FILTER_OPTIONS.motions,
+    });
+
+    const filteredDocketEntriesOnDocketRecord =
+      await getFormattedDocketEntriesForTest(cerebralTest);
+
+    expect(
+      filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
+        .length,
+    ).toBe(1);
+    expect(
+      filteredDocketEntriesOnDocketRecord
+        .formattedDocketEntriesOnDocketRecord[0].eventCode,
+    ).toBe('M000');
   });
 
   it('docket clerk views docket record filtered for order document types', async () => {

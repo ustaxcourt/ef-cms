@@ -11,10 +11,10 @@ export const createNewMessageOnCase = (
   cerebralTest,
   {
     docketNumber,
+    preserveCreatedMessage = true,
     subject,
     toSection = PETITIONS_SECTION,
     toUserId = petitionsClerk1User,
-    preserveCreatedMessage = true,
   } = {},
 ) => {
   const messageModalHelper = withAppContextDecorator(

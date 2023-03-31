@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import {
-  TRawTrialSession,
+  RawTrialSession,
   TrialSession,
   isStandaloneRemoteSession,
 } from '../../entities/trialSessions/TrialSession';
@@ -19,7 +19,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const createTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: TRawTrialSession },
+  { trialSession }: { trialSession: RawTrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -36,6 +36,15 @@ export const createTrialSessionInteractor = async (
     isStandaloneRemoteSession(trialSessionToAdd.sessionScope)
   ) {
     trialSessionToAdd.setAsCalendared();
+  }
+
+  if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {
+    applicationContext
+      .getUseCaseHelpers()
+      .associateSwingTrialSessions(applicationContext, {
+        swingSessionId: trialSessionToAdd.swingSessionId,
+        trialSessionEntity: trialSessionToAdd,
+      });
   }
 
   return await applicationContext
