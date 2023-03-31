@@ -57,6 +57,7 @@ import {
   getDocketNumbersByUser,
 } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers';
+import { getCasesByFilters } from '../../shared/src/persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
@@ -304,6 +305,7 @@ const gatewayMethods = {
   getCaseMetadataWithCounsel,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
+  getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesForUser,
