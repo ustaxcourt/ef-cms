@@ -1,4 +1,7 @@
-import { GetCaseInventoryReportInteractorRequest } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import {
+  CaseInventory,
+  GetCaseInventoryReportInteractorRequest,
+} from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 
 export const getCasesByFilters = async ({
   applicationContext,
@@ -6,9 +9,7 @@ export const getCasesByFilters = async ({
 }: {
   applicationContext: IApplicationContext;
   params: GetCaseInventoryReportInteractorRequest;
-}): Promise<{ totalCount: number; foundCases: any[] }> => {
-  // TODO: Make type for foundCases
-
+}): Promise<{ totalCount: number; foundCases: CaseInventory[] }> => {
   const source = [
     'associatedJudge',
     'isPaper',

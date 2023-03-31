@@ -13,6 +13,21 @@ export type GetCaseInventoryReportInteractorRequest = {
   filingMethod: 'all' | 'electronic' | 'paper';
 };
 
+export type CaseInventory = Pick<
+  TCase,
+  | 'associatedJudge'
+  | 'isPaper'
+  | 'createdAt'
+  | 'procedureType'
+  | 'caseType'
+  | 'caseTitle'
+  | 'docketNumber'
+  | 'preferredTrialCity'
+  | 'receivedAt'
+  | 'status'
+  | 'highPriority'
+>;
+
 /**
  * getCustomCaseInventoryReportInteractor
  *
@@ -28,7 +43,7 @@ export type GetCaseInventoryReportInteractorRequest = {
 export const getCustomCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCaseInventoryReportInteractorRequest,
-): Promise<{ totalCount: number; foundCases: any[] }> => {
+): Promise<{ totalCount: number; foundCases: CaseInventory[] }> => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
