@@ -16,7 +16,7 @@ const watch = !!process.env.WATCH;
 
 let server;
 
-if (watch) {
+if (watch && !process.env.CI) {
   server = livereload.createServer();
 }
 
