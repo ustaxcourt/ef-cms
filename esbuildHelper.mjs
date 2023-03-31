@@ -16,10 +16,6 @@ const watch = !!process.env.WATCH;
 
 let server;
 
-if (watch && !process.env.CI) {
-  server = livereload.createServer();
-}
-
 const env = {
   API_URL: process.env.API_URL,
   CHECK_DEPLOY_DATE_INTERVAL: process.env.CHECK_DEPLOY_DATE_INTERVAL,
@@ -56,8 +52,12 @@ export default async function ({
   entryPoint,
   indexName,
   outdir,
+  reloadServerPort,
   replaceHtmlFile,
 }) {
+  if (watch && !process.env.CI) {
+    server = livereload.createServer({ port: reloadServerPort });
+  }
   const sassMap = new Map();
   const buildOptions = {
     bundle: true,

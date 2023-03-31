@@ -24,5 +24,6 @@ esbuildHelper({
   entryPoint: 'index-public.ts',
   indexName: 'index-public.html',
   outdir: 'dist-public',
+  reloadServerPort: 37528,
   replaceHtmlFile,
 });
