@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConsolidatedCaseGroupFiling } from './ConsolidatedCaseGroupFiling';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { MultiDocumentPartiesFiling } from './MultiDocumentPartiesFiling';
 import { PartiesFiling } from './PartiesFiling';
@@ -54,9 +55,12 @@ export const FileDocument = connect(
           </>
         )}
 
+        {/* TODO: Remove MultiDocumentPartiesFiling */}
         {(fileDocumentHelper.showMultiDocumentFilingPartyForm && (
           <MultiDocumentPartiesFiling />
         )) || <PartiesFiling />}
+
+        <ConsolidatedCaseGroupFiling />
 
         <div className="margin-top-4">
           <Button
