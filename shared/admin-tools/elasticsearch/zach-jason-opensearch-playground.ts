@@ -5,11 +5,21 @@ import { pinkLog } from '../../src/tools/pinkLog';
 import { search } from '../../src/persistence/elasticsearch/searchClient';
 import createApplicationContext from '../../../web-api/src/applicationContext';
 
-const getAllCases = async ({ applicationContext, params }) => {
+const getAllCases = async ({ applicationContext }) => {
+  const source = [
+    'associatedJudge',
+    'caseCaption',
+    'docketNumber',
+    'docketNumberSuffix',
+    'docketNumberWithSuffix',
+    'receivedAt',
+    'status',
+  ];
   const { results } = await search({
     applicationContext,
     searchParameters: {
       body: {
+        _source: source,
         query: {
           bool: {
             must: [
@@ -17,14 +27,19 @@ const getAllCases = async ({ applicationContext, params }) => {
                 range: {
                   'receivedAt.S': {
                     gte: computeDate({ day: 1, month: 1, year: 2021 }),
-                    lt: computeDate({ day: 1, month: 11, year: 2021 }),
+                    lt: computeDate({ day: 1, month: 11, year: 2023 }),
                   },
                 },
               },
               // {
-              // match: {
-              //   'blocked.BOOL': false,
+              //   match: {
+              //     'isPaper.BOOL': false,
+              //   },
               // },
+              // {
+              //   match: {
+              //     'blocked.BOOL': false,
+              //   },
               // },
               // {
               //   match: {
@@ -55,7 +70,7 @@ const getAllCases = async ({ applicationContext, params }) => {
   };
   const petitions = await getAllCases({ applicationContext, params });
   const end = Date.now();
-  pinkLog('length: ', petitions.length);
+  pinkLog(petitions.length);
   pinkLog('time****', (end - start) / 1000);
 })();
 
