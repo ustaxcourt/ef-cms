@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export CI=true
 export IS_LOCAL=true
 export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=S3RVER
