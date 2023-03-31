@@ -1,9 +1,6 @@
-const {
-  A_VALID_DOCKET_ENTRY,
-  MOCK_PETITIONERS,
-} = require('./DocketEntry.test');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('setAsServed', () => {
   it('sets the Document as served', () => {

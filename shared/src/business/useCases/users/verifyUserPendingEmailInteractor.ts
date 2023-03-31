@@ -16,7 +16,7 @@ const updateCaseEntityAndGenerateChange = async ({
 }: {
   applicationContext: IApplicationContext;
   rawCaseData: TCase;
-  user: TUser;
+  user: RawUser;
 }) => {
   const caseEntity = new Case(rawCaseData, {
     applicationContext,

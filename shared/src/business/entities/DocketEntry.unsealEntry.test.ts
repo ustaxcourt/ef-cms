@@ -1,7 +1,7 @@
-const { A_VALID_DOCKET_ENTRY } = require('./DocketEntry.test');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DOCKET_ENTRY_SEALED_TO_TYPES } = require('../entities/EntityConstants');
-const { DocketEntry } = require('./DocketEntry');
+import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from './EntityConstants';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('unsealEntry', () => {
   it('should clear the sealedTo property from the docket entry', () => {
