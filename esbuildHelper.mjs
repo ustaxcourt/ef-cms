@@ -59,8 +59,7 @@ export default async function ({
   replaceHtmlFile,
 }) {
   const sassMap = new Map();
-
-  const ctx = await esbuild.context({
+  const buildOptions = {
     bundle: true,
     define: {
       global: 'window',
@@ -161,7 +160,7 @@ export default async function ({
           },
         ],
       }),
-      // only push this to plugins if watch === true?
+      // only push this to plugins if watch === true? probably not, otherwise replaceHtmlFile() will never run
       {
         name: 'name-goes-here',
         setup(build) {
@@ -175,7 +174,13 @@ export default async function ({
     ],
     sourcemap: process.env.USTC_ENV !== 'prod',
     splitting: true,
-  });
+  };
 
-  await ctx.watch().catch(() => process.exit(1));
+  if (!watch && !process.env.CI) {
+    await esbuild.build(buildOptions);
+  } else {
+    const ctx = await esbuild.context(buildOptions);
+
+    await ctx.watch().catch(() => process.exit(1));
+  }
 }
