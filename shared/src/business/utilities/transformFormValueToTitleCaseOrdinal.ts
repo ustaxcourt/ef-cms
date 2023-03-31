@@ -7,6 +7,9 @@ import { getOrdinal } from 'english-ordinals';
  * @returns {string|void} the formValue as an ordinal in title case
  */
 export const transformFormValueToTitleCaseOrdinal = formValue => {
+  if (!formValue) {
+    return;
+  }
   let splitNumberIntoWords = getOrdinal(formValue).split(' ');
 
   let wordWithHyphen = splitNumberIntoWords.find(word => word.includes('-'));
