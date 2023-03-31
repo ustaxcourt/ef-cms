@@ -420,6 +420,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
+    sleep: jest.fn(),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
     uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
@@ -428,10 +429,12 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetHttpClientReturnValue = {
+    delete: jest.fn(),
     get: () => ({
       data: 'url',
     }),
     post: jest.fn(),
+    put: jest.fn(),
   };
 
   const mockGetUseCases = appContextProxy({
