@@ -6,9 +6,9 @@ import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getCustomCaseInventoryReportInteractor', () => {
-  let getCustomCaseInventoryRequest: GetCaseInventoryReportInteractorRequest;
+  let params: GetCaseInventoryReportInteractorRequest;
   beforeEach(() => {
-    getCustomCaseInventoryRequest = {
+    params = {
       caseStatuses: ['CAV'],
       caseTypes: ['Deficiency'],
       createEndDate: '2022-02-01T17:21:05.483Z',
@@ -29,10 +29,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       });
 
       await expect(
-        getCustomCaseInventoryReportInteractor(
-          applicationContext,
-          getCustomCaseInventoryRequest,
-        ),
+        getCustomCaseInventoryReportInteractor(applicationContext, params),
       ).rejects.toThrow('Unauthorized for case inventory report');
     });
 
@@ -46,13 +43,10 @@ describe('getCustomCaseInventoryReportInteractor', () => {
 
     testCases.forEach(testCase => {
       it(`throws an error if ${testCase.missingField} is not passed in`, async () => {
-        delete getCustomCaseInventoryRequest[testCase.missingField];
+        delete params[testCase.missingField];
 
         await expect(
-          getCustomCaseInventoryReportInteractor(
-            applicationContext,
-            getCustomCaseInventoryRequest,
-          ),
+          getCustomCaseInventoryReportInteractor(applicationContext, params),
         ).rejects.toThrow(
           'Missing required params to run a Custom Case Inventory Report',
         );
@@ -68,16 +62,13 @@ describe('getCustomCaseInventoryReportInteractor', () => {
         totalCount: 0,
       });
 
-    await getCustomCaseInventoryReportInteractor(
-      applicationContext,
-      getCustomCaseInventoryRequest,
-    );
+    await getCustomCaseInventoryReportInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().getCasesByFilters,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
-      getCustomCaseInventoryRequest,
+      params,
     });
   });
 });
