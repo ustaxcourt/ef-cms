@@ -78,6 +78,7 @@ function DocketEntryFactory(rawProps) {
     this.lodged = rawPropsParam.lodged;
     this.objections = rawPropsParam.objections;
     this.ordinalValue = rawPropsParam.ordinalValue;
+    this.otherIteration = rawPropsParam.otherIteration;
     this.otherFilingParty = rawPropsParam.otherFilingParty;
     this.partyIrsPractitioner = rawPropsParam.partyIrsPractitioner;
     this.partyPrivatePractitioner = rawPropsParam.partyPrivatePractitioner;
@@ -146,6 +147,7 @@ function DocketEntryFactory(rawProps) {
     }),
     ordinalValue: DOCKET_ENTRY_VALIDATION_RULE_KEYS.ordinalValue,
     otherFilingParty: DOCKET_ENTRY_VALIDATION_RULE_KEYS.otherFilingParty,
+    otherIteration: DOCKET_ENTRY_VALIDATION_RULE_KEYS.otherIteration,
     previousDocument: joi.object().optional(),
     primaryDocumentFile: joi.object().when('isDocumentRequired', {
       is: true,
