@@ -17,8 +17,6 @@ jobs:
     env:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-      ACTIONS_RUNNER_DEBUG: true
-      ACTIONS_STEP_DEBUG: true
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
