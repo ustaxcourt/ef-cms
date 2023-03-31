@@ -1,18 +1,28 @@
-import { CaseStatus, CaseType } from '../../business/entities/EntityConstants';
+import { GetCaseInventoryReportInteractorRequest } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 
 export const getCasesByFilters = async ({
   applicationContext,
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: {
-    caseStatuses: CaseStatus[];
-    caseTypes: CaseType[];
-    createEndDate: string;
-    createStartDate: string;
-    filingMethod: 'all' | 'electronic' | 'paper';
-  };
-}) => {
+  params: GetCaseInventoryReportInteractorRequest;
+}): Promise<{ totalCount: number; foundCases: any[] }> => {
+  // TODO: Make type for foundCases
+
+  const source = [
+    'associatedJudge',
+    'isPaper',
+    'createdAt',
+    'procedureType',
+    'caseType',
+    'caseTitle',
+    'docketNumber',
+    'preferredTrialCity',
+    'receivedAt',
+    'status',
+    'highPriority',
+  ];
+
   const filters = [];
 
   const createDateFilter = {
@@ -52,10 +62,11 @@ export const getCasesByFilters = async ({
     filters.push(filingMethodFilter);
   }
 
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters: {
       body: {
+        _source: source,
         query: {
           bool: {
             must: filters,
@@ -65,7 +76,12 @@ export const getCasesByFilters = async ({
       },
       index: 'efcms-case',
       size: 10000,
+      track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
   });
-  return results;
+
+  return {
+    foundCases: results,
+    totalCount: total,
+  };
 };
