@@ -29,26 +29,28 @@ describe('updateTrialDateOnWorkItems', () => {
     ).toHaveBeenCalledWith({ applicationContext, workItemId });
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItemTrialDate,
+      applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord,
     ).toHaveBeenCalledTimes(workItemsResults.length);
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItemTrialDate.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord
+        .mock.calls[0][0],
     ).toMatchObject({
       applicationContext,
-      docketNumber: '101-20',
-      trialDate,
-      workItemId: 'abc',
+      attributeKey: 'trialDate',
+      attributeValue: trialDate,
+      pk: workItemsResults[0].pk,
+      sk: workItemsResults[0].sk,
     });
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItemTrialDate.mock
-        .calls[1][0],
+      applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord
+        .mock.calls[1][0],
     ).toMatchObject({
       applicationContext,
-      docketNumber: '101-20',
-      trialDate,
-      workItemId: 'abc',
+      attributeKey: 'trialDate',
+      attributeValue: trialDate,
+      pk: workItemsResults[1].pk,
+      sk: workItemsResults[1].sk,
     });
   });
 });

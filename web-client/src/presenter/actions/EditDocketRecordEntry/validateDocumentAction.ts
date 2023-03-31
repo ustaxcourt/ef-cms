@@ -54,6 +54,7 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
       'serviceDate',
       'trialLocation',
       'ordinalValue',
+      'otherIteration',
       'certificateOfServiceDate',
       'objections',
     ];

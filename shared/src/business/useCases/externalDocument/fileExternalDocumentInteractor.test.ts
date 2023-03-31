@@ -9,7 +9,7 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-import { MOCK_USERS } from '../../../test/mockUsers';
+import { MOCK_USERS, docketClerkUser } from '../../../test/mockUsers';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
@@ -102,6 +102,16 @@ describe('fileExternalDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+  });
+
+  it('should throw an error when the user is not authorized to file an external document on a case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {},
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {

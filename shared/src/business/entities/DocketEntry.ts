@@ -66,6 +66,7 @@ export class DocketEntry extends JoiValidationEntity {
   public sealedTo?: string;
   public filers: string[];
   public ordinalValue?: string;
+  public otherIteration?: string;
   public otherFilingParty?: string;
   public partyIrsPractitioner?: string;
   public processingStatus: string;
@@ -104,7 +105,7 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: any;
+  public workItem?: WorkItem;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -177,6 +178,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.sealedTo = rawDocketEntry.sealedTo;
     this.filers = rawDocketEntry.filers || [];
     this.ordinalValue = rawDocketEntry.ordinalValue;
+    this.otherIteration = rawDocketEntry.otherIteration;
     this.otherFilingParty = rawDocketEntry.otherFilingParty;
     this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
     this.processingStatus = rawDocketEntry.processingStatus || 'pending';
