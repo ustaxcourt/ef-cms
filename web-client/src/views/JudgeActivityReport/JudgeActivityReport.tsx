@@ -4,14 +4,23 @@ import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
     form: state.form,
+    submitJudgeActivityReportSequence:
+      sequences.submitJudgeActivityReportSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
-  function JudgeActivityReport({ form }) {
+  function JudgeActivityReport({
+    form,
+    submitJudgeActivityReportSequence,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <>
         <BigHeader text="Reports" />
@@ -23,10 +32,11 @@ export const JudgeActivityReport = connect(
           </div>
 
           <div className="blue-container">
-            <div className="display-flex flex-row flex-align-end">
-              <div className="">
+            <div className="grid-row">
+              <div className="grid-col-auto margin-x-3">
                 <DateInput
-                  errorText=""
+                  errorText={validationErrors.startDate}
+                  id="activity-start-date"
                   label="Start date"
                   names={{
                     day: 'startDay',
@@ -38,13 +48,13 @@ export const JudgeActivityReport = connect(
                     month: form.startMonth,
                     year: form.startYear,
                   }}
-                  onBlur={() => {}}
-                  onChange={() => {}}
+                  onChange={updateFormValueSequence}
                 />
               </div>
-              <div className="display-flex flex-column flex-auto ">
+              <div className="grid-col-auto margin-x-3">
                 <DateInput
-                  errorText=""
+                  errorText={validationErrors.endDate}
+                  id="activity-end-date"
                   label="End date"
                   names={{
                     day: 'endDay',
@@ -56,14 +66,13 @@ export const JudgeActivityReport = connect(
                     month: form.endMonth,
                     year: form.endYear,
                   }}
-                  onBlur={() => {}}
-                  onChange={() => {}}
+                  onChange={updateFormValueSequence}
                 />
               </div>
-              <div className="">
+              <div className="grid-col-auto">
                 <Button
                   onClick={() => {
-                    // updateDateRangeForDeadlinesSequence();
+                    submitJudgeActivityReportSequence();
                   }}
                 >
                   Run Report
