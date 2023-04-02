@@ -40,6 +40,7 @@ import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryRe
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changePasswordLocalSequence } from './sequences/changePasswordLocalSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
+import { checkForNegativeValueSequence } from './sequences/checkForNegativeValueSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
@@ -349,12 +350,10 @@ import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
-import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
-import { setupConfigSequence } from './sequences/setupConfigSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
@@ -574,6 +573,7 @@ export const presenter = {
     cerebralBindSimpleSetStateSequence,
     changePasswordLocalSequence,
     changeTabAndSetViewerDocumentToDisplaySequence,
+    checkForNegativeValueSequence,
     chooseModalWizardStepSequence,
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
@@ -881,12 +881,10 @@ export const presenter = {
     setPendingReportSelectedJudgeSequence,
     setSelectedAddressOnFormSequence,
     setSelectedBatchIndexSequence,
-    setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,
     setViewerCorrespondenceToDisplaySequence,
     setViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
-    setupConfigSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
     showMoreClosedCasesSequence,

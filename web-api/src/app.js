@@ -177,9 +177,6 @@ const {
   fileExternalDocumentToCaseLambda,
 } = require('./documents/fileExternalDocumentToCaseLambda');
 const {
-  fileExternalDocumentToConsolidatedCasesLambda,
-} = require('./documents/fileExternalDocumentToConsolidatedCasesLambda');
-const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
@@ -380,9 +377,6 @@ const {
 const {
   setNoticesForCalendaredTrialSessionLambda,
 } = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
-const {
-  setTrialSessionAsSwingSessionLambda,
-} = require('./trialSessions/setTrialSessionAsSwingSessionLambda');
 const {
   setTrialSessionCalendarLambda,
 } = require('./trialSessions/setTrialSessionCalendarLambda');
@@ -637,10 +631,6 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.post(
     '/case-documents/:docketNumber/external-document',
     lambdaWrapper(fileExternalDocumentToCaseLambda),
-  );
-  app.post(
-    '/case-documents/consolidated/:leadDocketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',
@@ -1034,10 +1024,6 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
     lambdaWrapper(setNoticesForCalendaredTrialSessionLambda, { isAsync: true }),
-  );
-  app.post(
-    '/trial-sessions/:trialSessionId/set-swing-session',
-    lambdaWrapper(setTrialSessionAsSwingSessionLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId/eligible-cases',

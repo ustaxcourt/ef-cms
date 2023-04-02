@@ -159,6 +159,7 @@ export const NoticeOfReceiptOfPetition = ({
           address3={contact.address3}
           city={contact.city}
           country={contact.country}
+          countryType={contact.countryType}
           inCareOf={contact.inCareOf}
           name={contact.name}
           postalCode={contact.postalCode}

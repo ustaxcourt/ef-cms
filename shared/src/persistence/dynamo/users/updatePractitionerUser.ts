@@ -6,7 +6,7 @@ export const updatePractitionerUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: RawUser;
 }) => {
   const { userId } = user;
 

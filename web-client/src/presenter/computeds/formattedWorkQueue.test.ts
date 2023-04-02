@@ -430,6 +430,193 @@ describe('formattedWorkQueue', () => {
     expect(result[3].workItemId).toEqual('d');
   });
 
+  it('should sort inbox work items by case status sort rank (submitted, assignedCase, assignedMotion, then jurisdictionRetained) after high priority', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            highPriority: false,
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'c',
+          },
+          {
+            ...baseWorkItem,
+            highPriority: true,
+            receivedAt: '2019-02-17T15:27:55.801Z',
+            trialDate: '2019-01-17T00:00:00.000Z',
+            workItemId: 'b',
+          },
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.assignedCase,
+            highPriority: false,
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'a',
+          },
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.jurisdictionRetained,
+            highPriority: false,
+            receivedAt: '2019-04-17T15:27:55.801Z',
+            workItemId: 'd',
+          },
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.assignedMotion,
+            highPriority: false,
+            receivedAt: '2019-04-17T15:27:55.801Z',
+            workItemId: 'e',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('b');
+    expect(result[1].workItemId).toEqual('c');
+    expect(result[2].workItemId).toEqual('a');
+    expect(result[3].workItemId).toEqual('e');
+    expect(result[4].workItemId).toEqual('d');
+  });
+
+  it('should sort inbox work items by receivedAt in ascending order within a status group', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            docketEntry: {
+              ...baseWorkItem.docketEntry,
+              receivedAt: '2007-01-17T15:27:55.801Z',
+            },
+            highPriority: false,
+            workItemId: 'middle',
+          },
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            docketEntry: {
+              ...baseWorkItem.docketEntry,
+              receivedAt: '2019-01-17T15:27:55.801Z',
+            },
+            highPriority: false,
+            workItemId: 'newer',
+          },
+          {
+            ...baseWorkItem,
+            assigneeId: docketClerkUser.userId,
+            caseStatus: STATUS_TYPES.submitted,
+            createdAt: '2000-01-17T15:27:55.801Z',
+            docketEntry: {
+              ...baseWorkItem.docketEntry,
+              receivedAt: '2000-01-17T15:27:55.801Z',
+            },
+            highPriority: false,
+            workItemId: 'older',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('older');
+    expect(result[1].workItemId).toEqual('middle');
+    expect(result[2].workItemId).toEqual('newer');
+  });
+
+  it('should sort section outbox in descending order from newest at the top to oldest', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        selectedWorkItems: [
+          { ...baseWorkItem, completedAt: '2019-06-17T15:27:55.801Z' },
+        ],
+        workQueue: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'c',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2015-02-17T15:27:55.801Z',
+            workItemId: 'b',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2022-04-17T15:27:55.801Z',
+            workItemId: 'a',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('a');
+    expect(result[1].workItemId).toEqual('c');
+    expect(result[2].workItemId).toEqual('b');
+  });
+
+  it('should sort my outbox in descending order from newest at the top to oldest', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        selectedWorkItems: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-06-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+          },
+        ],
+        workQueue: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-01-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+            workItemId: 'c',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2015-02-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+            workItemId: 'b',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2022-04-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+            workItemId: 'a',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('a');
+    expect(result[1].workItemId).toEqual('c');
+    expect(result[2].workItemId).toEqual('b');
+  });
+
   describe('Consolidate Group Cases', () => {
     it('should show the work item to not be a part of a consolidated group', () => {
       const result = runCompute(formattedWorkQueue, {

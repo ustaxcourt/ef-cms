@@ -36,6 +36,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
    - Increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
    - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
+     - If you are on an M1 Machine, make sure to set the environment variable `DOCKER_DEFAULT_PLATFORM=linux/amd64`.
    - Deploy as normal by triggering a CircleCI workflow
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
@@ -70,7 +71,7 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 There is a major upgrade to `esbuild` from 0.16.x to 0.17.x. The new major versions introduced breaking changes on how the `build` and `watch` commands work, which breaks reloading after changes in development environments. The major issue we ran into with upgrading was lack of documentation surrounding what the new events are called for watching for changes. Documentation for major version changes can be found [here](https://github.com/evanw/esbuild/releases/tag/v0.17.0), and in future release tags on Github, the esbuild website hasn't been updated since 0.17.x was released.
 
 ### esbuild-sass-plugin
-There is a minor update to `esbuild-sass-plugin` from 2.5.0 to 2.6.0 that has a peer dependency for `esbuild@^0.17.10`. Due to esbuild being locked to 0.16.x in our project as seen in the above caveat and to prevent having to use the `--legacy-peer-deps` flag again this package is being set to accept patch updates for the time being. This can be lifted when we update esbuild or if this package were to have security vulnerabilites in the future that need to be addressed.
+There is a minor update to `esbuild-sass-plugin` from 2.5.0 to 2.6.0 that has a peer dependency for `esbuild@^0.17.10`. Due to esbuild being locked to 0.16.x in our project as seen in the above caveat and to prevent having to use the `--legacy-peer-deps` flag again this package is being set to accept patch updates for the time being. This can be lifted when we update esbuild or if this package were to have security vulnerabilities in the future that need to be addressed.
 
 
 ### stylelint

@@ -1,21 +1,21 @@
-# name: Node.js CI - shared
+name: Node.js CI - Shared
 
-# on:
-#   pull_request:
-#   push:
-#     branches:
-#       - dependency-updates
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
 
-# jobs:
-#   Shared:
-#     runs-on: ubuntu-latest
+jobs:
+  Shared:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v3
-#         with:
-#           node-version: '16'
-#       - name: Shared
-#         run: |
-#           npm ci
-#           npm run test:shared
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Shared
+        run: |
+          npm ci
+          npm run test:shared
