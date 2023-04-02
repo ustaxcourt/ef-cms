@@ -66,13 +66,16 @@ export class DocketEntry extends JoiValidationEntity {
   public sealedTo?: string;
   public filers: string[];
   public ordinalValue?: string;
+  public otherIteration?: string;
   public otherFilingParty?: string;
   public partyIrsPractitioner?: string;
   public processingStatus: string;
   public receivedAt: string;
   public relationship?: string;
   public scenario?: string;
-  public secondaryDocument?: string;
+  public secondaryDocument?: {
+    secondaryDocumentInfo: string;
+  };
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -175,6 +178,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.sealedTo = rawDocketEntry.sealedTo;
     this.filers = rawDocketEntry.filers || [];
     this.ordinalValue = rawDocketEntry.ordinalValue;
+    this.otherIteration = rawDocketEntry.otherIteration;
     this.otherFilingParty = rawDocketEntry.otherFilingParty;
     this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
     this.processingStatus = rawDocketEntry.processingStatus || 'pending';
@@ -562,7 +566,7 @@ export const isServed = function (rawDocketEntry) {
  * @param {Array} servedParties List of parties that have been served
  * @returns {String} served parties code
  */
-export const getServedPartiesCode = servedParties => {
+export const getServedPartiesCode = (servedParties?: any[]) => {
   let servedPartiesCode = undefined;
   if (servedParties && servedParties.length > 0) {
     if (

@@ -1,6 +1,5 @@
-import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearPartyPrimaryAction } from '../actions/clearPartyPrimaryAction';
+import { clearOtherIterationAction } from '../actions/clearOtherIterationAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
@@ -39,11 +38,7 @@ export const completeDocumentSelectSequence = [
       stopShowValidationAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
-      canFileInConsolidatedCasesAction,
-      {
-        no: [],
-        yes: [clearPartyPrimaryAction],
-      },
+      clearOtherIterationAction,
       navigateToFileADocumentAction,
     ],
   },

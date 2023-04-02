@@ -184,21 +184,6 @@ const app = {
       }
     }
 
-    if (presenter.state.token && !presenter.state.maintenanceMode) {
-      const pdfFlagKey =
-        applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
-          .PDFJS_EXPRESS_VIEWER.key;
-      let isFlagOn = false;
-      isFlagOn = await applicationContext
-        .getUseCases()
-        .getFeatureFlagValueInteractor(applicationContext, {
-          featureFlag: pdfFlagKey,
-        });
-      presenter.state.featureFlags = {
-        [pdfFlagKey]: isFlagOn,
-      };
-    }
-
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
     const userPermissions = applicationContext.getCurrentUserPermissions();

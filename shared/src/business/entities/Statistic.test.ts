@@ -1,9 +1,9 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Statistic } = require('./Statistic');
+import { Statistic } from './Statistic';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('Statistic', () => {
   it('throws an error if applicationContext is not provided on construction', () => {
-    expect(() => new Statistic({}, {})).toThrow(
+    expect(() => new Statistic({}, {} as any)).toThrow(
       'applicationContext must be defined',
     );
   });
@@ -67,34 +67,6 @@ describe('Statistic', () => {
       ]);
     });
 
-    it('fails validation if a irsDeficiencyAmount, irsTotalPenalties, determinationTotalPenalties, and/or determinationDeficiencyAmount are not positive numbers', () => {
-      const statistic = new Statistic(
-        {
-          determinationDeficiencyAmount: -4352.32,
-          determinationTotalPenalties: -4,
-          irsDeficiencyAmount: -2.0,
-          irsTotalPenalties: -222.22,
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 2015,
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
-      expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
-        'determinationDeficiencyAmount',
-        'determinationTotalPenalties',
-        'irsDeficiencyAmount',
-        'irsTotalPenalties',
-      ]);
-    });
-
     it('fails validation if a lastDateOfPeriod is a date in the future', () => {
       const statistic = new Statistic(
         {
@@ -108,8 +80,9 @@ describe('Statistic', () => {
       );
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod:
-          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0].message,
+        lastDateOfPeriod: (
+          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0] as any
+        ).message,
       });
     });
 
@@ -146,6 +119,28 @@ describe('Statistic', () => {
             {
               name: 'Penalty 1(IRS)',
               penaltyAmount: 100.0,
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
+          year: 2015,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+      expect(statistic.isValid()).toBeTruthy();
+    });
+
+    it('passes validation if an irsDeficiencyAmount, irsTotalPenalties, determinationTotalPenalties, and/or determinationDeficiencyAmount include negative numbers', () => {
+      const statistic = new Statistic(
+        {
+          determinationDeficiencyAmount: -4352.32,
+          determinationTotalPenalties: 0,
+          irsDeficiencyAmount: -2.0,
+          irsTotalPenalties: -222.22,
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: -222.22,
               penaltyType: 'irsPenaltyAmount',
             },
           ],

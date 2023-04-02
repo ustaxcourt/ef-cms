@@ -3,7 +3,7 @@ export const updateUserEmail = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TUser;
+  user: RawUser;
 }) => {
   try {
     await applicationContext

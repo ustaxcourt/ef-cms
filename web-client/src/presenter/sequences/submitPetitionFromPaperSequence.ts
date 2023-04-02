@@ -1,6 +1,7 @@
 import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/assignPetitionToAuthenticatedUserAction';
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearConfirmationTextStatisticsAction } from '../actions/clearConfirmationTextStatisticsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
@@ -46,6 +47,7 @@ export const submitPetitionFromPaperSequence = [
             {
               error: [openFileUploadErrorModal],
               success: [
+                clearConfirmationTextStatisticsAction,
                 setCaseAction,
                 assignPetitionToAuthenticatedUserAction,
                 getPetitionIdAction,

@@ -1,9 +1,9 @@
-const {
+import {
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('./EntityConstants');
-const { PrivatePractitioner } = require('./PrivatePractitioner');
+} from './EntityConstants';
+import { PrivatePractitioner } from './PrivatePractitioner';
 
 describe('PrivatePractitioner', () => {
   it('Creates a valid PrivatePractitioner', () => {

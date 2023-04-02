@@ -143,7 +143,7 @@ export const createOrUpdateUser = async ({
   applicationContext: IApplicationContext;
   disableCognitoUser: boolean;
   password: string;
-  user: TUser;
+  user: RawUser;
 }) => {
   let userId;
   let userPoolId =

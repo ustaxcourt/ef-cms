@@ -592,3 +592,26 @@ label.ustc-upload {
     min-width: 480px;
   }
 }
+
+#other-iteration-field {
+  margin-top: 35px;
+}
+
+.ustc-confirmation-message {
+  display: block;
+  padding: 0;
+  margin: 15px 0 0 0;
+  color: #0050d8;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ustc-form-group--confirmation {
+  position: relative;
+  max-width: 31.25rem;
+  padding-left: 1rem;
+  border-left: 0.25rem solid #0050d8;
+  margin-top: 0;
+  margin-bottom: 35px;
+  margin-left: -1.25rem;
+}
