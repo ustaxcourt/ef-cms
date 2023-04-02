@@ -11,8 +11,8 @@ import { withAppContextDecorator } from '../../withAppContext';
 jest.mock('./addToTrialSessionModalHelper.ts');
 
 const {
+  SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-  TRIAL_SESSION_TYPES,
   USER_ROLES: ROLES,
 } = applicationContext.getConstants();
 
@@ -61,24 +61,26 @@ describe('formattedTrialSessions', () => {
         judge: { name: '1', userId: '1' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
-        sessionType: TRIAL_SESSION_TYPES.regular,
+        sessionType: SESSION_TYPES.regular,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
         term: 'Fall',
         termYear: '2019',
         trialLocation: 'Hartford, Connecticut',
+        trialSessionId: '1',
       },
       {
         caseOrder: [],
         judge: { name: '2', userId: '2' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         sessionStatus: 'New',
-        sessionType: TRIAL_SESSION_TYPES.small,
+        sessionType: SESSION_TYPES.small,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
         term: 'Winter',
         trialClerk: { name: '10', userId: '10' },
         trialLocation: 'Knoxville, TN',
+        trialSessionId: '2',
       },
       {
         caseOrder: [],
@@ -86,29 +88,31 @@ describe('formattedTrialSessions', () => {
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'New',
-        sessionType: TRIAL_SESSION_TYPES.regular,
+        sessionType: SESSION_TYPES.regular,
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
         term: 'Winter',
         trialLocation: 'Jacksonville, FL',
+        trialSessionId: '3',
       },
       {
         caseOrder: [],
         judge: { name: '4', userId: '4' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
-        sessionType: TRIAL_SESSION_TYPES.hybrid,
+        sessionType: SESSION_TYPES.hybrid,
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
         term: 'Summer',
         trialLocation: 'Memphis, TN',
+        trialSessionId: '4',
       },
       {
         caseOrder: [],
         judge: { name: '5', userId: '5' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         sessionStatus: 'Open',
-        sessionType: TRIAL_SESSION_TYPES.hybrid,
+        sessionType: SESSION_TYPES.hybrid,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: false,
         term: 'Spring',
@@ -121,7 +125,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '6', userId: '6' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
-        sessionType: TRIAL_SESSION_TYPES.regular,
+        sessionType: SESSION_TYPES.regular,
         startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         term: 'Spring',
@@ -185,7 +189,7 @@ describe('formattedTrialSessions', () => {
         screenMetadata: {
           trialSessionFilters: {
             proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-            sessionType: TRIAL_SESSION_TYPES.regular,
+            sessionType: SESSION_TYPES.regular,
           },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
@@ -293,23 +297,25 @@ describe('formattedTrialSessions', () => {
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: 'In Person',
         sessionStatus: 'New',
-        sessionType: TRIAL_SESSION_TYPES.regular,
+        sessionType: SESSION_TYPES.regular,
         startDate: '2019-11-27T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
         swingSession: true,
         term: 'Winter',
         trialLocation: 'Jacksonville, FL',
+        trialSessionId: '3',
         userIsAssignedToSession: false,
       },
       {
         caseOrder: [],
+        formattedEstimatedEndDate: undefined,
         formattedNoticeIssuedDate: undefined,
         formattedStartDate: '11/25/19',
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',
         sessionStatus: 'New',
-        sessionType: TRIAL_SESSION_TYPES.small,
+        sessionType: SESSION_TYPES.small,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -317,6 +323,7 @@ describe('formattedTrialSessions', () => {
         term: 'Winter',
         trialClerk: { name: '10', userId: '10' },
         trialLocation: 'Knoxville, TN',
+        trialSessionId: '2',
         userIsAssignedToSession: false,
       },
     ]);
@@ -335,6 +342,27 @@ describe('formattedTrialSessions', () => {
     });
 
     expect(formatTrialSessionDisplayOptions).toHaveBeenCalled();
+  });
+
+  it('removes the current trial session from the sessionsByTerm when state.trialSessionId is defined', () => {
+    const { sessionsByTerm } = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        form: {
+          term: 'Winter',
+        },
+        trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId,
+        trialSessions: TRIAL_SESSIONS_LIST,
+        user: testJudgeUser,
+      },
+    });
+
+    expect(
+      sessionsByTerm.find(
+        session =>
+          session.trialSessionId === TRIAL_SESSIONS_LIST[1].trialSessionId,
+      ),
+    ).toBeUndefined();
   });
 
   it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {

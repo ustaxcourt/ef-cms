@@ -472,9 +472,6 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
-  setTrialSessionAsSwingSessionInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
-const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
@@ -738,7 +735,6 @@ const useCases = {
   setForHearingInteractor,
   setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
-  setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
   setUserEmailFromPendingEmailInteractor,
   setWorkItemAsReadInteractor,
