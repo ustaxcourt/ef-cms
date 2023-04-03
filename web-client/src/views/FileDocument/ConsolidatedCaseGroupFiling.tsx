@@ -53,7 +53,15 @@ export const ConsolidatedCaseGroupFiling = connect(
               >
                 All in the consolidated group
               </label>
-              {/* TODO: map over consolidated cases */}
+              <ul className="ustc-unstyled-consolidated-case-list">
+                {fileDocumentHelper.formattedConsolidatedCaseList.map(
+                  (item, index) => (
+                    <li className="margin-bottom-2" key={index}>
+                      {item}
+                    </li>
+                  ),
+                )}
+              </ul>
               <input
                 aria-describedby="consolidated-case-group-radios-legend"
                 checked={form.fileAcrossConsolidatedGroup === false}
