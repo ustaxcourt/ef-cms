@@ -11,6 +11,9 @@ export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
   store,
 }) => {
+  // Do FF stuff here
+  store.set(state.form.fileAcrossConsolidatedGroup, true);
+
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);
