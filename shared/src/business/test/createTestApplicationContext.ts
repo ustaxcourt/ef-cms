@@ -199,6 +199,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { acquireLock } = require('../useCaseHelper/acquireLock');
 const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -460,7 +461,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
-    acquireLock: jest.fn(),
+    acquireLock: jest.fn().mockImplementation(acquireLock),
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),

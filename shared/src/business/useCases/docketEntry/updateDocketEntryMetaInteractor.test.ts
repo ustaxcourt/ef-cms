@@ -1,5 +1,10 @@
 import { MOCK_CASE } from '../../../test/mockCase';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { getContactPrimary } from '../../entities/cases/Case';
@@ -19,6 +24,10 @@ describe('updateDocketEntryMetaInteractor', () => {
   };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
     mockDocketEntries = [
       {
         ...baseDocketEntry,
@@ -139,6 +148,55 @@ describe('updateDocketEntryMetaInteractor', () => {
         processingStatus: 'complete',
         userId: mockUserId,
       }));
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      updateDocketEntryMetaInteractor(applicationContext, {
+        docketEntryMeta: mockDocketEntries[0],
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .acquireLock.mockReturnValue(MOCK_LOCK);
+
+    const mockUuid = '21af52db-508a-4962-a702-fa1aba9f8a37';
+
+    applicationContext.getUniqueId.mockReturnValue(mockUuid);
+
+    await updateDocketEntryMetaInteractor(applicationContext, {
+      docketEntryMeta: mockDocketEntries[0],
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().acquireLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      lockId: mockUuid,
+      lockName: `case|${MOCK_CASE.docketNumber}`,
+      user: expect.anything(),
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      lockId: mockUuid,
+      lockName: `case|${MOCK_CASE.docketNumber}`,
+    });
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {

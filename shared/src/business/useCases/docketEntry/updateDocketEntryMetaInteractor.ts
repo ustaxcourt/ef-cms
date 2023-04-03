@@ -53,6 +53,12 @@ export const updateDocketEntryMetaInteractor = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
+  const lockName = `case|${docketNumber}`;
+  const { lockId } = await applicationContext.getUseCaseHelpers().acquireLock({
+    applicationContext,
+    lockName,
+  });
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -214,6 +220,12 @@ export const updateDocketEntryMetaInteractor = async (
       applicationContext,
       caseToUpdate: caseEntity,
     });
+
+  await applicationContext.getPersistenceGateway().removeLock({
+    applicationContext,
+    lockId,
+    lockName,
+  });
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
