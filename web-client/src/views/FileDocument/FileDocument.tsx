@@ -60,7 +60,9 @@ export const FileDocument = connect(
           <MultiDocumentPartiesFiling />
         )) || <PartiesFiling />}
 
-        <ConsolidatedCaseGroupFiling />
+        {fileDocumentHelper.showConsolidatedCasesGroup && (
+          <ConsolidatedCaseGroupFiling />
+        )}
 
         <div className="margin-top-4">
           <Button

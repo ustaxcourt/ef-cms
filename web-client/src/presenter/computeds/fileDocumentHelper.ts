@@ -15,6 +15,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
+  console.log('caseDetail', caseDetail);
+
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
@@ -45,6 +47,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
 
+  const showConsolidatedCasesGroup = !!caseDetail.leadDocketNumber;
+
   const selectedCasesMap = (form.selectedCases || []).reduce(
     (acc, docketNumber) => {
       acc[docketNumber] = true;
@@ -60,7 +64,9 @@ export const fileDocumentHelper = (get, applicationContext) => {
       selectedCasesMap,
     });
 
+  // TODO: remove selectedDocketNumbers and selectedCases
   const selectedDocketNumbers = get(state.form.selectedCases);
+
   const formattedDocketNumbers =
     (selectedDocketNumbers &&
       getFormattedDocketNumbers({
@@ -99,6 +105,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     primaryDocument,
     secondaryDocument,
     selectedCasesAsCase,
+    showConsolidatedCasesGroup,
     showFilingIncludes,
     showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
