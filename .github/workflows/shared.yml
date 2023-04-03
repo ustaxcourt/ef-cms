@@ -2,6 +2,9 @@ name: Node.js CI - Shared
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   Shared:

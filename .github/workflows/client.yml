@@ -2,6 +2,9 @@ name: Node.js CI - Client Unit Tests
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   Client:
