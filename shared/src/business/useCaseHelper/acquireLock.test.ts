@@ -73,5 +73,15 @@ describe('acquireLock', () => {
         },
       });
     });
+    it('returns the unique identifier of the lock so that it can be removed later', async () => {
+      applicationContext.getUniqueId.mockReturnValue('some-uuid');
+
+      const result = await acquireLock({
+        applicationContext,
+        lockName: 'foo',
+      });
+
+      expect(result).toBe('some-uuid');
+    });
   });
 });
