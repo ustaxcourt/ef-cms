@@ -2,6 +2,9 @@ name: Build API Typescript
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   build_ts_api:

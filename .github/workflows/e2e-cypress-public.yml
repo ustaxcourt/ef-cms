@@ -2,20 +2,14 @@ name: E2E Cypress Public
 
 on:
   pull_request:
-
+  push:
+    branches:
+      - flakey-tests
 jobs:
   e2e_cypress_public:
     runs-on: macos-latest
     env:
       CI: true
-      SKIP_CACHE_INVALIDATION: true
-      TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-      QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
-      DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-      S3_ENDPOINT: http://localhost:9000
-      MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
       CHECK_DEPLOY_DATE_INTERVAL: 5000
     steps:
       - uses: actions/checkout@v3
@@ -29,6 +23,5 @@ jobs:
           mkdir -p /tmp/cypress/
           npm run start:all >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
-          URL=http://localhost:4000/api/swagger ./wait-until.sh
           sleep 5
           npm run cypress:integration:public
