@@ -57,7 +57,7 @@ export const OpinionPamphlets = connect(
                         </div>
                         <div className="grid-col-6"></div>
                         <div className="grid-col-2 text-right">
-                          Filed:{' '}
+                          <span className="text-bold">Filed:</span>{' '}
                           {
                             opinionPamphletsHelper.getPamhpletToDisplay(
                               filingDateKey,
