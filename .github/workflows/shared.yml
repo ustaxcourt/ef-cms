@@ -13,8 +13,6 @@ jobs:
         with:
           node-version: '16'
       - name: Install Node Dependencies
-        run: |
-          npm ci
+        run: npm ci
       - name: Shared
-        run: |
-          npm run test:shared
+        run: npm run test:shared
