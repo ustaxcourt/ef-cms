@@ -9,6 +9,7 @@ on:
 jobs:
   e2e_pa11y:
     runs-on: ubuntu-latest
+
     env:
       CI: true
     steps:
@@ -38,7 +39,6 @@ jobs:
         run: |
           mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
-          ./wait-for-dynamo.sh
           URL=http://localhost:1234 ./wait-until.sh
           sleep 20
           npm run test:pa11y:1 --node-flags --max-old-space-size=1024
