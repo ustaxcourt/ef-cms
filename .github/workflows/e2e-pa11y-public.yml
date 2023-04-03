@@ -35,7 +35,7 @@ jobs:
       - name: Run E2E Pa11y Public
         run: |
           mkdir -p /tmp/pa11y/
-          npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+          npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
           ./wait-until-services.sh
           URL=http://localhost:5000/public-api/health ./wait-until.sh
           sleep 10

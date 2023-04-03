@@ -35,7 +35,7 @@ jobs:
       - name: Run E2E Cypress Smoketests
         run: |
           mkdir -p /tmp/cypress/
-          npm run start:all >> /tmp/cypress/cypress-output.txt &
+          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
           npm run cypress:smoketests:local

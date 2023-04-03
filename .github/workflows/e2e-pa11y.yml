@@ -35,7 +35,7 @@ jobs:
       - name: Run E2E Pa11y
         run: |
           mkdir -p /tmp/pa11y/
-          npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+          npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
           URL=http://localhost:1234 ./wait-until.sh
           sleep 20
           npm run test:pa11y:1 --node-flags --max-old-space-size=1024
