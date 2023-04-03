@@ -1,4 +1,3 @@
-import { state } from 'cerebral';
 /**
  * Validates the judge activity report search form
  *
@@ -9,12 +8,9 @@ import { state } from 'cerebral';
  */
 export const validateJudgeActivityReportSearchAction = ({
   applicationContext,
-  get,
   path,
   props,
 }) => {
-  console.log('props ', props);
-  console.log(get(state.form));
   const errors = applicationContext
     .getUseCases()
     .validateJudgeActivityReportSearchInteractor(applicationContext, {
