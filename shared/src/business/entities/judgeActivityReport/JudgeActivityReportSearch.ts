@@ -18,8 +18,6 @@ function JudgeActivityReportSearch() {
 JudgeActivityReportSearch.prototype.init = function init(rawProps = {}) {
   this.startDate = rawProps.startDate;
   this.endDate = rawProps.endDate;
-
-  console.log(this.startDate, this.endDate, '*****');
 };
 
 JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
@@ -30,15 +28,23 @@ JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
         'End date cannot be prior to Start Date. Enter a valid End date.',
     },
     {
+      contains: 'must be less than or equal to',
+      message: 'End date cannot be in the future. Enter a valid date.',
+    },
+    {
       contains: 'is required',
-      message: 'Enter an End date.',
+      message: 'Enter an end date.',
     },
     'Enter a valid end date',
   ],
   startDate: [
     {
       contains: 'is required',
-      message: 'Enter a Start date.',
+      message: 'Enter a start date.',
+    },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Start date cannot be in the future. Enter a valid date.',
     },
     'Enter a valid start date',
   ],
@@ -46,13 +52,16 @@ JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
 
 JudgeActivityReportSearch.schema = joi.object().keys({
   endDate: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
+    .max('now')
     .required()
     .description(
       'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
     ),
-  startDate: JoiValidationConstants.ISO_DATE.required().description(
-    'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-  ),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
 });
 
 joiValidationDecorator(
