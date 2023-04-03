@@ -1,14 +1,15 @@
 import {
   CaseInventory,
-  GetCaseInventoryReportInteractorRequest,
+  GetCaseInventoryReportRequest,
 } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { search } from './searchClient';
 
 export const getCasesByFilters = async ({
   applicationContext,
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: GetCaseInventoryReportInteractorRequest;
+  params: GetCaseInventoryReportRequest;
 }): Promise<{ totalCount: number; foundCases: CaseInventory[] }> => {
   const source = [
     'associatedJudge',

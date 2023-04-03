@@ -1,12 +1,12 @@
 import {
-  GetCaseInventoryReportInteractorRequest,
+  GetCaseInventoryReportRequest,
   getCustomCaseInventoryReportInteractor,
 } from './getCustomCaseInventoryReportInteractor';
 import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getCustomCaseInventoryReportInteractor', () => {
-  let params: GetCaseInventoryReportInteractorRequest;
+  let params: GetCaseInventoryReportRequest;
   beforeEach(() => {
     params = {
       caseStatuses: ['CAV'],
