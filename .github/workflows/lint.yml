@@ -2,9 +2,6 @@ name: Node.js CI - Lint
 
 on:
   pull_request:
-  push:
-    branches:
-      - flakey-tests
 
 jobs:
   Lint:
