@@ -9,6 +9,7 @@ on:
 jobs:
   e2e_cypress:
     runs-on: ubuntu-latest
+
     env:
       CI: true
     steps:
