@@ -2,6 +2,9 @@ name: Node.js Client Integration Tests
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   client_integration:
@@ -40,9 +43,8 @@ jobs:
       - name: Web Client - Integration Tests
         run: |
           mkdir -p /tmp/web-client
-          npm run start:api:ci > /tmp/web-client/server-output.txt &
-          ./wait-for-dynamo.sh
-          URL=http://localhost:4000/api/swagger ./wait-until.sh
+          npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
+          ./wait-until-services.sh
           export TESTFILES=$(node split-tests.js)
           npm run test:client:integration:ci
       - name: Store Artifacts
