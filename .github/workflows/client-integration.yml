@@ -52,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: server log output
-          path: /tmp/web-client/server-output.txt
+          path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
