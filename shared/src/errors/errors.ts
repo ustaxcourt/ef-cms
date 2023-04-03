@@ -110,6 +110,22 @@ module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
   }
 };
 
+module.exports.ServiceUnavailableError = class ServiceUnavailableError extends (
+  Error
+) {
+  /**
+   * constructor
+   *
+   * @param {string} message the error message
+   */
+  constructor(message = 'Service Unavailable', retryAfter = 3000) {
+    super(message);
+
+    this.retryAfter = retryAfter;
+    this.statusCode = 503;
+  }
+};
+
 /**
  * InvalidEntityError error
  *
