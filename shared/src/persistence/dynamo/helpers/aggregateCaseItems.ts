@@ -1,4 +1,3 @@
-import { FORMATS, formatNow } from '../../../business/utilities/DateHandler';
 import { sortBy } from 'lodash';
 
 const getAssociatedJudge = (theCase, caseAndCaseItems) => {
@@ -12,12 +11,6 @@ const getAssociatedJudge = (theCase, caseAndCaseItems) => {
   }
 };
 
-const getLock = caseAndCaseItems => {
-  const now = formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS);
-  return caseAndCaseItems.find(
-    item => item.sk.startsWith('lock|') && item.ttl > now,
-  );
-};
 const isArchivedCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && item.archived;
 
@@ -109,7 +102,6 @@ const aggregateCaseItems = caseAndCaseItems => {
     docketEntries: sortedDocketEntries,
     hearings,
     irsPractitioners,
-    lock: getLock(caseAndCaseItems),
     privatePractitioners,
   };
 };
