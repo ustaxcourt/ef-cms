@@ -30,6 +30,7 @@ npm run seed:elasticsearch
 echo "Starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
+S3RVER_PID=$!
 URL=http://localhost:9000/ ./wait-until.sh
 
 npm run seed:s3
@@ -49,7 +50,8 @@ fi
 nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [[ -z "$CI" ]]; then
-  echo "Stopping dynamodb and elasticsearch"
+  echo "Stopping dynamodb, elasticsearch, and s3rver"
   pkill -P "$DYNAMO_PID"
   pkill -P "$ESEARCH_PID"
+  pkill -P $S3RVER_PID
 fi
