@@ -2,9 +2,6 @@ name: Node.js Client Integration Tests
 
 on:
   pull_request:
-  push:
-    branches:
-      - flakey-tests
 
 jobs:
   client_integration:
@@ -39,8 +36,7 @@ jobs:
           port: 8000
           cors: '*'
       - name: Install Node Dependencies
-        run: |
-          npm ci
+        run: npm ci
       - name: Web Client - Integration Tests
         run: |
           mkdir -p /tmp/web-client
@@ -49,7 +45,7 @@ jobs:
           URL=http://localhost:4000/api/swagger ./wait-until.sh
           export TESTFILES=$(node split-tests.js)
           npm run test:client:integration:ci
-      - name: Store  Artifacts
+      - name: Store Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: server log output

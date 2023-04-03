@@ -2,9 +2,6 @@ name: E2E Pa11y
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   e2e_pa11y:
@@ -19,7 +16,6 @@ jobs:
       MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
       AWS_ACCESS_KEY_ID: S3RVER
       AWS_SECRET_ACCESS_KEY: S3RVER
-      CIRCLECI: true
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -41,9 +37,10 @@ jobs:
         with:
           port: 8000
           cors: '*'
+      - name: Install Node Dependencies
+        run: npm ci
       - name: Run E2E Pa11y
         run: |
-          npm ci
           mkdir -p /tmp/pa11y/
           npm run start:all >> /tmp/pa11y/pa11y-server.txt &
           ./wait-for-dynamo.sh

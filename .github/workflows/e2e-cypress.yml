@@ -2,9 +2,6 @@ name: E2E Cypress
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   e2e_cypress:
@@ -24,9 +21,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Install Node Dependencies
+        run: npm ci
       - name: Run E2E Cypress
         run: |
-          npm ci
           mkdir -p /tmp/cypress/
           npm run start:all >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
