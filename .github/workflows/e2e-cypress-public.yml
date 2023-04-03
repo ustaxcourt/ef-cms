@@ -16,6 +16,16 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Runs Elasticsearch
+        uses: elastic/elastic-github-actions/elasticsearch@master
+        with:
+          stack-version: 7.10.2
+          security-enabled: false
+      - name: Setup DynamoDB Local
+        uses: rrainn/dynamodb-action@v2.0.1
+        with:
+          port: 8000
+          cors: '*'
       - name: Install Node Dependencies
         run: npm ci
       - name: Run E2E Cypress
