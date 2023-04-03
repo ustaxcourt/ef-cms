@@ -4,7 +4,11 @@ export const getCaseByDocketNumber = async ({
   acquireLock = false,
   applicationContext,
   docketNumber,
-}) => {
+}: {
+  acquireLock?: boolean;
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+}): Promise<any> => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
