@@ -2,9 +2,6 @@ name: Build API Typescript
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   build_ts_api:
@@ -14,8 +11,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Install Node Dependencies
+        run: npm ci
       - name: Build Typescript API
         run: |
-          npm ci
           npm run build:assets
           npm run build:lambda:api
