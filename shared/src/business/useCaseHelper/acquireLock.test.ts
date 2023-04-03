@@ -1,15 +1,8 @@
-import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
 import { MOCK_USERS } from '../../test/mockUsers';
 import { ServiceUnavailableError } from '../../errors/errors';
 import { acquireLock } from './acquireLock';
 import { applicationContext } from '../test/createTestApplicationContext';
-
-const mockLock = {
-  pk: `case|${MOCK_CASE.docketNumber}`,
-  sk: 'lock|21af52db-508a-4962-a702-fa1aba9f8a37',
-  ttl: 1680530219,
-  user: 'Someone else',
-};
 
 describe('acquireLock', () => {
   it('gets the current lock from persistence for the given lockName', async () => {
@@ -29,7 +22,7 @@ describe('acquireLock', () => {
     beforeEach(() => {
       applicationContext
         .getPersistenceGateway()
-        .getLock.mockReturnValue(mockLock);
+        .getLock.mockReturnValue(MOCK_LOCK);
     });
     it('throws an error if the persistence gateway returns a lock for the given lockName', async () => {
       await expect(
