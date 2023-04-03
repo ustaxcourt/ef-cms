@@ -16,10 +16,11 @@ export const acquireLock = async ({
   }
 
   const lockId = await applicationContext.getUniqueId();
-  return applicationContext.getPersistenceGateway().acquireLock({
+  await applicationContext.getPersistenceGateway().acquireLock({
     applicationContext,
     lockId,
     lockName,
     user: applicationContext.getCurrentUser(),
   });
+  return lockId;
 };
