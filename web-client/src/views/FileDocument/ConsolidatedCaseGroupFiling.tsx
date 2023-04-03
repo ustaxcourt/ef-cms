@@ -22,12 +22,13 @@ export const ConsolidatedCaseGroupFiling = () => {
               Select the group or this case to file in.
             </span>
             <input
+              defaultChecked
               aria-describedby="consolidated-case-group-radios-legend"
-              checked={true}
               className="usa-radio__input"
               id="consolidated-group-all"
               name="consolidated-group-all"
               type="radio"
+              onChange={e => (e.target.checked = true)}
             />
             <label
               className="usa-radio__label"
@@ -38,11 +39,11 @@ export const ConsolidatedCaseGroupFiling = () => {
             {/* TODO: map over consolidated cases */}
             <input
               aria-describedby="consolidated-case-group-radios-legend"
-              checked={false}
               className="usa-radio__input"
               id="consolidated-group-current-case"
               name="consolidated-group-current-case"
               type="radio"
+              onChange={e => (e.target.checked = true)}
             />
             <label
               className="usa-radio__label"
