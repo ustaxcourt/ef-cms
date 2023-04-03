@@ -10,7 +10,6 @@ describe('opinionPamphletsHelper', () => {
   );
 
   const mockTCRP = {
-    caseCaption: 'Hanan Al Hroub, Petitioner',
     docketNumber: '104-20',
     documentTitle: 'Pamhplet 1',
     documentType: 'Tax Court Report Pamphlet',
@@ -24,21 +23,25 @@ describe('opinionPamphletsHelper', () => {
       opinionPamphlets: [
         {
           ...mockTCRP,
+          caseCaption: 'ABCDEFGHI',
           docketEntryId: 1,
           filingDate: '2023-03-11T05:00:00.000Z',
         },
         {
           ...mockTCRP,
+          caseCaption: 'FGHI',
           docketEntryId: 2,
           filingDate: '2022-02-05T05:00:00.000Z',
         },
         {
           ...mockTCRP,
+          caseCaption: 'BCDEFGHI',
           docketEntryId: 3,
           filingDate: '2023-07-05T05:00:00.000Z',
         },
         {
           ...mockTCRP,
+          caseCaption: 'EFGHI',
           docketEntryId: 4,
           filingDate: '2022-02-05T05:00:00.000Z',
         },
@@ -46,7 +49,7 @@ describe('opinionPamphletsHelper', () => {
     };
   });
 
-  it('should organize opinion pamphlets by filing date', () => {
+  it('should organize opinion pamphlets by filing date, and then by caseCaption for each filing date', () => {
     const { pamphletsGroupedByFilingDate } = runCompute(
       opinionPamphletsHelper,
       { state },
@@ -56,35 +59,35 @@ describe('opinionPamphletsHelper', () => {
       '2022-02-05': [
         {
           ...mockTCRP,
-          docketEntryId: 2,
-          filingDateWithFullYear: '2022-02-05',
-          formattedFilingDate: '02/05/22',
-          sortingName: 'Hroub',
-        },
-        {
-          ...mockTCRP,
+          caseCaption: 'EFGHI',
           docketEntryId: 4,
           filingDateWithFullYear: '2022-02-05',
           formattedFilingDate: '02/05/22',
-          sortingName: 'Hroub',
+        },
+        {
+          caseCaption: 'FGHI',
+          ...mockTCRP,
+          docketEntryId: 2,
+          filingDateWithFullYear: '2022-02-05',
+          formattedFilingDate: '02/05/22',
         },
       ],
       '2023-03-11': [
         {
           ...mockTCRP,
+          caseCaption: 'ABCDEFGHI',
           docketEntryId: 1,
           filingDateWithFullYear: '2023-03-11',
           formattedFilingDate: '03/11/23',
-          sortingName: 'Hroub',
         },
       ],
       '2023-07-05': [
         {
           ...mockTCRP,
+          caseCaption: 'BCDEFGHI',
           docketEntryId: 3,
           filingDateWithFullYear: '2023-07-05',
           formattedFilingDate: '07/05/23',
-          sortingName: 'Hroub',
         },
       ],
     });
@@ -101,6 +104,14 @@ describe('opinionPamphletsHelper', () => {
     });
   });
 
+  it('should return a list of unique years that pamphlets were filed in in descedning order', () => {
+    const { pamphletPeriods } = runCompute(opinionPamphletsHelper, {
+      state,
+    });
+
+    expect(pamphletPeriods).toEqual(['2023', '2022']);
+  });
+
   describe('getPamhpletToDisplay', () => {
     it('should return the first TCRP pamphlet with the filing date key specified', () => {
       const { getPamhpletToDisplay } = runCompute(opinionPamphletsHelper, {
@@ -109,10 +120,10 @@ describe('opinionPamphletsHelper', () => {
 
       expect(getPamhpletToDisplay('2022-02-05')).toEqual({
         ...mockTCRP,
-        docketEntryId: 2,
+        caseCaption: 'EFGHI',
+        docketEntryId: 4,
         filingDateWithFullYear: '2022-02-05',
         formattedFilingDate: '02/05/22',
-        sortingName: 'Hroub',
       });
     });
   });
