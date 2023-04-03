@@ -246,7 +246,9 @@
     "node-forge": "^1.2.1",
     "tap": "^16.3.4",
     "terser": "^5.14.2",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.1",
+    "ecstatic": "^4.1.4",
+    "union" :"^0.5.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
