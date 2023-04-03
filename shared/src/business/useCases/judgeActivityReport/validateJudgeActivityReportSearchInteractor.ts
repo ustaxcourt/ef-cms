@@ -20,10 +20,5 @@ export const validateJudgeActivityReportSearchInteractor = (
     },
   );
 
-  console.log(
-    judgeActivityReportSearch.getFormattedValidationErrors(),
-    '+++++',
-  );
-
   return judgeActivityReportSearch.getFormattedValidationErrors();
 };

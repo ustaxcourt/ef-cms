@@ -1,26 +1,25 @@
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateJudgeActivityReportSearchInteractor } from './validateJudgeActivityReportSearchInteractor';
 
 describe('validateJudgeActivityReportSearchInteractor', () => {
-  it('returns the expected errors object on an empty statistic', () => {
+  it('should return formatted validation errors when the search criteria are invalid', () => {
     const errors = validateJudgeActivityReportSearchInteractor(
       applicationContext,
       {
-        deadlineSearch: {},
+        endDate: undefined,
+        startDate: undefined,
       },
     );
 
     expect(Object.keys(errors).length).toBeGreaterThan(0);
   });
 
-  it('returns null when there are no errors', () => {
+  it('should return null when the search criteria are valid', () => {
     const result = validateJudgeActivityReportSearchInteractor(
       applicationContext,
       {
-        deadlineSearch: {
-          endDate: '01/02/2020',
-          startDate: '01/01/2020',
-        },
+        endDate: '2021-01-22T05:00:00.000Z',
+        startDate: '2021-01-22T05:00:00.000Z',
       },
     );
 
