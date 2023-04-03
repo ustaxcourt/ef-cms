@@ -2,9 +2,6 @@ name: Verify PDFS
 
 on:
   pull_request:
-  push:
-    branches:
-      - flakey-tests
 
 jobs:
   test_pdfs:
