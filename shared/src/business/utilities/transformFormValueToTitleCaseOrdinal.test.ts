@@ -6,6 +6,11 @@ describe('transformFormValueToTitleCaseOrdinal', () => {
     expect(results).toEqual('Fiftieth');
   });
 
+  it('should return early when otherIteration is empty', () => {
+    const results = transformFormValueToTitleCaseOrdinal('');
+    expect(results).toEqual(undefined);
+  });
+
   it('should capitalize all words in the title including after a hyphen, except "and"', () => {
     const results = transformFormValueToTitleCaseOrdinal(321);
     expect(results).toEqual('Three Hundred and Twenty-First');

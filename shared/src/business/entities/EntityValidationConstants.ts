@@ -240,6 +240,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
     ),
+  otherIteration: joi.optional(),
   partyIrsPractitioner: joi.boolean().optional(),
   pending: joi
     .boolean()
