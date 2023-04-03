@@ -129,6 +129,7 @@ const completeDocketEntryQC = async (
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
+    secondaryDocument: entryMetadata.secondaryDocument,
     serviceDate: entryMetadata.serviceDate,
   };
 
