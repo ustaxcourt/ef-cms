@@ -460,6 +460,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
+    acquireLock: jest.fn(),
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
