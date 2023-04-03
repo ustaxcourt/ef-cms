@@ -76,12 +76,12 @@ export async function getLock({
   applicationContext: IApplicationContext;
   lockName: string;
 }) {
-  const now = formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS);
+  const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .queryFull({
+    .query({
       ConsistentRead: true,
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -101,5 +101,5 @@ export async function getLock({
       applicationContext,
     })
     .promise();
-  return res[0];
+  return res.Items[0];
 }
