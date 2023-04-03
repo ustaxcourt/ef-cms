@@ -35,15 +35,17 @@ jobs:
           cors: '*'
       - name: Install Node Dependencies
         run: npm ci
-      - name: Run E2E Pa11y Public
+      - name: Start API and Client
         run: |
           mkdir -p /tmp/pa11y/
           npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
           ./wait-until-services.sh
           URL=http://localhost:5000/public-api/health ./wait-until.sh
           sleep 10
-          npm run test:pa11y:public --node-flags --max-old-space-size=1536
-          npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
+      - name: Run E2E Pa11y Public
+        run: npm run test:pa11y:public --node-flags --max-old-space-size=1536
+      - name: Run E2E Pa11y Public Search
+        run: npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - name: Store Screenshots Artifacts
         uses: actions/upload-artifact@v3
         with:
