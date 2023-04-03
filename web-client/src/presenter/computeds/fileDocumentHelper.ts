@@ -15,8 +15,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
     applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
-  console.log('caseDetail', caseDetail);
-
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
@@ -100,8 +98,18 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const formattedCurrentCasePetitionerNames = `${caseDetail.docketNumber} ${currentCasePetitioners}`;
 
+  const formattedConsolidatedCaseList = caseDetail.consolidatedCases.map(
+    currentCase => {
+      const formattedPetitioners = currentCase.petitioners
+        .map(ptr => ptr.name)
+        .join(' & ');
+      return `${currentCase.docketNumber} ${formattedPetitioners}`;
+    },
+  );
+
   const exported = {
     certificateOfServiceDateFormatted,
+    formattedConsolidatedCaseList,
     formattedCurrentCasePetitionerNames,
     formattedDocketNumbers,
     formattedFilingParties,
