@@ -29,7 +29,7 @@ export const OpinionPamphlets = connect(
                     filingDateKey => {
                       return (
                         <div className="grid-row grid-gap" key={filingDateKey}>
-                          <div className="grid-col-4">
+                          <div className="tablet:grid-col-4">
                             <Button
                               link
                               aria-label={`View PDF: ${opinionPamphletsHelper.pamphletsGroupedByFilingDate[filingDateKey][0].documentTitle}`}
@@ -57,8 +57,8 @@ export const OpinionPamphlets = connect(
                               }
                             </Button>
                           </div>
-                          <div className="grid-col-6"></div>
-                          <div className="grid-col-2 text-right">
+                          <div className="tablet:grid-col-6"></div>
+                          <div className="tablet:grid-col-2 text-right">
                             <span className="text-bold">Filed:</span>{' '}
                             {
                               opinionPamphletsHelper.getPamphletToDisplay(
@@ -117,8 +117,8 @@ export const OpinionPamphlets = connect(
                   {opinionPamphletsHelper.yearAndFilingDateMap[period].map(
                     filingDateKey => {
                       return (
-                        <div className="grid-row grid-gap" key={filingDateKey}>
-                          <div className="grid-col-4">
+                        <div key={filingDateKey}>
+                          <div>
                             <Button
                               link
                               aria-label={`View PDF: ${opinionPamphletsHelper.pamphletsGroupedByFilingDate[filingDateKey][0].documentTitle}`}
@@ -146,8 +146,7 @@ export const OpinionPamphlets = connect(
                               }
                             </Button>
                           </div>
-                          <div className="grid-col-6"></div>
-                          <div className="grid-col-2 text-right">
+                          <div className="margin-bottom-105">
                             <span className="text-bold">Filed:</span>{' '}
                             {
                               opinionPamphletsHelper.getPamphletToDisplay(
