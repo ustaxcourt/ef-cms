@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -9,7 +10,9 @@ export const CalculatePenaltiesModal = connect(
   {
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.clearModalSequence,
+    checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
+    confirmationText: state.confirmationText,
     errors: state.modal.error,
     penalties: state.modal.penalties,
     penaltyNameLabel: state.modal.penaltyNameLabel,
@@ -21,6 +24,8 @@ export const CalculatePenaltiesModal = connect(
   function CalculatePenaltiesModal({
     addPenaltyInputSequence,
     cancelSequence,
+    checkForNegativeValueSequence,
+    confirmationText,
     confirmSequence,
     errors,
     penalties,
@@ -47,8 +52,13 @@ export const CalculatePenaltiesModal = connect(
           })}
         {penalties &&
           penalties.map((penalty, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div className="margin-top-3" key={index}>
+            <FormGroup
+              className="margin-top-3"
+              confirmationText={
+                confirmationText?.penalties[index]?.penaltyAmount
+              }
+              key={penalty.name}
+            >
               <label className="usa-label" htmlFor={`penalty_${index}`}>
                 Penalty {index + 1} {penaltyNameLabel}
               </label>
@@ -62,9 +72,13 @@ export const CalculatePenaltiesModal = connect(
                     key: `penalties.${index}.penaltyAmount`,
                     value: values.value,
                   });
+                  checkForNegativeValueSequence({
+                    key: `penalties.${index}.penaltyAmount`,
+                    value: values.value,
+                  });
                 }}
               />
-            </div>
+            </FormGroup>
           ))}
         {showAddAnotherPenaltyButton && (
           <Button

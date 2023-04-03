@@ -3,9 +3,11 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const FormGroup = connect(function FormGroup(props) {
-  const { children, className, errorText, formGroupRef, id } = props;
+  const { children, className, confirmationText, errorText, formGroupRef, id } =
+    props;
 
   let hasError = false;
+  let hasConfirmation = !!confirmationText;
 
   if (Array.isArray(errorText)) {
     hasError = errorText.some(text => !!text);
@@ -28,11 +30,19 @@ export const FormGroup = connect(function FormGroup(props) {
   const renderSingleError = () => {
     return errorText && <span className="usa-error-message">{errorText}</span>;
   };
+  const renderSingleConfirmation = () => {
+    return (
+      confirmationText && (
+        <span className="ustc-confirmation-message">{confirmationText}</span>
+      )
+    );
+  };
 
   return (
     <div
       className={classNames(
         'usa-form-group',
+        hasConfirmation && 'ustc-form-group--confirmation',
         hasError && 'usa-form-group--error',
         className,
       )}
@@ -42,6 +52,7 @@ export const FormGroup = connect(function FormGroup(props) {
       {children}
       {Array.isArray(errorText) && renderMultipleErrors()}
       {!Array.isArray(errorText) && renderSingleError()}
+      {hasConfirmation && renderSingleConfirmation()}
     </div>
   );
 });
