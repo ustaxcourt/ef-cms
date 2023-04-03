@@ -1,4 +1,7 @@
-import { OPINION_PAMPHLET_EVENT_CODE } from '../../entities/EntityConstants';
+import {
+  DOCUMENT_SEARCH_SORT,
+  OPINION_PAMPHLET_EVENT_CODE,
+} from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionPamphletsInteractor } from './getOpinionPamphletsInteractor';
 
@@ -34,12 +37,13 @@ describe('getOpinionPamphletsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
-    ).toEqual([OPINION_PAMPHLET_EVENT_CODE]);
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].requireServedDate,
-    ).toBe(false);
+        .calls[0][0],
+    ).toEqual({
+      applicationContext,
+      documentEventCodes: [OPINION_PAMPHLET_EVENT_CODE],
+      requireServedDate: false,
+      sortField: DOCUMENT_SEARCH_SORT.FILING_DATE_DESC,
+    });
   });
 
   it('should return a list of opinion pamphlets docket entries', async () => {
