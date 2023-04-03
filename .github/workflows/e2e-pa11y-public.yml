@@ -1,4 +1,4 @@
-name: E2E Pa11y Pubic (Search)
+name: E2E Pa11y Public (Search)
 
 on:
   pull_request:
