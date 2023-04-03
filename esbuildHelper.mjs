@@ -92,7 +92,6 @@ export default async function ({
       resolve({
         crypto: 'crypto-browserify',
         stream: 'stream-browserify',
-        // util: 'util/',
       }),
       sassPlugin({
         async transform(source, resolveDir, filePath) {
