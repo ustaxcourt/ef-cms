@@ -487,6 +487,11 @@ describe('completeDocketEntryQCInteractor', () => {
         hasOtherFilingParty: true,
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          documentType: 'Notice of Change of Address',
+          eventCode: 'A',
+        },
       },
     });
 
@@ -500,6 +505,10 @@ describe('completeDocketEntryQCInteractor', () => {
       freeText: 'Some text about this document',
       hasOtherFilingParty: true,
       otherFilingParty: 'Bert Brooks',
+      secondaryDocument: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'A',
+      },
     });
   });
 
