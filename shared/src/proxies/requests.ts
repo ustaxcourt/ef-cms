@@ -1,5 +1,5 @@
 const moize = require('moize').default;
-const maxRetries = 5;
+const maxRetries = 10;
 
 /**
  *

@@ -85,7 +85,7 @@ describe('requests that perform writes', () => {
         );
       });
 
-      it('should try the operation six times before it gives up', async () => {
+      it('should try the operation eleven times before it gives up', async () => {
         applicationContext
           .getHttpClient()
           [name].mockImplementation(() => mockFail503);
@@ -103,7 +103,7 @@ describe('requests that perform writes', () => {
           },
         });
         expect(applicationContext.getHttpClient()[name].mock.calls.length).toBe(
-          6,
+          11,
         );
       });
     });
