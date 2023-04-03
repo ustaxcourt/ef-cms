@@ -7,7 +7,7 @@ on:
       - flakey-tests
 jobs:
   e2e_cypress_public:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       CI: true
       CHECK_DEPLOY_DATE_INTERVAL: 5000
