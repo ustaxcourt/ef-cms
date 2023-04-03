@@ -72,9 +72,9 @@ export const OpinionPamphlets = connect(
                         >
                           <thead>
                             <tr>
-                              <th>Docket No.</th>
+                              <th className="width-card-lg">Docket No.</th>
                               <th>Case</th>
-                              <th className="text-right">Page</th>
+                              <th className="width-15 text-right">Page</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -83,10 +83,14 @@ export const OpinionPamphlets = connect(
                             ].map(pamphlet => {
                               return (
                                 <tr key={pamphlet.docketEntryId}>
-                                  <td>{pamphlet.docketNumber}</td>
+                                  <td className="width-card-lg">
+                                    {pamphlet.docketNumber}
+                                  </td>
                                   <td>{pamphlet.caseCaption}</td>
                                   {/* TODO: update this property with work done in 9967 */}
-                                  <td>{pamphlet.pageCount}</td>
+                                  <td className="width-15 text-right">
+                                    {pamphlet.pageCount}
+                                  </td>
                                 </tr>
                               );
                             })}
