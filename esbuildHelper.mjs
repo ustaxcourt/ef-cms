@@ -160,13 +160,12 @@ export default async function ({
           },
         ],
       }),
-      // only push this to plugins if watch === true? probably not, otherwise replaceHtmlFile() will never run
       {
-        name: 'name-goes-here',
+        name: 'replace-html-and-reload',
         setup(build) {
           build.onEnd(() => {
             console.log('replacing html from setup');
-            replaceHtmlFile();
+            replaceHtmlFile(watch);
             server?.refresh('index.html');
           });
         },
