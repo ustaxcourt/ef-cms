@@ -146,6 +146,7 @@
     "lint:file": "TIMING=1 eslint --",
     "esbuild:build": "node esbuild.config.mjs",
     "esbuild:start": "node esbuild.config.mjs -w",
+    "git:pr-to-test": "./scripts/pr-to-test.sh",
     "lint:fix": "run-p lint:css:fix lint:js/ts:fix",
     "lint:js/ts:fix:plain": "npm run lint:js/ts:fix -- --rule 'prettier/prettier: 0'",
     "lint:js/ts:fix": "npm run lint:js/ts -- --fix",
