@@ -10,4 +10,5 @@ module.exports = {
   },
   testEnvironment: 'node',
   testTimeout: 30000,
+  workerIdleMemoryLimit: 0.3,
 };
