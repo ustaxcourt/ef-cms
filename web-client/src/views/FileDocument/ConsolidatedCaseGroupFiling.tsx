@@ -5,10 +5,15 @@ import React from 'react';
 
 export const ConsolidatedCaseGroupFiling = connect(
   {
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function ConsolidatedCaseGroupFiling({ form, updateFormValueSequence }) {
+  function ConsolidatedCaseGroupFiling({
+    fileDocumentHelper,
+    form,
+    updateFormValueSequence,
+  }) {
     return (
       <>
         <h2 className="margin-top-4">Which Cases Do You Want to File In?</h2>
@@ -67,8 +72,7 @@ export const ConsolidatedCaseGroupFiling = connect(
                 className="usa-radio__label"
                 htmlFor="consolidated-group-current-case"
               >
-                {/* TODO: get current case information */}
-                Current case
+                {fileDocumentHelper.formattedCurrentCasePetitionerNames}
               </label>
             </fieldset>
           </FormGroup>

@@ -94,8 +94,15 @@ export const fileDocumentHelper = (get, applicationContext) => {
     filersMap: form.filersMap,
   });
 
+  const currentCasePetitioners = caseDetail.petitioners
+    .map(ptr => ptr.name)
+    .join(' & ');
+
+  const formattedCurrentCasePetitionerNames = `${caseDetail.docketNumber} ${currentCasePetitioners}`;
+
   const exported = {
     certificateOfServiceDateFormatted,
+    formattedCurrentCasePetitionerNames,
     formattedDocketNumbers,
     formattedFilingParties,
     formattedSelectedCasesAsCase,
