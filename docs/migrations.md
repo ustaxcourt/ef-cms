@@ -87,14 +87,14 @@ exports.migrateItems = migrateItems;
 
 Keep in mind this migration script processes each dynamo record individually; therefore, any item put into that `itemsAfter` array must be a dynamodb record containing a `pk`, `sk`.  The main reason we fetch the entire case is so we can validate the case after modifying it's properties.
 
-After you write your migration script, there is one more additional step you must do to get everything setup.  There is a file called `web-api/workflow-terraform/migration/main/lambdas/migrationsToRun.js` which contains an array of objects that must be in the order of which you want the migration scripts invoked.  Be sure to add your new migration script to this file so that the blue-green migration knows what to run.
+After you write your migration script, there is one more additional step you must do to get everything setup.  There is a file called `web-api/workflow-terraform/migration/main/lambdas/migrationsToRun.ts` which contains an array of objects that must be in the order of which you want the migration scripts invoked.  Be sure to add your new migration script to this file so that the blue-green migration knows what to run.
 
 Here is an example of that file:
 
-```javascript
-const {
+```typescript
+import {
   migrateItems: migration0003,
-} = require('./migrations/0003-case-has-sealed-documents');
+} from './migrations/0003-case-has-sealed-documents';
 
 // MODIFY THIS ARRAY TO ADD NEW MIGRATIONS OR REMOVE OLD ONES
 const migrationsToRun = [
@@ -104,7 +104,7 @@ const migrationsToRun = [
 exports.migrationsToRun = migrationsToRun;
 ```
 
-After doing these two main steps, writing a migration and adding it to the migrationsToRun.js file, our CI/CD process will automatically start the setup for running a blue-green migration.
+After doing these two main steps, writing a migration and adding it to the migrationsToRun.ts file, our CI/CD process will automatically start the setup for running a blue-green migration.
 
 If learning via a video if more your style, we have a short recording explaining how you can write a migration script below.
 
