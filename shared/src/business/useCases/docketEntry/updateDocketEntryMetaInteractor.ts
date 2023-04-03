@@ -54,7 +54,7 @@ export const updateDocketEntryMetaInteractor = async (
   }
 
   const lockName = `case|${docketNumber}`;
-  const { lockId } = await applicationContext.getUseCaseHelpers().acquireLock({
+  const lockId = await applicationContext.getUseCaseHelpers().acquireLock({
     applicationContext,
     lockName,
   });
