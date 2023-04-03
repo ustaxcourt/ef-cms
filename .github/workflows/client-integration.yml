@@ -2,6 +2,9 @@ name: Node.js Client Integration Tests
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   client_integration:

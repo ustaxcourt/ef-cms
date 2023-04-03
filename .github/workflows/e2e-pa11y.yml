@@ -2,6 +2,9 @@ name: E2E Pa11y
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   e2e_pa11y:

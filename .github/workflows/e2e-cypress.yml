@@ -2,6 +2,9 @@ name: E2E Cypress
 
 on:
   pull_request:
+  push:
+    branches:
+      - flakey-tests
 
 jobs:
   e2e_cypress:
