@@ -18,5 +18,4 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci && npm rebuild
       - name: Generate and Test PDFs
-        run: |
-          npm run test:document-generation
+        run: npm run test:document-generation
