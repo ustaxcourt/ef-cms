@@ -2,6 +2,9 @@ name: Verify PDFS
 
 on:
   pull_request:
+  push:
+    branches:
+      - telemetry-ga
 
 jobs:
   test_pdfs:
@@ -12,6 +15,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
       - name: Setup
         run: |
           sudo apt-get update

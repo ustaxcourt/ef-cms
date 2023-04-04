@@ -2,6 +2,9 @@ name: E2E Pa11y
 
 on:
   pull_request:
+  push:
+    branches:
+      - telemetry-ga
 
 jobs:
   e2e_pa11y:
@@ -30,6 +33,8 @@ jobs:
         with:
           port: 8000
           cors: '*'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
       - name: Install Node Dependencies
         run: npm ci
       - name: Start API and Client

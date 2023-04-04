@@ -2,7 +2,9 @@ name: Node.js CI - API
 
 on:
   pull_request:
-
+  push:
+    branches:
+      - telemetry-ga
 jobs:
   API:
     runs-on: ubuntu-latest
@@ -12,6 +14,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
       - name: Install Node Dependencies
         run: npm ci
       - name: API
