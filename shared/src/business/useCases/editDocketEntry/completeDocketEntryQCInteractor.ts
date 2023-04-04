@@ -128,6 +128,7 @@ export const completeDocketEntryQCInteractor = async (
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
+    secondaryDocument: entryMetadata.secondaryDocument,
     serviceDate: entryMetadata.serviceDate,
   };
 

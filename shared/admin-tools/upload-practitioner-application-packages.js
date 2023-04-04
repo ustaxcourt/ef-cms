@@ -1,4 +1,4 @@
-// usage: npx ts-node shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
+// usage: npx ts-node --transpile-only shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
 
 const { requireEnvVars } = require('./util');
 requireEnvVars(['ENV', 'HOME', 'REGION']);
