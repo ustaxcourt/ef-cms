@@ -59,7 +59,7 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Select a document type',
   ],
-  fileAcrossConsolidatedGroup: 'Select which cases you want to file in',
+  fileAcrossConsolidatedGroup: 'Select which case(s) you want to file in',
   filers: 'Select a filing party',
   freeText: [
     { contains: 'is required', message: 'Provide an answer' },
