@@ -372,9 +372,6 @@ const {
   setNoticesForCalendaredTrialSessionLambda,
 } = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
 const {
-  setTrialSessionAsSwingSessionLambda,
-} = require('./trialSessions/setTrialSessionAsSwingSessionLambda');
-const {
   setTrialSessionCalendarLambda,
 } = require('./trialSessions/setTrialSessionCalendarLambda');
 const {
@@ -1020,10 +1017,6 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
     lambdaWrapper(setNoticesForCalendaredTrialSessionLambda, { isAsync: true }),
-  );
-  app.post(
-    '/trial-sessions/:trialSessionId/set-swing-session',
-    lambdaWrapper(setTrialSessionAsSwingSessionLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId/eligible-cases',

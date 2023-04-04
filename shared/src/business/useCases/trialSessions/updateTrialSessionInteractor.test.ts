@@ -22,11 +22,12 @@ describe('updateTrialSessionInteractor', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
 
-    applicationContext.getUseCaseHelpers().savePaperServicePdf.mockReturnValue({
-      docketEntryId: '',
-      hasPaper: false,
-      url: 'www.example.com',
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue({
+        fileId: 'fef6cbf1-8589-46f9-a52e-285a21cac9b3',
+        url: 'www.example.com',
+      });
   });
 
   beforeEach(() => {
@@ -446,5 +447,25 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext,
       docketNumber: mockCaseRemovedFromTrialDocketNumber,
     });
+  });
+
+  it('should associate swing trial sessions when the current trial session has a swing session', async () => {
+    const mockSwingSessionId = '06419775-e726-4c3b-a7e0-193d379fa39d';
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        swingSession: true,
+        swingSessionId: mockSwingSessionId,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
+        .calls[0][1].swingSessionId,
+    ).toEqual(mockSwingSessionId);
   });
 });
