@@ -112,13 +112,13 @@ describe('opinionPamphletsHelper', () => {
     expect(pamphletPeriods).toEqual(['2023', '2022']);
   });
 
-  describe('getPamhpletToDisplay', () => {
+  describe('getPamphletToDisplay', () => {
     it('should return the first TCRP pamphlet with the filing date key specified', () => {
-      const { getPamhpletToDisplay } = runCompute(opinionPamphletsHelper, {
+      const { getPamphletToDisplay } = runCompute(opinionPamphletsHelper, {
         state,
       });
 
-      expect(getPamhpletToDisplay('2022-02-05')).toEqual({
+      expect(getPamphletToDisplay('2022-02-05')).toEqual({
         ...mockTCRP,
         caseCaption: 'EFGHI',
         docketEntryId: 4,
