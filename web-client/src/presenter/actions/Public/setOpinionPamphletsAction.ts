@@ -5,6 +5,6 @@ import { state } from 'cerebral';
  * @param {object} props the props object
  * @param {object} store the store object
  */
-export const setOpinionPamhpletsAction = ({ props, store }) => {
+export const setOpinionPamphletsAction = ({ props, store }) => {
   store.set(state.opinionPamphlets, props.opinionPamphlets);
 };

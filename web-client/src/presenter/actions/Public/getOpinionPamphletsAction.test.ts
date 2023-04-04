@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getOpinionPamhpletsAction } from './getOpinionPamhpletsAction';
+import { getOpinionPamphletsAction } from './getOpinionPamphletsAction';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
 
-describe('getOpinionPamhpletsAction', () => {
+describe('getOpinionPamphletsAction', () => {
   const mockOpinionPamphlets = [
     {
       docketEntryId: '1234',
@@ -26,7 +26,7 @@ describe('getOpinionPamhpletsAction', () => {
   });
 
   it('should return a list of opinion pamphlets as props', async () => {
-    const { output } = await runAction(getOpinionPamhpletsAction, {
+    const { output } = await runAction(getOpinionPamphletsAction, {
       modules: {
         presenter,
       },
