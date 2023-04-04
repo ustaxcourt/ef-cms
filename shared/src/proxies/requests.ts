@@ -18,8 +18,7 @@ exports.head = async ({ applicationContext, endpoint, params }) => {
       headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
     })
-    .then(response => response.data)
-    .catch(err => err);
+    .then(response => response.data);
 };
 
 /**

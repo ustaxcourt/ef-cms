@@ -24,7 +24,7 @@ describe('acquireLock', () => {
         .getPersistenceGateway()
         .getLock.mockReturnValue(MOCK_LOCK);
     });
-    it('throws an error if the persistence gateway returns a lock for the given lockName', async () => {
+    it('throws a ServiceUnavailableError error if the persistence gateway returns a lock for the given lockName', async () => {
       await expect(
         acquireLock({
           applicationContext,
