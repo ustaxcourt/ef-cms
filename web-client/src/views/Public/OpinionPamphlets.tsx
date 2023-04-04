@@ -67,9 +67,9 @@ export const OpinionPamphlets = connect(
                             }
                           </div>
                           <table
-                            aria-label="docket record"
+                            aria-label="opinion pamphlets"
                             className="usa-table case-detail ustc-table responsive-table"
-                            id="docket-record-table"
+                            id="opinion-pamphlets-table"
                             key={filingDateKey}
                           >
                             <thead>
@@ -155,9 +155,9 @@ export const OpinionPamphlets = connect(
                             }
                           </div>
                           <table
-                            aria-label="docket record"
+                            aria-label="opinion pamphlets"
                             className="usa-table case-detail ustc-table responsive-table"
-                            id="docket-record-table"
+                            id="opinion-pamphlets-table"
                             key={filingDateKey}
                           >
                             <thead>
