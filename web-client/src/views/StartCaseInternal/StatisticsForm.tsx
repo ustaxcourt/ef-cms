@@ -9,6 +9,8 @@ import React from 'react';
 export const StatisticsForm = connect(
   {
     addStatisticToFormSequence: sequences.addStatisticToFormSequence,
+    checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
+    confirmationText: state.confirmationText,
     form: state.form,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
@@ -21,6 +23,8 @@ export const StatisticsForm = connect(
   },
   function StatisticsForm({
     addStatisticToFormSequence,
+    checkForNegativeValueSequence,
+    confirmationText,
     form,
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
@@ -42,6 +46,10 @@ export const StatisticsForm = connect(
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
             updateStatisticsFormValueSequence({
+              key: `statistics.${index}.irsDeficiencyAmount`,
+              value: values.value,
+            });
+            checkForNegativeValueSequence({
               key: `statistics.${index}.irsDeficiencyAmount`,
               value: values.value,
             });
@@ -95,6 +103,9 @@ export const StatisticsForm = connect(
         </FormGroup>
 
         <FormGroup
+          confirmationText={
+            confirmationText?.statistics[index]?.irsDeficiencyAmount
+          }
           errorText={
             validationErrors.statistics &&
             validationErrors.statistics[index] &&

@@ -1,4 +1,5 @@
 import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
+import { clearConfirmationTextStatisticsAction } from '../actions/clearConfirmationTextStatisticsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getConstants } from '../../getConstants';
@@ -41,6 +42,7 @@ const gotoStartCaseExternal = [
 export const gotoStartCaseWizardSequence =
   startWebSocketConnectionSequenceDecorator([
     clearFormAction,
+    clearConfirmationTextStatisticsAction,
     clearScreenMetadataAction,
     prepareFormAction,
     stopShowValidationAction,

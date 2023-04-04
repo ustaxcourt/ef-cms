@@ -8,6 +8,7 @@ export const AddressLabelCoverSheet = ({
   address3,
   city,
   country,
+  countryType,
   docketNumberWithSuffix,
   inCareOf,
   name,
@@ -26,6 +27,7 @@ export const AddressLabelCoverSheet = ({
         address3={address3}
         city={city}
         country={country}
+        countryType={countryType}
         inCareOf={inCareOf}
         name={name}
         postalCode={postalCode}

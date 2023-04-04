@@ -2,6 +2,7 @@ import { chooseMetaTypePathAction } from '../actions/EditDocketRecordEntry/choos
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { clearOtherIterationAction } from '../actions/clearOtherIterationAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
@@ -57,6 +58,7 @@ export const submitEditDocketEntryMetaSequence = [
     success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
+      clearOtherIterationAction,
       updateDocketEntryMetaAction,
       {
         error: [setAlertErrorAction],
