@@ -21,6 +21,4 @@ if [[ $(uname -m) == 'arm64' ]] || [[ ! -f .dynamodb/DynamoDBLocal_lib/libsqlite
 fi
 
 # start dynamo 
-export AWS_ACCESS_KEY_ID=S3RVER
-export AWS_SECRET_ACCESS_KEY=S3RVER
 cd .dynamodb && java -Djava.library.path=.dynamodb/DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory
