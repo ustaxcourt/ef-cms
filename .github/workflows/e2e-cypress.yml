@@ -2,6 +2,9 @@ name: E2E Cypress
 
 on:
   pull_request:
+  push:
+    branches:
+      - telemetry-ga
 
 jobs:
   e2e_cypress:
@@ -24,6 +27,8 @@ jobs:
         with:
           port: 8000
           cors: '*'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
       - name: Install Node Dependencies
         run: npm ci
       - name: Run E2E Cypress
