@@ -1,3 +1,4 @@
+import { clearConfirmationTextAction } from '../actions/clearConfirmationTextAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
@@ -29,6 +30,7 @@ export const submitEditDeficiencyStatisticSequence = [
           error: [setAlertErrorAction],
           success: [
             clearFormAction,
+            clearConfirmationTextAction,
             setSaveAlertsForNavigationAction,
             setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
