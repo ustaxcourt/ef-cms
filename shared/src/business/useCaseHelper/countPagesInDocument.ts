@@ -17,5 +17,5 @@ exports.countPagesInDocument = async ({
   }
 
   const pdfDoc = await PDFDocument.load(bytes);
-  return pdfDoc.getPages().length;
+  return pdfDoc.getPageCount();
 };

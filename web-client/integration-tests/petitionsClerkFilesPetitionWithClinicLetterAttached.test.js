@@ -23,10 +23,6 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
     trialLocation: 'Los Angeles, California',
   };
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
