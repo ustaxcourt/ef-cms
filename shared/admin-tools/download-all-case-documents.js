@@ -1,4 +1,4 @@
-// usage: npx ts-node shared/admin-tools/download-all-case-documents.js "453-17"
+// usage: npx ts-node --transpile-only shared/admin-tools/download-all-case-documents.js "453-17"
 
 const createApplicationContext = require('../../web-api/src/applicationContext');
 const fs = require('fs');
