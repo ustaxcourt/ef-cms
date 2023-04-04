@@ -1,10 +1,10 @@
-import { getOpinionPamhpletsAction } from '../../actions/Public/getOpinionPamhpletsAction';
+import { getOpinionPamphletsAction } from '../../actions/Public/getOpinionPamphletsAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
-import { setOpinionPamhpletsAction } from '../../actions/Public/setOpinionPamhpletsAction';
+import { setOpinionPamphletsAction } from '../../actions/Public/setOpinionPamphletsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 
 export const gotoOpinionPamphletsSequence = showProgressSequenceDecorator([
-  getOpinionPamhpletsAction,
-  setOpinionPamhpletsAction,
+  getOpinionPamphletsAction,
+  setOpinionPamphletsAction,
   setCurrentPageAction('OpinionPamphlets'),
 ]);
