@@ -59,6 +59,7 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Select a document type',
   ],
+  fileAcrossConsolidatedGroup: 'Select which cases you want to file in',
   filers: 'Select a filing party',
   freeText: [
     { contains: 'is required', message: 'Provide an answer' },
@@ -218,6 +219,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
+    fileAcrossConsolidatedGroup: joi.boolean(),
     filers: joi
       .array()
       .items(JoiValidationConstants.UUID.required())
@@ -257,6 +259,10 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   if (documentMetadata.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');
+  }
+
+  if (documentMetadata.isInConsolidatedCasesGroup === true) {
+    makeRequired('fileAcrossConsolidatedGroup');
   }
 
   const objectionDocumentTypes = [

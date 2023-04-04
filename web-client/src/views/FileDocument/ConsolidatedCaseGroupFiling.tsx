@@ -8,17 +8,19 @@ export const ConsolidatedCaseGroupFiling = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
   function ConsolidatedCaseGroupFiling({
     fileDocumentHelper,
     form,
     updateFormValueSequence,
+    validationErrors,
   }) {
     return (
       <>
         <h2 className="margin-top-4">Which Cases Do You Want to File In?</h2>
         <div className="blue-container">
-          <FormGroup>
+          <FormGroup errorText={validationErrors.primaryDocumentFile}>
             <fieldset
               className="usa-fieldset margin-bottom-0"
               id="consolidated-case-group-radios"

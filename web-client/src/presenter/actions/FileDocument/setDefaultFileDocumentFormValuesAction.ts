@@ -31,7 +31,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
     isInConsolidatedGroup &&
     isMultiDocketableEventCode
   ) {
-    store.set(state.form.fileAcrossConsolidatedGroup, true);
+    store.set(state.form.fileAcrossConsolidatedGroup, undefined);
   }
 
   store.set(state.form.attachments, false);
