@@ -219,7 +219,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    fileAcrossConsolidatedGroup: joi.boolean(),
+    fileAcrossConsolidatedGroup: joi.boolean().optional(),
     filers: joi
       .array()
       .items(JoiValidationConstants.UUID.required())
@@ -260,6 +260,8 @@ function ExternalDocumentInformationFactory(documentMetadata) {
   if (documentMetadata.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');
   }
+
+  console.log('documentMetadata', documentMetadata);
 
   if (documentMetadata.isInConsolidatedCasesGroup === true) {
     makeRequired('fileAcrossConsolidatedGroup');
