@@ -69,14 +69,14 @@ export const opinionPamphletsHelper = (get, applicationContext) => {
     });
   });
 
-  const getPamhpletToDisplay = (filingDateKey: string): any => {
+  const getPamphletToDisplay = (filingDateKey: string): any => {
     return pamphletsGroupedByFilingDate[filingDateKey][0];
   };
 
   sortCasesByCaseCaption(pamphletsGroupedByFilingDate);
 
   return {
-    getPamhpletToDisplay,
+    getPamphletToDisplay,
     pamphletPeriods,
     pamphletsGroupedByFilingDate,
     yearAndFilingDateMap,
