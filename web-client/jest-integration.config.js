@@ -1,5 +1,7 @@
 const baseConfig = require('../jest.config');
 
+// adding a comment to force run
+
 module.exports = {
   ...baseConfig,
   collectCoverage: false,
