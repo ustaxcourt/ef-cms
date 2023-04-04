@@ -2,9 +2,7 @@ name: Node.js CI - API
 
 on:
   pull_request:
-  push:
-    branches:
-      - telemetry-ga
+
 jobs:
   API:
     runs-on: ubuntu-latest

@@ -2,9 +2,6 @@ name: Build API Typescript
 
 on:
   pull_request:
-  push:
-    branches:
-      - telemetry-ga
 
 jobs:
   build_ts_api:
