@@ -46,6 +46,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
 
   const { eventCode: documentToFileEventCode } = form;
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const isConsolidatedGroupAccessEnabled = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
