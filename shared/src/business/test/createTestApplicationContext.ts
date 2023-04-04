@@ -199,6 +199,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { abbreviateState } = require('../utilities/abbreviateState');
 const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -279,6 +280,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilities = appContextProxy({
+    abbreviateState: jest.fn().mockImplementation(abbreviateState),
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
