@@ -22,16 +22,16 @@ describe('getOpinionPamhpletsAction', () => {
 
     applicationContext
       .getUseCases()
-      .getTodaysOrdersInteractor.mockReturnValue(mockOpinionPamphlets);
+      .getOpinionPamphletsInteractor.mockReturnValue(mockOpinionPamphlets);
   });
 
   it('should return a list of opinion pamphlets as props', async () => {
-    const { result } = await runAction(getOpinionPamhpletsAction, {
+    const { output } = await runAction(getOpinionPamhpletsAction, {
       modules: {
         presenter,
       },
     });
 
-    expect(result.opinionPamphlets).toMatchObject(mockOpinionPamphlets);
+    expect(output.opinionPamphlets).toMatchObject(mockOpinionPamphlets);
   });
 });
