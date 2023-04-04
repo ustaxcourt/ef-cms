@@ -312,7 +312,7 @@ const setNoticeForCase = async ({
     caseToUpdate: caseEntity,
   });
 
-  const hasPages = newPdfDoc.getPages().length > 0;
+  const hasPages = newPdfDoc.getPageCount() > 0;
 
   if (hasPages) {
     const pdfData = await newPdfDoc.save();
