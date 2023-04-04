@@ -14,6 +14,7 @@ import { state } from 'cerebral';
 export const completeDocketEntryQCAction = async ({
   applicationContext,
   get,
+  path,
   props,
 }) => {
   const { docketNumber, leadDocketNumber } = get(state.caseDetail);
@@ -39,41 +40,47 @@ export const completeDocketEntryQCAction = async ({
     selectedSection,
   };
 
-  const {
-    caseDetail,
-    paperServiceDocumentTitle,
-    paperServiceParties,
-    paperServicePdfUrl,
-  } = await applicationContext
-    .getUseCases()
-    .completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata,
+  try {
+    const {
+      caseDetail,
+      paperServiceDocumentTitle,
+      paperServiceParties,
+      paperServicePdfUrl,
+    } = await applicationContext
+      .getUseCases()
+      .completeDocketEntryQCInteractor(applicationContext, {
+        entryMetadata,
+      });
+
+    const updatedDocument = caseDetail.docketEntries.filter(
+      doc => doc.docketEntryId === docketEntryId,
+    )[0];
+
+    const descriptionDisplay = applicationContext
+      .getUtilities()
+      .getDescriptionDisplay(updatedDocument);
+
+    const qcCompletedAndSentMessage = `${descriptionDisplay} QC completed and message sent.`;
+    const completedMessage = `${descriptionDisplay} has been completed.`;
+    const message = qcCompletionAndMessageFlag
+      ? qcCompletedAndSentMessage
+      : completedMessage;
+
+    return path.success({
+      alertSuccess: {
+        message,
+        title: 'QC Completed',
+      },
+      caseDetail,
+      docketNumber,
+      paperServiceDocumentTitle,
+      paperServiceParties,
+      pdfUrl: paperServicePdfUrl,
+      updatedDocument,
     });
-
-  const updatedDocument = caseDetail.docketEntries.filter(
-    doc => doc.docketEntryId === docketEntryId,
-  )[0];
-
-  const descriptionDisplay = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(updatedDocument);
-
-  const qcCompletedAndSentMessage = `${descriptionDisplay} QC completed and message sent.`;
-  const completedMessage = `${descriptionDisplay} has been completed.`;
-  const message = qcCompletionAndMessageFlag
-    ? qcCompletedAndSentMessage
-    : completedMessage;
-
-  return {
-    alertSuccess: {
-      message,
-      title: 'QC Completed',
-    },
-    caseDetail,
-    docketNumber,
-    paperServiceDocumentTitle,
-    paperServiceParties,
-    pdfUrl: paperServicePdfUrl,
-    updatedDocument,
-  };
+  } catch (error) {
+    return path.error({
+      error,
+    });
+  }
 };

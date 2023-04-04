@@ -23,6 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -58,7 +59,7 @@ export const needsNewCoversheet = ({
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-export const completeDocketEntryQCInteractor = async (
+const completeDocketEntryQC = async (
   applicationContext: IApplicationContext,
   { entryMetadata }: { entryMetadata: any },
 ) => {
@@ -123,10 +124,12 @@ export const completeDocketEntryQCInteractor = async (
     objections: entryMetadata.objections,
     ordinalValue: entryMetadata.ordinalValue,
     otherFilingParty: entryMetadata.otherFilingParty,
+    otherIteration: entryMetadata.otherIteration,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
+    secondaryDocument: entryMetadata.secondaryDocument,
     serviceDate: entryMetadata.serviceDate,
   };
 
@@ -376,3 +379,10 @@ export const completeDocketEntryQCInteractor = async (
     paperServicePdfUrl,
   };
 };
+
+export const completeDocketEntryQCInteractor = withLocking(
+  completeDocketEntryQC,
+  ({ entryMetadata }) =>
+    `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`,
+  new InvalidRequest('The document is currently being updated'),
+);
