@@ -37,8 +37,6 @@ export class Penalty extends JoiValidationEntity {
       .description('Penalty name.'),
     penaltyAmount: joi
       .number()
-      .positive()
-      .allow(0)
       .required()
       .description('The dollar amount of the penalty.'),
     penaltyId: JoiValidationConstants.UUID.required().description(

@@ -36,7 +36,12 @@ export const docketClerkEditsDocketEntryNonstandardG = cerebralTest => {
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'ordinalValue',
-      value: '1',
+      value: 'Other',
+    });
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'otherIteration',
+      value: '16',
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
@@ -59,14 +64,15 @@ export const docketClerkEditsDocketEntryNonstandardG = cerebralTest => {
 
     const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
-      descriptionDisplay: 'First Request for Admissions some additional info',
+      descriptionDisplay:
+        'Sixteenth Request for Admissions some additional info',
     });
 
     const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
-      documentTitle: 'First Request for Admissions',
+      documentTitle: 'Sixteenth Request for Admissions',
       documentType: 'Request for Admissions',
       eventCode: 'MISCL',
     });
