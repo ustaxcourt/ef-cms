@@ -28,9 +28,8 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        docketEntryId: mockDocketEntryId,
-        hasPaper: true,
+      .saveFileAndGenerateUrl.mockResolvedValue({
+        fileId: mockDocketEntryId,
         url: mockPdfUrl,
       });
 
@@ -63,10 +62,12 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       applicationContext.getUtilities().copyPagesAndAppendToTargetPdf,
     ).toHaveBeenCalledTimes(trialNoticePdfsKeys.length);
 
-    const pdfDoc =
-      applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
-        .calls[0][0].document;
-    expect(pdfDoc.getPages().length).toBe(trialNoticePdfsKeys.length);
+    const bytes =
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock
+        .calls[0][0].file;
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const pdfDoc = await PDFDocument.load(bytes);
+    expect(pdfDoc.getPageCount()).toBe(trialNoticePdfsKeys.length);
   });
 
   it('should return paper service pdf related information', async () => {
@@ -82,24 +83,5 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       hasPaper: true,
       pdfUrl: mockPdfUrl,
     });
-  });
-
-  it('should return null when pdfUrl is undefined', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        docketEntryId: mockDocketEntryId,
-        hasPaper: true,
-        url: undefined,
-      });
-
-    const result = await generateTrialSessionPaperServicePdfInteractor(
-      applicationContext,
-      {
-        trialNoticePdfsKeys,
-      },
-    );
-
-    expect(result.pdfUrl).toBeNull();
   });
 });
