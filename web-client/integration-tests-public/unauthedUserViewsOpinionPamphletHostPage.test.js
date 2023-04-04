@@ -59,7 +59,6 @@ describe('Unauthed user views opinion pamphlets host page', () => {
     await testClient.runSequence('gotoOpinionPamphletsSequence', {});
 
     expect(testClient.getState('currentPage')).toEqual('OpinionPamphlets');
-    expect(testClient.getState('currentPage')).toEqual('OpinionPamphlets');
 
     const opinionPamphletsHelper = withAppContextDecorator(
       opinionPamphletsHelperComputed,
