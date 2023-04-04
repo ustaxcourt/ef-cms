@@ -1,4 +1,4 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/practitioner-stats.ts
+// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/practitioner-stats.ts 2022
 
 import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
