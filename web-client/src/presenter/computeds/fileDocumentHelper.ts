@@ -45,7 +45,24 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
 
-  const showConsolidatedCasesGroup = !!caseDetail.leadDocketNumber;
+  const { eventCode: documentToFileEventCode } = form;
+  const isConsolidatedGroupAccessEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
+    ],
+  );
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
+  let showConsolidatedCasesGroupFilingCard = false;
+  if (
+    isConsolidatedGroupAccessEnabled &&
+    isInConsolidatedGroup &&
+    isMultiDocketableEventCode
+  ) {
+    showConsolidatedCasesGroupFilingCard = true;
+  }
 
   const selectedCasesMap = (form.selectedCases || []).reduce(
     (acc, docketNumber) => {
@@ -120,7 +137,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     primaryDocument,
     secondaryDocument,
     selectedCasesAsCase,
-    showConsolidatedCasesGroup,
+    showConsolidatedCasesGroupFilingCard,
     showFilingIncludes,
     showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,

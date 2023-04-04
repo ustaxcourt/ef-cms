@@ -60,7 +60,7 @@ export const FileDocument = connect(
           <MultiDocumentPartiesFiling />
         )) || <PartiesFiling />}
 
-        {fileDocumentHelper.showConsolidatedCasesGroup && (
+        {fileDocumentHelper.showConsolidatedCasesGroupFilingCard && (
           <ConsolidatedCaseGroupFiling />
         )}
 

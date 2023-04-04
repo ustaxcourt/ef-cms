@@ -9,10 +9,30 @@ import { state } from 'cerebral';
  */
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
+  get,
   store,
 }) => {
-  // Do FF stuff here
-  store.set(state.form.fileAcrossConsolidatedGroup, true);
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+  const caseDetail = get(state.caseDetail);
+  const { eventCode: documentToFileEventCode } = get(state.form);
+
+  const isConsolidatedGroupAccessEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
+    ],
+  );
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
+
+  if (
+    isConsolidatedGroupAccessEnabled &&
+    isInConsolidatedGroup &&
+    isMultiDocketableEventCode
+  ) {
+    store.set(state.form.fileAcrossConsolidatedGroup, true);
+  }
 
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
