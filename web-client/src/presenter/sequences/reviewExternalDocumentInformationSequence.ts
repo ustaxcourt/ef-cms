@@ -1,4 +1,3 @@
-import { checkFileAcrossConsolidatedGroupButtonValueAction } from '../actions/FileDocument/checkFileAcrossConsolidatedGroupButtonValueAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
@@ -18,7 +17,6 @@ export const reviewExternalDocumentInformationSequence = [
   startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setFilersFromFilersMapAction,
-  checkFileAcrossConsolidatedGroupButtonValueAction,
   validateExternalDocumentInformationAction,
   {
     error: [
