@@ -31,27 +31,28 @@ describe('updateDocketNumberSuffixOnWorkItems', () => {
     ).toHaveBeenCalledWith({ applicationContext, workItemId });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateWorkItemDocketNumberSuffix,
+      applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord,
     ).toHaveBeenCalledTimes(workItemsResults.length);
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateWorkItemDocketNumberSuffix.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord
+        .mock.calls[0][0],
     ).toMatchObject({
       applicationContext,
-      docketNumber: '101-20',
-      docketNumberSuffix,
-      workItemId: 'abc',
+      attributeKey: 'docketNumberSuffix',
+      attributeValue: docketNumberSuffix,
+      pk: workItemsResults[0].pk,
+      sk: workItemsResults[0].sk,
     });
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateWorkItemDocketNumberSuffix.mock.calls[1][0],
+      applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord
+        .mock.calls[1][0],
     ).toMatchObject({
       applicationContext,
-      docketNumber: '101-20',
-      docketNumberSuffix,
-      workItemId: 'abc',
+      attributeKey: 'docketNumberSuffix',
+      attributeValue: docketNumberSuffix,
+      pk: workItemsResults[1].pk,
+      sk: workItemsResults[1].sk,
     });
   });
 });
