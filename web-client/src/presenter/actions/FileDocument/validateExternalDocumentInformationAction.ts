@@ -15,7 +15,12 @@ export const validateExternalDocumentInformationAction = ({
   get,
   path,
 }) => {
-  const documentMetadata = get(state.form);
+  let documentMetadata = get(state.form);
+  const caseDetail = get(state.caseDetail);
+
+  const isInConsolidatedCasesGroup = !!caseDetail.leadDocketNumber;
+
+  documentMetadata = { ...documentMetadata, isInConsolidatedCasesGroup };
 
   const errors = applicationContext
     .getUseCases()
@@ -43,6 +48,7 @@ export const validateExternalDocumentInformationAction = ({
       'secondarySupportingDocuments',
       'filers',
       'partyIrsPractitioner',
+      'fileAcrossConsolidatedGroup',
     ];
 
     const errorDisplayMap = {
