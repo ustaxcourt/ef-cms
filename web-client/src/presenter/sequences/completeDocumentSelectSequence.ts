@@ -4,14 +4,14 @@ import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultS
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-// import { getConstants } from '../../getConstants';
-// import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
+import { getConstants } from '../../getConstants';
+import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
-// import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
+import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -40,14 +40,14 @@ export const completeDocumentSelectSequence = [
       clearAlertsAction,
       stopShowValidationAction,
       setDocketNumberPropAction,
-      // getFeatureFlagFactoryAction(
-      //   getConstants().ALLOWLIST_FEATURE_FLAGS
-      //     .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER,
-      // ),
-      // setFeatureFlagFactoryAction(
-      //   getConstants().ALLOWLIST_FEATURE_FLAGS
-      //     .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER,
-      // ),
+      getFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS
+          .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+      ),
+      setFeatureFlagFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS
+          .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+      ),
       setDefaultFileDocumentFormValuesAction,
       clearOtherIterationAction,
       navigateToFileADocumentAction,
