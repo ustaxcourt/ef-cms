@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
+import {
+  acquireLock,
+  deleteLock,
+} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from '../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from '../../shared/src/persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from '../../shared/src/persistence/dynamo/cases/associateUserWithCase';
@@ -274,6 +278,7 @@ const gatewayMethods = {
     updateWorkItemTrialDate,
   }),
   // methods below are not known to create or update "entity" records
+  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
@@ -285,6 +290,7 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
+  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
