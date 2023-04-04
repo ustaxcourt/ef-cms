@@ -313,6 +313,111 @@ export const FileDocumentReview = connect(
               </div>
             </div>
           </div>
+
+          {fileDocumentHelper.showConsolidatedCasesGroupFilingCard && (
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-6 margin-bottom-4">
+                <div className="card height-full margin-bottom-0">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">
+                      Case(s) The Document(s) Will Be Filed In
+                    </h3>
+                    <div className="grid-row grid-gap">
+                      <div className="tablet:grid-col-12 margin-bottom-1">
+                        <div className="tablet:margin-bottom-0 margin-bottom-205">
+                          <label className="usa-label" htmlFor="primary-filing">
+                            Docket Numbers and Petitioners
+                          </label>
+                          <ul className="ustc-unstyled-consolidated-case-list padding-left-0">
+                            {fileDocumentHelper.formattedConsolidatedCaseList.map(
+                              (item, index) => (
+                                <li className="margin-bottom-2" key={index}>
+                                  {item}
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        {fileDocumentHelper.showFilingIncludes && (
+                          <div
+                            className={classNames(
+                              !fileDocumentHelper.primaryDocument.showObjection
+                                ? 'margin-bottom-0'
+                                : 'margin-bottom-5',
+                            )}
+                          >
+                            <label
+                              className="usa-label"
+                              htmlFor="filing-includes"
+                            >
+                              Document includes
+                            </label>
+                            <ul className="ustc-unstyled-list without-margins">
+                              {form.certificateOfService && (
+                                <li>
+                                  Certificate of Service{' '}
+                                  {
+                                    fileDocumentHelper.certificateOfServiceDateFormatted
+                                  }
+                                </li>
+                              )}
+                              {form.attachments && <li>Attachment(s)</li>}
+                            </ul>
+                          </div>
+                        )}
+
+                        {fileDocumentHelper.primaryDocument.showObjection && (
+                          <div className="margin-bottom-0">
+                            <label className="usa-label" htmlFor="objections">
+                              Objections?
+                            </label>
+                            {form.objections}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {form.supportingDocuments && supportingDocuments()}
+
+                    {fileDocumentHelper.showSecondaryDocument &&
+                      secondaryDocument()}
+
+                    {form.secondarySupportingDocuments &&
+                      secondarySupportingDocuments()}
+                  </div>
+                </div>
+              </div>
+
+              <div className="tablet:grid-col-6 margin-bottom-4">
+                <div className="card height-full margin-bottom-0">
+                  <div className="content-wrapper">
+                    {fileDocumentHelper.showMultiDocumentFilingPartyForm && (
+                      <FiledInMultiCasesReview />
+                    )}
+                    {!fileDocumentHelper.showMultiDocumentFilingPartyForm && (
+                      <>
+                        <h3 className="underlined">Service Parties</h3>
+                        <div className="grid-row grid-gap">
+                          <div className="tablet:grid-col-12 margin-bottom-1">
+                            <ul className="ustc-unstyled-list without-margins">
+                              {fileDocumentHelper.formattedFilingParties.map(
+                                party => (
+                                  <li key={party}>{party}</li>
+                                ),
+                              )}
+                              {form.partyIrsPractitioner && <li>Respondent</li>}
+                            </ul>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {fileDocumentHelper.showMultiDocumentFilingPartyForm && (
