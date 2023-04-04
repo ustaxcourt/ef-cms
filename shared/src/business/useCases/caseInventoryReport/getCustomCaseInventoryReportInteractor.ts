@@ -5,7 +5,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-export type GetCaseInventoryReportInteractorRequest = {
+export type GetCaseInventoryReportRequest = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
   createEndDate: string;
@@ -42,12 +42,15 @@ export type CaseInventory = Pick<
  */
 export const getCustomCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
-  params: GetCaseInventoryReportInteractorRequest,
+  params: GetCaseInventoryReportRequest,
 ): Promise<{ totalCount: number; foundCases: CaseInventory[] }> => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
+
+  params.caseStatuses = params.caseStatuses || [];
+  params.caseTypes = params.caseTypes || [];
 
   const {
     caseStatuses,

@@ -12,14 +12,13 @@ export const CustomCaseReport = connect(
     customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence:
       sequences.getCustomCaseInventoryReportSequence,
-    setCustomCaseEndDate: sequences.setCustomCaseEndDate,
-    setCustomCaseStartDate: sequences.setCustomCaseStartDate,
+    selectDateRangeForCustomCaseReportSequence:
+      sequences.selectDateRangeForCustomCaseReportSequence,
   },
   function CustomCaseReport({
-    customCaseInventoryReportHelper,
+    // customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence,
-    setCustomCaseEndDate,
-    setCustomCaseStartDate,
+    selectDateRangeForCustomCaseReportSequence,
   }) {
     const [selected] = useState(false);
 
@@ -44,15 +43,15 @@ export const CustomCaseReport = connect(
               startName="caseCreationStartDate"
               startValue=""
               onChangeEnd={e => {
-                setCustomCaseEndDate({
-                  key: e.target.id,
-                  value: e.target.value,
+                selectDateRangeForCustomCaseReportSequence({
+                  date: e.target.value,
+                  startOrEnd: 'end',
                 });
               }}
               onChangeStart={e => {
-                setCustomCaseStartDate({
-                  key: e.target.id,
-                  value: e.target.value,
+                selectDateRangeForCustomCaseReportSequence({
+                  date: e.target.value,
+                  startOrEnd: 'start',
                 });
               }}
             />
