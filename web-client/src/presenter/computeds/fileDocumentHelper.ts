@@ -125,8 +125,36 @@ export const fileDocumentHelper = (get, applicationContext) => {
     },
   );
 
+  const { CONTACT_TYPE_TITLES, USER_ROLES } = applicationContext.getConstants();
+  const roleToDisplay = party => {
+    if (party.role === USER_ROLES.privatePractitioner) {
+      return 'Petitioner Counsel';
+    } else if (party.role === USER_ROLES.irsPractitioner) {
+      return 'Respondent Counsel';
+    } else {
+      return CONTACT_TYPE_TITLES[party.contactType];
+    }
+  };
+  let consolidatedGroupServiceParties = [];
+  if (isInConsolidatedGroup) {
+    caseDetail.consolidatedCases.forEach((memberCase, index) => {
+      consolidatedGroupServiceParties[index] = {};
+      const combinedPartiesList = [
+        ...memberCase.petitioners,
+        ...memberCase.privatePractitioners,
+        ...memberCase.irsPractitioners,
+      ];
+      combinedPartiesList.forEach(party => {
+        consolidatedGroupServiceParties[index].name = `${
+          party.name
+        }, ${roleToDisplay(party)}`;
+      });
+    });
+  }
+
   const exported = {
     certificateOfServiceDateFormatted,
+    consolidatedGroupServiceParties,
     formattedConsolidatedCaseList,
     formattedCurrentCasePetitionerNames,
     formattedDocketNumbers,
@@ -139,6 +167,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     secondaryDocument,
     selectedCasesAsCase,
     showConsolidatedCasesGroupFilingCard,
+    showFileAcrossConsolidatedGroupCards: form.fileAcrossConsolidatedGroup,
     showFilingIncludes,
     showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,

@@ -263,7 +263,10 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   console.log('documentMetadata', documentMetadata);
 
-  if (documentMetadata.isInConsolidatedCasesGroup === true) {
+  if (
+    documentMetadata.isInConsolidatedCasesGroup === true &&
+    typeof documentMetadata.fileAcrossConsolidatedGroup === 'undefined'
+  ) {
     makeRequired('fileAcrossConsolidatedGroup');
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -314,7 +315,7 @@ export const FileDocumentReview = connect(
             </div>
           </div>
 
-          {fileDocumentHelper.showConsolidatedCasesGroupFilingCard && (
+          {fileDocumentHelper.showFileAcrossConsolidatedGroupCards && (
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
@@ -402,12 +403,11 @@ export const FileDocumentReview = connect(
                         <div className="grid-row grid-gap">
                           <div className="tablet:grid-col-12 margin-bottom-1">
                             <ul className="ustc-unstyled-list without-margins">
-                              {fileDocumentHelper.formattedFilingParties.map(
+                              {fileDocumentHelper.consolidatedGroupServiceParties.map(
                                 party => (
-                                  <li key={party}>{party}</li>
+                                  <li key={party.name}>{party.name}</li>
                                 ),
                               )}
-                              {form.partyIrsPractitioner && <li>Respondent</li>}
                             </ul>
                           </div>
                         </div>
