@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
-import { setOpinionPamhpletsAction } from './setOpinionPamhpletsAction';
+import { setOpinionPamphletsAction } from './setOpinionPamphletsAction';
 
-describe('setOpinionPamhpletsAction', () => {
+describe('setOpinionPamphletsAction', () => {
   const mockOpinionPamphlets = [
     {
       docketEntryId: '1234',
@@ -22,7 +22,7 @@ describe('setOpinionPamhpletsAction', () => {
   });
 
   it('should set opinionPamphlets on state', async () => {
-    const { state } = await runAction(setOpinionPamhpletsAction, {
+    const { state } = await runAction(setOpinionPamphletsAction, {
       modules: {
         presenter,
       },
