@@ -51,7 +51,17 @@ const goto404 = app => {
 const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
 
 const ifHasAccess = (
-  { app, permissionToCheck, redirect = accessRedirects, skipMaintenanceCheck },
+  {
+    app,
+    permissionToCheck,
+    redirect = accessRedirects,
+    skipMaintenanceCheck,
+  }: {
+    app;
+    permissionToCheck?: string;
+    redirect?: any;
+    skipMaintenanceCheck?: boolean;
+  },
   cb,
 ) => {
   return function () {

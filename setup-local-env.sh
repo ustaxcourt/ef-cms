@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export CI=true
 export IS_LOCAL=true
 export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=S3RVER
@@ -19,3 +18,6 @@ export EFCMS_DOMAIN=localhost
 export USTC_ADMIN_PASS='4UtEnp!EDLJ@Pl3g'
 export USTC_ADMIN_USER='admin@example.com'
 export USER_POOL_ID='local_2pHzece7'
+export ELASTICSEARCH_HOST=localhost
+export ELASTICSEARCH_ENDPOINT=http://localhost:9200
+export DYNAMODB_ENDPOINT=http://localhost:8000
