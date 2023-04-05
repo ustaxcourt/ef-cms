@@ -1,3 +1,5 @@
+import { MULTI_DOCKET_FILING_EVENT_CODES } from '../EntityConstants';
+
 const joi = require('joi');
 const {
   addPropertyHelper,
@@ -261,9 +263,12 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     makeRequired('certificateOfServiceDate');
   }
 
-  console.log('documentMetadata', documentMetadata);
+  const isMultiDocketableEventCode = !!MULTI_DOCKET_FILING_EVENT_CODES.includes(
+    documentMetadata.eventCode,
+  );
 
   if (
+    isMultiDocketableEventCode &&
     documentMetadata.isInConsolidatedCasesGroup === true &&
     typeof documentMetadata.fileAcrossConsolidatedGroup === 'undefined'
   ) {
