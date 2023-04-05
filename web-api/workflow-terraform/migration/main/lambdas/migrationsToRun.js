@@ -13,6 +13,9 @@ const {
 const {
   migrateItems: migration0007,
 } = require('./migrations/0007-update-corporate-disclosure-document');
+const {
+  migrateItems: migration0009,
+} = require('./migrations/0009-add-trial-location-field-to-work-item');
 
 // MODIFY THIS ARRAY TO ADD NEW MIGRATIONS OR REMOVE OLD ONES
 const migrationsToRun = [
@@ -35,6 +38,10 @@ const migrationsToRun = [
   {
     key: '0007-update-corporate-disclosure-document.ts',
     script: migration0007,
+  },
+  {
+    key: '0009-add-trial-location-field-to-work-item.ts',
+    script: migration0009,
   },
 ];
 

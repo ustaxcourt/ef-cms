@@ -2,6 +2,7 @@
 /* eslint-disable max-lines */
 import {
   acquireLock,
+  deleteLock,
   getLock,
   removeLock,
 } from '../../shared/src/persistence/dynamo/locks/acquireLock';
@@ -143,6 +144,7 @@ import { setMessageAsRead } from '../../shared/src/persistence/dynamo/messages/s
 import { setPriorityOnAllWorkItems } from '../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
+import { updateAttributeOnDynamoRecord } from '../../shared/src/persistence/dynamo/workitems/updateAttributeOnDynamoRecord';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from '../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from '../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing';
@@ -163,11 +165,6 @@ import { updateUserCaseMapping } from '../../shared/src/persistence/dynamo/cases
 import { updateUserCaseNote } from '../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserEmail } from '../../shared/src/persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from '../../shared/src/persistence/dynamo/users/updateUserRecords';
-import { updateWorkItemAssociatedJudge } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge';
-import { updateWorkItemCaseStatus } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus';
-import { updateWorkItemCaseTitle } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle';
-import { updateWorkItemDocketNumberSuffix } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix';
-import { updateWorkItemTrialDate } from '../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate';
 import { verifyCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from '../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from '../../shared/src/persistence/s3/zipDocuments';
@@ -255,6 +252,7 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
+    updateAttributeOnDynamoRecord,
     updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
@@ -272,11 +270,6 @@ const gatewayMethods = {
     updateUserCaseNote,
     updateUserEmail,
     updateUserRecords,
-    updateWorkItemAssociatedJudge,
-    updateWorkItemCaseStatus,
-    updateWorkItemCaseTitle,
-    updateWorkItemDocketNumberSuffix,
-    updateWorkItemTrialDate,
   }),
   // methods below are not known to create or update "entity" records
   acquireLock,
@@ -291,6 +284,7 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
+  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
