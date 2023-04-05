@@ -29,7 +29,7 @@
 1. Commit all files with a --no-verify
 1. Rename all .js files to .ts files in cypress
   - Navigate to cypress/ in the terminal and run: ```find . -iname "*.js" -exec rename -f 's/\.js/\.ts/' {} \;```
-1. commit files
+1. commit files with a --no-verify
 1. Do a find and replace for relative imports to shared
   - Find: ```../shared```
   - Replace: ```../../shared```
