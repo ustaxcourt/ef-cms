@@ -7,6 +7,5 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
  */
 export const goToCreateAccountLocalSequence = [
   clearFormAction,
-  // clearSessionMetadataAction,
   setCurrentPageAction('CreateNewAccountLocal'),
 ];
