@@ -86,6 +86,23 @@ describe('setStartOrEndCreatedAtDateAction', () => {
     ]);
   });
 
+  it('should not add a case status that has previously been selected', async () => {
+    initialFilterState.caseStatuses = ['Assigned - Case'];
+    const result = await runAction(setStartOrEndCreatedAtDateAction, {
+      modules: { presenter },
+      props: {
+        caseStatuses: { action: 'add', caseStatus: 'Assigned - Case' },
+      },
+      state: {
+        customCaseInventoryFilters: initialFilterState,
+      },
+    });
+
+    expect(result.state.customCaseInventoryFilters.caseStatuses).toEqual([
+      'Assigned - Case',
+    ]);
+  });
+
   it('should remove a caseStatus filter from state', async () => {
     initialFilterState.caseStatuses = ['Assigned - Case', 'CAV'];
     const result = await runAction(setStartOrEndCreatedAtDateAction, {
@@ -109,6 +126,24 @@ describe('setStartOrEndCreatedAtDateAction', () => {
       modules: { presenter },
       props: {
         caseTypes: { action: 'add', caseType: 'Disclosure' },
+      },
+      state: {
+        customCaseInventoryFilters: initialFilterState,
+      },
+    });
+
+    expect(result.state.customCaseInventoryFilters.caseTypes).toEqual([
+      'Deficiency',
+      'Disclosure',
+    ]);
+  });
+
+  it('should not add a caseType filter that has previously been selected', async () => {
+    initialFilterState.caseTypes = ['Deficiency', 'Disclosure'];
+    const result = await runAction(setStartOrEndCreatedAtDateAction, {
+      modules: { presenter },
+      props: {
+        caseTypes: { action: 'add', caseType: 'Deficiency' },
       },
       state: {
         customCaseInventoryFilters: initialFilterState,

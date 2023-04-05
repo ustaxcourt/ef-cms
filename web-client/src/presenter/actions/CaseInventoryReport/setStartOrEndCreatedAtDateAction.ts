@@ -47,7 +47,10 @@ export const setStartOrEndCreatedAtDateAction = ({
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   }
   if (props.caseStatuses) {
-    if (props.caseStatuses.action === 'add') {
+    if (
+      props.caseStatuses.action === 'add' &&
+      !currentFilters.caseStatuses.includes(props.caseStatuses.caseStatus)
+    ) {
       currentFilters.caseStatuses.push(props.caseStatuses.caseStatus);
       store.merge(state.customCaseInventoryFilters, currentFilters);
     } else if (props.caseStatuses.action === 'remove') {
@@ -59,7 +62,10 @@ export const setStartOrEndCreatedAtDateAction = ({
     }
   }
   if (props.caseTypes) {
-    if (props.caseTypes.action === 'add') {
+    if (
+      props.caseTypes.action === 'add' &&
+      !currentFilters.caseTypes.includes(props.caseTypes.caseType)
+    ) {
       currentFilters.caseTypes.push(props.caseTypes.caseType);
       store.merge(state.customCaseInventoryFilters, currentFilters);
     } else if (props.caseTypes.action === 'remove') {
@@ -71,7 +77,3 @@ export const setStartOrEndCreatedAtDateAction = ({
     }
   }
 };
-
-// if (props contains date) transform createISODateString
-// if (props contains array-able filters) transform to an array
-// store.merge(state stuff)
