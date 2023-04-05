@@ -48,6 +48,7 @@ import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompres
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
+import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
@@ -264,6 +265,7 @@ export const AppComponent = connect(
         )}
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
+        {showModal === 'GenericErrorModal' && <GenericErrorModal />}
       </>
     );
   },
