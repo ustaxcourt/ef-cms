@@ -10,12 +10,14 @@ if [[ -z "$CI" ]]; then
 
   echo "starting dynamo"
   ./web-api/start-dynamo.sh &
+  DYNAMO_PID=$!
 
   echo "Stopping elasticsearch in case it's already running"
   pkill -f elasticsearch
 
   echo "Starting elasticsearch"
   ./web-api/start-elasticsearch.sh &
+  ESEARCH_PID=$!
   URL=http://localhost:9200/ ./wait-until.sh
 
   echo "Stopping s3rver in case it's already running"
@@ -53,5 +55,5 @@ if [[ -z "$CI" ]]; then
   echo "Stopping dynamodb, elasticsearch, and s3rver"
   pkill -P "$DYNAMO_PID"
   pkill -P "$ESEARCH_PID"
-  pkill -P $S3RVER_PID
+  pkill -P "$S3RVER_PID"
 fi
