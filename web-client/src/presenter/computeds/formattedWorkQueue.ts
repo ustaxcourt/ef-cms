@@ -81,6 +81,11 @@ export const formatWorkItem = ({
     }
   }
 
+  result.formattedCaseStatus = setFormattedCaseStatus({
+    applicationContext,
+    workItem: result,
+  });
+
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
   result.consolidatedIconTooltipText = consolidatedIconTooltipText;
@@ -387,21 +392,48 @@ export const formattedWorkQueue = (get, applicationContext) => {
       [STATUS_TYPES.jurisdictionRetained]: 4,
     };
 
-    highPriorityField = ['highPriority', 'trialDate'];
-    highPriorityDirection = ['desc', 'asc'];
-
-    sortField = [
+    highPriorityField = [
+      'highPriority',
+      'trialDate',
       workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-      sortField,
     ];
-    sortDirection = ['asc', sortDirection];
+    highPriorityDirection = ['desc', 'asc', 'asc'];
   }
 
   workQueue = orderBy(
     workQueue,
-    [...highPriorityField, ...sortField, 'docketNumber'],
-    [...highPriorityDirection, ...sortDirection, 'asc'],
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
   );
 
   return workQueue;
+};
+
+const setFormattedCaseStatus = ({ applicationContext, workItem }) => {
+  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
+  let formattedCaseStatus = workItem.caseStatus;
+
+  if (
+    workItem.caseStatus === STATUS_TYPES.calendared &&
+    workItem.trialLocation &&
+    workItem.trialDate
+  ) {
+    let formattedTrialLocation = '';
+    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      formattedTrialLocation = applicationContext
+        .getUtilities()
+        .abbreviateState(workItem.trialLocation ?? '');
+    } else {
+      formattedTrialLocation = workItem.trialLocation;
+    }
+
+    const formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(workItem.trialDate, 'MMDDYY');
+
+    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+  }
+
+  return formattedCaseStatus;
 };

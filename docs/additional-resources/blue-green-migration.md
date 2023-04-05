@@ -6,6 +6,15 @@ Every deployment, whether it's to production or a development environment, is a 
 
 Additionally, for deployments that require change in the data schema or elasticsearch mappings in order for the application to function, we build an empty copy of the data stores (DynamoDB and Elasticsearch). Then we perform a migration of information from currently running DynamoDB database table (*source table*) into the newly created, empty one (*destination table*). This migration passes all of the data through a lambda to update and verify the data before saving it into the destination table.
 
+## -> The Shortcut <-
+
+You can run a migration with the following two steps:
+
+1. Use the [environment switcher](docs/additional-resources/environment-switcher.md) to point to the environment where you're running a migration.
+2. Run `./setup-for-blue-green-migration.sh --force`.
+
+No additional manual steps are required.
+
 ## Automated Migration Steps
 
 **All of the automated migration steps are now handled by CircleCI, as defined in `config.yml`.**
@@ -96,7 +105,7 @@ The `east` table is master table, and if you delete these tables and recreate th
 ### Remove Record of Previous Migration
 
 1. Delete the Destination table [see instructions](#delete-the-destination-tables)
-2. Remove a migration script item from the environment's `efcms-<ENV>-deploy` DynamoDB table that is expected to migrate, from the `migrationsToRun.js` file. For example, if `migrationsToRun.js` includes a script called `0001-test-script.js`, delete that item from the DynamoDB table.
+2. Remove a migration script item from the environment's `efcms-<ENV>-deploy` DynamoDB table that is expected to migrate, from the `migrationsToRun.ts` file. For example, if `migrationsToRun.ts` includes a script called `0001-test-script.ts`, delete that item from the DynamoDB table.
 3. Kick off a CircleCI workflow, which will follow the steps above for Automated Migration Steps.
 
 ### Explicitly Configure Deploy Table

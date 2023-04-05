@@ -10,17 +10,6 @@ type TRawPenalty = {
   penaltyType: string;
 };
 
-type TDynamoRecord = {
-  pk: string;
-  sk: string;
-  gsi1pk?: string;
-  ttl?: number;
-  [key: string]: any;
-};
-
-type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;
-type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
-
 type TSectionWorkItem = {
   createdAt: string;
   docketEntry: RawDocketEntry[];
@@ -41,21 +30,6 @@ type TUserContact = {
   phone: string;
   postalCode: string;
   state: string;
-};
-
-type TUser = {
-  email: string;
-  name: string;
-  pendingEmail?: string;
-  section: string;
-  role: string;
-  token: string;
-  userId: string;
-  isUpdatingInformation: boolean;
-  pendingEmailVerificationToken?: string;
-  judgeFullName?: string;
-  judgeTitle?: string;
-  contact?: TUserContact;
 };
 
 type TTrialSessionWorkingCopyData = {
@@ -209,7 +183,7 @@ type TPractitioner = {
   serviceIndicator: string;
   updatedEmail: string;
   role: string;
-} & TUser;
+} & RawUser;
 
 interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];

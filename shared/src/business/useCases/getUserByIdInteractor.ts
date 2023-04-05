@@ -16,7 +16,7 @@ import { User } from '../entities/User';
 export const getUserByIdInteractor = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
-): Promise<TUser> => {
+): Promise<RawUser> => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {

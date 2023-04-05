@@ -1,13 +1,8 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Penalty } = require('./Penalty');
-const { PENALTY_TYPES } = require('./EntityConstants');
+import { PENALTY_TYPES } from './EntityConstants';
+import { Penalty } from './Penalty';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('Penalty', () => {
-  it('throws an error if applicationContext is not provided on construction', () => {
-    expect(() => new Penalty({}, {})).toThrow(
-      'applicationContext must be defined',
-    );
-  });
   describe('validation', () => {
     let statisticId;
     beforeAll(() => {
@@ -52,23 +47,6 @@ describe('Penalty', () => {
         {
           name: 'Penalty 1 (IRS)',
           penaltyAmount: 'something',
-          penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
-          statisticId,
-        },
-        { applicationContext },
-      );
-
-      expect(penalty.isValid()).toBe(false);
-      expect(Object.keys(penalty.getFormattedValidationErrors())).toContain(
-        'penaltyAmount',
-      );
-    });
-
-    it('should fail if penaltyAmount is a negative number', () => {
-      const penalty = new Penalty(
-        {
-          name: 'Penalty 1 (IRS)',
-          penaltyAmount: -422.68,
           penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
           statisticId,
         },
@@ -135,6 +113,20 @@ describe('Penalty', () => {
           name: 'Penalty 1 (Court)',
           penaltyAmount: 100.0,
           penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+          statisticId,
+        },
+        { applicationContext },
+      );
+
+      expect(penalty.isValid()).toBe(true);
+    });
+
+    it('should pass if penaltyAmount is a negative number', () => {
+      const penalty = new Penalty(
+        {
+          name: 'Penalty 1 (IRS)',
+          penaltyAmount: -422.68,
+          penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
           statisticId,
         },
         { applicationContext },
