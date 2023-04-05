@@ -1,4 +1,7 @@
-import { CaseStatus } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  CaseStatus,
+  CaseType,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { GetCaseInventoryReportRequest } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
@@ -18,6 +21,7 @@ export const setStartOrEndCreatedAtDateAction = ({
   get: any;
   props: Partial<GetCaseInventoryReportRequest> & {
     caseStatuses: { action: 'add' | 'remove'; caseStatus: CaseStatus };
+    caseTypes: { action: 'add' | 'remove'; caseType: CaseType };
   };
   store: any;
 }) => {
@@ -51,6 +55,18 @@ export const setStartOrEndCreatedAtDateAction = ({
         caseStatus => caseStatus === props.caseStatuses.caseStatus,
       );
       currentFilters.caseStatuses.splice(foundIndex, 1);
+      store.merge(state.customCaseInventoryFilters, currentFilters);
+    }
+  }
+  if (props.caseTypes) {
+    if (props.caseTypes.action === 'add') {
+      currentFilters.caseTypes.push(props.caseTypes.caseType);
+      store.merge(state.customCaseInventoryFilters, currentFilters);
+    } else if (props.caseTypes.action === 'remove') {
+      const foundIndex = currentFilters.caseTypes.findIndex(
+        caseType => caseType === props.caseTypes.caseType,
+      );
+      currentFilters.caseTypes.splice(foundIndex, 1);
       store.merge(state.customCaseInventoryFilters, currentFilters);
     }
   }

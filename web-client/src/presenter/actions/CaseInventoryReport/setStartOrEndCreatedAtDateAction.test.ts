@@ -102,4 +102,39 @@ describe('setStartOrEndCreatedAtDateAction', () => {
       'Assigned - Case',
     ]);
   });
+
+  it('should add a caseType filter to state', async () => {
+    initialFilterState.caseTypes = ['Deficiency'];
+    const result = await runAction(setStartOrEndCreatedAtDateAction, {
+      modules: { presenter },
+      props: {
+        caseTypes: { action: 'add', caseType: 'Disclosure' },
+      },
+      state: {
+        customCaseInventoryFilters: initialFilterState,
+      },
+    });
+
+    expect(result.state.customCaseInventoryFilters.caseTypes).toEqual([
+      'Deficiency',
+      'Disclosure',
+    ]);
+  });
+
+  it('should remove a case type filter from state', async () => {
+    initialFilterState.caseTypes = ['Deficiency', 'Disclosure'];
+    const result = await runAction(setStartOrEndCreatedAtDateAction, {
+      modules: { presenter },
+      props: {
+        caseTypes: { action: 'remove', caseType: 'Disclosure' },
+      },
+      state: {
+        customCaseInventoryFilters: initialFilterState,
+      },
+    });
+
+    expect(result.state.customCaseInventoryFilters.caseTypes).toEqual([
+      'Deficiency',
+    ]);
+  });
 });
