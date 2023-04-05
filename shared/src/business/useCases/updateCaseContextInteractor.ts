@@ -4,8 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../errors/errors';
+import { withLocking } from '../../persistence/dynamo/locks/acquireLock';
 
 /**
  * updateCaseContextInteractor
@@ -18,7 +22,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {object} providers.caseStatus the status to set on the case
  * @returns {object} the updated case data
  */
-export const updateCaseContextInteractor = async (
+export const updateCaseContext = async (
   applicationContext: IApplicationContext,
   {
     associatedJudge,
@@ -38,11 +42,6 @@ export const updateCaseContextInteractor = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const lockName = `case|${docketNumber}`;
-  const lockId = await applicationContext.getUseCaseHelpers().acquireLock({
-    applicationContext,
-    lockName,
-  });
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
@@ -121,11 +120,14 @@ export const updateCaseContextInteractor = async (
       caseToUpdate: newCase,
     });
 
-  await applicationContext.getPersistenceGateway().removeLock({
-    applicationContext,
-    lockId,
-    lockName,
-  });
-
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
+
+export const updateCaseContextInteractor = withLocking(
+  updateCaseContext,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

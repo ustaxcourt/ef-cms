@@ -4,13 +4,18 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry, isServed } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
 
 /**
  *
@@ -20,7 +25,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentT
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @returns {object} the updated case after the documents are added
  */
-export const updateDocketEntryMetaInteractor = async (
+export const updateDocketEntryMeta = async (
   applicationContext: IApplicationContext,
   {
     docketEntryMeta,
@@ -213,3 +218,12 @@ export const shouldGenerateCoversheetForDocketEntry = ({
     !originalDocketEntry.isMinuteEntry
   );
 };
+
+export const updateDocketEntryMetaInteractor = withLocking(
+  updateDocketEntryMeta,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

@@ -36,7 +36,7 @@ export function withLocking(
 
     await applicationContext
       .getPersistenceGateway()
-      .deleteLock({ applicationContext, identifier, prefix });
+      .removeLock({ applicationContext, identifier, prefix });
 
     return results;
   };
@@ -94,8 +94,8 @@ export async function removeLock({
     })
     .delete({
       Key: {
-        ':pk': `${prefix}|${identifier}`,
-        ':sk': 'lock',
+        pk: `${prefix}|${identifier}`,
+        sk: 'lock',
       },
       TableName: getTableName({
         applicationContext,
@@ -121,7 +121,7 @@ export async function getLock({
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .get({
+    .query({
       ConsistentRead: true,
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -141,5 +141,5 @@ export async function getLock({
       applicationContext,
     })
     .promise();
-  return res.Item;
+  return res.Items[0];
 }
