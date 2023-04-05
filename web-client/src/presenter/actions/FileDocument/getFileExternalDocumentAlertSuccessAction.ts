@@ -54,6 +54,7 @@ export const getFileExternalDocumentAlertSuccessAction = ({
   if (props.printReceiptLink) {
     alertSuccess.linkUrl = props.printReceiptLink;
     alertSuccess.linkText = 'Print receipt.';
+    alertSuccess.newTab = true;
   }
 
   return {
