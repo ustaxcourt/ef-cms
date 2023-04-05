@@ -1,0 +1,14 @@
+diff --git a/node_modules/pa11y/lib/action.js b/node_modules/pa11y/lib/action.js
+index 675b660..189ad28 100644
+--- a/node_modules/pa11y/lib/action.js
++++ b/node_modules/pa11y/lib/action.js
+@@ -276,7 +276,8 @@ module.exports.actions = [
+ 
+ 				return isInDesiredVisibilityState;
+ 			}, {
+-				polling: 200
++				polling: 200,
++        timeout: options.timeout
+ 			}, selector, state);
+ 		}
+ 	},
