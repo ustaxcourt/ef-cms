@@ -5,23 +5,23 @@ import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React, { useState } from 'react';
+import React from 'react';
 
 export const CustomCaseReport = connect(
   {
+    customCaseInventoryFilters: state.customCaseInventoryFilters,
     customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence:
       sequences.getCustomCaseInventoryReportSequence,
-    selectDateRangeForCustomCaseReportSequence:
-      sequences.selectDateRangeForCustomCaseReportSequence,
+    setCustomCaseInventoryReportFiltersSequence:
+      sequences.setCustomCaseInventoryReportFiltersSequence,
   },
   function CustomCaseReport({
     // customCaseInventoryReportHelper,
+    customCaseInventoryFilters,
     getCustomCaseInventoryReportSequence,
-    selectDateRangeForCustomCaseReportSequence,
+    setCustomCaseInventoryReportFiltersSequence,
   }) {
-    const [selected] = useState(false);
-
     return (
       <>
         <BigHeader text="Reports" />
@@ -43,15 +43,15 @@ export const CustomCaseReport = connect(
               startName="caseCreationStartDate"
               startValue=""
               onChangeEnd={e => {
-                selectDateRangeForCustomCaseReportSequence({
-                  date: e.target.value,
-                  startOrEnd: 'end',
+                setCustomCaseInventoryReportFiltersSequence({
+                  key: 'createEndDate',
+                  value: e.target.value,
                 });
               }}
               onChangeStart={e => {
-                selectDateRangeForCustomCaseReportSequence({
-                  date: e.target.value,
-                  startOrEnd: 'start',
+                setCustomCaseInventoryReportFiltersSequence({
+                  key: 'createStartDate',
+                  value: e.target.value,
                 });
               }}
             />
@@ -61,13 +61,18 @@ export const CustomCaseReport = connect(
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby="petition-filing-method-radios"
-                checked={selected}
+                checked={customCaseInventoryFilters.filingMethod === 'all'}
                 className="usa-radio__input"
                 id="petitionFilingMethod-all"
                 name="petitionFilingMethod"
                 type="radio"
                 value="all"
-                // onChange={handleChange}
+                onChange={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    key: e.target.name,
+                    value: 'all',
+                  });
+                }}
               />
               <label
                 className="usa-radio__label"
@@ -79,13 +84,20 @@ export const CustomCaseReport = connect(
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby="petition-filing-method-radios"
-                checked={selected}
+                checked={
+                  customCaseInventoryFilters.filingMethod === 'electronic'
+                }
                 className="usa-radio__input"
                 id="petitionFilingMethod-electronic"
                 name="petitionFilingMethod"
                 type="radio"
                 value="electronic"
-                // onChange={handleChange}
+                onChange={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    key: e.target.name,
+                    value: 'electronic',
+                  });
+                }}
               />
               <label
                 className="usa-radio__label"
@@ -97,12 +109,18 @@ export const CustomCaseReport = connect(
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby="petition-filing-method-radios"
-                checked={selected}
+                checked={customCaseInventoryFilters.filingMethod === 'paper'}
                 className="usa-radio__input"
                 id="petitionFilingMethod-paper"
                 name="petitionFilingMethod"
                 type="radio"
                 value="paper"
+                onChange={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    key: e.target.name,
+                    value: 'paper',
+                  });
+                }}
                 // onChange={handleChange}
               />
               <label

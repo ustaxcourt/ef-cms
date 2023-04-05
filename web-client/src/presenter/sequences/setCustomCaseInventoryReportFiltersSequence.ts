@@ -1,9 +1,8 @@
-import { normalizeDateFormatAction } from '../actions/CaseDeadline/normalizeDateFormatAction';
 import { setStartOrEndCreatedAtDateAction } from '../actions/CaseInventoryReport/setStartOrEndCreatedAtDateAction';
 
-export const selectDateRangeForCustomCaseReportSequence = [
-  normalizeDateFormatAction,
+export const setCustomCaseInventoryReportFiltersSequence = [
   setStartOrEndCreatedAtDateAction,
+
   // shouldValidateAction,
   // {
   //   ignore: [],

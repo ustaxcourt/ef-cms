@@ -316,7 +316,6 @@ import { sealAddressSequence } from './sequences/sealAddressSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
-import { selectDateRangeForCustomCaseReportSequence } from './sequences/selectDateRangeForCustomCaseReportSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
@@ -332,6 +331,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
+import { setCustomCaseInventoryReportFiltersSequence } from './sequences/setCustomCaseInventoryReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
@@ -846,7 +846,8 @@ export const presenter = {
     sealCaseSequence,
     sealDocketEntrySequence,
     selectAssigneeSequence,
-    selectDateRangeForCustomCaseReportSequence,
+    selectDateRangeForCustomCaseReportSequence:
+      setCustomCaseInventoryReportFiltersSequence,
     selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
