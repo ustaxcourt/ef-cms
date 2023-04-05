@@ -1,14 +1,20 @@
-name: E2E Pa11y Public (Search)
+name: Node.js Client Integration Tests
 
 on:
   pull_request:
 
 jobs:
-  e2e_pa11y_public:
+  client_integration_public:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [2]
+        ci_node_index: [0, 1]
     env:
-      CI: true
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -34,24 +40,15 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v1
       - name: Install Node Dependencies
         run: npm ci
-      - name: Start API and Client
+      - name: Web Client - Integration Tests Public
         run: |
-          mkdir -p /tmp/pa11y/
-          npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
+          mkdir -p /tmp/web-client
+          npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
           ./wait-until-services.sh
-          URL=http://localhost:5000/public-api/health ./wait-until.sh
-          sleep 10
-      - name: Run E2E Pa11y Public
-        run: npm run test:pa11y:public --node-flags --max-old-space-size=1536
-      - name: Run E2E Pa11y Public Search
-        run: npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
-      - name: Store Screenshots Artifacts
+          export TESTFILES=$(node split-tests.js -public)
+          npm run test:client:integration:ci
+      - name: Store Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: screen-shots
-          path: ${{ github.workspace }}/web-client/pa11y/pa11y-screenshots
-      - name: Store Server Logs
-        uses: actions/upload-artifact@v3
-        with:
-          name: server-logs
-          path: /tmp/pa11y
+          name: server log output
+          path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
