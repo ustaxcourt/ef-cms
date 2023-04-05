@@ -136,7 +136,7 @@ export const JudgeActivityReport = connect(
           <ErrorNotification />
 
           <div className="title">
-            <h1>Activity - </h1>
+            <h1>Activity - {judgeActivityReportHelper.formattedJudgeName} </h1>
           </div>
 
           <div className="blue-container">

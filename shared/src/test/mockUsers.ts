@@ -19,9 +19,10 @@ export const adcUser = {
 };
 
 export const chambersUser = {
+  name: 'Chandler Chambers',
   role: ROLES.chambers,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
-  userId: '555',
+  userId: '3d9fa032-ad00-475a-9183-8aa0229a31eb',
 };
 
 export const clerkOfCourtUser = {
@@ -51,7 +52,7 @@ export const irsSuperuserUser = {
 };
 
 export const judgeUser = {
-  judgeFullName: 'Barney the Dinosaur',
+  judgeFullName: 'Sonia Sotomayor',
   name: 'Barney',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',

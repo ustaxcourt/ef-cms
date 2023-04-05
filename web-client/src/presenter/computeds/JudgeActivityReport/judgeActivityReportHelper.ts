@@ -1,9 +1,29 @@
-export const judgeActivityReportHelper = () => {
+export const judgeActivityReportHelper = (get, applicationContext) => {
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  const currentUser = applicationContext.getCurrentUser();
+
+  const isChambersUser = currentUser.role === USER_ROLES.chambers;
+  if (isChambersUser) {
+    const allJudgeChambers = applicationContext
+      .getUtilities()
+      .getJudgesChambers();
+
+    const judgeChambers = Object.values(allJudgeChambers).find(
+      chambers => chambers.section === currentUser.section,
+    );
+
+    currentUser.judgeFullName = judgeChambers.judgeFullName;
+  }
+
   return {
     closedCases: {
       Closed: 9,
       'Closed-Dismissed': 11,
     },
+    formattedJudgeName: applicationContext
+      .getUtilities()
+      .getJudgeLastName(currentUser.judgeFullName),
     opinionsIssued: [
       { documentType: 'Memorandum Opinion', eventCode: 'MOP', total: 76 },
       { documentType: 'T.C. Opinion', eventCode: 'TCOP', total: 13 },
