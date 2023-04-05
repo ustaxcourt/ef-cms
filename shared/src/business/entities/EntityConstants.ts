@@ -184,8 +184,8 @@ export const CASE_STATUS_TYPES = {
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
 } as const;
-const caseStatusTypesArray = Object.values(CASE_STATUS_TYPES);
-export type CaseStatus = (typeof caseStatusTypesArray)[number];
+export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
+export type CaseStatus = (typeof CASE_STATUSES)[number];
 
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
