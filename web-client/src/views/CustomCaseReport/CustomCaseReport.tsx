@@ -72,10 +72,9 @@ export const CustomCaseReport = connect(
                 id="petitionFilingMethod-all"
                 name="filingMethod"
                 type="radio"
-                onChange={e => {
+                onChange={() => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    key: e.target.name,
-                    value: 'all',
+                    filingMethod: 'all',
                   });
                 }}
               />
@@ -96,10 +95,9 @@ export const CustomCaseReport = connect(
                 id="petitionFilingMethod-electronic"
                 name="filingMethod"
                 type="radio"
-                onChange={e => {
+                onChange={() => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    key: e.target.name,
-                    value: 'electronic',
+                    filingMethod: 'electronic',
                   });
                 }}
               />
@@ -118,10 +116,9 @@ export const CustomCaseReport = connect(
                 id="petitionFilingMethod-paper"
                 name="filingMethod"
                 type="radio"
-                onChange={e => {
+                onChange={() => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    key: e.target.name,
-                    value: 'paper',
+                    filingMethod: 'paper',
                   });
                 }}
                 // onChange={handleChange}
