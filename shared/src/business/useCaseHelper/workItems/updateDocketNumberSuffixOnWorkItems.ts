@@ -8,14 +8,13 @@ exports.updateDocketNumberSuffixOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext
-      .getPersistenceGateway()
-      .updateWorkItemDocketNumberSuffix({
-        applicationContext,
-        docketNumber: workItem.docketNumber,
-        docketNumberSuffix,
-        workItemId: workItem.workItemId,
-      }),
+    applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord({
+      applicationContext,
+      attributeKey: 'docketNumberSuffix',
+      attributeValue: docketNumberSuffix,
+      pk: workItem.pk,
+      sk: workItem.sk,
+    }),
   );
 
   await Promise.all(workItemUpdates);
