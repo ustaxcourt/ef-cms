@@ -2,7 +2,6 @@
 /* eslint-disable max-lines */
 import {
   acquireLock,
-  deleteLock,
   getLock,
   removeLock,
 } from '../../shared/src/persistence/dynamo/locks/acquireLock';
@@ -284,7 +283,6 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
-  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
