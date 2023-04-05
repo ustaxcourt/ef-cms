@@ -22,5 +22,5 @@
     "./web-client/src/**/*",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./cognito-triggers-sls/node_modules/**/*"]
 }

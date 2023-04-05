@@ -89,32 +89,54 @@ export const createOrUpdatePractitionerUser = async ({
   });
 
   if (!userExists) {
+    let baseCreateUserParams = {
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: userEmail,
+        },
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+        {
+          Name: 'name',
+          Value: user.name,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: userEmail,
+    };
+
+    const createUserParamsLocal = {
+      ...baseCreateUserParams,
+      DesiredDeliveryMediums: ['EMAIL'],
+      UserAttributes: [
+        ...baseCreateUserParams.UserAttributes,
+        {
+          Name: 'custom:userId',
+          Value: user.userId,
+        },
+      ],
+      Username: user.userId,
+    };
+
+    const createUserParams = process.env.USE_COGNITO_LOCAL
+      ? createUserParamsLocal
+      : baseCreateUserParams;
+
     const response = await applicationContext
       .getCognito()
-      .adminCreateUser({
-        UserAttributes: [
-          {
-            Name: 'email_verified',
-            Value: 'True',
-          },
-          {
-            Name: 'email',
-            Value: userEmail,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: userEmail,
-      })
+      .adminCreateUser(createUserParams)
       .promise();
-    if (response && response.User && response.User.Username) {
+
+    if (process.env.USE_COGNITO_LOCAL) {
+      ({ userId } = user);
+    } else if (response && response.User && response.User.Username) {
       userId = response.User.Username;
     }
   } else {

@@ -7,5 +7,10 @@ const { handler } = require('./cognito-triggers');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.cognitoTriggersLocalLambda = async event => {
-  await handler(event.body);
+  const cognitoEvent = JSON.parse(event.body);
+
+  cognitoEvent.request.userAttributes.sub =
+    cognitoEvent.request.userAttributes['custom:userId'];
+
+  return await handler(cognitoEvent);
 };

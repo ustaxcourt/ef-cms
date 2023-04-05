@@ -73,6 +73,9 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  confirmSignUpLocalInteractor,
+} = require('../../shared/src/business/useCases/auth/confirmSignUpLocalInteractor');
+const {
   createCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/createCaseDeadlineInteractor');
 const {
@@ -608,6 +611,7 @@ const useCases = {
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
+  confirmSignUpLocalInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
