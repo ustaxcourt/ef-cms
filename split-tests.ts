@@ -1,7 +1,9 @@
 import fs from 'fs';
 import shuffleSeed from 'shuffle-seed';
 
-const specDir = './web-client/integration-tests';
+const testType = process.argv[2] || '';
+
+const specDir = `./web-client/integration-tests${testType}`;
 const files = fs.readdirSync(specDir).filter(f => f.endsWith('test.ts'));
 
 const shuffled = shuffleSeed.shuffle(files, process.env.GITHUB_SHA);

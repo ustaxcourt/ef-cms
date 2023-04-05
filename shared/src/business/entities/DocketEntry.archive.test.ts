@@ -1,6 +1,6 @@
-const { A_VALID_DOCKET_ENTRY } = require('./DocketEntry.test');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('archive', () => {
   it('archives the document', () => {

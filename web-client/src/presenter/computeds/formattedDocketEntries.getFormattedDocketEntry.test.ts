@@ -519,4 +519,27 @@ describe('getFormattedDocketEntry', () => {
       );
     });
   });
+
+  describe('toolTipText', () => {
+    it('should add a tooltip to (disabled) docket entries with no file attached', () => {
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: simpleDocketEntry,
+      });
+
+      expect(result.toolTipText).toEqual('No Document View');
+    });
+
+    it('should not add a tooltip to docket entries with a file attached', () => {
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: {
+          ...simpleDocketEntry,
+          isFileAttached: true,
+        },
+      });
+
+      expect(result.toolTipText).toBeUndefined();
+    });
+  });
 });

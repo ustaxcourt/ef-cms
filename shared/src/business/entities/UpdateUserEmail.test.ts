@@ -1,4 +1,4 @@
-const { UpdateUserEmail } = require('./UpdateUserEmail');
+import { UpdateUserEmail } from './UpdateUserEmail';
 
 describe('UpdateUserEmail', () => {
   describe('validation', () => {

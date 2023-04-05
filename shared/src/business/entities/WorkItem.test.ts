@@ -1,17 +1,13 @@
-const {
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-} = require('./EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { WorkItem } = require('./WorkItem');
+} from './EntityConstants';
+import { WorkItem } from './WorkItem';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('WorkItem', () => {
   describe('isValid', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(() => new WorkItem({}, {})).toThrow();
-    });
-
     it('Creates a valid workitem', () => {
       const workItem = new WorkItem(
         {
@@ -86,6 +82,28 @@ describe('WorkItem', () => {
         { applicationContext },
       );
       expect(workItem.isValid()).toBeTruthy();
+    });
+
+    it('should create a valid workitem when caseStatus is calendared', () => {
+      const workItem = new WorkItem(
+        {
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+          assigneeName: 'bob',
+          caseStatus: CASE_STATUS_TYPES.calendared,
+          caseTitle: 'Johnny Joe Jacobson',
+          docketEntry: {},
+          docketNumber: '101-18',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          isRead: true,
+          section: DOCKET_SECTION,
+          sentBy: 'bob',
+          trialDate: '2018-11-21T20:49:28.192Z',
+          trialLocation: 'Fairbanks, Alaska',
+          workItemId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+        },
+        { applicationContext },
+      );
+      expect(workItem.isValid()).toBe(true);
     });
   });
 

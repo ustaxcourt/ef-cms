@@ -1,3 +1,4 @@
+import { clearConfirmationTextAction } from '../actions/clearConfirmationTextAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -15,6 +16,7 @@ export const gotoEditDeficiencyStatisticSequence = [
       setCurrentPageAction('Interstitial'),
       stopShowValidationAction,
       clearFormAction,
+      clearConfirmationTextAction,
       getCaseAction,
       setCaseAction,
       setEditDeficiencyStatisticFormAction,

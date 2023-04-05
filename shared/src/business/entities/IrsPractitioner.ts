@@ -1,24 +1,23 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
 import { Practitioner } from './Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
 import {
   USER_CONTACT_VALIDATION_RULES,
+  User,
   VALIDATION_ERROR_MESSAGES,
-  userDecorator,
 } from './User';
 import joi from 'joi';
 
 export const entityName = 'IrsPractitioner';
 
-export class IrsPractitioner extends JoiValidationEntity {
+export class IrsPractitioner extends User {
   public barNumber: string;
   public serviceIndicator: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(rawUser, { filtered = false } = {}) {
-    super('IrsPractitioner');
-    userDecorator(this, rawUser, filtered);
+  constructor(rawUser, options?) {
+    super(rawUser, options);
+    this.entityName = 'IrsPractitioner';
     this.barNumber = rawUser.barNumber;
     this.serviceIndicator =
       rawUser.serviceIndicator ||
@@ -45,7 +44,7 @@ export class IrsPractitioner extends JoiValidationEntity {
   });
 
   getValidationRules() {
-    return IrsPractitioner.VALIDATION_RULES;
+    return IrsPractitioner.VALIDATION_RULES as any;
   }
 
   getErrorToMessageMap() {

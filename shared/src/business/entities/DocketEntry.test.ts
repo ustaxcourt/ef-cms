@@ -1,10 +1,10 @@
-const {
+import {
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
-} = require('./EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+} from './EntityConstants';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 export const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
 export const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
@@ -97,10 +97,6 @@ describe('DocketEntry entity', () => {
   });
 
   describe('isValid', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(() => new DocketEntry({}, {})).toThrow();
-    });
-
     it('Creates a valid docket entry', () => {
       const myDoc = new DocketEntry(A_VALID_DOCKET_ENTRY, {
         applicationContext,

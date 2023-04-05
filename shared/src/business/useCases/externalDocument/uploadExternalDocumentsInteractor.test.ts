@@ -6,9 +6,6 @@ describe('uploadExternalDocumentsInteractor', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .fileExternalDocumentForConsolidatedInteractor.mockReturnValue({});
-    applicationContext
-      .getUseCases()
       .fileExternalDocumentInteractor.mockReturnValue({});
   });
 
@@ -20,14 +17,12 @@ describe('uploadExternalDocumentsInteractor', () => {
 
     await expect(
       uploadExternalDocumentsInteractor(applicationContext, {
-        docketNumbersForFiling: ['101-20'],
         documentFiles: {
           primary: {
             stuff: 'hi',
           },
         },
         documentMetadata: {},
-        leadDocketNumber: '103-20',
         progressFunctions: {
           primary: () => {},
         },
@@ -42,14 +37,12 @@ describe('uploadExternalDocumentsInteractor', () => {
     });
 
     const result = await uploadExternalDocumentsInteractor(applicationContext, {
-      docketNumbersForFiling: ['101-20'],
       documentFiles: {
         primary: 'something',
       },
       documentMetadata: {
         primaryDocumentFile: {},
       },
-      leadDocketNumber: '103-20',
       progressFunctions: {
         primary: () => {},
       },
@@ -68,7 +61,6 @@ describe('uploadExternalDocumentsInteractor', () => {
 
     await expect(
       uploadExternalDocumentsInteractor(applicationContext, {
-        docketNumbersForFiling: ['101-20'],
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -101,7 +93,6 @@ describe('uploadExternalDocumentsInteractor', () => {
 
     await expect(
       uploadExternalDocumentsInteractor(applicationContext, {
-        docketNumbersForFiling: ['202-10'],
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -120,36 +111,5 @@ describe('uploadExternalDocumentsInteractor', () => {
         },
       }),
     ).resolves.not.toThrow();
-  });
-
-  it('should call fileExternalDocumentForConsolidatedInteractor when a leadDocketNumber is provided', async () => {
-    await uploadExternalDocumentsInteractor(applicationContext, {
-      docketNumbersForFiling: ['100-20'],
-      documentFiles: {
-        primary: 'something',
-        primarySupporting0: 'something3',
-        secondary: 'something2',
-        secondarySupporting0: 'something4',
-      },
-      documentMetadata: {
-        primaryDocumentFile: {},
-        secondaryDocument: {},
-      },
-      leadDocketNumber: '101-20',
-      progressFunctions: {
-        primary: 'something',
-        primarySupporting0: 'something3',
-        secondary: 'something2',
-        secondarySupporting0: 'something4',
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().fileExternalDocumentInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases()
-        .fileExternalDocumentForConsolidatedInteractor,
-    ).toHaveBeenCalled();
   });
 });

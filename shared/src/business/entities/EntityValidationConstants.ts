@@ -240,6 +240,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
     ),
+  otherIteration: joi.optional(),
   partyIrsPractitioner: joi.boolean().optional(),
   pending: joi
     .boolean()
@@ -434,7 +435,8 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
     .description('The name of the user that sent the WorkItem'),
   sentBySection: JoiValidationConstants.STRING.optional(),
   sentByUserId: JoiValidationConstants.UUID.optional(),
-  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+  trialDate: joi.string().optional().allow(null),
+  trialLocation: joi.string().optional().allow(null),
   updatedAt: JoiValidationConstants.ISO_DATE.required(),
   workItemId: JoiValidationConstants.UUID.required(),
 };
