@@ -846,8 +846,6 @@ export const presenter = {
     sealCaseSequence,
     sealDocketEntrySequence,
     selectAssigneeSequence,
-    selectDateRangeForCustomCaseReportSequence:
-      setCustomCaseInventoryReportFiltersSequence,
     selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
@@ -862,6 +860,7 @@ export const presenter = {
     setCaseDetailPrimaryTabSequence,
     setCaseTypeToDisplaySequence,
     setCurrentPageIndexSequence,
+    setCustomCaseInventoryReportFiltersSequence,
     setDocumentForPreviewSequence,
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
