@@ -6,6 +6,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -133,7 +134,7 @@ export const CustomCaseReport = connect(
               </label>
             </div>
           </div>
-          <div className="grid-col-6">
+          <div className="grid-col-8">
             <div className="grid-row">
               <div className="grid-col margin-top-3 margin-right-4">
                 <legend className="display-block" id="trial-year">
@@ -143,13 +144,15 @@ export const CustomCaseReport = connect(
                   aria-label="Case Status"
                   className={classNames('usa-select')}
                   name="caseStatus"
-                  // onChange={e => {
-                  //   updateModalValueSequence({
-                  //     key: e.target.name,
-                  //     value: e.target.value,
-                  //   });
-                  //   validateTrialSessionPlanningSequence();
-                  // }}
+                  onChange={e => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      caseStatuses: {
+                        action: 'add',
+                        caseStatus: e.target.value,
+                      },
+                    });
+                    // validateTrialSessionPlanningSequence();
+                  }}
                 >
                   <option value="">- Select one or more -</option>
                   {CASE_STATUSES.map(caseStatus => (
@@ -167,13 +170,15 @@ export const CustomCaseReport = connect(
                   aria-label="Case Types"
                   className={classNames('usa-select')}
                   name="caseTypes"
-                  // onChange={e => {
-                  //   updateModalValueSequence({
-                  //     key: e.target.name,
-                  //     value: e.target.value,
-                  //   });
-                  //   validateTrialSessionPlanningSequence();
-                  // }}
+                  onChange={e => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      caseTypes: {
+                        action: 'add',
+                        caseType: e.target.value,
+                      },
+                    });
+                    // validateTrialSessionPlanningSequence();
+                  }}
                 >
                   <option value="">- Select one or more -</option>
                   {CASE_TYPES.map(caseType => (
@@ -183,6 +188,51 @@ export const CustomCaseReport = connect(
                   ))}
                 </select>
               </div>
+            </div>
+          </div>
+
+          <div className="grid-col-12 margin-top-3 margin-bottom-3">
+            <div className="grid-row">
+              {customCaseInventoryFilters.caseStatuses.map(status => (
+                <Button key={status}>
+                  {status}
+                  <Icon
+                    aria-label={`remove ${status} selection`}
+                    className="margin-right-3"
+                    icon="copy"
+                    size="1x"
+                    onClick={() => {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        caseStatuses: {
+                          action: 'remove',
+                          caseStatus: status,
+                        },
+                      });
+                      // validateTrialSessionPlanningSequence();
+                    }}
+                  />{' '}
+                </Button>
+              ))}
+              {customCaseInventoryFilters.caseTypes.map(caseType => (
+                <Button key={caseType}>
+                  {caseType}
+                  <Icon
+                    aria-label={`remove ${caseType} selection`}
+                    className="margin-right-3"
+                    icon="copy"
+                    size="1x"
+                    onClick={() => {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        caseTypes: {
+                          action: 'remove',
+                          caseStatus: caseType,
+                        },
+                      });
+                      // validateTrialSessionPlanningSequence();
+                    }}
+                  />{' '}
+                </Button>
+              ))}
             </div>
           </div>
 
