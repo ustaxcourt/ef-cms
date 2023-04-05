@@ -80,7 +80,9 @@ export const IndividualWorkQueueInProgress = connect(
                     </td>
                   )}
                   {workQueueHelper.showCaseStatusColumn && (
-                    <td className="message-queue-row">{item.caseStatus}</td>
+                    <td className="message-queue-row">
+                      {item.formattedCaseStatus}
+                    </td>
                   )}
                   {workQueueHelper.showProcessedByColumn && (
                     <td>{item.assigneeName}</td>
