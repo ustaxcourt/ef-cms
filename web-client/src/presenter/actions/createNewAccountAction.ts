@@ -30,6 +30,7 @@ export const createNewAccountAction = async ({ applicationContext, get }) => {
       linkUrl: `/confirm-signup-local?${queryString}`,
       message: `New user account created successfully for ${email}!
       Please click the link below to verify your email address.`,
+      newTab: false,
     },
   };
 };
