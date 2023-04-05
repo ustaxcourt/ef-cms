@@ -1,4 +1,3 @@
-import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getPrintableFilingReceiptSequence } from './getPrintableFilingReceiptSequence';
@@ -11,7 +10,6 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
-import { uploadExternalDocumentsForConsolidatedAction } from '../actions/FileDocument/uploadExternalDocumentsForConsolidatedAction';
 
 const onSuccess = [
   submitRespondentCaseAssociationRequestAction,
@@ -26,21 +24,9 @@ const onSuccess = [
 
 export const submitExternalDocumentSequence = showProgressSequenceDecorator([
   openFileUploadStatusModalAction,
-  canFileInConsolidatedCasesAction,
+  uploadExternalDocumentsAction,
   {
-    no: [
-      uploadExternalDocumentsAction,
-      {
-        error: [openFileUploadErrorModal],
-        success: onSuccess,
-      },
-    ],
-    yes: [
-      uploadExternalDocumentsForConsolidatedAction,
-      {
-        error: [openFileUploadErrorModal],
-        success: onSuccess,
-      },
-    ],
+    error: [openFileUploadErrorModal],
+    success: onSuccess,
   },
 ]);

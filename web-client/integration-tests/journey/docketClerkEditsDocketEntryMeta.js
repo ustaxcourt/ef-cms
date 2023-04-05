@@ -25,13 +25,14 @@ export const docketClerkEditsDocketEntryMeta = (
       },
     );
 
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'ordinalValue',
-        value: 'First',
-      },
-    );
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'ordinalValue',
+      value: 'Other',
+    });
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'otherIteration',
+      value: '16',
+    });
 
     await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',

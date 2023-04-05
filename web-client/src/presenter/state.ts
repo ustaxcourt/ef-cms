@@ -21,6 +21,7 @@ import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
+import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -62,6 +63,7 @@ import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionD
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
+import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -141,6 +143,7 @@ const helpers = {
   caseInventoryReportHelper,
   caseSearchBoxHelper,
   caseSearchNoMatchesHelper,
+  caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
@@ -179,6 +182,7 @@ const helpers = {
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
+  getOrdinalValuesForUploadIteration,
   getTrialCityName,
   headerHelper,
   internalPetitionPartiesHelper,
@@ -322,6 +326,7 @@ export const baseState = {
     stampApplied: false,
     stampData: null,
   },
+  pdfPreviewUrl: '',
   pendingReports: {},
   permissions: null,
   practitionerDetail: {},
@@ -358,6 +363,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
@@ -374,3 +380,11 @@ export const state = {
   ...helpers,
   ...baseState,
 };
+
+declare global {
+  type State = typeof state & {
+    constants: ReturnType<typeof getConstants>;
+    modal: any;
+    screenMetadata: any;
+  };
+}

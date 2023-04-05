@@ -1,3 +1,5 @@
+import { TDynamoRecord } from '../../../shared/src/persistence/dynamo/dynamoTypes';
+
 const case105_23: TCase & TDynamoRecord = {
   associatedJudge: 'Chief Judge',
   caseCaption: 'Armand Fulton, Petitioner',

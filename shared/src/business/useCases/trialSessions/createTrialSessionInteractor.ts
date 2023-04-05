@@ -38,6 +38,15 @@ export const createTrialSessionInteractor = async (
     trialSessionToAdd.setAsCalendared();
   }
 
+  if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {
+    applicationContext
+      .getUseCaseHelpers()
+      .associateSwingTrialSessions(applicationContext, {
+        swingSessionId: trialSessionToAdd.swingSessionId,
+        trialSessionEntity: trialSessionToAdd,
+      });
+  }
+
   return await applicationContext
     .getUseCaseHelpers()
     .createTrialSessionAndWorkingCopy({
