@@ -96,7 +96,6 @@ export const LogIn = connect(
             <Button
               id="create-new-account-button"
               onClick={() => {
-                // goToCreateAccountLocalSequence();
                 navigateToPathSequence({
                   path: '/create-new-account-local',
                 });

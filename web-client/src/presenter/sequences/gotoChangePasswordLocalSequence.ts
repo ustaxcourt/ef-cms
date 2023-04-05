@@ -7,6 +7,5 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
  */
 export const gotoChangePasswordLocalSequence = [
   clearFormAction,
-  // clearSessionMetadataAction,
   setCurrentPageAction('ChangePasswordLocal'),
 ];

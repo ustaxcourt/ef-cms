@@ -19,8 +19,6 @@ export const loginWithCognitoLocalSequence = showProgressSequenceDecorator([
     yes: [
       decodeTokenAction,
       setTokenAction,
-      // do we need this if not refreshing locally?
-      // startRefreshIntervalAction,
       getUserAction,
       setUserAction,
       setUserPermissionsAction,
