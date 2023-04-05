@@ -156,7 +156,7 @@ export const OpinionPamphlets = connect(
                           </div>
                           <table
                             aria-label="opinion pamphlets"
-                            className="usa-table case-detail ustc-table responsive-table"
+                            className="usa-table case-detail ustc-table responsive-table no-blue-hover"
                             id="opinion-pamphlets-table"
                             key={filingDateKey}
                           >
