@@ -1,23 +1,62 @@
 import { FORMATS, formatNow } from '../../../business/utilities/DateHandler';
-import { User } from '../../../business/entities/User';
 import { getTableName } from '../../dynamodbClientService';
+
+/**
+ * will wrap a function with logic to acquire a lock and delete a lock after finishing.
+ *
+ * @param {function} cb the original function to wrap
+ * @param {function} getLockInfo a function which is passes the original args for getting the lock suffix
+ * @param {error} onLockError the error object to throw if a lock is already in use
+ * @returns {object} the item that was retrieved
+ */
+export function withLocking(
+  cb: (applicationContext: IApplicationContext, options: any) => any,
+  getLockInfo,
+  onLockError,
+) {
+  return async function (
+    applicationContext: IApplicationContext,
+    options: any,
+  ) {
+    const { identifier, prefix } = getLockInfo(options);
+
+    const currentLock = await getLock({
+      applicationContext,
+      identifier,
+      prefix,
+    });
+
+    if (currentLock) {
+      throw onLockError;
+    }
+
+    await acquireLock({ applicationContext, identifier, prefix });
+
+    const results = await cb(applicationContext, options);
+
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteLock({ applicationContext, identifier, prefix });
+
+    return results;
+  };
+}
 
 /**
  * tries to acquire a lock from a dynamodb table
  */
 export async function acquireLock({
   applicationContext,
-  lockId,
-  lockName,
-  user,
+  identifier,
+  prefix,
 }: {
   applicationContext: IApplicationContext;
-  lockId: string;
-  lockName: string;
-  user: User;
+  identifier: string;
+  prefix: string;
 }) {
   const now = formatNow();
   const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  const ttl = nowUnix + 30;
 
   await applicationContext
     .getDocumentClient({
@@ -25,11 +64,10 @@ export async function acquireLock({
     })
     .put({
       Item: {
-        pk: lockName,
-        sk: `lock|${lockId}`,
+        pk: `${prefix}|${identifier}`,
+        sk: 'lock',
         timestamp: now,
-        ttl: nowUnix + 30,
-        user,
+        ttl,
       },
       TableName: getTableName({
         applicationContext,
@@ -43,12 +81,12 @@ export async function acquireLock({
  */
 export async function removeLock({
   applicationContext,
-  lockId,
-  lockName,
+  identifier,
+  prefix,
 }: {
   applicationContext: IApplicationContext;
-  lockName: string;
-  lockId: string;
+  identifier: string;
+  prefix: string;
 }) {
   await applicationContext
     .getDocumentClient({
@@ -56,8 +94,8 @@ export async function removeLock({
     })
     .delete({
       Key: {
-        pk: lockName,
-        sk: `lock|${lockId}`,
+        ':pk': `${prefix}|${identifier}`,
+        ':sk': 'lock',
       },
       TableName: getTableName({
         applicationContext,
@@ -71,17 +109,19 @@ export async function removeLock({
  */
 export async function getLock({
   applicationContext,
-  lockName,
+  identifier,
+  prefix,
 }: {
   applicationContext: IApplicationContext;
-  lockName: string;
+  identifier: string;
+  prefix: string;
 }) {
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .query({
+    .get({
       ConsistentRead: true,
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -90,16 +130,16 @@ export async function getLock({
       },
       ExpressionAttributeValues: {
         ':now': now,
-        ':pk': lockName,
-        ':prefix': 'lock|',
+        ':pk': `${prefix}|${identifier}`,
+        ':sk': 'lock',
       },
       FilterExpression: '#ttl > :now',
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      KeyConditionExpression: '#pk = :pk and #sk = :sk',
       TableName: getTableName({
         applicationContext,
       }),
       applicationContext,
     })
     .promise();
-  return res.Items[0];
+  return res.Item;
 }

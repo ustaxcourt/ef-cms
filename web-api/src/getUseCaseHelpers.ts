@@ -27,7 +27,6 @@ import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelp
 import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
-import { savePaperServicePdf } from '../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
 import { sendEmailVerificationLink } from '../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink';
 import { sendIrsSuperuserPetitionEmail } from '../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
@@ -47,6 +46,7 @@ import { updateCaseTitleOnWorkItems } from '../../shared/src/business/useCaseHel
 import { updateDocketNumberSuffixOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems';
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 import { updateTrialDateOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems';
+import { updateTrialLocationOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialLocationOnWorkItems';
 
 const useCaseHelpers = {
   acquireLock,
@@ -77,7 +77,6 @@ const useCaseHelpers = {
   removeCounselFromRemovedPetitioner,
   removeCoversheet,
   saveFileAndGenerateUrl,
-  savePaperServicePdf,
   sealInLowerEnvironment,
   sendEmailVerificationLink,
   sendIrsSuperuserPetitionEmail,
@@ -97,6 +96,7 @@ const useCaseHelpers = {
   updateDocketNumberSuffixOnWorkItems,
   updateInitialFilingDocuments,
   updateTrialDateOnWorkItems,
+  updateTrialLocationOnWorkItems,
 };
 
 export const getUseCaseHelpers = () => useCaseHelpers;

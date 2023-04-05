@@ -1,5 +1,5 @@
-export const docketClerkViewsQCOutbox = (cerebralTest, shouldExist) => {
-  return it('Docket clerk views My Document QC - Outbox', async () => {
+export const docketClerkViewsQCSectionInbox = (cerebralTest, shouldExist) => {
+  return it('Docket clerk views Section Document QC - Outbox', async () => {
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
     await cerebralTest.runSequence('chooseWorkQueueSequence', {

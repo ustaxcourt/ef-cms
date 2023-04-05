@@ -44,21 +44,25 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     });
   }
 
-  const { docketEntryId, hasPaper, url } = await applicationContext
-    .getUseCaseHelpers()
-    .savePaperServicePdf({
-      applicationContext,
-      document: paperServiceDocumentsPdf,
-    });
+  const hasPaper = !!paperServiceDocumentsPdf.getPageCount();
+  const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
-  if (url) {
+  let docketEntryId, pdfUrl;
+
+  if (hasPaper) {
+    ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl({
+        applicationContext,
+        file: paperServicePdfData,
+        useTempBucket: true,
+      }));
+
     applicationContext.logger.info(
-      `generated the printable paper service pdf at ${url}`,
-      {
-        url,
-      },
+      `generated the printable paper service pdf at ${pdfUrl}`,
+      { pdfUrl },
     );
   }
 
-  return { docketEntryId, hasPaper, pdfUrl: url || null };
+  return { docketEntryId, hasPaper, pdfUrl };
 };
