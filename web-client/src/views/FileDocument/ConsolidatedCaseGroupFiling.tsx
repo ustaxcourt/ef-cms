@@ -20,7 +20,7 @@ export const ConsolidatedCaseGroupFiling = connect(
       <>
         <h2 className="margin-top-4">Which Cases Do You Want to File In?</h2>
         <div className="blue-container">
-          <FormGroup errorText={validationErrors.primaryDocumentFile}>
+          <FormGroup errorText={validationErrors.fileAcrossConsolidatedGroup}>
             <fieldset
               className="usa-fieldset margin-bottom-0"
               id="consolidated-case-group-radios"

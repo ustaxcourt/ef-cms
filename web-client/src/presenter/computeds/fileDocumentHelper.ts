@@ -136,18 +136,19 @@ export const fileDocumentHelper = (get, applicationContext) => {
     }
   };
   let consolidatedGroupServiceParties = [];
+  // simplify with lodash groupBy function
   if (isInConsolidatedGroup) {
-    caseDetail.consolidatedCases.forEach((memberCase, index) => {
-      consolidatedGroupServiceParties[index] = {};
+    caseDetail.consolidatedCases.forEach((memberCase, i) => {
+      consolidatedGroupServiceParties[i] = {};
       const combinedPartiesList = [
         ...memberCase.petitioners,
         ...memberCase.privatePractitioners,
         ...memberCase.irsPractitioners,
       ];
-      combinedPartiesList.forEach(party => {
-        consolidatedGroupServiceParties[index].name = `${
-          party.name
-        }, ${roleToDisplay(party)}`;
+      combinedPartiesList.forEach((party, j) => {
+        consolidatedGroupServiceParties[i][j] = `${party.name}, ${roleToDisplay(
+          party,
+        )}`;
       });
     });
   }
@@ -169,7 +170,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showConsolidatedCasesGroupFilingCard,
     showFileAcrossConsolidatedGroupCards: form.fileAcrossConsolidatedGroup,
     showFilingIncludes,
-    showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     supportingDocumentTypeList,
     ...showSecondaryProperties,
