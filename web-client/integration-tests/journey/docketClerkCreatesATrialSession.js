@@ -142,6 +142,23 @@ export const docketClerkCreatesATrialSession = (
       value: '2050',
     });
 
+    if (overrides.trialDate) {
+      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'startDateMonth',
+        value: overrides.trialDate.month,
+      });
+
+      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'startDateDay',
+        value: overrides.trialDate.day,
+      });
+
+      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'startDateYear',
+        value: overrides.trialDate.year,
+      });
+    }
+
     if (overrides.swingSession) {
       await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
         key: 'swingSession',
