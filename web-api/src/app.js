@@ -455,6 +455,7 @@ const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
+const { confirmSignUpLocalLambda } = require('./auth/confirmSignUpLocalLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
@@ -1218,11 +1219,18 @@ if (process.env.IS_LOCAL) {
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
   // This following endpoints are used by cognito-local
-  app.post('/cognito-triggers-local', cognitoTriggersLocalLambda);
+  app.post(
+    '/cognito-triggers-local',
+    lambdaWrapper(cognitoTriggersLocalLambda, {
+      isAsync: true,
+    }),
+  );
 
   app.post('/users/local', lambdaWrapper(createUserLambdaLocal));
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
+
+  app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 }
 
 exports.app = app;

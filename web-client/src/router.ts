@@ -826,6 +826,14 @@ const router = {
       return app.getSequence('gotoChangePasswordLocalSequence')();
     });
 
+    registerRoute('/confirm-signup-local?..', () => {
+      const { confirmationCode, email } = route.query();
+      return app.getSequence('confirmSignUpLocalSequence')({
+        confirmationCode,
+        userEmail: email,
+      });
+    });
+
     registerRoute(
       '/users/create-practitioner',
       ifHasAccess({ app }, () => {
