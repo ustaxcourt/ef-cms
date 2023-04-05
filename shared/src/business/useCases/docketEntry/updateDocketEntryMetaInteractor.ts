@@ -15,7 +15,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
-import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *

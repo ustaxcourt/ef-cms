@@ -606,7 +606,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .acquireLock.mockImplementation(() => {
+      .getLock.mockImplementation(() => {
         const error: any = new Error('an error has occured');
         error.code = 'ConditionalCheckFailedException';
         return Promise.reject(error);

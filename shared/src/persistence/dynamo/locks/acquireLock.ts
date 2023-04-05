@@ -2,50 +2,9 @@ import { FORMATS, formatNow } from '../../../business/utilities/DateHandler';
 import { getTableName } from '../../dynamodbClientService';
 
 /**
- * will wrap a function with logic to acquire a lock and delete a lock after finishing.
- *
- * @param {function} cb the original function to wrap
- * @param {function} getLockInfo a function which is passes the original args for getting the lock suffix
- * @param {error} onLockError the error object to throw if a lock is already in use
- * @returns {object} the item that was retrieved
+ * tries to createLock a lock from a dynamodb table
  */
-export function withLocking(
-  cb: (applicationContext: IApplicationContext, options: any) => any,
-  getLockInfo,
-  onLockError,
-) {
-  return async function (
-    applicationContext: IApplicationContext,
-    options: any,
-  ) {
-    const { identifier, prefix } = getLockInfo(options);
-
-    const currentLock = await getLock({
-      applicationContext,
-      identifier,
-      prefix,
-    });
-
-    if (currentLock) {
-      throw onLockError;
-    }
-
-    await acquireLock({ applicationContext, identifier, prefix });
-
-    const results = await cb(applicationContext, options);
-
-    await applicationContext
-      .getPersistenceGateway()
-      .removeLock({ applicationContext, identifier, prefix });
-
-    return results;
-  };
-}
-
-/**
- * tries to acquire a lock from a dynamodb table
- */
-export async function acquireLock({
+export async function createLock({
   applicationContext,
   identifier,
   prefix,
@@ -121,25 +80,21 @@ export async function getLock({
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .query({
+    .get({
       ConsistentRead: true,
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-        '#ttl': 'ttl',
+      Key: {
+        pk: `${prefix}|${identifier}`,
+        sk: 'lock',
       },
-      ExpressionAttributeValues: {
-        ':now': now,
-        ':pk': `${prefix}|${identifier}`,
-        ':sk': 'lock',
-      },
-      FilterExpression: '#ttl > :now',
-      KeyConditionExpression: '#pk = :pk and #sk = :sk',
       TableName: getTableName({
         applicationContext,
       }),
       applicationContext,
     })
     .promise();
-  return res.Items[0];
+
+  if (!res?.Item || res.Item.ttl < now) {
+    return undefined;
+  }
+  return res.Item;
 }
