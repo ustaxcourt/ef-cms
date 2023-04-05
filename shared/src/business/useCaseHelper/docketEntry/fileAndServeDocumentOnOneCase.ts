@@ -40,6 +40,8 @@ exports.fileAndServeDocumentOnOneCase = async ({
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
     );
