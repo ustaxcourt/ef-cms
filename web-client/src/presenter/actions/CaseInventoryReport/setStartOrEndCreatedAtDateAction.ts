@@ -21,6 +21,10 @@ export const setStartOrEndCreatedAtDateAction = ({
     store.merge(state.customCaseInventoryFilters, {
       [props.key]: dateWithTime,
     });
+  } else {
+    store.merge(state.customCaseInventoryFilters, {
+      [props.key]: props.value,
+    });
   }
 };
 
