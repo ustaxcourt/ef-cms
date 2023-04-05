@@ -66,14 +66,6 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
 
 `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 
-
-### esbuild
-There is a major upgrade to `esbuild` from 0.16.x to 0.17.x. The new major versions introduced breaking changes on how the `build` and `watch` commands work, which breaks reloading after changes in development environments. The major issue we ran into with upgrading was lack of documentation surrounding what the new events are called for watching for changes. Documentation for major version changes can be found [here](https://github.com/evanw/esbuild/releases/tag/v0.17.0), and in future release tags on Github, the esbuild website hasn't been updated since 0.17.x was released.
-
-### esbuild-sass-plugin
-There is a minor update to `esbuild-sass-plugin` from 2.5.0 to 2.6.0 that has a peer dependency for `esbuild@^0.17.10`. Due to esbuild being locked to 0.16.x in our project as seen in the above caveat and to prevent having to use the `--legacy-peer-deps` flag again this package is being set to accept patch updates for the time being. This can be lifted when we update esbuild or if this package were to have security vulnerabilities in the future that need to be addressed.
-
-
 ### stylelint
 There is an update available to `stylelint` but if we update that package then there are issues with installing that require us to install with the `--legacy-peer-deps` flag again. The update to stylelint is not related to a security issue so I decided not to upgrade for now while its downstream dependencies rely on outdated packages.
 
