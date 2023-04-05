@@ -178,7 +178,7 @@ SectionWorkQueueTable.Row = React.memo(
           {showFiledByColumn && (
             <td className="message-queue-row">{item.docketEntry.filedBy}</td>
           )}
-          <td className="message-queue-row">{item.caseStatus}</td>
+          <td className="message-queue-row">{item.formattedCaseStatus}</td>
           {showAssignedToColumn && (
             <td className="to message-queue-row">{item.assigneeName}</td>
           )}
