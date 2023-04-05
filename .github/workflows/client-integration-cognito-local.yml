@@ -1,4 +1,4 @@
-name: Client Integration Cognito Local
+name: Node.js Client Integration Cognito Local
 
 on:
   pull_request:
