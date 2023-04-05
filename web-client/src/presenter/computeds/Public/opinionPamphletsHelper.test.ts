@@ -23,25 +23,25 @@ describe('opinionPamphletsHelper', () => {
       opinionPamphlets: [
         {
           ...mockTCRP,
-          caseCaption: 'ABCDEFGHI',
+          caseCaption: 'ABCDEFGHI, Petitioner',
           docketEntryId: 1,
           filingDate: '2023-03-11T05:00:00.000Z',
         },
         {
           ...mockTCRP,
-          caseCaption: 'FGHI',
+          caseCaption: 'FGHI, Petitioners',
           docketEntryId: 2,
           filingDate: '2022-02-05T05:00:00.000Z',
         },
         {
           ...mockTCRP,
-          caseCaption: 'BCDEFGHI',
+          caseCaption: 'BCDEFGHI, Petitioner(s)',
           docketEntryId: 3,
           filingDate: '2023-07-05T05:00:00.000Z',
         },
         {
           ...mockTCRP,
-          caseCaption: 'EFGHI',
+          caseCaption: 'EFGHI, Tax Matters Partner, Petitioner',
           docketEntryId: 4,
           filingDate: '2022-02-05T05:00:00.000Z',
         },
@@ -59,7 +59,7 @@ describe('opinionPamphletsHelper', () => {
       '2022-02-05': [
         {
           ...mockTCRP,
-          caseCaption: 'EFGHI',
+          caseCaption: 'EFGHI, Tax Matters Partner',
           docketEntryId: 4,
           filingDateWithFullYear: '2022-02-05',
           formattedFilingDate: '02/05/22',
@@ -104,7 +104,52 @@ describe('opinionPamphletsHelper', () => {
     });
   });
 
-  it('should return a list of unique years that pamphlets were filed in in descedning order', () => {
+  it('should remove the words `Petitioner`, `Petitioners` and `Petitioner(s)` from the caseCaption of each pamphlet', () => {
+    const { pamphletsGroupedByFilingDate } = runCompute(
+      opinionPamphletsHelper,
+      {
+        state,
+      },
+    );
+    expect(pamphletsGroupedByFilingDate).toEqual({
+      '2022-02-05': [
+        {
+          ...mockTCRP,
+          caseCaption: 'EFGHI, Tax Matters Partner',
+          docketEntryId: 4,
+          filingDateWithFullYear: '2022-02-05',
+          formattedFilingDate: '02/05/22',
+        },
+        {
+          caseCaption: 'FGHI',
+          ...mockTCRP,
+          docketEntryId: 2,
+          filingDateWithFullYear: '2022-02-05',
+          formattedFilingDate: '02/05/22',
+        },
+      ],
+      '2023-03-11': [
+        {
+          ...mockTCRP,
+          caseCaption: 'ABCDEFGHI',
+          docketEntryId: 1,
+          filingDateWithFullYear: '2023-03-11',
+          formattedFilingDate: '03/11/23',
+        },
+      ],
+      '2023-07-05': [
+        {
+          ...mockTCRP,
+          caseCaption: 'BCDEFGHI',
+          docketEntryId: 3,
+          filingDateWithFullYear: '2023-07-05',
+          formattedFilingDate: '07/05/23',
+        },
+      ],
+    });
+  });
+
+  it('should return a list of unique years that pamphlets were filed in in descending order', () => {
     const { pamphletPeriods } = runCompute(opinionPamphletsHelper, {
       state,
     });
@@ -120,7 +165,7 @@ describe('opinionPamphletsHelper', () => {
 
       expect(getPamphletToDisplay('2022-02-05')).toEqual({
         ...mockTCRP,
-        caseCaption: 'EFGHI',
+        caseCaption: 'EFGHI, Tax Matters Partner',
         docketEntryId: 4,
         filingDateWithFullYear: '2022-02-05',
         formattedFilingDate: '02/05/22',
