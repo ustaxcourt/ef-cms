@@ -64,7 +64,7 @@ export const CustomCaseReport = connect(
                 checked={customCaseInventoryFilters.filingMethod === 'all'}
                 className="usa-radio__input"
                 id="petitionFilingMethod-all"
-                name="petitionFilingMethod"
+                name="filingMethod"
                 type="radio"
                 value="all"
                 onChange={e => {
@@ -89,7 +89,7 @@ export const CustomCaseReport = connect(
                 }
                 className="usa-radio__input"
                 id="petitionFilingMethod-electronic"
-                name="petitionFilingMethod"
+                name="filingMethod"
                 type="radio"
                 value="electronic"
                 onChange={e => {
@@ -112,7 +112,7 @@ export const CustomCaseReport = connect(
                 checked={customCaseInventoryFilters.filingMethod === 'paper'}
                 className="usa-radio__input"
                 id="petitionFilingMethod-paper"
-                name="petitionFilingMethod"
+                name="filingMethod"
                 type="radio"
                 value="paper"
                 onChange={e => {

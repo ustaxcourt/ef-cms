@@ -49,4 +49,22 @@ describe('setStartOrEndCreatedAtDateAction', () => {
       expectedDate,
     );
   });
+
+  describe('set filing methods', () => {
+    ['all', 'electronic', 'paper'].map(filingMethod => {
+      it(`should set customCaseInventoryFilters filing method ${filingMethod} in state`, async () => {
+        const result = await runAction(setStartOrEndCreatedAtDateAction, {
+          modules: { presenter },
+          props: {
+            key: 'filingMethod',
+            value: filingMethod,
+          },
+        });
+
+        expect(result.state.customCaseInventoryFilters.filingMethod).toEqual(
+          filingMethod,
+        );
+      });
+    });
+  });
 });
