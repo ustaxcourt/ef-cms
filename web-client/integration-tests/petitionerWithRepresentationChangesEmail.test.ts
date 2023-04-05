@@ -1,4 +1,4 @@
-import { docketClerkVerifiesQCItemNotInSectionInbox } from './journey/docketClerkVerifiesQCItemNotInSectionInbox.js';
+import { docketClerkVerifiesQCItemNotInSectionInbox } from './journey/docketClerkVerifiesQCItemNotInSectionInbox';
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';

@@ -1,5 +1,5 @@
-import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession.js';
-import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList.js';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest } from './helpers';
 
 const cerebralTest = setupTest();
