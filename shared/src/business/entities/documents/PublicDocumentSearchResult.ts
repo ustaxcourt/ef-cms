@@ -69,7 +69,7 @@ PublicDocumentSearchResult.schema = joi.object().keys({
   judge: JoiValidationConstants.STRING.optional(),
   numberOfPages: joi.number().integer().optional().allow(null),
   sealedDate: JoiValidationConstants.ISO_DATE,
-  signedJudgeName: JoiValidationConstants.STRING.optional(),
+  signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
 });
 
 joiValidationDecorator(
