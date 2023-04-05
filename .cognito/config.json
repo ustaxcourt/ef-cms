@@ -11,7 +11,7 @@
     "IssuerDomain": "http://localhost:9229"
   },
   "TriggerFunctions": {
-    "PostConfirmation": "PostConfirmation_ConfirmSignUp",
+    "PostConfirmation": "cognito-triggers-sls-dev-PostConfirmation_ConfirmSignUp",
     "PostAuthentication": "cognito-triggers-sls-dev-PostAuthentication_Authentication"
   },
   "LambdaConfig": {
@@ -19,6 +19,9 @@
   },
   "UserPoolDefaults": {
     "UsernameAttributes": [
+      "email"
+    ],
+    "AutoVerifiedAttributes": [
       "email"
     ]
   },

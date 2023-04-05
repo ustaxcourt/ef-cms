@@ -1,5 +1,4 @@
 import { ROLES } from '../../entities/EntityConstants';
-import { createUserRecords } from '../../../persistence/dynamo/users/createNewPetitionerUser';
 
 /**
  * createUserInteractorLocal
@@ -15,13 +14,17 @@ export const createUserInteractorLocal = async (
 ) => {
   const userId = applicationContext.getUniqueId();
 
-  const baseCreateUserParams = {
-    DesiredDeliveryMediums: ['EMAIL'],
-    TemporaryPassword: user.password,
+  const params = {
+    ClientId: 'bvjrggnd3co403c0aahscinne',
+    Password: user.password,
     UserAttributes: [
       {
         Name: 'email',
         Value: user.email,
+      },
+      {
+        Name: 'email_verified',
+        Value: 'True',
       },
       {
         Name: 'custom:role',
@@ -36,26 +39,8 @@ export const createUserInteractorLocal = async (
         Value: userId,
       },
     ],
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: user.email,
+    Username: userId,
   };
 
-  await applicationContext
-    .getCognito()
-    .adminCreateUser(baseCreateUserParams)
-    .promise();
-
-  delete user.password;
-
-  const newUser = await createUserRecords({
-    applicationContext,
-    newUser: {
-      ...user,
-      role: 'petitioner',
-      section: 'petitioner',
-    },
-    userId,
-  });
-
-  return newUser;
+  await applicationContext.getCognito().signUp(params).promise();
 };

@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import qs from 'qs';
 
 /**
  * creates new account locally
@@ -12,15 +13,23 @@ export const createNewAccountAction = async ({ applicationContext, get }) => {
   const { email, name, password } = get(state.form);
 
   const user = { email, name, password };
-  const newUser = await applicationContext
+  await applicationContext
     .getUseCases()
     .createUserInteractorLocal(applicationContext, {
       user,
     });
 
+  const queryString = qs.stringify(
+    { confirmationCode: '123456', email },
+    { encode: false },
+  );
+
   return {
     alertSuccess: {
-      message: `New user account created successfully for ${newUser.email}`,
+      linkText: 'Verify Email',
+      linkUrl: `/confirm-signup-local?${queryString}`,
+      message: `New user account created successfully for ${email}!
+      Please click the link below to verify your email address.`,
     },
   };
 };
