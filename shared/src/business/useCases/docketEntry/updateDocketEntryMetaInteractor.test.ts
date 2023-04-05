@@ -170,11 +170,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should acquire and remove the lock on the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .acquireLock.mockReturnValue(MOCK_LOCK);
-
-    const mockUuid = '21af52db-508a-4962-a702-fa1aba9f8a37';
-
-    applicationContext.getUniqueId.mockReturnValue(mockUuid);
+      .getLock.mockReturnValue(undefined);
 
     await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: mockDocketEntries[0],
@@ -182,20 +178,19 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().acquireLock,
+      applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      lockId: mockUuid,
-      lockName: `case|${MOCK_CASE.docketNumber}`,
-      user: expect.anything(),
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
     });
 
     expect(
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      lockId: mockUuid,
-      lockName: `case|${MOCK_CASE.docketNumber}`,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
     });
   });
 

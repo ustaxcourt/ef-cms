@@ -30,12 +30,6 @@ exports.associateIrsPractitionerToCase = async ({
     return;
   }
 
-  const lockName = `case|${docketNumber}`;
-  const lockId = await applicationContext.getUseCaseHelpers().acquireLock({
-    applicationContext,
-    lockName,
-  });
-
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -63,10 +57,5 @@ exports.associateIrsPractitionerToCase = async ({
     caseToUpdate: caseEntity,
   });
 
-  await applicationContext.getPersistenceGateway().removeLock({
-    applicationContext,
-    lockId,
-    lockName,
-  });
   return caseEntity.toRawObject();
 };
