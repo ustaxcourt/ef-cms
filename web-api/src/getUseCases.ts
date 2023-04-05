@@ -301,6 +301,9 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getOpinionPamphletsInteractor,
+} = require('../../shared/src/business/useCases/public/getOpinionPamphletsInteractor');
+const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
 const {
@@ -687,6 +690,7 @@ const useCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
+  getOpinionPamphletsInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
