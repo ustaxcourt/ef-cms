@@ -277,6 +277,7 @@ const gatewayMethods = {
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createPractitionerDocument,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -330,6 +331,8 @@ const gatewayMethods = {
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocumentByFileId,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,

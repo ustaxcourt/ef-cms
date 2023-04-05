@@ -8,6 +8,11 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 
 export const ErrorFactory = {
   getError: e => {
+    console.log(
+      '\n\n\n\n\n*********** ',
+      JSON.stringify(e),
+      ' *********** \n\n\n\n\n',
+    );
     let responseCode =
       (e.response && e.response.status) || e.status || e.statusCode;
 

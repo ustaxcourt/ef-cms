@@ -53,6 +53,11 @@ const router = {
       return app.getSequence('gotoHealthCheckSequence')();
     });
 
+    route('/opinion-pamphlets', () => {
+      setPageTitle('United States Tax Court Reports');
+      app.getSequence('gotoOpinionPamphletsSequence')();
+    });
+
     route('/', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();

@@ -67,6 +67,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     queue: 'section',
   });
 
+  // Document QC External filed document on Non-lead Case
   loginAs(cerebralTest, 'privatepractitioner@example.com');
 
   it('sets the docketNumber', () => {
