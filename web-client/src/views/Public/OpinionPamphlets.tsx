@@ -28,7 +28,7 @@ export const OpinionPamphlets = connect(
                   {opinionPamphletsHelper.yearAndFilingDateMap[period].map(
                     filingDateKey => {
                       return (
-                        <div className="grid-row grid-gap" key={filingDateKey}>
+                        <div className="grid-row" key={filingDateKey}>
                           <div className="tablet:grid-col-4">
                             <Button
                               link
