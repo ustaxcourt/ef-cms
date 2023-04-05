@@ -28,7 +28,7 @@ export const OpinionPamphlets = connect(
                   {opinionPamphletsHelper.yearAndFilingDateMap[period].map(
                     filingDateKey => {
                       return (
-                        <div className="grid-row grid-gap" key={filingDateKey}>
+                        <div className="grid-row" key={filingDateKey}>
                           <div className="tablet:grid-col-4">
                             <Button
                               link
@@ -156,7 +156,7 @@ export const OpinionPamphlets = connect(
                           </div>
                           <table
                             aria-label="opinion pamphlets"
-                            className="usa-table case-detail ustc-table responsive-table"
+                            className="usa-table case-detail ustc-table responsive-table no-blue-hover"
                             id="opinion-pamphlets-table"
                             key={filingDateKey}
                           >
