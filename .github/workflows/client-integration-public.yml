@@ -4,14 +4,14 @@ on:
   pull_request:
 
 jobs:
-  client_integration:
+  client_integration_public:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [12]
-        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        ci_node_total: [2]
+        ci_node_index: [0, 1]
     env:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
@@ -42,12 +42,12 @@ jobs:
           comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
-      - name: Web Client - Integration Tests
+      - name: Web Client - Integration Tests Public
         run: |
           mkdir -p /tmp/web-client
           npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
           ./wait-until-services.sh
-          export TESTFILES=$(node split-tests.js)
+          export TESTFILES=$(node split-tests.js -public)
           npm run test:client:integration:ci
       - name: Store Artifacts
         uses: actions/upload-artifact@v3
