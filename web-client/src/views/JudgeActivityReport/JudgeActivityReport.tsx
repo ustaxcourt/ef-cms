@@ -1,6 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -12,20 +12,21 @@ export const JudgeActivityReport = connect(
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateJudgeActivityReportFormSequence:
+      sequences.updateJudgeActivityReportFormSequence,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
     form,
     judgeActivityReportHelper,
     submitJudgeActivityReportSequence,
-    updateFormValueSequence,
+    updateJudgeActivityReportFormSequence,
     validationErrors,
   }) {
     const closedCases: JSX.Element = (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption>
+          <caption className="table-caption-serif">
             Cases Closed <span className="float-right">Total: 20</span>
           </caption>
           <thead>
@@ -37,14 +38,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(judgeActivityReportHelper.closedCases).map(
-              ([key, value]) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td className="text-center">{value}</td>
-                </tr>
-              ),
-            )}
+            {Object.entries(
+              judgeActivityReportHelper.activityReportResults.closedCases,
+            ).map(([key, value]) => (
+              <tr key={key}>
+                <td>{key}</td>
+                <td className="text-center">{value}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -53,7 +54,7 @@ export const JudgeActivityReport = connect(
     const trialSessionsHeld: JSX.Element = (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption>
+          <caption className="table-caption-serif">
             Sessions Held <span className="float-right">Total: 25</span>
           </caption>
 
@@ -64,14 +65,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(judgeActivityReportHelper.trialSessionsHeld).map(
-              ([key, value]) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value}</td>
-                </tr>
-              ),
-            )}
+            {Object.entries(
+              judgeActivityReportHelper.activityReportResults.trialSessionsHeld,
+            ).map(([key, value]) => (
+              <tr key={key}>
+                <td>{key}</td>
+                <td>{value}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -80,7 +81,7 @@ export const JudgeActivityReport = connect(
     const ordersIssued: JSX.Element = (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption>
+          <caption className="table-caption-serif">
             Orders Issued <span className="float-right">Total: 4</span>
           </caption>
           <thead>
@@ -91,13 +92,15 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.ordersIssued.map(order => (
-              <tr key={order.eventCode}>
-                <td>{order.eventCode}</td>
-                <td>{order.documentType}</td>
-                <td>{order.total}</td>
-              </tr>
-            ))}
+            {judgeActivityReportHelper.activityReportResults.ordersIssued.map(
+              order => (
+                <tr key={order.eventCode}>
+                  <td>{order.eventCode}</td>
+                  <td>{order.documentType}</td>
+                  <td>{order.total}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -106,7 +109,7 @@ export const JudgeActivityReport = connect(
     const opinionsIssued: JSX.Element = (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption>
+          <caption className="table-caption-serif">
             Opinions Issued <span className="float-right">Total: 89</span>
           </caption>
           <thead>
@@ -117,13 +120,15 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.opinionsIssued.map(opinion => (
-              <tr key={opinion.eventCode}>
-                <td>{opinion.eventCode}</td>
-                <td>{opinion.documentType}</td>
-                <td>{opinion.total}</td>
-              </tr>
-            ))}
+            {judgeActivityReportHelper.activityReportResults.opinionsIssued.map(
+              opinion => (
+                <tr key={opinion.eventCode}>
+                  <td>{opinion.eventCode}</td>
+                  <td>{opinion.documentType}</td>
+                  <td>{opinion.total}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -132,6 +137,7 @@ export const JudgeActivityReport = connect(
     return (
       <>
         <BigHeader text="Reports" />
+
         <section className="usa-section grid-container">
           <ErrorNotification />
 
@@ -141,6 +147,47 @@ export const JudgeActivityReport = connect(
 
           <div className="blue-container">
             <div className="grid-row">
+              <div className="grid-col-auto margin-x-3">
+                <DateRangePickerComponent
+                  endDateErrorText={validationErrors.endDate}
+                  endName="deadlineEnd"
+                  endPickerCls={'grid-col-6'}
+                  endValue={form.endDate}
+                  formGroupCls={'margin-bottom-0'}
+                  rangePickerCls={'grid-row '}
+                  showHint={false}
+                  showPlaceholder={true}
+                  startDateErrorText={validationErrors.startDate}
+                  startName="deadlineStart"
+                  startPickerCls={'grid-col-6'}
+                  startValue={form.endDate}
+                  onChangeEnd={e => {
+                    updateJudgeActivityReportFormSequence({
+                      key: 'endDate',
+                      value: e.target.value,
+                    });
+                  }}
+                  onChangeStart={e => {
+                    updateJudgeActivityReportFormSequence({
+                      key: 'startDate',
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="grid-col-auto display-flex flex-align-end">
+                <Button
+                  className="position-relative margin-bottom-35"
+                  onClick={() => {
+                    submitJudgeActivityReportSequence();
+                  }}
+                >
+                  Run Report
+                </Button>
+              </div>
+            </div>
+
+            {/* <div className="grid-row">
               <div className="grid-col-auto margin-x-3">
                 <DateInput
                   errorText={validationErrors.startDate}
@@ -191,20 +238,23 @@ export const JudgeActivityReport = connect(
                   Run Report
                 </Button>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
-        <section className="usa-section grid-container">
-          <div className="grid-row grid-gap">
-            <div className="grid-col-6">{closedCases}</div>
-            <div className="grid-col-6">{trialSessionsHeld}</div>
-          </div>
 
-          <div className="grid-row grid-gap">
-            <div className="grid-col-6">{ordersIssued}</div>
-            <div className="grid-col-6">{opinionsIssued}</div>
-          </div>
-        </section>
+        {judgeActivityReportHelper.activityReportResults && (
+          <section className="usa-section grid-container">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">{closedCases}</div>
+              <div className="grid-col-6">{trialSessionsHeld}</div>
+            </div>
+
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">{ordersIssued}</div>
+              <div className="grid-col-6">{opinionsIssued}</div>
+            </div>
+          </section>
+        )}
       </>
     );
   },

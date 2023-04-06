@@ -447,6 +447,7 @@ import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormVal
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
+import { updateJudgeActivityReportFormSequence } from './sequences/updateJudgeActivityReportFormSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -959,6 +960,7 @@ const sequences = {
   updateFormValueAndSecondaryContactInfoSequence,
   updateFormValueSequence,
   updateHearingNoteSequence,
+  updateJudgeActivityReportFormSequence,
   updateJudgesCaseNoteOnCaseDetailSequence,
   updateMessageModalAttachmentsSequence,
   updateModalFormValueSequence,

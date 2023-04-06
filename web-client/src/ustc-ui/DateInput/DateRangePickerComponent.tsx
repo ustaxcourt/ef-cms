@@ -11,11 +11,13 @@ export const DateRangePickerComponent = ({
   endName,
   endPickerCls,
   endValue,
+  formGroupCls,
   onChangeEnd,
   onChangeStart,
   pickerSpacer,
   rangePickerCls,
   showHint,
+  showPlaceholder,
   startDateErrorText,
   startDateOptional,
   startLabel,
@@ -95,7 +97,7 @@ export const DateRangePickerComponent = ({
   const displayHint = showHint !== undefined ? showHint : true;
 
   return (
-    <FormGroup formGroupRef={dateRangePickerRef}>
+    <FormGroup className={formGroupCls} formGroupRef={dateRangePickerRef}>
       <div className={classNames('usa-date-range-picker', rangePickerCls)}>
         <div className={startPickerCls}>
           <FormGroup
@@ -123,6 +125,7 @@ export const DateRangePickerComponent = ({
                 className="usa-input"
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
+                placeholder={showPlaceholder ? 'MM/DD/YYYY' : undefined}
                 ref={startDateInputRef}
                 type="text"
               />
@@ -156,6 +159,7 @@ export const DateRangePickerComponent = ({
                 className="usa-input"
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
+                placeholder={showPlaceholder ? 'MM/DD/YYYY' : undefined}
                 ref={endDateInputRef}
                 type="text"
               />
