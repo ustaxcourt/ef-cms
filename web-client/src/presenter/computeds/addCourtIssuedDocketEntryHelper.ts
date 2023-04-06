@@ -58,6 +58,9 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const showAttachmentAndServiceFields =
     !eventCodesNotRequiringAttachmentsAndService.includes(selectedEventCode);
 
+  const showOpinionStartingPage =
+    eventCodesNotRequiringAttachmentsAndService.includes(selectedEventCode);
+
   const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
@@ -76,6 +79,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     serviceParties,
     showAttachmentAndServiceFields,
     showDocumentTypeDropdown,
+    showOpinionStartingPage,
     showReceivedDate,
     showSaveAndServeButton,
     showServiceStamp,
