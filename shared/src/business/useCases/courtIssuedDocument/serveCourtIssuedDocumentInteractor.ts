@@ -220,7 +220,7 @@ export const serveCourtIssuedDocument = async (
 
 export const serveCourtIssuedDocumentInteractor = withLocking(
   serveCourtIssuedDocument,
-  ({ docketNumbers, subjectCaseDocketNumber }) => ({
+  ({ docketNumbers = [], subjectCaseDocketNumber }) => ({
     identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
     prefix: 'case',
     ttl: 15 * 60,

@@ -183,6 +183,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       identifier: MOCK_CASE.docketNumber,
       prefix: 'case',
+      ttl: 30,
     });
 
     expect(

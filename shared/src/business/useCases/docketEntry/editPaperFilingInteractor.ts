@@ -499,13 +499,10 @@ const getDocketEntryToEdit = async ({
 
 export const editPaperFilingInteractor = withLocking(
   editPaperFiling,
-  ({ request }) => ({
+  ({ consolidatedGroupDocketNumbers = [], documentMetadata }) => ({
     identifier: [
       ...new Set(
-        ...[
-          request.documentMetadata.docketNumber,
-          ...request.consolidatedGroupDocketNumbers,
-        ],
+        ...[documentMetadata.docketNumber, ...consolidatedGroupDocketNumbers],
       ),
     ],
     prefix: 'case',
