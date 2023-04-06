@@ -9,8 +9,14 @@ const {
   ORDER_TYPES,
   PETITIONS_SECTION,
 } = require('../../entities/EntityConstants');
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
+import { clerkOfCourtUser } from '../../../test/mockUsers';
 const { judgeUser } = require('../../../test/mockUsers');
 const { MOCK_CASE } = require('../../../test/mockCase');
+import { MOCK_LOCK } from '../../../test/mockLock';
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
@@ -29,7 +35,9 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     stampedDocketEntryId: mockStampedDocketEntryId,
   };
 
-  beforeAll(() => {
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -133,5 +141,52 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
         },
       ],
     });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      addDraftStampOrderDocketEntryInteractor(applicationContext, args),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
+  });
+
+  it('should throw an Unauthorized error if the user is not authorized', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({});
+
+    await expect(
+      addDraftStampOrderDocketEntryInteractor(applicationContext, args),
+    ).rejects.toThrow(UnauthorizedError);
   });
 });

@@ -7,6 +7,15 @@ const { DocketEntry } = require('../../entities/DocketEntry');
 const { Message } = require('../../entities/Message');
 const { orderBy } = require('lodash');
 const { Stamp } = require('../../entities/Stamp');
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -20,7 +29,7 @@ const { Stamp } = require('../../entities/Stamp');
  * @param {string} providers.stampedDocketEntryId the id of the stamped document
  * @param {string} providers.stampData the stampData from the form
  */
-exports.addDraftStampOrderDocketEntryInteractor = async (
+export const addDraftStampOrderDocketEntry = async (
   applicationContext,
   {
     docketNumber,
@@ -32,6 +41,10 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
   },
 ) => {
   const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.STAMP_MOTION)) {
+    throw new UnauthorizedError('Unauthorized to update docket entry');
+  }
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -110,3 +123,12 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     caseToUpdate: caseEntity,
   });
 };
+
+export const addDraftStampOrderDocketEntryInteractor = withLocking(
+  addDraftStampOrderDocketEntry,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
