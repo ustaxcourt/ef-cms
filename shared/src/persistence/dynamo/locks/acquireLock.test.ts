@@ -1,17 +1,6 @@
-import { FORMATS, formatNow } from '../../../business/utilities/DateHandler';
-import { MOCK_LOCK } from '../../../test/mockLock';
+import { MOCK_ACTIVE_LOCK, MOCK_EXPIRED_LOCK } from '../../../test/mockLock';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { createLock, getLock, removeLock } from './acquireLock';
-
-const mockCurrentLock = {
-  ...MOCK_LOCK,
-  ttl: Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS)) + 10,
-};
-
-const mockExpiredLock = {
-  ...MOCK_LOCK,
-  ttl: Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS)) - 10,
-};
 
 describe('createLock', () => {
   it('should persist a record with the specified lockName and lockId', async () => {
@@ -38,7 +27,7 @@ describe('getLock', () => {
     applicationContext.getDocumentClient().get.mockReturnValue({
       promise: () =>
         Promise.resolve({
-          Item: mockCurrentLock,
+          Item: MOCK_ACTIVE_LOCK,
         }),
     });
 
@@ -47,7 +36,7 @@ describe('getLock', () => {
       identifier: '123-45',
       prefix: 'case',
     });
-    expect(result).toMatchObject(mockCurrentLock);
+    expect(result).toMatchObject(MOCK_ACTIVE_LOCK);
   });
   it('returns undefined from persistence if it did not find a lock', async () => {
     applicationContext.getDocumentClient().get.mockReturnValue({
@@ -66,7 +55,7 @@ describe('getLock', () => {
     applicationContext.getDocumentClient().get.mockReturnValue({
       promise: () =>
         Promise.resolve({
-          Item: mockExpiredLock,
+          Item: MOCK_EXPIRED_LOCK,
         }),
     });
 

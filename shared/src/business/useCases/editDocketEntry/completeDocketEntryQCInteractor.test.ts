@@ -5,6 +5,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_ACTIVE_LOCK } from '../../../test/mockLock';
 import { MOCK_CASE } from '../../../test/mockCase';
 import {
   applicationContext,
@@ -606,11 +607,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockImplementation(() => {
-        const error: any = new Error('an error has occured');
-        error.code = 'ConditionalCheckFailedException';
-        return Promise.reject(error);
-      });
+      .getLock.mockReturnValue(MOCK_ACTIVE_LOCK);
 
     await expect(() =>
       completeDocketEntryQCInteractor(applicationContext, {
