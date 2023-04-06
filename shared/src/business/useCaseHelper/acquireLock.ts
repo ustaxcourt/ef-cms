@@ -5,10 +5,23 @@ export const acquireLock = async ({
   prefix,
 }: {
   applicationContext: IApplicationContext;
-  identifier: string;
+  identifier: string | string[];
   prefix: string;
   onLockError: Error;
 }) => {
+  if (typeof identifier === 'object') {
+    return Promise.all(
+      identifier.map(entityIdentifier =>
+        acquireLock({
+          applicationContext,
+          identifier: entityIdentifier,
+          onLockError,
+          prefix,
+        }),
+      ),
+    );
+  }
+
   const currentLock = await applicationContext
     .getPersistenceGateway()
     .getLock({ applicationContext, identifier, prefix });
@@ -17,13 +30,37 @@ export const acquireLock = async ({
     throw onLockError;
   }
 
-  const lockId = await applicationContext.getUniqueId();
   await applicationContext.getPersistenceGateway().createLock({
     applicationContext,
     identifier,
     prefix,
   });
-  return lockId;
+};
+
+export const removeLock = ({
+  applicationContext,
+  identifier,
+  prefix,
+}: {
+  applicationContext: IApplicationContext;
+  identifier: string | string[];
+  prefix: string;
+}) => {
+  if (typeof identifier === 'object') {
+    return Promise.all(
+      identifier.map(entityIdentifier =>
+        removeLock({
+          applicationContext,
+          identifier: entityIdentifier,
+          prefix,
+        }),
+      ),
+    );
+  }
+
+  return applicationContext
+    .getPersistenceGateway()
+    .removeLock({ applicationContext, identifier, prefix });
 };
 
 /**
@@ -54,9 +91,11 @@ export function withLocking(
 
     const results = await cb(applicationContext, options);
 
-    await applicationContext
-      .getPersistenceGateway()
-      .removeLock({ applicationContext, identifier, prefix });
+    await removeLock({
+      applicationContext,
+      identifier,
+      prefix,
+    });
 
     return results;
   };
