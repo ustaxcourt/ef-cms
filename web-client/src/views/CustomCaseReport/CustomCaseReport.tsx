@@ -16,15 +16,15 @@ import classNames from 'classnames';
 export const CustomCaseReport = connect(
   {
     customCaseInventoryFilters: state.customCaseInventoryFilters,
-    // customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
+    customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence:
       sequences.getCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence:
       sequences.setCustomCaseInventoryReportFiltersSequence,
   },
   function CustomCaseReport({
-    // customCaseInventoryReportHelper,
     customCaseInventoryFilters,
+    customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence,
   }) {
@@ -242,10 +242,68 @@ export const CustomCaseReport = connect(
           >
             Run Report
           </Button>
+          <ReportTable
+            customCaseInventoryReportData={
+              customCaseInventoryReportHelper.customCaseInventoryReportData
+            }
+          />
         </section>
       </>
     );
   },
 );
+
+const ReportTable = ({ customCaseInventoryReportData }) => {
+  return (
+    <table
+      aria-label="case inventory record"
+      className="usa-table case-detail ustc-table responsive-table"
+      id="docket-record-table"
+    >
+      <thead>
+        <tr>
+          <th>Docket No.</th>
+          <th>Date Created</th>
+          <th>Case Title</th>
+          <th>Case Status</th>
+          <th>Case Type</th>
+          <th>Judge</th>
+          <th>Request Place of Trial</th>
+          <th>High Priority for calendaring</th>
+        </tr>
+      </thead>
+      <tbody>
+        {customCaseInventoryReportData.map(entry => {
+          <tr className="pending-item-row">
+            <td>{entry.docketNumber}</td>
+            {/* <td>
+              <span className="no-wrap">{entry.createdAtFormatted}</span>
+            </td>
+            <td>
+              <FilingsAndProceedings arrayIndex={entry.index} entry={entry} />
+            </td>
+            <td>{entry.filedBy}</td>
+            <td>
+              {caseDetailHelper.hasTrackedItemsPermission && (
+                <Button
+                  link
+                  className="padding-0 no-wrap"
+                  icon="trash"
+                  onClick={() =>
+                    openConfirmRemoveCaseDetailPendingItemModalSequence({
+                      docketEntryId: entry.docketEntryId,
+                    })
+                  }
+                >
+                  Remove
+                </Button>
+              )}
+            </td> */}
+          </tr>;
+        })}
+      </tbody>
+    </table>
+  );
+};
 
 CustomCaseReport.displayName = 'CustomCaseReport';

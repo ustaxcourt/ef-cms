@@ -30,6 +30,7 @@ import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelp
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
+import { customCaseInventoryReportHelper } from './computeds/customCaseInventoryReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -152,6 +153,7 @@ const helpers = {
   createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
+  customCaseInventoryReportHelper,
   dashboardExternalHelper,
   docketEntryQcHelper,
   docketRecordHelper,
