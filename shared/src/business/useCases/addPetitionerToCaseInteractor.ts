@@ -5,7 +5,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used to add a petitioner to a case
@@ -16,7 +20,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case data
  */
-export const addPetitionerToCaseInteractor = async (
+export const addPetitionerToCase = async (
   applicationContext: IApplicationContext,
   {
     caseCaption,
@@ -62,3 +66,12 @@ export const addPetitionerToCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const addPetitionerToCaseInteractor = withLocking(
+  addPetitionerToCase,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
