@@ -3,9 +3,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -19,7 +23,7 @@ import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAsso
  * the secondary contact on the case, false otherwise
  * @returns {Promise<*>} the promise of the case association request
  */
-export const submitCaseAssociationRequestInteractor = async (
+export const submitCaseAssociationRequest = async (
   applicationContext: IApplicationContext,
   { docketNumber, filers }: { docketNumber: string; filers: string[] },
 ) => {
@@ -54,3 +58,12 @@ export const submitCaseAssociationRequestInteractor = async (
     });
   }
 };
+
+export const submitCaseAssociationRequestInteractor = withLocking(
+  submitCaseAssociationRequest,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
