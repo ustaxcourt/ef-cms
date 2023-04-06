@@ -31,6 +31,7 @@ describe('advancedDocumentSearch', () => {
       'isStricken',
       'judge',
       'numberOfPages',
+      'pageNumber',
       'petitioners',
       'privatePractitioners',
       'sealedDate',
