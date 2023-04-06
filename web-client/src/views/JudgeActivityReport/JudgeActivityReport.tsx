@@ -186,59 +186,6 @@ export const JudgeActivityReport = connect(
                 </Button>
               </div>
             </div>
-
-            {/* <div className="grid-row">
-              <div className="grid-col-auto margin-x-3">
-                <DateInput
-                  errorText={validationErrors.startDate}
-                  id="activity-start-date"
-                  label="Start date"
-                  names={{
-                    day: 'startDay',
-                    month: 'startMonth',
-                    year: 'startYear',
-                  }}
-                  placeholder={'MM/DD/YYYY'}
-                  showDateHint={false}
-                  values={{
-                    day: form.startDay,
-                    month: form.startMonth,
-                    year: form.startYear,
-                  }}
-                  onChange={updateFormValueSequence}
-                />
-              </div>
-              <div className="grid-col-auto margin-x-3">
-                <DateInput
-                  errorText={validationErrors.endDate}
-                  id="activity-end-date"
-                  label="End date"
-                  names={{
-                    day: 'endDay',
-                    month: 'endMonth',
-                    year: 'endYear',
-                  }}
-                  placeholder={'MM/DD/YYYY'}
-                  showDateHint={false}
-                  values={{
-                    day: form.endDay,
-                    month: form.endMonth,
-                    year: form.endYear,
-                  }}
-                  onChange={updateFormValueSequence}
-                />
-              </div>
-              <div className="grid-col-auto display-flex flex-align-end">
-                <Button
-                  className="position-relative margin-bottom-35"
-                  onClick={() => {
-                    submitJudgeActivityReportSequence();
-                  }}
-                >
-                  Run Report
-                </Button>
-              </div>
-            </div> */}
           </div>
         </section>
 
