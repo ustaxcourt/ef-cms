@@ -156,7 +156,7 @@ export const OpinionPamphlets = connect(
                           </div>
                           <table
                             aria-label="opinion pamphlets"
-                            className="usa-table case-detail ustc-table responsive-table no-blue-hover"
+                            className="usa-table case-detail ustc-table responsive-table"
                             id="opinion-pamphlets-table"
                             key={filingDateKey}
                           >
@@ -172,15 +172,14 @@ export const OpinionPamphlets = connect(
                                 filingDateKey
                               ].map(pamphlet => {
                                 return (
-                                  <tr key={pamphlet.docketEntryId}>
-                                    <td className="width-card-lg">
-                                      {pamphlet.docketNumber}
-                                    </td>
+                                  <tr
+                                    className="no-blue-hover"
+                                    key={pamphlet.docketEntryId}
+                                  >
+                                    <td>{pamphlet.docketNumber}</td>
                                     <td>{pamphlet.caseCaption}</td>
                                     {/* TODO: update this property with work done in 9967 */}
-                                    <td className="width-15 text-right">
-                                      {pamphlet.pageCount}
-                                    </td>
+                                    <td>{pamphlet.pageCount}</td>
                                   </tr>
                                 );
                               })}

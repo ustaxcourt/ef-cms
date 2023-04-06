@@ -1,4 +1,4 @@
-import { isEmpty, orderBy, uniq } from 'lodash';
+import { cloneDeep, isEmpty, orderBy, uniq } from 'lodash';
 import { state } from 'cerebral';
 
 const sortCasesByCaseCaption = pamphletsGroupedByFilingDate => {
@@ -46,7 +46,7 @@ const groupPamphletsByFilingDate = ({
 };
 
 export const opinionPamphletsHelper = (get, applicationContext) => {
-  const opinionPamphlets: any = get(state.opinionPamphlets);
+  const opinionPamphlets: any = cloneDeep(get(state.opinionPamphlets));
 
   const pamphletsGroupedByFilingDate = groupPamphletsByFilingDate({
     applicationContext,
