@@ -70,6 +70,7 @@ export class DocketEntry extends JoiValidationEntity {
   public otherFilingParty?: string;
   public partyIrsPractitioner?: string;
   public processingStatus: string;
+  public pageNumber?: string;
   public receivedAt: string;
   public relationship?: string;
   public scenario?: string;
@@ -181,6 +182,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.otherIteration = rawDocketEntry.otherIteration;
     this.otherFilingParty = rawDocketEntry.otherFilingParty;
     this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
+    this.pageNumber = rawDocketEntry.pageNumber;
     this.processingStatus = rawDocketEntry.processingStatus || 'pending';
     this.receivedAt = createISODateAtStartOfDayEST(rawDocketEntry.receivedAt);
     this.relationship = rawDocketEntry.relationship;

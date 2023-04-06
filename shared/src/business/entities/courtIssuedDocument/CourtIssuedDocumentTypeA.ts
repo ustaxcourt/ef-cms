@@ -14,6 +14,7 @@ const {
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
+const { OPINION_PAMPHLET_EVENT_CODE } = require('../EntityConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
@@ -26,6 +27,7 @@ CourtIssuedDocumentTypeA.prototype.init = function init(rawProps) {
   this.freeText = rawProps.freeText;
   this.isLegacy = rawProps.isLegacy;
   this.serviceStamp = rawProps.serviceStamp;
+  this.pageNumber = rawProps.pageNumber;
 };
 
 CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
@@ -38,6 +40,11 @@ CourtIssuedDocumentTypeA.schema = {
     is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
+  }),
+  pageNumber: joi.when('eventCode', {
+    is: joi.valid(OPINION_PAMPHLET_EVENT_CODE),
+    otherwise: joi.forbidden(),
+    then: joi.number().min(0).max(9999).required(),
   }),
   serviceStamp: JoiValidationConstants.STRING.valid(
     ...SERVICE_STAMP_OPTIONS,
