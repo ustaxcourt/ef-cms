@@ -11,21 +11,30 @@ const sortCasesByCaseCaption = pamphletsGroupedByFilingDate => {
   });
 };
 
+const formatPamphletsForDisplay = (pamphlet, applicationContext) => {
+  pamphlet.filingDateWithFullYear = applicationContext
+    .getUtilities()
+    .formatDateString(pamphlet.filingDate, 'YYYYMMDD');
+
+  pamphlet.formattedFilingDate = applicationContext
+    .getUtilities()
+    .formatDateString(pamphlet.filingDate, 'MMDDYY');
+
+  delete pamphlet.filingDate;
+
+  let petitionerWordMatch =
+    /,?\s*Petitioner\(s\)?|,\s*Petitioners?|,\s*Petitioner\b/gi;
+
+  pamphlet.caseCaption = pamphlet.caseCaption.replace(petitionerWordMatch, '');
+};
+
 const groupPamphletsByFilingDate = ({
   applicationContext,
   opinionPamphlets,
 }) => {
   let pamphletGroups = {};
   opinionPamphlets.forEach(pamphlet => {
-    pamphlet.filingDateWithFullYear = applicationContext
-      .getUtilities()
-      .formatDateString(pamphlet.filingDate, 'YYYYMMDD');
-
-    pamphlet.formattedFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(pamphlet.filingDate, 'MMDDYY');
-
-    delete pamphlet.filingDate;
+    formatPamphletsForDisplay(pamphlet, applicationContext);
 
     if (isEmpty(pamphletGroups[pamphlet.filingDateWithFullYear])) {
       pamphletGroups[pamphlet.filingDateWithFullYear] = [pamphlet];

@@ -1,3 +1,4 @@
+import { TDynamoRecord } from './dynamo/dynamoTypes';
 import { chunk, isEmpty } from 'lodash';
 
 /**
