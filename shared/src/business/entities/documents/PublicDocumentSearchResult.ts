@@ -71,8 +71,7 @@ PublicDocumentSearchResult.schema = joi.object().keys({
   judge: JoiValidationConstants.STRING.optional(),
   numberOfPages: joi.number().integer().optional().allow(null),
   pageNumber: joi.when('eventCode', {
-    is: joi.valid(OPINION_PAMPHLET_EVENT_CODE),
-    otherwise: joi.forbidden(),
+    is: joi.exist().valid(OPINION_PAMPHLET_EVENT_CODE),
     then: joi.number().integer().min(0).max(9999).required(),
   }),
   sealedDate: JoiValidationConstants.ISO_DATE,
