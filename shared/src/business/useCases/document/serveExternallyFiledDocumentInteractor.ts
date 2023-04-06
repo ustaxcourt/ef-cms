@@ -5,12 +5,17 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { addCoverToPdf } from '../addCoverToPdf';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -22,7 +27,7 @@ import { addCoverToPdf } from '../addCoverToPdf';
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  */
-export const serveExternallyFiledDocumentInteractor = async (
+export const serveExternallyFiledDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -221,3 +226,12 @@ export const serveExternallyFiledDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const serveExternallyFiledDocumentInteractor = withLocking(
+  serveExternallyFiledDocument,
+  ({ docketNumbers, subjectCaseDocketNumber }) => ({
+    identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('One of the cases are currently being updated'),
+);

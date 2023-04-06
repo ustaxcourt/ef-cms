@@ -1,11 +1,16 @@
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -24,7 +29,7 @@ const { omit } = require('lodash');
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  * @returns {Object} the URL of the document that was served
  */
-export const fileAndServeCourtIssuedDocumentInteractor = async (
+export const fileAndServeCourtIssuedDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -250,3 +255,12 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
+  fileAndServeCourtIssuedDocument,
+  ({ docketNumbers, subjectCaseDocketNumber }) => ({
+    identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('One of the cases are currently being updated'),
+);

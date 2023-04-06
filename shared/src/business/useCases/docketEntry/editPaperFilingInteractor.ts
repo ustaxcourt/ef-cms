@@ -4,12 +4,17 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { cloneDeep } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -25,7 +30,7 @@ interface IEditPaperFilingRequest {
  * @param {IEditPaperFilingRequest} request the request data
  * @returns {object} The paper service PDF url
  */
-export const editPaperFilingInteractor = async (
+export const editPaperFiling = async (
   applicationContext: IApplicationContext,
   request: IEditPaperFilingRequest,
 ) => {
@@ -491,3 +496,19 @@ const getDocketEntryToEdit = async ({
 
   return { caseEntity, docketEntryEntity };
 };
+
+export const editPaperFilingInteractor = withLocking(
+  editPaperFiling,
+  ({ request }) => ({
+    identifier: [
+      ...new Set(
+        ...[
+          request.documentMetadata.docketNumber,
+          ...request.consolidatedGroupDocketNumbers,
+        ],
+      ),
+    ],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('One of the cases are currently being updated'),
+);
