@@ -9,7 +9,7 @@ import {
   UnauthorizedError,
 } from '../../errors/errors';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
-import { withLocking } from '../../persistence/dynamo/locks/acquireLock';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * updateCaseContextInteractor
