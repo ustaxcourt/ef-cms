@@ -44,7 +44,7 @@ CourtIssuedDocumentTypeA.schema = {
   pageNumber: joi.when('eventCode', {
     is: joi.valid(OPINION_PAMPHLET_EVENT_CODE),
     otherwise: joi.forbidden(),
-    then: joi.number().min(0).max(9999).required(),
+    then: joi.number().integer().min(0).max(9999).required(),
   }),
   serviceStamp: JoiValidationConstants.STRING.valid(
     ...SERVICE_STAMP_OPTIONS,

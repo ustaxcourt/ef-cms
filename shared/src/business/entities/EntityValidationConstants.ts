@@ -246,7 +246,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .when('eventCode', {
       is: joi.exist().valid(OPINION_PAMPHLET_EVENT_CODE),
       otherwise: joi.forbidden(),
-      then: joi.number().min(0).max(9999).required(),
+      then: joi.number().integer().min(0).max(9999).required(),
     })
     .description(
       'The page on which an opinion appears in the opinion pamphlet.',
