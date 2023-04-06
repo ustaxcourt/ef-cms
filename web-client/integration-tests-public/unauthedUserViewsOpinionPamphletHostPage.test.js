@@ -4,6 +4,7 @@ import { docketClerkCreatesAnOpinion } from '../integration-tests/journey/docket
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
@@ -51,6 +52,7 @@ describe('Unauthed user views opinion pamphlets host page', () => {
   docketClerkAddsOpiniontoDocketEntry(testClient, 0, formFieldValues);
 
   it('unauthed user views opinion pamphlets host page', async () => {
+    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoOpinionPamphletsSequence', {});
 
     expect(cerebralTest.getState('currentPage')).toEqual('OpinionPamphlets');
