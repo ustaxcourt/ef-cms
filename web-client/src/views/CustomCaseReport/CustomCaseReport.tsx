@@ -50,14 +50,12 @@ export const CustomCaseReport = connect(
               startValue=""
               onChangeEnd={e => {
                 setCustomCaseInventoryReportFiltersSequence({
-                  key: 'createEndDate',
-                  value: e.target.value,
+                  createEndDate: e.target.value,
                 });
               }}
               onChangeStart={e => {
                 setCustomCaseInventoryReportFiltersSequence({
-                  key: 'createStartDate',
-                  value: e.target.value,
+                  createStartDate: e.target.value,
                 });
               }}
             />
@@ -272,36 +270,25 @@ const ReportTable = ({ customCaseInventoryReportData }) => {
           <th>High Priority for calendaring</th>
         </tr>
       </thead>
-      <tbody>
-        {customCaseInventoryReportData.map(entry => {
-          <tr className="pending-item-row">
-            <td>{entry.docketNumber}</td>
-            {/* <td>
-              <span className="no-wrap">{entry.createdAtFormatted}</span>
-            </td>
-            <td>
-              <FilingsAndProceedings arrayIndex={entry.index} entry={entry} />
-            </td>
-            <td>{entry.filedBy}</td>
-            <td>
-              {caseDetailHelper.hasTrackedItemsPermission && (
-                <Button
-                  link
-                  className="padding-0 no-wrap"
-                  icon="trash"
-                  onClick={() =>
-                    openConfirmRemoveCaseDetailPendingItemModalSequence({
-                      docketEntryId: entry.docketEntryId,
-                    })
-                  }
-                >
-                  Remove
-                </Button>
-              )}
-            </td> */}
-          </tr>;
-        })}
-      </tbody>
+      {customCaseInventoryReportData &&
+        customCaseInventoryReportData.foundCases && (
+          <tbody>
+            {customCaseInventoryReportData.foundCases.map(entry => {
+              return (
+                <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
+                  <td>{entry.docketNumber}</td>
+                  <td>{entry.createdAt}</td>
+                  <td>TITLE GOES HERE</td>
+                  <td>{entry.status}</td>
+                  <td>{entry.caseType}</td>
+                  <td>{entry.associatedJudge}</td>
+                  <td>{entry.preferredTrialCity}</td>
+                  <td>CALCULATION FOR CALENDARING</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        )}
     </table>
   );
 };
