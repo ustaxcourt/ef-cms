@@ -6,6 +6,7 @@ const {
 const {
   DOCUMENT_TYPES_REQUIRING_DESCRIPTION,
   GENERIC_ORDER_DOCUMENT_TYPE,
+  REPORT_PAMPHLET_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
@@ -14,7 +15,6 @@ const {
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { OPINION_PAMPHLET_EVENT_CODE } = require('../EntityConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
@@ -41,8 +41,8 @@ CourtIssuedDocumentTypeA.schema = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  pageNumber: joi.when('eventCode', {
-    is: joi.valid(OPINION_PAMPHLET_EVENT_CODE),
+  pageNumber: joi.when('documentType', {
+    is: joi.exist().valid(REPORT_PAMPHLET_DOCUMENT_TYPE),
     otherwise: joi.forbidden(),
     then: joi.number().integer().min(0).max(9999).required(),
   }),
