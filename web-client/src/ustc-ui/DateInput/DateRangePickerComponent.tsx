@@ -14,7 +14,6 @@ export const DateRangePickerComponent = ({
   formGroupCls,
   onChangeEnd,
   onChangeStart,
-  pickerSpacer,
   rangePickerCls,
   showHint,
   showPlaceholder,
@@ -93,7 +92,6 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  const Spacer = pickerSpacer;
   const displayHint = showHint !== undefined ? showHint : true;
 
   return (
@@ -132,8 +130,6 @@ export const DateRangePickerComponent = ({
             </div>
           </FormGroup>
         </div>
-
-        {Spacer && <Spacer />}
 
         <div className={endPickerCls}>
           <FormGroup
