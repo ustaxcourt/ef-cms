@@ -177,6 +177,7 @@ import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForU
 import {
   getChambersSections,
   getChambersSectionsLabels,
+  getJudgesChambers,
 } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { getChiefJudgeNameForSigningInteractor } from '../../shared/src/proxies/getChiefJudgeNameForSigningProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
@@ -751,6 +752,7 @@ const applicationContext = {
       getFormattedPartiesNameAndTitle,
       getFormattedTrialSessionDetails,
       getJudgeLastName,
+      getJudgesChambers,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,
