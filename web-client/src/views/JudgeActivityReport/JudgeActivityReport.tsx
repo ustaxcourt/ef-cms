@@ -151,6 +151,8 @@ export const JudgeActivityReport = connect(
                     month: 'startMonth',
                     year: 'startYear',
                   }}
+                  placeholder={'MM/DD/YYYY'}
+                  showDateHint={false}
                   values={{
                     day: form.startDay,
                     month: form.startMonth,
@@ -169,6 +171,8 @@ export const JudgeActivityReport = connect(
                     month: 'endMonth',
                     year: 'endYear',
                   }}
+                  placeholder={'MM/DD/YYYY'}
+                  showDateHint={false}
                   values={{
                     day: form.endDay,
                     month: form.endMonth,
