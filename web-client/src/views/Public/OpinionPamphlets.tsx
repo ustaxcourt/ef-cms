@@ -89,9 +89,8 @@ export const OpinionPamphlets = connect(
                                       {pamphlet.docketNumber}
                                     </td>
                                     <td>{pamphlet.caseCaption}</td>
-                                    {/* TODO: update this property with work done in 9967 */}
                                     <td className="width-15 text-right">
-                                      {pamphlet.pageCount}
+                                      {pamphlet.pageNumber}
                                     </td>
                                   </tr>
                                 );
@@ -177,9 +176,8 @@ export const OpinionPamphlets = connect(
                                       {pamphlet.docketNumber}
                                     </td>
                                     <td>{pamphlet.caseCaption}</td>
-                                    {/* TODO: update this property with work done in 9967 */}
                                     <td className="width-15 text-right">
-                                      {pamphlet.pageCount}
+                                      {pamphlet.pageNumber}
                                     </td>
                                   </tr>
                                 );
