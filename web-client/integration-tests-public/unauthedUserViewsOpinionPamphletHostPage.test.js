@@ -36,6 +36,7 @@ describe('Unauthed user views opinion pamphlets host page', () => {
     filingDateMonth: '01',
     filingDateYear: '2023',
     freeText: 'Pamphlet filed on 01/01/2023',
+    pageNumber: 78,
     scenario: 'Type A',
   };
 
