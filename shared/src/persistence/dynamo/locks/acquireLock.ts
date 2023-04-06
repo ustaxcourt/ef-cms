@@ -8,14 +8,15 @@ export async function createLock({
   applicationContext,
   identifier,
   prefix,
+  ttl = 30,
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
   prefix: string;
+  ttl?: number;
 }) {
   const now = formatNow();
   const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
-  const ttl = nowUnix + 30;
 
   await applicationContext
     .getDocumentClient({
@@ -26,7 +27,7 @@ export async function createLock({
         pk: `${prefix}|${identifier}`,
         sk: 'lock',
         timestamp: now,
-        ttl,
+        ttl: ttl + nowUnix,
       },
       TableName: getTableName({
         applicationContext,
