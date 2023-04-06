@@ -30,6 +30,9 @@ export const acquireLock = async ({
     .getLock({ applicationContext, identifier, prefix });
 
   if (currentLock) {
+    applicationContext.logger.warn('Entity is currently locked', {
+      currentLock,
+    });
     throw onLockError;
   }
 
