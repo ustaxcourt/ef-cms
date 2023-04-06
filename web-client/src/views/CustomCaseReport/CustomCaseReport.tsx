@@ -240,6 +240,14 @@ export const CustomCaseReport = connect(
           >
             Run Report
           </Button>
+          <div className="text-right">
+            {`Count: ${
+              (customCaseInventoryReportHelper.customCaseInventoryReportData &&
+                customCaseInventoryReportHelper.customCaseInventoryReportData
+                  .totalCount) ||
+              0
+            }`}
+          </div>
           <ReportTable
             customCaseInventoryReportData={
               customCaseInventoryReportHelper.customCaseInventoryReportData
