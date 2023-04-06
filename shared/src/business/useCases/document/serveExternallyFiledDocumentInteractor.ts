@@ -229,7 +229,7 @@ export const serveExternallyFiledDocument = async (
 
 export const serveExternallyFiledDocumentInteractor = withLocking(
   serveExternallyFiledDocument,
-  ({ docketNumbers, subjectCaseDocketNumber }) => ({
+  ({ docketNumbers = [], subjectCaseDocketNumber }) => ({
     identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
     prefix: 'case',
   }),

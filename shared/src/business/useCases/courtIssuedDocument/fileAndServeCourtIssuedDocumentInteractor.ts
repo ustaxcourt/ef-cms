@@ -258,7 +258,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
 export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
   fileAndServeCourtIssuedDocument,
-  ({ docketNumbers, subjectCaseDocketNumber }) => ({
+  ({ docketNumbers = [], subjectCaseDocketNumber }) => ({
     identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
     prefix: 'case',
   }),

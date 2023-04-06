@@ -56,10 +56,12 @@ export const associatePrivatePractitionerWithCase = async (
 };
 
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(
-  associatePrivatePractitionerToCase,
-  ({ docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
-  }),
+  associatePrivatePractitionerWithCase,
+  params => {
+    return {
+      identifier: params.docketNumber,
+      prefix: 'case',
+    };
+  },
   new ServiceUnavailableError('The case is currently being updated'),
 );
