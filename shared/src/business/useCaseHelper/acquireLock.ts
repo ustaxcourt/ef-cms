@@ -3,11 +3,13 @@ export const acquireLock = async ({
   identifier,
   onLockError,
   prefix,
+  ttl = 30,
 }: {
   applicationContext: IApplicationContext;
   identifier: string | string[];
   prefix: string;
   onLockError: Error;
+  ttl?: number;
 }) => {
   if (typeof identifier === 'object') {
     return Promise.all(
@@ -17,6 +19,7 @@ export const acquireLock = async ({
           identifier: entityIdentifier,
           onLockError,
           prefix,
+          ttl,
         }),
       ),
     );
@@ -34,6 +37,7 @@ export const acquireLock = async ({
     applicationContext,
     identifier,
     prefix,
+    ttl,
   });
 };
 
@@ -80,13 +84,14 @@ export function withLocking(
     applicationContext: IApplicationContext,
     options: any,
   ) {
-    const { identifier, prefix } = getLockInfo(options);
+    const { identifier, prefix, ttl } = getLockInfo(options);
 
     await acquireLock({
       applicationContext,
       identifier,
       onLockError,
       prefix,
+      ttl,
     });
 
     const results = await cb(applicationContext, options);
