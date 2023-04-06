@@ -14,6 +14,8 @@ jobs:
           node-version: '16'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
       - name: Lint

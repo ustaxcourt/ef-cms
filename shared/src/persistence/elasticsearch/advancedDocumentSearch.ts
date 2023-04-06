@@ -30,6 +30,7 @@ exports.advancedDocumentSearch = async ({
   keyword,
   omitSealed,
   overrideResultSize,
+  requireServedDate = true,
   sortField,
   startDate,
 }) => {
@@ -126,16 +127,21 @@ exports.advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
+  const documentFilter = [];
+
+  if (requireServedDate) {
+    documentFilter.push({
       exists: {
         field: 'servedAt',
       },
-    },
+    });
+  }
+
+  documentFilter.push(
+    { term: { 'entityName.S': 'DocketEntry' } },
     { term: { 'isFileAttached.BOOL': true } },
     { terms: { 'eventCode.S': documentEventCodes } },
-  ];
+  );
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
