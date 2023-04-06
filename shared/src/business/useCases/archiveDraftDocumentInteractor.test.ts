@@ -1,9 +1,21 @@
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
 import { ROLES } from '../entities/EntityConstants';
+import { ServiceUnavailableError } from '../../errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { archiveDraftDocumentInteractor } from './archiveDraftDocumentInteractor';
 
 describe('archiveDraftDocumentInteractor', () => {
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+    });
+  });
+
   it('returns an unauthorized error on non petitionsclerk users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
@@ -16,9 +28,6 @@ describe('archiveDraftDocumentInteractor', () => {
   });
 
   it('expect the updated case to contain the archived document', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -49,9 +58,6 @@ describe('archiveDraftDocumentInteractor', () => {
   });
 
   it('updates work items if there is a workItem found on the document', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -88,5 +94,50 @@ describe('archiveDraftDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItem,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      archiveDraftDocumentInteractor(applicationContext, {
+        docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '101-20',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await await archiveDraftDocumentInteractor(applicationContext, {
+      docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
   });
 });
