@@ -230,9 +230,24 @@ export const CustomCaseReport = connect(
               ))}
             </div>
           </div>
-
-          <Button onClick={() => getCustomCaseInventoryReportSequence()}>
+          <Button
+            isActive={customCaseInventoryReportHelper.isRunReportButtonActive}
+            tooltip="Run Report"
+            onClick={() => getCustomCaseInventoryReportSequence()}
+          >
             Run Report
+          </Button>
+          <Button
+            link
+            isActive={customCaseInventoryReportHelper.isClearFiltersActive}
+            tooltip="Clear Filters"
+            // onClick={() =>
+            //   setCustomCaseInventoryReportFiltersSequence({
+            //     resetFilters: true, //DISCUSS BETTER APPROACH
+            //   })
+            // }
+          >
+            Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
           <div className="text-right margin-bottom-3">
