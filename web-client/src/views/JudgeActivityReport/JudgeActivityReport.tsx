@@ -151,7 +151,7 @@ export const JudgeActivityReport = connect(
                 <DateRangePickerComponent
                   endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
-                  endPickerCls={'grid-col-6'}
+                  endPickerCls={'grid-col-6 padding-left-2'}
                   endValue={form.endDate}
                   formGroupCls={'margin-bottom-0'}
                   rangePickerCls={'grid-row '}
@@ -159,7 +159,7 @@ export const JudgeActivityReport = connect(
                   showPlaceholder={true}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
-                  startPickerCls={'grid-col-6'}
+                  startPickerCls={'grid-col-6 padding-right-2'}
                   startValue={form.endDate}
                   onChangeEnd={e => {
                     updateJudgeActivityReportFormSequence({
