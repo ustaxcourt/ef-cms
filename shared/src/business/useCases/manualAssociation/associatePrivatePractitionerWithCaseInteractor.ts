@@ -2,8 +2,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -16,7 +20,7 @@ import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAsso
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
-export const associatePrivatePractitionerWithCaseInteractor = async (
+export const associatePrivatePractitionerWithCase = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -50,3 +54,12 @@ export const associatePrivatePractitionerWithCaseInteractor = async (
     user,
   });
 };
+
+export const associatePrivatePractitionerWithCaseInteractor = withLocking(
+  associatePrivatePractitionerToCase,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
