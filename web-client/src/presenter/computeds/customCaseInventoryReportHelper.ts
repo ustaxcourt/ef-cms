@@ -1,8 +1,9 @@
 import { state } from 'cerebral';
 
-export const customCaseInventoryReportHelper = (get, applicationContext) => {
-  return false;
-  // return {
-  //   disableCustomCaseReportButton: false,
-  // };
+export const customCaseInventoryReportHelper = get => {
+  const customCaseInventoryReportData =
+    get(state.customCaseInventoryReportData) || [];
+  return {
+    customCaseInventoryReportData,
+  };
 };
