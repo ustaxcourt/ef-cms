@@ -24,11 +24,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Compare type errors between shared and current branch
-        run: |
-          ls
-          cd stagingBranch
-          ls
-          cd ..
-          cd branchToBeCompared
-          ls
+      - name: Current branch ls
+        working-directory: ./branchToBeCompared
+        run: ls
+      - name: Staging branch ls
+        working-directory: ./stagingBranch
+        run: ls
