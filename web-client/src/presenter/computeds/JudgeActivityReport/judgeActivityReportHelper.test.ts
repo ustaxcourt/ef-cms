@@ -14,8 +14,6 @@ describe('judgeActivityReportHelper', () => {
     { ...applicationContext },
   );
 
-  beforeEach(() => {});
-
   describe('formattedJudgeName', () => {
     it('should be the last name of the current user when they are a judge', () => {
       applicationContext.getCurrentUser.mockReturnValue({

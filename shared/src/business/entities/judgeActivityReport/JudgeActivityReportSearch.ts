@@ -51,13 +51,13 @@ JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 JudgeActivityReportSearch.schema = joi.object().keys({
-  endDate: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
+  endDate: JoiValidationConstants.DATE.min(joi.ref('startDate'))
     .max('now')
     .required()
     .description(
       'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
     ),
-  startDate: JoiValidationConstants.ISO_DATE.max('now')
+  startDate: JoiValidationConstants.DATE.max('now')
     .required()
     .description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',

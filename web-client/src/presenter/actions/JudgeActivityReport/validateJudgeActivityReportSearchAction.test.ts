@@ -23,6 +23,7 @@ describe('validateJudgeActivityReportSearchAction', () => {
       modules: {
         presenter,
       },
+      state: { form: { endDate: '02/02/2000', startDate: '01/01/1000' } },
     });
 
     expect(mockSuccessPath).toHaveBeenCalled();
@@ -39,6 +40,7 @@ describe('validateJudgeActivityReportSearchAction', () => {
       modules: {
         presenter,
       },
+      state: { form: { endDate: 'gobbeltygook', startDate: undefined } },
     });
 
     expect(mockErrorPath).toHaveBeenCalled();

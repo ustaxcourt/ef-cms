@@ -1,10 +1,19 @@
+import {
+  FORMATS,
+  calculateISODate,
+  formatDateString,
+} from '../../utilities/DateHandler';
 import { JudgeActivityReportSearch } from './JudgeActivityReportSearch';
-import { calculateISODate } from '../../utilities/DateHandler';
 
 describe('JudgeActivityReportSearch', () => {
+  const mockFutureDate = formatDateString(
+    calculateISODate({ howMuch: 5, units: 'days' }),
+    FORMATS.YYYYMMDD,
+  );
+
   it('should have validation errors when start date is not provided', () => {
     const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
-      endDate: '01/01/2000',
+      endDate: '2000/01/01',
       startDate: undefined,
     });
 
@@ -18,7 +27,7 @@ describe('JudgeActivityReportSearch', () => {
   it('should have validation errors when end date is not provided', () => {
     const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
       endDate: undefined,
-      startDate: '2025-02-01T00:00:00.000Z',
+      startDate: '2025-02-01',
     });
 
     expect(
@@ -30,8 +39,8 @@ describe('JudgeActivityReportSearch', () => {
 
   it('should have validation errors when the end date provided is chronologically before the start date', () => {
     const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
-      endDate: '2021-02-01T00:00:00.000Z',
-      startDate: '2022-02-01T00:00:00.000Z',
+      endDate: '2021-01-01',
+      startDate: '2022-02-01',
     });
 
     expect(
@@ -43,8 +52,6 @@ describe('JudgeActivityReportSearch', () => {
   });
 
   it('should have validation errors when the start date provided is in the future', () => {
-    const mockFutureDate = calculateISODate({ howMuch: 5, units: 'days' });
-
     const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
       endDate: mockFutureDate,
       startDate: mockFutureDate,
@@ -58,11 +65,9 @@ describe('JudgeActivityReportSearch', () => {
   });
 
   it('should have validation errors when the end date provided is in the future', () => {
-    const mockFutureDate = calculateISODate({ howMuch: 5, units: 'days' });
-
     const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
       endDate: mockFutureDate,
-      startDate: '2020-03-01T00:00:00.000Z',
+      startDate: '2020-03-01',
     });
 
     expect(
