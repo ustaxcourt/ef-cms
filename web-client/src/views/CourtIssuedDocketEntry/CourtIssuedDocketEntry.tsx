@@ -226,9 +226,6 @@ export const CourtIssuedDocketEntry = connect(
                           name="pageNumber"
                           type="number"
                           value={form.pageNumber || ''}
-                          // onBlur={() => {
-                          //   validateSequence();
-                          // }}
                           onChange={e => {
                             updateCourtIssuedDocketEntryFormValueSequence({
                               key: e.target.name,
