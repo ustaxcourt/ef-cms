@@ -76,7 +76,7 @@ import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persiste
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
-import { getDocumentQCInboxForUser } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser';
+import { getDocumentQCInboxForUser } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser';
 import { getDocumentQCServedForSection } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection';
 import { getDocumentQCServedForUser } from '../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser';
 import { getDownloadPolicyUrl } from '../../shared/src/persistence/s3/getDownloadPolicyUrl';
