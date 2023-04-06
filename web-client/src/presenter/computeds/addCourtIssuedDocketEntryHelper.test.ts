@@ -350,7 +350,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showReceivedDate).toBeTruthy();
   });
 
-  it(`should set showAttachmentAndServiceFields to false when the document event code is ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
+  it(`should set showAttachmentAndServiceFields to false and showOpinionStartingPage to true when the document event code is ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         ...state,
@@ -362,9 +362,10 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
 
     expect(result.showAttachmentAndServiceFields).toBe(false);
+    expect(result.showOpinionStartingPage).toBe(true);
   });
 
-  it(`should set showAttachmentAndServiceFields to true when the document event code is NOT ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
+  it(`should set showAttachmentAndServiceFields to true and showOpinionStartingPage to false when the document event code is NOT ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         ...state,
@@ -376,5 +377,6 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
 
     expect(result.showAttachmentAndServiceFields).toBe(true);
+    expect(result.showOpinionStartingPage).toBe(false);
   });
 });
