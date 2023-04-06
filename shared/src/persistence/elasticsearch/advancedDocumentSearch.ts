@@ -49,6 +49,7 @@ exports.advancedDocumentSearch = async ({
     'isStricken',
     'judge',
     'numberOfPages',
+    'pageNumber',
     'petitioners',
     'privatePractitioners',
     'sealedDate',
