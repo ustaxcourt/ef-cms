@@ -189,7 +189,7 @@ export const CustomCaseReport = connect(
           <div className="grid-col-12 margin-top-3 margin-bottom-3">
             <div className="grid-row">
               {customCaseInventoryFilters.caseStatuses.map(status => (
-                <Button key={status}>
+                <span className="blue-pill" key={status}>
                   {status}
                   <Icon
                     aria-label={`remove ${status} selection`}
@@ -206,10 +206,10 @@ export const CustomCaseReport = connect(
                       // validateTrialSessionPlanningSequence();
                     }}
                   />{' '}
-                </Button>
+                </span>
               ))}
               {customCaseInventoryFilters.caseTypes.map(caseType => (
-                <Button key={caseType}>
+                <span className="blue-pill" key={caseType}>
                   {caseType}
                   <Icon
                     aria-label={`remove ${caseType} selection`}
@@ -226,21 +226,16 @@ export const CustomCaseReport = connect(
                       // validateTrialSessionPlanningSequence();
                     }}
                   />{' '}
-                </Button>
+                </span>
               ))}
             </div>
           </div>
 
-          <Button
-            // disabled={
-            //   customCaseInventoryReportHelper.disableCustomCaseReportButton
-            // }
-
-            onClick={() => getCustomCaseInventoryReportSequence()}
-          >
+          <Button onClick={() => getCustomCaseInventoryReportSequence()}>
             Run Report
           </Button>
-          <div className="text-right">
+          <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
+          <div className="text-right margin-bottom-3">
             {`Count: ${
               (customCaseInventoryReportHelper.customCaseInventoryReportData &&
                 customCaseInventoryReportHelper.customCaseInventoryReportData
@@ -281,20 +276,18 @@ const ReportTable = ({ customCaseInventoryReportData }) => {
       {customCaseInventoryReportData &&
         customCaseInventoryReportData.foundCases && (
           <tbody>
-            {customCaseInventoryReportData.foundCases.map(entry => {
-              return (
-                <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
-                  <td>{entry.docketNumber}</td>
-                  <td>{entry.createdAt}</td>
-                  <td>TITLE GOES HERE</td>
-                  <td>{entry.status}</td>
-                  <td>{entry.caseType}</td>
-                  <td>{entry.associatedJudge}</td>
-                  <td>{entry.preferredTrialCity}</td>
-                  <td>CALCULATION FOR CALENDARING</td>
-                </tr>
-              );
-            })}
+            {customCaseInventoryReportData.foundCases.map(entry => (
+              <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
+                <td>{entry.docketNumber}</td>
+                <td>{entry.createdAt}</td>
+                <td>PLACEHOLDER</td>
+                <td>{entry.status}</td>
+                <td>{entry.caseType}</td>
+                <td>{entry.associatedJudge}</td>
+                <td>{entry.preferredTrialCity}</td>
+                <td>PLACEHOLDER</td>
+              </tr>
+            ))}
           </tbody>
         )}
     </table>
