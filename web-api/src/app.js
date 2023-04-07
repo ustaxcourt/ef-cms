@@ -177,6 +177,9 @@ const {
   generateDraftStampOrderLambda,
 } = require('./documents/generateDraftStampOrderLambda');
 const {
+  generateJudgeActivityReportLambda,
+} = require('./reports/generateJudgeActivityReportLambda');
+const {
   generatePractitionerCaseListPdfLambda,
 } = require('./cases/generatePractitionerCaseListPdfLambda');
 const {
@@ -989,6 +992,10 @@ app.get(
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
+  );
+  app.post(
+    '/reports/judge-activity-report',
+    lambdaWrapper(generateJudgeActivityReportLambda),
   );
 }
 
