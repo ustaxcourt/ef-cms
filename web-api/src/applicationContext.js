@@ -181,6 +181,7 @@ const {
 } = require('@aws-sdk/client-s3');
 const { createPresignedPost } = require('@aws-sdk/s3-presigned-post');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const { Upload } = require('@aws-sdk/lib-storage');
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -686,6 +687,18 @@ module.exports = (appContextUser, logger = createLogger()) => {
               );
             },
           };
+        },
+        async upload(params) {
+          const parallelUploads3 = new Upload({
+            client: s3Cache,
+            params,
+          });
+
+          // parallelUploads3.on('httpUploadProgress', progress => {
+          //   console.log(progress);
+          // });
+
+          await parallelUploads3.done();
         },
       };
     },

@@ -83,13 +83,14 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
       Key: key,
     };
 
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error('error uploading to s3', err);
+    return s3Client
+      .putObject(params)
+      .promise()
+      .then(resolve)
+      .catch(err => {
+        applicationContext.logger.error('error uploading to s3', { err });
         reject(err);
-      }
-      resolve();
-    });
+      });
   });
 
   const { url } = await applicationContext

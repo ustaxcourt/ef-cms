@@ -58,17 +58,17 @@ exports.generateNoticeOfDocketChangePdf = async ({
       Key: docketEntryId,
     };
 
-    s3Client.upload(params, function (err) {
-      if (err) {
+    return s3Client
+      .putObject(params)
+      .promise()
+      .then(resolve)
+      .catch(err => {
         applicationContext.logger.error(
           'An error occurred while attempting to upload to S3',
           err,
         );
         reject(err);
-      }
-
-      resolve();
-    });
+      });
   });
 
   return docketEntryId;
