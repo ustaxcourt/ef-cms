@@ -19,11 +19,13 @@ function findTypescriptErrorCount(text: string): number {
 // *********************************ExecSync ****************************
 let typescriptErrorOutput: string = 'bleh';
 try {
+  console.log('Running command.');
   execSync('echo "npx tsc --noEmit" | script /dev/null', {
     encoding: 'utf-8',
     maxBuffer: 1024 * 50000,
   });
 } catch (error) {
+  console.log('Inside of catch: ', error.stdout);
   typescriptErrorOutput = error.stdout;
 }
 
