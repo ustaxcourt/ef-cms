@@ -4,6 +4,7 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -14,7 +15,6 @@ import {
 } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const CustomCaseReport = connect(
   {
@@ -125,7 +125,6 @@ export const CustomCaseReport = connect(
                     filingMethod: 'paper',
                   });
                 }}
-                // onChange={handleChange}
               />
               <label
                 className="usa-radio__label"
@@ -138,9 +137,7 @@ export const CustomCaseReport = connect(
           <div className="grid-col-8">
             <div className="grid-row">
               <div className="grid-col margin-top-3 margin-right-4">
-                <FormGroup
-                // errorText={validationErrors.documentType}
-                >
+                <FormGroup>
                   <label
                     className="usa-label"
                     htmlFor="case-status"
@@ -166,9 +163,7 @@ export const CustomCaseReport = connect(
                 </FormGroup>
               </div>
               <div className="grid-col margin-top-3">
-                <FormGroup
-                // errorText={validationErrors.documentType}
-                >
+                <FormGroup>
                   <label
                     className="usa-label"
                     htmlFor="case-type"
@@ -280,41 +275,44 @@ export const CustomCaseReport = connect(
 
 const ReportTable = ({ customCaseInventoryReportData }) => {
   return (
-    <table
-      aria-label="case inventory record"
-      className="usa-table case-detail ustc-table responsive-table"
-      id="docket-record-table"
-    >
-      <thead>
-        <tr>
-          <th>Docket No.</th>
-          <th>Date Created</th>
-          <th>Case Title</th>
-          <th>Case Status</th>
-          <th>Case Type</th>
-          <th>Judge</th>
-          <th>Request Place of Trial</th>
-          <th>High Priority for calendaring</th>
-        </tr>
-      </thead>
-      {customCaseInventoryReportData &&
-        customCaseInventoryReportData.foundCases && (
-          <tbody>
-            {customCaseInventoryReportData.foundCases.map(entry => (
-              <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
-                <td>{entry.docketNumber}</td>
-                <td>{entry.createdAt}</td>
-                <td>PLACEHOLDER</td>
-                <td>{entry.status}</td>
-                <td>{entry.caseType}</td>
-                <td>{entry.associatedJudge}</td>
-                <td>{entry.preferredTrialCity}</td>
-                <td>PLACEHOLDER</td>
-              </tr>
-            ))}
-          </tbody>
-        )}
-    </table>
+    <>
+      <Paginator></Paginator>
+      <table
+        aria-label="case inventory record"
+        className="usa-table case-detail ustc-table responsive-table"
+        id="docket-record-table"
+      >
+        <thead>
+          <tr>
+            <th>Docket No.</th>
+            <th>Date Created</th>
+            <th>Case Title</th>
+            <th>Case Status</th>
+            <th>Case Type</th>
+            <th>Judge</th>
+            <th>Request Place of Trial</th>
+            <th>High Priority for calendaring</th>
+          </tr>
+        </thead>
+        {customCaseInventoryReportData &&
+          customCaseInventoryReportData.foundCases && (
+            <tbody>
+              {customCaseInventoryReportData.foundCases.map(entry => (
+                <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
+                  <td>{entry.docketNumber}</td>
+                  <td>{entry.createdAt}</td>
+                  <td>PLACEHOLDER</td>
+                  <td>{entry.status}</td>
+                  <td>{entry.caseType}</td>
+                  <td>{entry.associatedJudge}</td>
+                  <td>{entry.preferredTrialCity}</td>
+                  <td>PLACEHOLDER</td>
+                </tr>
+              ))}
+            </tbody>
+          )}
+      </table>
+    </>
   );
 };
 
