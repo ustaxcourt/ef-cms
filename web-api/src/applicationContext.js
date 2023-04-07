@@ -174,6 +174,7 @@ const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 const { CognitoIdentityServiceProvider, DynamoDB, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 const {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -642,6 +643,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
           createPresignedPost(s3Cache, params)
             .then(data => cb(null, data))
             .catch(err => cb(err, null));
+        },
+        deleteObject(params) {
+          return {
+            promise() {
+              return s3Cache.send(new DeleteObjectCommand(params));
+            },
+          };
         },
         getObject({ Bucket, Key }) {
           return {
