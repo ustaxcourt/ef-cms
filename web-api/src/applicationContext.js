@@ -176,6 +176,7 @@ const execPromise = util.promisify(exec);
 const {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } = require('@aws-sdk/client-s3');
@@ -678,6 +679,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
           })
             .then(data => cb(null, data))
             .catch(err => cb(err, null));
+        },
+        headObject(params) {
+          return {
+            promise() {
+              return s3Cache.send(new HeadObjectCommand(params));
+            },
+          };
         },
         putObject({ Body, Bucket, ContentType, Key }) {
           return {
