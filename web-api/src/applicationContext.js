@@ -665,7 +665,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
               for await (const chunk of Body) {
                 chunks.push(chunk);
               }
-              const byteBuffer = Uint8Array.from(Buffer.concat(chunks));
+              const byteBuffer = Buffer.concat(chunks);
               return {
                 Body: byteBuffer,
               };
