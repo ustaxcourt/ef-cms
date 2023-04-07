@@ -3,11 +3,15 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { Statistic } from '../../entities/Statistic';
-import { UnauthorizedError } from '../../../errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
- * addDeficiencyStatisticInteractor
+ * addDeficiencyStatistic
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -21,7 +25,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {object} the updated case
  */
-export const addDeficiencyStatisticInteractor = async (
+export const addDeficiencyStatistic = async (
   applicationContext: IApplicationContext,
   {
     determinationDeficiencyAmount,
@@ -86,3 +90,12 @@ export const addDeficiencyStatisticInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const addDeficiencyStatisticInteractor = withLocking(
+  addDeficiencyStatistic,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

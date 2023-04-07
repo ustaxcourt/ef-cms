@@ -5,6 +5,8 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase.ts';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   deleteCounselFromCaseInteractor,
@@ -97,6 +99,51 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      deleteCounselFromCaseInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await deleteCounselFromCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
   });
 
   it('deletes a practitioner with the given userId from the associated case', async () => {

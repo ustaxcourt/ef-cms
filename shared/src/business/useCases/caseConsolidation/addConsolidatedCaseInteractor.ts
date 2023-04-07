@@ -1,12 +1,17 @@
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
- * addConsolidatedCaseInteractor
+ * addConsolidatedCase
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +19,7 @@ import {
  * @param {object} providers.docketNumberToConsolidateWith the docket number of the case with which to consolidate
  * @returns {object} the updated case data
  */
-export const addConsolidatedCaseInteractor = async (
+export const addConsolidatedCase = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -97,3 +102,12 @@ export const addConsolidatedCaseInteractor = async (
 
   await Promise.all(updateCasePromises);
 };
+
+export const addConsolidatedCaseInteractor = withLocking(
+  addConsolidatedCase,
+  ({ docketNumber, docketNumberToConsolidateWith }) => ({
+    identifier: [docketNumber, docketNumberToConsolidateWith],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
