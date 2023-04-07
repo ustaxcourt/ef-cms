@@ -24,15 +24,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: NPM Install
+      - name: NPM Install in your branch
         working-directory: ./branchToBeCompared
         run: npm ci
-      - name: Jim thanks
+      - name: NPM Install in staging
+        working-directory: ./stagingBranch
+        run: npm ci
+      - name: Compare errors between your branch and staging
         working-directory: ./branchToBeCompared
         run: npx ts-node scripts/compareTypescriptErrors.ts
-      # - name: Current branch ls
-      #   working-directory: ./branchToBeCompared
-      #   run: ls
-      # - name: Staging branch ls
-      #   working-directory: ./stagingBranch
-      #   run: ls
