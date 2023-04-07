@@ -455,6 +455,54 @@ describe('updateCaseAndAssociations', () => {
         workItemId: '123',
       });
     });
+    it('the trial location has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          trialDate: '2021-01-02T05:22:16.001Z',
+          trialLocation: 'Lubbock, Texas',
+          trialSessionId: faker.datatype.uuid(),
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        trialLocation: 'Lubbock, Texas',
+        workItemId: '123',
+      });
+    });
+
+    it('the trial location has been removed', async () => {
+      const oldCase = {
+        ...validMockCase,
+        trialDate: '2021-01-02T05:22:16.001Z',
+        trialLocation: 'Lubbock, Texas',
+        trialSessionId: faker.datatype.uuid(),
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          trialLocation: undefined,
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        trialLocation: null,
+        workItemId: '123',
+      });
+    });
   });
 
   describe('correspondences', () => {
