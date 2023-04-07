@@ -51,6 +51,7 @@ import {
   formatJudgeName,
   getJudgeLastName,
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { generateJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/generateJudgeActivityReportProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
@@ -416,6 +417,7 @@ const allUseCases = {
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
+  generateJudgeActivityReportInteractor,
   generatePDFFromJPGDataInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
