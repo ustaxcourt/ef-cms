@@ -28,9 +28,6 @@ export const setStartOrEndCreatedAtDateAction = ({
   const currentFilters: GetCaseInventoryReportRequest = get(
     state.customCaseInventoryFilters,
   );
-  // const defaultFilters = get(
-  //   state.constants.DEFAULT_CUSTOM_CASE_INVENTORY_FILTERS,
-  // );
   const desiredFilters = cloneDeep(props);
   if (props.createStartDate) {
     const dateWithTime = applicationContext

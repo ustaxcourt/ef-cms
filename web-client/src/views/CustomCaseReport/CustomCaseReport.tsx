@@ -43,7 +43,7 @@ export const CustomCaseReport = connect(
           <div className="title">
             <h1>Custom Case Report</h1>
           </div>
-          <div className="grid-col-4">
+          <div className="grid-col-4 blue-container">
             <DateRangePickerComponent
               endDateOptional={false}
               endLabel="Case created end date"
@@ -138,27 +138,6 @@ export const CustomCaseReport = connect(
           <div className="grid-col-8">
             <div className="grid-row">
               <div className="grid-col margin-top-3 margin-right-4">
-                {/* <select
-                  aria-label="Case Status"
-                  className={classNames('usa-select')}
-                  name="caseStatus"
-                  onChange={e => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      caseStatuses: {
-                        action: 'add',
-                        caseStatus: e.target.value,
-                      },
-                    });
-                    // validateTrialSessionPlanningSequence();
-                  }}
-                >
-                  <option value="">- Select one or more -</option>
-                  {CASE_STATUSES.map(caseStatus => (
-                    <option key={caseStatus} value={caseStatus}>
-                      {caseStatus}
-                    </option>
-                  ))}
-                </select> */}
                 <FormGroup
                 // errorText={validationErrors.documentType}
                 >
@@ -172,59 +151,21 @@ export const CustomCaseReport = connect(
                   <SelectSearch
                     aria-labelledby="case-status-label"
                     id="case-status"
-                    name="eventCode"
+                    name="caseStatus"
                     options={customCaseInventoryReportHelper.caseStatuses}
-                    // value={reactSelectValue({
-                    //   documentTypes:
-                    //     addCourtIssuedDocketEntryHelper.documentTypes,
-                    //   selectedEventCode: form.eventCode,
-                    // })}
-                    // onChange={(inputValue, { action, name }) => {
-                    //   courtIssuedDocketEntryOnChange({
-                    //     action,
-                    //     inputValue,
-                    //     name,
-                    //     updateSequence:
-                    //       updateCourtIssuedDocketEntryFormValueSequence,
-                    //     validateSequence:
-                    //       validateCourtIssuedDocketEntrySequence,
-                    //   });
-                    //   return true;
-                    // }}
-                    // onInputChange={(inputText, { action }) => {
-                    //   onInputChange({
-                    //     action,
-                    //     inputText,
-                    //     updateSequence:
-                    //       updateCourtIssuedDocketEntryFormValueSequence,
-                    //   });
-                    // }}
+                    value={'Select one or more'}
+                    onChange={inputValue => {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        caseStatuses: {
+                          action: 'add',
+                          caseStatus: inputValue.value,
+                        },
+                      });
+                    }}
                   />
                 </FormGroup>
               </div>
               <div className="grid-col margin-top-3">
-                {/* <select
-                  aria-label="Case Types"
-                  className={classNames('usa-select')}
-                  name="caseTypes"
-                  onChange={e => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      caseTypes: {
-                        action: 'add',
-                        caseType: e.target.value,
-                      },
-                    });
-                    // validateTrialSessionPlanningSequence();
-                  }}
-                >
-                  <option value="">- Select one or more -</option>
-                  {CASE_TYPES.map(caseType => (
-                    <option key={caseType} value={caseType}>
-                      {caseType}
-                    </option>
-                  ))}
-                </select> */}
-
                 <FormGroup
                 // errorText={validationErrors.documentType}
                 >
@@ -240,31 +181,15 @@ export const CustomCaseReport = connect(
                     id="case-type"
                     name="eventCode"
                     options={customCaseInventoryReportHelper.caseTypes}
-                    // value={reactSelectValue({
-                    //   documentTypes:
-                    //     addCourtIssuedDocketEntryHelper.documentTypes,
-                    //   selectedEventCode: form.eventCode,
-                    // })}
-                    // onChange={(inputValue, { action, name }) => {
-                    //   courtIssuedDocketEntryOnChange({
-                    //     action,
-                    //     inputValue,
-                    //     name,
-                    //     updateSequence:
-                    //       updateCourtIssuedDocketEntryFormValueSequence,
-                    //     validateSequence:
-                    //       validateCourtIssuedDocketEntrySequence,
-                    //   });
-                    //   return true;
-                    // }}
-                    // onInputChange={(inputText, { action }) => {
-                    //   onInputChange({
-                    //     action,
-                    //     inputText,
-                    //     updateSequence:
-                    //       updateCourtIssuedDocketEntryFormValueSequence,
-                    //   });
-                    // }}
+                    value="Select one or more"
+                    onChange={inputValue => {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        caseTypes: {
+                          action: 'add',
+                          caseType: inputValue.value,
+                        },
+                      });
+                    }}
                   />
                 </FormGroup>
               </div>
@@ -290,29 +215,32 @@ export const CustomCaseReport = connect(
                       });
                       // validateTrialSessionPlanningSequence();
                     }}
-                  />{' '}
+                  />
                 </span>
               ))}
-              {customCaseInventoryFilters.caseTypes.map(caseType => (
-                <span className="blue-pill" key={caseType}>
-                  {caseType}
-                  <Icon
-                    aria-label={`remove ${caseType} selection`}
-                    className="margin-right-3"
-                    icon="copy"
-                    size="1x"
-                    onClick={() => {
-                      setCustomCaseInventoryReportFiltersSequence({
-                        caseTypes: {
-                          action: 'remove',
-                          caseStatus: caseType,
-                        },
-                      });
-                      // validateTrialSessionPlanningSequence();
-                    }}
-                  />{' '}
-                </span>
-              ))}
+
+              {customCaseInventoryFilters.caseTypes.map(caseType => {
+                return (
+                  <span className="blue-pill" key={caseType}>
+                    {caseType}
+                    <Icon
+                      aria-label={`remove ${caseType} selection`}
+                      className="margin-right-3"
+                      icon="copy"
+                      size="1x"
+                      onClick={() => {
+                        setCustomCaseInventoryReportFiltersSequence({
+                          caseTypes: {
+                            action: 'remove',
+                            caseType,
+                          },
+                        });
+                        // validateTrialSessionPlanningSequence();
+                      }}
+                    />
+                  </span>
+                );
+              })}
             </div>
           </div>
           <Button
