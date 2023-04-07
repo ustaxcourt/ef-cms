@@ -4,7 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
+
 /**
  * used to remove a petitioner from a case
  *
@@ -16,7 +21,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @returns {object} the case data
  */
 
-export const removePetitionerAndUpdateCaptionInteractor = async (
+export const removePetitionerAndUpdateCaption = async (
   applicationContext: IApplicationContext,
   {
     caseCaption,
@@ -78,3 +83,12 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const removePetitionerAndUpdateCaptionInteractor = withLocking(
+  removePetitionerAndUpdateCaption,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

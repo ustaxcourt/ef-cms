@@ -5,6 +5,8 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
@@ -69,6 +71,9 @@ describe('updateCourtIssuedOrderInteractor', () => {
   };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     mockCurrentUser = new User({
       name: 'Olivia Jade',
       role: ROLES.petitionsClerk,
@@ -364,5 +369,68 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(3);
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      updateCourtIssuedOrderInteractor(applicationContext, {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+          documentType: 'Notice',
+          draftOrderState: {
+            documentType: 'Order of Dismissal for Lack of Jurisdiction',
+            eventCode: 'ODJ',
+          },
+          eventCode: 'NOT',
+        },
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await updateCourtIssuedOrderInteractor(applicationContext, {
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+        documentType: 'Notice',
+        draftOrderState: {
+          documentType: 'Order of Dismissal for Lack of Jurisdiction',
+          eventCode: 'ODJ',
+        },
+        eventCode: 'NOT',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+    });
   });
 });

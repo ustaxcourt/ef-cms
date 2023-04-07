@@ -1,15 +1,22 @@
 import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
+import { ServiceUnavailableError } from '../../errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { prioritizeCaseInteractor } from './prioritizeCaseInteractor';
 
 describe('prioritizeCaseInteractor', () => {
-  it('should update the case with the highPriority flag set as true and attach a reason', async () => {
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
+  });
 
+  it('should update the case with the highPriority flag set as true and attach a reason', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -39,10 +46,6 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should update trial sort mapping records when status is other than "General Docket - At Issue (Ready for Trial)"', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -74,10 +77,6 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case status is calendared', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -136,10 +135,6 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should update trial sort mapping records when automaticBlocked and high priority', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -161,5 +156,50 @@ describe('prioritizeCaseInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      prioritizeCaseInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await prioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
   });
 });

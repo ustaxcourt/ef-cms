@@ -4,21 +4,24 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 
 describe('remove case from trial session', () => {
-  let user;
   let mockTrialSession;
 
   beforeEach(() => {
-    user = {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => user);
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -39,10 +42,10 @@ describe('remove case from trial session', () => {
   });
 
   it('throws error if user is unauthorized', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
       userId: 'petitioner',
-    };
+    });
     mockTrialSession = MOCK_TRIAL_INPERSON;
 
     await expect(
@@ -313,5 +316,56 @@ describe('remove case from trial session', () => {
 
     expect(result.associatedJudge).toEqual('Judge Dredd');
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      removeCaseFromTrialInteractor(applicationContext, {
+        associatedJudge: 'Judge Dredd',
+        caseStatus: CASE_STATUS_TYPES.cav,
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await removeCaseFromTrialInteractor(applicationContext, {
+      associatedJudge: 'Judge Dredd',
+      caseStatus: CASE_STATUS_TYPES.cav,
+      disposition: 'because',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
   });
 });

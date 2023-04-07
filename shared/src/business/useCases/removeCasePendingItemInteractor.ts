@@ -3,10 +3,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * removeCasePendingItemInteractor
+ * removeCasePendingItem
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +18,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {object} providers.docketEntryId the id of the docket entry no longer pending
  * @returns {object} the updated case data
  */
-export const removeCasePendingItemInteractor = async (
+export const removeCasePendingItem = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
@@ -50,3 +54,12 @@ export const removeCasePendingItemInteractor = async (
 
   return updatedCaseEntity.toRawObject();
 };
+
+export const removeCasePendingItemInteractor = withLocking(
+  removeCasePendingItem,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

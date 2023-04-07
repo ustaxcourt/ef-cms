@@ -8,6 +8,8 @@ import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
 
@@ -22,6 +24,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -325,6 +330,109 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(docketEntryOnLead).toMatchObject({
       docketNumber: LEAD_CASE.docketNumber,
       freeText: 'free text testing',
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
+        docketNumbers: [],
+        documentMeta: {
+          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          generatedDocumentTitle: 'Generated Order Document Title',
+        },
+        subjectDocketNumber: caseRecord.docketNumber,
+      } as any),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [],
+      documentMeta: {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        generatedDocumentTitle: 'Generated Order Document Title',
+      },
+      subjectDocketNumber: caseRecord.docketNumber,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+    });
+  });
+
+  it('should acquire and remove the lock for every case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: ['888-88', '999-99'],
+      documentMeta: {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        generatedDocumentTitle: 'Generated Order Document Title',
+      },
+      subjectDocketNumber: caseRecord.docketNumber,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(3);
+
+    [caseRecord.docketNumber, '888-88', '999-99'].forEach(docketNumber => {
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: docketNumber,
+        prefix: 'case',
+        ttl: 30,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: docketNumber,
+        prefix: 'case',
+      });
     });
   });
 });

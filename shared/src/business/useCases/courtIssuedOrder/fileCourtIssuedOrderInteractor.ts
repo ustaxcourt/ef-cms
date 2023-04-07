@@ -6,8 +6,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { orderBy } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -17,7 +21,7 @@ import { orderBy } from 'lodash';
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the updated case entity after the document is added
  */
-export const fileCourtIssuedOrderInteractor = async (
+export const fileCourtIssuedOrder = async (
   applicationContext: IApplicationContext,
   {
     documentMetadata,
@@ -149,3 +153,12 @@ export const fileCourtIssuedOrderInteractor = async (
 
   return caseEntity.toRawObject();
 };
+
+export const fileCourtIssuedOrderInteractor = withLocking(
+  fileCourtIssuedOrder,
+  ({ documentMetadata }) => ({
+    identifier: documentMetadata.docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

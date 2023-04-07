@@ -9,10 +9,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -21,7 +25,7 @@ import { pick } from 'lodash';
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-export const fileExternalDocumentInteractor = async (
+export const fileExternalDocument = async (
   applicationContext: IApplicationContext,
   { documentMetadata }: { documentMetadata: any },
 ) => {
@@ -188,3 +192,12 @@ export const fileExternalDocumentInteractor = async (
 
   return caseEntity.toRawObject();
 };
+
+export const fileExternalDocumentInteractor = withLocking(
+  fileExternalDocument,
+  ({ documentMetadata }) => ({
+    identifier: documentMetadata.docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

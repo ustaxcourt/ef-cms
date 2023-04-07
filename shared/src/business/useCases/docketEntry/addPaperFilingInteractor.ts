@@ -10,9 +10,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -25,7 +29,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
  * @returns {object} the updated case after the documents are added
  */
-export const addPaperFilingInteractor = async (
+export const addPaperFiling = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -256,3 +260,15 @@ const saveWorkItem = async ({
     workItem: workItemRaw,
   });
 };
+
+export const addPaperFilingInteractor = withLocking(
+  addPaperFiling,
+  ({ consolidatedGroupDocketNumbers = [], documentMetadata }) => ({
+    identifier: [
+      documentMetadata?.docketNumber,
+      ...consolidatedGroupDocketNumbers,
+    ],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

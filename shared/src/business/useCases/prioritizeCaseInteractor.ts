@@ -3,7 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used for setting a case as high priority
@@ -14,7 +18,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case to set as high priority
  * @returns {object} the case data
  */
-export const prioritizeCaseInteractor = async (
+export const prioritizeCase = async (
   applicationContext,
   { docketNumber, reason },
 ) => {
@@ -61,3 +65,12 @@ export const prioritizeCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const prioritizeCaseInteractor = withLocking(
+  prioritizeCase,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

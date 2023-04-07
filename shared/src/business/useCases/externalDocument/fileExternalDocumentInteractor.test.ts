@@ -9,7 +9,9 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_USERS, docketClerkUser } from '../../../test/mockUsers';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
@@ -20,6 +22,9 @@ describe('fileExternalDocumentInteractor', () => {
   let caseRecord;
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -109,7 +114,14 @@ describe('fileExternalDocumentInteractor', () => {
 
     await expect(
       fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata: {},
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -429,5 +441,64 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {
+          category: 'Application',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APPW',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await fileExternalDocumentInteractor(applicationContext, {
+      documentMetadata: {
+        category: 'Application',
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Application for Waiver of Filing Fee',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APPW',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+    });
   });
 });

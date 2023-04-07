@@ -3,8 +3,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { createISODateString } from '../../utilities/DateHandler';
 
 /**
@@ -40,6 +44,16 @@ export const completeWorkItemInteractor = async (
     });
   const originalWorkItemEntity = new WorkItem(originalWorkItem, {
     applicationContext,
+  });
+
+  await acquireLock({
+    applicationContext,
+    identifier: originalWorkItem.docketNumber,
+    onLockError: new ServiceUnavailableError(
+      'The case is currently being updated',
+    ),
+    prefix: 'case',
+    ttl: 30,
   });
 
   const completedWorkItem = originalWorkItemEntity
@@ -85,6 +99,12 @@ export const completeWorkItemInteractor = async (
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate,
+  });
+
+  await applicationContext.getPersistenceGateway().removeLock({
+    applicationContext,
+    identifier: completedWorkItem.docketNumber,
+    prefix: 'case',
   });
 
   return completedWorkItem;

@@ -5,14 +5,16 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import {
+  ServiceUnavailableError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from '../../errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * saveCaseDetailInternalEditInteractor
+ * saveCaseDetailInternalEdit
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -20,7 +22,7 @@ import { isEmpty } from 'lodash';
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
-export const saveCaseDetailInternalEditInteractor = async (
+export const saveCaseDetailInternalEdit = async (
   applicationContext,
   { caseToUpdate, docketNumber },
 ) => {
@@ -167,3 +169,12 @@ export const saveCaseDetailInternalEditInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
+
+export const saveCaseDetailInternalEditInteractor = withLocking(
+  saveCaseDetailInternalEdit,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

@@ -5,15 +5,20 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { addCoverToPdf } from './addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * updateContactInteractor
+ * updateContact
  *
  * this interactor is invoked when a petitioner updates a case they are associated with from the parties tab.
  *
@@ -23,7 +28,7 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
-export const updateContactInteractor = async (
+export const updateContact = async (
   applicationContext,
   { contactInfo, docketNumber },
 ) => {
@@ -230,3 +235,12 @@ export const updateContactInteractor = async (
 
   return caseEntity.toRawObject();
 };
+
+export const updateContactInteractor = withLocking(
+  updateContact,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
