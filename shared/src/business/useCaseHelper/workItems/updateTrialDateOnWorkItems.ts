@@ -8,11 +8,12 @@ exports.updateTrialDateOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemTrialDate({
+    applicationContext.getPersistenceGateway().updateAttributeOnDynamoRecord({
       applicationContext,
-      docketNumber: workItem.docketNumber,
-      trialDate,
-      workItemId: workItem.workItemId,
+      attributeKey: 'trialDate',
+      attributeValue: trialDate,
+      pk: workItem.pk,
+      sk: workItem.sk,
     }),
   );
 

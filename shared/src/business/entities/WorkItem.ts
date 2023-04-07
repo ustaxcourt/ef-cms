@@ -30,6 +30,7 @@ export class WorkItem extends JoiValidationEntity {
   public sentBySection: string;
   public sentByUserId: string;
   public trialDate?: string;
+  public trialLocation?: string;
   public updatedAt: string;
   public workItemId: string;
 
@@ -84,6 +85,7 @@ export class WorkItem extends JoiValidationEntity {
     this.sentBySection = rawWorkItem.sentBySection;
     this.sentByUserId = rawWorkItem.sentByUserId;
     this.trialDate = rawWorkItem.trialDate;
+    this.trialLocation = rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
     this.workItemId =
       rawWorkItem.workItemId || applicationContext.getUniqueId();
