@@ -24,8 +24,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Current branch ls
+        working-directory: ./branchToBeCompared
+        run: ls
       - name: Jim thanks
         run: npx ts-node scripts/compareTypescriptErrors.ts
+        working-directory: ./branchToBeCompared
       # - name: Current branch ls
       #   working-directory: ./branchToBeCompared
       #   run: ls
