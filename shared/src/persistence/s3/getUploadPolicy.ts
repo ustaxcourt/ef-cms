@@ -23,6 +23,7 @@ export const getUploadPolicy = ({
           ['starts-with', '$Content-Type', ''],
           ['content-length-range', 0, MAX_FILE_SIZE_BYTES],
         ],
+        Key: key,
       },
       (err, data) => {
         if (err) {

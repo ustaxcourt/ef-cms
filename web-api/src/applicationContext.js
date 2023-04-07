@@ -171,8 +171,15 @@ const { User } = require('../../shared/src/business/entities/User');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+const { CognitoIdentityServiceProvider, DynamoDB, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
+const {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} = require('@aws-sdk/client-s3');
+const { createPresignedPost } = require('@aws-sdk/s3-presigned-post');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -619,18 +626,60 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient: () => {
       if (!s3Cache) {
-        s3Cache = new S3({
+        s3Cache = new S3Client({
           endpoint: environment.s3Endpoint,
+          forcePathStyle: true,
           httpOptions: {
             connectTimeout: 3000,
             timeout: 5000,
           },
-          maxRetries: 3,
+          maxAttempts: 3,
           region: 'us-east-1',
-          s3ForcePathStyle: true,
         });
       }
-      return s3Cache;
+      return {
+        createPresignedPost(params, cb) {
+          createPresignedPost(s3Cache, params)
+            .then(data => cb(null, data))
+            .catch(err => cb(err, null));
+        },
+        getObject({ Bucket, Key }) {
+          return {
+            async promise() {
+              const { Body } = await s3Cache.send(
+                new GetObjectCommand({
+                  Bucket,
+                  Key,
+                }),
+              );
+              const chunks = [];
+              for await (const chunk of Body) {
+                chunks.push(chunk);
+              }
+              const byteBuffer = Uint8Array.from(Buffer.concat(chunks));
+              return {
+                Body: byteBuffer,
+              };
+            },
+          };
+        },
+        getSignedUrl(method, params, cb) {
+          getSignedUrl(s3Cache, new GetObjectCommand(params), {
+            expiresIn: 3600,
+          })
+            .then(data => cb(null, data))
+            .catch(err => cb(err, null));
+        },
+        putObject({ Body, Bucket, ContentType, Key }) {
+          return {
+            promise() {
+              return s3Cache.send(
+                new PutObjectCommand({ Body, Bucket, ContentType, Key }),
+              );
+            },
+          };
+        },
+      };
     },
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
