@@ -2,10 +2,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
-import { FiledInMultiCasesReview } from './FiledInMultiCasesReview';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { MultiDocumentPartiesFilingReview } from './MultiDocumentPartiesFilingReview';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -285,31 +283,22 @@ export const FileDocumentReview = connect(
             <div className="tablet:grid-col-5 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
-                  {fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-                    <FiledInMultiCasesReview />
-                  )}
-                  {!fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-                    <>
-                      <h3 className="underlined">
-                        Parties Filing The Document(s)
-                      </h3>
-                      <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-12 margin-bottom-1">
-                          <label className="usa-label" htmlFor="filing-parties">
-                            Filing parties
-                          </label>
-                          <ul className="ustc-unstyled-list without-margins">
-                            {fileDocumentHelper.formattedFilingParties.map(
-                              party => (
-                                <li key={party}>{party}</li>
-                              ),
-                            )}
-                            {form.partyIrsPractitioner && <li>Respondent</li>}
-                          </ul>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  <h3 className="underlined">Parties Filing The Document(s)</h3>
+                  <div className="grid-row grid-gap">
+                    <div className="tablet:grid-col-12 margin-bottom-1">
+                      <label className="usa-label" htmlFor="filing-parties">
+                        Filing parties
+                      </label>
+                      <ul className="ustc-unstyled-list without-margins">
+                        {fileDocumentHelper.formattedFilingParties.map(
+                          party => (
+                            <li key={party}>{party}</li>
+                          ),
+                        )}
+                        {form.partyIrsPractitioner && <li>Respondent</li>}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -419,25 +408,6 @@ export const FileDocumentReview = connect(
             </div>
           )}
         </div>
-
-        {fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-          <div className="grid-row grid-gap margin-bottom-5">
-            <div className="tablet:grid-col-12">
-              <div className="card height-full margin-bottom-0">
-                <div className="content-wrapper">
-                  <h3 className="underlined">Parties Filing The Document(s)</h3>
-                  <div className="grid-row grid-gap">
-                    <MultiDocumentPartiesFilingReview
-                      selectedCases={
-                        fileDocumentHelper.formattedSelectedCasesAsCase
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="grid-row grid-gap margin-bottom-5">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
