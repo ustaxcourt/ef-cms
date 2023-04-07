@@ -1,3 +1,21 @@
+export const checkLock = async ({
+  applicationContext,
+  identifier,
+  onLockError,
+  prefix,
+}) => {
+  const currentLock = await applicationContext
+    .getPersistenceGateway()
+    .getLock({ applicationContext, identifier, prefix });
+
+  if (currentLock) {
+    applicationContext.logger.warn('Entity is currently locked', {
+      currentLock,
+    });
+    throw onLockError;
+  }
+};
+
 export const acquireLock = async ({
   applicationContext,
   identifier,
@@ -11,37 +29,32 @@ export const acquireLock = async ({
   onLockError: Error;
   ttl?: number;
 }) => {
-  if (typeof identifier === 'object') {
-    return Promise.all(
-      identifier.map(entityIdentifier =>
-        acquireLock({
-          applicationContext,
-          identifier: entityIdentifier,
-          onLockError,
-          prefix,
-          ttl,
-        }),
-      ),
-    );
-  }
+  const identifiersToLock =
+    typeof identifier === 'string' ? [identifier] : identifier;
 
-  const currentLock = await applicationContext
-    .getPersistenceGateway()
-    .getLock({ applicationContext, identifier, prefix });
+  // First check if any are already locked, if so throw an error
+  await Promise.all(
+    identifiersToLock.map(entityIdentifier =>
+      checkLock({
+        applicationContext,
+        identifier: entityIdentifier,
+        onLockError,
+        prefix,
+      }),
+    ),
+  );
 
-  if (currentLock) {
-    applicationContext.logger.warn('Entity is currently locked', {
-      currentLock,
-    });
-    throw onLockError;
-  }
-
-  await applicationContext.getPersistenceGateway().createLock({
-    applicationContext,
-    identifier,
-    prefix,
-    ttl,
-  });
+  // Second, lock them up so the are unavailable
+  await Promise.all(
+    identifiersToLock.map(entityIdentifier =>
+      applicationContext.getPersistenceGateway().createLock({
+        applicationContext,
+        identifier: entityIdentifier,
+        prefix,
+        ttl,
+      }),
+    ),
+  );
 };
 
 export const removeLock = ({
