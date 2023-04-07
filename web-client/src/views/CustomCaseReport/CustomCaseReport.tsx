@@ -1,20 +1,25 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import {
-  CASE_STATUSES,
-  CASE_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
+import {
+  courtIssuedDocketEntryOnChange,
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const CustomCaseReport = connect(
   {
+    clearOptionalCustomCaseInventoryFilterSequence:
+      sequences.clearOptionalCustomCaseInventoryFilterSequence,
     customCaseInventoryFilters: state.customCaseInventoryFilters,
     customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence:
@@ -23,6 +28,7 @@ export const CustomCaseReport = connect(
       sequences.setCustomCaseInventoryReportFiltersSequence,
   },
   function CustomCaseReport({
+    clearOptionalCustomCaseInventoryFilterSequence,
     customCaseInventoryFilters,
     customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence,
@@ -132,10 +138,7 @@ export const CustomCaseReport = connect(
           <div className="grid-col-8">
             <div className="grid-row">
               <div className="grid-col margin-top-3 margin-right-4">
-                <legend className="display-block" id="trial-year">
-                  Case Status
-                </legend>
-                <select
+                {/* <select
                   aria-label="Case Status"
                   className={classNames('usa-select')}
                   name="caseStatus"
@@ -155,13 +158,52 @@ export const CustomCaseReport = connect(
                       {caseStatus}
                     </option>
                   ))}
-                </select>
+                </select> */}
+                <FormGroup
+                // errorText={validationErrors.documentType}
+                >
+                  <label
+                    className="usa-label"
+                    htmlFor="case-status"
+                    id="case-status-label"
+                  >
+                    Case Status (optional)
+                  </label>
+                  <SelectSearch
+                    aria-labelledby="case-status-label"
+                    id="case-status"
+                    name="eventCode"
+                    options={customCaseInventoryReportHelper.caseStatuses}
+                    // value={reactSelectValue({
+                    //   documentTypes:
+                    //     addCourtIssuedDocketEntryHelper.documentTypes,
+                    //   selectedEventCode: form.eventCode,
+                    // })}
+                    // onChange={(inputValue, { action, name }) => {
+                    //   courtIssuedDocketEntryOnChange({
+                    //     action,
+                    //     inputValue,
+                    //     name,
+                    //     updateSequence:
+                    //       updateCourtIssuedDocketEntryFormValueSequence,
+                    //     validateSequence:
+                    //       validateCourtIssuedDocketEntrySequence,
+                    //   });
+                    //   return true;
+                    // }}
+                    // onInputChange={(inputText, { action }) => {
+                    //   onInputChange({
+                    //     action,
+                    //     inputText,
+                    //     updateSequence:
+                    //       updateCourtIssuedDocketEntryFormValueSequence,
+                    //   });
+                    // }}
+                  />
+                </FormGroup>
               </div>
               <div className="grid-col margin-top-3">
-                <legend className="display-block" id="trial-year">
-                  Case Types
-                </legend>
-                <select
+                {/* <select
                   aria-label="Case Types"
                   className={classNames('usa-select')}
                   name="caseTypes"
@@ -181,7 +223,50 @@ export const CustomCaseReport = connect(
                       {caseType}
                     </option>
                   ))}
-                </select>
+                </select> */}
+
+                <FormGroup
+                // errorText={validationErrors.documentType}
+                >
+                  <label
+                    className="usa-label"
+                    htmlFor="case-type"
+                    id="case-type-label"
+                  >
+                    Case Types (optional)
+                  </label>
+                  <SelectSearch
+                    aria-labelledby="case-type-label"
+                    id="case-type"
+                    name="eventCode"
+                    options={customCaseInventoryReportHelper.caseTypes}
+                    // value={reactSelectValue({
+                    //   documentTypes:
+                    //     addCourtIssuedDocketEntryHelper.documentTypes,
+                    //   selectedEventCode: form.eventCode,
+                    // })}
+                    // onChange={(inputValue, { action, name }) => {
+                    //   courtIssuedDocketEntryOnChange({
+                    //     action,
+                    //     inputValue,
+                    //     name,
+                    //     updateSequence:
+                    //       updateCourtIssuedDocketEntryFormValueSequence,
+                    //     validateSequence:
+                    //       validateCourtIssuedDocketEntrySequence,
+                    //   });
+                    //   return true;
+                    // }}
+                    // onInputChange={(inputText, { action }) => {
+                    //   onInputChange({
+                    //     action,
+                    //     inputText,
+                    //     updateSequence:
+                    //       updateCourtIssuedDocketEntryFormValueSequence,
+                    //   });
+                    // }}
+                  />
+                </FormGroup>
               </div>
             </div>
           </div>
@@ -241,11 +326,7 @@ export const CustomCaseReport = connect(
             link
             isActive={customCaseInventoryReportHelper.isClearFiltersActive}
             tooltip="Clear Filters"
-            // onClick={() =>
-            //   setCustomCaseInventoryReportFiltersSequence({
-            //     resetFilters: true, //DISCUSS BETTER APPROACH
-            //   })
-            // }
+            onClick={() => clearOptionalCustomCaseInventoryFilterSequence()}
           >
             Clear Filters
           </Button>
