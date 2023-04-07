@@ -1,5 +1,7 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
 
@@ -29,6 +31,9 @@ describe('updateDeficiencyStatisticInteractor', () => {
   };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'docketClerk',
@@ -87,6 +92,53 @@ describe('updateDeficiencyStatisticInteractor', () => {
     );
     expect(result).toMatchObject({
       statistics: [statistic],
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      updateDeficiencyStatisticInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
+        ...statistic,
+      } as any),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await updateDeficiencyStatisticInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
+      ...statistic,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
     });
   });
 });

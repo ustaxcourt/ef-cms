@@ -3,10 +3,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
- * deleteCaseDeadlineInteractor
+ * deleteCaseDeadline
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +18,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case the case deadline is attached to
  * @returns {Promise} the promise of the delete call
  */
-export const deleteCaseDeadlineInteractor = async (
+export const deleteCaseDeadline = async (
   applicationContext: IApplicationContext,
   {
     caseDeadlineId,
@@ -54,3 +58,12 @@ export const deleteCaseDeadlineInteractor = async (
     });
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const deleteCaseDeadlineInteractor = withLocking(
+  deleteCaseDeadline,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

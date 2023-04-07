@@ -1,5 +1,7 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
 
@@ -8,6 +10,9 @@ const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
 
 describe('removeConsolidatedCasesInteractor', () => {
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     mockCases = {
       '101-19': {
         ...MOCK_CASE,
@@ -242,6 +247,60 @@ describe('removeConsolidatedCasesInteractor', () => {
     ).toMatchObject({
       docketNumber: '104-19',
       leadDocketNumber: undefined,
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      removeConsolidatedCasesInteractor(applicationContext, {
+        docketNumber: '105-19',
+        docketNumbersToRemove: ['104-19'],
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the cases', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await removeConsolidatedCasesInteractor(applicationContext, {
+      docketNumber: '105-19',
+      docketNumbersToRemove: ['104-19'],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(2);
+
+    ['105-19', '104-19'].forEach(docketNumber => {
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: docketNumber,
+        prefix: 'case',
+        ttl: 30,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: docketNumber,
+        prefix: 'case',
+      });
     });
   });
 });

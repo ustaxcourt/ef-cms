@@ -3,7 +3,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
+
 /**
  * used for setting a case as blocked
  *
@@ -13,7 +18,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {string} providers.docketNumber the docket number to block
  * @returns {object} the case data
  */
-export const blockCaseFromTrialInteractor = async (
+export const blockCaseFromTrial = async (
   applicationContext: IApplicationContext,
   { docketNumber, reason }: { docketNumber: string; reason: string },
 ) => {
@@ -50,3 +55,12 @@ export const blockCaseFromTrialInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const blockCaseFromTrialInteractor = withLocking(
+  blockCaseFromTrial,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

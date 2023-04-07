@@ -1,12 +1,17 @@
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
- * removeConsolidatedCasesInteractor
+ * removeConsolidatedCases
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +19,7 @@ import {
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-export const removeConsolidatedCasesInteractor = async (
+export const removeConsolidatedCases = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -112,3 +117,12 @@ export const removeConsolidatedCasesInteractor = async (
 
   await Promise.all(updateCasePromises);
 };
+
+export const removeConsolidatedCasesInteractor = withLocking(
+  removeConsolidatedCases,
+  ({ docketNumber, docketNumbersToRemove = [] }) => ({
+    identifier: [docketNumber, ...docketNumbersToRemove],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);
