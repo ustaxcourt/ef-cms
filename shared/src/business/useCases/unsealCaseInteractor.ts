@@ -3,17 +3,21 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * unsealCaseInteractor
+ * unsealCase
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<object>} the updated case data
  */
-export const unsealCaseInteractor = async (
+export const unsealCase = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
@@ -40,3 +44,12 @@ export const unsealCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const unsealCaseInteractor = withLocking(
+  unsealCase,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

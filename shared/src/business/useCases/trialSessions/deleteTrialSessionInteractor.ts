@@ -3,16 +3,20 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../errors/errors';
+import { acquireLock } from '../../useCaseHelper/acquireLock';
 
 /**
- * deleteTrialSessionInteractor
+ * deleteTrialSession
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the id of the trial session
- * @returns {Promise} the promise of the deleteTrialSessionInteractor call
+ * @returns {Promise} the promise of the deleteTrialSession call
  */
 export const deleteTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
@@ -55,6 +59,18 @@ export const deleteTrialSessionInteractor = async (
     trialSessionId,
   });
 
+  const docketNumbers = trialSessionEntity.caseOrder.map(
+    ({ docketNumber }) => docketNumber,
+  );
+  await acquireLock({
+    applicationContext,
+    identifier: docketNumbers,
+    onLockError: new ServiceUnavailableError(
+      'The case is currently being updated',
+    ),
+    prefix: 'case',
+  });
+
   if (trialSessionEntity.judge) {
     await applicationContext
       .getPersistenceGateway()
@@ -92,6 +108,16 @@ export const deleteTrialSessionInteractor = async (
       caseToUpdate: caseEntity,
     });
   }
+
+  await Promise.all(
+    docketNumbers.map(docketNumber =>
+      applicationContext.getPersistenceGateway().removeLock({
+        applicationContext,
+        identifier: docketNumber,
+        prefix: 'case',
+      }),
+    ),
+  );
 
   return trialSessionEntity.toRawObject();
 };

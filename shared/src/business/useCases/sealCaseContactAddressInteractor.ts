@@ -4,12 +4,14 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import {
+  ServiceUnavailableError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * sealCaseContactAddressInteractor
+ * sealCaseContactAddress
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -17,7 +19,7 @@ import {
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {object} the updated case data
  */
-export const sealCaseContactAddressInteractor = async (
+export const sealCaseContactAddress = async (
   applicationContext,
   { contactId, docketNumber },
 ) => {
@@ -58,3 +60,12 @@ export const sealCaseContactAddressInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
+
+export const sealCaseContactAddressInteractor = withLocking(
+  sealCaseContactAddress,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

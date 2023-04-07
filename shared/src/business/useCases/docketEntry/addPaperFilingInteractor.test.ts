@@ -9,6 +9,8 @@ import {
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
@@ -19,6 +21,9 @@ describe('addPaperFilingInteractor', () => {
   const mockCase = { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
@@ -76,7 +81,7 @@ describe('addPaperFilingInteractor', () => {
     await expect(
       addPaperFilingInteractor(applicationContext, {
         clientConnectionId: undefined,
-        consolidatedGroupDocketNumbers: undefined,
+        consolidatedGroupDocketNumbers: [],
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: undefined,
         isSavingForLater: undefined,
@@ -494,6 +499,73 @@ describe('addPaperFilingInteractor', () => {
     ).toBe(false);
   });
 
+  it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      addPaperFilingInteractor(applicationContext, {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: false,
+          isPaper: true,
+        },
+        isSavingForLater: true,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      consolidatedGroupDocketNumbers: [],
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: false,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: mockCase.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: mockCase.docketNumber,
+      prefix: 'case',
+    });
+  });
+
   describe('consolidated groups', () => {
     let mockConsolidatedGroupRequest;
 
@@ -550,6 +622,76 @@ describe('addPaperFilingInteractor', () => {
         applicationContext.getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf,
       ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getLock.mockReturnValueOnce(undefined)
+        .mockReturnValueOnce(MOCK_LOCK);
+
+      const mockConsolidatedGroup = [
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ];
+      mockConsolidatedGroupRequest.isSavingForLater = false;
+      mockConsolidatedGroupRequest.consolidatedGroupDocketNumbers =
+        mockConsolidatedGroup;
+
+      await expect(
+        addPaperFilingInteractor(
+          applicationContext,
+          mockConsolidatedGroupRequest,
+        ),
+      ).rejects.toThrow(ServiceUnavailableError);
+
+      expect(
+        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should acquire and remove the lock on the case', async () => {
+      const mockConsolidatedGroup = [
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ];
+      mockConsolidatedGroupRequest.isSavingForLater = false;
+      mockConsolidatedGroupRequest.consolidatedGroupDocketNumbers =
+        mockConsolidatedGroup;
+
+      applicationContext
+        .getPersistenceGateway()
+        .getLock.mockReturnValue(undefined);
+
+      await addPaperFilingInteractor(
+        applicationContext,
+        mockConsolidatedGroupRequest,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledTimes(3);
+      mockConsolidatedGroup.forEach(docketNumber => {
+        expect(
+          applicationContext.getPersistenceGateway().removeLock,
+        ).toHaveBeenCalledWith({
+          applicationContext,
+          identifier: docketNumber,
+          prefix: 'case',
+        });
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).toHaveBeenCalledWith({
+          applicationContext,
+          identifier: docketNumber,
+          prefix: 'case',
+          ttl: 30,
+        });
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledTimes(3);
     });
   });
 });

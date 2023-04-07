@@ -4,7 +4,9 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
@@ -14,6 +16,9 @@ describe('addCaseToTrialSessionInteractor', () => {
   let mockCase;
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     mockCurrentUser = {
       role: ROLES.petitionsClerk,
       userId: '8675309b-18d0-43ec-bafb-654e83405411',
@@ -163,5 +168,52 @@ describe('addCaseToTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      addCaseToTrialSessionInteractor(applicationContext, {
+        calendarNotes: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await addCaseToTrialSessionInteractor(applicationContext, {
+      calendarNotes: 'testing',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: mockTrialSession.trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
   });
 });

@@ -3,10 +3,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
- * archiveCorrespondenceDocumentInteractor
+ * archiveCorrespondenceDocument
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +18,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {void}
  */
-export const archiveCorrespondenceDocumentInteractor = async (
+export const archiveCorrespondenceDocument = async (
   applicationContext: IApplicationContext,
   {
     correspondenceId,
@@ -54,3 +58,12 @@ export const archiveCorrespondenceDocumentInteractor = async (
     caseToUpdate: caseEntity,
   });
 };
+
+export const archiveCorrespondenceDocumentInteractor = withLocking(
+  archiveCorrespondenceDocument,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

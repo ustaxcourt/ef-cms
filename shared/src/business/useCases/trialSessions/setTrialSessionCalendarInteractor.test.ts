@@ -1,9 +1,11 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import {
   PARTY_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
@@ -34,6 +36,9 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     user = new User({
       name: 'petitionsClerk',
       role: ROLES.petitionsClerk,
@@ -233,6 +238,49 @@ describe('setTrialSessionCalendarInteractor', () => {
         .mock.calls[0][0],
     ).toMatchObject({
       limit: 149, // max cases + buffer - manually added case
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      setTrialSessionCalendarInteractor(applicationContext, {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 900,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
     });
   });
 });

@@ -20,6 +20,8 @@ import {
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import {
   applicationContext,
   testPdfDoc,
@@ -72,6 +74,9 @@ describe('serveCaseToIrsInteractor', () => {
   };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     mockCase = { ...MOCK_CASE };
     mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
@@ -1391,6 +1396,49 @@ describe('serveCaseToIrsInteractor', () => {
         .systemGeneratedDocument,
     ).toMatchObject({
       content: expect.stringContaining(mockTodayPlus30),
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
     });
   });
 });

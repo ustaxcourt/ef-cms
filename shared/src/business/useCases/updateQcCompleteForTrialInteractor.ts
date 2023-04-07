@@ -3,10 +3,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * updateQcCompleteForTrialInteractor
+ * updateQcCompleteForTrial
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -16,7 +20,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @returns {Promise<object>} the updated case data
  */
 
-export const updateQcCompleteForTrialInteractor = async (
+export const updateQcCompleteForTrial = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -51,3 +55,12 @@ export const updateQcCompleteForTrialInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateQcCompleteForTrialInteractor = withLocking(
+  updateQcCompleteForTrial,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

@@ -4,13 +4,18 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
 import { omit } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -19,7 +24,7 @@ import { omit } from 'lodash';
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-export const fileCourtIssuedDocketEntryInteractor = async (
+export const fileCourtIssuedDocketEntry = async (
   applicationContext: IApplicationContext,
   {
     docketNumbers,
@@ -205,3 +210,12 @@ export const fileCourtIssuedDocketEntryInteractor = async (
   }).validate();
   return subjectCase.toRawObject();
 };
+
+export const fileCourtIssuedDocketEntryInteractor = withLocking(
+  fileCourtIssuedDocketEntry,
+  ({ docketNumbers = [], subjectDocketNumber }) => ({
+    identifier: [...new Set([subjectDocketNumber, ...docketNumbers])],
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

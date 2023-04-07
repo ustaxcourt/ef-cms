@@ -7,6 +7,8 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
@@ -68,6 +70,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
   };
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -439,5 +444,66 @@ describe('fileCourtIssuedOrderInteractor', () => {
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('error parsing pdf');
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      fileCourtIssuedOrderInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentContents: 'I am some document contents',
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await fileCourtIssuedOrderInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: 'I am some document contents',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: caseRecord.docketNumber,
+      prefix: 'case',
+    });
   });
 });

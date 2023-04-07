@@ -3,10 +3,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
- * removePdfFromDocketEntryInteractor
+ * removePdfFromDocketEntry
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +18,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {object} providers.docketEntryId the docket entry id for the file to be removed
  * @returns {object} the updated case data
  */
-export const removePdfFromDocketEntryInteractor = async (
+export const removePdfFromDocketEntry = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
@@ -56,3 +60,12 @@ export const removePdfFromDocketEntryInteractor = async (
     return new Case(updatedCase, { applicationContext }).toRawObject();
   }
 };
+
+export const removePdfFromDocketEntryInteractor = withLocking(
+  removePdfFromDocketEntry,
+  ({ docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
+  new ServiceUnavailableError('The case is currently being updated'),
+);

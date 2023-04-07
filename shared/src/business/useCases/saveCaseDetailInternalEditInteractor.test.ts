@@ -4,7 +4,9 @@ import {
   PETITIONS_SECTION,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
 import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
+import { ServiceUnavailableError } from '../../errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
 import { omit } from 'lodash';
@@ -45,7 +47,9 @@ describe('updateCase', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(petitionsClerkUser);
@@ -340,5 +344,61 @@ describe('updateCase', () => {
     );
 
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
+  });
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+
+    await expect(
+      saveCaseDetailInternalEditInteractor(applicationContext, {
+        caseToUpdate: {
+          ...mockCase,
+          contactPrimary: {
+            ...getContactPrimary(mockCase),
+          },
+          petitioners: undefined,
+        },
+        docketNumber: mockCase.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
+    await saveCaseDetailInternalEditInteractor(applicationContext, {
+      caseToUpdate: {
+        ...mockCase,
+        contactPrimary: {
+          ...getContactPrimary(mockCase),
+        },
+        petitioners: undefined,
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: MOCK_CASE.docketNumber,
+      prefix: 'case',
+    });
   });
 });
