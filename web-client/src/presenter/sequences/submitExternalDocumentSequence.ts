@@ -12,7 +12,12 @@ import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDoc
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 const onSuccess = [
+  // If you file across the consolidated group do you become automatically associated with the cases filed
+  // on in the group that you are not currently associated with
+  // If they are "Filing First Document in an indirectly associated case accessed through the Consolidated Cases card
+  // do we allow to file across the consolidated group?"
   submitRespondentCaseAssociationRequestAction,
+  //start looping over CCs at some point after here
   setCaseAction,
   closeFileUploadStatusModalAction,
   getPrintableFilingReceiptSequence,
@@ -24,9 +29,17 @@ const onSuccess = [
 
 export const submitExternalDocumentSequence = showProgressSequenceDecorator([
   openFileUploadStatusModalAction,
+  // shouldFileAcrossConsolidatedGroupAction
+  // if no continue with preexisting workflow
   uploadExternalDocumentsAction,
   {
     error: [openFileUploadErrorModal],
     success: onSuccess,
   },
+  // if yes
+  // uploadExternalDocumentsAcrossConsolidatedGroupAction,
+  // {
+  //   error: [openFileUploadErrorModal],
+  //   success: onSuccess,
+  // },
 ]);

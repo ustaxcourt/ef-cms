@@ -45,52 +45,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
 
-  const { eventCode: documentToFileEventCode } = form;
-  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
-  const isConsolidatedGroupAccessEnabled = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
-    ],
-  );
-  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
-  const isMultiDocketableEventCode = !!applicationContext
-    .getConstants()
-    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
-  let showConsolidatedCasesGroupFilingCard = false;
-  if (
-    isConsolidatedGroupAccessEnabled &&
-    isInConsolidatedGroup &&
-    isMultiDocketableEventCode
-  ) {
-    showConsolidatedCasesGroupFilingCard = true;
-  }
-
-  const selectedCasesMap = (form.selectedCases || []).reduce(
-    (acc, docketNumber) => {
-      acc[docketNumber] = true;
-      return acc;
-    },
-    {},
-  );
-
-  const { formattedSelectedCasesAsCase, selectedCasesAsCase } =
-    getFormattedSelectedCasesAsCase({
-      applicationContext,
-      cases: caseDetail.consolidatedCases || [],
-      selectedCasesMap,
-    });
-
-  // TODO: remove selectedDocketNumbers and selectedCases
-  const selectedDocketNumbers = get(state.form.selectedCases);
-
-  const formattedDocketNumbers =
-    (selectedDocketNumbers &&
-      getFormattedDocketNumbers({
-        applicationContext,
-        selectedDocketNumbers,
-      })) ||
-    null;
-
   const { primaryDocument, secondaryDocument } = getPrimarySecondaryDocuments({
     AMENDMENT_EVENT_CODES,
     CATEGORY_MAP,
@@ -110,34 +64,57 @@ export const fileDocumentHelper = (get, applicationContext) => {
     filersMap: form.filersMap,
   });
 
-  const currentCasePetitioners = caseDetail.petitioners
-    .map(ptr => ptr.name)
-    .join(' & ');
-
-  const formattedCurrentCasePetitionerNames = `${caseDetail.docketNumber} ${currentCasePetitioners}`;
-
-  const formattedConsolidatedCaseList = caseDetail.consolidatedCases.map(
-    currentCase => {
-      const formattedPetitioners = currentCase.petitioners
-        .map(ptr => ptr.name)
-        .join(' & ');
-      return `${currentCase.docketNumber} ${formattedPetitioners}`;
-    },
+  const { eventCode: documentToFileEventCode } = form;
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+  const isConsolidatedGroupAccessEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
+    ],
   );
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
 
-  const { CONTACT_TYPE_TITLES, USER_ROLES } = applicationContext.getConstants();
-  const roleToDisplay = party => {
-    if (party.role === USER_ROLES.privatePractitioner) {
-      return 'Petitioner Counsel';
-    } else if (party.role === USER_ROLES.irsPractitioner) {
-      return 'Respondent Counsel';
-    } else {
-      return CONTACT_TYPE_TITLES[party.contactType];
-    }
-  };
+  let showConsolidatedCasesGroupFilingCard = false;
+  let formattedCurrentCasePetitionerNames;
+  let formattedConsolidatedCaseList = [];
   let consolidatedGroupServiceParties = [];
-  // simplify with lodash groupBy function
-  if (isInConsolidatedGroup) {
+
+  if (
+    isConsolidatedGroupAccessEnabled &&
+    isInConsolidatedGroup &&
+    isMultiDocketableEventCode
+  ) {
+    showConsolidatedCasesGroupFilingCard = true;
+
+    const currentCasePetitioners = caseDetail.petitioners
+      .map(ptr => ptr.name)
+      .join(' & ');
+
+    formattedCurrentCasePetitionerNames = `${caseDetail.docketNumber} ${currentCasePetitioners}`;
+
+    formattedConsolidatedCaseList = caseDetail.consolidatedCases.map(
+      currentCase => {
+        const formattedPetitioners = currentCase.petitioners
+          .map(ptr => ptr.name)
+          .join(' & ');
+        return `${currentCase.docketNumber} ${formattedPetitioners}`;
+      },
+    );
+
+    const { CONTACT_TYPE_TITLES, USER_ROLES } =
+      applicationContext.getConstants();
+    const roleToDisplay = party => {
+      if (party.role === USER_ROLES.privatePractitioner) {
+        return 'Petitioner Counsel';
+      } else if (party.role === USER_ROLES.irsPractitioner) {
+        return 'Respondent Counsel';
+      } else {
+        return CONTACT_TYPE_TITLES[party.contactType];
+      }
+    };
+    // simplify with lodash groupBy function
     caseDetail.consolidatedCases.forEach((memberCase, i) => {
       consolidatedGroupServiceParties[i] = {};
       const combinedPartiesList = [
@@ -158,15 +135,12 @@ export const fileDocumentHelper = (get, applicationContext) => {
     consolidatedGroupServiceParties,
     formattedConsolidatedCaseList,
     formattedCurrentCasePetitionerNames,
-    formattedDocketNumbers,
     formattedFilingParties,
-    formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument,
     secondaryDocument,
-    selectedCasesAsCase,
     showConsolidatedCasesGroupFilingCard,
     showFileAcrossConsolidatedGroupCards: form.fileAcrossConsolidatedGroup,
     showFilingIncludes,
@@ -282,56 +256,6 @@ const getPrimarySecondaryDocuments = ({
     },
   };
   return primarySecondaryDocuments;
-};
-
-const getFormattedSelectedCasesAsCase = ({
-  applicationContext,
-  cases = [],
-  selectedCasesMap,
-}) => {
-  const { formatCase } = applicationContext.getUtilities();
-  const { PARTY_TYPES } = applicationContext.getConstants();
-
-  const selectedCasesAsCase = cases
-    .reduce((acc, consolidatedCase) => {
-      if (selectedCasesMap[consolidatedCase.docketNumber]) {
-        acc.push({ ...consolidatedCase });
-      }
-      return acc;
-    }, [])
-    .map(consolidatedCase => {
-      consolidatedCase.showSecondaryParty =
-        consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
-        consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-      return consolidatedCase;
-    });
-  const formattedSelectedCasesAsCase = selectedCasesAsCase.map(selectedCase =>
-    formatCase(applicationContext, selectedCase),
-  );
-  return {
-    formattedSelectedCasesAsCase,
-    selectedCasesAsCase,
-  };
-};
-
-const getFormattedDocketNumbers = ({
-  applicationContext,
-  selectedDocketNumbers,
-}) => {
-  const sortedDocketNumbers = selectedDocketNumbers
-    .map(docketNumber => ({
-      // convert to Case entity-like object to use entity method
-      docketNumber,
-    }))
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-    .map(({ docketNumber }) => docketNumber);
-
-  const formattedDocketNumbers = [
-    sortedDocketNumbers.slice(0, -1).join(', '),
-    sortedDocketNumbers.slice(-1)[0],
-  ].join(sortedDocketNumbers.length < 2 ? '' : ' & ');
-
-  return formattedDocketNumbers;
 };
 
 const getFormattedSupportingDocument = ({ applicationContext, item }) => {
