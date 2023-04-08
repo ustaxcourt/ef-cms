@@ -17,7 +17,8 @@ export class OutboxItem extends JoiValidationEntity {
   public leadDocketNumber: string;
   public section: string;
   public assigneeId: string;
-  public trialDate: string;
+  public trialDate?: string;
+  public trialLocation?: string;
   public workItemId: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -57,6 +58,7 @@ export class OutboxItem extends JoiValidationEntity {
     this.leadDocketNumber = rawOutboxItem.leadDocketNumber;
     this.section = rawOutboxItem.section;
     this.trialDate = rawOutboxItem.trialDate;
+    this.trialLocation = rawOutboxItem.trialLocation;
     this.workItemId =
       rawOutboxItem.workItemId || applicationContext.getUniqueId();
   }
