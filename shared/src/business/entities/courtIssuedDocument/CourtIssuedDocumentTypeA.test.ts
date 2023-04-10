@@ -30,7 +30,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       });
     });
 
-    it('should be valid when all fields are present', () => {
+    it('should be valid when all fields except pageNumber are present', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: '[Anything]',
@@ -112,17 +112,6 @@ describe('CourtIssuedDocumentTypeA', () => {
       });
     });
 
-    it(`should be invalid when the document type is a ${REPORT_PAMPHLET_DOCUMENT_TYPE} and freeText is not defined`, () => {
-      const documentInstance = CourtIssuedDocumentFactory({
-        documentTitle: '[Anything]',
-        documentType: REPORT_PAMPHLET_DOCUMENT_TYPE,
-        scenario: 'Type A',
-      });
-      expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
-      });
-    });
-
     it('should be invalid when freeText is longer than 1000 characters', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
@@ -161,6 +150,35 @@ describe('CourtIssuedDocumentTypeA', () => {
         serviceStamp: 'Served',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+  });
+
+  describe('TCRP (Tax Court Report Pamphlet)', () => {
+    it(`should be invalid when the document type is a ${REPORT_PAMPHLET_DOCUMENT_TYPE} and freeText or pageNumber are not defined`, () => {
+      const documentInstance = CourtIssuedDocumentFactory({
+        documentTitle: '[Anything]',
+        documentType: REPORT_PAMPHLET_DOCUMENT_TYPE,
+        scenario: 'Type A',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+        pageNumber: VALIDATION_ERROR_MESSAGES.pageNumber,
+      });
+    });
+
+    it(`should be invalid when all fields including pageNumber are present and documentType is not ${REPORT_PAMPHLET_DOCUMENT_TYPE}`, () => {
+      const documentInstance = CourtIssuedDocumentFactory({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        freeText: 'Some free text',
+        pageNumber: 7,
+        scenario: 'Type A',
+        serviceStamp: 'Served',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        pageNumber: VALIDATION_ERROR_MESSAGES.pageNumber,
+      });
     });
   });
 

@@ -5,6 +5,7 @@ const {
 } = require('../JoiValidationDecorator');
 const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  OPINION_PAMPHLET_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { pick } = require('lodash');
@@ -35,6 +36,7 @@ PublicDocumentSearchResult.prototype.init = function init(rawProps = {}) {
     'isStricken',
     'judge',
     'numberOfPages',
+    'pageNumber',
     'sealedDate',
     'signedJudgeName',
   ];
@@ -68,8 +70,12 @@ PublicDocumentSearchResult.schema = joi.object().keys({
   isStricken: joi.boolean().invalid(true),
   judge: JoiValidationConstants.STRING.optional(),
   numberOfPages: joi.number().integer().optional().allow(null),
+  pageNumber: joi.when('eventCode', {
+    is: joi.exist().valid(OPINION_PAMPHLET_EVENT_CODE),
+    then: joi.number().integer().min(0).max(9999).required(),
+  }),
   sealedDate: JoiValidationConstants.ISO_DATE,
-  signedJudgeName: JoiValidationConstants.STRING.optional(),
+  signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
 });
 
 joiValidationDecorator(
