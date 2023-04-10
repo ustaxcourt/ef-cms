@@ -27,15 +27,12 @@ const updateCaseEntityAndGenerateChange = async ({
   });
 
   const petitionerObject = caseEntity.getPetitionerById(user.userId);
-  console.log({ petitionerObject, petitioners: caseEntity.petitioners, user });
   if (!petitionerObject) {
     applicationContext.logger.error(
       `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
     );
     return;
   }
-
-  console.log(petitionerObject);
 
   const oldEmail = petitionerObject.email;
   const newData = {
@@ -46,8 +43,6 @@ const updateCaseEntityAndGenerateChange = async ({
   const oldData = { email: oldEmail };
   petitionerObject.email = user.email;
 
-  console.log(petitionerObject);
-
   if (
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
       petitionerObject.contactId,
@@ -56,15 +51,7 @@ const updateCaseEntityAndGenerateChange = async ({
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  console.log(
-    caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerObject.contactId,
-    ),
-  );
-  console.log(petitionerObject);
-  console.log(caseEntity.petitioners);
   const servedParties = aggregatePartiesForService(caseEntity);
-  console.log(servedParties);
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
@@ -75,7 +62,6 @@ const updateCaseEntityAndGenerateChange = async ({
     );
 
   if (caseEntity.shouldGenerateNoticesForCase()) {
-    console.log('notice of change of address');
     const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
@@ -91,11 +77,10 @@ const updateCaseEntityAndGenerateChange = async ({
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   }
 
-  console.log('done');
   return caseEntity.validate();
 };
 
-export const updateCasesForPetitioner = async ({
+export const updatePetitionerCases = async ({
   applicationContext,
   docketNumbersAssociatedWithUser,
   user,
@@ -108,8 +93,6 @@ export const updateCasesForPetitioner = async ({
       }),
     ),
   );
-
-  console.log(rawCasesToUpdate[0].petitioners);
 
   const validatedCasesToUpdateInPersistence = [];
   for (let rawCaseData of rawCasesToUpdate) {
@@ -303,16 +286,13 @@ export const verifyUserPendingEmailInteractor = async (
   });
 
   try {
-    console.log(docketNumbersAssociatedWithUser);
     if (userEntity.role === ROLES.petitioner) {
-      console.log('petitioner!');
-      await updateCasesForPetitioner({
+      await updatePetitionerCases({
         applicationContext,
         docketNumbersAssociatedWithUser,
         user: updatedRawUser,
       });
     } else if (userEntity.role === ROLES.privatePractitioner) {
-      console.log('practitioner!');
       await updatePractitionerCases({
         applicationContext,
         docketNumbersAssociatedWithUser,

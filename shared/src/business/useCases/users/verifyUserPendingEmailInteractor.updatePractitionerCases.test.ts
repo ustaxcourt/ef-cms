@@ -19,25 +19,17 @@ describe('verifyUserPendingEmailInteractor updatePractitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['101-19']);
-    applicationContext
-      .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         privatePractitioners: [mockPractitionerUser],
       });
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockReturnValue();
-    applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser.mockReturnValue();
   });
 
   describe('updatePractitionerCases', () => {
     it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
       await updatePractitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
         user: mockPractitionerUser,
       });
 
