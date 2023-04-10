@@ -5,8 +5,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
 const updateCaseEntityAndGenerateChange = async ({
@@ -23,12 +27,15 @@ const updateCaseEntityAndGenerateChange = async ({
   });
 
   const petitionerObject = caseEntity.getPetitionerById(user.userId);
+  console.log({ petitionerObject, petitioners: caseEntity.petitioners, user });
   if (!petitionerObject) {
     applicationContext.logger.error(
       `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
     );
     return;
   }
+
+  console.log(petitionerObject);
 
   const oldEmail = petitionerObject.email;
   const newData = {
@@ -39,6 +46,8 @@ const updateCaseEntityAndGenerateChange = async ({
   const oldData = { email: oldEmail };
   petitionerObject.email = user.email;
 
+  console.log(petitionerObject);
+
   if (
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
       petitionerObject.contactId,
@@ -47,7 +56,15 @@ const updateCaseEntityAndGenerateChange = async ({
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
+  console.log(
+    caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    ),
+  );
+  console.log(petitionerObject);
+  console.log(caseEntity.petitioners);
   const servedParties = aggregatePartiesForService(caseEntity);
+  console.log(servedParties);
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
@@ -58,6 +75,7 @@ const updateCaseEntityAndGenerateChange = async ({
     );
 
   if (caseEntity.shouldGenerateNoticesForCase()) {
+    console.log('notice of change of address');
     const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
@@ -73,22 +91,25 @@ const updateCaseEntityAndGenerateChange = async ({
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   }
 
+  console.log('done');
   return caseEntity.validate();
 };
 
 export const updateCasesForPetitioner = async ({
   applicationContext,
-  petitionerCases,
+  docketNumbersAssociatedWithUser,
   user,
 }) => {
   const rawCasesToUpdate = await Promise.all(
-    petitionerCases.map(({ docketNumber }) =>
+    docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
       }),
     ),
   );
+
+  console.log(rawCasesToUpdate[0].petitioners);
 
   const validatedCasesToUpdateInPersistence = [];
   for (let rawCaseData of rawCasesToUpdate) {
@@ -114,31 +135,6 @@ export const updateCasesForPetitioner = async ({
 };
 
 /**
- * updatePetitionerCases
- * for the provided user, update their email address on all cases
- * where they are the contactPrimary or contactSecondary
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user who is a primary or secondary contact on a case
- * @returns {Promise} resolves upon completion of case updates
- */
-export const updatePetitionerCases = async ({ applicationContext, user }) => {
-  const petitionerCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
-
-  return await updateCasesForPetitioner({
-    applicationContext,
-    petitionerCases,
-    user,
-  });
-};
-
-/**
  * updatePractitionerCases
  * for the provided user, update their email address on all cases
  * where they are an IRS practitioner or private practitioner, sending an
@@ -152,19 +148,15 @@ export const updatePetitionerCases = async ({ applicationContext, user }) => {
  */
 export const updatePractitionerCases = async ({
   applicationContext,
+  docketNumbersAssociatedWithUser,
   user,
 }: {
   applicationContext: IApplicationContext;
+  docketNumbersAssociatedWithUser: string[];
   user: any;
 }) => {
-  const practitionerDocketNumbers = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
   const casesToUpdate = await Promise.all(
-    practitionerDocketNumbers.map(docketNumber =>
+    docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
@@ -253,6 +245,23 @@ export const verifyUserPendingEmailInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  const docketNumbersAssociatedWithUser = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  await acquireLock({
+    applicationContext,
+    identifier: docketNumbersAssociatedWithUser,
+    onLockError: new ServiceUnavailableError(
+      'One of the cases is currently being updated',
+    ),
+    prefix: 'case',
+    ttl: 900,
+  });
+
   let userEntity;
   if (user.role === ROLES.petitioner) {
     userEntity = new User(user);
@@ -294,19 +303,35 @@ export const verifyUserPendingEmailInteractor = async (
   });
 
   try {
+    console.log(docketNumbersAssociatedWithUser);
     if (userEntity.role === ROLES.petitioner) {
-      await updatePetitionerCases({
+      console.log('petitioner!');
+      await updateCasesForPetitioner({
         applicationContext,
+        docketNumbersAssociatedWithUser,
         user: updatedRawUser,
       });
     } else if (userEntity.role === ROLES.privatePractitioner) {
+      console.log('practitioner!');
       await updatePractitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser,
         user: updatedRawUser,
       });
     }
+    await Promise.all(
+      docketNumbersAssociatedWithUser.map(docketNumber =>
+        applicationContext.getPersistenceGateway().removeLock({
+          applicationContext,
+          identifier: docketNumber,
+          prefix: 'case',
+        }),
+      ),
+    );
   } catch (error) {
-    applicationContext.logger.error(error);
+    applicationContext.logger.error('Unable to verify pending user email', {
+      error,
+    });
     throw error;
   }
 };
