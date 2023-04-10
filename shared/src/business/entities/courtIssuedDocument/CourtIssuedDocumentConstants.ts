@@ -34,6 +34,7 @@ const VALIDATION_ERROR_MESSAGES = {
     },
   ],
   judge: 'Select a judge',
+  pageNumber: 'Enter opinion starting page',
   serviceStamp: 'Select a service stamp',
   trialLocation: 'Select a trial location',
 };

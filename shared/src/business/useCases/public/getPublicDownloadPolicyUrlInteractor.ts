@@ -1,6 +1,9 @@
 import { Case, isSealedCase } from '../../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import {
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  OPINION_PAMPHLET_EVENT_CODE,
+} from '../../entities/EntityConstants';
 import { isPrivateDocument } from '../../entities/cases/PublicCase';
 
 /**
@@ -56,12 +59,18 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     docketEntryEntity.eventCode,
   );
 
+  const isOpinionReportPamphlet =
+    docketEntryEntity.eventCode === OPINION_PAMPHLET_EVENT_CODE;
+
   if (docketEntryEntity.isSealed) {
     throw new UnauthorizedError('Docket entry has been sealed.');
   }
 
   // opinion documents are public even in sealed cases
-  if (isSealedCase(caseEntity) && !isOpinionDocument) {
+  const cannotAccessSealedDocument =
+    isSealedCase(caseEntity) && !isOpinionDocument && !isOpinionReportPamphlet;
+
+  if (cannotAccessSealedDocument) {
     throw new UnauthorizedError(
       'Unauthorized to access documents in a sealed case',
     );
