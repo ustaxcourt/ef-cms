@@ -8,5 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  */
 export const openFileUploadStatusModalAction = ({ store }) => {
+  console.log('in openFileUploadStatusModalAction');
+
   store.set(state.modal.showModal, 'FileUploadStatusModal');
 };

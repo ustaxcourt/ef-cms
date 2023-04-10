@@ -8,5 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.caseDetail
  */
 export const setCaseAction = ({ props, store }) => {
+  console.log('in setCaseAction');
+
   store.set(state.caseDetail, props.caseDetail);
 };
