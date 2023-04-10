@@ -6,69 +6,57 @@ import { getContactPrimary } from '../../entities/cases/Case';
 import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
 
 describe('setUserEmailFromPendingEmailInteractor', () => {
-  let mockPractitioner;
-  let mockUser;
-  let userCases;
   const UPDATED_EMAIL = 'other@example.com';
   const USER_ID = '7a0c9454-5f1a-438a-8c8a-f7560b119343';
+  const mockPetitioner = {
+    ...validUser,
+    birthYear: '1950',
+    email: undefined,
+    firstName: 'Alden',
+    lastName: 'Rivas',
+    name: 'Alden Rivas',
+    originalBarState: 'FL',
+    pendingEmail: UPDATED_EMAIL,
+    role: ROLES.petitioner,
+    userId: USER_ID,
+  };
+
+  const mockPractitioner = {
+    ...MOCK_PRACTITIONER,
+    email: undefined,
+    pendingEmail: UPDATED_EMAIL,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  };
 
   beforeEach(() => {
-    mockUser = {
-      ...validUser,
-      birthYear: '1950',
-      email: undefined,
-      firstName: 'Alden',
-      lastName: 'Rivas',
-      name: 'Alden Rivas',
-      originalBarState: 'FL',
-      pendingEmail: UPDATED_EMAIL,
-      role: ROLES.petitioner,
-      userId: USER_ID,
+    const mockCase = {
+      ...MOCK_CASE,
+      docketNumber: '101-21',
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          contactId: USER_ID,
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+      privatePractitioners: [mockPractitioner],
     };
 
-    mockPractitioner = {
-      ...MOCK_PRACTITIONER,
-      email: undefined,
-      pendingEmail: UPDATED_EMAIL,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    };
-
-    userCases = [
-      {
-        ...MOCK_CASE,
-        docketNumber: '101-21',
-        petitioners: [
-          {
-            ...getContactPrimary(MOCK_CASE),
-            contactId: USER_ID,
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners: [mockPractitioner],
-      },
-    ];
+    applicationContext
+      .getPersistenceGateway()
+      .updateUser.mockReturnValue(mockPetitioner);
 
     applicationContext
       .getPersistenceGateway()
-      .updateUser.mockImplementation(() => mockUser);
+      .getDocketNumbersByUser.mockReturnValue([mockCase.docketNumber]);
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByUser.mockImplementation(() => [
-        userCases[0].docketNumber,
-      ]);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => userCases[0]);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined, and service indicator set to electronic with a practitioner user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
-
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: {
         ...mockPractitioner,
@@ -90,7 +78,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: mockUser,
+      user: mockPetitioner,
     });
 
     expect(
@@ -104,7 +92,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
 
   it('should attempt to send a message to update the petitioner cases via the message gateway', async () => {
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: mockUser,
+      user: mockPetitioner,
     });
 
     expect(
@@ -113,10 +101,6 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should update the user cases with the new email and electronic service for a practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
-
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockPractitioner,
     });
@@ -149,10 +133,6 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should not turn an inactive Practitioner into a User', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
-
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: {
         ...mockPractitioner,
