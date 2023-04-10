@@ -586,9 +586,13 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
-  judgeUserId: JoiValidationConstants.UUID.optional().description(
-    'Unique ID for the associated judge.',
-  ),
+  // judgeUserId: joi
+  //   .when('associatedJudge', {
+  //     is: joi.exist(),
+  //     otherwise: joi.allow(null).optional(),
+  //     then: JoiValidationConstants.UUID.required(),
+  //   })
+  // .description('Unique ID for the associated judge.'),
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
@@ -2046,12 +2050,10 @@ Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
  * @param {string} associatedJudge the judge to associate with the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAssociatedJudge = function ({
-  associatedJudge,
-  judgeUserId,
-}) {
-  this.associatedJudge = associatedJudge;
-  this.judgeUserId = judgeUserId;
+Case.prototype.setAssociatedJudge = function (associatedJudge) {
+  this.associatedJudge = associatedJudge.name;
+  this.judgeUserId = associatedJudge.userId;
+  console.log(this.associatedJudge, this.judgeUserId, 'info things');
   return this;
 };
 

@@ -17,27 +17,28 @@ export const submitUpdateCaseModalAction = async ({
 
   const caseToUpdate = get(state.caseDetail);
 
-  const { caseCaption, caseStatus, judgeUserId } = get(state.modal);
+  const { associatedJudge, caseCaption, caseStatus } = get(state.modal);
 
-  let selectedJudgeUserId = judgeUserId;
+  let judgeUserId = associatedJudge;
   if (!STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(caseStatus)) {
-    selectedJudgeUserId = undefined;
+    judgeUserId = undefined;
   }
 
   let updatedCase = caseToUpdate;
 
   if (
     (caseStatus && caseToUpdate.status !== caseStatus) ||
-    (selectedJudgeUserId && caseToUpdate.judgeUserId !== selectedJudgeUserId) ||
+    (judgeUserId && caseToUpdate.judgeUserId !== judgeUserId) ||
     (caseCaption && caseToUpdate.caseCaption !== caseCaption)
   ) {
+    console.log(judgeUserId, judgeUserId, '----');
     updatedCase = await applicationContext
       .getUseCases()
       .updateCaseContextInteractor(applicationContext, {
         caseCaption,
         caseStatus,
         docketNumber: caseToUpdate.docketNumber,
-        judgeUserId: selectedJudgeUserId,
+        judgeUserId,
       });
   }
 

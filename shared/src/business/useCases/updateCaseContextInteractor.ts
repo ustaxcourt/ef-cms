@@ -48,10 +48,12 @@ export const updateCaseContextInteractor = async (
     newCase.setCaseCaption(caseCaption);
   }
 
-  // const judgeUser =
+  const judgeUser = applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: judgeUserId });
 
-  if (associatedJudge) {
-    newCase.setAssociatedJudge(associatedJudge);
+  if (judgeUserId) {
+    newCase.setAssociatedJudge(judgeUser);
   }
 
   // if this case status is changing FROM calendared
@@ -88,7 +90,7 @@ export const updateCaseContextInteractor = async (
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
-      newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
+      newCase.removeFromTrialWithAssociatedJudge(judgeUser.name);
     } else if (
       oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
     ) {
@@ -117,6 +119,8 @@ export const updateCaseContextInteractor = async (
       applicationContext,
       caseToUpdate: newCase,
     });
+
+  console.log(updatedCase, 'updatedCase---');
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
