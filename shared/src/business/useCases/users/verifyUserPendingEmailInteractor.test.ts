@@ -415,7 +415,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       ).not.toHaveBeenCalled();
     });
 
-    describe('updateCasesForPetitioner', () => {
+    describe('updatePetitionerCases', () => {
       it('should call generateAndServeDocketEntry with verified petitioner for servedParties', async () => {
         applicationContext
           .getPersistenceGateway()
