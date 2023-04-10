@@ -1,6 +1,6 @@
 const {
   ADVANCED_SEARCH_OPINION_TYPES,
-} = require('../../../../shared/src/business/entities/EntityConstants');
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 
 exports.navigateTo = () => {
   cy.visit('/');

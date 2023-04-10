@@ -1,6 +1,6 @@
 const {
   CASE_STATUS_TYPES,
-} = require('../../../shared/src/business/entities/EntityConstants');
+} = require('../../../../shared/src/business/entities/EntityConstants');
 const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
