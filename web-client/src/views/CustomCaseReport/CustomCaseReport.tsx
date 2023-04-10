@@ -2,7 +2,6 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
@@ -66,7 +65,7 @@ export const CustomCaseReport = connect(
               }}
             />
           </div>
-          <div className="grid-col-6">
+          <div className="grid-col-6 margin-bottom-2">
             <legend>Petition Filing Method</legend>
             <div className="usa-radio usa-radio__inline">
               <input
@@ -135,70 +134,66 @@ export const CustomCaseReport = connect(
             </div>
           </div>
           <div className="grid-col-8">
-            <div className="grid-row">
-              <div className="grid-col margin-top-3 margin-right-4">
-                <FormGroup>
-                  <label
-                    className="usa-label"
-                    htmlFor="case-status"
-                    id="case-status-label"
-                  >
-                    Case Status (optional)
-                  </label>
-                  <SelectSearch
-                    aria-labelledby="case-status-label"
-                    id="case-status"
-                    name="caseStatus"
-                    options={customCaseInventoryReportHelper.caseStatuses}
-                    value={'Select one or more'}
-                    onChange={inputValue => {
-                      setCustomCaseInventoryReportFiltersSequence({
-                        caseStatuses: {
-                          action: 'add',
-                          caseStatus: inputValue.value,
-                        },
-                      });
-                    }}
-                  />
-                </FormGroup>
+            <div className="grid-row margin-bottom-2">
+              <div className="grid-col margin-right-4">
+                <label
+                  className="usa-label"
+                  htmlFor="case-status"
+                  id="case-status-label"
+                >
+                  Case Status (optional)
+                </label>
+                <SelectSearch
+                  aria-labelledby="case-status-label"
+                  id="case-status"
+                  name="caseStatus"
+                  options={customCaseInventoryReportHelper.caseStatuses}
+                  value={'Select one or more'}
+                  onChange={inputValue => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      caseStatuses: {
+                        action: 'add',
+                        caseStatus: inputValue.value,
+                      },
+                    });
+                  }}
+                />
               </div>
-              <div className="grid-col margin-top-3">
-                <FormGroup>
-                  <label
-                    className="usa-label"
-                    htmlFor="case-type"
-                    id="case-type-label"
-                  >
-                    Case Types (optional)
-                  </label>
-                  <SelectSearch
-                    aria-labelledby="case-type-label"
-                    id="case-type"
-                    name="eventCode"
-                    options={customCaseInventoryReportHelper.caseTypes}
-                    value="Select one or more"
-                    onChange={inputValue => {
-                      setCustomCaseInventoryReportFiltersSequence({
-                        caseTypes: {
-                          action: 'add',
-                          caseType: inputValue.value,
-                        },
-                      });
-                    }}
-                  />
-                </FormGroup>
+              <div className="grid-col">
+                <label
+                  className="usa-label"
+                  htmlFor="case-type"
+                  id="case-type-label"
+                >
+                  Case Types (optional)
+                </label>
+                <SelectSearch
+                  aria-labelledby="case-type-label"
+                  id="case-type"
+                  name="eventCode"
+                  options={customCaseInventoryReportHelper.caseTypes}
+                  value="Select one or more"
+                  onChange={inputValue => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      caseTypes: {
+                        action: 'add',
+                        caseType: inputValue.value,
+                      },
+                    });
+                  }}
+                />
               </div>
             </div>
           </div>
 
-          <div className="grid-col-12 margin-top-3 margin-bottom-3">
+          <div className="grid-col-12 margin-bottom-3">
             <div className="grid-row">
               {customCaseInventoryFilters.caseStatuses.map(status => (
                 <span className="blue-pill" key={status}>
                   {status}
                   <Icon
                     aria-label={`remove ${status} selection`}
-                    className="margin-left-1"
+                    className="margin-left-1 cursor-pointer"
                     icon="times"
                     size="1x"
                     onClick={() => {
@@ -220,7 +215,7 @@ export const CustomCaseReport = connect(
                     {caseType}
                     <Icon
                       aria-label={`remove ${caseType} selection`}
-                      className="margin-left-1"
+                      className="margin-left-1 cursor-pointer"
                       icon="times"
                       size="1x"
                       onClick={() => {
