@@ -46,6 +46,8 @@ export const fileExternalDocumentInteractor = async (
   let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
+  // console.log('new case::::::', caseEntity);
+
   const {
     secondaryDocument,
     secondarySupportingDocuments,
@@ -102,6 +104,8 @@ export const fileExternalDocumentInteractor = async (
       ]);
     }
   }
+
+  console.log('documentsToAdd:::::', documentsToAdd);
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
