@@ -1,6 +1,7 @@
-const { defineConfig } = require('cypress');
+import { defineConfig } from 'cypress';
 
-module.exports = defineConfig({
+// eslint-disable-next-line import/no-default-export
+export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
   e2e: {
@@ -13,22 +14,23 @@ module.exports = defineConfig({
         },
       });
     },
-    specPattern: 'cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
-    supportFile: 'cypress-smoketests/support/index.js',
+    specPattern:
+      'cypress/cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
+    supportFile: 'cypress/cypress-smoketests/support/index.ts',
     testIsolation: false,
   },
-  fixturesFolder: 'cypress-smoketests/fixtures',
+  fixturesFolder: 'cypress/cypress-smoketests/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
   },
   requestTimeout: 60000,
   retries: 4,
-  screenshotsFolder: 'cypress-smoketests/screenshots',
+  screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,
   videoUploadOnPasses: false,
-  videosFolder: 'cypress-smoketests/videos',
+  videosFolder: 'cypress/cypress-smoketests/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
 });
