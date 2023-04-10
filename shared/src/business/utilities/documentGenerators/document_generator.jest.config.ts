@@ -3,7 +3,9 @@ import type { Config } from 'jest';
 const config: Config = {
   clearMocks: true,
   collectCoverage: false,
-  maxWorkers: 1, // because generating pdf is a heavy test, we are locking this to 1 to reduce load on the ci/cd runners
+  logHeapUsage: true,
+  maxWorkers: 1,
+  // because generating pdf is a heavy test, we are locking this to 1 to reduce load on the ci/cd runners
   moduleNameMapper: {
     '^uuid$': require.resolve('uuid'),
   },
@@ -18,6 +20,7 @@ const config: Config = {
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
+  workerIdleMemoryLimit: '512MB',
 };
 
 // eslint-disable-next-line import/no-default-export
