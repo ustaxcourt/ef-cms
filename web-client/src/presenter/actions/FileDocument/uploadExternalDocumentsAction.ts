@@ -29,8 +29,23 @@ export const uploadExternalDocumentsAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  const { docketNumber } = get(state.caseDetail);
+  const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
+
+  console.log('case in:', get(state.caseDetail));
+  console.log('form:', get(state.form));
+
+  let docketNumbersToFileAcross = [];
+
+  if (form.fileAcrossConsolidatedGroup) {
+    for (let index = 0; index < consolidatedCases.length; index++) {
+      docketNumbersToFileAcross.push(consolidatedCases[index].docketNumber);
+    }
+  } else {
+    docketNumbersToFileAcross.push(docketNumber);
+  }
+
+  console.log('docketNumbersToFileAcross', docketNumbersToFileAcross);
 
   let privatePractitioners = null;
   let { filers } = form;
@@ -75,20 +90,27 @@ export const uploadExternalDocumentsAction = async ({
     });
   }
 
+  console.log('documentFiles', documentFiles);
+  console.log('documentMetadata', documentMetadata);
+
   try {
     const progressFunctions = setupPercentDone(documentFiles, store);
 
     const { caseDetail, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor(applicationContext, {
+        docketNumbersToFileAcross,
         documentFiles,
         documentMetadata,
-        progressFunctions,
       });
+
+    console.log('docketEntryIdsAdded', docketEntryIdsAdded);
 
     for (let docketEntryId of docketEntryIdsAdded) {
       await addCoversheet({ applicationContext, docketEntryId, docketNumber });
     }
+
+    console.log('caseDetail', caseDetail);
 
     return path.success({
       caseDetail,
