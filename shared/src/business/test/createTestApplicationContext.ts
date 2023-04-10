@@ -199,6 +199,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { abbreviateState } = require('../utilities/abbreviateState');
 const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -279,6 +280,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilities = appContextProxy({
+    abbreviateState: jest.fn().mockImplementation(abbreviateState),
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
@@ -365,6 +367,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
@@ -530,6 +533,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
+    acquireLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
@@ -540,6 +544,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
+    deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),

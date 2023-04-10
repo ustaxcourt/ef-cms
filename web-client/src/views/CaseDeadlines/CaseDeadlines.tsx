@@ -51,12 +51,9 @@ export const CaseDeadlines = connect(
               <div className="blue-container">
                 <DateRangePickerComponent
                   endDateErrorText={validationErrors.endDate}
-                  endDateOptional={true}
                   endName="deadlineEnd"
                   endValue={screenMetadata.filterEndDateState}
-                  orientation="vertical"
                   startDateErrorText={validationErrors.startDate}
-                  startDateOptional={true}
                   startName="deadlineStart"
                   startValue={screenMetadata.filterStartDateState}
                   onChangeEnd={e => {

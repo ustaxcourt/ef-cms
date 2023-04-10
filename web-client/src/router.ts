@@ -51,7 +51,17 @@ const goto404 = app => {
 const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
 
 const ifHasAccess = (
-  { app, permissionToCheck, redirect = accessRedirects, skipMaintenanceCheck },
+  {
+    app,
+    permissionToCheck,
+    redirect = accessRedirects,
+    skipMaintenanceCheck,
+  }: {
+    app;
+    permissionToCheck?: string;
+    redirect?: any;
+    skipMaintenanceCheck?: boolean;
+  },
   cb,
 ) => {
   return function () {
@@ -1241,6 +1251,14 @@ const router = {
       ifHasAccess({ app }, () => {
         setPageTitle('PDF Preview');
         return app.getSequence('gotoPdfPreviewSequence')();
+      }),
+    );
+
+    registerRoute(
+      '/reports/judge-activity-report',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Activity Report');
+        return app.getSequence('gotoJudgeActivityReportSequence')();
       }),
     );
 

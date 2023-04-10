@@ -49,7 +49,7 @@ fi
 
 nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
-if [ ! -e "$CIRCLECI" ]; then
+if [ ! -e "$CI" ]; then
   echo "killing dynamodb local"
   pkill -P "${DYNAMO_PID}"
   pkill -P "${ESEARCH_PID}"
