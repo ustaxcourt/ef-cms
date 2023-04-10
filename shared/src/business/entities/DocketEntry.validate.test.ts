@@ -5,6 +5,7 @@ import {
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
+  OPINION_PAMPHLET_EVENT_CODE,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } from './EntityConstants';
@@ -243,6 +244,16 @@ describe('validate', () => {
         signedJudgeName: 'Dredd',
       },
     },
+    {
+      description:
+        'should pass validation when the event code is "TCRP" and "pageNumber" is provided',
+      docketEntry: {
+        documentTitle: 'Report 1',
+        documentType: 'Tax Court Report Pamphlet',
+        eventCode: OPINION_PAMPHLET_EVENT_CODE,
+        pageNumber: 42,
+      },
+    },
   ];
 
   validTests.forEach(item =>
@@ -422,6 +433,15 @@ describe('validate', () => {
         sealedTo: undefined,
       },
       expectValidationErrors: ['sealedTo'],
+    },
+    {
+      description:
+        'should fail validation when the event code is "TCRP" and "pageNumber" is not provided',
+      docketEntry: {
+        documentTitle: 'Report 1',
+        documentType: 'Tax Court Report Pamphlet',
+        eventCode: OPINION_PAMPHLET_EVENT_CODE,
+      },
     },
   ];
 
