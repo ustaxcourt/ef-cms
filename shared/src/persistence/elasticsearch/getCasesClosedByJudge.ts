@@ -13,7 +13,7 @@ const { search } = require('./searchClient');
  * @param {string} providers.endDate end date
  * @returns {array} array of docket numbers
  */
-exports.getCasesByUserId = async ({
+exports.getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
   startDate,
@@ -31,13 +31,13 @@ exports.getCasesByUserId = async ({
           bool: {
             should: [
               {
-                term: { 'privatePractitioners.L.M.userId.S': `${userId}` },
+                'closedDate.S': {
+                  gte: `${startDate}||/h`,
+                  lte: `${endDate}||/h`,
+                },
               },
               {
-                term: { 'irsPractitioners.L.M.userId.S': `${userId}` },
-              },
-              {
-                term: { 'userId.S': `${userId}` },
+                term: { 'judgeUserId.S': `${userId}` },
               },
             ],
           },
