@@ -12,8 +12,6 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
 }) => {
-  console.log('in submitRespondentCaseAssociationRequestAction');
-
   const docketNumber = get(state.caseDetail.docketNumber);
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();

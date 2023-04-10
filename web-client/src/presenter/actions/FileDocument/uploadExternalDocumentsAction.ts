@@ -29,12 +29,8 @@ export const uploadExternalDocumentsAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  console.log('in uploadExternalDocumentsAction');
-
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
-
-  console.log('form::', form);
 
   let privatePractitioners = null;
   let { filers } = form;
