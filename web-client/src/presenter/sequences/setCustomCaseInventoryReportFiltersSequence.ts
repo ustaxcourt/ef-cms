@@ -1,7 +1,7 @@
-import { setStartOrEndCreatedAtDateAction } from '../actions/CaseInventoryReport/setStartOrEndCreatedAtDateAction';
+import { setCustomCaseInventoryFiltersAction } from '../actions/CaseInventoryReport/setCustomCaseInventoryFiltersAction';
 
 export const setCustomCaseInventoryReportFiltersSequence = [
-  setStartOrEndCreatedAtDateAction,
+  setCustomCaseInventoryFiltersAction,
 
   // shouldValidateAction,
   // {
