@@ -46,7 +46,30 @@ const PreviousPage = (props: {
   );
 };
 
-const PageElipsis = () => {
+const NextPage = (props: { selectedPage: number; onNextClick: Function }) => {
+  return (
+    <>
+      {props.selectedPage !== 1 && (
+        <li className="usa-pagination__item usa-pagination__arrow">
+          <button
+            aria-label="Next page"
+            className="usa-pagination__link usa-pagination__next-page background-none border-none"
+            onClick={() => {
+              props.onNextClick();
+            }}
+          >
+            <svg aria-hidden="true" className="usa-icon" role="img">
+              <use xlinkHref="/assets/img/sprite.svg#navigate_before"></use>
+            </svg>
+            <span className="usa-pagination__link-text">Next</span>
+          </button>
+        </li>
+      )}
+    </>
+  );
+};
+
+const PageEllipsis = () => {
   return (
     <>
       <li
@@ -76,66 +99,11 @@ export const Paginator = (props: {
         <ul className="usa-pagination__list">
           <PreviousPage selectedPage={2} onPreviousClick={() => {}} />
           <PageButton pageNumber={1} selected={currentPageNumber === 1} />
-          {currentPageNumber > 4 && <PageElipsis />}
+          {currentPageNumber > 4 && <PageEllipsis />}
           {currentPageNumber <= 4 && (
             <PageButton pageNumber={2} selected={currentPageNumber === 2} />
           )}
-          
-          <li className="usa-pagination__item usa-pagination__page-no">
-            <a
-              aria-label="Page 9"
-              className="usa-pagination__button"
-              href="javascript:void(0);"
-            >
-              9
-            </a>
-          </li>
-          <li className="usa-pagination__item usa-pagination__page-no">
-            <a
-              aria-current="page"
-              aria-label="Page 10"
-              className="usa-pagination__button usa-current"
-              href="javascript:void(0);"
-            >
-              10
-            </a>
-          </li>
-          <li className="usa-pagination__item usa-pagination__page-no">
-            <a
-              aria-label="Page 11"
-              className="usa-pagination__button"
-              href="hello.com"
-            >
-              11
-            </a>
-          </li>
-          <li
-            className="usa-pagination__item usa-pagination__overflow"
-            role="presentation"
-          >
-            <span>…</span>
-          </li>
-          <li className="usa-pagination__item usa-pagination__page-no">
-            <a
-              aria-label="Last page, page 24"
-              className="usa-pagination__button"
-              href="hello.com"
-            >
-              24
-            </a>
-          </li>
-          <li className="usa-pagination__item usa-pagination__arrow">
-            <a
-              aria-label="Next page"
-              className="usa-pagination__link usa-pagination__next-page"
-              href="hello.com"
-            >
-              <span className="usa-pagination__link-text">Next </span>
-              <svg aria-hidden="true" className="usa-icon" role="img">
-                <use xlinkHref="/assets/img/sprite.svg#navigate_next"></use>
-              </svg>
-            </a>
-          </li>
+          <NextPage selectedPage={currentPageNumber} onNextClick={() => {}} />
         </ul>
       </nav>
     </>
