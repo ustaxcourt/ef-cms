@@ -50,6 +50,15 @@ export const generateJudgeActivityReportSearchInteractor = (
       startDate,
     });
 
+  console.log(closedCases);
+
+  const closedDismissedStatusCases = closedCases.filter(
+    caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
+  );
+  const closedStatusCases = closedCases.filter(
+    caseItem => caseItem.status !== CASE_STATUS_TYPES.closed,
+  );
+
   return {
     closedCases,
   };
