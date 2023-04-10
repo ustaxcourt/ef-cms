@@ -30,6 +30,7 @@ module.exports = {
         'cypress-integration/**/*.js',
         'cypress-smoketests/**/*.js',
         'cypress-readonly/**/*.js',
+        'cypress/**/*.ts',
       ],
       rules: {
         'jest/expect-expect': 'off',
