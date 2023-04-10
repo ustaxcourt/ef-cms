@@ -24,6 +24,9 @@ describe('completeDocketEntryQCInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     const workItem = {
       docketEntry: {
         docketEntryId: mockDocketEntryId,
@@ -107,7 +110,10 @@ describe('completeDocketEntryQCInteractor', () => {
 
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {},
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          leadDocketNumber: caseRecord.docketNumber,
+        },
       }),
     ).rejects.toThrow('Unauthorized');
   });
