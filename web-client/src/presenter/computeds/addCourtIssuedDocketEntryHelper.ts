@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    OPINION_PAMPHLET_EVENT_CODE,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
     USER_ROLES,
@@ -53,10 +54,15 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     form.eventCode,
   );
 
-  const eventCodesNotRequiringAttachmentsAndService = ['TCRP'];
+  const eventCodesNotRequiringAttachmentsAndService = [
+    OPINION_PAMPHLET_EVENT_CODE,
+  ];
 
   const showAttachmentAndServiceFields =
     !eventCodesNotRequiringAttachmentsAndService.includes(selectedEventCode);
+
+  const showOpinionStartingPage =
+    eventCodesNotRequiringAttachmentsAndService.includes(selectedEventCode);
 
   const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
@@ -76,6 +82,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     serviceParties,
     showAttachmentAndServiceFields,
     showDocumentTypeDropdown,
+    showOpinionStartingPage,
     showReceivedDate,
     showSaveAndServeButton,
     showServiceStamp,

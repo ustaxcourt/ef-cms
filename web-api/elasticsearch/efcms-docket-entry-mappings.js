@@ -71,6 +71,9 @@ module.exports = {
     'numberOfPages.N': {
       type: 'integer',
     },
+    'pageNumber.N': {
+      type: 'integer',
+    },
     'pending.BOOL': {
       type: 'boolean',
     },
