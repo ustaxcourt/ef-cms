@@ -6,6 +6,7 @@ const {
 const {
   DOCUMENT_TYPES_REQUIRING_DESCRIPTION,
   GENERIC_ORDER_DOCUMENT_TYPE,
+  REPORT_PAMPHLET_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
@@ -26,6 +27,7 @@ CourtIssuedDocumentTypeA.prototype.init = function init(rawProps) {
   this.freeText = rawProps.freeText;
   this.isLegacy = rawProps.isLegacy;
   this.serviceStamp = rawProps.serviceStamp;
+  this.pageNumber = rawProps.pageNumber;
 };
 
 CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
@@ -38,6 +40,11 @@ CourtIssuedDocumentTypeA.schema = {
     is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
+  }),
+  pageNumber: joi.when('documentType', {
+    is: joi.exist().valid(REPORT_PAMPHLET_DOCUMENT_TYPE),
+    otherwise: joi.forbidden(),
+    then: joi.number().integer().min(0).max(9999).required(),
   }),
   serviceStamp: JoiValidationConstants.STRING.valid(
     ...SERVICE_STAMP_OPTIONS,

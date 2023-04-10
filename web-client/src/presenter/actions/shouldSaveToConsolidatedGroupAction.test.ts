@@ -1,3 +1,4 @@
+import { OPINION_PAMPHLET_EVENT_CODE } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -65,7 +66,7 @@ describe('shouldSaveToConsolidatedGroupAction', () => {
           leadDocketNumber: '101-20',
         },
         form: {
-          eventCode: 'TCRP',
+          eventCode: OPINION_PAMPHLET_EVENT_CODE,
         },
       },
     });
