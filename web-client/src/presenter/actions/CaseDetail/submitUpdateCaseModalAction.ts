@@ -31,7 +31,6 @@ export const submitUpdateCaseModalAction = async ({
     (judgeUserId && caseToUpdate.judgeUserId !== judgeUserId) ||
     (caseCaption && caseToUpdate.caseCaption !== caseCaption)
   ) {
-    console.log(judgeUserId, judgeUserId, '----');
     updatedCase = await applicationContext
       .getUseCases()
       .updateCaseContextInteractor(applicationContext, {
