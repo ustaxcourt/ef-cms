@@ -2047,7 +2047,8 @@ Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAssociatedJudge = function (associatedJudge) {
-  this.associatedJudge = associatedJudge;
+  this.associatedJudge = associatedJudge.name;
+  this.judgeUserId = associatedJudge.userId;
   return this;
 };
 

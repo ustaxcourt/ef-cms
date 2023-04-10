@@ -12,24 +12,24 @@ import { UnauthorizedError } from '../../errors/errors';
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.associatedJudge the associated judge to set on the case
  * @param {string} providers.caseCaption the caption to set on the case
- * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.caseStatus the status to set on the case
+ * @param {string} providers.docketNumber the docket number of the case to update
+ * @param {string} providers.judgeUserId the id of the associated judge to set on the case
  * @returns {object} the updated case data
  */
 export const updateCaseContextInteractor = async (
   applicationContext: IApplicationContext,
   {
-    associatedJudge,
     caseCaption,
     caseStatus,
     docketNumber,
+    judgeUserId,
   }: {
-    associatedJudge?: string;
     caseCaption?: string;
     caseStatus?: string;
     docketNumber: string;
+    judgeUserId?: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -48,8 +48,12 @@ export const updateCaseContextInteractor = async (
     newCase.setCaseCaption(caseCaption);
   }
 
-  if (associatedJudge) {
-    newCase.setAssociatedJudge(associatedJudge);
+  const judgeUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: judgeUserId });
+
+  if (judgeUserId) {
+    newCase.setAssociatedJudge(judgeUser);
   }
 
   // if this case status is changing FROM calendared
@@ -86,7 +90,7 @@ export const updateCaseContextInteractor = async (
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
-      newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
+      newCase.removeFromTrialWithAssociatedJudge(judgeUser.name);
     } else if (
       oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
     ) {
