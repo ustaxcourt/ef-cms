@@ -198,8 +198,8 @@ export const CustomCaseReport = connect(
                   {status}
                   <Icon
                     aria-label={`remove ${status} selection`}
-                    className="margin-right-3"
-                    icon="copy"
+                    className="margin-left-1"
+                    icon="times"
                     size="1x"
                     onClick={() => {
                       setCustomCaseInventoryReportFiltersSequence({
@@ -220,8 +220,8 @@ export const CustomCaseReport = connect(
                     {caseType}
                     <Icon
                       aria-label={`remove ${caseType} selection`}
-                      className="margin-right-3"
-                      icon="copy"
+                      className="margin-left-1"
+                      icon="times"
                       size="1x"
                       onClick={() => {
                         setCustomCaseInventoryReportFiltersSequence({
