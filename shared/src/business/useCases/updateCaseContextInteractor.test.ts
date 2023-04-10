@@ -6,7 +6,7 @@ import {
 import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '../../test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '../../test/mockTrial';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { judgeUser } from '../../test/mockUsers';
+import { docketClerkUser, judgeUser } from '../../test/mockUsers';
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
 
 describe('updateCaseContextInteractor', () => {
@@ -85,7 +85,7 @@ describe('updateCaseContextInteractor', () => {
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
-    expect(result.associatedJudge).toEqual('Judge Rachael');
+    expect(result.associatedJudge).toEqual(judgeUser.name);
     expect(result.trialSessionId).toBeUndefined();
   });
 
@@ -166,10 +166,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -182,8 +179,9 @@ describe('updateCaseContextInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
       judgeUserId: judgeUser.userId,
     });
+
     expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
-    expect(result.associatedJudge).toEqual('Judge Carluzzo');
+    expect(result.associatedJudge).toEqual(judgeUser.name);
   });
 
   it('should only update the associated judge without changing the status if the associated judge and the same case status are passed in', async () => {
@@ -194,7 +192,7 @@ describe('updateCaseContextInteractor', () => {
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
-    expect(result.associatedJudge).toEqual('Judge Carluzzo');
+    expect(result.associatedJudge).toEqual(judgeUser.name);
   });
 
   it('should call updateCase with the updated case caption and return the updated case', async () => {

@@ -2053,7 +2053,6 @@ Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
 Case.prototype.setAssociatedJudge = function (associatedJudge) {
   this.associatedJudge = associatedJudge.name;
   this.judgeUserId = associatedJudge.userId;
-  console.log(this.associatedJudge, this.judgeUserId, 'info things');
   return this;
 };
 
