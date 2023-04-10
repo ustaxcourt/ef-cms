@@ -55,7 +55,7 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
-        value: UNSERVABLE_EVENT_CODES[0], // CTRA
+        value: UNSERVABLE_EVENT_CODES[1], // CTRA
       },
     );
 

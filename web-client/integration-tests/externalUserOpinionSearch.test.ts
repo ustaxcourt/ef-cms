@@ -5,7 +5,7 @@ import {
   DATE_RANGE_SEARCH_OPTIONS,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { docketClerkAddsOpiniontoDocketyEntry } from './journey/docketClerkAddsOpinionToDocketEntry';
+import { docketClerkAddsOpiniontoDocketEntry } from './journey/docketClerkAddsOpinionToDocketEntry';
 import { docketClerkCreatesAnOpinion } from './journey/docketClerkCreatesAnOpinion';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
@@ -57,7 +57,7 @@ describe('verify opinion search works for external users', () => {
   // log in as docket clerk, add an opinion, docket entry, and serve
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOpinion(cerebralTest, fakeFile);
-  docketClerkAddsOpiniontoDocketyEntry(cerebralTest, 0);
+  docketClerkAddsOpiniontoDocketEntry(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
 
   describe('IRS and private practitioners search for opinion in sealed and non-sealed cases by docket number', () => {
