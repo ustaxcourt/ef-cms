@@ -219,7 +219,7 @@ table,
     text-align: right;
   }
 
-  tr {
+  tr:not(:first-child) {
     border-top: 1px solid color($theme-color-base-lighter);
 
     &.notes-row {
@@ -259,10 +259,7 @@ table,
   }
 
   width: 100%;
-  border-top: none;
-  border-right: 1px solid color($theme-color-base-lighter);
-  border-bottom: 1px solid color($theme-color-base-lighter);
-  border-left: 1px solid color($theme-color-base-lighter);
+  border: 1px solid color($theme-color-base-lighter);
 
   /* big screens */
   @media only screen and (min-width: $medium-screen) {
@@ -330,10 +327,6 @@ table,
     .filing-type-icon {
       padding-right: 0;
       padding-left: 0;
-    }
-
-    &.responsive-table tr {
-      display: table-row;
     }
 
     td {
@@ -673,4 +666,9 @@ table.case-list tbody tr:nth-child(even) td {
   .date-changed {
     width: 220px;
   }
+}
+
+.table-caption-serif {
+  font-family: $font-serif !important;
+  font-size: 20px !important;
 }
