@@ -4,6 +4,7 @@ import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchH
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { opinionPamphletsHelper } from './computeds/Public/opinionPamphletsHelper';
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
@@ -18,6 +19,7 @@ const helpers = {
   featureFlagHelper,
   loadingHelper,
   menuHelper,
+  opinionPamphletsHelper,
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
   templateHelper,
@@ -43,6 +45,7 @@ export const state = {
   },
   isPublic: true,
   isTerminalUser: false,
+  opinionPamphlets: [],
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,

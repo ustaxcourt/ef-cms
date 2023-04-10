@@ -89,6 +89,7 @@ export const updateDocketEntryMetaInteractor = async (
     ordinalValue: docketEntryMeta.ordinalValue,
     otherFilingParty: docketEntryMeta.otherFilingParty,
     otherIteration: docketEntryMeta.otherIteration,
+    pageNumber: docketEntryMeta.pageNumber,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
     pending: docketEntryMeta.pending,
     previousDocument: docketEntryMeta.previousDocument,

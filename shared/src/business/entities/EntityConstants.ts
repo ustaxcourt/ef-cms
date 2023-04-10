@@ -617,6 +617,8 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
 
+export const OPINION_PAMPHLET_EVENT_CODE = 'TCRP';
+
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
@@ -625,7 +627,7 @@ export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   'ODL',
   'SPTN',
   'OCS',
-  'TCRP',
+  OPINION_PAMPHLET_EVENT_CODE,
 ];
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
