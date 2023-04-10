@@ -47,7 +47,7 @@ jobs:
           mkdir -p /tmp/web-client
           npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
           ./wait-until-services.sh
-          export TESTFILES=$(node split-tests.js)
+          export TESTFILES=$(npx ts-node split-tests.ts)
           npm run test:client:integration:ci
       - name: Store Artifacts
         uses: actions/upload-artifact@v3
