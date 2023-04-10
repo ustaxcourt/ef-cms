@@ -16,13 +16,12 @@ const { search } = require('./searchClient');
 exports.getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
+  judgeUserId,
   startDate,
-  userId,
 }) => {
-  // get count of all cases whos clsoed date is in the date range AND associatedJudge, judgeUserId is the judge provided
-  const source = ['docketNumber'];
+  const source = ['status'];
 
-  const { results, total } = await search({
+  const { results } = await search({
     applicationContext,
     searchParameters: {
       body: {
@@ -37,7 +36,7 @@ exports.getCasesClosedByJudge = async ({
                 },
               },
               {
-                term: { 'judgeUserId.S': `${userId}` },
+                term: { 'judgeUserId.S': `${judgeUserId}` },
               },
             ],
           },
@@ -48,17 +47,9 @@ exports.getCasesClosedByJudge = async ({
     },
   });
 
-  // Cannot use from and size to paginate through a result with more than 10,000 hits
-  // https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html
-  if (total > MAX_ELASTICSEARCH_PAGINATION) {
-    applicationContext.logger.warn(
-      `Search for cases associated with user|${userId} returned ${total} hits; cannot paginate`,
-      { userId },
-    );
-  }
-
   applicationContext.logger.info(
-    `Found ${results.length} cases associated with user|${userId}`,
+    `Found ${results.length} closed cases associated with judge ${judgeUserId}`,
   );
+
   return results;
 };
