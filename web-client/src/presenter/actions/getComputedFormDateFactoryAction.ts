@@ -9,8 +9,8 @@ import { state } from 'cerebral';
  * @returns {Function} the primed action
  */
 export const getComputedFormDateFactoryAction = (
-  prefix,
-  toIsoString,
+  prefix: string,
+  toIsoString?: string,
   stateKey = 'computedDate',
 ) => {
   /**
@@ -60,6 +60,5 @@ export const getComputedFormDateFactoryAction = (
 
     return { [stateKey]: computedDate };
   };
-
   return computeFormDateAction;
 };

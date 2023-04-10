@@ -2,6 +2,7 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../business/utilities/DateHandler';
+import { TDynamoRecord } from '../dynamoTypes';
 import { calculateTimeToLive } from '../calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
 

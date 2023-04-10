@@ -6,29 +6,31 @@ import dateRangePicker from '../../../../node_modules/uswds/src/js/components/da
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
-  endDateOptional,
   endLabel,
   endName,
+  endPickerCls,
   endValue,
+  formGroupCls,
   onChangeEnd,
   onChangeStart,
-  orientation = 'vertical',
+  rangePickerCls,
   startDateErrorText,
-  startDateOptional,
   startLabel,
   startName,
+  startPickerCls,
   startValue,
 }: {
   endDateErrorText?: string;
-  endDateOptional: boolean;
   endLabel?: string;
   endName: string;
+  endPickerCls?: string;
   endValue: string;
+  formGroupCls?: string;
+  rangePickerCls?: string;
   onChangeEnd: Function;
   onChangeStart: Function;
-  orientation: 'vertical' | 'horizontal';
   startDateErrorText?: string;
-  startDateOptional: boolean;
+  startPickerCls?: string;
   startLabel?: string;
   startName: string;
   startValue: string;
@@ -109,14 +111,9 @@ export const DateRangePickerComponent = ({
   }, [startDateInputRef, endDateInputRef]);
 
   return (
-    <FormGroup formGroupRef={dateRangePickerRef}>
-      <div
-        className={classNames(
-          'usa-date-range-picker',
-          orientation === 'horizontal' ? 'grid-row' : undefined,
-        )}
-      >
-        <div className="grid-col">
+    <FormGroup className={formGroupCls} formGroupRef={dateRangePickerRef}>
+      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
+        <div className={startPickerCls}>
           <FormGroup
             errorText={startDateErrorText}
             formGroupRef={startDatePickerRef}
@@ -127,9 +124,6 @@ export const DateRangePickerComponent = ({
               id={`${startName}-date-start-label`}
             >
               {startLabel || 'Start date'}{' '}
-              {startDateOptional && (
-                <span className="usa-hint">(optional)</span>
-              )}
             </label>
             <div className="usa-date-picker">
               <input
@@ -145,7 +139,7 @@ export const DateRangePickerComponent = ({
           </FormGroup>
         </div>
 
-        <div className="grid-col">
+        <div className={endPickerCls}>
           <FormGroup
             errorText={endDateErrorText}
             formGroupRef={endDatePickerRef}
@@ -156,7 +150,6 @@ export const DateRangePickerComponent = ({
               id={`${endName}-date-end-label`}
             >
               {endLabel || 'End date'}{' '}
-              {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
             <div className="usa-date-picker">
               <input

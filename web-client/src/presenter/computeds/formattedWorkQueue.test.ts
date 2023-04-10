@@ -10,8 +10,13 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedWorkQueue', () => {
-  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
-    applicationContext.getConstants();
+  const {
+    CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
+    DOCKET_SECTION,
+    STATUS_TYPES,
+    TRIAL_SESSION_SCOPE_TYPES,
+  } = applicationContext.getConstants();
 
   let globalUser;
   let screenMetadata = {};
@@ -538,6 +543,85 @@ describe('formattedWorkQueue', () => {
     expect(result[2].workItemId).toEqual('newer');
   });
 
+  it('should sort section outbox in descending order from newest at the top to oldest', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        selectedWorkItems: [
+          { ...baseWorkItem, completedAt: '2019-06-17T15:27:55.801Z' },
+        ],
+        workQueue: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-01-17T15:27:55.801Z',
+            workItemId: 'c',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2015-02-17T15:27:55.801Z',
+            workItemId: 'b',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2022-04-17T15:27:55.801Z',
+            workItemId: 'a',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('a');
+    expect(result[1].workItemId).toEqual('c');
+    expect(result[2].workItemId).toEqual('b');
+  });
+
+  it('should sort my outbox in descending order from newest at the top to oldest', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        selectedWorkItems: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-06-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+          },
+        ],
+        workQueue: [
+          {
+            ...baseWorkItem,
+            completedAt: '2019-01-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+            workItemId: 'c',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2015-02-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+            workItemId: 'b',
+          },
+          {
+            ...baseWorkItem,
+            completedAt: '2022-04-17T15:27:55.801Z',
+            completedByUserId: docketClerkUser.userId,
+            workItemId: 'a',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].workItemId).toEqual('a');
+    expect(result[1].workItemId).toEqual('c');
+    expect(result[2].workItemId).toEqual('b');
+  });
+
   describe('Consolidate Group Cases', () => {
     it('should show the work item to not be a part of a consolidated group', () => {
       const result = runCompute(formattedWorkQueue, {
@@ -589,5 +673,62 @@ describe('formattedWorkQueue', () => {
       expect(result[0].inLeadCase).toBe(false);
       expect(result[0].consolidatedIconTooltipText).toBe('Consolidated case');
     });
+  });
+
+  it('should format the trialDate and trialLocation on the formattedWorkItem when caseStatus is Calendared', () => {
+    const trialDate = '2025-01-01T16:29:13.122Z';
+    const trialLocation = 'Austin, Texas';
+    const formattedTrialDate = '01/01/25';
+    const formattedTrialLocation = 'Austin, TX';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            caseStatus: STATUS_TYPES.calendared,
+            trialDate,
+            trialLocation,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result[0].formattedCaseStatus).toBe(
+      `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`,
+    );
+  });
+
+  it('should format the trialDate and trialLocation on the formattedWorkItem when caseStatus is Calendared and standAloneRemote', () => {
+    const trialDate = '2025-01-01T16:29:13.122Z';
+    const trialLocation = TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...baseWorkItem,
+            trialDate,
+            trialLocation,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().abbreviateState,
+    ).not.toHaveBeenCalled();
+
+    expect(result[0].formattedCaseStatus).toBe(result[0].caseStatus);
   });
 });

@@ -177,6 +177,7 @@ import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForU
 import {
   getChambersSections,
   getChambersSectionsLabels,
+  getJudgesChambers,
 } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { getChiefJudgeNameForSigningInteractor } from '../../shared/src/proxies/getChiefJudgeNameForSigningProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
@@ -262,7 +263,6 @@ import { setItemInteractor } from '../../shared/src/business/useCases/setItemInt
 import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
-import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
@@ -320,6 +320,7 @@ import { validateEditPetitionerCounselInteractor } from '../../shared/src/busine
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateHearingNoteInteractor } from '../../shared/src/business/useCases/validateHearingNoteInteractor';
+import { validateJudgeActivityReportSearchInteractor } from '../../shared/src/business/useCases/judgeActivityReport/validateJudgeActivityReportSearchInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -511,7 +512,6 @@ const allUseCases = {
   setItemInteractor,
   setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
-  setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
   strikeDocketEntryInteractor,
@@ -565,6 +565,7 @@ const allUseCases = {
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateHearingNoteInteractor,
+  validateJudgeActivityReportSearchInteractor,
   validateNoteInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -751,6 +752,7 @@ const applicationContext = {
       getFormattedPartiesNameAndTitle,
       getFormattedTrialSessionDetails,
       getJudgeLastName,
+      getJudgesChambers,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,
