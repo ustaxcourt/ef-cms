@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitUpdateCaseModalAction } from './submitUpdateCaseModalAction';
@@ -97,7 +98,7 @@ describe('submitUpdateCaseModalAction', () => {
       state: {
         caseDetail: caseMock,
         modal: {
-          associatedJudge: 'Judge Colvin',
+          associatedJudge: judgeUser.userId,
           caseStatus: STATUS_TYPES.generalDocket,
         },
       },
@@ -112,6 +113,31 @@ describe('submitUpdateCaseModalAction', () => {
     ).toMatchObject({
       caseStatus: STATUS_TYPES.generalDocket,
       docketNumber: '123-20',
+      judgeUserId: undefined,
+    });
+  });
+
+  it('updates the case with the selected judge and new case status', async () => {
+    await runAction(submitUpdateCaseModalAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: caseMock,
+        modal: {
+          associatedJudge: judgeUser.userId,
+          caseStatus: STATUS_TYPES.assignedCase,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      caseStatus: STATUS_TYPES.assignedCase,
+      docketNumber: '123-20',
+      judgeUserId: judgeUser.userId,
     });
   });
 });
