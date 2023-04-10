@@ -31,9 +31,16 @@ export const generateJudgeActivityReportSearchInteractor = (
       applicationContext,
     },
   );
+
   if (!searchEntity.isValid()) {
     throw new InvalidRequestError();
   }
 
-  return {};
+  const closedCases = applicationContext
+    .getPersistenceGateway()
+    .getCasesClosedByJudge({});
+
+  return {
+    closedCases,
+  };
 };
