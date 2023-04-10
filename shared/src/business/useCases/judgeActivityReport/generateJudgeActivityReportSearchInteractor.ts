@@ -17,7 +17,11 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const generateJudgeActivityReportSearchInteractor = (
   applicationContext,
-  { endDate, startDate }: { endDate: string; startDate: string },
+  {
+    endDate,
+    judge,
+    startDate,
+  }: { endDate: string; startDate: string; judge: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,6 +29,7 @@ export const generateJudgeActivityReportSearchInteractor = (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  // todo: add judge?
   const searchEntity = new JudgeActivityReportSearch(
     { endDate, startDate },
     {
@@ -38,7 +43,7 @@ export const generateJudgeActivityReportSearchInteractor = (
 
   const closedCases = applicationContext
     .getPersistenceGateway()
-    .getCasesClosedByJudge({});
+    .getCasesClosedByJudge({ applicationContext, endDate, judge, startDate });
 
   return {
     closedCases,
