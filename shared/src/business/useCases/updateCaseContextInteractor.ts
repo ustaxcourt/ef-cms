@@ -48,7 +48,7 @@ export const updateCaseContextInteractor = async (
     newCase.setCaseCaption(caseCaption);
   }
 
-  const judgeUser = applicationContext
+  const judgeUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: judgeUserId });
 
@@ -119,8 +119,6 @@ export const updateCaseContextInteractor = async (
       applicationContext,
       caseToUpdate: newCase,
     });
-
-  console.log(updatedCase, 'updatedCase---');
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
