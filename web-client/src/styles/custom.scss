@@ -1802,6 +1802,10 @@ button.change-scanner-button {
   position: relative;
 }
 
+.margin-bottom-35 {
+  margin-bottom: 35px;
+}
+
 .health-check-text {
   font-size: 17px;
   font-weight: 600;
@@ -2093,7 +2097,7 @@ button.change-scanner-button {
   border-radius: 20px;
   background: color($theme-color-primary);
   color: $color-white;
-  font-weight: $font-bold;
+  font-weight: $font-semibold;
   text-align: center;
   padding: 0.5rem 1rem;
   margin: 0rem 0.7rem 0.7rem 0;

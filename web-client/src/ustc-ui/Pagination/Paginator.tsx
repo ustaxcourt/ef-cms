@@ -95,7 +95,7 @@ export const Paginator = (props: {
 
   return (
     <>
-      <nav aria-label="Pagination" className="usa-pagination">
+      <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
         <ul className="usa-pagination__list">
           <PreviousPage selectedPage={2} onPreviousClick={() => {}} />
           <PageButton pageNumber={1} selected={currentPageNumber === 1} />

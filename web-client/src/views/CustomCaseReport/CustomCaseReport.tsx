@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
+import { Detective } from 'aws-sdk';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
@@ -42,28 +43,31 @@ export const CustomCaseReport = connect(
           <div className="title">
             <h1>Custom Case Report</h1>
           </div>
-          <div className="grid-col-4 blue-container">
-            <DateRangePickerComponent
-              endDateOptional={false}
-              endLabel="Case created end date"
-              endName="caseCreationEndDate"
-              endValue=""
-              orientation="horizontal"
-              startDateOptional={false}
-              startLabel="Case created start date"
-              startName="caseCreationStartDate"
-              startValue=""
-              onChangeEnd={e => {
-                setCustomCaseInventoryReportFiltersSequence({
-                  createEndDate: e.target.value,
-                });
-              }}
-              onChangeStart={e => {
-                setCustomCaseInventoryReportFiltersSequence({
-                  createStartDate: e.target.value,
-                });
-              }}
-            />
+          <div className="grid-col-12 blue-container margin-bottom-3">
+            <div className="grid-col-auto margin-x-3">
+              <DateRangePickerComponent
+                endLabel="Case created end date"
+                endName="caseCreationEndDate"
+                endPickerCls={'grid-col-6 padding-left-2'}
+                endValue=""
+                formGroupCls={'margin-bottom-0'}
+                rangePickerCls={'grid-row '}
+                startLabel="Case created start date"
+                startName="caseCreationStartDate"
+                startPickerCls={'grid-col-6 padding-right-2'}
+                startValue=""
+                onChangeEnd={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    createEndDate: e.target.value,
+                  });
+                }}
+                onChangeStart={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    createStartDate: e.target.value,
+                  });
+                }}
+              />
+            </div>
           </div>
           <div className="grid-col-6 margin-bottom-2">
             <legend>Petition Filing Method</legend>
@@ -249,13 +253,13 @@ export const CustomCaseReport = connect(
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
-          <div className="text-right margin-bottom-3">
-            {`Count: ${
-              (customCaseInventoryReportHelper.customCaseInventoryReportData &&
-                customCaseInventoryReportHelper.customCaseInventoryReportData
-                  .totalCount) ||
-              0
-            }`}
+          <Paginator />
+          <div className="text-right margin-bottom-2">
+            <span className="text-bold">Count: &nbsp;</span>
+            {(customCaseInventoryReportHelper.customCaseInventoryReportData &&
+              customCaseInventoryReportHelper.customCaseInventoryReportData
+                .totalCount) ||
+              0}
           </div>
           <ReportTable
             customCaseInventoryReportData={
@@ -271,7 +275,6 @@ export const CustomCaseReport = connect(
 const ReportTable = ({ customCaseInventoryReportData }) => {
   return (
     <>
-      <Paginator></Paginator>
       <table
         aria-label="case inventory record"
         className="usa-table case-detail ustc-table responsive-table"
