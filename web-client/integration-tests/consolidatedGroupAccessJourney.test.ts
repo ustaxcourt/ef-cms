@@ -3,7 +3,7 @@ import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { seedData } from './fixtures/consolidated-cases';
-import { seedDatabase, seedFullDataset } from './utils/database.js';
+import { seedDatabase, seedFullDataset } from './utils/database';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 // Feature flag: consolidated-cases-group-access-petitioner, CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
