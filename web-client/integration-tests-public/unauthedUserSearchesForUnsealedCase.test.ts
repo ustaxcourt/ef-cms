@@ -39,7 +39,7 @@ describe('Unauthed user sees unsealed case', () => {
           address1: '734 Cowley Parkway',
           city: 'Somewhere',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'NOTAREALNAMEFORTESTINGPUBLIC',
+          name: 'an unsealed electronic case',
           phone: '+1 (884) 358-9729',
           postalCode: '77546',
           state: 'CT',
