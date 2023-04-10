@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseGroupFiling } from './ConsolidatedCaseGroupFiling';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { MultiDocumentPartiesFiling } from './MultiDocumentPartiesFiling';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
@@ -16,6 +15,8 @@ export const FileDocument = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isIrsPractitionerConsolidatedCasesFilingEnabled:
+      state.isIrsPractitionerConsolidatedCasesFilingEnabled,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
@@ -24,6 +25,7 @@ export const FileDocument = connect(
   function FileDocument({
     fileDocumentHelper,
     formCancelToggleCancelSequence,
+    isIrsPractitionerConsolidatedCasesFilingEnabled,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
     showModal,
@@ -55,12 +57,9 @@ export const FileDocument = connect(
           </>
         )}
 
-        {/* TODO: Remove MultiDocumentPartiesFiling */}
-        {(fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-          <MultiDocumentPartiesFiling />
-        )) || <PartiesFiling />}
+        <PartiesFiling />
 
-        {fileDocumentHelper.showConsolidatedCasesGroupFilingCard && (
+        {isIrsPractitionerConsolidatedCasesFilingEnabled && (
           <ConsolidatedCaseGroupFiling />
         )}
 

@@ -31,6 +31,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
     isInConsolidatedGroup &&
     isMultiDocketableEventCode
   ) {
+    store.set(state.isIrsPractitionerConsolidatedCasesFilingEnabled, true);
     store.set(state.form.fileAcrossConsolidatedGroup, undefined);
   }
 
