@@ -6,7 +6,14 @@ on:
 jobs:
   Client:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [4]
+        ci_node_index: [0, 1, 2, 3]
+    env:
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -19,4 +26,6 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
       - name: Test Client Unit
-        run: npm run test:client:unit
+        run: |
+          export TESTFILES=$(npx ts-node split-tests-glob.ts -unit)
+          npm run test:client:unit:ci
