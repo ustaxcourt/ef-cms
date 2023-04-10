@@ -12,24 +12,24 @@ import { UnauthorizedError } from '../../errors/errors';
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.associatedJudge the associated judge to set on the case
  * @param {string} providers.caseCaption the caption to set on the case
- * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.caseStatus the status to set on the case
+ * @param {string} providers.docketNumber the docket number of the case to update
+ * @param {string} providers.judgeUserId the id of the associated judge to set on the case
  * @returns {object} the updated case data
  */
 export const updateCaseContextInteractor = async (
   applicationContext: IApplicationContext,
   {
-    associatedJudge,
     caseCaption,
     caseStatus,
     docketNumber,
+    judgeUserId,
   }: {
-    associatedJudge?: string;
     caseCaption?: string;
     caseStatus?: string;
     docketNumber: string;
+    judgeUserId?: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -47,6 +47,8 @@ export const updateCaseContextInteractor = async (
   if (caseCaption) {
     newCase.setCaseCaption(caseCaption);
   }
+
+  // const judgeUser =
 
   if (associatedJudge) {
     newCase.setAssociatedJudge(associatedJudge);
