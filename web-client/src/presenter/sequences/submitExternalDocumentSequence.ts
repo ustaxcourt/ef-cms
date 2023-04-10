@@ -9,7 +9,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { shouldFileAcrossConsolidatedGroupAction } from '../actions/CaseConsolidation/shouldFileAcrossConsolidatedGroupAction';
+// import { shouldFileAcrossConsolidatedGroupAction } from '../actions/CaseConsolidation/shouldFileAcrossConsolidatedGroupAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
@@ -25,6 +25,8 @@ const onSuccess = [
   //   no: [
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
+  getConsolidatedCasesByCaseAction,
+  setConsolidatedCasesForCaseAction,
   closeFileUploadStatusModalAction,
   getPrintableFilingReceiptSequence,
   getFileExternalDocumentAlertSuccessAction,
