@@ -334,7 +334,8 @@ const updateCaseWorkItems = async ({
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.status !== caseToUpdate.status ||
-    oldCase.trialDate !== caseToUpdate.trialDate;
+    oldCase.trialDate !== caseToUpdate.trialDate ||
+    oldCase.trialLocation !== caseToUpdate.trialLocation;
 
   if (!workItemsRequireUpdate) {
     return [];
@@ -398,6 +399,15 @@ const updateCaseWorkItems = async ({
         applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems({
           applicationContext,
           trialDate: updatedCase.trialDate || null,
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.trialLocation !== updatedCase.trialLocation) {
+      workItemRequestFunctions.push(() =>
+        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems({
+          applicationContext,
+          trialLocation: updatedCase.trialLocation || null,
           workItemId,
         }),
       );
