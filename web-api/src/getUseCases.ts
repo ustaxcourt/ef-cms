@@ -154,6 +154,9 @@ const {
   generateDraftStampOrderInteractor,
 } = require('../../shared/src/business/useCases/generateDraftStampOrderInteractor');
 const {
+  generateJudgeActivityReportInteractor,
+} = require('../../shared/src/business/useCases/judgeActivityReport/generateJudgeActivityReportInteractor');
+const {
   generateNoticeOfChangeOfTrialJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor');
 const {
@@ -628,6 +631,7 @@ const useCases = {
   fileExternalDocumentInteractor,
   forwardMessageInteractor,
   generateDocketRecordPdfInteractor,
+  generateJudgeActivityReportInteractor,
   generateDraftStampOrderInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,

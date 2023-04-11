@@ -11,8 +11,9 @@ export const getJudgeActivityReportReportAction = async ({
 }) => {
   const judgeActivityReport = await applicationContext
     .getUseCases()
-    .getJudgeActivityReportReportInteractor(applicationContext, {
+    .generateJudgeActivityReportReportInteractor(applicationContext, {
       endDate: props.computedEndDate,
+      judgeName: '',
       startDate: props.computedStartDate,
     });
 

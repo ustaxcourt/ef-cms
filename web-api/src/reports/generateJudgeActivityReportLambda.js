@@ -13,7 +13,7 @@ export const generateJudgeActivityReportLambda = event =>
       return await applicationContext
         .getUseCases()
         .generateJudgeActivityReportInteractor(applicationContext, {
-          ...event.queryStringParameters,
+          ...JSON.parse(event.body),
         });
     },
     { logResults: false },
