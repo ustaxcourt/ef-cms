@@ -18,8 +18,8 @@ describe('validateJudgeActivityReportSearchInteractor', () => {
     const result = validateJudgeActivityReportSearchInteractor(
       applicationContext,
       {
-        endDate: '2021-01-22T05:00:00.000Z',
-        startDate: '2021-01-22T05:00:00.000Z',
+        endDate: '2021-01-23',
+        startDate: '2021-01-22',
       },
     );
 
