@@ -40,6 +40,8 @@ export const zipDocuments = ({
     const { documentsBucketName, tempDocumentsBucketName } =
       applicationContext.environment;
 
+    console.log('gg');
+
     const s3Client = applicationContext.getStorageClient();
 
     onUploadStart?.();
@@ -58,6 +60,7 @@ export const zipDocuments = ({
 
     passThrough.on('error', reject);
 
+    console.log('we are here');
     zipS3Files({
       additionalFileNames: extraFileNames,
       additionalFiles: extraFiles,

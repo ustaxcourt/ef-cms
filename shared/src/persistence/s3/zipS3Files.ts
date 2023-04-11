@@ -36,7 +36,10 @@ export const zipS3Files = ({
     s3: s3Client,
   });
   const keyStream = client.createKeyStream(folder, s3Keys);
+  console.log(s3FilesLib.createFileStream);
   const stream = s3FilesLib.createFileStream(keyStream, true);
+  console.log(s3FilesLib.createFileStream);
+  console.log('stream', stream);
   const archive = archiver('zip', { gzip: false });
 
   const extrasPromises = additionalFiles.map((extraFile, index) =>
