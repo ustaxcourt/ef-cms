@@ -29,8 +29,13 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  const { docketNumber } = get(state.caseDetail);
+  const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
+  let docketNumbersToFileAcross = [];
+
+  for (let index = 0; index < consolidatedCases.length; index++) {
+    docketNumbersToFileAcross.push(consolidatedCases[index].docketNumber);
+  }
 
   let privatePractitioners = null;
   let { filers } = form;
