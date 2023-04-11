@@ -1,6 +1,3 @@
-const {
-  MAX_ELASTICSEARCH_PAGINATION,
-} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 /**
@@ -16,7 +13,7 @@ const { search } = require('./searchClient');
 exports.getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
-  judgeUserId,
+  judgeName,
   startDate,
 }) => {
   const source = ['status'];
@@ -36,7 +33,7 @@ exports.getCasesClosedByJudge = async ({
                 },
               },
               {
-                term: { 'judgeUserId.S': `${judgeUserId}` },
+                term: { 'associatedJudge.S': `${judgeName}` },
               },
             ],
           },
@@ -48,7 +45,7 @@ exports.getCasesClosedByJudge = async ({
   });
 
   applicationContext.logger.info(
-    `Found ${results.length} closed cases associated with judge ${judgeUserId}`,
+    `Found ${results.length} closed cases associated with judge ${judgeName}`,
   );
 
   return results;

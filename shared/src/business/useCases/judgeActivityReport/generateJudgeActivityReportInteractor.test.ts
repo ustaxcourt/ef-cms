@@ -1,8 +1,8 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { generateJudgeActivityReportSearchInteractor } from './generateJudgeActivityReportSearchInteractor';
+import { generateJudgeActivityReportInteractor } from './generateJudgeActivityReportInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-describe('generateJudgeActivityReportSearchInteractor', () => {
+describe('generateJudgeActivityReportInteractor', () => {
   const mockClosedCases = [];
 
   const mockValidRequest = {
@@ -15,7 +15,7 @@ describe('generateJudgeActivityReportSearchInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     expect(() =>
-      generateJudgeActivityReportSearchInteractor(
+      generateJudgeActivityReportInteractor(
         applicationContext,
         mockValidRequest,
       ),
@@ -26,7 +26,7 @@ describe('generateJudgeActivityReportSearchInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
     expect(() =>
-      generateJudgeActivityReportSearchInteractor(applicationContext, {
+      generateJudgeActivityReportInteractor(applicationContext, {
         endDate: undefined,
         judge: 'abc',
         startDate: 'yabbadabbadoo',
@@ -40,7 +40,7 @@ describe('generateJudgeActivityReportSearchInteractor', () => {
       .getPersistenceGateway()
       .getCasesClosedByJudge.mockReturnValue(mockClosedCases);
 
-    const { closedCases } = generateJudgeActivityReportSearchInteractor(
+    const { closedCases } = generateJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
     );
