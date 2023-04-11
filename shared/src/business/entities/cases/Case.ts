@@ -2028,9 +2028,13 @@ Case.prototype.removeFromHearing = function (trialSessionId) {
  * @param {string} associatedJudge (optional) the associated judge for the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
+Case.prototype.removeFromTrialWithAssociatedJudge = function (
+  associatedJudge: string,
+  judgeUserId: string,
+) {
   if (associatedJudge) {
     this.associatedJudge = associatedJudge;
+    this.judgeUserId = judgeUserId;
   }
 
   this.trialDate = undefined;

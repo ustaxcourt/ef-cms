@@ -13,11 +13,11 @@ const { put } = require('./requests');
  */
 exports.updateCaseContextInteractor = (
   applicationContext,
-  { associatedJudge, caseCaption, caseStatus, docketNumber },
+  { caseCaption, caseStatus, docketNumber, judgeUserId },
 ) => {
   return put({
     applicationContext,
-    body: { associatedJudge, caseCaption, caseStatus },
+    body: { caseCaption, caseStatus, judgeUserId },
     endpoint: `/case-meta/${docketNumber}/case-context`,
   });
 };
