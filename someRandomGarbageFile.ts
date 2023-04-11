@@ -1,1 +1,4 @@
-export const iServeNoPurposeDeleteThisFile = 7;
+let iServeNoPurposeDeleteThisFile = 7;
+iServeNoPurposeDeleteThisFile = 'hello';
+
+console.log(iServeNoPurposeDeleteThisFile);
