@@ -3,6 +3,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
+import { WarningNotificationComponent } from '../../views/WarningNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -24,6 +25,16 @@ export const PrimaryDocumentForm = connect(
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
+        {fileDocumentHelper.redactionAcknowledgementEnabled && (
+          <WarningNotificationComponent
+            alertWarning={{
+              message:
+                'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or redacted.',
+            }}
+            dismissable={false}
+            scrollToTop={false}
+          />
+        )}
         <div className="blue-container">
           <FormGroup errorText={validationErrors.primaryDocumentFile}>
             <label
