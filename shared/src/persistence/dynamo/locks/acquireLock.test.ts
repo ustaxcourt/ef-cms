@@ -3,7 +3,7 @@ import { applicationContext } from '../../../business/test/createTestApplication
 import { createLock, getLock, removeLock } from './acquireLock';
 
 describe('createLock', () => {
-  it('should persist a record with the specified lockName and lockId', async () => {
+  it('should persist a record with the specified prefix and identifier', async () => {
     await createLock({
       applicationContext,
       identifier: '123-45',

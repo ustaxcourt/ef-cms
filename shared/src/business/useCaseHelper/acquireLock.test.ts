@@ -50,13 +50,13 @@ describe('acquireLock', () => {
     });
   });
 
-  describe('lockName is locked', () => {
+  describe('is locked', () => {
     beforeEach(() => {
       applicationContext
         .getPersistenceGateway()
         .getLock.mockReturnValue(MOCK_LOCK);
     });
-    it('throws a ServiceUnavailableError error if the persistence gateway returns a lock for the given lockName', async () => {
+    it('throws a ServiceUnavailableError error if the persistence gateway returns a lock for the given prefix and identifier', async () => {
       await expect(
         acquireLock({
           applicationContext,
@@ -89,24 +89,17 @@ describe('acquireLock', () => {
     });
   });
 
-  describe('lockName is not locked', () => {
+  describe('is not locked', () => {
     beforeEach(() => {
       applicationContext
         .getPersistenceGateway()
         .getLock.mockReturnValue(undefined);
     });
-    it('creates a new lock in persistence with for the given lockName', async () => {
+    it('creates a new lock in persistence', async () => {
       await acquireLock({
         applicationContext,
         identifier: '123-45',
         onLockError,
-        prefix: 'case',
-      });
-      expect(
-        applicationContext.getPersistenceGateway().getLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: '123-45',
         prefix: 'case',
       });
       expect(
