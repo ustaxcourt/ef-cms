@@ -173,13 +173,13 @@ const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 const { CognitoIdentityServiceProvider, DynamoDB, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
-const {
+import {
   DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
   PutObjectCommand,
   S3Client,
-} = require('@aws-sdk/client-s3');
+} from '@aws-sdk/client-s3';
 const { createPresignedPost } = require('@aws-sdk/s3-presigned-post');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { Upload } = require('@aws-sdk/lib-storage');
@@ -270,7 +270,7 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
 
 let dynamoClientCache = {};
 let dynamoCache = {};
-let s3Cache;
+let s3Cache: S3Client;
 let sesCache;
 let sqsCache;
 let searchClientCache;
@@ -655,6 +655,15 @@ module.exports = (appContextUser, logger = createLogger()) => {
         },
         getObject({ Bucket, Key }) {
           return {
+            async createReadStream() {
+              const { Body } = await s3Cache.send(
+                new GetObjectCommand({
+                  Bucket,
+                  Key,
+                }),
+              );
+              return Body;
+            },
             async promise() {
               const { Body } = await s3Cache.send(
                 new GetObjectCommand({
@@ -701,10 +710,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
             client: s3Cache,
             params,
           });
-
-          // parallelUploads3.on('httpUploadProgress', progress => {
-          //   console.log(progress);
-          // });
 
           await parallelUploads3.done();
         },

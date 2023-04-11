@@ -52,7 +52,7 @@ export const zipS3Files = ({
   });
 
   archive.on('error', function (err) {
-    debug && console.log('archive error', err);
+    console.log('archive error', err);
     onError(err);
   });
 
@@ -83,12 +83,16 @@ export const zipS3Files = ({
       archive.append(file.data.length === 0 ? '' : file.data, entryData);
     })
     .on('end', function () {
-      debug && console.log('end -> finalize');
+      console.log('end -> finalize');
       extraFilesPromisesAll
-        .then(() => {})
-        .catch(() => {})
         .then(() => {
-          debug && console.log('promise.all -> finalize');
+          console.log('first then is done');
+        })
+        .catch(e => {
+          console.log(e);
+        })
+        .then(() => {
+          console.log('promise.all -> finalize');
           archive.finalize();
         });
     })

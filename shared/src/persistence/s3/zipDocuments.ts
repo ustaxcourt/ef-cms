@@ -1,6 +1,6 @@
 import { zipS3Files } from './zipS3Files';
 import archiver from 'archiver';
-import s3FilesLib from 's3-files';
+import s3FilesLib from './s3-files';
 import stream from 'stream';
 
 /**
@@ -46,14 +46,15 @@ export const zipDocuments = ({
 
     const passThrough = new stream.PassThrough();
 
-    s3Client.upload(
-      {
+    s3Client
+      .upload({
         Body: passThrough,
         Bucket: tempDocumentsBucketName,
         Key: zipName,
-      },
-      () => resolve(undefined),
-    );
+      })
+      .then(() => {
+        resolve(undefined);
+      });
 
     passThrough.on('error', reject);
 
