@@ -15,7 +15,6 @@ const {
   INTERNAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
-  OPINION_PAMPHLET_EVENT_CODE,
   PARTIES_CODES,
   ROLES,
   SCENARIOS,
@@ -242,15 +241,6 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
     ),
   otherIteration: joi.optional(),
-  pageNumber: joi
-    .when('eventCode', {
-      is: joi.exist().valid(OPINION_PAMPHLET_EVENT_CODE),
-      otherwise: joi.forbidden(),
-      then: joi.number().integer().min(0).max(9999).required(),
-    })
-    .description(
-      'The page on which an opinion appears in the opinion pamphlet.',
-    ),
   partyIrsPractitioner: joi.boolean().optional(),
   pending: joi
     .boolean()

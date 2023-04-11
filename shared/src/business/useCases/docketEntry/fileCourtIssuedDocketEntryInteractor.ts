@@ -105,7 +105,6 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           isOnDocketRecord: true,
           judge: documentMeta.judge,
           numberOfPages,
-          pageNumber: documentMeta.pageNumber,
           scenario: documentMeta.scenario,
           serviceStamp: documentMeta.serviceStamp,
           trialLocation: documentMeta.trialLocation,

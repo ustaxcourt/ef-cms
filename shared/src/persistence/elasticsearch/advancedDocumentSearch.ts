@@ -30,7 +30,6 @@ exports.advancedDocumentSearch = async ({
   keyword,
   omitSealed,
   overrideResultSize,
-  requireServedDate = true,
   sortField,
   startDate,
 }) => {
@@ -49,7 +48,6 @@ exports.advancedDocumentSearch = async ({
     'isStricken',
     'judge',
     'numberOfPages',
-    'pageNumber',
     'petitioners',
     'privatePractitioners',
     'sealedDate',
@@ -128,21 +126,16 @@ exports.advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter = [];
-
-  if (requireServedDate) {
-    documentFilter.push({
+  const documentFilter = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+    {
       exists: {
         field: 'servedAt',
       },
-    });
-  }
-
-  documentFilter.push(
-    { term: { 'entityName.S': 'DocketEntry' } },
+    },
     { term: { 'isFileAttached.BOOL': true } },
     { terms: { 'eventCode.S': documentEventCodes } },
-  );
+  ];
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
