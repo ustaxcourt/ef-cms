@@ -12,6 +12,7 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { shouldFileAcrossConsolidatedGroupAction } from '../actions/CaseConsolidation/shouldFileAcrossConsolidatedGroupAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
+import { uploadExternalDocumentsAcrossConsolidatedGroupAction } from '../actions/FileDocument/uploadExternalDocumentsAcrossConsolidatedGroupAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 const onSuccessForIndividualCase = [
@@ -46,12 +47,12 @@ export const submitExternalDocumentSequence = showProgressSequenceDecorator([
         success: onSuccessForIndividualCase,
       },
     ],
-    // yes: [
-    //   uploadExternalDocumentsAcrossConsolidatedGroupAction,
-    //   {
-    //     error: [openFileUploadErrorModal],
-    //     success: onSuccessForIndividualCase,
-    //   },
-    // ],
+    yes: [
+      uploadExternalDocumentsAcrossConsolidatedGroupAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: onSuccessForIndividualCase,
+      },
+    ],
   },
 ]);
