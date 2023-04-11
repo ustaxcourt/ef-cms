@@ -31,12 +31,9 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
 
   const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
-  let docketNumbersToFileAcross = [];
+  let documentMetadataForConsolidatedCases = [];
 
-  for (let index = 0; index < consolidatedCases.length; index++) {
-    docketNumbersToFileAcross.push(consolidatedCases[index].docketNumber);
-  }
-
+  // This is used when a practitioner is requesting access to an unassociated case
   let privatePractitioners = null;
   let { filers } = form;
   if (
@@ -80,18 +77,42 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
     });
   }
 
+  for (let index = 0; index < consolidatedCases.length; index++) {
+    documentMetadataForConsolidatedCases.push({
+      documentMetaData: {
+        ...documentMetadata,
+        docketNumber: consolidatedCases[index].docketNumber,
+      },
+    });
+  }
+
   try {
     const progressFunctions = setupPercentDone(documentFiles, store);
 
-    const { caseDetail, docketEntryIdsAdded } = await applicationContext
+    // const { caseDetail, docketEntryIdsAdded } = await applicationContext
+    const [caseDetail] = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor(applicationContext, {
-        documentFiles,
-        documentMetadata,
-        progressFunctions,
-      });
+      .uploadExternalDocumentsForConsolidatedGroupInteractor(
+        applicationContext,
+        {
+          documentFiles,
+          documentMetadataForConsolidatedCases,
+          progressFunctions,
+        },
+      );
+    // [
+    //   {
+    //     caseDetail:{},
+    //     docketEntryIdsAdded:[]
+    //   },
+    //   {
+    //     caseDetail:{},
+    //     docketEntryIdsAdded:[]
+    //   }
+    // ]
+    console.log('caseDetail in action', caseDetail);
 
-    for (let docketEntryId of docketEntryIdsAdded) {
+    for (let docketEntryId of caseDetail.docketEntryIdsAdded) {
       await addCoversheet({ applicationContext, docketEntryId, docketNumber });
     }
 
