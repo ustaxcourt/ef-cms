@@ -9,12 +9,12 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-// import { shouldFileAcrossConsolidatedGroupAction } from '../actions/CaseConsolidation/shouldFileAcrossConsolidatedGroupAction';
+import { shouldFileAcrossConsolidatedGroupAction } from '../actions/CaseConsolidation/shouldFileAcrossConsolidatedGroupAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
-const onSuccess = [
+const onSuccessForIndividualCase = [
   // If you file across the consolidated group do you become automatically associated with the cases filed
   // on in the group that you are not currently associated with
   // If they are "Filing First Document in an indirectly associated case accessed through the Consolidated Cases card
@@ -33,23 +33,25 @@ const onSuccess = [
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
   navigateToCaseDetailAction,
-  //   ],
-  //   yes: [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
-  // },
 ];
 
 export const submitExternalDocumentSequence = showProgressSequenceDecorator([
   openFileUploadStatusModalAction,
-  // if no continue with preexisting workflow
-  uploadExternalDocumentsAction,
+  shouldFileAcrossConsolidatedGroupAction,
   {
-    error: [openFileUploadErrorModal],
-    success: onSuccess,
+    no: [
+      uploadExternalDocumentsAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: onSuccessForIndividualCase,
+      },
+    ],
+    // yes: [
+    //   uploadExternalDocumentsAcrossConsolidatedGroupAction,
+    //   {
+    //     error: [openFileUploadErrorModal],
+    //     success: onSuccessForIndividualCase,
+    //   },
+    // ],
   },
-  // if yes
-  // uploadExternalDocumentsAcrossConsolidatedGroupAction,
-  // {
-  //   error: [openFileUploadErrorModal],
-  //   success: onSuccess,
-  // },
 ]);

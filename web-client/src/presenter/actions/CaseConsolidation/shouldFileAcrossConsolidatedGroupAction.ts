@@ -11,10 +11,7 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if docket entry is multi-docketable
  */
 export const shouldFileAcrossConsolidatedGroupAction = ({ get, path }) => {
-  console.log('entering shouldFileAcrossConsolidatedGroupAction');
-
   const { fileAcrossConsolidatedGroup } = get(state.form);
-  console.log('fileAcrossConsolidatedGroup', fileAcrossConsolidatedGroup);
 
   if (fileAcrossConsolidatedGroup) {
     console.log('fileAcrossConsolidatedGroup YES');
