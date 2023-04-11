@@ -3,6 +3,11 @@ export const checkLock = async ({
   identifier,
   onLockError,
   prefix,
+}: {
+  applicationContext: IApplicationContext;
+  identifier: string;
+  onLockError: Error;
+  prefix: string;
 }) => {
   const currentLock = await applicationContext
     .getPersistenceGateway()
@@ -110,7 +115,13 @@ export function withLocking(
       ttl,
     });
 
-    const results = await cb(applicationContext, options);
+    let caughtError;
+    let results;
+    try {
+      results = await cb(applicationContext, options);
+    } catch (err) {
+      caughtError = err;
+    }
 
     await removeLock({
       applicationContext,
@@ -118,6 +129,9 @@ export function withLocking(
       prefix,
     });
 
+    if (caughtError) {
+      throw caughtError;
+    }
     return results;
   };
 }
