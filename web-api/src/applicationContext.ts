@@ -293,7 +293,7 @@ const entitiesByName = {
   WorkItem,
 };
 
-const createApplicationContext = (appContextUser, logger = createLogger()) => {
+module.exports = (appContextUser, logger = createLogger()) => {
   let user;
 
   if (appContextUser) {
@@ -735,6 +735,3 @@ const createApplicationContext = (appContextUser, logger = createLogger()) => {
     },
   };
 };
-
-// eslint-disable-next-line import/no-default-export
-export default createApplicationContext;
