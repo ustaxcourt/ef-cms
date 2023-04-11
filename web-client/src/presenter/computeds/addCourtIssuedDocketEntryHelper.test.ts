@@ -12,7 +12,6 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 describe('addCourtIssuedDocketEntryHelper', () => {
   const {
-    OPINION_PAMPHLET_EVENT_CODE,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
     USER_ROLES,
@@ -29,7 +28,6 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
     ],
     EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
-    OPINION_PAMPHLET_EVENT_CODE,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
     USER_ROLES: {
@@ -350,22 +348,21 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showReceivedDate).toBeTruthy();
   });
 
-  it(`should set showAttachmentAndServiceFields to false and showOpinionStartingPage to true when the document event code is ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
+  it('should set showAttachmentAndServiceFields to false when the document event code is TCRP', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         ...state,
         docketEntryId: '123',
         form: {
-          eventCode: OPINION_PAMPHLET_EVENT_CODE,
+          eventCode: 'TCRP',
         },
       },
     });
 
     expect(result.showAttachmentAndServiceFields).toBe(false);
-    expect(result.showOpinionStartingPage).toBe(true);
   });
 
-  it(`should set showAttachmentAndServiceFields to true and showOpinionStartingPage to false when the document event code is NOT ${OPINION_PAMPHLET_EVENT_CODE}`, () => {
+  it('should set showAttachmentAndServiceFields to true when the document event code is NOT TCRP', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         ...state,
@@ -377,6 +374,5 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
 
     expect(result.showAttachmentAndServiceFields).toBe(true);
-    expect(result.showOpinionStartingPage).toBe(false);
   });
 });

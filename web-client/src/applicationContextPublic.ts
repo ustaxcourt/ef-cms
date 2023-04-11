@@ -44,7 +44,6 @@ import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicS
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
   createISODateString,
-  deconstructDate,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
@@ -63,7 +62,6 @@ import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
-import { getOpinionPamphletsInteractor } from '../../shared/src/proxies/public/getOpinionPamphletsProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
@@ -101,7 +99,6 @@ const allUseCases = {
   getHealthCheckInteractor,
   getItemInteractor,
   getMaintenanceModePublicInteractor,
-  getOpinionPamphletsInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
@@ -192,7 +189,6 @@ const applicationContextPublic = {
     return {
       compareCasesByDocketNumber,
       createISODateString,
-      deconstructDate,
       formatDateString,
       formatDocketEntry,
       getContactPrimary,

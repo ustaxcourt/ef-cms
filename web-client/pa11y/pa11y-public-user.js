@@ -11,5 +11,4 @@ module.exports = [
   'http://localhost:5678/email-verification-success',
   'http://localhost:5678/email-verification-instructions',
   'http://localhost:5678/maintenance',
-  'http://localhost:5678/opinion-pamphlets',
 ];

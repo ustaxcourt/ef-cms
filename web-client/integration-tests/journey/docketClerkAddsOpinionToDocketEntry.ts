@@ -1,9 +1,8 @@
 import { updateForm, waitForLoadingComponentToHide } from '../helpers';
 
-export const docketClerkAddsOpiniontoDocketEntry = (
+export const docketClerkAddsOpiniontoDocketyEntry = (
   cerebralTest,
   draftOrderIndex,
-  formFieldValues = undefined,
 ) => {
   return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
@@ -11,7 +10,7 @@ export const docketClerkAddsOpiniontoDocketEntry = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const updateKeyValues = formFieldValues || {
+    const updateKeyValues = {
       documentTitle: 'T.C. Opinion [judge] [Anything]',
       documentType: 'T.C. Opinion',
       eventCode: 'TCOP',

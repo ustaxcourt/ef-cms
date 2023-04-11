@@ -1,7 +1,4 @@
-import {
-  DOCKET_ENTRY_SEALED_TO_TYPES,
-  OPINION_PAMPHLET_EVENT_CODE,
-} from '../../entities/EntityConstants';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -114,38 +111,6 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           documentTitle: 'Memorandum Opinion',
           documentType: 'Memorandum Opinion',
           eventCode: 'MOP',
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      ),
-    );
-    const result = await getPublicDownloadPolicyUrlInteractor(
-      applicationContext,
-      {
-        docketNumber: '123-20',
-        key: '83813a24-7687-418e-a186-c416b4bb0ad4',
-      } as any,
-    );
-    expect(result).toEqual('localhost');
-  });
-
-  it('should return a url for a TCRP document that is part of a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        sealedDate: '2019-03-01T21:40:46.415Z',
-      });
-
-    mockCase.docketEntries.push(
-      new DocketEntry(
-        {
-          docketEntryId: '83813a24-7687-418e-a186-c416b4bb0ad4',
-          documentTitle: 'Tax Court Report Pamphlet',
-          documentType: 'Tax Court Report Pamphlet',
-          eventCode: OPINION_PAMPHLET_EVENT_CODE,
           isFileAttached: true,
           isOnDocketRecord: true,
           servedAt: '2019-03-01T21:40:46.415Z',
