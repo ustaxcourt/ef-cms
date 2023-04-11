@@ -81,9 +81,6 @@ const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 
 const {
-  getOpinionPamphletsLambda,
-} = require('./public-api/getOpinionPamphletsLambda');
-const {
   opinionPublicSearchLambda,
 } = require('./public-api/opinionPublicSearchLambda');
 const {
@@ -134,10 +131,6 @@ app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
 app.get(
   '/public-api/todays-orders/:page/:todaysOrdersSort',
   lambdaWrapper(todaysOrdersLambda),
-);
-app.get(
-  '/public-api/opinion-pamphlets',
-  lambdaWrapper(getOpinionPamphletsLambda),
 );
 
 app.get(

@@ -13,15 +13,14 @@ export const shouldSaveToConsolidatedGroupAction = ({
   get,
   path,
 }) => {
-  const { OPINION_PAMPHLET_EVENT_CODE, UNSERVABLE_EVENT_CODES } =
-    applicationContext.getConstants();
+  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
   const { eventCode } = get(state.form);
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(eventCode);
   const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
-  const isNotTaxCourtPamphlet = eventCode !== OPINION_PAMPHLET_EVENT_CODE;
+  const isNotTaxCourtPamphlet = eventCode !== 'TCRP';
 
   if (isLeadCase && isUnservable && isNotTaxCourtPamphlet) {
     return path.yes();

@@ -211,34 +211,7 @@ export const CourtIssuedDocketEntry = connect(
                   </FormGroup>
                 )}
 
-                {addCourtIssuedDocketEntryHelper.showOpinionStartingPage && (
-                  <FormGroup errorText={validationErrors.pageNumber}>
-                    <fieldset className="usa-fieldset margin-bottom-0">
-                      <legend className="usa-legend" id="page-number-legend">
-                        Opinion starting page
-                      </legend>
-                      <div className="usa-form-group--year display-inline-block">
-                        <input
-                          aria-describedby="page-number-legend"
-                          aria-label="opinion starting page"
-                          className="usa-input"
-                          id="pageNumber"
-                          name="pageNumber"
-                          type="number"
-                          value={form.pageNumber || ''}
-                          onChange={e => {
-                            updateCourtIssuedDocketEntryFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    </fieldset>
-                  </FormGroup>
-                )}
-
-                {addCourtIssuedDocketEntryHelper.showOpinionStartingPage && (
+                {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <>
                     <div className="usa-label" htmlFor="service-parties">
                       Service parties

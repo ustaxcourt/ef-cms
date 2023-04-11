@@ -8,7 +8,6 @@ import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
-import { OpinionPamphlets } from './Public/OpinionPamphlets';
 import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
@@ -29,7 +28,6 @@ const pages = {
   ErrorView,
   HealthCheck,
   Interstitial,
-  OpinionPamphlets,
   Privacy,
   PublicCaseDetail,
   PublicPrintableDocketRecord,
