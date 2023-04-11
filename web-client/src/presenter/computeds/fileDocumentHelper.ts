@@ -88,6 +88,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     filersMap: form.filersMap,
   });
 
+  const { redactionAcknowledgementEnabled } = get(state.featureFlagHelper);
+
   const exported = {
     certificateOfServiceDateFormatted,
     formattedDocketNumbers,
@@ -97,6 +99,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument,
+    redactionAcknowledgementEnabled,
     secondaryDocument,
     selectedCasesAsCase,
     showFilingIncludes,
