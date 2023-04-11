@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+const { post } = require('../requests');
 
 /**
  * generateJudgeActivityReportInteractor
@@ -11,14 +11,19 @@ const { get } = require('../requests');
  */
 export const generateJudgeActivityReportInteractor = (
   applicationContext,
-  { endDate, startDate }: { startDate: string; endDate: string },
+  {
+    endDate,
+    judgeName,
+    startDate,
+  }: { startDate: string; endDate: string; judgeName: string },
 ) => {
-  return get({
+  return post({
     applicationContext,
-    endpoint: '/reports/judge-activity-report',
-    params: {
+    body: {
       endDate,
+      judgeName,
       startDate,
     },
+    endpoint: '/reports/judge-activity-report',
   });
 };
