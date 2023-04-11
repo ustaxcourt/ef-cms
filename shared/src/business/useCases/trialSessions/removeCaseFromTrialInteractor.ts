@@ -19,13 +19,13 @@ import { UnauthorizedError } from '../../../errors/errors';
 export const removeCaseFromTrialInteractor = async (
   applicationContext: IApplicationContext,
   {
-    associatedJudge,
     caseStatus,
     disposition,
     docketNumber,
+    judgeUserId,
     trialSessionId,
   }: {
-    associatedJudge: string;
+    judgeUserId?: string;
     caseStatus: string;
     disposition: string;
     docketNumber: string;
@@ -70,8 +70,8 @@ export const removeCaseFromTrialInteractor = async (
 
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
-      associatedJudge,
       changedBy: user.name,
+      judgeUserId,
       updatedCaseStatus: caseStatus,
     });
 

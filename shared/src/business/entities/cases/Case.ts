@@ -1984,6 +1984,7 @@ Case.prototype.unsetAsHighPriority = function () {
  * @param {string} providers.associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
+// update associatedJudge to judgeUserId but how get chief judge user id?
 Case.prototype.removeFromTrial = function ({
   associatedJudge = CHIEF_JUDGE,
   changedBy,
