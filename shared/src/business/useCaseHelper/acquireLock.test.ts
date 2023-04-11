@@ -124,13 +124,12 @@ describe('withLocking', () => {
     prefix: 'case',
     ttl: 60,
   }));
-  let func;
+  const func = withLocking(callbackFunction, getLockInfo, onLockError);
 
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockReturnValue(undefined);
-    func = withLocking(callbackFunction, getLockInfo, onLockError);
   });
 
   it('creates the lock for the specified prefix and identifier', async () => {
