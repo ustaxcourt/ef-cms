@@ -6,7 +6,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import applicationContextFactory from '../../web-api/src/applicationContext';
+const applicationContextFactory = require('../../web-api/src/applicationContext');
 
 const {
   IRS_SYSTEM_SECTION,

@@ -1,3 +1,4 @@
+const applicationContextFactory = require('../../web-api/src/applicationContext');
 import {
   CASE_STATUS_TYPES,
   ROLES,
@@ -9,7 +10,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import applicationContextFactory from '../../web-api/src/applicationContext';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
