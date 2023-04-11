@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
-import { getComputedFormDateFactoryAction } from '../../actions/getComputedFormDateFactoryAction';
-import { getJudgeActivityReportReportAction } from '../../actions/JudgeActivityReport/getJudgeActivityReportReportAction';
+import { getJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getJudgeActivityReportAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
@@ -12,8 +11,6 @@ import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActi
 
 export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
   startShowValidationAction,
-  getComputedFormDateFactoryAction('start', false, 'computedStartDate'),
-  getComputedFormDateFactoryAction('end', false, 'computedEndDate'),
   validateJudgeActivityReportSearchAction,
   {
     error: [
@@ -25,7 +22,7 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       stopShowValidationAction,
       clearErrorAlertsAction,
       clearAlertsAction,
-      getJudgeActivityReportReportAction,
+      getJudgeActivityReportAction,
     ],
   },
 ]);

@@ -25,13 +25,17 @@ exports.getCasesClosedByJudge = async ({
         _source: source,
         query: {
           bool: {
-            should: [
+            filter: [
               {
-                'closedDate.S': {
-                  gte: `${startDate}||/h`,
-                  lte: `${endDate}||/h`,
+                range: {
+                  'closedDate.S': {
+                    gte: `${startDate}||/h`,
+                    lte: `${endDate}||/h`,
+                  },
                 },
               },
+            ],
+            must: [
               {
                 term: { 'associatedJudge.S': `${judgeName}` },
               },
