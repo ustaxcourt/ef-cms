@@ -23,7 +23,11 @@ describe('generateNoticeOfDocketChangePdf', () => {
     isAuthorized.mockReturnValue(true);
     applicationContext.logger.error = jest.fn();
     applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback(null, true),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.resolve();
+        },
+      }),
     });
   });
 
@@ -58,7 +62,11 @@ describe('generateNoticeOfDocketChangePdf', () => {
 
   it('fails and logs if the s3 upload fails', async () => {
     applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback('there was an error uploading'),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.reject('there was an error uploading');
+        },
+      }),
     });
 
     await expect(

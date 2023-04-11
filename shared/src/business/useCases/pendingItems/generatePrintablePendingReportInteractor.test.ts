@@ -57,7 +57,11 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
-      upload: jest.fn((params, callback) => callback()),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.resolve();
+        },
+      }),
     });
 
     applicationContext
@@ -281,7 +285,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     );
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
-    expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
+    expect(applicationContext.getStorageClient().putObject).toHaveBeenCalled();
   });
 
   it('should return the document url', async () => {
@@ -298,12 +302,18 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   it('fails and logs if the s3 upload fails', async () => {
     applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback('error'),
+      putObject() {
+        return {
+          promise() {
+            return Promise.reject('error');
+          },
+        };
+      },
     });
 
     await expect(
       generatePrintablePendingReportInteractor(applicationContext, {} as any),
-    ).rejects.toEqual('error');
+    ).rejects.toContain('error');
     expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'error uploading to s3',

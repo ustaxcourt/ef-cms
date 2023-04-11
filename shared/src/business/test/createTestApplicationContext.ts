@@ -528,7 +528,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getObject: jest.fn().mockReturnValue({
       promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
     }),
-    putObject: jest.fn().mockReturnValue({ promise: () => {} }),
+    putObject: jest.fn().mockReturnValue({
+      promise: () => {
+        return Promise.resolve();
+      },
+    }),
   });
 
   const mockGetPersistenceGateway = appContextProxy({

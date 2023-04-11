@@ -29,7 +29,11 @@ describe('uploadToS3', () => {
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
-      upload: (params, callback) => callback('there was an error uploading'),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.reject('there was an error uploading');
+        },
+      }),
     });
 
     await expect(
@@ -61,7 +65,11 @@ describe('uploadToS3', () => {
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
-      upload: (params, callback) => callback(),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.resolve();
+        },
+      }),
     });
 
     await uploadToS3({

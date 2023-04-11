@@ -32,7 +32,11 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
-      upload: jest.fn((params, callback) => callback()),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.resolve();
+        },
+      }),
     });
 
     applicationContext
@@ -97,7 +101,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     );
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
-    expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
+    expect(applicationContext.getStorageClient().putObject).toHaveBeenCalled();
   });
 
   it('should return the Trial Session Working Copy PDF url', async () => {
@@ -114,7 +118,11 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
   it('fails and logs if the s3 upload fails', async () => {
     applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback('error'),
+      putObject: jest.fn().mockReturnValue({
+        promise: () => {
+          return Promise.reject('error');
+        },
+      }),
     });
 
     await expect(
