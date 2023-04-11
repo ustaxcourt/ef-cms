@@ -1,6 +1,8 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_PRACTITIONER, validUser } from '../../../test/mockUsers';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactPrimary } from '../../entities/cases/Case';
 import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
@@ -27,22 +29,23 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     pendingEmail: UPDATED_EMAIL,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   };
-
+  const mockCase = {
+    ...MOCK_CASE,
+    docketNumber: '101-21',
+    petitioners: [
+      {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: USER_ID,
+        email: undefined,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    ],
+    privatePractitioners: [mockPractitioner],
+  };
   beforeEach(() => {
-    const mockCase = {
-      ...MOCK_CASE,
-      docketNumber: '101-21',
-      petitioners: [
-        {
-          ...getContactPrimary(MOCK_CASE),
-          contactId: USER_ID,
-          email: undefined,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
-      ],
-      privatePractitioners: [mockPractitioner],
-    };
-
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockReturnValue(mockPetitioner);
@@ -150,6 +153,47 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       entityName: 'Practitioner',
       pendingEmail: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+  });
+
+  describe('locking', () => {
+    it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getLock.mockReturnValue(MOCK_LOCK);
+
+      await expect(
+        setUserEmailFromPendingEmailInteractor(applicationContext, {
+          user: mockPractitioner,
+        }),
+      ).rejects.toThrow(ServiceUnavailableError);
+
+      expect(
+        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should acquire and remove the lock on the case', async () => {
+      await setUserEmailFromPendingEmailInteractor(applicationContext, {
+        user: mockPractitioner,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: mockCase.docketNumber,
+        prefix: 'case',
+        ttl: 30,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: mockCase.docketNumber,
+        prefix: 'case',
+      });
     });
   });
 });
