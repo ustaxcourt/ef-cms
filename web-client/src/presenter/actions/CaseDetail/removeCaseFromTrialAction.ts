@@ -24,6 +24,8 @@ export const removeCaseFromTrialAction = async ({
     trialSessionId: modalTrialSessionId,
   } = get(state.modal);
 
+  //associatedJudge will be user id, change everywhere
+
   trialSessionId = modalTrialSessionId || stateTrialSessionId;
   try {
     const caseDetail = await applicationContext

@@ -127,7 +127,7 @@ export const RemoveFromTrialSessionModal = connect(
                 <option value="">- Select -</option>
                 <option value="Chief Judge">Chief Judge</option>
                 {modal.judges.map(judgeUser => (
-                  <option key={judgeUser.userId} value={judgeUser.name}>
+                  <option key={judgeUser.userId} value={judgeUser.userId}>
                     {judgeUser.name}
                   </option>
                 ))}

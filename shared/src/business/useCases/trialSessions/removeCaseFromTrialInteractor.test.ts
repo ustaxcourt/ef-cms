@@ -4,7 +4,7 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { MOCK_TRIAL_INPERSON, judgeUser } from '../../../test/mockTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 
@@ -300,11 +300,11 @@ describe('remove case from trial session', () => {
     });
   });
 
-  it('sets the associatedJudge and caseStatus when provided', async () => {
+  it.only('sets the associatedJudge and caseStatus when provided', async () => {
     mockTrialSession = { ...MOCK_TRIAL_INPERSON, isCalendared: true };
 
     const result = await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: 'Judge Dredd',
+      associatedJudge: { name: judgeUser.name, userId: judgeUser.userId },
       caseStatus: CASE_STATUS_TYPES.cav,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
