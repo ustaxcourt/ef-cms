@@ -36,9 +36,16 @@ export const featureFlagHelper = (get, applicationContext) => {
     );
   }
 
+  const redactionAcknowledgementEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
+    ],
+  );
+
   return {
     areMultiDocketablePaperFilingsEnabled,
     isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
+    redactionAcknowledgementEnabled,
   };
 };
