@@ -1,8 +1,9 @@
 import { Practitioner } from '../../entities/Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
-
 /**
  * setUserEmailFromPendingEmailInteractor
  *
@@ -37,6 +38,14 @@ export const setUserEmailFromPendingEmailInteractor = async (
       pendingEmail: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
+    await acquireLock({
+      applicationContext,
+      identifier: docketNumbersAssociatedWithUser,
+      onLockError: new ServiceUnavailableError(
+        'One of the cases are currently being updated',
+      ),
+      prefix: 'case',
+    });
   } else {
     userEntity = new User({
       ...user,
@@ -66,6 +75,15 @@ export const setUserEmailFromPendingEmailInteractor = async (
         docketNumbersAssociatedWithUser,
         user: rawUser,
       });
+      await Promise.all(
+        docketNumbersAssociatedWithUser.map(docketNumber =>
+          applicationContext.getPersistenceGateway().removeLock({
+            applicationContext,
+            identifier: docketNumber,
+            prefix: 'case',
+          }),
+        ),
+      );
     }
   } catch (error) {
     applicationContext.logger.error(error);
