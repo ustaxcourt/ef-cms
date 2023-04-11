@@ -26,6 +26,7 @@ export const CustomCaseReport = connect(
       sequences.getCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence:
       sequences.setCustomCaseInventoryReportFiltersSequence,
+    validationErrors: state.validationErrors,
   },
   function CustomCaseReport({
     clearOptionalCustomCaseInventoryFilterSequence,
@@ -33,6 +34,7 @@ export const CustomCaseReport = connect(
     customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence,
+    validationErrors,
   }) {
     return (
       <>
@@ -46,12 +48,14 @@ export const CustomCaseReport = connect(
           <div className="grid-col-12 blue-container margin-bottom-3">
             <div className="grid-col-auto margin-x-3">
               <DateRangePickerComponent
+                endDateErrorText={validationErrors.endDate}
                 endLabel="Case created end date"
                 endName="caseCreationEndDate"
                 endPickerCls={'grid-col-6 padding-left-2'}
                 endValue=""
                 formGroupCls={'margin-bottom-0'}
                 rangePickerCls={'grid-row '}
+                startDateErrorText={validationErrors.startDate}
                 startLabel="Case created start date"
                 startName="caseCreationStartDate"
                 startPickerCls={'grid-col-6 padding-right-2'}
