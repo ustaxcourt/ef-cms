@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getJudgeActivityReportReportAction } from './getJudgeActivityReportReportAction';
+import { getJudgeActivityReportAction } from './getJudgeActivityReportAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getJudgeActivityReportReportAction', () => {
+describe('getJudgeActivityReportAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should retrieve the judge activity report from persistence and return it to props', async () => {
@@ -14,7 +14,7 @@ describe('getJudgeActivityReportReportAction', () => {
         mockJudgeActivityReport,
       );
 
-    const { output } = await runAction(getJudgeActivityReportReportAction, {
+    const { output } = await runAction(getJudgeActivityReportAction, {
       modules: {
         presenter,
       },
