@@ -6,22 +6,22 @@ import {
 } from '../../../authorization/authorizationClientService';
 
 /**
- * generateJudgeActivityReportSearchInteractor
+ * generateJudgeActivityReportInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.endDate the date to end the search for judge activity
- * @param {string} providers.judgeUserId the id of the judge to generate the report for
+ * @param {string} providers.judgeName the name of the judge to generate the report for
  * @param {string} providers.startDate the date to start the search for judge activity
  * @returns {object} errors (null if no errors)
  */
-export const generateJudgeActivityReportSearchInteractor = (
+export const generateJudgeActivityReportInteractor = (
   applicationContext,
   {
     endDate,
-    judgeUserId,
+    judgeName,
     startDate,
-  }: { endDate: string; startDate: string; judgeUserId: string },
+  }: { endDate: string; startDate: string; judgeName: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -46,7 +46,7 @@ export const generateJudgeActivityReportSearchInteractor = (
     .getCasesClosedByJudge({
       applicationContext,
       endDate,
-      judgeUserId,
+      judgeName,
       startDate,
     });
 
