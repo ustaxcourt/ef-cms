@@ -7392,50 +7392,6 @@
         }
       }
     },
-    "/public-api/opinion-pamphlets": {
-      "get": {
-        "tags": ["opinion-pamphlets"],
-        "summary": "returns the opinion pamphlets published by the court",
-        "description": "Returns the opinion pamphlets published by the court",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/document"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/login": {
       "delete": {
         "tags": ["auth"],
