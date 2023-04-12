@@ -37,7 +37,7 @@ exports.getCasesClosedByJudge = async ({
             ],
             must: [
               {
-                match_phrase: { 'associatedJudge.S': judgeName },
+                match_phrase: { 'associatedJudge.S': `${judgeName}` },
               },
             ],
           },
