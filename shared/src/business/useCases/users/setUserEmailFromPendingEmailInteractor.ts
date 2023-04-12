@@ -45,6 +45,8 @@ export const setUserEmailFromPendingEmailInteractor = async (
         'One of the cases are currently being updated',
       ),
       prefix: 'case',
+      retries: 5,
+      waitTime: 3000,
     });
   } else {
     userEntity = new User({
