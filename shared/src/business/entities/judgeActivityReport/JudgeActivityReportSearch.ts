@@ -1,5 +1,10 @@
 const joi = require('joi').extend(require('@hapi/joi-date'));
 const {
+  calculateISODate,
+  createEndOfDayISO,
+  createStartOfDayISO,
+} = require('../../utilities/DateHandler');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
@@ -84,6 +89,11 @@ JudgeActivityReportSearch.schema = joi.object().keys({
     .required()
     .description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
+  tomorrow: joi
+    .optional()
+    .description(
+      'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
     ),
 });
 
