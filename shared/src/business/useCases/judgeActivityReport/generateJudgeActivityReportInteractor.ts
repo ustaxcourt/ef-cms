@@ -18,12 +18,9 @@ import {
 //update this method infrastructure to remove judgeName
 export const generateJudgeActivityReportInteractor = (
   applicationContext,
-  { endDate, judgeName, startDate }: { endDate: string; startDate: string },
+  { endDate, startDate }: { endDate: string; startDate: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-
-  //if judge, use authorizedUser.name
-  //if chambers user, use constant to find right object and grab judge name
 
   const userEntity = new User(authorizedUser);
 
@@ -31,14 +28,15 @@ export const generateJudgeActivityReportInteractor = (
 
   let judgeName;
   if (isChambersUser) {
-    const chamberInfo = applicationContext
+    const chambersInfo: any = applicationContext
       .getPersistenceGateway()
-      .getJudgesChambers();
+      .getChambersSections();
 
-    // Object.values()
+    const sectionObject: any = Object.values(chambersInfo).map(
+      obj => obj.section === userEntity.section,
+    );
 
-    // [userEntity.section].judgeFullName;
-    judgeName = getJudgeLastName(userEntity.section);
+    judgeName = getJudgeLastName(sectionObject.judgeFullName);
   } else {
     judgeName = userEntity.name;
   }
