@@ -23,6 +23,7 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       clearErrorAlertsAction,
       clearAlertsAction,
       getJudgeActivityReportAction,
+      setJudgeActivityReportDataAction,
     ],
   },
 ]);

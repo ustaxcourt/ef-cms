@@ -77,13 +77,13 @@ const getJudgeNameForUser = async (
 
   let judgeName;
   if (isChambersUser) {
-    const chambersInfo: any = getJudgesChambers();
+    const chambersData: any = getJudgesChambers();
 
-    const sectionObject: any = Object.values(chambersInfo).find(
+    const userSectionInfo: any = Object.values(chambersData).find(
       obj => obj.section === user.section,
     );
 
-    judgeName = getJudgeLastName(sectionObject.judgeFullName);
+    judgeName = getJudgeLastName(userSectionInfo.judgeFullName);
   } else {
     judgeName = user.name;
   }
