@@ -12,7 +12,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public startDate: string;
   public judgeName: string;
 
-  private tomorrow: string;
+  protected tomorrow: string;
 
   constructor(rawProps) {
     super('JudgeActivityReportSearch');
