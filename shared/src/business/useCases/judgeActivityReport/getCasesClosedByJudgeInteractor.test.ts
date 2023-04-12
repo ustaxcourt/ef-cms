@@ -5,9 +5,9 @@ import {
   judgeUser,
   petitionsClerkUser,
 } from '../../../test/mockUsers';
-import { generateJudgeActivityReportInteractor } from './generateJudgeActivityReportInteractor';
+import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 
-describe('generateJudgeActivityReportInteractor', () => {
+describe('getCasesClosedByJudgeInteractor', () => {
   const mockClosedCases = [
     {
       status: CASE_STATUS_TYPES.closed,
@@ -28,6 +28,7 @@ describe('generateJudgeActivityReportInteractor', () => {
 
   const mockValidRequest = {
     endDate: '03/21/2020',
+    judgeName: judgeUser.name,
     startDate: '02/12/2020',
   };
 
@@ -47,27 +48,22 @@ describe('generateJudgeActivityReportInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
-      generateJudgeActivityReportInteractor(
-        applicationContext,
-        mockValidRequest,
-      ),
+      getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      generateJudgeActivityReportInteractor(applicationContext, {
+      getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: undefined,
+        judgeName: judgeUser.name,
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
   });
 
   it("should search for closed cases using the current user's name when they are a judge user", async () => {
-    await generateJudgeActivityReportInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    await getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest);
 
     expect(
       applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
@@ -82,10 +78,7 @@ describe('generateJudgeActivityReportInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(chambersUser);
 
-    await generateJudgeActivityReportInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    await getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest);
 
     expect(
       applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
@@ -94,7 +87,7 @@ describe('generateJudgeActivityReportInteractor', () => {
   });
 
   it('should return the cases closed organized by status', async () => {
-    const result = await generateJudgeActivityReportInteractor(
+    const result = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
