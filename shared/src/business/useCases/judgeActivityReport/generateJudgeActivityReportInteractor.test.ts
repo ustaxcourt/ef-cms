@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   chambersUser,
@@ -7,7 +8,23 @@ import {
 import { generateJudgeActivityReportInteractor } from './generateJudgeActivityReportInteractor';
 
 describe('generateJudgeActivityReportInteractor', () => {
-  const mockClosedCases = [];
+  const mockClosedCases = [
+    {
+      status: CASE_STATUS_TYPES.closed,
+    },
+    {
+      status: CASE_STATUS_TYPES.closedDismissed,
+    },
+    {
+      status: CASE_STATUS_TYPES.closed,
+    },
+    {
+      status: CASE_STATUS_TYPES.closedDismissed,
+    },
+    {
+      status: CASE_STATUS_TYPES.closedDismissed,
+    },
+  ];
 
   const mockValidRequest = {
     endDate: '03/21/2020',
@@ -76,12 +93,15 @@ describe('generateJudgeActivityReportInteractor', () => {
     ).toBe('Colvin');
   });
 
-  it('should return the cases closed in the time period specified in the request by the current user when they are a judge', async () => {
-    const { closedCases } = await generateJudgeActivityReportInteractor(
+  it('should return the cases closed organized by status', async () => {
+    const result = await generateJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
     );
 
-    expect(closedCases).toEqual(mockClosedCases);
+    expect(result).toEqual({
+      [CASE_STATUS_TYPES.closed]: 2,
+      [CASE_STATUS_TYPES.closedDismissed]: 3,
+    });
   });
 });
