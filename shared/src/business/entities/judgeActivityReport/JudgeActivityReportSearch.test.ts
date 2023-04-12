@@ -101,5 +101,19 @@ describe('JudgeActivityReportSearch', () => {
         endDate: 'End date cannot be in the future. Enter a valid date.',
       });
     });
+
+    it('should have validation errors when a judge is not provided', () => {
+      const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
+        endDate: '03/03/2020',
+        judgeName: undefined,
+        startDate: '03/01/2020',
+      });
+
+      expect(
+        judgeActivityReportSearchEntity.getFormattedValidationErrors(),
+      ).toMatchObject({
+        judgeName: 'End date cannot be in the future. Enter a valid date.',
+      });
+    });
   });
 });

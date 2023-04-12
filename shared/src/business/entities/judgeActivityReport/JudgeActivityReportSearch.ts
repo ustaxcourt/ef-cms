@@ -10,11 +10,14 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 export class JudgeActivityReportSearch extends JoiValidationEntity {
   public endDate: string;
   public startDate: string;
+  public judgeName: string;
 
   private tomorrow: string;
 
   constructor(rawProps) {
     super('JudgeActivityReportSearch');
+
+    this.judgeName = rawProps.judgeName;
     this.tomorrow = calculateISODate({
       howMuch: +1,
       units: 'days',
@@ -50,16 +53,17 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       ),
+    judgeName: joi
+      .required()
+      .description('The last name of the judge to generate the report for'),
     startDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       ),
-    tomorrow: joi
-      .optional()
-      .description(
-        'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
-      ),
+    tomorrow: JoiValidationConstants.STRING.optional().description(
+      'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
+    ),
   };
 
   static VALIDATION_ERROR_MESSAGES = {
@@ -79,6 +83,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       },
       'Enter a valid end date',
     ],
+    judgeName: 'Judge name is required',
     startDate: [
       {
         contains: 'is required',
