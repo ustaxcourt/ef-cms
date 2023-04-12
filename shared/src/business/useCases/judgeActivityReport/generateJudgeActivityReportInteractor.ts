@@ -8,32 +8,6 @@ import {
 import { getJudgeLastName } from '../../utilities/getFormattedJudgeName';
 import { getJudgesChambers } from '../../../persistence/dynamo/chambers/getJudgesChambers';
 
-const getJudgeNameForUser = async (
-  applicationContext: any,
-  authorizedUser: any,
-) => {
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: authorizedUser.userId,
-  });
-
-  const isChambersUser = user.role === ROLES.chambers;
-
-  let judgeName;
-  if (isChambersUser) {
-    const chambersInfo: any = getJudgesChambers();
-
-    const sectionObject: any = Object.values(chambersInfo).find(
-      obj => obj.section === user.section,
-    );
-
-    judgeName = getJudgeLastName(sectionObject.judgeFullName);
-  } else {
-    judgeName = user.name;
-  }
-  return judgeName;
-};
-
 /**
  * generateJudgeActivityReportInteractor
  *
@@ -49,11 +23,14 @@ export const generateJudgeActivityReportInteractor = async (
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  let judgeName = await getJudgeNameForUser(applicationContext, authorizedUser);
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const judgeName = await getJudgeNameForUser(
+    applicationContext,
+    authorizedUser,
+  );
 
   // todo: add judge?
   const searchEntity = new JudgeActivityReportSearch({ endDate, startDate });
@@ -82,4 +59,30 @@ export const generateJudgeActivityReportInteractor = async (
     closedCases,
     closedDismissedCases,
   };
+};
+
+const getJudgeNameForUser = async (
+  applicationContext: any,
+  authorizedUser: any,
+) => {
+  const user = await applicationContext.getPersistenceGateway().getUserById({
+    applicationContext,
+    userId: authorizedUser.userId,
+  });
+
+  const isChambersUser = user.role === ROLES.chambers;
+
+  let judgeName;
+  if (isChambersUser) {
+    const chambersInfo: any = getJudgesChambers();
+
+    const sectionObject: any = Object.values(chambersInfo).find(
+      obj => obj.section === user.section,
+    );
+
+    judgeName = getJudgeLastName(sectionObject.judgeFullName);
+  } else {
+    judgeName = user.name;
+  }
+  return judgeName;
 };
