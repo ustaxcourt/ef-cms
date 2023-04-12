@@ -7,9 +7,16 @@ describe('generateJudgeActivityReportInteractor', () => {
 
   const mockValidRequest = {
     endDate: '2014-03-21',
-    judge: 'abc',
     startDate: '2013-12-23',
   };
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(judgeUser);
+  });
 
   it('should return an error when the user is not authorized to generate the report', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
@@ -28,7 +35,6 @@ describe('generateJudgeActivityReportInteractor', () => {
     expect(() =>
       generateJudgeActivityReportInteractor(applicationContext, {
         endDate: undefined,
-        judge: 'abc',
         startDate: 'yabbadabbadoo',
       }),
     ).toThrow();

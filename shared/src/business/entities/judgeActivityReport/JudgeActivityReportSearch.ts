@@ -15,6 +15,10 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('JudgeActivityReportSearch');
+    this.tomorrow = calculateISODate({
+      howMuch: +1,
+      units: 'days',
+    });
 
     if (rawProps.startDate) {
       const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
@@ -34,10 +38,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
           day,
           month,
           year,
-        });
-        this.tomorrow = calculateISODate({
-          howMuch: +1,
-          units: 'days',
         });
       }
     }

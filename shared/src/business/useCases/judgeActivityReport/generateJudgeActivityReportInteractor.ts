@@ -5,7 +5,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { User } from '../../entities/User';
 import { getJudgeLastName } from '../../utilities/getFormattedJudgeName';
 import { getJudgesChambers } from '../../../persistence/dynamo/chambers/getJudgesChambers';
 
@@ -13,26 +12,24 @@ const getJudgeNameForUser = async (
   applicationContext: any,
   authorizedUser: any,
 ) => {
-  const userRaw = await applicationContext.getPersistenceGateway().getUserById({
+  const user = await applicationContext.getPersistenceGateway().getUserById({
     applicationContext,
     userId: authorizedUser.userId,
   });
 
-  const userEntity = new User(userRaw);
-
-  const isChambersUser = userEntity.role === ROLES.chambers;
+  const isChambersUser = user.role === ROLES.chambers;
 
   let judgeName;
   if (isChambersUser) {
     const chambersInfo: any = getJudgesChambers();
 
     const sectionObject: any = Object.values(chambersInfo).find(
-      obj => obj.section === userEntity.section,
+      obj => obj.section === user.section,
     );
 
     judgeName = getJudgeLastName(sectionObject.judgeFullName);
   } else {
-    judgeName = userEntity.name;
+    judgeName = user.name;
   }
   return judgeName;
 };
@@ -59,12 +56,7 @@ export const generateJudgeActivityReportInteractor = async (
   }
 
   // todo: add judge?
-  const searchEntity = new JudgeActivityReportSearch(
-    { endDate, startDate },
-    {
-      applicationContext,
-    },
-  );
+  const searchEntity = new JudgeActivityReportSearch({ endDate, startDate });
 
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
