@@ -16,8 +16,31 @@ function JudgeActivityReportSearch() {
 }
 
 JudgeActivityReportSearch.prototype.init = function init(rawProps = {}) {
-  this.startDate = rawProps.startDate;
-  this.endDate = rawProps.endDate;
+  if (rawProps.startDate) {
+    const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
+    if (month && day && year) {
+      this.startDate = createStartOfDayISO({
+        day,
+        month,
+        year,
+      });
+    }
+  }
+
+  if (rawProps.endDate) {
+    const [month, day, year] = rawProps.endDate.split('/');
+    if (month && day && year) {
+      this.endDate = createEndOfDayISO({
+        day,
+        month,
+        year,
+      });
+      this.tomorrow = calculateISODate({
+        howMuch: +1,
+        units: 'days',
+      });
+    }
+  }
 };
 
 JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
@@ -51,9 +74,9 @@ JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 JudgeActivityReportSearch.schema = joi.object().keys({
-  endDate: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
-    .max('now')
-    .required()
+  endDate: JoiValidationConstants.ISO_DATE.required()
+    .less(joi.ref('tomorrow'))
+    .min(joi.ref('startDate'))
     .description(
       'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
     ),
