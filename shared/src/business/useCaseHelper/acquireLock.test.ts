@@ -7,7 +7,8 @@ const onLockError = new ServiceUnavailableError('The case is currently locked');
 
 describe('acquireLock', () => {
   let mockCall;
-  let mockFeatureFlagValue;
+  let mockFeatureFlagValue = true;
+  let mockLock;
 
   beforeAll(() => {
     applicationContext
@@ -15,6 +16,9 @@ describe('acquireLock', () => {
       .getFeatureFlagValueInteractor.mockImplementation(
         () => mockFeatureFlagValue,
       );
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
@@ -25,6 +29,7 @@ describe('acquireLock', () => {
       prefix: 'case',
     };
     mockFeatureFlagValue = true; // enabled
+    mockLock = undefined; // unlocked
   });
 
   it('gets the current lock from persistence for the given prefix and identifier', async () => {
@@ -41,7 +46,6 @@ describe('acquireLock', () => {
   it('gets the current lock for the given prefix and an array of identifiers', async () => {
     mockCall.identifier = ['123-45', '678-90'];
     await acquireLock(mockCall);
-
     expect(
       applicationContext.getPersistenceGateway().getLock,
     ).toHaveBeenCalledTimes(2);
@@ -63,9 +67,7 @@ describe('acquireLock', () => {
 
   describe('is locked', () => {
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getLock.mockReturnValue(MOCK_LOCK);
+      mockLock = MOCK_LOCK;
     });
 
     it('throws a ServiceUnavailableError error if the persistence gateway returns a lock for the given prefix and identifier', async () => {
