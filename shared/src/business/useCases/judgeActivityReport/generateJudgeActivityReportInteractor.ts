@@ -1,6 +1,6 @@
+import { CASE_STATUS_TYPES, ROLES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
-import { ROLES } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -51,16 +51,16 @@ export const generateJudgeActivityReportInteractor = async (
       startDate: searchEntity.startDate,
     });
 
-  const closedDismissedCases = closedCasesByJudge.filter(
+  const closedDismissedCaseCount = closedCasesByJudge.filter(
     caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
-  );
-  const closedCases = closedCasesByJudge.filter(
+  ).length;
+  const closedCaseCount = closedCasesByJudge.filter(
     caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
-  );
+  ).length;
 
   return {
-    closedCases,
-    closedDismissedCases,
+    [CASE_STATUS_TYPES.closed]: closedCaseCount,
+    [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
   };
 };
 
