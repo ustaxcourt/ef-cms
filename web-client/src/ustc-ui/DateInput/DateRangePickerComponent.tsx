@@ -27,8 +27,8 @@ export const DateRangePickerComponent = ({
   endValue: string;
   formGroupCls?: string;
   rangePickerCls?: string;
-  onChangeEnd: Function;
-  onChangeStart: Function;
+  onChangeEnd: (event: CustomEvent) => void;
+  onChangeStart: (event: CustomEvent) => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string;
@@ -64,10 +64,10 @@ export const DateRangePickerComponent = ({
   useEffect(() => {
     const startInput = window.document.getElementById(
       `${startName}-date-start`,
-    );
+    ) as HTMLInputElement;
     const startHiddenInput = window.document.querySelector(
       `input[name="${startName}-date-start"]`,
-    );
+    ) as HTMLInputElement;
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
@@ -82,10 +82,12 @@ export const DateRangePickerComponent = ({
   }, [startValue]);
 
   useEffect(() => {
-    const endInput = window.document.getElementById(`${endName}-date-end`);
+    const endInput = window.document.getElementById(
+      `${endName}-date-end`,
+    ) as HTMLInputElement;
     const endHiddenInput = window.document.querySelector(
       `input[name="${endName}-date-end"]`,
-    );
+    ) as HTMLInputElement;
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';
