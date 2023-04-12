@@ -18,7 +18,6 @@ export const getJudgeActivityReportAction = async ({
     .getUseCases()
     .generateJudgeActivityReportInteractor(applicationContext, {
       endDate,
-      judgeName: '',
       startDate,
     });
 
