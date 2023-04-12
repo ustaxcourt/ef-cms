@@ -32,8 +32,11 @@ export const generateJudgeActivityReportInteractor = async (
     authorizedUser,
   );
 
-  // todo: add judge?
-  const searchEntity = new JudgeActivityReportSearch({ endDate, startDate });
+  const searchEntity = new JudgeActivityReportSearch({
+    endDate,
+    judgeName,
+    startDate,
+  });
 
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
@@ -44,7 +47,7 @@ export const generateJudgeActivityReportInteractor = async (
     .getCasesClosedByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
-      judgeName,
+      judgeName: searchEntity.judgeName,
       startDate: searchEntity.startDate,
     });
 
