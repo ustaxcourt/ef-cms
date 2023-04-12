@@ -25,6 +25,6 @@ export const getCasesClosedByJudgeInteractor = (
       judgeName,
       startDate,
     },
-    endpoint: '/reports/judge-activity-report',
+    endpoint: '/judge-activity-report/closed-cases',
   });
 };
