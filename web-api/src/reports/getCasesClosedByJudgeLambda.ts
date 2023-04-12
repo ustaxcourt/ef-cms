@@ -1,18 +1,18 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * generate the judge activity report
+ * retrieves closed cases associated with the specified judge
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const generateJudgeActivityReportLambda = event =>
+export const getCasesClosedByJudgeLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .generateJudgeActivityReportInteractor(applicationContext, {
+        .getCasesClosedByJudgeInteractor(applicationContext, {
           ...JSON.parse(event.body),
         });
     },

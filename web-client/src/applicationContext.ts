@@ -51,9 +51,9 @@ import {
   formatJudgeName,
   getJudgeLastName,
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
-import { generateJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/generateJudgeActivityReportProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
@@ -417,7 +417,6 @@ const allUseCases = {
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
-  generateJudgeActivityReportInteractor,
   generatePDFFromJPGDataInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
@@ -434,6 +433,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getChiefJudgeNameForSigningInteractor,
   getCompletedMessagesForSectionInteractor,
