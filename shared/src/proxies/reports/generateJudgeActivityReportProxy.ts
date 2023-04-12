@@ -11,17 +11,12 @@ const { post } = require('../requests');
  */
 export const generateJudgeActivityReportInteractor = (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { startDate: string; endDate: string; judgeName: string },
+  { endDate, startDate }: { startDate: string; endDate: string },
 ) => {
   return post({
     applicationContext,
     body: {
       endDate,
-      judgeName,
       startDate,
     },
     endpoint: '/reports/judge-activity-report',
