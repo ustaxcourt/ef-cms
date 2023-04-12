@@ -297,6 +297,7 @@ import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/busines
 import { uploadDocumentAndMakeSafeInteractor } from '../../shared/src/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
+import { uploadExternalDocumentsForConsolidatedGroupInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsForConsolidatedGroupInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
@@ -542,6 +543,7 @@ const allUseCases = {
   uploadCorrespondenceDocumentInteractor,
   uploadDocumentAndMakeSafeInteractor,
   uploadDocumentInteractor,
+  uploadExternalDocumentsForConsolidatedGroupInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
   validateAddDeficiencyStatisticsInteractor,

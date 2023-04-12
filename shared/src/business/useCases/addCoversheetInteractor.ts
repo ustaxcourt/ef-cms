@@ -42,6 +42,9 @@ export const addCoversheetInteractor = async (
     caseEntity = new Case(caseRecord, { applicationContext });
   }
 
+  console.log('caseEntity&&&&&', caseEntity);
+  console.log('docketEntryId&&&&&', docketEntryId);
+
   let pdfData;
   try {
     const { Body } = await applicationContext
@@ -60,6 +63,7 @@ export const addCoversheetInteractor = async (
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
+  console.log('docketEntryEntity&&&&&', docketEntryEntity);
 
   const {
     consolidatedCases, // if feature flag is off, this will always be null
