@@ -154,6 +154,20 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
   });
 
+  it('should set dateLabel to "Trial date" when state.form.scenario is Type G', () => {
+    let testState = {
+      ...state,
+      form: { scenario: 'Type G' },
+    };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      dateLabel: 'Trial date',
+    });
+  });
+
   it('returns freeTextLabel for an order if the selected eventCode is O', () => {
     let testState = { ...state, form: { eventCode: 'O' } };
 
