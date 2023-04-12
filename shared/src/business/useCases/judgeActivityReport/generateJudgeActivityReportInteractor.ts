@@ -45,9 +45,9 @@ export const generateJudgeActivityReportInteractor = (
     .getPersistenceGateway()
     .getCasesClosedByJudge({
       applicationContext,
-      endDate,
+      endDate: searchEntity.endDate,
       judgeName,
-      startDate,
+      startDate: searchEntity.startDate,
     });
 
   return {
