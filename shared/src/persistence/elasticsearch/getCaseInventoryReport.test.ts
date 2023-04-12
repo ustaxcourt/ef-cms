@@ -22,8 +22,16 @@ describe('getCaseInventoryReport', () => {
   const mockDataTwo = {
     associatedJudge: CHIEF_JUDGE,
     docketNumber: '102-20',
-    status: CASE_STATUS_TYPES.closed,
+    status: CASE_STATUS_TYPES.calendared,
   };
+  const mustNotQuery = [
+    {
+      term: { 'status.S': 'Closed' },
+    },
+    {
+      term: { 'status.S': 'Closed - Dismissed' },
+    },
+  ];
 
   beforeEach(() => {
     applicationContext.getConstants.mockReturnValue({
@@ -69,6 +77,9 @@ describe('getCaseInventoryReport', () => {
         match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must_not).toEqual(
+      mustNotQuery,
+    );
 
     expect(results).toEqual({
       foundCases: [
@@ -80,7 +91,7 @@ describe('getCaseInventoryReport', () => {
         {
           associatedJudge: CHIEF_JUDGE,
           docketNumber: '102-20',
-          status: CASE_STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.calendared,
         },
       ],
       totalCount: '2',
@@ -112,6 +123,9 @@ describe('getCaseInventoryReport', () => {
         term: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must_not).toEqual(
+      mustNotQuery,
+    );
 
     expect(results).toEqual({
       foundCases: [
@@ -157,6 +171,9 @@ describe('getCaseInventoryReport', () => {
         term: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must_not).toEqual(
+      mustNotQuery,
+    );
 
     expect(results).toEqual({
       foundCases: [
@@ -168,7 +185,7 @@ describe('getCaseInventoryReport', () => {
         {
           associatedJudge: CHIEF_JUDGE,
           docketNumber: '102-20',
-          status: CASE_STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.calendared,
         },
       ],
       totalCount: '2',
