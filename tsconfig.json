@@ -10,7 +10,8 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "strict": true
   },
   "ts-node": {
     "files": true

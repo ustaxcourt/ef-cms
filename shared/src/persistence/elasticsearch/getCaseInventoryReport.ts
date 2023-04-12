@@ -43,6 +43,9 @@ exports.getCaseInventoryReport = async ({
             {
               term: { 'status.S': 'Closed' },
             },
+            {
+              term: { 'status.S': 'Closed - Dismissed' },
+            },
           ],
         },
       },
