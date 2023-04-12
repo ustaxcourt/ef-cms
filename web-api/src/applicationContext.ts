@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -173,6 +172,7 @@ const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 const { CognitoIdentityServiceProvider, DynamoDB, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
+import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi';
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -180,6 +180,9 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
+import { SNSClient } from '@aws-sdk/client-sns';
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 const { createPresignedPost } = require('@aws-sdk/s3-presigned-post');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { Upload } = require('@aws-sdk/lib-storage');
@@ -544,11 +547,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (endpoint.includes('localhost')) {
         endpoint = 'http://localhost:3011';
       }
-      return new AWS.ApiGatewayManagementApi({
+      return new ApiGatewayManagementApiClient({
         endpoint,
-        httpOptions: {
-          timeout: 900000, // 15 minutes
-        },
       });
     },
     getNotificationGateway: () => ({
@@ -568,13 +568,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
         };
       } else {
-        notificationServiceCache = new AWS.SNS({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-        });
+        notificationServiceCache = new SNSClient({});
       }
       return notificationServiceCache;
     },
@@ -608,16 +602,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         } else {
           searchClientCache = new Client({
             ...AwsSigv4Signer({
-              getCredentials: () =>
-                new Promise((resolve, reject) => {
-                  AWS.config.getCredentials((err, credentials) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(credentials);
-                    }
-                  });
-                }),
+              getCredentials: () => fromIni(),
               region: 'us-east-1',
             }),
             node: `https://${environment.elasticsearchEndpoint}:443`,
@@ -632,12 +617,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         s3Cache = new S3Client({
           endpoint: environment.s3Endpoint,
           forcePathStyle: true,
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
           maxAttempts: 3,
           region: 'us-east-1',
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            socketTimeout: 5000,
+          }),
         });
       }
       return {
