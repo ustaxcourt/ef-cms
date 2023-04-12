@@ -994,7 +994,7 @@ app.get(
     lambdaWrapper(runTrialSessionPlanningReportLambda),
   );
   app.post(
-    '/reports/judge-activity-report',
+    '/judge-activity-report/closed-cases',
     lambdaWrapper(generateJudgeActivityReportLambda),
   );
 }
