@@ -3,9 +3,9 @@ import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FiledInMultiCasesReview } from './FiledInMultiCasesReview';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { MultiDocumentPartiesFilingReview } from './MultiDocumentPartiesFilingReview';
 import { PDFPreviewButton } from '../PDFPreviewButton';
+import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -19,6 +19,7 @@ export const FileDocumentReview = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function FileDocumentReview({
     fileDocumentHelper,
@@ -27,6 +28,7 @@ export const FileDocumentReview = connect(
     navigateBackSequence,
     showModal,
     submitExternalDocumentSequence,
+    updateFormValueSequence,
   }) {
     const secondaryDocument = () => (
       <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
@@ -203,10 +205,14 @@ export const FileDocumentReview = connect(
           information appears the way you want it to.
         </p>
 
-        <Hint>
-          Don’t forget to check your PDF(s) to ensure all personal information
-          has been removed or redacted.
-        </Hint>
+        <WarningNotificationComponent
+          alertWarning={{
+            message:
+              'Don’t forget to check your PDF(s) to ensure all personal information has been removed or redacted.',
+          }}
+          dismissable={false}
+          scrollToTop={false}
+        />
 
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
@@ -358,6 +364,50 @@ export const FileDocumentReview = connect(
                     your filing after you submit it.
                   </li>
                 </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid-row grid-gap">
+          <span className="margin-bottom-1">
+            <b>Please read and acknowledge before submitting your filing</b>
+          </span>
+          <div className="tablet:grid-col-12">
+            <div className="card">
+              <div className="content-wrapper usa-checkbox">
+                <input
+                  aria-describedby="redaction-acknowledgement-label"
+                  checked={form.redactionAcknowledgement || false}
+                  className="usa-checkbox__input"
+                  id="redaction-acknowledgement"
+                  name="redactionAcknowledgement"
+                  type="checkbox"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label margin-top-0"
+                  htmlFor="redaction-acknowledgement"
+                  id="redaction-acknowledgement-label"
+                >
+                  <b>
+                    All documents I am filing have been redacted in accordance
+                    with{' '}
+                    <a
+                      href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      Rule 27
+                    </a>
+                    .
+                  </b>
+                </label>
               </div>
             </div>
           </div>
