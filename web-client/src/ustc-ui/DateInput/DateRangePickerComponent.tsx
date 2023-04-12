@@ -6,22 +6,34 @@ import dateRangePicker from '../../../../node_modules/uswds/src/js/components/da
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
-  endDateOptional,
   endLabel,
   endName,
   endPickerCls,
   endValue,
+  formGroupCls,
   onChangeEnd,
   onChangeStart,
-  pickerSpacer,
   rangePickerCls,
-  showHint,
   startDateErrorText,
-  startDateOptional,
   startLabel,
   startName,
   startPickerCls,
   startValue,
+}: {
+  endDateErrorText?: string;
+  endLabel?: string;
+  endName: string;
+  endPickerCls?: string;
+  endValue: string;
+  formGroupCls?: string;
+  rangePickerCls?: string;
+  onChangeEnd: Function;
+  onChangeStart: Function;
+  startDateErrorText?: string;
+  startPickerCls?: string;
+  startLabel?: string;
+  startName: string;
+  startValue: string;
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -35,6 +47,13 @@ export const DateRangePickerComponent = ({
       startDatePickerRef.current &&
       endDatePickerRef.current &&
       dateRangePickerRef.current
+    ) {
+      datePicker.on(startDatePickerRef.current);
+      datePicker.on(endDatePickerRef.current);
+      dateRangePicker.on(dateRangePickerRef.current);
+    } else if (
+      startDatePickerRef.current ||
+      (endDatePickerRef.current && dateRangePickerRef.current)
     ) {
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
@@ -91,11 +110,8 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  const Spacer = pickerSpacer;
-  const displayHint = showHint !== undefined ? showHint : true;
-
   return (
-    <FormGroup formGroupRef={dateRangePickerRef}>
+    <FormGroup className={formGroupCls} formGroupRef={dateRangePickerRef}>
       <div className={classNames('usa-date-range-picker', rangePickerCls)}>
         <div className={startPickerCls}>
           <FormGroup
@@ -108,29 +124,20 @@ export const DateRangePickerComponent = ({
               id={`${startName}-date-start-label`}
             >
               {startLabel || 'Start date'}{' '}
-              {startDateOptional && (
-                <span className="usa-hint">(optional)</span>
-              )}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${startName}-date-start-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
                 className="usa-input"
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
+                placeholder="MM/DD/YYYY"
                 ref={startDateInputRef}
                 type="text"
               />
             </div>
           </FormGroup>
         </div>
-
-        {Spacer && <Spacer />}
 
         <div className={endPickerCls}>
           <FormGroup
@@ -143,19 +150,14 @@ export const DateRangePickerComponent = ({
               id={`${endName}-date-end-label`}
             >
               {endLabel || 'End date'}{' '}
-              {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${endName}-date-end-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
+                placeholder="MM/DD/YYYY"
                 ref={endDateInputRef}
                 type="text"
               />
