@@ -1,12 +1,10 @@
-import { CASE_STATUS_TYPES, ROLES } from '../../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { getJudgeLastName } from '../../utilities/getFormattedJudgeName';
-import { getJudgesChambers } from '../../../persistence/dynamo/chambers/getJudgesChambers';
 
 /**
  * generateJudgeActivityReportInteractor

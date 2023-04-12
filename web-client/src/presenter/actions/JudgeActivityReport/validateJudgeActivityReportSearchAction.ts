@@ -14,12 +14,13 @@ export const validateJudgeActivityReportSearchAction = ({
   get,
   path,
 }) => {
-  const { endDate, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
     .validateJudgeActivityReportSearchInteractor(applicationContext, {
       endDate,
+      judgeName,
       startDate,
     });
 
