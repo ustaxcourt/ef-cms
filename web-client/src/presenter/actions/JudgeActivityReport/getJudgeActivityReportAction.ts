@@ -14,12 +14,12 @@ export const getJudgeActivityReportAction = async ({
 }) => {
   const { endDate, startDate } = get(state.form);
 
-  const closedCasesByJudge = await applicationContext
+  const casesClosedByJudge = await applicationContext
     .getUseCases()
     .generateJudgeActivityReportInteractor(applicationContext, {
       endDate,
       startDate,
     });
 
-  return { closedCasesByJudge };
+  return { casesClosedByJudge };
 };
