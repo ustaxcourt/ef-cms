@@ -3,6 +3,7 @@ import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { getJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getJudgeActivityReportAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setJudgeActivityReportDataAction } from '../../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
+import { setJudgeNameForActivityReportAction } from '../../actions/JudgeActivityReport/setJudgeNameForActivityReportAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
@@ -11,6 +12,7 @@ import { stopShowValidationAction } from '../../actions/stopShowValidationAction
 import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
 export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
+  setJudgeNameForActivityReportAction,
   startShowValidationAction,
   validateJudgeActivityReportSearchAction,
   {
