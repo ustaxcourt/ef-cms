@@ -30,8 +30,6 @@ export const ConfirmInitiateServiceModal = connect(
       }, timeout);
     };
 
-    console.log('Confirm?', props.confirmSequence);
-
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

@@ -16,14 +16,6 @@ import { uploadExternalDocumentsAcrossConsolidatedGroupAction } from '../actions
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 const onSuccessForIndividualCase = [
-  // If you file across the consolidated group do you become automatically associated with the cases filed
-  // on in the group that you are not currently associated with
-  // If they are "Filing First Document in an indirectly associated case accessed through the Consolidated Cases card
-  // do we allow to file across the consolidated group?"
-  //start looping over CCs at some point after here
-  // shouldFileAcrossConsolidatedGroupAction,
-  // {
-  //   no: [
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,
@@ -36,14 +28,6 @@ const onSuccessForIndividualCase = [
   navigateToCaseDetailAction,
 ];
 const onSuccessForConsolidatedGroup = [
-  // If you file across the consolidated group do you become automatically associated with the cases filed
-  // on in the group that you are not currently associated with
-  // If they are "Filing First Document in an indirectly associated case accessed through the Consolidated Cases card
-  // do we allow to file across the consolidated group?"
-  //start looping over CCs at some point after here
-  // shouldFileAcrossConsolidatedGroupAction,
-  // {
-  //   no: [
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,

@@ -54,7 +54,6 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
     privatePractitioners,
   };
 
-  console.log(documentMetadata);
   const documentFiles = {
     primary: form.primaryDocumentFile,
   };
@@ -81,8 +80,7 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
   try {
     const progressFunctions = setupPercentDone(documentFiles, store);
 
-    // const { caseDetail, docketEntryIdsAdded } = await applicationContext
-    const { caseDetails, docketEntryIdsAdded } = await applicationContext
+    const { caseDetail, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsForConsolidatedGroupInteractor(
         applicationContext,
@@ -93,11 +91,7 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
         },
       );
 
-    console.log('caseDetails', caseDetails);
-    console.log('docketEntryIdsAdded', docketEntryIdsAdded);
-
     for (let docketEntryId of docketEntryIdsAdded) {
-      console.log('docketEntryId', docketEntryId);
       await addCoversheet({
         applicationContext,
         docketEntryId,
@@ -105,12 +99,11 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
       });
     }
     return path.success({
-      caseDetails,
+      caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
     });
   } catch (err) {
-    console.log(err);
     return path.error();
   }
 };

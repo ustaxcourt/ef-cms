@@ -136,11 +136,7 @@ export const fileExternalDocumentInteractor = async (
 
       const servedParties = aggregatePartiesForService(caseEntity);
 
-      // console.log('documentsToAdd;;;;;', documentsToAdd);
-
       for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
-        // console.log('baseMetadata;;;;;', baseMetadata);
-        // console.log('metadata;;;;;', metadata);
         if (docketEntryId && metadata) {
           const docketEntryEntity = new DocketEntry(
             {
@@ -156,8 +152,6 @@ export const fileExternalDocumentInteractor = async (
             },
             { applicationContext, petitioners: currentCaseEntity.petitioners },
           ).validate();
-
-          // console.log('docketEntryEntity:::::', docketEntryEntity);
 
           const highPriorityWorkItem =
             caseEntity.status === CASE_STATUS_TYPES.calendared;
@@ -226,18 +220,14 @@ export const fileExternalDocumentInteractor = async (
           workItem: workItem.validate().toRawObject(),
         });
       }
-      // console.log('caseEntity:::::', caseEntity);
       const rawCaseEntity = caseEntity.toRawObject();
-      // console.log('rawCaseEntity:::::', rawCaseEntity);
       return rawCaseEntity;
     },
   );
 
-  await Promise.all(consolidatedCaseEntities);
+  const resolvedCaseEntities = await Promise.all(consolidatedCaseEntities);
 
-  if (documentMetadata.consolidatedCasesToFileAcross) {
-    return consolidatedCaseEntities;
-  } else {
-    return consolidatedCaseEntities[0];
-  }
+  return resolvedCaseEntities.find(
+    caseEntity => caseEntity.docketNumber === docketNumber,
+  );
 };

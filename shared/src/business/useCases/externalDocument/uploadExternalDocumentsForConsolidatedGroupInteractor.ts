@@ -86,16 +86,11 @@ export const uploadExternalDocumentsForConsolidatedGroupInteractor = async (
     }
   }
 
-  let caseDetailsForConsolidatedCases = await applicationContext
+  let currentCaseDetail = await applicationContext
     .getUseCases()
     .fileExternalDocumentInteractor(applicationContext, {
       documentMetadata,
     });
 
-  console.log(
-    'caseDetailsForConsolidatedCases',
-    caseDetailsForConsolidatedCases,
-  );
-
-  return { caseDetails: caseDetailsForConsolidatedCases, docketEntryIdsAdded };
+  return { caseDetail: currentCaseDetail, docketEntryIdsAdded };
 };
