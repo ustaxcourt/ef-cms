@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {object} the judge activity report
  */
-export const getJudgeActivityReportAction = async ({
+export const getCasesClosedByJudgeAction = async ({
   applicationContext,
   get,
 }) => {
