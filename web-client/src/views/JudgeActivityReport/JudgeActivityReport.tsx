@@ -9,6 +9,7 @@ import React from 'react';
 export const JudgeActivityReport = connect(
   {
     form: state.form,
+    judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
@@ -18,6 +19,7 @@ export const JudgeActivityReport = connect(
   },
   function JudgeActivityReport({
     form,
+    judgeActivityReportData,
     judgeActivityReportHelper,
     submitJudgeActivityReportSequence,
     updateJudgeActivityReportFormSequence,
@@ -27,7 +29,10 @@ export const JudgeActivityReport = connect(
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
-            Cases Closed <span className="float-right">Total: 20</span>
+            Cases Closed{' '}
+            <span className="float-right">
+              Total: {judgeActivityReportData.casesClosedByJudge.total}
+            </span>
           </caption>
           <thead>
             <tr>

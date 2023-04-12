@@ -309,6 +309,7 @@ export const baseState = {
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  judgeActivityReportData: {},
   judges: [],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,

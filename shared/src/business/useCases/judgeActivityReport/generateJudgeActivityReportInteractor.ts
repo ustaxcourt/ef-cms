@@ -42,7 +42,7 @@ export const generateJudgeActivityReportInteractor = async (
     throw new InvalidRequest();
   }
 
-  const closedCasesByJudge = await applicationContext
+  const casesClosedByJudge = await applicationContext
     .getPersistenceGateway()
     .getCasesClosedByJudge({
       applicationContext,
@@ -51,16 +51,17 @@ export const generateJudgeActivityReportInteractor = async (
       startDate: searchEntity.startDate,
     });
 
-  const closedDismissedCaseCount = closedCasesByJudge.filter(
+  const closedDismissedCaseCount = casesClosedByJudge.filter(
     caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
   ).length;
-  const closedCaseCount = closedCasesByJudge.filter(
+  const closedCaseCount = casesClosedByJudge.filter(
     caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
   ).length;
 
   return {
     [CASE_STATUS_TYPES.closed]: closedCaseCount,
     [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
+    total: casesClosedByJudge.length,
   };
 };
 

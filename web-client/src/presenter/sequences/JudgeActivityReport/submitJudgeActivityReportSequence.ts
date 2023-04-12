@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { getJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getJudgeActivityReportAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
+import { setJudgeActivityReportDataAction } from '../../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
