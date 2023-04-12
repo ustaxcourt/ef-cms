@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 const DateHandler = require('../utilities/DateHandler');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
@@ -121,6 +122,9 @@ const {
 const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
+const {
+  getFeatureFlagValueInteractor,
+} = require('../useCases/featureFlag/getFeatureFlagValueInteractor');
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
@@ -444,6 +448,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
+    getFeatureFlagValueInteractor: jest
+      .fn()
+      .mockImplementation(getFeatureFlagValueInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
@@ -576,6 +583,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
+    getFeatureFlagValue: jest.fn().mockImplementation(({ featureFlag }) => {
+      switch (featureFlag) {
+        case ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key:
+          return { current: true };
+      }
+    }),
     getItem: jest.fn().mockImplementation(getItem),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
