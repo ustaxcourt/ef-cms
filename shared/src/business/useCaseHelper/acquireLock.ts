@@ -1,3 +1,5 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
+
 export const checkLock = async ({
   applicationContext,
   identifier,
@@ -9,6 +11,12 @@ export const checkLock = async ({
   onLockError: Error;
   prefix: string;
 }) => {
+  const isCaseLockingEnabled = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key,
+    });
+
   const currentLock = await applicationContext
     .getPersistenceGateway()
     .getLock({ applicationContext, identifier, prefix });
@@ -17,7 +25,9 @@ export const checkLock = async ({
     applicationContext.logger.warn('Entity is currently locked', {
       currentLock,
     });
-    throw onLockError;
+    if (isCaseLockingEnabled) {
+      throw onLockError;
+    }
   }
 };
 
@@ -26,28 +36,46 @@ export const acquireLock = async ({
   identifier,
   onLockError,
   prefix,
+  retries = 0,
   ttl = 30,
+  waitTime = 3000,
 }: {
   applicationContext: IApplicationContext;
   identifier: string | string[];
-  prefix: string;
   onLockError: Error;
+  prefix: string;
+  retries?: number;
   ttl?: number;
+  waitTime?: number;
 }) => {
   const identifiersToLock =
     typeof identifier === 'string' ? [identifier] : identifier;
 
+  let isLockAcquired = false;
+  let attempts = 0;
+
   // First check if any are already locked, if so throw an error
-  await Promise.all(
-    identifiersToLock.map(entityIdentifier =>
-      checkLock({
-        applicationContext,
-        identifier: entityIdentifier,
-        onLockError,
-        prefix,
-      }),
-    ),
-  );
+  while (!isLockAcquired) {
+    try {
+      attempts++;
+      await Promise.all(
+        identifiersToLock.map(entityIdentifier =>
+          checkLock({
+            applicationContext,
+            identifier: entityIdentifier,
+            onLockError,
+            prefix,
+          }),
+        ),
+      );
+      isLockAcquired = true;
+    } catch (err) {
+      if (attempts > retries) {
+        throw err;
+      }
+      await applicationContext.getUtilities().sleep(waitTime);
+    }
+  }
 
   // Second, lock them up so the are unavailable
   await Promise.all(
