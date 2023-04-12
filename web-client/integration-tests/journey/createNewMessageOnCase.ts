@@ -15,6 +15,12 @@ export const createNewMessageOnCase = (
     subject,
     toSection = PETITIONS_SECTION,
     toUserId = petitionsClerk1User,
+  }: {
+    docketNumber?: string;
+    preserveCreatedMessage?: boolean;
+    subject?: any;
+    toSection?: string;
+    toUserId?: string;
   } = {},
 ) => {
   const messageModalHelper = withAppContextDecorator(
