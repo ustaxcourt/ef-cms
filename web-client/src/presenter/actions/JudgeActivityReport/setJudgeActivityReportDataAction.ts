@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * Sets judgeActivityReportData on state
  *

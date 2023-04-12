@@ -8,6 +8,7 @@ import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
+    CLOSED_CASE_STATUSES: state.constants.CLOSED_CASE_STATUSES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
@@ -18,6 +19,7 @@ export const JudgeActivityReport = connect(
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
+    CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
     judgeActivityReportHelper,
@@ -25,7 +27,7 @@ export const JudgeActivityReport = connect(
     updateJudgeActivityReportFormSequence,
     validationErrors,
   }) {
-    const closedCases: JSX.Element = (
+    const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
@@ -43,12 +45,12 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(
-              judgeActivityReportHelper.activityReportResults.closedCases,
-            ).map(([key, value]) => (
-              <tr key={key}>
-                <td>{key}</td>
-                <td className="text-center">{value}</td>
+            {CLOSED_CASE_STATUSES.map(status => (
+              <tr key={status}>
+                <td>{status}</td>
+                <td className="text-center">
+                  {judgeActivityReportData.casesClosedByJudge[status]}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -194,10 +196,10 @@ export const JudgeActivityReport = connect(
           </div>
         </section>
 
-        {judgeActivityReportHelper.activityReportResults && (
+        {judgeActivityReportData.casesClosedByJudge && (
           <section className="usa-section grid-container">
             <div className="grid-row grid-gap">
-              <div className="grid-col-6">{closedCases}</div>
+              <div className="grid-col-6">{closedCases()}</div>
               <div className="grid-col-6">{trialSessionsHeld}</div>
             </div>
 
