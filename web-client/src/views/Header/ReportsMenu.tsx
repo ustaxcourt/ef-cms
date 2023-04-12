@@ -70,13 +70,13 @@ export const ReportsMenu = connect(
             <li className="usa-nav__submenu-item">
               <a
                 href="/reports/custom-case"
-                id="advanced-case-inventory-btn"
+                id="custom-case-report-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();
                 }}
               >
-                Advanced Case Inventory
+                Custom Case Report
               </a>
             </li>
             <li className="usa-nav__submenu-item">
