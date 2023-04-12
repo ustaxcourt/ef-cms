@@ -5,6 +5,7 @@ import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setJudgeNameForActivityReportAction } from '../../actions/JudgeActivityReport/setJudgeNameForActivityReportAction';
 import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 
@@ -15,6 +16,7 @@ const gotoJudgeActivityReport = [
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   clearFormAction,
+  setJudgeNameForActivityReportAction,
   setCurrentPageAction('JudgeActivityReport'),
 ];
 
