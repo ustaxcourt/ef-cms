@@ -14,23 +14,23 @@ import { getJudgesChambers } from '../../../persistence/dynamo/chambers/getJudge
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.endDate the date to end the search for judge activity
+ * @param {string} providers.judgeName the name of the judge
  * @param {string} providers.startDate the date to start the search for judge activity
  * @returns {object} errors (null if no errors)
  */
 export const generateJudgeActivityReportInteractor = async (
   applicationContext,
-  { endDate, startDate }: { endDate: string; startDate: string },
+  {
+    endDate,
+    judgeName,
+    startDate,
+  }: { judgeName: string; endDate: string; startDate: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const judgeName = await getJudgeNameForUser(
-    applicationContext,
-    authorizedUser,
-  );
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
@@ -63,30 +63,4 @@ export const generateJudgeActivityReportInteractor = async (
     [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
     total: casesClosedByJudge.length,
   };
-};
-
-const getJudgeNameForUser = async (
-  applicationContext: any,
-  authorizedUser: any,
-) => {
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: authorizedUser.userId,
-  });
-
-  const isChambersUser = user.role === ROLES.chambers;
-
-  let judgeName;
-  if (isChambersUser) {
-    const chambersData: any = getJudgesChambers();
-
-    const userSectionInfo: any = Object.values(chambersData).find(
-      obj => obj.section === user.section,
-    );
-
-    judgeName = getJudgeLastName(userSectionInfo.judgeFullName);
-  } else {
-    judgeName = user.name;
-  }
-  return judgeName;
 };
