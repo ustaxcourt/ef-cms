@@ -31,7 +31,6 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
 
   const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
-  let documentMetadataForConsolidatedCases = [];
 
   // This is used when a practitioner is requesting access to an unassociated case
   let privatePractitioners = null;
@@ -48,12 +47,14 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
 
   const documentMetadata = {
     ...form,
+    consolidatedCasesToFileAcross: consolidatedCases,
     docketNumber,
     filers,
     isFileAttached: true,
     privatePractitioners,
   };
 
+  console.log(documentMetadata);
   const documentFiles = {
     primary: form.primaryDocumentFile,
   };
@@ -77,51 +78,39 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
     });
   }
 
-  for (let index = 0; index < consolidatedCases.length; index++) {
-    documentMetadataForConsolidatedCases.push({
-      documentMetaData: {
-        ...documentMetadata,
-        docketNumber: consolidatedCases[index].docketNumber,
-      },
-    });
-  }
-
   try {
     const progressFunctions = setupPercentDone(documentFiles, store);
 
     // const { caseDetail, docketEntryIdsAdded } = await applicationContext
-    const [caseDetail] = await applicationContext
+    const { caseDetails, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsForConsolidatedGroupInteractor(
         applicationContext,
         {
           documentFiles,
-          documentMetadataForConsolidatedCases,
+          documentMetadata,
           progressFunctions,
         },
       );
-    // [
-    //   {
-    //     caseDetail:{},
-    //     docketEntryIdsAdded:[]
-    //   },
-    //   {
-    //     caseDetail:{},
-    //     docketEntryIdsAdded:[]
-    //   }
-    // ]
-    console.log('caseDetail in action', caseDetail);
 
-    for (let docketEntryId of caseDetail.docketEntryIdsAdded) {
-      await addCoversheet({ applicationContext, docketEntryId, docketNumber });
+    console.log('caseDetails', caseDetails);
+    console.log('docketEntryIdsAdded', docketEntryIdsAdded);
+
+    for (let docketEntryId of docketEntryIdsAdded) {
+      console.log('docketEntryId', docketEntryId);
+      await addCoversheet({
+        applicationContext,
+        docketEntryId,
+        docketNumber,
+      });
     }
-
     return path.success({
-      caseDetail,
+      caseDetails,
       docketNumber,
       documentsFiled: documentMetadata,
     });
   } catch (err) {
+    console.log(err);
     return path.error();
   }
 };

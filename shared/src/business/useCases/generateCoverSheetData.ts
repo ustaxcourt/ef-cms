@@ -39,6 +39,8 @@ export const generateCoverSheetData = async ({
   stampData?: any;
   useInitialData: boolean;
 }) => {
+  console.log('docketEntryEntity:::::', docketEntryEntity);
+
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
     : '';
@@ -118,7 +120,8 @@ export const generateCoverSheetData = async ({
     docketEntryEntity.eventCode,
   );
   if (
-    isLeadCase(caseEntity) &&
+    (isLeadCase(caseEntity) ||
+      docketEntryEntity.isFiledAcrossConsolidatedCasesByExternalUser) &&
     (isMultiDocketableCourtIssued || isMultiDocketablePaperFiled)
   ) {
     coverSheetData = await applicationContext

@@ -14,15 +14,15 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.progressFunctions callback functions for updating the progress indicator during file upload
  * @returns {Promise<Object>} the case details with the uploaded document(s) attached
  */
-export const uploadExternalDocumentsForConsolidatedGroupInteractor = (
+export const uploadExternalDocumentsForConsolidatedGroupInteractor = async (
   applicationContext: any,
   {
     documentFiles,
-    documentMetadataForConsolidatedCases,
+    documentMetadata,
     progressFunctions,
   }: {
     documentFiles: Record<string, any>;
-    documentMetadataForConsolidatedCases: any;
+    documentMetadata: any;
     progressFunctions: Record<string, any>;
   },
 ) => {
@@ -34,69 +34,68 @@ export const uploadExternalDocumentsForConsolidatedGroupInteractor = (
 
   const docketEntryIdsAdded = [];
 
-  return documentMetadataForConsolidatedCases.map(async documentMetadata => {
-    documentMetadata.primaryDocumentId = await applicationContext
+  documentMetadata.primaryDocumentId = await applicationContext
+    .getUseCases()
+    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      document: documentFiles['primary'],
+      onUploadProgress: progressFunctions['primary'],
+    });
+  docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
+
+  if (documentFiles.secondary) {
+    documentMetadata.secondaryDocument.docketEntryId = await applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: documentFiles['primary'],
-        onUploadProgress: progressFunctions['primary'],
+        document: documentFiles['secondary'],
+        onUploadProgress: progressFunctions['secondary'],
       });
-    docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
+    docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
+  }
 
-    if (documentFiles.secondary) {
-      documentMetadata.secondaryDocument.docketEntryId =
+  if (documentMetadata.hasSupportingDocuments) {
+    for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
+      documentMetadata.supportingDocuments[i].docketEntryId =
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: documentFiles['secondary'],
-            onUploadProgress: progressFunctions['secondary'],
+            document: documentFiles[`primarySupporting${i}`],
+            onUploadProgress: progressFunctions[`primarySupporting${i}`],
           });
       docketEntryIdsAdded.push(
-        documentMetadata.secondaryDocument.docketEntryId,
+        documentMetadata.supportingDocuments[i].docketEntryId,
       );
     }
+  }
 
-    if (documentMetadata.hasSupportingDocuments) {
-      for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
-        documentMetadata.supportingDocuments[i].docketEntryId =
-          await applicationContext
-            .getUseCases()
-            .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-              document: documentFiles[`primarySupporting${i}`],
-              onUploadProgress: progressFunctions[`primarySupporting${i}`],
-            });
-        docketEntryIdsAdded.push(
-          documentMetadata.supportingDocuments[i].docketEntryId,
-        );
-      }
+  if (documentMetadata.hasSecondarySupportingDocuments) {
+    for (
+      let i = 0;
+      i < documentMetadata.secondarySupportingDocuments.length;
+      i++
+    ) {
+      documentMetadata.secondarySupportingDocuments[i].docketEntryId =
+        await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+            document: documentFiles[`secondarySupporting${i}`],
+            onUploadProgress: progressFunctions[`secondarySupporting${i}`],
+          });
+      docketEntryIdsAdded.push(
+        documentMetadata.secondarySupportingDocuments[i].docketEntryId,
+      );
     }
+  }
 
-    if (documentMetadata.hasSecondarySupportingDocuments) {
-      for (
-        let i = 0;
-        i < documentMetadata.secondarySupportingDocuments.length;
-        i++
-      ) {
-        documentMetadata.secondarySupportingDocuments[i].docketEntryId =
-          await applicationContext
-            .getUseCases()
-            .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-              document: documentFiles[`secondarySupporting${i}`],
-              onUploadProgress: progressFunctions[`secondarySupporting${i}`],
-            });
-        docketEntryIdsAdded.push(
-          documentMetadata.secondarySupportingDocuments[i].docketEntryId,
-        );
-      }
-    }
+  let caseDetailsForConsolidatedCases = await applicationContext
+    .getUseCases()
+    .fileExternalDocumentInteractor(applicationContext, {
+      documentMetadata,
+    });
 
-    let caseDetail = await applicationContext
-      .getUseCases()
-      .fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata,
-      });
-    caseDetail.docketEntryIdsAdded = docketEntryIdsAdded;
+  console.log(
+    'caseDetailsForConsolidatedCases',
+    caseDetailsForConsolidatedCases,
+  );
 
-    return caseDetail;
-  });
+  return { caseDetails: caseDetailsForConsolidatedCases, docketEntryIdsAdded };
 };
