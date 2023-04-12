@@ -33,7 +33,7 @@ describe('unauthed user searches for sealed case', () => {
           address1: '734 Cowley Parkway',
           city: 'Somewhere',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'NOTAREALNAMEFORTESTINGPUBLIC',
+          name: 'Roland the Headless Thompson Gunner',
           phone: '+1 (884) 358-9729',
           postalCode: '77546',
           state: 'CT',
