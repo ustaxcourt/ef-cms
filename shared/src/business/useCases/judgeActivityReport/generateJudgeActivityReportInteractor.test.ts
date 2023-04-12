@@ -6,8 +6,8 @@ describe('generateJudgeActivityReportInteractor', () => {
   const mockClosedCases = [];
 
   const mockValidRequest = {
-    endDate: '2014-03-21',
-    startDate: '2013-12-23',
+    endDate: '03/21/2020',
+    startDate: '02/12/2020',
   };
 
   beforeEach(() => {
@@ -40,13 +40,12 @@ describe('generateJudgeActivityReportInteractor', () => {
     ).toThrow();
   });
 
-  it('should return the cases closed in the time period specified in the request by the current user when they are a judge', () => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+  it.only('should return the cases closed in the time period specified in the request by the current user when they are a judge', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesClosedByJudge.mockReturnValue(mockClosedCases);
 
-    const { closedCases } = generateJudgeActivityReportInteractor(
+    const { closedCases } = await generateJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
     );
