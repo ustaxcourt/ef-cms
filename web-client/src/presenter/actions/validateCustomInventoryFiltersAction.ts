@@ -29,6 +29,9 @@ export const validateCustomInventoryFiltersAction = ({
 
   if (errors) {
     return path.error({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
       errors,
     });
   }
