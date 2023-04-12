@@ -6,13 +6,18 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCustomInventoryFiltersAction } from '../actions/validateCustomInventoryFiltersAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 
 export const getCustomCaseInventoryReportSequence =
   showProgressSequenceDecorator([
     startShowValidationAction,
     validateCustomInventoryFiltersAction,
     {
-      error: [setValidationErrorsAction],
+      error: [
+        setAlertErrorAction,
+        setValidationErrorsAction,
+        setValidationErrorsAction,
+      ],
       success: [
         stopShowValidationAction,
         clearErrorAlertsAction,
