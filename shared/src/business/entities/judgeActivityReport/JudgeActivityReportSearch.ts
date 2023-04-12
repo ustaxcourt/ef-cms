@@ -53,10 +53,10 @@ JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES = {
     {
       contains: 'ref:startDate',
       message:
-        'End date cannot be prior to Start Date. Enter a valid End date.',
+        'End date cannot be prior to Start Date. Enter a valid end date.',
     },
     {
-      contains: 'must be less than or equal to',
+      contains: 'ref:tomorrow',
       message: 'End date cannot be in the future. Enter a valid date.',
     },
     {
