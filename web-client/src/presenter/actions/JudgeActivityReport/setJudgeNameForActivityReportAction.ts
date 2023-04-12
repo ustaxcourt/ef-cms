@@ -4,13 +4,17 @@ import { state } from 'cerebral';
  * Sets setJudgeNameForActivityReportAction on state
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
+ * @param {object} applicationContext the applicationContext
  * @param {object} providers.store the cerebral store object
  */
-export const setJudgeNameForActivityReportAction = async ({ props, store }) => {
-  const user = await applicationContext.getCurrentUser();
+export const setJudgeNameForActivityReportAction = ({
+  applicationContext,
+  store,
+}) => {
+  const user = applicationContext.getCurrentUser();
+  const { USER_ROLES } = applicationContext.getConstants();
 
-  const isChambersUser = user.role === ROLES.chambers;
+  const isChambersUser = user.role === USER_ROLES.chambers;
 
   let judgeName;
   if (isChambersUser) {
@@ -22,12 +26,12 @@ export const setJudgeNameForActivityReportAction = async ({ props, store }) => {
       obj => obj.section === user.section,
     );
 
-    //how
-    judgeName = getJudgeLastName(userSectionInfo.judgeFullName);
+    judgeName = applicationContext
+      .getUtilities()
+      .getJudgeLastName(userSectionInfo.judgeFullName);
   } else {
     judgeName = user.name;
   }
 
-  //use this in helper
-  store.set(form, judgeName);
+  store.set(state.form.judgeName, judgeName);
 };

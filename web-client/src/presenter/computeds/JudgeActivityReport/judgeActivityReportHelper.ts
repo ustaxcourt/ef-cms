@@ -1,4 +1,4 @@
-export const judgeActivityReportHelper = (get, applicationContext) => {
+export const judgeActivityReportHelper = () => {
   return {
     activityReportResults: {
       closedCases: {
