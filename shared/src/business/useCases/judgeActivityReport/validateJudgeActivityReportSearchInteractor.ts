@@ -11,14 +11,17 @@ import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/Ju
  */
 export const validateJudgeActivityReportSearchInteractor = (
   applicationContext,
-  { endDate, startDate }: { endDate: string; startDate: string },
+  {
+    endDate,
+    judgeName,
+    startDate,
+  }: { endDate: string; startDate: string; judgeName: string },
 ) => {
-  const judgeActivityReportSearch = new JudgeActivityReportSearch(
-    { endDate, startDate },
-    {
-      applicationContext,
-    },
-  );
+  const judgeActivityReportSearch = new JudgeActivityReportSearch({
+    endDate,
+    judgeName,
+    startDate,
+  });
 
   return judgeActivityReportSearch.getFormattedValidationErrors();
 };
