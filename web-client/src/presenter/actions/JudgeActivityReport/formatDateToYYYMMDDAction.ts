@@ -7,18 +7,17 @@
  * @returns {object} date formatted as YYYY-MM-DD
  */
 export const formatDateToYYYMMDDAction = ({ applicationContext, props }) => {
-  console.log('props.value---', props.value);
-  // const { DATE_FORMATS } = applicationContext.getConstants();
+  const { DATE_FORMATS } = applicationContext.getConstants();
 
-  // const dateToFormat = applicationContext
-  //   .getUtilities()
-  //   .prepareDateFromString(props.value, DATE_FORMATS.MMDDYYYY);
+  const dateToFormat = applicationContext
+    .getUtilities()
+    .prepareDateFromString(props.value, DATE_FORMATS.MMDDYYYY);
 
-  // const formattedDate = applicationContext
-  //   .getUtilities()
-  //   .formatDateString(dateToFormat, DATE_FORMATS.YYYYMMDD);
+  const formattedDate = applicationContext
+    .getUtilities()
+    .formatDateString(dateToFormat, DATE_FORMATS.YYYYMMDD);
 
-  // return {
-  //   value: formattedDate,
-  // };
+  return {
+    value: formattedDate,
+  };
 };
