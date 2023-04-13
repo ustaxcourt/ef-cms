@@ -112,7 +112,7 @@ describe('JudgeActivityReportSearch', () => {
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        judgeName: 'End date cannot be in the future. Enter a valid date.',
+        judgeName: 'Judge name is required',
       });
     });
   });
