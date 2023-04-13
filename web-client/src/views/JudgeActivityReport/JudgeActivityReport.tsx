@@ -9,6 +9,7 @@ import React from 'react';
 export const JudgeActivityReport = connect(
   {
     CLOSED_CASE_STATUSES: state.constants.CLOSED_CASE_STATUSES,
+    SESSION_TYPES: state.constants.SESSION_TYPES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     submitJudgeActivityReportSequence:
@@ -20,6 +21,7 @@ export const JudgeActivityReport = connect(
     CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
+    SESSION_TYPES,
     submitJudgeActivityReportSequence,
     updateFormValueSequence,
     validationErrors,
@@ -59,7 +61,7 @@ export const JudgeActivityReport = connect(
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
-            Sessions Held <span className="float-right">Total: 25</span>
+            Sessions Held <span className="float-right">Total: </span>
           </caption>
 
           <thead>
@@ -69,14 +71,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(judgeActivityReportData.trialSessions).map(
-              ([key, value]) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value}</td>
-                </tr>
-              ),
-            )}
+            {Object.values(SESSION_TYPES).map(status => (
+              <tr key={status}>
+                <td>{status}</td>
+                <td className="text-center">
+                  {judgeActivityReportData.trialSessions[status]}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
