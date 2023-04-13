@@ -171,7 +171,10 @@ const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 const execPromise = util.promisify(exec);
-import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi';
+import {
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
+} from '@aws-sdk/client-apigatewaymanagementapi';
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import {
   DeleteObjectCommand,
@@ -180,6 +183,8 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { SESClient } from '@aws-sdk/client-ses';
 import { SNSClient } from '@aws-sdk/client-sns';
@@ -258,17 +263,18 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
   // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      httpOptions: {
-        connectTimeout: 3000,
-        timeout: 5000,
-      },
-      maxRetries: 3,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
+    dynamoCache[type] = DynamoDBDocumentClient.from(
+      new DynamoDBClient({
+        endpoint: useMasterRegion
+          ? environment.masterDynamoDbEndpoint
+          : environment.dynamoDbEndpoint,
+        maxAttempts: 3,
+        region: useMasterRegion ? environment.masterRegion : environment.region,
+        requestHandler: new NodeHttpHandler({
+          requestTimeout: 3000,
+        }),
+      }),
+    );
   }
   return dynamoCache[type];
 };
@@ -547,9 +553,19 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (endpoint.includes('localhost')) {
         endpoint = 'http://localhost:3011';
       }
-      return new ApiGatewayManagementApiClient({
+      const client = new ApiGatewayManagementApiClient({
         endpoint,
       });
+
+      return {
+        postToConnection(params) {
+          return {
+            promise() {
+              return client.send(new PostToConnectionCommand(params));
+            },
+          };
+        },
+      };
     },
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,

@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const { DynamoDB } = AWS;
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 
 /**
  * getDynamoEndpoints
@@ -24,22 +25,40 @@ exports.getDynamoEndpoints = ({
   useMasterRegion,
 }) => {
   const baseConfig = {
-    httpOptions: {
-      timeout: 5000,
-    },
-    maxRetries: 3,
+    maxAttempts: 3,
+    requestHandler: new NodeHttpHandler({
+      requestTimeout: 3000,
+    }),
   };
-  const mainRegionDB = new DynamoDB.DocumentClient({
-    ...baseConfig,
-    endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
-    region: useMasterRegion ? masterRegion : mainRegion,
-  });
 
-  const fallbackRegionDB = new DynamoDB.DocumentClient({
-    ...baseConfig,
-    endpoint: useMasterRegion ? fallbackRegionEndpoint : masterDynamoDbEndpoint,
-    region: useMasterRegion ? fallbackRegion : masterRegion,
-  });
+  const options = {
+    marshallOptions: {
+      removeUndefinedValues: true,
+    },
+    unmarshallOptions: {
+      wrapNumbers: false,
+    },
+  };
+
+  const mainRegionDB = DynamoDBDocument.from(
+    new DynamoDB({
+      ...baseConfig,
+      endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
+      region: useMasterRegion ? masterRegion : mainRegion,
+    }),
+    options,
+  );
+
+  const fallbackRegionDB = DynamoDBDocument.from(
+    new DynamoDB({
+      ...baseConfig,
+      endpoint: useMasterRegion
+        ? fallbackRegionEndpoint
+        : masterDynamoDbEndpoint,
+      region: useMasterRegion ? fallbackRegion : masterRegion,
+    }),
+    options,
+  );
 
   return { fallbackRegionDB, mainRegionDB };
 };

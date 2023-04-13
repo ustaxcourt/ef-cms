@@ -110,6 +110,8 @@ const server = http.createServer((request, response) => {
   });
   request.on('end', () => {
     const split = request.url!.split('/');
+    console.log('---url', request.url);
+    console.log('connections', connections);
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
       connections[connectionId].sendUTF(body);
@@ -140,6 +142,7 @@ wsServer.on('request', function (request) {
   const connection = request.accept('echo-protocol', request.origin);
   const connectionId = uuid();
   connections[connectionId] = connection;
+  console.log('adding a connection of ', connectionId);
   const queryStringParameters = Object.keys(request.resourceURL.query!).reduce(
     (aggregatedValue, key) => {
       const value = request.resourceURL.query![key];
