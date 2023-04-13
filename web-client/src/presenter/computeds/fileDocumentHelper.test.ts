@@ -12,6 +12,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   caseDetail: MOCK_CASE,
+  featureFlagHelper: {},
   form: {},
   validationErrors: {},
 };
@@ -200,6 +201,12 @@ describe('fileDocumentHelper', () => {
     state.validationErrors = { filers: 'You did something bad.' };
     const result = runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
+  });
+
+  it('passes the value of the REDACTION_ACKNOWLEDGEMENT_ENABLED flag', () => {
+    state.featureFlagHelper.redactionAcknowledgementEnabled = true;
+    const result = runCompute(fileDocumentHelper, { state });
+    expect(result.redactionAcknowledgementEnabled).toEqual(true);
   });
 
   describe('supporting documents', () => {
