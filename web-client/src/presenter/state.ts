@@ -68,7 +68,6 @@ import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
-import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
@@ -189,7 +188,6 @@ const helpers = {
   headerHelper,
   internalPetitionPartiesHelper,
   internalTypesHelper,
-  judgeActivityReportHelper,
   loadingHelper,
   menuHelper,
   messageDocumentHelper,

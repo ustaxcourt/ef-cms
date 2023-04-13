@@ -5,7 +5,7 @@ import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
-import { setJudgeNameForActivityReportAction } from '../../actions/JudgeActivityReport/setJudgeNameForActivityReportAction';
+import { setJudgeNameForActivityReportAction } from '../../actions/JudgeActivityReport/setJudgeLastNameOnFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 
