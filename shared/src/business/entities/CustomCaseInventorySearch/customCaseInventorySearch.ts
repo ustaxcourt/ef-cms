@@ -1,9 +1,9 @@
-import { JoiValidationConstants } from '../JoiValidationConstants';
+import { DATE_RANGE_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 import joiDate from '@hapi/joi-date';
+
 joi.extend(joiDate);
-const { DATE_RANGE_SEARCH_OPTIONS } = require('../EntityConstants');
 
 /**
  * Custom Case Inventory Report Entity
@@ -19,7 +19,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
     this.startDate = rawProps.startDate;
-    this.endDate = rawProps.endDate;
+    this.endDate = rawProps.endDate; // TODO; DECIDE IF WE NEED TO RESTRICT END DATE VALIDATION TO 'TODAY'
   }
 
   static VALIDATION_ERROR_MESSAGES = {
@@ -54,34 +54,8 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      endDate: joi.alternatives().conditional('startDate', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.ISO_DATE.format(
-          'YYYY-MM-DDTHH:mm:ss.SSSZ',
-        )
-          .less(joi.ref('tomorrow'))
-          .optional()
-          .description(
-            'The end date search filter is not required if there is no start date',
-          ),
-        then: JoiValidationConstants.ISO_DATE.format('YYYY-MM-DDTHH:mm:ss.SSSZ')
-          .less(joi.ref('tomorrow'))
-          .min(joi.ref('startDate'))
-          .optional()
-          .description(
-            'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
-          ),
-      }),
-      startDate: joi.alternatives().conditional('dateRange', {
-        is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        otherwise: joi.forbidden(),
-        then: JoiValidationConstants.ISO_DATE.format('YYYY-MM-DDTHH:mm:ss.SSSZ')
-          .max('now')
-          .required()
-          .description(
-            'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-          ),
-      }),
+      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
+      startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
     };
   }
   getErrorToMessageMap() {
