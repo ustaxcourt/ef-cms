@@ -1,5 +1,6 @@
 // import { ROLES } from '../../entities/EntityConstants';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { SESSION_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
@@ -15,7 +16,21 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     startDate: '2020-03-01T00:00:00.000Z',
   };
 
-  const mockTrialSessions = [mockRegularTrialSession];
+  const mockMotionHearingTrialSession = {
+    ...MOCK_TRIAL_REGULAR,
+    endDate: '2020-03-03T00:00:00.000Z',
+    judge: {
+      name: judgeUser.name,
+      userId: judgeUser.userId,
+    },
+    sessionType: SESSION_TYPES.motionHearing,
+    startDate: '2020-03-02T00:00:00.000Z',
+  };
+
+  const mockTrialSessions = [
+    mockRegularTrialSession,
+    mockMotionHearingTrialSession,
+  ];
 
   const mockValidRequest = {
     endDate: '04/01/2020',
@@ -53,7 +68,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should return filtered trial session types with counts', async () => {
+  it('should return for each trial session type, the weighted count of sessions held in the date range for the judge provided', async () => {
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
@@ -61,7 +76,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
 
     expect(result).toEqual({
       Hybrid: 0,
-      'Motion/Hearing': 0,
+      'Motion/Hearing': 0.5, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
       Regular: 1,
       Small: 0,
       Special: 0,
