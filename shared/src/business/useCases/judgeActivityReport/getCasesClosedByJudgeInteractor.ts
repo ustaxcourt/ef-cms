@@ -7,7 +7,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 
 /**
- * generateJudgeActivityReportInteractor
+ * getCasesClosedByJudgeInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -16,7 +16,7 @@ import {
  * @param {string} providers.startDate the date to start the search for judge activity
  * @returns {object} errors (null if no errors)
  */
-export const generateJudgeActivityReportInteractor = async (
+export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
   {
     endDate,

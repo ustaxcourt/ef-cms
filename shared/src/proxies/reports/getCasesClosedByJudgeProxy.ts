@@ -1,15 +1,16 @@
 const { post } = require('../requests');
 
 /**
- * generateJudgeActivityReportInteractor
+ * getCasesClosedByJudgeInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.endDate the end date for the report query
+ * @param {string} providers.judgeName the judge name for the report query
  * @param {string} providers.startDate the start date for the report query
  * @returns {Promise<*>} the promise of the api call
  */
-export const generateJudgeActivityReportInteractor = (
+export const getCasesClosedByJudgeInteractor = (
   applicationContext,
   {
     endDate,
@@ -24,6 +25,6 @@ export const generateJudgeActivityReportInteractor = (
       judgeName,
       startDate,
     },
-    endpoint: '/reports/judge-activity-report',
+    endpoint: '/judge-activity-report/closed-cases',
   });
 };

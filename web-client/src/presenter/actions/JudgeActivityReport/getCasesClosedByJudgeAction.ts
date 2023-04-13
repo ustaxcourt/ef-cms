@@ -16,7 +16,7 @@ export const getCasesClosedByJudgeAction = async ({
 
   const casesClosedByJudge = await applicationContext
     .getUseCases()
-    .generateJudgeActivityReportInteractor(applicationContext, {
+    .getCasesClosedByJudgeInteractor(applicationContext, {
       endDate,
       judgeName,
       startDate,
