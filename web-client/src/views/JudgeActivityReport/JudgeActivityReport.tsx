@@ -69,14 +69,10 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(
-              judgeActivityReportHelper.activityReportResults.trialSessionsHeld,
-            ).map(([key, value]) => (
-              <tr key={key}>
-                <td>{key}</td>
-                <td>{value}</td>
-              </tr>
-            ))}
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </>
@@ -96,15 +92,11 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.activityReportResults.ordersIssued.map(
-              order => (
-                <tr key={order.eventCode}>
-                  <td>{order.eventCode}</td>
-                  <td>{order.documentType}</td>
-                  <td>{order.total}</td>
-                </tr>
-              ),
-            )}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </>
@@ -124,15 +116,11 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.activityReportResults.opinionsIssued.map(
-              opinion => (
-                <tr key={opinion.eventCode}>
-                  <td>{opinion.eventCode}</td>
-                  <td>{opinion.documentType}</td>
-                  <td>{opinion.total}</td>
-                </tr>
-              ),
-            )}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </>
