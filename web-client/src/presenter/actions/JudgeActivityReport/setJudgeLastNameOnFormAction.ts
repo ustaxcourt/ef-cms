@@ -1,28 +1,24 @@
 import { state } from 'cerebral';
 
 /**
- * Sets setJudgeNameForActivityReportAction on state
+ * Sets last name of the judge on form used for the judge activity report on state
  *
  * @param {object} providers the providers object
  * @param {object} applicationContext the applicationContext
  * @param {object} providers.store the cerebral store object
  */
-export const setJudgeNameForActivityReportAction = ({
-  applicationContext,
-  store,
-}) => {
-  const user = applicationContext.getCurrentUser();
+export const setJudgeLastNameOnFormAction = ({ applicationContext, store }) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
-  const isChambersUser = user.role === USER_ROLES.chambers;
+  const user = applicationContext.getCurrentUser();
 
-  let judgeName;
+  const isChambersUser: boolean = user.role === USER_ROLES.chambers;
+
+  let judgeName: string;
   if (isChambersUser) {
-    const chambersData: any = applicationContext
-      .getUtilities()
-      .getJudgesChambers();
+    const chambersData = applicationContext.getUtilities().getJudgesChambers();
 
-    const userSectionInfo: any = Object.values(chambersData).find(
+    const userSectionInfo = Object.values(chambersData).find(
       obj => obj.section === user.section,
     );
 
