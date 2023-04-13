@@ -17,17 +17,16 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
   const { USER_ROLES } = applicationContext.getConstants();
   const chambersJudgeUser = get(state.judgeUser);
   const isChambersUser = role === USER_ROLES.chambers;
-  const judgeUserId =
+  const judgeId =
     isChambersUser && chambersJudgeUser ? chambersJudgeUser.userId : userId;
 
   const trialSessions = await applicationContext
     .getUseCases()
     .getTrialSessionsForJudgeActivityReportInteractor(applicationContext, {
       endDate,
-      judgeUserId,
+      judgeId,
       startDate,
     });
 
-  console.log('trialSessions for buch', trialSessions);
   return { trialSessions };
 };

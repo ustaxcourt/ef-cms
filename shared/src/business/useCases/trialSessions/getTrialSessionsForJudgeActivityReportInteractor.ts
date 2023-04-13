@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { SESSION_TYPES } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
 
@@ -54,6 +55,12 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       session.startDate >= searchEntity.startDate,
   );
 
+  const specialSessions = judgeSessionsInDateRange.filter(
+    session => (session.sessionStatus = SESSION_TYPES.special),
+  );
+
+  // Total Number of Special trial sessions the judge has been assigned to that have Start Dates that fall within this time frame
+  // Total Number of Sessions for all non-Special sessions the judge has been assigned to that have Start Dates that fall within this time frame and are not in New status
   // now make a map with counts of sessionStatus: value, and switch on the type of sessions to determine value
   // value for session_type:
   // Regular/Small/Hybrid sessions: 1 session each
