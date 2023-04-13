@@ -170,9 +170,9 @@ const { User } = require('../../shared/src/business/entities/User');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
-const { CognitoIdentityServiceProvider, DynamoDB, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi';
+import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -181,7 +181,9 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
+import { SESClient } from '@aws-sdk/client-ses';
 import { SNSClient } from '@aws-sdk/client-sns';
+import { SQSClient } from '@aws-sdk/client-sqs';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
 const { createPresignedPost } = require('@aws-sdk/s3-presigned-post');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
@@ -377,13 +379,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
         };
       } else {
-        return new CognitoIdentityServiceProvider({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
+        return new CognitoIdentityProviderClient({
+          maxAttempts: 3,
           region: 'us-east-1',
+          requestHandler: new NodeHttpHandler({
+            requestTimeout: 3000,
+          }),
         });
       }
     },
@@ -467,13 +468,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         };
       } else {
         if (!sesCache) {
-          sesCache = new SES({
-            httpOptions: {
-              connectTimeout: 3000,
-              timeout: 5000,
-            },
-            maxRetries: 3,
+          sesCache = new SESClient({
+            maxAttempts: 3,
             region: 'us-east-1',
+            requestHandler: new NodeHttpHandler({
+              requestTimeout: 3000,
+            }),
           });
         }
         return sesCache;
@@ -529,13 +529,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
 
     getMessagingClient: () => {
       if (!sqsCache) {
-        sqsCache = new SQS({
+        sqsCache = new SQSClient({
           apiVersion: '2012-11-05',
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
+          maxAttempts: 3,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            socketTimeout: 5000,
+          }),
         });
       }
       return sqsCache;
