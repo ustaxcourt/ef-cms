@@ -18,6 +18,9 @@ export const validateCustomInventoryFiltersAction = ({
     state.customCaseInventoryFilters,
   );
 
+  console.log('createEndDate', createEndDate);
+  console.log('createStartDate', createStartDate);
+
   const errors = applicationContext
     .getUseCases()
     .validateCustomCaseInventorySearchFiltersInteractor(applicationContext, {
@@ -31,6 +34,7 @@ export const validateCustomInventoryFiltersAction = ({
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
+        messages: errors,
       },
       errors,
     });
