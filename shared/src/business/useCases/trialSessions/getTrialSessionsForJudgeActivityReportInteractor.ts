@@ -47,14 +47,11 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       applicationContext,
     });
 
-  console.log(searchEntity); //2020-08-10T05:00:00.000Z
-
   const judgeSessionsInDateRange = trialSessions.filter(
     session =>
       session.judge?.userId === searchEntity.judgeId &&
-      session.startDate <= searchEntity.endDate,
-    // &&
-    // session.startDate >= startDate,
+      session.startDate <= searchEntity.endDate &&
+      session.startDate >= searchEntity.startDate,
   );
 
   // now make a map with counts of sessionStatus: value, and switch on the type of sessions to determine value
