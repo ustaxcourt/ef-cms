@@ -60,7 +60,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     session =>
       session.sessionType === SESSION_TYPES.small &&
       session.sessionStatus !== SESSION_STATUS_TYPES.new &&
-      !!session.swingSession,
+      !session.swingSession,
   ).length;
 
   const smallSwingSessions =
@@ -73,7 +73,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     session =>
       session.sessionType === SESSION_TYPES.regular &&
       session.sessionStatus !== SESSION_STATUS_TYPES.new &&
-      !!session.swingSession,
+      !session.swingSession,
   ).length;
 
   const regularSwingSessions =
@@ -88,7 +88,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     session =>
       session.sessionType === SESSION_TYPES.hybrid &&
       session.sessionStatus !== SESSION_STATUS_TYPES.new &&
-      !!session.swingSession,
+      !session.swingSession,
   ).length;
 
   const hybridSwingSessions =
