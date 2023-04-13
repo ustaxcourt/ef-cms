@@ -59,55 +59,53 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   const smallNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
       isTypeOf(SESSION_TYPES.small)(session) &&
-      session.sessionStatus !== SESSION_STATUS_TYPES.new &&
+      !isNew(session) &&
       !session.swingSession,
   ).length;
 
   const smallSwingSessions =
     judgeSessionsInDateRange.filter(
-      session =>
-        session.sessionType === SESSION_TYPES.small && session.swingSession,
+      session => isTypeOf(SESSION_TYPES.small)(session) && session.swingSession,
     ).length / 2;
 
   const regularNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
-      session.sessionType === SESSION_TYPES.regular &&
-      session.sessionStatus !== SESSION_STATUS_TYPES.new &&
+      isTypeOf(SESSION_TYPES.regular)(session) &&
+      !isNew(session) &&
       !session.swingSession,
   ).length;
 
   const regularSwingSessions =
     judgeSessionsInDateRange.filter(
       session =>
-        session.sessionType === SESSION_TYPES.regular &&
-        session.sessionStatus !== SESSION_STATUS_TYPES.new &&
+        isTypeOf(SESSION_TYPES.regular)(session) &&
+        !isNew(session) &&
         session.swingSession,
     ).length / 2;
 
   const hybridNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
-      session.sessionType === SESSION_TYPES.hybrid &&
-      session.sessionStatus !== SESSION_STATUS_TYPES.new &&
+      isTypeOf(SESSION_TYPES.hybrid)(session) &&
+      !isNew(session) &&
       !session.swingSession,
   ).length;
 
   const hybridSwingSessions =
     judgeSessionsInDateRange.filter(
       session =>
-        session.sessionType === SESSION_TYPES.hybrid &&
-        session.sessionStatus !== SESSION_STATUS_TYPES.new &&
+        isTypeOf(SESSION_TYPES.hybrid)(session) &&
+        !isNew(session) &&
         session.swingSession,
     ).length / 2;
 
   const motionHearingSessions =
     judgeSessionsInDateRange.filter(
       session =>
-        session.sessionType === SESSION_TYPES.motionHearing &&
-        session.sessionStatus !== SESSION_STATUS_TYPES.new,
+        isTypeOf(SESSION_TYPES.motionHearing)(session) && !isNew(session),
     ).length / 2;
 
-  const specialSessions = judgeSessionsInDateRange.filter(
-    session => session.sessionType === SESSION_TYPES.special,
+  const specialSessions = judgeSessionsInDateRange.filter(session =>
+    isTypeOf(SESSION_TYPES.special)(session),
   ).length;
 
   return {
@@ -119,6 +117,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   };
 };
 
+const isNew = session => session.sessionStatus === SESSION_STATUS_TYPES.new;
 const isTypeOf = sessionType => {
   return session => session.sessionType === sessionType;
 };
