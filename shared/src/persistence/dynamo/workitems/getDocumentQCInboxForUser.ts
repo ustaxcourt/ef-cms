@@ -1,4 +1,4 @@
-import { query } from '../../dynamodbClientService';
+import { queryFull } from '../../dynamodbClientService';
 
 export const getDocumentQCInboxForUser = async ({
   applicationContext,
@@ -7,7 +7,7 @@ export const getDocumentQCInboxForUser = async ({
   applicationContext: IApplicationContext;
   userId: string;
 }): Promise<RawWorkItem[]> => {
-  const workItems: RawWorkItem[] = (await query({
+  const workItems: RawWorkItem[] = (await queryFull({
     ExpressionAttributeNames: {
       '#gsi2pk': 'gsi2pk',
       '#sk': 'sk',
@@ -21,17 +21,15 @@ export const getDocumentQCInboxForUser = async ({
     applicationContext,
   })) as any;
 
-  return workItems
-    .filter(workItem => !workItem.completedAt)
-    .sort((a, b) => {
-      if (a.highPriority) {
-        return -1;
-      }
+  return workItems.sort((a, b) => {
+    if (a.highPriority) {
+      return -1;
+    }
 
-      if (b.highPriority) {
-        return 1;
-      }
+    if (b.highPriority) {
+      return 1;
+    }
 
-      return 0;
-    });
+    return 0;
+  });
 };
