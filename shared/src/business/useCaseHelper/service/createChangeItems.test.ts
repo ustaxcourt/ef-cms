@@ -1,13 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { generateAndServeDocketEntry } = require('./createChangeItems');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateAndServeDocketEntry } from './createChangeItems';
 
 describe('generateAndServeDocketEntry', () => {
   let testCaseEntity;
@@ -248,5 +243,36 @@ describe('generateAndServeDocketEntry', () => {
         },
       }),
     ).resolves.toBeTruthy();
+  });
+
+  it('creates a work item that includes lead docket number when the case is consolidated', async () => {
+    const leadDocketNumber = '103-20';
+
+    await generateAndServeDocketEntry({
+      ...testArguments,
+      caseEntity: new Case(
+        {
+          ...testCaseEntity,
+          leadDocketNumber,
+          petitioners: [
+            {
+              ...testCaseEntity.petitioners[0],
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      ),
+      user: {
+        ...testUser,
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem.leadDocketNumber,
+    ).toEqual(leadDocketNumber);
   });
 });
