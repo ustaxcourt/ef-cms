@@ -1,4 +1,5 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { judgeUser } from '../../../test/mockUsers';
 import { validateJudgeActivityReportSearchInteractor } from './validateJudgeActivityReportSearchInteractor';
 
 describe('validateJudgeActivityReportSearchInteractor', () => {
@@ -7,6 +8,7 @@ describe('validateJudgeActivityReportSearchInteractor', () => {
       applicationContext,
       {
         endDate: undefined,
+        judgeName: judgeUser.name,
         startDate: undefined,
       },
     );
@@ -18,8 +20,9 @@ describe('validateJudgeActivityReportSearchInteractor', () => {
     const result = validateJudgeActivityReportSearchInteractor(
       applicationContext,
       {
-        endDate: '2021-01-22T05:00:00.000Z',
-        startDate: '2021-01-22T05:00:00.000Z',
+        endDate: '06/07/2022',
+        judgeName: judgeUser.name,
+        startDate: '05/02/2022',
       },
     );
 
