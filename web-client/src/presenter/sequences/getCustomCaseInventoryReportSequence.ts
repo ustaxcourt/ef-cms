@@ -10,18 +10,18 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 
 export const getCustomCaseInventoryReportSequence =
   showProgressSequenceDecorator([
-    startShowValidationAction,
+    // startShowValidationAction,
     validateCustomInventoryFiltersAction,
     {
-      error: [
-        setAlertErrorAction,
-        setValidationErrorsAction,
-        setValidationErrorsAction,
-      ],
+      // error: [
+      //   setAlertErrorAction,
+      //   setValidationErrorsAction,
+      //   setValidationErrorsAction,
+      // ],
       success: [
-        stopShowValidationAction,
-        clearErrorAlertsAction,
-        clearAlertsAction,
+        // stopShowValidationAction,
+        // clearErrorAlertsAction,
+        // clearAlertsAction,
         getCustomCaseInventoryReportAction,
       ],
     },
