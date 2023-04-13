@@ -55,7 +55,7 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const trialSessionsHeld: JSX.Element = (
+    const trialSessionsHeld: () => JSX.Element = () => (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
@@ -69,10 +69,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
+            {Object.entries(judgeActivityReportData.trialSessions).map(
+              (key, value) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -185,7 +189,7 @@ export const JudgeActivityReport = connect(
           <section className="usa-section grid-container">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">{closedCases()}</div>
-              <div className="grid-col-6">{trialSessionsHeld}</div>
+              <div className="grid-col-6">{trialSessionsHeld()}</div>
             </div>
 
             <div className="grid-row grid-gap">
