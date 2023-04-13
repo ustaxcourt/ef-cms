@@ -94,3 +94,6 @@ export const ExternalConsolidatedCaseGroupFilingCard = connect(
     );
   },
 );
+
+ExternalConsolidatedCaseGroupFilingCard.displayName =
+  'ExternalConsolidatedCaseGroupFilingCard';
