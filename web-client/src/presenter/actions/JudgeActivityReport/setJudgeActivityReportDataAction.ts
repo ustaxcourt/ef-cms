@@ -8,10 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const setJudgeActivityReportDataAction = ({ props, store }) => {
-  const { casesClosedByJudge } = props;
+  const { casesClosedByJudge, trialSessions } = props;
 
   store.set(
     state.judgeActivityReportData.casesClosedByJudge,
     casesClosedByJudge,
   );
+  store.set(state.judgeActivityReportData.trialSessions, trialSessions);
 };
