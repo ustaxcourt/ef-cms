@@ -3,15 +3,16 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ConsolidatedCaseGroupFiling = connect(
+export const ExternalConsolidatedCaseGroupFilingCard = connect(
   {
-    fileDocumentHelper: state.fileDocumentHelper,
+    externalConsolidatedCaseGroupHelper:
+      state.externalConsolidatedCaseGroupHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function ConsolidatedCaseGroupFiling({
-    fileDocumentHelper,
+  function ExternalConsolidatedCaseGroupFilingCard({
+    externalConsolidatedCaseGroupHelper,
     form,
     updateFormValueSequence,
     validationErrors,
@@ -56,7 +57,7 @@ export const ConsolidatedCaseGroupFiling = connect(
                 All in the consolidated group
               </label>
               <ul className="ustc-unstyled-consolidated-case-list">
-                {fileDocumentHelper.formattedConsolidatedCaseList.map(
+                {externalConsolidatedCaseGroupHelper.formattedConsolidatedCaseList.map(
                   (item, index) => (
                     <li className="margin-bottom-2" key={index}>
                       {item}
@@ -82,7 +83,9 @@ export const ConsolidatedCaseGroupFiling = connect(
                 className="usa-radio__label"
                 htmlFor="consolidated-group-current-case"
               >
-                {fileDocumentHelper.formattedCurrentCasePetitionerNames}
+                {
+                  externalConsolidatedCaseGroupHelper.formattedCurrentCasePetitionerNames
+                }
               </label>
             </fieldset>
           </FormGroup>

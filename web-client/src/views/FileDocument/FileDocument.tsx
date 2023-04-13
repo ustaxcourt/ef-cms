@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ConsolidatedCaseGroupFiling } from './ConsolidatedCaseGroupFiling';
+import { ExternalConsolidatedCaseGroupFilingCard } from './ExternalConsolidatedCaseGroupFilingCard';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
@@ -60,7 +60,7 @@ export const FileDocument = connect(
         <PartiesFiling />
 
         {isIrsPractitionerConsolidatedCasesFilingEnabled && (
-          <ConsolidatedCaseGroupFiling />
+          <ExternalConsolidatedCaseGroupFilingCard />
         )}
 
         <div className="margin-top-4">

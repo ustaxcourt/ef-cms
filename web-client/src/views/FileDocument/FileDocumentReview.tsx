@@ -12,6 +12,8 @@ import classNames from 'classnames';
 
 export const FileDocumentReview = connect(
   {
+    externalConsolidatedCaseGroupHelper:
+      state.externalConsolidatedCaseGroupHelper,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -20,6 +22,7 @@ export const FileDocumentReview = connect(
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
   function FileDocumentReview({
+    externalConsolidatedCaseGroupHelper,
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
@@ -304,7 +307,7 @@ export const FileDocumentReview = connect(
             </div>
           </div>
 
-          {fileDocumentHelper.showFileAcrossConsolidatedGroupCards && (
+          {form.fileAcrossConsolidatedGroup && (
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
@@ -319,7 +322,7 @@ export const FileDocumentReview = connect(
                             Docket Numbers and Petitioners
                           </label>
                           <ul className="ustc-unstyled-consolidated-case-list padding-left-0">
-                            {fileDocumentHelper.formattedConsolidatedCaseList.map(
+                            {externalConsolidatedCaseGroupHelper.formattedConsolidatedCaseList.map(
                               (item, index) => (
                                 <li className="margin-bottom-2" key={index}>
                                   {item}
@@ -386,7 +389,7 @@ export const FileDocumentReview = connect(
                     <h3 className="underlined">Service Parties</h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-12 margin-bottom-1">
-                        {fileDocumentHelper.consolidatedGroupServiceParties.map(
+                        {externalConsolidatedCaseGroupHelper.consolidatedGroupServiceParties.map(
                           (partyGroup, index1, parties) => (
                             <React.Fragment key={index1}>
                               <ul className="ustc-unstyled-list without-margins">
