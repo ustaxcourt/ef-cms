@@ -7,12 +7,12 @@ import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSess
 describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   const mockRegularTrialSession = {
     ...MOCK_TRIAL_REGULAR,
-    endDate: '03/31/2020',
+    endDate: '2020-03-02T00:00:00.000Z',
     judge: {
       name: judgeUser.name,
       userId: judgeUser.userId,
     },
-    startDate: '03/30/2020',
+    startDate: '2020-03-01T00:00:00.000Z',
   };
 
   const mockTrialSessions = [mockRegularTrialSession];

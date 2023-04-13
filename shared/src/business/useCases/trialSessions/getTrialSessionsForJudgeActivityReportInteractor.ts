@@ -58,7 +58,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   const smallNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
-      session.sessionType === SESSION_TYPES.small &&
+      isTypeOf(SESSION_TYPES.small)(session) &&
       session.sessionStatus !== SESSION_STATUS_TYPES.new &&
       !session.swingSession,
   ).length;
@@ -117,4 +117,8 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     [SESSION_TYPES.motionHearing]: motionHearingSessions,
     [SESSION_TYPES.special]: specialSessions,
   };
+};
+
+const isTypeOf = sessionType => {
+  return session => session.sessionType === sessionType;
 };
