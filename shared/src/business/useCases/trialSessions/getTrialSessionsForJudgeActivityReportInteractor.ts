@@ -1,10 +1,11 @@
+import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
-import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getTrialSessionsForJudgeActivityReportInteractor
@@ -30,19 +31,28 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const searchEntity = new JudgeActivityReportSearch({
+    endDate,
+    judgeId,
+    startDate,
+  });
+
+  if (!searchEntity.isValid()) {
+    throw new InvalidRequest();
+  }
+
   const trialSessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({
       applicationContext,
     });
 
-  console.log(applicationContext.getUtilities().createISODateString(endDate)); //2020-08-10T05:00:00.000Z
+  console.log(searchEntity); //2020-08-10T05:00:00.000Z
 
   const judgeSessionsInDateRange = trialSessions.filter(
     session =>
-      session.judge?.userId === judgeId &&
-      session.startDate <=
-        applicationContext.getUtilities().createISODateString(endDate),
+      session.judge?.userId === searchEntity.judgeId &&
+      session.startDate <= searchEntity.endDate,
     // &&
     // session.startDate >= startDate,
   );
