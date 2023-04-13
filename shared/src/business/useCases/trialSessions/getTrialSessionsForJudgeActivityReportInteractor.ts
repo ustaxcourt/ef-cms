@@ -4,7 +4,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { SESSION_TYPES } from '../../entities/EntityConstants';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
 
@@ -56,8 +59,16 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   );
 
   const specialSessions = judgeSessionsInDateRange.filter(
-    session => (session.sessionStatus = SESSION_TYPES.special),
+    session => session.sessionType === SESSION_TYPES.special,
   );
+
+  const nonSpecialSessions = judgeSessionsInDateRange.filter(
+    session =>
+      session.sessionType !== SESSION_TYPES.special &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.new,
+  );
+
+  const filteredJudgeSessions = [...specialSessions, ...nonSpecialSessions];
 
   // Total Number of Special trial sessions the judge has been assigned to that have Start Dates that fall within this time frame
   // Total Number of Sessions for all non-Special sessions the judge has been assigned to that have Start Dates that fall within this time frame and are not in New status
@@ -68,7 +79,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   // Motion/Hearing: .5 session each
   // ? value of special = 1?
   const validatedSessions = TrialSession.validateRawCollection(
-    judgeSessionsInDateRange as any,
+    filteredJudgeSessions as any,
     {
       applicationContext,
     },
