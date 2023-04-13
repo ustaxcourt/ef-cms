@@ -552,11 +552,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
 
       return {
         postToConnection(params) {
-          return {
-            promise() {
-              return client.send(new PostToConnectionCommand(params));
-            },
-          };
+          return client.send(new PostToConnectionCommand(params));
         },
       };
     },

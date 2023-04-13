@@ -456,13 +456,10 @@ export const remove = ({
   applicationContext: IApplicationContext;
   key: any;
 }) => {
-  return applicationContext
-    .getDocumentClient()
-    .send(
-      new DeleteCommand({
-        Key: key,
-        TableName: getTableName({ applicationContext }),
-      }),
-    )
-    .promise();
+  return applicationContext.getDocumentClient().send(
+    new DeleteCommand({
+      Key: key,
+      TableName: getTableName({ applicationContext }),
+    }),
+  );
 };
