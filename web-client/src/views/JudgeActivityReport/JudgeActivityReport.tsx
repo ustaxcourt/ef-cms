@@ -11,7 +11,6 @@ export const JudgeActivityReport = connect(
     CLOSED_CASE_STATUSES: state.constants.CLOSED_CASE_STATUSES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
-    judgeActivityReportHelper: state.judgeActivityReportHelper,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     updateJudgeActivityReportFormSequence:
@@ -22,7 +21,6 @@ export const JudgeActivityReport = connect(
     CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
-    judgeActivityReportHelper,
     submitJudgeActivityReportSequence,
     updateJudgeActivityReportFormSequence,
     validationErrors,
