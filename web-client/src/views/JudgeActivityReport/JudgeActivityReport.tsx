@@ -35,8 +35,8 @@ export const JudgeActivityReport = connect(
           </caption>
           <thead>
             <tr>
-              <th aria-label="">Case Type</th>
-              <th aria-label="" className="text-center">
+              <th aria-label="Case type">Case Type</th>
+              <th aria-label="Case type total" className="text-center">
                 Case Type Total
               </th>
             </tr>
@@ -64,13 +64,13 @@ export const JudgeActivityReport = connect(
 
           <thead>
             <tr>
-              <th aria-label="TODO">Session Type</th>
-              <th aria-label="Docket Number">Session Type Total</th>
+              <th aria-label="Session type">Session Type</th>
+              <th aria-label="Session type total">Session Type Total</th>
             </tr>
           </thead>
           <tbody>
             {Object.entries(judgeActivityReportData.trialSessions).map(
-              (key, value) => (
+              ([key, value]) => (
                 <tr key={key}>
                   <td>{key}</td>
                   <td>{value}</td>
