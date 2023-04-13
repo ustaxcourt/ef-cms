@@ -1,15 +1,17 @@
 // import { ROLES } from '../../entities/EntityConstants';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
 
 const MOCK_TRIAL_SESSION = {
   ...MOCK_TRIAL_REGULAR,
+  endDate: '03/31/2020',
   judge: {
     name: judgeUser.name,
     userId: judgeUser.userId,
   },
-  //add start and end date within the range of mock valid request
+  startDate: '03/30/2020',
 };
 
 const mockTrialSessions = [MOCK_TRIAL_SESSION];
@@ -49,5 +51,20 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getTrialSessions,
     ).toHaveBeenCalled();
+  });
+
+  it('should return filtered trial session types with counts', async () => {
+    const result = await getTrialSessionsForJudgeActivityReportInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
+
+    expect(result).toEqual({
+      Hybrid: 0,
+      'Motion/Hearing': 0,
+      Regular: 0,
+      Small: 0,
+      Special: 0,
+    });
   });
 });
