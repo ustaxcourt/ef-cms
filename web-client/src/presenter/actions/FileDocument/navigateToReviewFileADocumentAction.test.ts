@@ -29,4 +29,34 @@ describe('navigateToReviewFileADocumentAction', () => {
       `/case-detail/${mockDocketNumber}/file-a-document/review`,
     );
   });
+
+  it('should set form.redactionAcknowledgement to false when the REDACTION_ACKNOWLEDGEMENT_ENABLED flag is true (and not do so if the flag is not true)', async () => {
+    let result = await runAction(navigateToReviewFileADocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        featureFlagHelper: { redactionAcknowledgementEnabled: true },
+      },
+    });
+
+    expect(result.state.form.redactionAcknowledgement).toEqual(false);
+
+    result = await runAction(navigateToReviewFileADocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        featureFlagHelper: { redactionAcknowledgementEnabled: undefined },
+      },
+    });
+
+    expect(result.state.form).toEqual(undefined);
+  });
 });
