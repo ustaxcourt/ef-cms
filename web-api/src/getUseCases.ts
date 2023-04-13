@@ -154,9 +154,6 @@ const {
   generateDraftStampOrderInteractor,
 } = require('../../shared/src/business/useCases/generateDraftStampOrderInteractor');
 const {
-  generateJudgeActivityReportInteractor,
-} = require('../../shared/src/business/useCases/judgeActivityReport/generateJudgeActivityReportInteractor');
-const {
   generateNoticeOfChangeOfTrialJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor');
 const {
@@ -225,6 +222,9 @@ const {
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
+const {
+  getCasesClosedByJudgeInteractor,
+} = require('../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor');
 const {
   getCasesForUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesForUserInteractor');
@@ -631,7 +631,6 @@ const useCases = {
   fileExternalDocumentInteractor,
   forwardMessageInteractor,
   generateDocketRecordPdfInteractor,
-  generateJudgeActivityReportInteractor,
   generateDraftStampOrderInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
@@ -642,6 +641,7 @@ const useCases = {
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,
+  getCasesClosedByJudgeInteractor,
   generatePrintablePendingReportInteractor,
   generatePrintableTrialSessionCopyReportInteractor,
   generateStandingPretrialOrderForSmallCaseInteractor,
