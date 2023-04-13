@@ -13,8 +13,7 @@ export const JudgeActivityReport = connect(
     judgeActivityReportData: state.judgeActivityReportData,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
-    updateJudgeActivityReportFormSequence:
-      sequences.updateJudgeActivityReportFormSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
@@ -22,7 +21,7 @@ export const JudgeActivityReport = connect(
     form,
     judgeActivityReportData,
     submitJudgeActivityReportSequence,
-    updateJudgeActivityReportFormSequence,
+    updateFormValueSequence,
     validationErrors,
   }) {
     const closedCases: () => JSX.Element = () => (
@@ -167,13 +166,13 @@ export const JudgeActivityReport = connect(
                   startPickerCls={'grid-col-6 padding-right-2'}
                   startValue={form.endDate}
                   onChangeEnd={e => {
-                    updateJudgeActivityReportFormSequence({
+                    updateFormValueSequence({
                       key: 'endDate',
                       value: e.target.value,
                     });
                   }}
                   onChangeStart={e => {
-                    updateJudgeActivityReportFormSequence({
+                    updateFormValueSequence({
                       key: 'startDate',
                       value: e.target.value,
                     });
