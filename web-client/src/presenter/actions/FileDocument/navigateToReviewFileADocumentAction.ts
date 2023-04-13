@@ -12,6 +12,9 @@ export const navigateToReviewFileADocumentAction = async ({
   router,
   store,
 }) => {
+  if (get(state.featureFlagHelper.redactionAcknowledgementEnabled)) {
+    store.set(state.form.redactionAcknowledgement, false);
+  }
   store.set(state.wizardStep, 'FileDocumentReview');
   const { docketNumber } = get(state.caseDetail);
   await router.route(`/case-detail/${docketNumber}/file-a-document/review`);
