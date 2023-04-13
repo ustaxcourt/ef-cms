@@ -30386,6 +30386,10 @@
     "startDate": "2020-08-10T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
+    "judge": {
+      "name": "Colvin",
+      "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+    },
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195fb"
   },
   {
