@@ -2,7 +2,10 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { JSDOM } from 'jsdom';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -88,10 +91,30 @@ const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
-    return new DynamoDB.DocumentClient({
-      endpoint: 'http://localhost:8000',
-      region: 'us-east-1',
-    });
+    const baseConfig = {
+      maxAttempts: 3,
+      requestHandler: new NodeHttpHandler({
+        requestTimeout: 3000,
+      }),
+    };
+
+    const options = {
+      marshallOptions: {
+        removeUndefinedValues: true,
+      },
+      unmarshallOptions: {
+        wrapNumbers: false,
+      },
+    };
+
+    return DynamoDBDocumentClient.from(
+      new DynamoDBClient({
+        ...baseConfig,
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      }),
+      options,
+    );
   },
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',

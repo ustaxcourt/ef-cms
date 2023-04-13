@@ -1,3 +1,4 @@
+import { DeleteCommand, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { getTableName } from '../../dynamodbClientService';
 
 /**
@@ -59,16 +60,17 @@ export async function acquireLock({
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .get({
-      Key: {
-        pk: `lock-${lockName}`,
-        sk: `lock-${lockName}`,
-      },
-      TableName: getTableName({
-        applicationContext,
+    .send(
+      new GetCommand({
+        Key: {
+          pk: `lock-${lockName}`,
+          sk: `lock-${lockName}`,
+        },
+        TableName: getTableName({
+          applicationContext,
+        }),
       }),
-    })
-    .promise();
+    );
 
   if (lock && lock.ttl <= Date.now()) {
     await deleteLock({ applicationContext, lockName });
@@ -78,20 +80,21 @@ export async function acquireLock({
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .put({
-      ConditionExpression: 'attribute_not_exists(lockName)',
-      Item: {
-        gsi1pk: 'lock',
-        lockName: `lock-${lockName}`,
-        pk: `lock-${lockName}`,
-        sk: `lock-${lockName}`,
-        ttl: Date.now() + lockTtl,
-      },
-      TableName: getTableName({
-        applicationContext,
+    .send(
+      new PutCommand({
+        ConditionExpression: 'attribute_not_exists(lockName)',
+        Item: {
+          gsi1pk: 'lock',
+          lockName: `lock-${lockName}`,
+          pk: `lock-${lockName}`,
+          sk: `lock-${lockName}`,
+          ttl: Date.now() + lockTtl,
+        },
+        TableName: getTableName({
+          applicationContext,
+        }),
       }),
-    })
-    .promise();
+    );
 }
 
 /**
@@ -108,14 +111,13 @@ export async function deleteLock({
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .delete({
-      Key: {
-        pk: `lock-${lockName}`,
-        sk: `lock-${lockName}`,
-      },
-      TableName: getTableName({
-        applicationContext,
+    .send(
+      new DeleteCommand({
+        Key: {
+          pk: `lock-${lockName}`,
+          sk: `lock-${lockName}`,
+        },
+        TableName: getTableName({ applicationContext }),
       }),
-    })
-    .promise();
+    );
 }
