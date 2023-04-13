@@ -32,7 +32,6 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
   const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
-  // This is used when a practitioner is requesting access to an unassociated case
   let privatePractitioners = null;
   let { filers } = form;
   if (
@@ -95,7 +94,9 @@ export const uploadExternalDocumentsAcrossConsolidatedGroupAction = async ({
       await addCoversheet({
         applicationContext,
         docketEntryId,
-        docketNumber,
+        docketNumber: form.fileAcrossConsolidatedGroup
+          ? caseDetail.leadDocketNumber
+          : docketNumber,
       });
     }
     return path.success({
