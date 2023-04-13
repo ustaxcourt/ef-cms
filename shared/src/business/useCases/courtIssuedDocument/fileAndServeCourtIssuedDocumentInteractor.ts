@@ -172,6 +172,7 @@ export const fileAndServeCourtIssuedDocument = async (
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
             scenario: form.scenario,
             serviceStamp: form.serviceStamp,
+            trialLocation: form.trialLocation,
             userId: user.userId,
           },
           { applicationContext },
