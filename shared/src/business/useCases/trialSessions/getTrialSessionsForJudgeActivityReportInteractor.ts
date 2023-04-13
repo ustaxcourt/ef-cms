@@ -58,17 +58,33 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       session.startDate >= searchEntity.startDate,
   );
 
-  const specialSessions = judgeSessionsInDateRange.filter(
-    session => session.sessionType === SESSION_TYPES.special,
-  );
-
-  const nonSpecialSessions = judgeSessionsInDateRange.filter(
+  const smallSessions = judgeSessionsInDateRange.filter(
     session =>
-      session.sessionType !== SESSION_TYPES.special &&
+      session.sessionType === SESSION_TYPES.small &&
       session.sessionStatus !== SESSION_STATUS_TYPES.new,
   );
 
-  const filteredJudgeSessions = [...specialSessions, ...nonSpecialSessions];
+  const regularSessions = judgeSessionsInDateRange.filter(
+    session =>
+      session.sessionType === SESSION_TYPES.regular &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.new,
+  );
+
+  const hybridSessions = judgeSessionsInDateRange.filter(
+    session =>
+      session.sessionType === SESSION_TYPES.hybrid &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.new,
+  );
+
+  const motionHearingSessions = judgeSessionsInDateRange.filter(
+    session =>
+      session.sessionType === SESSION_TYPES.motionHearing &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.new,
+  );
+
+  const specialSessions = judgeSessionsInDateRange.filter(
+    session => session.sessionType === SESSION_TYPES.special,
+  );
 
   // Total Number of Special trial sessions the judge has been assigned to that have Start Dates that fall within this time frame
   // Total Number of Sessions for all non-Special sessions the judge has been assigned to that have Start Dates that fall within this time frame and are not in New status
@@ -78,18 +94,22 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   // R/S/H session marked as part of a SWING session: .5 session each
   // Motion/Hearing: .5 session each
   // ? value of special = 1?
-  const validatedSessions = TrialSession.validateRawCollection(
-    filteredJudgeSessions as any,
-    {
-      applicationContext,
-    },
-  );
+  // const validatedSessions = TrialSession.validateRawCollection(
+  //   filteredJudgeSessions as any,
+  //   {
+  //     applicationContext,
+  //   },
+  // );
 
   // return validatedSessions.map(
   //   trialSession => new TrialSessionInfoDTO(trialSession as any),
   // );
 
   return {
+    [SESSION_TYPES.small]: smallSessions.length,
+    [SESSION_TYPES.regular]: regularSessions.length,
+    [SESSION_TYPES.hybrid]: hybridSessions.length,
+    [SESSION_TYPES.motionHearing]: motionHearingSessions.length,
     [SESSION_TYPES.special]: specialSessions.length,
   };
 };

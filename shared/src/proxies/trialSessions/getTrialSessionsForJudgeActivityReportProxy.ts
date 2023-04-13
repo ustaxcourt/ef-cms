@@ -6,7 +6,7 @@ const { post } = require('../requests');
  * @param {object} applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getTrialSessionsForJudgeActivityReportInteractor = (
+export const getTrialSessionsForJudgeActivityReportInteractor = (
   applicationContext,
   {
     endDate,
@@ -21,7 +21,6 @@ exports.getTrialSessionsForJudgeActivityReportInteractor = (
       judgeId,
       startDate,
     },
-    endpoint:
-      '/judge-activity-report/trial-sessions?fields=trialLocation,trialSessionId,sessionStatus,startDate',
+    endpoint: '/judge-activity-report/trial-sessions',
   });
 };
