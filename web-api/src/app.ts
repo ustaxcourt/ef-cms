@@ -300,6 +300,9 @@ const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
 const {
+  getTrialSessionsForJudgeActivityReportLambda,
+} = require('./trialSessions/getTrialSessionsForJudgeActivityReportLambda');
+const {
   getTrialSessionsForJudgeLambda,
 } = require('./trialSessions/getTrialSessionsForJudgeLambda');
 const {
@@ -1090,6 +1093,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.get(
     '/judges/:judgeId/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/trial-sessions',
+    lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
   );
 }
 
