@@ -85,7 +85,11 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     },
   );
 
-  return validatedSessions.map(
-    trialSession => new TrialSessionInfoDTO(trialSession as any),
-  );
+  // return validatedSessions.map(
+  //   trialSession => new TrialSessionInfoDTO(trialSession as any),
+  // );
+
+  return {
+    [SESSION_TYPES.special]: specialSessions.length,
+  };
 };
