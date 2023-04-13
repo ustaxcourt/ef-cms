@@ -177,9 +177,6 @@ const {
   generateDraftStampOrderLambda,
 } = require('./documents/generateDraftStampOrderLambda');
 const {
-  generateJudgeActivityReportLambda,
-} = require('./reports/generateJudgeActivityReportLambda');
-const {
   generatePractitionerCaseListPdfLambda,
 } = require('./cases/generatePractitionerCaseListPdfLambda');
 const {
@@ -209,6 +206,9 @@ const {
 const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
+const {
+  getCasesClosedByJudgeLambda,
+} = require('./reports/getCasesClosedByJudgeLambda');
 const {
   getCompletedMessagesForSectionLambda,
 } = require('./messages/getCompletedMessagesForSectionLambda');
@@ -995,7 +995,7 @@ app.get(
   );
   app.post(
     '/judge-activity-report/closed-cases',
-    lambdaWrapper(generateJudgeActivityReportLambda),
+    lambdaWrapper(getCasesClosedByJudgeLambda),
   );
 }
 
