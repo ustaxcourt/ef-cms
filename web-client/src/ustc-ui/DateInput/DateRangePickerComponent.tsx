@@ -39,21 +39,14 @@ export const DateRangePickerComponent = ({
   const startDatePickerRef = useRef();
   const endDatePickerRef = useRef();
 
-  const startDateInputRef = useRef();
-  const endDateInputRef = useRef();
+  const startDateInputRef = useRef<HTMLInputElement>(null);
+  const endDateInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (
       startDatePickerRef.current &&
       endDatePickerRef.current &&
       dateRangePickerRef.current
-    ) {
-      datePicker.on(startDatePickerRef.current);
-      datePicker.on(endDatePickerRef.current);
-      dateRangePicker.on(dateRangePickerRef.current);
-    } else if (
-      startDatePickerRef.current ||
-      (endDatePickerRef.current && dateRangePickerRef.current)
     ) {
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
@@ -103,12 +96,18 @@ export const DateRangePickerComponent = ({
 
   useEffect(() => {
     if (startDateInputRef.current && endDateInputRef.current) {
-      window.document
-        .getElementById(`${endName}-date-end`)
-        .addEventListener('change', onChangeEnd);
-      window.document
-        .getElementById(`${startName}-date-start`)
-        .addEventListener('change', onChangeStart);
+      const dateEndInput = window.document.getElementById(
+        `${endName}-date-end`,
+      );
+      if (dateEndInput) {
+        dateEndInput.addEventListener('change', onChangeEnd);
+      }
+      const dateStartInput = window.document.getElementById(
+        `${startName}-date-start`,
+      );
+      if (dateStartInput) {
+        dateStartInput.addEventListener('change', onChangeStart);
+      }
     }
   }, [startDateInputRef, endDateInputRef]);
 
