@@ -27,13 +27,59 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     startDate: '2020-03-02T00:00:00.000Z',
   };
 
+  const mockSmallSwingTrialSession = {
+    ...MOCK_TRIAL_REGULAR,
+    endDate: '2020-03-03T00:00:00.000Z',
+    judge: {
+      name: judgeUser.name,
+      userId: judgeUser.userId,
+    },
+    sessionType: SESSION_TYPES.small,
+    startDate: '2020-03-02T00:00:00.000Z',
+    swingSession: true,
+    swingSessionId: '0875bab4-5bfe-4b3a-a62d-565d7d950bd9',
+  };
+
+  const mockHybridSwingTrialSession = {
+    ...MOCK_TRIAL_REGULAR,
+    endDate: '2020-03-03T00:00:00.000Z',
+    judge: {
+      name: judgeUser.name,
+      userId: judgeUser.userId,
+    },
+    sessionType: SESSION_TYPES.hybrid,
+    startDate: '2020-03-02T00:00:00.000Z',
+    swingSession: true,
+    swingSessionId: '0875bab4-5bfe-4b3a-a62d-565d7d950bd9',
+  };
+
+  const mockHybridNonSwingTrialSession = {
+    ...MOCK_TRIAL_REGULAR,
+    endDate: '2020-03-03T00:00:00.000Z',
+    judge: {
+      name: judgeUser.name,
+      userId: judgeUser.userId,
+    },
+    sessionType: SESSION_TYPES.hybrid,
+    startDate: '2020-03-02T00:00:00.000Z',
+  };
+
   const mockTrialSessions = [
     mockRegularTrialSession,
     mockMotionHearingTrialSession,
+    mockSmallSwingTrialSession,
+    mockHybridNonSwingTrialSession,
+    mockHybridSwingTrialSession,
   ];
 
   const mockValidRequest = {
     endDate: '04/01/2020',
+    judgeId: judgeUser.userId,
+    startDate: '01/01/2020',
+  };
+
+  const mockInvalidRequest = {
+    endDate: '04/01/5000',
     judgeId: judgeUser.userId,
     startDate: '01/01/2020',
   };
@@ -57,6 +103,15 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     ).rejects.toThrow();
   });
 
+  it('should throw an error when the search request is not valid', async () => {
+    await expect(
+      getTrialSessionsForJudgeActivityReportInteractor(
+        applicationContext,
+        mockInvalidRequest,
+      ),
+    ).rejects.toThrow();
+  });
+
   it('should retrieve all trial sessions from persistence for filtering', async () => {
     await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
@@ -75,10 +130,10 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     );
 
     expect(result).toEqual({
-      Hybrid: 0,
+      Hybrid: 1.5,
       'Motion/Hearing': 0.5, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
       Regular: 1,
-      Small: 0,
+      Small: 0.5, // .5 for each R/S/H that is a part of a swing session
       Special: 0,
     });
   });

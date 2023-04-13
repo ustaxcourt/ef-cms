@@ -60,19 +60,20 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     session =>
       isTypeOf(SESSION_TYPES.small)(session) &&
       !isNew(session) &&
-      !session.swingSession,
+      !isSwingSession(session),
   ).length;
 
   const smallSwingSessions =
     judgeSessionsInDateRange.filter(
-      session => isTypeOf(SESSION_TYPES.small)(session) && session.swingSession,
+      session =>
+        isTypeOf(SESSION_TYPES.small)(session) && isSwingSession(session),
     ).length / 2;
 
   const regularNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
       isTypeOf(SESSION_TYPES.regular)(session) &&
       !isNew(session) &&
-      !session.swingSession,
+      !isSwingSession(session),
   ).length;
 
   const regularSwingSessions =
@@ -80,14 +81,14 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       session =>
         isTypeOf(SESSION_TYPES.regular)(session) &&
         !isNew(session) &&
-        session.swingSession,
+        isSwingSession(session),
     ).length / 2;
 
   const hybridNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
       isTypeOf(SESSION_TYPES.hybrid)(session) &&
       !isNew(session) &&
-      !session.swingSession,
+      !isSwingSession(session),
   ).length;
 
   const hybridSwingSessions =
@@ -95,7 +96,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       session =>
         isTypeOf(SESSION_TYPES.hybrid)(session) &&
         !isNew(session) &&
-        session.swingSession,
+        isSwingSession(session),
     ).length / 2;
 
   const motionHearingSessions =
@@ -121,3 +122,4 @@ const isNew = session => session.sessionStatus === SESSION_STATUS_TYPES.new;
 const isTypeOf = sessionType => {
   return session => session.sessionType === sessionType;
 };
+const isSwingSession = session => session.swingSession;
