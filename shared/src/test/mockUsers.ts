@@ -53,7 +53,7 @@ export const irsSuperuserUser = {
 
 export const judgeUser = {
   judgeFullName: 'Sonia Sotomayor',
-  name: 'Barney',
+  name: 'Sotomayor',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
 };
