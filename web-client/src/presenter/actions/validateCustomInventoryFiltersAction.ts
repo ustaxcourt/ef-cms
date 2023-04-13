@@ -14,27 +14,27 @@ export const validateCustomInventoryFiltersAction = ({
   get,
   path,
 }) => {
-  // const { createEndDate, createStartDate } = get(
-  //   state.customCaseInventoryFilters,
-  // );
+  const { createEndDate, createStartDate } = get(
+    state.customCaseInventoryFilters,
+  );
 
-  // const errors = applicationContext
-  //   .getUseCases()
-  //   .validateJudgeActivityReportSearchInteractor(applicationContext, {
-  //     endDate: createEndDate,
-  //     startDate: createStartDate,
-  //   });
+  const errors = applicationContext
+    .getUseCases()
+    .validateCustomCaseInventorySearchFiltersInteractor(applicationContext, {
+      endDate: createEndDate,
+      startDate: createStartDate,
+    });
 
-  // console.log('errors', errors);
+  console.log('errors', errors);
 
-  // if (errors) {
-  //   return path.error({
-  //     alertError: {
-  //       title: 'Errors were found. Please correct your form and resubmit.',
-  //     },
-  //     errors,
-  //   });
-  // }
+  if (errors) {
+    return path.error({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
+      errors,
+    });
+  }
 
   return path.success();
 };

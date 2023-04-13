@@ -1,18 +1,12 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
-import { Detective } from 'aws-sdk';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import {
-  courtIssuedDocketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
