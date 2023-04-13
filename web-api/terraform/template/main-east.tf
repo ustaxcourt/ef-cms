@@ -5,6 +5,15 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   tags = {
     environment = var.environment
   }
+  
+    server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
