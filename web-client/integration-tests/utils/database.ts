@@ -37,7 +37,7 @@ const CHUNK_SIZE = 25;
 
 export const clearDatabase = async () => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey: AWS.DynamoDB.DocumentClient.Key | undefined = undefined;
   while (hasMoreResults) {
     hasMoreResults = false;
 

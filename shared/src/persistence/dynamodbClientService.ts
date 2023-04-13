@@ -1,3 +1,14 @@
+import {
+  BatchGetCommand,
+  BatchWriteCommand,
+  DeleteCommand,
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+  ScanCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
+import { DescribeTableCommand } from '@aws-sdk/client-dynamodb';
 import { TDynamoRecord } from './dynamo/dynamoTypes';
 import { chunk, isEmpty } from 'lodash';
 
@@ -60,11 +71,11 @@ export const getDeployTableName = ({ applicationContext }) => {
 export const describeTable = async ({ applicationContext }) => {
   const dynamoClient = applicationContext.getDynamoClient();
 
-  const params = {
-    TableName: getTableName({ applicationContext }),
-  };
-
-  return await dynamoClient.describeTable(params).promise();
+  return await dynamoClient.send(
+    new DescribeTableCommand({
+      TableName: getTableName({ applicationContext }),
+    }),
+  );
 };
 
 export const describeDeployTable = async ({ applicationContext }) => {
@@ -72,11 +83,11 @@ export const describeDeployTable = async ({ applicationContext }) => {
     useMasterRegion: true,
   });
 
-  const params = {
-    TableName: getDeployTableName({ applicationContext }),
-  };
-
-  return await dynamoClient.describeTable(params).promise();
+  return await dynamoClient.send(
+    new DescribeTableCommand({
+      TableName: getDeployTableName({ applicationContext }),
+    }),
+  );
 };
 
 /**
@@ -93,13 +104,14 @@ export const put = ({
 }): Promise<TDynamoRecord> => {
   return applicationContext
     .getDocumentClient()
-    .put({
-      Item: filterEmptyStrings(Item),
-      TableName: getTableName({
-        applicationContext,
+    .send(
+      new PutCommand({
+        Item: filterEmptyStrings(Item),
+        TableName: getTableName({
+          applicationContext,
+        }),
       }),
-    })
-    .promise()
+    )
     .then(() => Item);
 };
 
@@ -119,24 +131,25 @@ export const update = ({
   ConditionExpression?: string;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string | boolean>;
-  Key: Record<string, string>;
+  Key: any;
   UpdateExpression: string;
   applicationContext: IApplicationContext;
 }): Promise<TDynamoRecord[]> => {
   const filteredValues = filterEmptyStrings(ExpressionAttributeValues);
   return applicationContext
     .getDocumentClient()
-    .update({
-      ConditionExpression,
-      ExpressionAttributeNames,
-      ExpressionAttributeValues: filteredValues,
-      Key,
-      TableName: getTableName({
-        applicationContext,
+    .send(
+      new UpdateCommand({
+        ConditionExpression,
+        ExpressionAttributeNames,
+        ExpressionAttributeValues: filteredValues,
+        Key,
+        TableName: getTableName({
+          applicationContext,
+        }),
+        UpdateExpression,
       }),
-      UpdateExpression,
-    })
-    .promise()
+    )
     .then(() => undefined);
 };
 
@@ -151,13 +164,14 @@ export const updateToDeployTable = params => {
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .update({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
+    .send(
+      new UpdateCommand({
+        TableName: getDeployTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...filteredParams,
       }),
-      ...filteredParams,
-    })
-    .promise()
+    )
     .then(() => params.Item);
 };
 
@@ -173,13 +187,14 @@ export const updateConsistent = params => {
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .update({
-      TableName: getTableName({
-        applicationContext: params.applicationContext,
+    .send(
+      new UpdateCommand({
+        TableName: getTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...filteredParams,
       }),
-      ...filteredParams,
-    })
-    .promise()
+    )
     .then(data => data.Attributes);
 };
 
@@ -192,13 +207,14 @@ export const updateConsistent = params => {
 export const get = params => {
   return params.applicationContext
     .getDocumentClient()
-    .get({
-      TableName: getTableName({
-        applicationContext: params.applicationContext,
+    .send(
+      new GetCommand({
+        TableName: getTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...params,
       }),
-      ...params,
-    })
-    .promise()
+    )
     .then(res => {
       return removeAWSGlobalFields(res.Item);
     });
@@ -215,13 +231,14 @@ export const getFromDeployTable = params => {
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .get({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
+    .send(
+      new GetCommand({
+        TableName: getDeployTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...params,
       }),
-      ...params,
-    })
-    .promise()
+    )
     .then(res => {
       return removeAWSGlobalFields(res.Item);
     });
@@ -244,7 +261,7 @@ export const query = ({
   ...params
 }: {
   ExpressionAttributeNames: Record<string, string>;
-  ExpressionAttributeValues: Record<string, string | number>;
+  ExpressionAttributeValues: any;
   IndexName?: string;
   Limit?: number;
   FilterExpression?: string;
@@ -254,19 +271,20 @@ export const query = ({
 }): Promise<TDynamoRecord[]> => {
   return applicationContext
     .getDocumentClient()
-    .query({
-      ExpressionAttributeNames,
-      ExpressionAttributeValues,
-      FilterExpression,
-      IndexName,
-      KeyConditionExpression,
-      Limit,
-      TableName: getTableName({
-        applicationContext,
+    .send(
+      new QueryCommand({
+        ExpressionAttributeNames,
+        ExpressionAttributeValues,
+        FilterExpression,
+        IndexName,
+        KeyConditionExpression,
+        Limit,
+        TableName: getTableName({
+          applicationContext,
+        }),
+        ...params,
       }),
-      ...params,
-    })
-    .promise()
+    )
     .then(result => {
       result.Items.forEach(removeAWSGlobalFields);
       return result.Items;
@@ -282,14 +300,15 @@ export const scan = async params => {
 
     await params.applicationContext
       .getDocumentClient()
-      .scan({
-        ExclusiveStartKey: lastKey,
-        TableName: getTableName({
-          applicationContext: params.applicationContext,
+      .send(
+        new ScanCommand({
+          ExclusiveStartKey: lastKey,
+          TableName: getTableName({
+            applicationContext: params.applicationContext,
+          }),
+          ...params,
         }),
-        ...params,
-      })
-      .promise()
+      )
       .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
@@ -317,18 +336,17 @@ export const queryFull = async ({
   params?: Record<string, any>;
   IndexName?: string;
   ExpressionAttributeNames: Record<string, string>;
-  ExpressionAttributeValues: Record<string, string>;
+  ExpressionAttributeValues: any;
   KeyConditionExpression: string;
 }): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey = undefined;
   let allResults = [];
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await applicationContext
-      .getDocumentClient()
-      .query({
+    const subsetResults = await applicationContext.getDocumentClient().send(
+      new QueryCommand({
         ExclusiveStartKey: lastKey,
         ExpressionAttributeNames,
         ExpressionAttributeValues,
@@ -338,8 +356,8 @@ export const queryFull = async ({
           applicationContext,
         }),
         ...params,
-      })
-      .promise();
+      }),
+    );
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
@@ -369,14 +387,15 @@ export const batchGet = async ({ applicationContext, keys }) => {
     results = results.concat(
       await applicationContext
         .getDocumentClient()
-        .batchGet({
-          RequestItems: {
-            [getTableName({ applicationContext })]: {
-              Keys: chunkOfKeys,
+        .send(
+          new BatchGetCommand({
+            RequestItems: {
+              [getTableName({ applicationContext })]: {
+                Keys: chunkOfKeys,
+              },
             },
-          },
-        })
-        .promise()
+          } as any),
+        )
         .then(result => {
           const items = result.Responses[getTableName({ applicationContext })];
           items.forEach(item => removeAWSGlobalFields(item));
@@ -400,9 +419,8 @@ export const batchDelete = ({ applicationContext, items }) => {
   }
 
   const batchDeleteItems = itemsToDelete => {
-    return applicationContext
-      .getDocumentClient()
-      .batchWrite({
+    return applicationContext.getDocumentClient().send(
+      new BatchWriteCommand({
         RequestItems: {
           [getTableName({ applicationContext })]: itemsToDelete.map(item => ({
             DeleteRequest: {
@@ -413,8 +431,8 @@ export const batchDelete = ({ applicationContext, items }) => {
             },
           })),
         },
-      })
-      .promise();
+      }),
+    );
   };
 
   const results = batchDeleteItems(items);
@@ -436,13 +454,15 @@ export const remove = ({
   key,
 }: {
   applicationContext: IApplicationContext;
-  key: Record<string, string>;
+  key: any;
 }) => {
   return applicationContext
     .getDocumentClient()
-    .delete({
-      Key: key,
-      TableName: getTableName({ applicationContext }),
-    })
+    .send(
+      new DeleteCommand({
+        Key: key,
+        TableName: getTableName({ applicationContext }),
+      }),
+    )
     .promise();
 };

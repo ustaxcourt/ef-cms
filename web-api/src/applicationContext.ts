@@ -245,14 +245,7 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
 
   if (!dynamoClientCache[type]) {
     dynamoClientCache[type] = {
-      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
-      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
-      delete: fallbackHandler({ key: 'delete', ...config }),
-      get: fallbackHandler({ key: 'get', ...config }),
-      put: fallbackHandler({ key: 'put', ...config }),
-      query: fallbackHandler({ key: 'query', ...config }),
-      scan: fallbackHandler({ key: 'scan', ...config }),
-      update: fallbackHandler({ key: 'update', ...config }),
+      send: fallbackHandler({ key: 'send', ...config }),
     };
   }
   return dynamoClientCache[type];

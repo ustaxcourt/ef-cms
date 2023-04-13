@@ -1,5 +1,5 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 
 /**
@@ -40,8 +40,8 @@ exports.getDynamoEndpoints = ({
     },
   };
 
-  const mainRegionDB = DynamoDBDocument.from(
-    new DynamoDB({
+  const mainRegionDB = DynamoDBDocumentClient.from(
+    new DynamoDBClient({
       ...baseConfig,
       endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
       region: useMasterRegion ? masterRegion : mainRegion,
@@ -49,8 +49,8 @@ exports.getDynamoEndpoints = ({
     options,
   );
 
-  const fallbackRegionDB = DynamoDBDocument.from(
-    new DynamoDB({
+  const fallbackRegionDB = DynamoDBDocumentClient.from(
+    new DynamoDBClient({
       ...baseConfig,
       endpoint: useMasterRegion
         ? fallbackRegionEndpoint

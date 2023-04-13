@@ -22,23 +22,12 @@ const fallbackHandler = ({
   });
 
   return params => {
-    return {
-      promise: () =>
-        new Promise((resolve, reject) => {
-          mainRegionDB[key](params)
-            .catch(err => {
-              if (
-                err.code === 'ResourceNotFoundException' ||
-                err.statusCode === 503
-              ) {
-                return fallbackRegionDB[key](params);
-              }
-              throw err;
-            })
-            .then(resolve)
-            .catch(reject);
-        }),
-    };
+    return mainRegionDB[key](params).catch(err => {
+      if (err.code === 'ResourceNotFoundException' || err.statusCode === 503) {
+        return fallbackRegionDB[key](params);
+      }
+      throw err;
+    });
   };
 };
 
