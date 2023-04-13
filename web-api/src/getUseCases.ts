@@ -223,6 +223,9 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCasesClosedByJudgeInteractor,
+} = require('../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor');
+const {
   getCasesForUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesForUserInteractor');
 const {
@@ -652,6 +655,7 @@ const useCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,

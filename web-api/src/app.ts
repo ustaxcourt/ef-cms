@@ -207,6 +207,9 @@ const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
 const {
+  getCasesClosedByJudgeLambda,
+} = require('./reports/getCasesClosedByJudgeLambda');
+const {
   getCompletedMessagesForSectionLambda,
 } = require('./messages/getCompletedMessagesForSectionLambda');
 const {
@@ -989,6 +992,10 @@ app.get(
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
+  );
+  app.post(
+    '/judge-activity-report/closed-cases',
+    lambdaWrapper(getCasesClosedByJudgeLambda),
   );
 }
 
