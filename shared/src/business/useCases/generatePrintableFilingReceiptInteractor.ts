@@ -70,9 +70,7 @@ export const generatePrintableFilingReceiptInteractor = async (
       });
     consolidatedCasesDocketNumbers = consolidatedCases
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
-      .map(
-        consolidatedCaseRecord => consolidatedCaseRecord.docketNumberWithSuffix,
-      );
+      .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
 
     caseEntity = new Case(consolidatedCases[0], {
       applicationContext,

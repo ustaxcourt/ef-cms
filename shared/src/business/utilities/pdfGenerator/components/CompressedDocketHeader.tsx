@@ -13,9 +13,13 @@ export const CompressedDocketHeader = ({
       <div className="case-information">
         {fileAcrossConsolidatedGroup ? (
           <div id="caption">
-            {caseTitle}, et al.,
-            {caseCaptionExtension} v. Commissioner of Internal Revenue,
-            Respondent
+            <div id="caption-title">{caseTitle}, et al.,</div>
+            <div id="caption-extension">{caseCaptionExtension}</div>
+            <div id="caption-v">v.</div>
+            <div id="caption-commissioner">
+              Commissioner of Internal Revenue,
+            </div>
+            <div id="caption-respondent">Respondent</div>
           </div>
         ) : (
           <div id="caption">
@@ -25,15 +29,11 @@ export const CompressedDocketHeader = ({
         )}
         {fileAcrossConsolidatedGroup ? (
           <div className="condensed" id="docket-number">
-            <ul>
-              {consolidatedCasesDocketNumbers.map(
-                consolidatedCaseDocketNumberWithSuffix => (
-                  <li key={consolidatedCaseDocketNumberWithSuffix}>
-                    Docket No. {consolidatedCaseDocketNumberWithSuffix}
-                  </li>
-                ),
-              )}
-            </ul>
+            <div className="consolidated-cases">
+              {consolidatedCasesDocketNumbers.map(docketNumber => (
+                <div key={docketNumber}>Docket No. {docketNumber}</div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="condensed" id="docket-number">
