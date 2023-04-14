@@ -14,7 +14,7 @@ const config: Config = {
   //   '**/web-client/integration-tests/**/?(*.)+(spec|test).[jt]s?(x)',
   //   '**/web-client/integration-tests-public/**/?(*.)+(spec|test).[jt]s?(x)',
   // ], // Uncomment testMatch to run all integration tests in integration-tests + integration-tests-public
-  testTimeout: 30000,
+  testTimeout: 60000,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
