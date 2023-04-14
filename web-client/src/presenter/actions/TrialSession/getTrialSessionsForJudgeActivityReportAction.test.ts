@@ -1,112 +1,78 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getTrialSessionsOnCaseAction } from './getTrialSessionsOnCaseAction';
+import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getTrialSessionsOnCaseAction', () => {
+describe('getTrialSessionsForJudgeActivityReportAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should return two trial sessions, one for the trialSessionId and one for the hearing', async () => {
-    applicationContext
-      .getUseCases()
-      .getTrialSessionDetailsInteractor.mockResolvedValue({
-        sort: 'practitioner',
-        sortOrder: 'desc',
-        trialSessionId: '123',
-        userId: '234',
-      });
-
-    const result = await runAction(getTrialSessionsOnCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          hearings: [
-            {
-              trialSessionId: 'abc',
-            },
-          ],
-          trialSessionId: '123',
-        },
-      },
+  it('should return the trialSessions from the interactor when calling this action as a judge user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'judge',
+      userId: '123',
     });
 
-    expect(result.output.trialSessions.length).toEqual(2);
-  });
-
-  it('should set the judge name in state based on the trial session id', async () => {
     applicationContext
       .getUseCases()
-      .getTrialSessionDetailsInteractor.mockResolvedValue({
-        judge: { name: 'Armen' },
-        sort: 'practitioner',
-        sortOrder: 'desc',
-        trialSessionId: '123',
-        userId: '234',
-      });
-
-    const result = await runAction(getTrialSessionsOnCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          hearings: [],
-          trialSessionId: '123',
-        },
-      },
-    });
-
-    expect(result.state.trialSessionJudge).toEqual({ name: 'Armen' });
-  });
-
-  it('should return an empty array if no trial session id or hearing is set', async () => {
-    const result = await runAction(getTrialSessionsOnCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          hearings: [],
-        },
-      },
-    });
-
-    expect(result.output.trialSessions.length).toEqual(0);
-  });
-
-  it('should set the judge as Unassigned if the trial session has no judge assigned', async () => {
-    applicationContext
-      .getUseCases()
-      .getTrialSessionDetailsInteractor.mockResolvedValue({
-        judge: null,
-        sort: 'practitioner',
-        sortOrder: 'desc',
-        trialSessionId: '123',
-        userId: '234',
-      });
-
-    const result = await runAction(getTrialSessionsOnCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          hearings: [],
+      .getTrialSessionsForJudgeActivityReportInteractor.mockResolvedValue([
+        {
           trialSessionId: 'abc',
         },
-      },
-    });
+      ]);
 
-    expect(result.state.trialSessionJudge).toEqual({
-      name: 'Unassigned',
+    const result = await runAction(
+      getTrialSessionsForJudgeActivityReportAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          form: {
+            endDate: 'whatever',
+            startDate: 'whatever',
+          },
+        },
+      },
+    );
+
+    expect(result.output.trialSessions.length).toEqual(1);
+  });
+
+  it('should return the trialSessions from the interactor when calling this action as a chambers user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'chambers',
     });
+    applicationContext
+      .getUseCases()
+      .getTrialSessionsForJudgeActivityReportInteractor.mockResolvedValue([
+        {
+          trialSessionId: 'abc',
+        },
+      ]);
+
+    const result = await runAction(
+      getTrialSessionsForJudgeActivityReportAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          form: {
+            endDate: 'whatever',
+            startDate: 'whatever',
+          },
+          judgeUser: {
+            role: 'judge',
+            userId: '123',
+          },
+        },
+      },
+    );
+
+    expect(result.output.trialSessions.length).toEqual(1);
   });
 });
