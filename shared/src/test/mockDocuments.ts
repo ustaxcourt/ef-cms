@@ -1,5 +1,38 @@
 import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
 
+export const PENDING_DOCKET_ENTRY: RawDocketEntry = {
+  createdAt: '2018-11-21T20:49:28.192Z',
+  docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  docketNumber: '101-18',
+  documentTitle: 'Proposed Stipulated Decision',
+  documentType: 'Proposed Stipulated Decision',
+  draftOrderState: {},
+  entityName: 'DocketEntry',
+  eventCode: 'PSDE',
+  filedBy: 'Test Petitioner',
+  filers: [],
+  filingDate: '2018-03-01T05:00:00.000Z',
+  index: 5,
+  isFileAttached: true,
+  isMinuteEntry: false,
+  isOnDocketRecord: false,
+  pending: true,
+  processingStatus: 'pending',
+  receivedAt: '2018-03-01T05:00:00.000Z',
+  servedAt: '2019-08-25T05:00:00.000Z',
+  servedParties: [
+    {
+      name: 'Bernard Lowe',
+    },
+    {
+      name: 'IRS',
+      role: 'irsSuperuser',
+    },
+  ],
+  stampData: {},
+  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+};
+
 export const MOCK_DOCUMENTS: RawDocketEntry[] = [
   {
     createdAt: '2018-11-21T20:49:28.192Z',
@@ -37,9 +70,9 @@ export const MOCK_DOCUMENTS: RawDocketEntry[] = [
     index: 3,
     isFileAttached: true,
     isMinuteEntry: false,
-    isOnDocketRecord: true,
+    isOnDocketRecord: false,
     pending: false,
-    processingStatus: 'pending',
+    processingStatus: 'complete',
     receivedAt: '2018-03-01T05:00:00.000Z',
     stampData: {},
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -59,9 +92,9 @@ export const MOCK_DOCUMENTS: RawDocketEntry[] = [
     index: 4,
     isFileAttached: true,
     isMinuteEntry: false,
-    isOnDocketRecord: true,
+    isOnDocketRecord: false,
     pending: false,
-    processingStatus: 'pending',
+    processingStatus: 'complete',
     receivedAt: '2018-03-01T05:00:00.000Z',
     servedAt: '2019-08-25T05:00:00.000Z',
     servedParties: [
@@ -76,36 +109,5 @@ export const MOCK_DOCUMENTS: RawDocketEntry[] = [
     stampData: {},
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
-  {
-    createdAt: '2018-11-21T20:49:28.192Z',
-    docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    docketNumber: '101-18',
-    documentTitle: 'Proposed Stipulated Decision',
-    documentType: 'Proposed Stipulated Decision',
-    draftOrderState: {},
-    entityName: 'DocketEntry',
-    eventCode: 'PSDE',
-    filedBy: 'Test Petitioner',
-    filers: [],
-    filingDate: '2018-03-01T05:00:00.000Z',
-    index: 5,
-    isFileAttached: true,
-    isMinuteEntry: false,
-    isOnDocketRecord: true,
-    pending: false,
-    processingStatus: 'pending',
-    receivedAt: '2018-03-01T05:00:00.000Z',
-    servedAt: '2019-08-25T05:00:00.000Z',
-    servedParties: [
-      {
-        name: 'Bernard Lowe',
-      },
-      {
-        name: 'IRS',
-        role: 'irsSuperuser',
-      },
-    ],
-    stampData: {},
-    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  },
+  PENDING_DOCKET_ENTRY,
 ];
