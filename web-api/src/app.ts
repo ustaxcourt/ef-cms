@@ -1098,6 +1098,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
   );
+  app.post(
+    '/judge-activity-report/opinions',
+    lambdaWrapper(getOpinionFiledByJudgeLambda),
+  );
 }
 
 /**

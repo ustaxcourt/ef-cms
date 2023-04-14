@@ -204,6 +204,7 @@ import { getJudgeInSectionInteractor } from '../../shared/src/proxies/users/getJ
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/proxies/trialSessions/getOpinionsFiledByJudgeProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
@@ -459,6 +460,7 @@ const allUseCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
+  getOpinionsFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
