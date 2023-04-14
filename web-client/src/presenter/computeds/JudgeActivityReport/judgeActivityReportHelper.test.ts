@@ -26,5 +26,15 @@ describe('judgeActivityReportHelper', () => {
 
       expect(trialSessionsHeldTotal).toBe(3);
     });
+
+    it('should be 0 when there are no trialSessions', () => {
+      const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {},
+        },
+      });
+
+      expect(trialSessionsHeldTotal).toBe(0);
+    });
   });
 });
