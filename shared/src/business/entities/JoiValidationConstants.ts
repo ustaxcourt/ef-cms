@@ -7,16 +7,13 @@ const {
   MAX_FILE_SIZE_BYTES,
 } = require('./EntityConstants');
 
-const DATE_FORMATS = {
-  ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
-  YYYYMMDD: 'YYYY-MM-DD',
-};
+const { FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 const STRING = joi.string().min(1);
 exports.JoiValidationConstants = deepFreeze({
   CASE_CAPTION: STRING.max(4700),
-  DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
+  DATE: joi.date().iso().format([FORMATS.YYYYMMDD_DASH]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
   DOCKET_RECORD: joi
     .array()
@@ -26,7 +23,7 @@ exports.JoiValidationConstants = deepFreeze({
     ),
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
-  ISO_DATE: joi.date().iso().format([DATE_FORMATS.ISO]),
+  ISO_DATE: joi.date().iso().format([FORMATS.ISO_DATE]),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
   STRING,
   TWENTYFOUR_HOUR_MINUTES: STRING.regex(
