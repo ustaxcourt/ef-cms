@@ -8,6 +8,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { orderBy } from 'lodash';
 
 /**
  * getOpinionsFiledByJudgeInteractor
@@ -63,5 +64,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
     };
   });
 
-  return result;
+  const sortedResult = orderBy(result, 'eventCode', 'asc');
+
+  return sortedResult;
 };

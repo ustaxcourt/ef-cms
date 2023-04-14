@@ -13,8 +13,10 @@ export const judgeActivityReportHelper = get => {
     trialSessions || {},
   ).reduce((a: number, b: number) => a + b, 0);
 
-  const opinionsFiledTotal: number =
-    opinions || [].reduce((a: any, b: any) => a + b.count, 0);
+  const opinionsFiledTotal: number = (opinions || []).reduce(
+    (a: any, b: any) => a + b.count,
+    0,
+  );
 
   return {
     closedCasesTotal,
