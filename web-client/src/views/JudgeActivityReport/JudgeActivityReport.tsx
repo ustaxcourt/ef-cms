@@ -113,11 +113,14 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const opinionsIssued: JSX.Element = (
+    const opinionsIssued: () => JSX.Element = () => (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
-            Opinions Issued <span className="float-right">Total:</span>
+            Opinions Issued{' '}
+            <span className="float-right">
+              Total: {judgeActivityReportHelper.opinionsFiledTotal}
+            </span>
           </caption>
           <thead>
             <tr>
@@ -127,11 +130,13 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {judgeActivityReportData.opinions.map(opinion => (
+              <tr key={opinion.eventCode}>
+                <td>{opinion.eventCode}</td>
+                <td>{opinion.documentType}</td>
+                <td>{opinion.count}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -201,7 +206,7 @@ export const JudgeActivityReport = connect(
 
             <div className="grid-row grid-gap">
               <div className="grid-col-6">{ordersIssued}</div>
-              <div className="grid-col-6">{opinionsIssued}</div>
+              <div className="grid-col-6">{opinionsIssued()}</div>
             </div>
           </section>
         )}
