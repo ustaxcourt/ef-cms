@@ -461,29 +461,17 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
 
 const DATE_RANGE_VALIDATION_RULE_KEYS = {
   endDate: joi.alternatives().conditional('startDate', {
-    is: JoiValidationConstants.ISO_DATE.format(
-      JoiValidationConstants.DATE_FORMATS.ISO,
-    )
-      .exist()
-      .not(null),
-    otherwise: JoiValidationConstants.ISO_DATE.format(
-      JoiValidationConstants.DATE_FORMATS.ISO,
-    )
-      .required()
-      .description('The end date search filter must be of valid date format'),
-    then: JoiValidationConstants.ISO_DATE.format(
-      JoiValidationConstants.DATE_FORMATS.ISO,
-    )
-      .required()
+    is: JoiValidationConstants.ISO_DATE.exist().not(null),
+    otherwise: JoiValidationConstants.ISO_DATE.required().description(
+      'The end date search filter must be of valid date format',
+    ),
+    then: JoiValidationConstants.ISO_DATE.required()
       .min(joi.ref('startDate'))
       .description(
         'The end date search filter must be of valid date format and greater than or equal to the start date',
       ),
   }),
-  startDate: JoiValidationConstants.ISO_DATE.format(
-    JoiValidationConstants.DATE_FORMATS.ISO,
-  )
-    .max('now')
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
