@@ -268,7 +268,7 @@ const {
 } = require('./messages/getMessagesForCaseLambda');
 const {
   getOpinionsFiledByJudgeLambda,
-} = require('./trialSessions/getOpinionsFiledByJudgeLambda');
+} = require('./reports/getOpinionsFiledByJudgeLambda');
 const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
@@ -304,7 +304,7 @@ const {
 } = require('./trialSessions/getTrialSessionDetailsLambda');
 const {
   getTrialSessionsForJudgeActivityReportLambda,
-} = require('./trialSessions/getTrialSessionsForJudgeActivityReportLambda');
+} = require('./reports/getTrialSessionsForJudgeActivityReportLambda');
 const {
   getTrialSessionsForJudgeLambda,
 } = require('./trialSessions/getTrialSessionsForJudgeLambda');

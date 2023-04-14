@@ -35,12 +35,12 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
   beforeEach(() => {
     applicationContext
       .getUseCases()
-      .getCasesClosedByJudgeInteractor.mockReturnValue(
+      .getOpinionsFiledByJudgeInteractor.mockReturnValue(
         mockOpinionsFiledByJudge,
       );
   });
 
-  it('should retrieve cases closed by the provided judge in the date range provided from persistence and return it to props', async () => {
+  it('should retrieve opinions by the provided judge in the date range provided from persistence and return it to props', async () => {
     const { output } = await runAction(
       getOpinionsForJudgeActivityReportAction,
       {
