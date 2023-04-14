@@ -18,7 +18,7 @@ import { orderBy } from 'lodash';
  * @param {string} providers.endDate the date to end the search for judge activity
  * @param {string} providers.judgeName the name of the judge
  * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {object} errors (null if no errors)
+ * @returns {array} list of opinions filed by the judge in the given date range, sorted alphabetically ascending by event code
  */
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext,
