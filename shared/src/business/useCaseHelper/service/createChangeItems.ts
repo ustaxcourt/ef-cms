@@ -139,7 +139,6 @@ const createWorkItemForChange = async ({
       },
       docketNumber: caseEntity.docketNumber,
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-      leadDocketNumber: caseEntity.leadDocketNumber,
       section: DOCKET_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,
@@ -147,6 +146,7 @@ const createWorkItemForChange = async ({
       trialLocation: caseEntity.trialLocation,
     },
     { applicationContext },
+    caseEntity,
   );
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
