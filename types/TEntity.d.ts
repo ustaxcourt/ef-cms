@@ -66,7 +66,7 @@ type TCaseEntity = {
 
 type TCase = {
   archivedDocketEntries?: RawDocketEntry[];
-  associatedJudge: string;
+  associatedJudge?: string;
   automaticBlocked?: string;
   automaticBlockedDate?: string;
   automaticBlockedReason?: string;
@@ -82,6 +82,7 @@ type TCase = {
   caseCaption: string;
   caseNote?: string;
   caseType: string;
+  contactPrimary?: any;
   correspondence?: RawCorrespondence[];
   closedDate?: string;
   hearings?: {
@@ -142,8 +143,8 @@ type TPetitioner = {
   email?: string;
   confirmEmail?: string;
   address1: string;
-  address2: string;
-  address3: string;
+  address2?: string;
+  address3?: string;
   city: string;
   contactId: string;
   contactType: string;

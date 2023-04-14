@@ -11,7 +11,6 @@ import { MOCK_DOCUMENTS } from './mockDocuments';
 
 export const MOCK_CASE: TCase = {
   archivedDocketEntries: [],
-  associatedJudge: 'Judge Fieri',
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   correspondence: [],
@@ -30,8 +29,6 @@ export const MOCK_CASE: TCase = {
   petitioners: [
     {
       address1: '123 Main St',
-      address2: '',
-      address3: '',
       city: 'Somewhere',
       contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       contactType: CONTACT_TYPES.primary,

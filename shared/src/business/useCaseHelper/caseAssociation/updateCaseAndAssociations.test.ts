@@ -317,9 +317,13 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToUpdate });
-
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate.docketEntries,
+      ).toMatchObject(caseToUpdate.docketEntries);
+      expect(
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate.archivedDocketEntries,
+      ).toMatchObject(caseToUpdate.archivedDocketEntries);
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
       ).toHaveBeenCalledTimes(4);

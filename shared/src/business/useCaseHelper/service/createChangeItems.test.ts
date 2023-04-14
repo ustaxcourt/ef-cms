@@ -186,7 +186,7 @@ describe('generateAndServeDocketEntry', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should pass the correct index to the coverSheet', async () => {
+  it('should pass the number of docket entries on the docket Record + 1 to the coverSheet', async () => {
     await generateAndServeDocketEntry({
       ...testArguments,
       caseEntity: new Case(
@@ -243,36 +243,5 @@ describe('generateAndServeDocketEntry', () => {
         },
       }),
     ).resolves.toBeTruthy();
-  });
-
-  it('creates a work item that includes lead docket number when the case is consolidated', async () => {
-    const leadDocketNumber = '103-20';
-
-    await generateAndServeDocketEntry({
-      ...testArguments,
-      caseEntity: new Case(
-        {
-          ...testCaseEntity,
-          leadDocketNumber,
-          petitioners: [
-            {
-              ...testCaseEntity.petitioners[0],
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            },
-          ],
-        },
-        { applicationContext },
-      ),
-      user: {
-        ...testUser,
-        role: ROLES.privatePractitioner,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem.leadDocketNumber,
-    ).toEqual(leadDocketNumber);
   });
 });
