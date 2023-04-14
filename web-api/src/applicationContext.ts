@@ -225,12 +225,12 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
     ? environment.dynamoDbEndpoint.includes('localhost')
       ? 'http://localhost:8000'
       : environment.dynamoDbEndpoint
-    : `dynamodb.${mainRegion}.amazonaws.com`;
+    : `https://dynamodb.${mainRegion}.amazonaws.com:443`;
   const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
     'localhost',
   )
     ? 'http://localhost:8000'
-    : `dynamodb.${fallbackRegion}.amazonaws.com`;
+    : `https://dynamodb.${fallbackRegion}.amazonaws.com:443`;
   const { masterDynamoDbEndpoint, masterRegion } = environment;
 
   const config = {
