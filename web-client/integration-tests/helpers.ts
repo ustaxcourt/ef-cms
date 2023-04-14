@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
-import { DynamoDB, S3, SQS } from 'aws-sdk';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { JSDOM } from 'jsdom';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
+import { S3, SQS } from 'aws-sdk';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -89,32 +89,34 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
+const baseConfig = {
+  maxAttempts: 3,
+  requestHandler: new NodeHttpHandler({
+    requestTimeout: 3000,
+  }),
+};
+
+const options = {
+  marshallOptions: {
+    removeUndefinedValues: true,
+  },
+  unmarshallOptions: {
+    wrapNumbers: false,
+  },
+};
+
+const docClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({
+    ...baseConfig,
+    endpoint: 'http://localhost:8000',
+    region: 'us-east-1',
+  }),
+  options,
+);
+
 Object.assign(applicationContext, {
   getDocumentClient: () => {
-    const baseConfig = {
-      maxAttempts: 3,
-      requestHandler: new NodeHttpHandler({
-        requestTimeout: 3000,
-      }),
-    };
-
-    const options = {
-      marshallOptions: {
-        removeUndefinedValues: true,
-      },
-      unmarshallOptions: {
-        wrapNumbers: false,
-      },
-    };
-
-    return DynamoDBDocumentClient.from(
-      new DynamoDBClient({
-        ...baseConfig,
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      }),
-      options,
-    );
+    return docClient;
   },
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',
@@ -149,10 +151,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       sendBulkTemplatedEmail,
     }),
     getDocumentClient: () => {
-      return new DynamoDB.DocumentClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
+      return docClient;
     },
     getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
     getDocumentsBucketName: () => {
