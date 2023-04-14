@@ -102,17 +102,17 @@ describe('JudgeActivityReportSearch', () => {
       });
     });
 
-    it('should have validation errors when a judge is not provided', () => {
+    it('should have validation errors when the start and end dates provided are NOT in the format `MM/DD/YYYY`', () => {
       const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
-        endDate: '03/03/2020',
-        judgeName: undefined,
-        startDate: '03/01/2020',
+        endDate: '03-09-2020',
+        startDate: '03-01-2020',
       });
 
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        judgeName: 'Judge name is required',
+        endDate: 'Enter an end date.',
+        startDate: 'Enter a start date.',
       });
     });
   });

@@ -1,4 +1,3 @@
-// import { ROLES } from '../../entities/EntityConstants';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { SESSION_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';

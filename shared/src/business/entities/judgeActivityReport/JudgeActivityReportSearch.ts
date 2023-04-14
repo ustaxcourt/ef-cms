@@ -86,9 +86,8 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
         contains: 'is required',
         message: 'Enter an end date.',
       },
-      'Enter a valid end date',
+      'Enter a valid end date.',
     ],
-    judgeName: 'Judge name is required',
     startDate: [
       {
         contains: 'is required',
