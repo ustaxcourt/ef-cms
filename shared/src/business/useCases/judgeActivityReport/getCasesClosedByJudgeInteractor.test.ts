@@ -47,7 +47,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCasesClosedByJudgeInteractor(applicationContext, {
-        endDate: undefined,
+        endDate: 'baddabingbaddaboom',
         judgeName: judgeUser.name,
         startDate: 'yabbadabbadoo',
       }),
@@ -63,7 +63,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
     expect(result).toEqual({
       [CASE_STATUS_TYPES.closed]: 2,
       [CASE_STATUS_TYPES.closedDismissed]: 3,
-      total: mockClosedCases.length,
     });
   });
 });
