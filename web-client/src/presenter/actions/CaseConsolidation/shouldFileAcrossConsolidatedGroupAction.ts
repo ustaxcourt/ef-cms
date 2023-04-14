@@ -16,9 +16,9 @@ export const shouldFileAcrossConsolidatedGroupAction = ({ get, path }) => {
   if (fileAcrossConsolidatedGroup) {
     console.log('fileAcrossConsolidatedGroup YES');
 
-    return path.yes();
+    return path.yes({ fileAcrossConsolidatedGroup });
   }
   console.log('fileAcrossConsolidatedGroup NO!');
 
-  return path.no();
+  return path.no({ fileAcrossConsolidatedGroup });
 };

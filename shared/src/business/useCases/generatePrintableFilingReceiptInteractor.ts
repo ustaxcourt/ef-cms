@@ -44,7 +44,12 @@ export const generatePrintableFilingReceiptInteractor = async (
   {
     docketNumber,
     documentsFiled,
-  }: { docketNumber: string; documentsFiled: any },
+    fileAcrossConsolidatedGroup,
+  }: {
+    docketNumber: string;
+    documentsFiled: any;
+    fileAcrossConsolidatedGroup: boolean;
+  },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -52,7 +57,27 @@ export const generatePrintableFilingReceiptInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { applicationContext }).validate();
+  let caseEntity = new Case(caseRecord, { applicationContext }).validate();
+
+  let consolidatedCasesDocketNumbers = [];
+
+  if (fileAcrossConsolidatedGroup) {
+    const consolidatedCases = await applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadDocketNumber({
+        applicationContext,
+        leadDocketNumber: caseEntity.leadDocketNumber,
+      });
+    consolidatedCasesDocketNumbers = consolidatedCases
+      .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
+      .map(
+        consolidatedCaseRecord => consolidatedCaseRecord.docketNumberWithSuffix,
+      );
+
+    caseEntity = new Case(consolidatedCases[0], {
+      applicationContext,
+    }).validate();
+  }
 
   const primaryDocument = getDocumentInfo({
     applicationContext,
@@ -96,7 +121,9 @@ export const generatePrintableFilingReceiptInteractor = async (
     data: {
       caseCaptionExtension,
       caseTitle,
+      consolidatedCasesDocketNumbers,
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+      fileAcrossConsolidatedGroup,
       filedAt: applicationContext
         .getUtilities()
         .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),
