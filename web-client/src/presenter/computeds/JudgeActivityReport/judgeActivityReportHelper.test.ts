@@ -14,17 +14,16 @@ describe('judgeActivityReportHelper', () => {
   );
 
   it('should return all table total counts as 0 when the report has not yet been run', () => {
-    const { closedCasesTotal, trialSessionsHeldTotal } = runCompute(
-      judgeActivityReportHelper,
-      {
+    const { closedCasesTotal, opinionsFiledTotal, trialSessionsHeldTotal } =
+      runCompute(judgeActivityReportHelper, {
         state: {
           judgeActivityReportData: {},
         },
-      },
-    );
+      });
 
     expect(closedCasesTotal).toBe(0);
     expect(trialSessionsHeldTotal).toBe(0);
+    expect(opinionsFiledTotal).toBe(0);
   });
 
   describe('closedCasesTotal', () => {
@@ -59,6 +58,41 @@ describe('judgeActivityReportHelper', () => {
       });
 
       expect(trialSessionsHeldTotal).toBe(3);
+    });
+  });
+
+  describe('opinionsFiledTotal', () => {
+    it('should be the sum of the values of opinions filed off state.judgeActivityReportData', () => {
+      const { opinionsFiledTotal } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {
+            opinions: [
+              {
+                count: 1,
+                documentType: 'Memorandum Opinion',
+                eventCode: 'MOP',
+              },
+              {
+                count: 0,
+                documentType: 'S Opinion',
+                eventCode: 'SOP',
+              },
+              {
+                count: 0,
+                documentType: 'TC Opinion',
+                eventCode: 'TCOP',
+              },
+              {
+                count: 4,
+                documentType: 'Bench Opinion',
+                eventCode: 'OST',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(opinionsFiledTotal).toBe(5);
     });
   });
 });
