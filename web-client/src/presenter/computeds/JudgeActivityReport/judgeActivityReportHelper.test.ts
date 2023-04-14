@@ -1,9 +1,5 @@
+import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  chambersUser,
-  judgeUser,
-} from '../../../../../shared/src/test/mockUsers';
-import { getJudgesChambers } from '../../../../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -14,29 +10,21 @@ describe('judgeActivityReportHelper', () => {
     { ...applicationContext },
   );
 
-  describe('formattedJudgeName', () => {
-    it('should be the last name of the current user when they are a judge', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        ...judgeUser,
-        judgeFullName: 'Ronald L. Buch',
+  describe('trialSessionsHeldCount', () => {
+    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+      const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {
+            trialSessions: {
+              [SESSION_TYPES.regular]: 1,
+              [SESSION_TYPES.hybrid]: 0.5,
+              [SESSION_TYPES.motionHearing]: 1.5,
+            },
+          },
+        },
       });
 
-      const { formattedJudgeName } = runCompute(judgeActivityReportHelper, {});
-
-      expect(formattedJudgeName).toBe('Buch');
-    });
-
-    it('should be the last name of the section judge when the current user is a chambers user', () => {
-      const colvinsSection =
-        getJudgesChambers().COLVINS_CHAMBERS_SECTION.section;
-      applicationContext.getCurrentUser.mockReturnValue({
-        ...chambersUser,
-        section: colvinsSection,
-      });
-
-      const { formattedJudgeName } = runCompute(judgeActivityReportHelper, {});
-
-      expect(formattedJudgeName).toBe('Colvin');
+      expect(trialSessionsHeldTotal).toBe(3);
     });
   });
 });
