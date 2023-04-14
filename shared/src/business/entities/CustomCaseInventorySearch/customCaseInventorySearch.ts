@@ -27,7 +27,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
       {
         contains: 'ref:startDate',
         message:
-          'End date cannot be prior to Start Date. Enter a valid End date.',
+          'End date cannot be prior to start date. Enter a valid end date.',
       },
       {
         contains: 'must be less than or equal to',
@@ -37,7 +37,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         contains: 'is required',
         message: 'Enter an end date.',
       },
-      'Enter a valid end date',
+      'Enter a valid end date.',
     ],
     startDate: [
       {
@@ -48,7 +48,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         contains: 'must be less than or equal to',
         message: 'Start date cannot be in the future. Enter a valid date.',
       },
-      'Enter a valid start date',
+      'Enter a valid start date.',
     ],
   };
 
