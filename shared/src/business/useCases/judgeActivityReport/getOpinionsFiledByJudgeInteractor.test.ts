@@ -31,7 +31,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the opinions filed by the judge provided in the date range provided', async () => {
+  it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
@@ -64,13 +64,13 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
 
     expect(result).toEqual([
       { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
-      { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
-      { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
       {
         count: 0,
         documentType: 'Order of Service of Transcript (Bench Opinion)',
         eventCode: 'OST',
       },
+      { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
+      { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
     ]);
   });
 });
