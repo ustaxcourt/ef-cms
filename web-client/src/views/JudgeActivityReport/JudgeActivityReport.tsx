@@ -9,8 +9,10 @@ import React from 'react';
 export const JudgeActivityReport = connect(
   {
     CLOSED_CASE_STATUSES: state.constants.CLOSED_CASE_STATUSES,
+    SESSION_TYPES: state.constants.SESSION_TYPES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
+    judgeActivityReportHelper: state.judgeActivityReportHelper,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -20,6 +22,8 @@ export const JudgeActivityReport = connect(
     CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
+    judgeActivityReportHelper,
+    SESSION_TYPES,
     submitJudgeActivityReportSequence,
     updateFormValueSequence,
     validationErrors,
@@ -30,13 +34,13 @@ export const JudgeActivityReport = connect(
           <caption className="table-caption-serif">
             Cases Closed{' '}
             <span className="float-right">
-              Total: {judgeActivityReportData.casesClosedByJudge.total}
+              Total: {judgeActivityReportHelper.closedCasesTotal}
             </span>
           </caption>
           <thead>
             <tr>
-              <th aria-label="">Case Type</th>
-              <th aria-label="" className="text-center">
+              <th aria-label="Case type">Case Type</th>
+              <th aria-label="Case type total" className="text-center">
                 Case Type Total
               </th>
             </tr>
@@ -55,24 +59,31 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const trialSessionsHeld: JSX.Element = (
+    const trialSessionsHeld: () => JSX.Element = () => (
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
-            Sessions Held <span className="float-right">Total: 25</span>
+            Sessions Held{' '}
+            <span className="float-right">
+              Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
+            </span>
           </caption>
 
           <thead>
             <tr>
-              <th aria-label="TODO">Session Type</th>
-              <th aria-label="Docket Number">Session Type Total</th>
+              <th aria-label="Session type">Session Type</th>
+              <th aria-label="Session type total">Session Type Total</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
+            {Object.values(SESSION_TYPES).map(status => (
+              <tr key={status}>
+                <td>{status}</td>
+                <td className="text-center">
+                  {judgeActivityReportData.trialSessions[status]}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -185,7 +196,7 @@ export const JudgeActivityReport = connect(
           <section className="usa-section grid-container">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">{closedCases()}</div>
-              <div className="grid-col-6">{trialSessionsHeld}</div>
+              <div className="grid-col-6">{trialSessionsHeld()}</div>
             </div>
 
             <div className="grid-row grid-gap">
