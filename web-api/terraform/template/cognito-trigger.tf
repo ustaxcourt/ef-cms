@@ -42,8 +42,8 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
       TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
       QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
-      DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
-      MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
+      DYNAMODB_ENDPOINT                  = "https://dynamodb.us-east-1.amazonaws.com:443"
+      MASTER_DYNAMODB_ENDPOINT           = "https://dynamodb.us-east-1.amazonaws.com:443"
       MASTER_REGION                      = "us-east-1"
       STAGE                              = var.environment
       NODE_ENV                           = "production"
@@ -83,8 +83,8 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
       DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
       TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
       QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
-      DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
-      MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
+      DYNAMODB_ENDPOINT                  = "https://dynamodb.us-east-1.amazonaws.com:443"
+      MASTER_DYNAMODB_ENDPOINT           = "https://dynamodb.us-east-1.amazonaws.com:443"
       MASTER_REGION                      = "us-east-1"
       STAGE                              = var.environment
       NODE_ENV                           = "production"

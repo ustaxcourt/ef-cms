@@ -24,7 +24,7 @@ export REGION
 
 STAGE="${ENV}" \
     DEPLOYING_COLOR="${DEPLOYING_COLOR}" \
-    DYNAMODB_ENDPOINT="dynamodb.${REGION}.amazonaws.com" \
+    DYNAMODB_ENDPOINT="https://dynamodb.${REGION}.amazonaws.com:443" \
     S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
     DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
     USER_POOL_ID="${USER_POOL_ID}" \

@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 REGION="${DEFAULT_REGION}"
-DYNAMODB_ENDPOINT="dynamodb.${DEFAULT_REGION}.amazonaws.com"
+DYNAMODB_ENDPOINT="https://dynamodb.${DEFAULT_REGION}.amazonaws.com:443"
 
 CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
 SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}")
