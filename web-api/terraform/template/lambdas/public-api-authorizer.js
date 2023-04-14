@@ -1,9 +1,25 @@
-const AWS = require('aws-sdk');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const { NodeHttpHandler } = require('@aws-sdk/node-http-handler');
 
-const docClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-});
+const docClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({
+    endpoint: 'https://dynamodb.us-east-1.amazonaws.com:443',
+    maxAttempts: 3,
+    region: 'us-east-1',
+    requestHandler: new NodeHttpHandler({
+      requestTimeout: 3000,
+    }),
+  }),
+  {
+    marshallOptions: {
+      removeUndefinedValues: true,
+    },
+    unmarshallOptions: {
+      wrapNumbers: false,
+    },
+  },
+);
 
 const getWhiteListIps = async () => {
   const { Item: whiteListIps } = await docClient
