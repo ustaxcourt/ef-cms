@@ -11,13 +11,14 @@ const { post } = require('./requests');
  */
 exports.generatePrintableFilingReceiptInteractor = (
   applicationContext,
-  { docketNumber, documentsFiled },
+  { docketNumber, documentsFiled, fileAcrossConsolidatedGroup },
 ) => {
   return post({
     applicationContext,
     body: {
       docketNumber,
       documentsFiled,
+      fileAcrossConsolidatedGroup,
     },
     endpoint: '/documents/filing-receipt-pdf',
   });
