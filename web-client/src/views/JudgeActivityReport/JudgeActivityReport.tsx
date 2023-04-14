@@ -12,6 +12,7 @@ export const JudgeActivityReport = connect(
     SESSION_TYPES: state.constants.SESSION_TYPES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
+    judgeActivityReportHelper: state.judgeActivityReportHelper,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -21,6 +22,7 @@ export const JudgeActivityReport = connect(
     CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
+    judgeActivityReportHelper,
     SESSION_TYPES,
     submitJudgeActivityReportSequence,
     updateFormValueSequence,
