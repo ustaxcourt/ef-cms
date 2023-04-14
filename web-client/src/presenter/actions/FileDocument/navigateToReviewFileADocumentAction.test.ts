@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { navigateToReviewFileADocumentAction } from './navigateToReviewFileADocumentAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -7,6 +8,7 @@ const routeStub = jest.fn();
 presenter.providers.router = {
   route: routeStub,
 };
+presenter.providers.applicationContext = applicationContext;
 
 describe('navigateToReviewFileADocumentAction', () => {
   const mockDocketNumber = '122-19';
@@ -39,7 +41,7 @@ describe('navigateToReviewFileADocumentAction', () => {
         caseDetail: {
           docketNumber: mockDocketNumber,
         },
-        featureFlagHelper: { redactionAcknowledgementEnabled: true },
+        featureFlags: { 'redaction-acknowledgement-enabled': true },
       },
     });
 
@@ -53,7 +55,7 @@ describe('navigateToReviewFileADocumentAction', () => {
         caseDetail: {
           docketNumber: mockDocketNumber,
         },
-        featureFlagHelper: { redactionAcknowledgementEnabled: undefined },
+        featureFlags: {},
       },
     });
 
