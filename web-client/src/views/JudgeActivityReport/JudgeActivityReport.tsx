@@ -63,7 +63,10 @@ export const JudgeActivityReport = connect(
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
-            Sessions Held <span className="float-right">Total: </span>
+            Sessions Held{' '}
+            <span className="float-right">
+              Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
+            </span>
           </caption>
 
           <thead>
