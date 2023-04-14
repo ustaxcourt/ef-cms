@@ -28,6 +28,11 @@ export const checkLock = async ({
     if (isCaseLockingEnabled) {
       throw onLockError;
     }
+  } else {
+    applicationContext.logger.warn('Entity is NOT currently locked', {
+      identifier,
+      prefix,
+    });
   }
 };
 
