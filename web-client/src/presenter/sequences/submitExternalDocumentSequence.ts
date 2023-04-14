@@ -18,8 +18,6 @@ import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExt
 const onSuccessForIndividualCase = [
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
-  getConsolidatedCasesByCaseAction,
-  setConsolidatedCasesForCaseAction,
   closeFileUploadStatusModalAction,
   getPrintableFilingReceiptSequence,
   getFileExternalDocumentAlertSuccessAction,
@@ -27,6 +25,7 @@ const onSuccessForIndividualCase = [
   setSaveAlertsForNavigationAction,
   navigateToCaseDetailAction,
 ];
+
 const onSuccessForConsolidatedGroup = [
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
