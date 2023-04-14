@@ -654,7 +654,6 @@ const useCases = {
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
-  getCasesClosedByJudgeInteractor,
   getCaseExistsInteractor,
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
