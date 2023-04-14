@@ -1,3 +1,7 @@
+import {
+  COURT_ISSUED_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+} from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
@@ -38,4 +42,26 @@ export const getOpinionsFiledByJudgeInteractor = async (
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
   }
+
+  const { results } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      isOpinionSearch: true,
+      judge: searchEntity.judgeName,
+    });
+
+  const result = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
+    const count = results.filter(res => res.eventCode === eventCode).length;
+    return {
+      count,
+      documentType: COURT_ISSUED_EVENT_CODES.find(
+        doc => doc.eventCode === eventCode,
+      )?.documentType,
+      eventCode,
+    };
+  });
+
+  return result;
 };
