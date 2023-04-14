@@ -36,6 +36,20 @@ describe('setCustomCaseInventoryFiltersAction', () => {
     );
   });
 
+  it('should set customCaseInventoryFilters createStartDate with an empty string if no createStartDate was provided', async () => {
+    const result = await runAction(setCustomCaseInventoryFiltersAction, {
+      modules: { presenter },
+      props: {
+        createStartDate: '',
+      },
+      state: {
+        customCaseInventoryFilters: initialFilterState,
+      },
+    });
+
+    expect(result.state.customCaseInventoryFilters.createStartDate).toEqual('');
+  });
+
   it('should set customCaseInventoryFilters createEndDate in state', async () => {
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
@@ -52,7 +66,21 @@ describe('setCustomCaseInventoryFiltersAction', () => {
     );
   });
 
-  it('should set filing method in state', async () => {
+  it('should set customCaseInventoryFilters createEndDate with an empty string if no createEndDate was provided', async () => {
+    const result = await runAction(setCustomCaseInventoryFiltersAction, {
+      modules: { presenter },
+      props: {
+        createEndDate: '',
+      },
+      state: {
+        customCaseInventoryFilters: initialFilterState,
+      },
+    });
+
+    expect(result.state.customCaseInventoryFilters.createEndDate).toEqual('');
+  });
+
+  it('should set customCaseInventoryFilters filing method in state', async () => {
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
@@ -68,7 +96,7 @@ describe('setCustomCaseInventoryFiltersAction', () => {
     );
   });
 
-  it('should add a caseStatus filter to state', async () => {
+  it('should add a caseStatus filter in customCaseInventoryFilters', async () => {
     initialFilterState.caseStatuses = ['Assigned - Case'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
@@ -103,7 +131,7 @@ describe('setCustomCaseInventoryFiltersAction', () => {
     ]);
   });
 
-  it('should remove a caseStatus filter from state', async () => {
+  it('should remove a caseStatus filter from customCaseInventoryFilters', async () => {
     initialFilterState.caseStatuses = ['Assigned - Case', 'CAV'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
@@ -120,7 +148,7 @@ describe('setCustomCaseInventoryFiltersAction', () => {
     ]);
   });
 
-  it('should add a caseType filter to state', async () => {
+  it('should add a caseType filter to customCaseInventoryFilters', async () => {
     initialFilterState.caseTypes = ['Deficiency'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },

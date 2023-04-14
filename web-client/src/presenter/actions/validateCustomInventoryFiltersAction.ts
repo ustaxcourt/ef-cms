@@ -33,8 +33,9 @@ export const validateCustomInventoryFiltersAction = ({
   if (errors) {
     return path.error({
       alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
-        messages: errors,
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+        messages: Object.values(errors), // TODO: Refactor
       },
       errors,
     });

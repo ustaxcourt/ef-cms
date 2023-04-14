@@ -2,6 +2,7 @@ import {
   CaseStatus,
   CaseType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { GetCaseInventoryReportRequest } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
@@ -17,7 +18,7 @@ export const setCustomCaseInventoryFiltersAction = ({
   props,
   store,
 }: {
-  applicationContext: any;
+  applicationContext: IApplicationContext;
   get: any;
   props: Partial<GetCaseInventoryReportRequest> & {
     caseStatuses: { action: 'add' | 'remove'; caseStatus: CaseStatus };
@@ -29,18 +30,28 @@ export const setCustomCaseInventoryFiltersAction = ({
     state.customCaseInventoryFilters,
   );
   const desiredFilters = cloneDeep(props);
+
   if (props.createStartDate) {
     const dateWithTime = applicationContext
       .getUtilities()
-      .createISODateString(props.createStartDate, 'MM/dd/yyyy'); // TODO: USE FORMATS CONSTANT FROM DATEHANDLER
+      .createISODateString(props.createStartDate, FORMATS.MMDDYYYY);
+
     desiredFilters.createStartDate = dateWithTime;
+    store.merge(state.customCaseInventoryFilters, desiredFilters);
+  } else if (props.createStartDate === '') {
+    desiredFilters.createStartDate = '';
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   }
   if (props.createEndDate) {
     const dateWithTime = applicationContext
       .getUtilities()
-      .createISODateString(props.createEndDate, 'MM/dd/yyyy'); // TODO: USE FORMATS CONSTANT FROM DATEHANDLER
+      .createISODateString(props.createEndDate, FORMATS.MMDDYYYY);
+    console.log('dateWithTime in END DATE', dateWithTime);
+
     desiredFilters.createEndDate = dateWithTime;
+    store.merge(state.customCaseInventoryFilters, desiredFilters);
+  } else if (props.createEndDate === '') {
+    desiredFilters.createEndDate = '';
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   }
   if (props.filingMethod) {
