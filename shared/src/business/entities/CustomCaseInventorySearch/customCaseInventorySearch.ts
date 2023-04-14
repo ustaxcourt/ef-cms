@@ -1,9 +1,5 @@
 import { DATE_RANGE_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import joi from 'joi';
-import joiDate from '@hapi/joi-date';
-
-joi.extend(joiDate);
 
 /**
  * Custom Case Inventory Report Entity
