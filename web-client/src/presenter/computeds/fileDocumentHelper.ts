@@ -11,8 +11,12 @@ export const supportingDocumentFreeTextTypes = [
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
 export const fileDocumentHelper = (get, applicationContext) => {
-  const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
-    applicationContext.getConstants();
+  const {
+    ALLOWLIST_FEATURE_FLAGS,
+    AMENDMENT_EVENT_CODES,
+    CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const form = get(state.form);
@@ -88,7 +92,11 @@ export const fileDocumentHelper = (get, applicationContext) => {
     filersMap: form.filersMap,
   });
 
-  const { redactionAcknowledgementEnabled } = get(state.featureFlagHelper);
+  const redactionAcknowledgementEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
+    ],
+  );
 
   const exported = {
     certificateOfServiceDateFormatted,

@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -12,7 +13,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   caseDetail: MOCK_CASE,
-  featureFlagHelper: {},
+  featureFlags: {},
   form: {},
   validationErrors: {},
 };
@@ -204,9 +205,17 @@ describe('fileDocumentHelper', () => {
   });
 
   it('passes the value of the REDACTION_ACKNOWLEDGEMENT_ENABLED flag', () => {
-    state.featureFlagHelper.redactionAcknowledgementEnabled = true;
-    const result = runCompute(fileDocumentHelper, { state });
+    state.featureFlags = {
+      [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
+    };
+    let result = runCompute(fileDocumentHelper, { state });
     expect(result.redactionAcknowledgementEnabled).toEqual(true);
+
+    state.featureFlags = {
+      [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: false,
+    };
+    result = runCompute(fileDocumentHelper, { state });
+    expect(result.redactionAcknowledgementEnabled).toEqual(false);
   });
 
   describe('supporting documents', () => {
