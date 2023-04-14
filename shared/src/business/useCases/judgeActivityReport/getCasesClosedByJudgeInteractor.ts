@@ -59,6 +59,5 @@ export const getCasesClosedByJudgeInteractor = async (
   return {
     [CASE_STATUS_TYPES.closed]: closedCaseCount,
     [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
-    total: casesClosedByJudge.length,
   };
 };

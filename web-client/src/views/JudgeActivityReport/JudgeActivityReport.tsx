@@ -34,7 +34,7 @@ export const JudgeActivityReport = connect(
           <caption className="table-caption-serif">
             Cases Closed{' '}
             <span className="float-right">
-              Total: {judgeActivityReportData.casesClosedByJudge.total}
+              Total: {judgeActivityReportHelper.closedCasesTotal}
             </span>
           </caption>
           <thead>
