@@ -35,16 +35,21 @@ export class WorkItem extends JoiValidationEntity {
   public workItemId: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(rawWorkItem, { applicationContext }) {
+  constructor(
+    rawWorkItem,
+    { applicationContext },
+    caseEntity?: TCase | TCaseEntity,
+  ) {
     super('WorkItem');
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
-    this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
+    this.associatedJudge =
+      caseEntity?.associatedJudge || rawWorkItem.associatedJudge || CHIEF_JUDGE;
     this.caseIsInProgress = rawWorkItem.caseIsInProgress;
-    this.caseStatus = rawWorkItem.caseStatus;
+    this.caseStatus = caseEntity?.status || rawWorkItem.caseStatus;
     this.caseTitle = rawWorkItem.caseTitle;
     this.completedAt = rawWorkItem.completedAt;
     this.completedBy = rawWorkItem.completedBy;
@@ -71,8 +76,10 @@ export class WorkItem extends JoiValidationEntity {
     ]);
 
     this.docketNumber = rawWorkItem.docketNumber;
-    this.leadDocketNumber = rawWorkItem.leadDocketNumber;
-    this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
+    this.leadDocketNumber =
+      caseEntity?.leadDocketNumber || rawWorkItem.leadDocketNumber;
+    this.docketNumberWithSuffix =
+      caseEntity?.docketNumberWithSuffix || rawWorkItem.docketNumberWithSuffix;
     this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||
@@ -84,8 +91,8 @@ export class WorkItem extends JoiValidationEntity {
     this.sentBy = rawWorkItem.sentBy;
     this.sentBySection = rawWorkItem.sentBySection;
     this.sentByUserId = rawWorkItem.sentByUserId;
-    this.trialDate = rawWorkItem.trialDate;
-    this.trialLocation = rawWorkItem.trialLocation;
+    this.trialDate = caseEntity?.trialDate || rawWorkItem.trialDate;
+    this.trialLocation = caseEntity?.trialLocation || rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
     this.workItemId =
       rawWorkItem.workItemId || applicationContext.getUniqueId();

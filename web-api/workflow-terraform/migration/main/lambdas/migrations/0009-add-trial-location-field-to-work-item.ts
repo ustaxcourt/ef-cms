@@ -37,6 +37,7 @@ export const migrateItems = async (items, documentClient) => {
         {
           applicationContext,
         },
+        fullCase,
       ).validateWithLogging(applicationContext);
 
       item.trialLocation = theWorkItem.trialLocation;
