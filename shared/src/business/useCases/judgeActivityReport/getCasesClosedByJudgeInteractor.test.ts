@@ -1,11 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import {
-  chambersUser,
-  judgeUser,
-  petitionsClerkUser,
-} from '../../../test/mockUsers';
 import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
+import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 describe('getCasesClosedByJudgeInteractor', () => {
   const mockClosedCases = [
@@ -37,10 +33,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(judgeUser);
-
-    applicationContext
-      .getPersistenceGateway()
       .getCasesClosedByJudge.mockResolvedValue(mockClosedCases);
   });
 
@@ -62,30 +54,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it("should search for closed cases using the current user's name when they are a judge user", async () => {
-    await getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
-        .calls[0][0].judgeName,
-    ).toBe(judgeUser.name);
-  });
-
-  it('should search for closed cases using the judge name of the section of the current when they are a chambers user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(chambersUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(chambersUser);
-
-    await getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
-        .calls[0][0].judgeName,
-    ).toBe('Colvin');
-  });
-
   it('should return the cases closed organized by status', async () => {
     const result = await getCasesClosedByJudgeInteractor(
       applicationContext,
@@ -95,6 +63,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     expect(result).toEqual({
       [CASE_STATUS_TYPES.closed]: 2,
       [CASE_STATUS_TYPES.closedDismissed]: 3,
+      total: mockClosedCases.length,
     });
   });
 });
