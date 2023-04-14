@@ -117,7 +117,7 @@ export const JudgeActivityReport = connect(
       <>
         <table aria-describedby="TODO" className="usa-table ustc-table">
           <caption className="table-caption-serif">
-            Opinions Issued <span className="float-right">Total: 89</span>
+            Opinions Issued <span className="float-right">Total:</span>
           </caption>
           <thead>
             <tr>
