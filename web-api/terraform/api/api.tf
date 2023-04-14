@@ -39,6 +39,9 @@ resource "aws_api_gateway_gateway_response" "large_payload" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "timeout" {
@@ -50,6 +53,9 @@ resource "aws_api_gateway_gateway_response" "timeout" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "default5xx" {
@@ -59,6 +65,9 @@ resource "aws_api_gateway_gateway_response" "default5xx" {
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
+  }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
   }
 }
 
