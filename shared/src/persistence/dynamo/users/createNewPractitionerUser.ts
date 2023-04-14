@@ -1,3 +1,4 @@
+import { AdminCreateUserCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { put } from '../../dynamodbClientService';
 
 export const updateUserRecords = async ({
@@ -50,9 +51,8 @@ export const createNewPractitionerUser = async ({
 }) => {
   const { userId } = user;
 
-  await applicationContext
-    .getCognito()
-    .adminCreateUser({
+  await applicationContext.getCognito().send(
+    new AdminCreateUserCommand({
       UserAttributes: [
         {
           Name: 'email_verified',
@@ -77,8 +77,8 @@ export const createNewPractitionerUser = async ({
       ],
       UserPoolId: process.env.USER_POOL_ID,
       Username: user.pendingEmail,
-    })
-    .promise();
+    }),
+  );
 
   const updatedUser = await exports.updateUserRecords({
     applicationContext,

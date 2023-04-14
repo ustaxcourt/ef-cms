@@ -1,5 +1,11 @@
 import * as client from '../../dynamodbClientService';
 import {
+  AdminCreateUserCommand,
+  AdminDisableUserCommand,
+  AdminGetUserCommand,
+  AdminUpdateUserAttributesCommand,
+} from '@aws-sdk/client-cognito-identity-provider';
+import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
@@ -117,13 +123,12 @@ export const isUserAlreadyCreated = async ({
   userPoolId: string;
 }) => {
   try {
-    await applicationContext
-      .getCognito()
-      .adminGetUser({
+    await applicationContext.getCognito().send(
+      new AdminGetUserCommand({
         UserPoolId: userPoolId,
         Username: email,
-      })
-      .promise();
+      }),
+    );
     return true;
   } catch (e) {
     if (e.code === 'UserNotFoundException') {
@@ -158,9 +163,8 @@ export const createOrUpdateUser = async ({
   });
 
   if (!userExists) {
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser({
+    const response = await applicationContext.getCognito().send(
+      new AdminCreateUserCommand({
         MessageAction: 'SUPPRESS',
         TemporaryPassword: password,
         UserAttributes: [
@@ -183,21 +187,19 @@ export const createOrUpdateUser = async ({
         ],
         UserPoolId: userPoolId,
         Username: user.email,
-      })
-      .promise();
+      }),
+    );
     userId = response.User.Username;
   } else {
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
+    const response = await applicationContext.getCognito().send(
+      new AdminGetUserCommand({
         UserPoolId: userPoolId,
         Username: user.email,
-      })
-      .promise();
+      }),
+    );
 
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
+    await applicationContext.getCognito().send(
+      new AdminUpdateUserAttributesCommand({
         UserAttributes: [
           {
             Name: 'custom:role',
@@ -206,20 +208,19 @@ export const createOrUpdateUser = async ({
         ],
         UserPoolId: userPoolId,
         Username: response.Username,
-      })
-      .promise();
+      }),
+    );
 
     userId = response.Username;
   }
 
   if (disableCognitoUser) {
-    await applicationContext
-      .getCognito()
-      .adminDisableUser({
+    await applicationContext.getCognito().send(
+      new AdminDisableUserCommand({
         UserPoolId: userPoolId,
         Username: userId,
-      })
-      .promise();
+      }),
+    );
   }
 
   return await createUserRecords({

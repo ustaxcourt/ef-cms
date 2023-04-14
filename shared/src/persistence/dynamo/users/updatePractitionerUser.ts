@@ -1,3 +1,4 @@
+import { AdminUpdateUserAttributesCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { getUserById } from './getUserById';
 import { updateUserRecords } from './updateUserRecords';
 
@@ -16,9 +17,8 @@ export const updatePractitionerUser = async ({
   });
 
   try {
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
+    await applicationContext.getCognito().send(
+      new AdminUpdateUserAttributesCommand({
         UserAttributes: [
           {
             Name: 'custom:role',
@@ -27,8 +27,8 @@ export const updatePractitionerUser = async ({
         ],
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email ? user.email : user.pendingEmail,
-      })
-      .promise();
+      }),
+    );
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;

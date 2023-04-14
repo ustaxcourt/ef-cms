@@ -1,4 +1,9 @@
 import * as client from '../../dynamodbClientService';
+import {
+  AdminCreateUserCommand,
+  AdminGetUserCommand,
+  AdminUpdateUserAttributesCommand,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../business/entities/EntityConstants';
 import { isUserAlreadyCreated } from './createOrUpdateUser';
 
@@ -89,9 +94,8 @@ export const createOrUpdatePractitionerUser = async ({
   });
 
   if (!userExists) {
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser({
+    const response = await applicationContext.getCognito().send(
+      new AdminCreateUserCommand({
         UserAttributes: [
           {
             Name: 'email_verified',
@@ -112,23 +116,21 @@ export const createOrUpdatePractitionerUser = async ({
         ],
         UserPoolId: process.env.USER_POOL_ID,
         Username: userEmail,
-      })
-      .promise();
+      }),
+    );
     if (response && response.User && response.User.Username) {
       userId = response.User.Username;
     }
   } else {
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
+    const response = await applicationContext.getCognito().send(
+      new AdminGetUserCommand({
         UserPoolId: process.env.USER_POOL_ID,
         Username: userEmail,
-      })
-      .promise();
+      }),
+    );
 
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
+    await applicationContext.getCognito().send(
+      new AdminUpdateUserAttributesCommand({
         UserAttributes: [
           {
             Name: 'custom:role',
@@ -137,8 +139,8 @@ export const createOrUpdatePractitionerUser = async ({
         ],
         UserPoolId: process.env.USER_POOL_ID,
         Username: response.Username,
-      })
-      .promise();
+      }),
+    );
 
     userId = response.Username;
   }

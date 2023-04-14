@@ -1,12 +1,13 @@
+import { AdminGetUserCommand } from '@aws-sdk/client-cognito-identity-provider';
+
 exports.getCognitoUserIdByEmail = async ({ applicationContext, email }) => {
   try {
-    const userFromCognito = await applicationContext
-      .getCognito()
-      .adminGetUser({
+    const userFromCognito = await applicationContext.getCognito().send(
+      new AdminGetUserCommand({
         UserPoolId: process.env.USER_POOL_ID,
         Username: email,
-      })
-      .promise();
+      }),
+    );
 
     const customUserId = (
       userFromCognito.UserAttributes.find(

@@ -1,3 +1,5 @@
+import { AdminUpdateUserAttributesCommand } from '@aws-sdk/client-cognito-identity-provider';
+
 export const updateUserEmail = async ({
   applicationContext,
   user,
@@ -6,9 +8,8 @@ export const updateUserEmail = async ({
   user: RawUser;
 }) => {
   try {
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
+    await applicationContext.getCognito().send(
+      new AdminUpdateUserAttributesCommand({
         UserAttributes: [
           {
             Name: 'email',
@@ -21,8 +22,8 @@ export const updateUserEmail = async ({
         ],
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
-      })
-      .promise();
+      }),
+    );
   } catch (err) {
     applicationContext.logger.error(
       `Error updating user with original email ${user.email}`,
