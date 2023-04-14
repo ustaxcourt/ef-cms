@@ -1,11 +1,21 @@
 /* eslint-disable max-lines */
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { JSDOM } from 'jsdom';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
-import { S3, SQS } from 'aws-sdk';
+import { SQSClient } from '@aws-sdk/client-sqs';
+const { createPresignedPost } = require('@aws-sdk/s3-presigned-post');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const { Upload } = require('@aws-sdk/lib-storage');
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -63,7 +73,6 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios from 'axios';
@@ -212,8 +221,13 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
-        sqsCache = new SQS({
+        sqsCache = new SQSClient({
           apiVersion: '2012-11-05',
+          maxAttempts: 3,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            socketTimeout: 5000,
+          }),
         });
       }
       return sqsCache;
@@ -245,13 +259,91 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getStorageClient: () => {
       if (!s3Cache) {
-        s3Cache = new S3({
+        s3Cache = new S3Client({
           endpoint: environment.s3Endpoint,
+          forcePathStyle: true,
+          maxAttempts: 3,
           region: 'us-east-1',
-          s3ForcePathStyle: true,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            socketTimeout: 5000,
+          }),
         });
       }
-      return s3Cache;
+      return {
+        createPresignedPost(params, cb) {
+          createPresignedPost(s3Cache, params)
+            .then(data => cb(null, data))
+            .catch(err => cb(err, null));
+        },
+        deleteObject(params) {
+          return {
+            promise() {
+              return s3Cache.send(new DeleteObjectCommand(params));
+            },
+          };
+        },
+        getObject({ Bucket, Key }) {
+          return {
+            async createReadStream() {
+              const { Body } = await s3Cache.send(
+                new GetObjectCommand({
+                  Bucket,
+                  Key,
+                }),
+              );
+              return Body;
+            },
+            async promise() {
+              const { Body } = await s3Cache.send(
+                new GetObjectCommand({
+                  Bucket,
+                  Key,
+                }),
+              );
+              const chunks = [];
+              for await (const chunk of Body) {
+                chunks.push(chunk);
+              }
+              const byteBuffer = Buffer.concat(chunks);
+              return {
+                Body: byteBuffer,
+              };
+            },
+          };
+        },
+        getSignedUrl(method, params, cb) {
+          getSignedUrl(s3Cache, new GetObjectCommand(params), {
+            expiresIn: 3600,
+          })
+            .then(data => cb(null, data))
+            .catch(err => cb(err, null));
+        },
+        headObject(params) {
+          return {
+            promise() {
+              return s3Cache.send(new HeadObjectCommand(params));
+            },
+          };
+        },
+        putObject({ Body, Bucket, ContentType, Key }) {
+          return {
+            promise() {
+              return s3Cache.send(
+                new PutObjectCommand({ Body, Bucket, ContentType, Key }),
+              );
+            },
+          };
+        },
+        async upload(params) {
+          const parallelUploads3 = new Upload({
+            client: s3Cache,
+            params,
+          });
+
+          await parallelUploads3.done();
+        },
+      };
     },
     getTempDocumentsBucketName: () => {
       return process.env.DOCUMENTS_BUCKET_NAME || '';
