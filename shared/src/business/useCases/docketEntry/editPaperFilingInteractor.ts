@@ -497,15 +497,28 @@ const getDocketEntryToEdit = async ({
   return { caseEntity, docketEntryEntity };
 };
 
+export const determineEntitiesToLock = ({
+  consolidatedGroupDocketNumbers = [],
+  documentMetadata,
+}: {
+  consolidatedGroupDocketNumbers?: string[];
+  documentMetadata: object;
+}): {
+  identifier: string[];
+  prefix: string;
+  ttl?: number;
+} => ({
+  identifier: [
+    ...new Set([
+      documentMetadata.docketNumber,
+      ...consolidatedGroupDocketNumbers,
+    ]),
+  ],
+  prefix: 'case',
+});
+
 export const editPaperFilingInteractor = withLocking(
   editPaperFiling,
-  ({ consolidatedGroupDocketNumbers = [], documentMetadata }) => ({
-    identifier: [
-      ...new Set(
-        ...[documentMetadata.docketNumber, ...consolidatedGroupDocketNumbers],
-      ),
-    ],
-    prefix: 'case',
-  }),
+  determineEntitiesToLock,
   new ServiceUnavailableError('One of the cases are currently being updated'),
 );

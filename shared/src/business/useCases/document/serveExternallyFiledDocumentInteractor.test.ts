@@ -6,7 +6,10 @@ import {
   applicationContext,
   testPdfDoc,
 } from '../../test/createTestApplicationContext';
-import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
+import {
+  determineEntitiesToLock,
+  serveExternallyFiledDocumentInteractor,
+} from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
 import { addCoverToPdf } from '../addCoverToPdf';
@@ -591,5 +594,32 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.pdfUrl,
     ).toBeUndefined();
+  });
+});
+
+describe('determineEntitiesToLock', () => {
+  let mockParams;
+  beforeEach(() => {
+    mockParams = {
+      applicationContext,
+      docketNumbers: [],
+      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+    };
+  });
+
+  it('should return an object that includes the prefix case', () => {
+    expect(determineEntitiesToLock(mockParams).prefix).toBe('case');
+  });
+
+  it('should return an object that includes the subjectCaseDocketNumber in the identifiers', () => {
+    mockParams.subjectCaseDocketNumber = '123-20';
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('123-20');
+  });
+
+  it('should return an object that includes all of the docketNumbers specified in the identifiers', () => {
+    mockParams.docketNumbers = ['111-20', '222-20', '333-20'];
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('111-20');
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('222-20');
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('333-20');
   });
 });

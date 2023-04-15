@@ -227,11 +227,23 @@ export const serveExternallyFiledDocument = async (
   });
 };
 
+export const determineEntitiesToLock = ({
+  docketNumbers = [],
+  subjectCaseDocketNumber,
+}: {
+  docketNumbers?: string[];
+  subjectCaseDocketNumber: string;
+}): {
+  identifier: string[];
+  prefix: string;
+  ttl?: number;
+} => ({
+  identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])],
+  prefix: 'case',
+});
+
 export const serveExternallyFiledDocumentInteractor = withLocking(
   serveExternallyFiledDocument,
-  ({ docketNumbers = [], subjectCaseDocketNumber }) => ({
-    identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
-    prefix: 'case',
-  }),
+  determineEntitiesToLock,
   new ServiceUnavailableError('One of the cases are currently being updated'),
 );
