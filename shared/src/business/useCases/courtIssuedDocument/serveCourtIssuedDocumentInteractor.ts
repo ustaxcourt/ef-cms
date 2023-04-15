@@ -218,12 +218,24 @@ export const serveCourtIssuedDocument = async (
   });
 };
 
+export const determineEntitiesToLock = ({
+  docketNumbers = [],
+  subjectCaseDocketNumber,
+}: {
+  docketNumbers?: string[];
+  subjectCaseDocketNumber;
+}): {
+  identifier: string[];
+  prefix: string;
+  ttl?: number;
+} => ({
+  identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])],
+  prefix: 'case',
+  ttl: 15 * 60,
+});
+
 export const serveCourtIssuedDocumentInteractor = withLocking(
   serveCourtIssuedDocument,
-  ({ docketNumbers = [], subjectCaseDocketNumber }) => ({
-    identifier: [...new Set(...docketNumbers, subjectCaseDocketNumber)],
-    prefix: 'case',
-    ttl: 15 * 60,
-  }),
+  determineEntitiesToLock,
   new ServiceUnavailableError('One of the cases are currently being updated'),
 );

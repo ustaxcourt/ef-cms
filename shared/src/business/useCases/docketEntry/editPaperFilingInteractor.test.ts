@@ -5,8 +5,11 @@ import {
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  determineEntitiesToLock,
+  editPaperFilingInteractor,
+} from './editPaperFilingInteractor';
 import { docketClerkUser, petitionerUser } from '../../../test/mockUsers';
-import { editPaperFilingInteractor } from './editPaperFilingInteractor';
 import { getContactPrimary } from '../../entities/cases/Case';
 
 describe('editPaperFilingInteractor', () => {
@@ -624,5 +627,34 @@ describe('editPaperFilingInteractor', () => {
         });
       });
     });
+  });
+});
+
+describe('determineEntitiesToLock', () => {
+  let mockParams;
+  beforeEach(() => {
+    mockParams = {
+      applicationContext,
+      consolidatedGroupDocketNumbers: [],
+      documentMetadata: {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+    };
+  });
+
+  it('should return an object that includes the prefix case', () => {
+    expect(determineEntitiesToLock(mockParams).prefix).toBe('case');
+  });
+
+  it('should return an object that includes the documentMetadata.docketNumber in the identifiers', () => {
+    mockParams.documentMetadata.docketNumber = '123-20';
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('123-20');
+  });
+
+  it('should return an object that includes all of the consolidatedGroupDocketNumbers specified in the identifiers', () => {
+    mockParams.consolidatedGroupDocketNumbers = ['111-20', '222-20', '333-20'];
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('111-20');
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('222-20');
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('333-20');
   });
 });
