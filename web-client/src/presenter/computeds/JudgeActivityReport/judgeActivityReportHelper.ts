@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export const judgeActivityReportHelper = get => {
-  const { casesClosedByJudge, opinions, trialSessions } = get(
+  const { casesClosedByJudge, opinions, orders, trialSessions } = get(
     state.judgeActivityReportData,
   );
 
@@ -18,9 +18,15 @@ export const judgeActivityReportHelper = get => {
     0,
   );
 
+  const ordersFiledTotal: number = (orders || []).reduce(
+    (a: any, b: any) => a + b.count,
+    0,
+  );
+
   return {
     closedCasesTotal,
     opinionsFiledTotal,
+    ordersFiledTotal,
     trialSessionsHeldTotal,
   };
 };
