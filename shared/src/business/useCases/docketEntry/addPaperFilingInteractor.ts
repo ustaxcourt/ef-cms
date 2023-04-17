@@ -40,7 +40,7 @@ export const addPaperFiling = async (
   }: {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
-    documentMetadata: any;
+    documentMetadata: DocumentMetadata;
     isSavingForLater: boolean;
     docketEntryId: string;
   },
@@ -261,14 +261,36 @@ const saveWorkItem = async ({
   });
 };
 
+interface DocumentMetadata {
+  docketNumber: string;
+  isFileAttached: boolean;
+  documentTitle: string;
+  documentType: string;
+  receivedAt: string;
+  mailingDate: string;
+}
+
+export const determineEntitiesToLock = ({
+  consolidatedGroupDocketNumbers = [],
+  documentMetadata,
+}: {
+  consolidatedGroupDocketNumbers?: string[];
+  documentMetadata: DocumentMetadata;
+}): {
+  identifier: string[];
+  prefix: string;
+} => ({
+  identifier: [
+    ...new Set([
+      ...consolidatedGroupDocketNumbers,
+      documentMetadata?.docketNumber,
+    ]),
+  ],
+  prefix: 'case',
+});
+
 export const addPaperFilingInteractor = withLocking(
   addPaperFiling,
-  ({ consolidatedGroupDocketNumbers = [], documentMetadata }) => ({
-    identifier: [
-      documentMetadata?.docketNumber,
-      ...consolidatedGroupDocketNumbers,
-    ],
-    prefix: 'case',
-  }),
+  determineEntitiesToLock,
   new ServiceUnavailableError('The case is currently being updated'),
 );
