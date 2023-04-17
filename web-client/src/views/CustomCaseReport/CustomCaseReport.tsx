@@ -251,7 +251,9 @@ export const CustomCaseReport = connect(
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
-          <Paginator pages={20} onPageChange={() => {}} />
+          <Paginator pages={20} onPageChange={(selectedPage) => {
+            console.log('parent selectedPage: ', selectedPage)
+          }} />
           <div className="text-right margin-bottom-2">
             <span className="text-bold">Count: &nbsp;</span>
             {(customCaseInventoryReportHelper.customCaseInventoryReportData &&
