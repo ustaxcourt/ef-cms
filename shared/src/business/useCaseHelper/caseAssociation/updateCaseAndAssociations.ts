@@ -5,6 +5,7 @@ import { DocketEntry } from '../../entities/DocketEntry';
 import { IrsPractitioner } from '../../entities/IrsPractitioner';
 import { Message } from '../../entities/Message';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { WorkItem } from '../../entities/WorkItem';
 import { pick } from 'lodash';
 import diff from 'diff-arrays-of-objects';
 
@@ -342,115 +343,38 @@ const updateCaseWorkItems = async ({
     return [];
   }
 
-  const workItems = await applicationContext
+  const rawWorkItems = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });
 
-  return workItems.map(rawWorkItem =>
-    applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
-      workItem: {
-        ...rawWorkItem,
-        associatedJudge: caseToUpdate.associatedJudge,
-        caseStatus: caseToUpdate.status,
-        caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
-        trialDate: caseToUpdate.trialDate || null,
-        trialLocation: caseToUpdate.trialLocation || null,
+  const updatedWorkItems = rawWorkItems.map(rawWorkItem => ({
+    ...rawWorkItem,
+    associatedJudge: caseToUpdate.associatedJudge,
+    caseStatus: caseToUpdate.status,
+    caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
+    docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+    leadDocketNumber: caseToUpdate.leadDocketNumber,
+    trialDate: caseToUpdate.trialDate || null,
+    trialLocation: caseToUpdate.trialLocation || null,
+  }));
+
+  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems, {
+    applicationContext,
+  });
+
+  return validWorkItems.map(
+    validWorkItem =>
+      function () {
+        return applicationContext.getPersistenceGateway().saveWorkItem({
+          applicationContext,
+          workItem: validWorkItem,
+        });
       },
-    }),
   );
 };
-
-// const updateWorkItemRecordFunctions = (
-//   updatedCase: TCase,
-//   previousCase: TCase,
-//   workItemId: string,
-// ) => {
-//   const workItemRequestFunctions = [];
-//   if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext
-//         .getUseCaseHelpers()
-//         .updateAssociatedJudgeOnWorkItems({
-//           applicationContext,
-//           associatedJudge: updatedCase.associatedJudge,
-//           workItemId,
-//         }),
-//     );
-//   }
-//   if (previousCase.caseCaption !== updatedCase.caseCaption) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems({
-//         applicationContext,
-//         caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
-//         workItemId,
-//       }),
-//     );
-//   }
-//   if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext
-//         .getUseCaseHelpers()
-//         .updateDocketNumberSuffixOnWorkItems({
-//           applicationContext,
-//           docketNumberSuffix: updatedCase.docketNumberSuffix,
-//           workItemId,
-//         }),
-//     );
-//   }
-//   if (previousCase.status !== updatedCase.status) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems({
-//         applicationContext,
-//         caseStatus: updatedCase.status,
-//         workItemId,
-//       }),
-//     );
-//   }
-//   if (previousCase.trialDate !== updatedCase.trialDate) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems({
-//         applicationContext,
-//         trialDate: updatedCase.trialDate || null,
-//         workItemId,
-//       }),
-//     );
-//   }
-//   if (previousCase.trialLocation !== updatedCase.trialLocation) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems({
-//         applicationContext,
-//         trialLocation: updatedCase.trialLocation || null,
-//         workItemId,
-//       }),
-//     );
-//   }
-//   if (previousCase.leadDocketNumber !== updatedCase.leadDocketNumber) {
-//     workItemRequestFunctions.push(() =>
-//       applicationContext
-//         .getUseCaseHelpers()
-//         .updateLeadDocketNumberOnWorkItems({
-//           applicationContext,
-//           leadDocketNumber: updatedCase.leadDocketNumber || null,
-//           workItemId,
-//         }),
-//     );
-//   }
-
-//   return workItemRequestFunctions;
-// };
-
-// const workItemIds = workItems.map(mapping => mapping.sk.split('|')[1]);
-// const workItemUpdateFunctions = workItemIds
-//   .map(workItemId =>
-//     updateWorkItemRecordFunctions(caseToUpdate, oldCase, workItemId),
-//   )
-//   .flat();
 
 /**
  * Identifies user case mappings which require updates and issues persistence calls
