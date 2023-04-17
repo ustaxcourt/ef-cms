@@ -9,15 +9,26 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
   const mockStartDate = '02/20/2021';
   const mockEndDate = '03/03/2021';
   const mockJudgeName = 'Sotomayor';
-  const mockOrdersFiledByJudge = [];
+  const mockOrdersIssuedByJudge = [
+    {
+      count: 1,
+      documentType: 'Order',
+      eventCode: 'O',
+    },
+    {
+      count: 5,
+      documentType: 'Order for Dismissal',
+      eventCode: 'ODS',
+    },
+  ];
 
   beforeEach(() => {
     applicationContext
       .getUseCases()
-      .getOrdersFiledByJudgeInteractor.mockReturnValue(mockOrdersFiledByJudge);
+      .getOrdersFiledByJudgeInteractor.mockReturnValue(mockOrdersIssuedByJudge);
   });
 
-  it('should retrieve orders by the provided judge in the date range provided from persistence and return it to props', async () => {
+  it('should retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
     const { output } = await runAction(
       getOrdersIssuedForJudgeActivityReportAction,
       {
@@ -42,6 +53,6 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
       judgeName: mockJudgeName,
       startDate: mockStartDate,
     });
-    expect(output.ordersIssued).toBe(mockOrdersFiledByJudge);
+    expect(output.orders).toBe(mockOrdersIssuedByJudge);
   });
 });
