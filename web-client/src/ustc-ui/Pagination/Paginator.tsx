@@ -80,18 +80,20 @@ const PageEllipsis = () => {
   );
 };
 
+// eslint-disable-next-line complexity
 export const Paginator = (props: {
   pages: number;
   onPageChange: (selectedPage: number) => any;
 }) => {
-  const [currentPageNumber, setPageNumber] = useState(19);
+  const [currentPageNumber, setPageNumber] = useState(8);
   const sevenDisplayedSlots = [];
+  const numberOfPaginatorSlots = 7;
   console.log('Recreating component. SelectedPageNumber: ', currentPageNumber);
   // 1. Should it render the slot at all?
   // 2. Should it render a page button or an ellipse?
   // 3. Should it render The slot number it is or should it add some extras?
 
-  for (let slotNumber = 0; slotNumber < 7; slotNumber++) {
+  for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
     if (slotNumber >= props.pages) {
       continue;
     }
@@ -106,7 +108,7 @@ export const Paginator = (props: {
       continue;
     }
     if (slotNumber === 1) {
-      if (currentPageNumber > 3 && props.pages > 7) {
+      if (currentPageNumber > 3 && props.pages > numberOfPaginatorSlots) {
         sevenDisplayedSlots.push(<PageEllipsis />);
       } else {
         sevenDisplayedSlots.push(
@@ -120,16 +122,7 @@ export const Paginator = (props: {
       continue;
     }
     if (slotNumber === 2 || slotNumber === 3 || slotNumber === 4) {
-      const weGotAlotOfPages = props.pages > 7;
-      if (weGotAlotOfPages) {
-        sevenDisplayedSlots.push(
-          <PageButton
-            pageNumber={currentPageNumber + slotNumber - 3}
-            selected={currentPageNumber === currentPageNumber + slotNumber - 3}
-            onClick={setPageNumber}
-          />,
-        );
-      } else {
+      if (currentPageNumber < 4) {
         sevenDisplayedSlots.push(
           <PageButton
             pageNumber={slotNumber}
@@ -137,15 +130,37 @@ export const Paginator = (props: {
             onClick={setPageNumber}
           />,
         );
+        continue;
       }
-      continue;
+      if (currentPageNumber >= 4 && props.pages - currentPageNumber > 3) {
+        sevenDisplayedSlots.push(
+          <PageButton
+            pageNumber={currentPageNumber + slotNumber - 3}
+            selected={currentPageNumber === currentPageNumber + slotNumber - 3}
+            onClick={setPageNumber}
+          />,
+        );
+        continue;
+      }
+      if (currentPageNumber >= 4 && props.pages - currentPageNumber <= 3) {
+        sevenDisplayedSlots.push(
+          <PageButton
+            pageNumber={props.pages - numberOfPaginatorSlots + slotNumber}
+            selected={
+              currentPageNumber ===
+              props.pages - numberOfPaginatorSlots + slotNumber
+            }
+            onClick={setPageNumber}
+          />,
+        );
+        continue;
+      }
     }
     if (slotNumber === 5) {
-      // 8 pages with currently selected being 7 then it should not show ellipse
-      // 8 pages with currently selected being 6 then it should not show ellipse
-      // 8 pages with currently selected being 5 then it should not show ellipse
-      // 8 pages with currently selected being 4 then it should show ellipse
-      if (props.pages - currentPageNumber > 3 && props.pages > 7) {
+      if (
+        props.pages - currentPageNumber > 4 &&
+        props.pages > numberOfPaginatorSlots
+      ) {
         sevenDisplayedSlots.push(<PageEllipsis />);
       } else {
         sevenDisplayedSlots.push(
