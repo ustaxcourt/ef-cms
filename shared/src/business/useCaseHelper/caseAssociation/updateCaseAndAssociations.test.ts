@@ -1,24 +1,22 @@
 /* eslint-disable max-lines */
 jest.mock('../../entities/Message');
 jest.mock('../../entities/CaseDeadline');
-const {
+
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { CaseDeadline } = require('../../entities/CaseDeadline');
-const { faker } = require('@faker-js/faker');
-const { Message } = require('../../entities/Message');
-const { MOCK_CASE } = require('../../../../src/test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+} from '../../entities/EntityConstants';
 
-const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
-
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
+import { Case } from '../../entities/cases/Case';
+import { CaseDeadline } from '../../entities/CaseDeadline';
+import { MOCK_CASE } from '../../../../src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { Message } from '../../entities/Message';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { faker } from '@faker-js/faker';
+import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 
 describe('updateCaseAndAssociations', () => {
   const MOCK_TRIAL_SESSION = {
@@ -331,11 +329,12 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('work items', () => {
+    const workItemId = '2810389';
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
         .getWorkItemsByDocketNumber.mockReturnValue([
-          { pk: 'abc|987', sk: 'workitem|123' },
+          { pk: 'abc|987', sk: `workitem|${workItemId}` },
         ]);
     });
 
@@ -353,7 +352,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         associatedJudge: 'Judge Dredd',
-        workItemId: '123',
+        workItemId,
       });
     });
 
@@ -372,7 +371,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        workItemId: '123',
+        workItemId,
       });
     });
 
@@ -390,7 +389,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         caseTitle: Case.getCaseTitle('Some caption changed'),
-        workItemId: '123',
+        workItemId,
       });
     });
 
@@ -408,7 +407,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         caseStatus: CASE_STATUS_TYPES.generalDocket,
-        workItemId: '123',
+        workItemId,
       });
     });
 
@@ -427,7 +426,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         trialDate: '2021-01-02T05:22:16.001Z',
-        workItemId: '123',
+        workItemId,
       });
     });
 
@@ -456,7 +455,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         trialDate: null,
-        workItemId: '123',
+        workItemId,
       });
     });
     it('the trial location has been updated', async () => {
@@ -475,7 +474,7 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         trialLocation: 'Lubbock, Texas',
-        workItemId: '123',
+        workItemId,
       });
     });
 
@@ -504,7 +503,35 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         trialLocation: null,
-        workItemId: '123',
+        workItemId,
+      });
+    });
+
+    it('the lead docket number has been removed', async () => {
+      const oldCase = {
+        ...validMockCase,
+        leadDocketNumber: '101-20',
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          leadDocketNumber: undefined,
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .updateLeadDocketNumberOnWorkItems,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        leadDocketNumber: null,
+        workItemId,
       });
     });
   });

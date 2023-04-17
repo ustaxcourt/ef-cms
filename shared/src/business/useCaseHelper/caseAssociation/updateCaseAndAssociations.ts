@@ -1,12 +1,12 @@
-const diff = require('diff-arrays-of-objects');
-const { Case } = require('../../entities/cases/Case');
-const { CaseDeadline } = require('../../entities/CaseDeadline');
-const { Correspondence } = require('../../entities/Correspondence');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { IrsPractitioner } = require('../../entities/IrsPractitioner');
-const { Message } = require('../../entities/Message');
-const { pick } = require('lodash');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
+import { Case } from '../../entities/cases/Case';
+import { CaseDeadline } from '../../entities/CaseDeadline';
+import { Correspondence } from '../../entities/Correspondence';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { Message } from '../../entities/Message';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { pick } from 'lodash';
+import diff from 'diff-arrays-of-objects';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -335,7 +335,8 @@ const updateCaseWorkItems = async ({
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.status !== caseToUpdate.status ||
     oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.trialLocation !== caseToUpdate.trialLocation;
+    oldCase.trialLocation !== caseToUpdate.trialLocation ||
+    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
 
   if (!workItemsRequireUpdate) {
     return [];
@@ -349,9 +350,9 @@ const updateCaseWorkItems = async ({
     });
 
   const updateWorkItemRecordFunctions = (
-    updatedCase,
-    previousCase,
-    workItemId,
+    updatedCase: TCase,
+    previousCase: TCase,
+    workItemId: string,
   ) => {
     const workItemRequestFunctions = [];
     if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
@@ -410,6 +411,17 @@ const updateCaseWorkItems = async ({
           trialLocation: updatedCase.trialLocation || null,
           workItemId,
         }),
+      );
+    }
+    if (previousCase.leadDocketNumber !== updatedCase.leadDocketNumber) {
+      workItemRequestFunctions.push(() =>
+        applicationContext
+          .getUseCaseHelpers()
+          .updateLeadDocketNumberOnWorkItems({
+            applicationContext,
+            leadDocketNumber: updatedCase.leadDocketNumber || null,
+            workItemId,
+          }),
       );
     }
 
@@ -529,7 +541,7 @@ const updateCaseDeadlines = async ({
  * @param {string} providers.caseToUpdate the case object which was updated
  * @returns {Promise<*>} the updated case entity
  */
-exports.updateCaseAndAssociations = async ({
+export const updateCaseAndAssociations = async ({
   applicationContext,
   caseToUpdate,
 }) => {
