@@ -30,4 +30,46 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       }),
     ).rejects.toThrow();
   });
+
+  it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Something Something Cool',
+            documentType: 'Order',
+            eventCode: 'O',
+            signedJudgeName: 'Guy Fieri',
+          },
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Order that a letter is added to the Docket number',
+            documentType: 'Order that a letter is added to the Docket number',
+            eventCode: 'OAL',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
+
+    const result = await getOrdersFiledByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
+
+    // this is NOT static, so it should only return the orders that have a count
+    expect(result).toEqual([
+      { count: 1, documentType: 'Order', eventCode: 'O' },
+      {
+        count: 1,
+        documentType: 'Order that a letter is added to the Docket number',
+        eventCode: 'OAL',
+      },
+    ]);
+  });
 });
