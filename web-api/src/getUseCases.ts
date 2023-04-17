@@ -343,7 +343,7 @@ const {
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
 const {
   getTrialSessionsForJudgeActivityReportInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeActivityReportInteractor');
+} = require('../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor');
 const {
   getTrialSessionsForJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeInteractor');

@@ -144,6 +144,31 @@ describe('judgeActivityReportHelper', () => {
         },
       });
 
+      expect(showResults).toBe(false);
+    });
+
+    it('should true when there are orders, opinions, trial sessions or cases for the specified judge', () => {
+      const { showResults } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {
+            casesClosedByJudge: {
+              [CASE_STATUS_TYPES.closed]: 421,
+            },
+            opinions: [
+              {
+                count: 1500,
+                documentType: 'TC Opinion',
+                eventCode: 'TCOP',
+              },
+            ],
+            orders: [],
+            trialSessions: {
+              [SESSION_TYPES.hybrid]: 0,
+            },
+          },
+        },
+      });
+
       expect(showResults).toBe(true);
     });
   });
