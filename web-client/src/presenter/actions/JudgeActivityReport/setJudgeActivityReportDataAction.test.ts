@@ -99,4 +99,35 @@ describe('setJudgeActivityReportDataAction', () => {
 
     expect(state.judgeActivityReportData.opinions).toBe(mockOpinions);
   });
+
+  it('should set props.orders on state', async () => {
+    const mockOrdersIssuedByJudge = [
+      {
+        count: 1,
+        documentType: 'Order',
+        eventCode: 'O',
+      },
+      {
+        count: 5,
+        documentType: 'Order for Dismissal',
+        eventCode: 'ODS',
+      },
+    ];
+
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        orders: mockOrdersIssuedByJudge,
+      },
+      state: {
+        judgeActivityReportData: {
+          orders: undefined,
+        },
+      },
+    });
+
+    expect(state.judgeActivityReportData.orders).toBe(mockOrdersIssuedByJudge);
+  });
 });

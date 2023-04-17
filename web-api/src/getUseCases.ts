@@ -1,4 +1,5 @@
 import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor';
+import { getOrdersFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor';
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 const {
@@ -684,6 +685,7 @@ const useCases = {
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
   getOpinionsFiledByJudgeInteractor,
+  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
