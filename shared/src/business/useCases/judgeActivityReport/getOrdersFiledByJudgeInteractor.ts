@@ -1,6 +1,6 @@
 import {
   COURT_ISSUED_EVENT_CODES,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
@@ -8,7 +8,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { orderBy } from 'lodash';
+import { omit, orderBy } from 'lodash';
 
 /**
  * getOrdersFiledByJudgeInteractor
@@ -18,7 +18,7 @@ import { orderBy } from 'lodash';
  * @param {string} providers.endDate the date to end the search for judge activity
  * @param {string} providers.judgeName the name of the judge
  * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {array} list of opinions filed by the judge in the given date range, sorted alphabetically ascending by event code
+ * @returns {array} list of orders filed by the judge in the given date range, sorted alphabetically ascending by event code
  */
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
@@ -44,16 +44,22 @@ export const getOrdersFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
+  const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+  const orderEventCodesToSearch = omit(
+    ORDER_EVENT_CODES,
+    excludedOrderEventCodes,
+  );
+
   const { results } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      isOpinionSearch: true,
+      documentEventCodes: orderEventCodesToSearch,
       judge: searchEntity.judgeName,
     });
 
-  const result = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
+  // fix this
+  const result = orderEventCodesToSearch.map(eventCode => {
     const count = results.filter(res => res.eventCode === eventCode).length;
     return {
       count,
