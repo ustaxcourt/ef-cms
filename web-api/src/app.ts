@@ -270,6 +270,9 @@ const {
   getOpinionsFiledByJudgeLambda,
 } = require('./reports/getOpinionsFiledByJudgeLambda');
 const {
+  getOrdersFiledByJudgeLambda,
+} = require('./reports/getOrdersFiledByJudgeLambda');
+const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -1104,6 +1107,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.post(
     '/judge-activity-report/opinions',
     lambdaWrapper(getOpinionsFiledByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/orders',
+    lambdaWrapper(getOrdersFiledByJudgeLambda),
   );
 }
 
