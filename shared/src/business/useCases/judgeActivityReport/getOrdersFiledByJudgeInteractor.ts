@@ -1,14 +1,11 @@
-import {
-  COURT_ISSUED_EVENT_CODES,
-  ORDER_EVENT_CODES,
-} from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
+import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { orderBy, without } from 'lodash';
+import { groupBy, orderBy } from 'lodash';
 
 /**
  * getOrdersFiledByJudgeInteractor
@@ -45,9 +42,8 @@ export const getOrdersFiledByJudgeInteractor = async (
   }
 
   const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
-  const orderEventCodesToSearch = without(
-    ORDER_EVENT_CODES,
-    excludedOrderEventCodes,
+  const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
+    eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
   const { results } = await applicationContext
@@ -58,22 +54,17 @@ export const getOrdersFiledByJudgeInteractor = async (
       judge: searchEntity.judgeName,
     });
 
-  // fix this
-  let result = orderEventCodesToSearch.map(eventCode => {
-    const count = results.filter(res => res.eventCode === eventCode).length;
+  let result = groupBy(results, 'eventCode');
 
+  const formattedResult = Object.entries(result).map(([key, value]) => {
     return {
-      count,
-      documentType: COURT_ISSUED_EVENT_CODES.find(
-        doc => doc.eventCode === eventCode,
-      )?.documentType,
-      eventCode,
+      count: value.length,
+      documentType: value[0].documentType,
+      eventCode: key,
     };
   });
 
-  result = result.filter(item => item.count > 0);
-
-  const sortedResult = orderBy(result, 'eventCode', 'asc');
+  const sortedResult = orderBy(formattedResult, 'eventCode', 'asc');
 
   return sortedResult;
 };
