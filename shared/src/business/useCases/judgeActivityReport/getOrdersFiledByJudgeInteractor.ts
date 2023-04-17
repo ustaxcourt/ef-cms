@@ -51,7 +51,9 @@ export const getOrdersFiledByJudgeInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodesToSearch,
+      endDate: searchEntity.endDate,
       judge: searchEntity.judgeName,
+      startDate: searchEntity.startDate,
     });
 
   let result = groupBy(results, 'eventCode');

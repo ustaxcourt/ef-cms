@@ -23,12 +23,12 @@ export const judgeActivityReportHelper = get => {
     0,
   );
 
-  const showResults =
+  const resultsCount =
     ordersFiledTotal +
-      opinionsFiledTotal +
-      trialSessionsHeldTotal +
-      closedCasesTotal >
-    0;
+    opinionsFiledTotal +
+    trialSessionsHeldTotal +
+    closedCasesTotal;
+  const showResults = resultsCount > 0;
 
   return {
     closedCasesTotal,

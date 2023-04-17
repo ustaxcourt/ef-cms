@@ -206,7 +206,7 @@ export const JudgeActivityReport = connect(
         </section>
 
         <section className="usa-section grid-container">
-          {judgeActivityReportData.showResults ? (
+          {judgeActivityReportHelper.showResults ? (
             <>
               <div className="grid-row grid-gap">
                 <div className="grid-col-6">{closedCases()}</div>
@@ -219,7 +219,7 @@ export const JudgeActivityReport = connect(
               </div>
             </>
           ) : (
-            <div className="text-semibold">
+            <div className="text-semibold margin-0">
               There is no activity for the selected dates
             </div>
           )}
