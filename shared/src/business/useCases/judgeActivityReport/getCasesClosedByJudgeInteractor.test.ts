@@ -1,11 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import {
-  chambersUser,
-  judgeUser,
-  petitionsClerkUser,
-} from '../../../test/mockUsers';
 import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
+import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 describe('getCasesClosedByJudgeInteractor', () => {
   const mockClosedCases = [
