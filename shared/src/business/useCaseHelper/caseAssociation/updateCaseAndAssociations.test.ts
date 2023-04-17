@@ -8,11 +8,11 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-
 import { Case } from '../../entities/cases/Case';
 import { CaseDeadline } from '../../entities/CaseDeadline';
 import { MOCK_CASE } from '../../../../src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_WORK_ITEM } from '../../../test/mockWorkItem';
 import { Message } from '../../entities/Message';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -330,18 +330,32 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('work items', () => {
-    const workItemId = '2810389';
     let updatedCase: TCase;
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
         .getWorkItemsByDocketNumber.mockReturnValue([
-          { pk: 'abc|987', sk: `workitem|${workItemId}` },
+          {
+            pk: 'abc|987',
+            sk: `workitem|${MOCK_WORK_ITEM.workItemId}`,
+            ...MOCK_WORK_ITEM,
+          },
         ]);
     });
 
     beforeEach(() => {
       updatedCase = cloneDeep(validMockCase);
+    });
+
+    it('does not call saveWorkItem if nothing on the case changes that requires a work item to be updated', async () => {
+      updatedCase.mailingDate = '2025-01-05T05:22:16.001Z';
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem,
+      ).not.toHaveBeenCalled();
     });
 
     it('the associated judge has been updated', async () => {
@@ -352,85 +366,66 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock
-          .calls[0][0],
-      ).toMatchObject({
-        workItem: { associatedJudge: 'Judge Dredd' },
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.associatedJudge,
+      ).toBe('Judge Dredd');
     });
 
-    it('the docket number suffix is null has been updated because the case type has changed', async () => {
+    it('the docket docketNumberWithSuffix is updated because the case type has changed', async () => {
+      updatedCase.caseType = CASE_TYPES_MAP.whistleblower;
+      // updatedCase.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          caseType: CASE_TYPES_MAP.whistleblower,
-        },
+        caseToUpdate: updatedCase,
       });
 
       expect(
-        applicationContext.getUseCaseHelpers()
-          .updateDocketNumberSuffixOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        workItemId,
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.docketNumberWithSuffix,
+      ).toBe(
+        `${updatedCase.docketNumber}${DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER}`,
+      );
     });
 
     it('the case caption has been updated', async () => {
+      updatedCase.caseCaption = 'Some caption changed';
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          caseCaption: 'Some caption changed',
-        },
+        caseToUpdate: updatedCase,
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        caseTitle: Case.getCaseTitle('Some caption changed'),
-        workItemId,
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.caseTitle,
+      ).toBe(Case.getCaseTitle('Some caption changed'));
     });
 
     it('the case status has been updated', async () => {
+      updatedCase.status = CASE_STATUS_TYPES.generalDocket;
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
+        caseToUpdate: updatedCase,
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        caseStatus: CASE_STATUS_TYPES.generalDocket,
-        workItemId,
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.caseStatus,
+      ).toBe(CASE_STATUS_TYPES.generalDocket);
     });
 
     it('the trial date has been updated', async () => {
+      updatedCase.trialDate = '2021-01-02T05:22:16.001Z';
+      updatedCase.trialSessionId = faker.datatype.uuid();
+
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          trialDate: '2021-01-02T05:22:16.001Z',
-          trialSessionId: faker.datatype.uuid(),
-        },
+        caseToUpdate: updatedCase,
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        trialDate: '2021-01-02T05:22:16.001Z',
-        workItemId,
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.trialDate,
+      ).toBe('2021-01-02T05:22:16.001Z');
     });
 
     it('the trial date has been removed', async () => {
@@ -454,12 +449,9 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        trialDate: null,
-        workItemId,
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.trialDate,
+      ).toBe(null);
     });
     it('the trial location has been updated', async () => {
       await updateCaseAndAssociations({
@@ -473,12 +465,9 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        trialLocation: 'Lubbock, Texas',
-        workItemId,
-      });
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.trialLocation,
+      ).toBe('Lubbock, Texas');
     });
 
     it('the trial location has been removed', async () => {
@@ -502,11 +491,13 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        trialLocation: null,
-        workItemId,
+        applicationContext.getPersistenceGateway().saveWorkItem.mock
+          .calls[0][0],
+      ).toMatchObject({
+        workItem: {
+          trialLocation: null,
+          workItemId: MOCK_WORK_ITEM.workItemId,
+        },
       });
     });
 
@@ -529,13 +520,33 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers()
-          .updateLeadDocketNumberOnWorkItems,
-      ).toHaveBeenCalledWith({
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.leadDocketNumber,
+      ).toBeUndefined();
+    });
+
+    it('the lead docket number has been changed', async () => {
+      const oldCase = {
+        ...validMockCase,
+        leadDocketNumber: '101-20',
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+      await updateCaseAndAssociations({
         applicationContext,
-        leadDocketNumber: null,
-        workItemId,
+        caseToUpdate: {
+          ...validMockCase,
+          leadDocketNumber: '202-20',
+        },
       });
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.leadDocketNumber,
+      ).toBe('202-20');
     });
   });
 
