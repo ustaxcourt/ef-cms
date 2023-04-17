@@ -88,7 +88,6 @@ export const Paginator = (props: {
   const [currentPageNumber, setPageNumber] = useState(8);
   const sevenDisplayedSlots = [];
   const numberOfPaginatorSlots = 7;
-  console.log('Recreating component. SelectedPageNumber: ', currentPageNumber);
   // 1. Should it render the slot at all?
   // 2. Should it render a page button or an ellipse?
   // 3. Should it render The slot number it is or should it add some extras?
@@ -102,7 +101,10 @@ export const Paginator = (props: {
         <PageButton
           pageNumber={0}
           selected={currentPageNumber === 0}
-          onClick={setPageNumber}
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            props.onPageChange(selectedPage);
+          }}
         />,
       );
       continue;
@@ -115,7 +117,10 @@ export const Paginator = (props: {
           <PageButton
             pageNumber={1}
             selected={currentPageNumber === 1}
-            onClick={setPageNumber}
+            onClick={selectedPage => {
+              setPageNumber(selectedPage);
+              props.onPageChange(selectedPage);
+            }}
           />,
         );
       }
@@ -127,7 +132,10 @@ export const Paginator = (props: {
           <PageButton
             pageNumber={slotNumber}
             selected={currentPageNumber === slotNumber}
-            onClick={setPageNumber}
+            onClick={selectedPage => {
+              setPageNumber(selectedPage);
+              props.onPageChange(selectedPage);
+            }}
           />,
         );
         continue;
@@ -137,7 +145,10 @@ export const Paginator = (props: {
           <PageButton
             pageNumber={currentPageNumber + slotNumber - 3}
             selected={currentPageNumber === currentPageNumber + slotNumber - 3}
-            onClick={setPageNumber}
+            onClick={selectedPage => {
+              setPageNumber(selectedPage);
+              props.onPageChange(selectedPage);
+            }}
           />,
         );
         continue;
@@ -150,7 +161,10 @@ export const Paginator = (props: {
               currentPageNumber ===
               props.pages - numberOfPaginatorSlots + slotNumber
             }
-            onClick={setPageNumber}
+            onClick={selectedPage => {
+              setPageNumber(selectedPage);
+              props.onPageChange(selectedPage);
+            }}
           />,
         );
         continue;
@@ -167,7 +181,10 @@ export const Paginator = (props: {
           <PageButton
             pageNumber={props.pages - 2}
             selected={currentPageNumber === props.pages - 2}
-            onClick={setPageNumber}
+            onClick={selectedPage => {
+              setPageNumber(selectedPage);
+              props.onPageChange(selectedPage);
+            }}
           />,
         );
       }
@@ -178,7 +195,10 @@ export const Paginator = (props: {
         <PageButton
           pageNumber={props.pages - 1}
           selected={currentPageNumber === props.pages - 1}
-          onClick={setPageNumber}
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            props.onPageChange(selectedPage);
+          }}
         />,
       );
       continue;
@@ -191,13 +211,19 @@ export const Paginator = (props: {
         <ul className="usa-pagination__list">
           {currentPageNumber !== 0 && (
             <PreviousPage
-              onPreviousClick={() => setPageNumber(currentPageNumber - 1)}
+              onPreviousClick={() => {
+                setPageNumber(currentPageNumber - 1);
+                props.onPageChange(currentPageNumber - 1);
+              }}
             />
           )}
           {sevenDisplayedSlots}
           {currentPageNumber < props.pages - 1 && (
             <NextPage
-              onNextClick={() => setPageNumber(currentPageNumber + 1)}
+              onNextClick={() => {
+                setPageNumber(currentPageNumber + 1);
+                props.onPageChange(currentPageNumber + 1);
+              }}
             />
           )}
         </ul>
@@ -205,37 +231,5 @@ export const Paginator = (props: {
     </>
   );
 };
-
-// export const Paginator = (props: {
-//   pages: number;
-//   onPageChange: (selectedPage: number) => any;
-// }) => {
-//   const [currentPageNumber, setPageNumber] = useState(2);
-//   const middlePageButtons = [];
-//   for (let index = 0; index < 3; index++) {
-//     const pageNumberToDisplay = currentPageNumber + index
-//     middlePageButtons.push(<PageButton pageNumber={currentPageNumber}></PageButton>)
-//   }
-
-//   return (
-//     <>
-//       <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
-//         <ul className="usa-pagination__list">
-//           {currentPageNumber !== 1 && (
-//             <PreviousPage onPreviousClick={() => {}} />
-//           )}
-//           <PageButton pageNumber={1} selected={currentPageNumber === 1} />
-//           {currentPageNumber > 4 && <PageEllipsis />}
-//           {currentPageNumber <= 4 && (
-//             <PageButton pageNumber={2} selected={currentPageNumber === 2} />
-//           )}
-//           {currentPageNumber < props.pages && (
-//             <NextPage onNextClick={() => {}} />
-//           )}
-//         </ul>
-//       </nav>
-//     </>
-//   );
-// };
 
 Paginator.displayName = 'Paginator';
