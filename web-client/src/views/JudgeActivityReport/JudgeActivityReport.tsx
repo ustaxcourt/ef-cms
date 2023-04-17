@@ -121,7 +121,7 @@ export const JudgeActivityReport = connect(
     const opinionsIssued: () => JSX.Element = () => (
       <>
         <table
-          aria-describedby="opinions issued"
+          aria-describedby="opinionsIssued"
           className="usa-table ustc-table"
         >
           <caption className="table-caption-serif" id="opinionsIssued">
