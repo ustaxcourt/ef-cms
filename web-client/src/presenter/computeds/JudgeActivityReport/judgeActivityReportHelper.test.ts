@@ -95,4 +95,29 @@ describe('judgeActivityReportHelper', () => {
       expect(opinionsFiledTotal).toBe(5);
     });
   });
+
+  describe('ordersFiledTotal', () => {
+    it('should be the sum of the values of orders filed off state.judgeActivityReportData', () => {
+      const { ordersFiledTotal } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {
+            orders: [
+              {
+                count: 1,
+                documentType: 'Order',
+                eventCode: 'O',
+              },
+              {
+                count: 5,
+                documentType: 'Order for Dismissal',
+                eventCode: 'ODS',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(ordersFiledTotal).toBe(6);
+    });
+  });
 });
