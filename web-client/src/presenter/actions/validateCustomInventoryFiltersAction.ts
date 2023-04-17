@@ -18,17 +18,12 @@ export const validateCustomInventoryFiltersAction = ({
     state.customCaseInventoryFilters,
   );
 
-  console.log('createEndDate', createEndDate);
-  console.log('createStartDate', createStartDate);
-
   const errors = applicationContext
     .getUseCases()
     .validateCustomCaseInventorySearchFiltersInteractor(applicationContext, {
       endDate: createEndDate,
       startDate: createStartDate,
     });
-
-  console.log('errors', errors);
 
   if (errors) {
     return path.error({
