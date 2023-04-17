@@ -59,8 +59,9 @@ export const getOrdersFiledByJudgeInteractor = async (
     });
 
   // fix this
-  const result = orderEventCodesToSearch.map(eventCode => {
+  let result = orderEventCodesToSearch.map(eventCode => {
     const count = results.filter(res => res.eventCode === eventCode).length;
+
     return {
       count,
       documentType: COURT_ISSUED_EVENT_CODES.find(
@@ -69,6 +70,8 @@ export const getOrdersFiledByJudgeInteractor = async (
       eventCode,
     };
   });
+
+  result = result.filter(item => item.count > 0);
 
   const sortedResult = orderBy(result, 'eventCode', 'asc');
 
