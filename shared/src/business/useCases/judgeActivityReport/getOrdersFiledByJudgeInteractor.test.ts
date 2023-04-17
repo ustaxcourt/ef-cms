@@ -31,15 +31,17 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
+  it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
         results: [
           {
+            documentType: 'Order',
             eventCode: 'O',
           },
           {
+            documentType: 'Order that the letter "L" is added to Docket number',
             eventCode: 'OAL',
           },
         ],
@@ -58,5 +60,14 @@ describe('getOrdersFiledByJudgeInteractor', () => {
         eventCode: 'OAL',
       },
     ]);
+  });
+
+  it.only('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
+    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+
+    await expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].documentEventCodes,
+    ).not.toContain('OAJ');
   });
 });
