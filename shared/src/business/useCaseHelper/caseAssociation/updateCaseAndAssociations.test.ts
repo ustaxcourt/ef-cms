@@ -15,6 +15,7 @@ import { MOCK_CASE } from '../../../../src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { Message } from '../../entities/Message';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { faker } from '@faker-js/faker';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 
@@ -330,6 +331,7 @@ describe('updateCaseAndAssociations', () => {
 
   describe('work items', () => {
     const workItemId = '2810389';
+    let updatedCase: TCase;
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
@@ -338,21 +340,22 @@ describe('updateCaseAndAssociations', () => {
         ]);
     });
 
+    beforeEach(() => {
+      updatedCase = cloneDeep(validMockCase);
+    });
+
     it('the associated judge has been updated', async () => {
+      updatedCase.associatedJudge = 'Judge Dredd';
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          associatedJudge: 'Judge Dredd',
-        },
+        caseToUpdate: updatedCase,
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().updateAssociatedJudgeOnWorkItems,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        associatedJudge: 'Judge Dredd',
-        workItemId,
+        applicationContext.getPersistenceGateway().saveWorkItem.mock
+          .calls[0][0],
+      ).toMatchObject({
+        workItem: { associatedJudge: 'Judge Dredd' },
       });
     });
 
