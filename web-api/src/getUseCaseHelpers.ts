@@ -44,6 +44,7 @@ import { updateCaseStatusOnWorkItems } from '../../shared/src/business/useCaseHe
 import { updateCaseTitleOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems';
 import { updateDocketNumberSuffixOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems';
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
+import { updateLeadDocketNumberOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateLeadDocketNumberOnWorkItems';
 import { updateTrialDateOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems';
 import { updateTrialLocationOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialLocationOnWorkItems';
 
@@ -93,6 +94,7 @@ const useCaseHelpers = {
   updateCaseTitleOnWorkItems,
   updateDocketNumberSuffixOnWorkItems,
   updateInitialFilingDocuments,
+  updateLeadDocketNumberOnWorkItems,
   updateTrialDateOnWorkItems,
   updateTrialLocationOnWorkItems,
 };
