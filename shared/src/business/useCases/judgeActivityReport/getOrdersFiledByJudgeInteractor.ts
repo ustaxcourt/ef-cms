@@ -8,7 +8,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { omit, orderBy } from 'lodash';
+import { orderBy, without } from 'lodash';
 
 /**
  * getOrdersFiledByJudgeInteractor
@@ -45,7 +45,7 @@ export const getOrdersFiledByJudgeInteractor = async (
   }
 
   const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
-  const orderEventCodesToSearch = omit(
+  const orderEventCodesToSearch = without(
     ORDER_EVENT_CODES,
     excludedOrderEventCodes,
   );
