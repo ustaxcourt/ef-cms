@@ -120,4 +120,31 @@ describe('judgeActivityReportHelper', () => {
       expect(ordersFiledTotal).toBe(6);
     });
   });
+
+  describe('showResults', () => {
+    it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
+      const { showResults } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {
+            casesClosedByJudge: {
+              [CASE_STATUS_TYPES.closed]: 0,
+            },
+            opinions: [
+              {
+                count: 0,
+                documentType: 'TC Opinion',
+                eventCode: 'TCOP',
+              },
+            ],
+            orders: [],
+            trialSessions: {
+              [SESSION_TYPES.hybrid]: 0,
+            },
+          },
+        },
+      });
+
+      expect(showResults).toBe(true);
+    });
+  });
 });

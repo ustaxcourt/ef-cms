@@ -205,19 +205,25 @@ export const JudgeActivityReport = connect(
           </div>
         </section>
 
-        {judgeActivityReportData.casesClosedByJudge && (
-          <section className="usa-section grid-container">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{closedCases()}</div>
-              <div className="grid-col-6">{trialSessionsHeld()}</div>
-            </div>
+        <section className="usa-section grid-container">
+          {judgeActivityReportData.showResults ? (
+            <>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">{closedCases()}</div>
+                <div className="grid-col-6">{trialSessionsHeld()}</div>
+              </div>
 
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{ordersIssued()}</div>
-              <div className="grid-col-6">{opinionsIssued()}</div>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">{ordersIssued()}</div>
+                <div className="grid-col-6">{opinionsIssued()}</div>
+              </div>
+            </>
+          ) : (
+            <div className="text-semibold">
+              There is no activity for the selected dates
             </div>
-          </section>
-        )}
+          )}
+        </section>
       </>
     );
   },
