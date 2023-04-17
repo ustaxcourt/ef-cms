@@ -37,12 +37,21 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue({
         results: [
           {
+            documentType:
+              'Order that the letter "X" is deleted from the Docket number',
+            eventCode: 'ODX',
+          },
+          {
             documentType: 'Order',
             eventCode: 'O',
           },
           {
             documentType: 'Order that the letter "L" is added to Docket number',
             eventCode: 'OAL',
+          },
+          {
+            documentType: 'Order',
+            eventCode: 'O',
           },
         ],
       });
@@ -53,21 +62,43 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     );
 
     expect(result).toEqual([
-      { count: 1, documentType: 'Order', eventCode: 'O' },
+      { count: 2, documentType: 'Order', eventCode: 'O' },
       {
         count: 1,
         documentType: 'Order that the letter "L" is added to Docket number',
         eventCode: 'OAL',
       },
+      {
+        count: 1,
+        documentType:
+          'Order that the letter "X" is deleted from the Docket number',
+        eventCode: 'ODX',
+      },
     ]);
   });
 
-  it.only('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
+  it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue([]);
+
     await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
-    await expect(
+    expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0].documentEventCodes,
     ).not.toContain('OAJ');
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].documentEventCodes,
+    ).not.toContain('SPOS');
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].documentEventCodes,
+    ).not.toContain('SPTO');
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].documentEventCodes,
+    ).not.toContain('OST');
   });
 });
