@@ -30,8 +30,8 @@ export const JudgeActivityReport = connect(
   }) {
     const closedCases: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
+        <table aria-describedby="casesClosed" className="usa-table ustc-table">
+          <caption className="table-caption-serif" id="casesClosed">
             Cases Closed{' '}
             <span className="float-right">
               Total: {judgeActivityReportHelper.closedCasesTotal}
@@ -61,8 +61,8 @@ export const JudgeActivityReport = connect(
 
     const trialSessionsHeld: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
+        <table aria-describedby="sessionsHeld" className="usa-table ustc-table">
+          <caption className="table-caption-serif" id="sessionsHeld">
             Sessions Held{' '}
             <span className="float-right">
               Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
@@ -89,25 +89,30 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const ordersIssued: JSX.Element = (
+    const ordersIssued: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
-            Orders Issued <span className="float-right">Total: 4</span>
+        <table aria-describedby="ordersIssued" className="usa-table ustc-table">
+          <caption className="table-caption-serif" id="ordersIssued">
+            Orders Issued{' '}
+            <span className="float-right">
+              Total: {judgeActivityReportHelper.ordersFiledTotal}
+            </span>
           </caption>
           <thead>
             <tr>
-              <th aria-label="TODO">Event</th>
-              <th aria-label="Docket Number">Order Type</th>
-              <th aria-label="Docket Number">Event Total</th>
+              <th aria-label="event code">Event</th>
+              <th aria-label="order type">Order Type</th>
+              <th aria-label="event total">Event Total</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {judgeActivityReportData.orders.map(order => (
+              <tr key={order.eventCode}>
+                <td>{order.eventCode}</td>
+                <td>{order.documentType}</td>
+                <td>{order.count}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -115,8 +120,11 @@ export const JudgeActivityReport = connect(
 
     const opinionsIssued: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
+        <table
+          aria-describedby="opinions issued"
+          className="usa-table ustc-table"
+        >
+          <caption className="table-caption-serif" id="opinionsIssued">
             Opinions Issued{' '}
             <span className="float-right">
               Total: {judgeActivityReportHelper.opinionsFiledTotal}
@@ -124,9 +132,9 @@ export const JudgeActivityReport = connect(
           </caption>
           <thead>
             <tr>
-              <th aria-label="TODO">Event</th>
-              <th aria-label="Docket Number">Opinion Type</th>
-              <th aria-label="Docket Number">Event Total</th>
+              <th aria-label="event code">Event</th>
+              <th aria-label="opinion type">Opinion Type</th>
+              <th aria-label="event total">Event Total</th>
             </tr>
           </thead>
           <tbody>
@@ -205,7 +213,7 @@ export const JudgeActivityReport = connect(
             </div>
 
             <div className="grid-row grid-gap">
-              <div className="grid-col-6">{ordersIssued}</div>
+              <div className="grid-col-6">{ordersIssued()}</div>
               <div className="grid-col-6">{opinionsIssued()}</div>
             </div>
           </section>
