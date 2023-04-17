@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+const numberOfPaginatorSlots = 7;
 const PageButton = (props: {
   pageNumber: number;
   selected: boolean;
@@ -80,129 +81,144 @@ const PageEllipsis = () => {
   );
 };
 
-// eslint-disable-next-line complexity
+// eslint-disable-next-line jsdoc/require-jsdoc
+function getSlotComponent({
+  currentPageNumber,
+  onPageChange,
+  setPageNumber,
+  slotNumber,
+  totalPages,
+}: {
+  currentPageNumber: number;
+  onPageChange: (selectedPage: number) => any;
+  slotNumber: number;
+  totalPages: number;
+  setPageNumber: (selectedPage: number) => any;
+}) {
+  if (slotNumber === 0) {
+    return (
+      <PageButton
+        pageNumber={0}
+        selected={currentPageNumber === 0}
+        onClick={selectedPage => {
+          setPageNumber(selectedPage);
+          onPageChange(selectedPage);
+        }}
+      />
+    );
+  }
+  if (slotNumber === 1) {
+    if (currentPageNumber > 3 && totalPages > numberOfPaginatorSlots) {
+      return <PageEllipsis />;
+    } else {
+      return (
+        <PageButton
+          pageNumber={1}
+          selected={currentPageNumber === 1}
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            onPageChange(selectedPage);
+          }}
+        />
+      );
+    }
+  }
+  if (slotNumber === 2 || slotNumber === 3 || slotNumber === 4) {
+    if (currentPageNumber < 4) {
+      return (
+        <PageButton
+          pageNumber={slotNumber}
+          selected={currentPageNumber === slotNumber}
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            onPageChange(selectedPage);
+          }}
+        />
+      );
+    }
+    if (currentPageNumber >= 4 && totalPages - currentPageNumber > 3) {
+      return (
+        <PageButton
+          pageNumber={currentPageNumber + slotNumber - 3}
+          selected={currentPageNumber === currentPageNumber + slotNumber - 3}
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            onPageChange(selectedPage);
+          }}
+        />
+      );
+    }
+    if (currentPageNumber >= 4 && totalPages - currentPageNumber <= 3) {
+      return (
+        <PageButton
+          pageNumber={totalPages - numberOfPaginatorSlots + slotNumber}
+          selected={
+            currentPageNumber ===
+            totalPages - numberOfPaginatorSlots + slotNumber
+          }
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            onPageChange(selectedPage);
+          }}
+        />
+      );
+    }
+  }
+  if (slotNumber === 5) {
+    if (
+      totalPages - currentPageNumber > 4 &&
+      totalPages > numberOfPaginatorSlots
+    ) {
+      return <PageEllipsis />;
+    } else {
+      return (
+        <PageButton
+          pageNumber={totalPages - 2}
+          selected={currentPageNumber === totalPages - 2}
+          onClick={selectedPage => {
+            setPageNumber(selectedPage);
+            onPageChange(selectedPage);
+          }}
+        />
+      );
+    }
+  }
+  if (slotNumber === 6) {
+    return (
+      <PageButton
+        pageNumber={totalPages - 1}
+        selected={currentPageNumber === totalPages - 1}
+        onClick={selectedPage => {
+          setPageNumber(selectedPage);
+          onPageChange(selectedPage);
+        }}
+      />
+    );
+  }
+}
+
 export const Paginator = (props: {
-  pages: number;
+  totalPages: number;
   onPageChange: (selectedPage: number) => any;
 }) => {
-  const [currentPageNumber, setPageNumber] = useState(8);
+  const [currentPageNumber, setPageNumber] = useState(0);
   const sevenDisplayedSlots = [];
-  const numberOfPaginatorSlots = 7;
   // 1. Should it render the slot at all?
   // 2. Should it render a page button or an ellipse?
   // 3. Should it render The slot number it is or should it add some extras?
 
   for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
-    if (slotNumber >= props.pages) {
+    if (slotNumber >= props.totalPages) {
       continue;
     }
-    if (slotNumber === 0) {
-      sevenDisplayedSlots.push(
-        <PageButton
-          pageNumber={0}
-          selected={currentPageNumber === 0}
-          onClick={selectedPage => {
-            setPageNumber(selectedPage);
-            props.onPageChange(selectedPage);
-          }}
-        />,
-      );
-      continue;
-    }
-    if (slotNumber === 1) {
-      if (currentPageNumber > 3 && props.pages > numberOfPaginatorSlots) {
-        sevenDisplayedSlots.push(<PageEllipsis />);
-      } else {
-        sevenDisplayedSlots.push(
-          <PageButton
-            pageNumber={1}
-            selected={currentPageNumber === 1}
-            onClick={selectedPage => {
-              setPageNumber(selectedPage);
-              props.onPageChange(selectedPage);
-            }}
-          />,
-        );
-      }
-      continue;
-    }
-    if (slotNumber === 2 || slotNumber === 3 || slotNumber === 4) {
-      if (currentPageNumber < 4) {
-        sevenDisplayedSlots.push(
-          <PageButton
-            pageNumber={slotNumber}
-            selected={currentPageNumber === slotNumber}
-            onClick={selectedPage => {
-              setPageNumber(selectedPage);
-              props.onPageChange(selectedPage);
-            }}
-          />,
-        );
-        continue;
-      }
-      if (currentPageNumber >= 4 && props.pages - currentPageNumber > 3) {
-        sevenDisplayedSlots.push(
-          <PageButton
-            pageNumber={currentPageNumber + slotNumber - 3}
-            selected={currentPageNumber === currentPageNumber + slotNumber - 3}
-            onClick={selectedPage => {
-              setPageNumber(selectedPage);
-              props.onPageChange(selectedPage);
-            }}
-          />,
-        );
-        continue;
-      }
-      if (currentPageNumber >= 4 && props.pages - currentPageNumber <= 3) {
-        sevenDisplayedSlots.push(
-          <PageButton
-            pageNumber={props.pages - numberOfPaginatorSlots + slotNumber}
-            selected={
-              currentPageNumber ===
-              props.pages - numberOfPaginatorSlots + slotNumber
-            }
-            onClick={selectedPage => {
-              setPageNumber(selectedPage);
-              props.onPageChange(selectedPage);
-            }}
-          />,
-        );
-        continue;
-      }
-    }
-    if (slotNumber === 5) {
-      if (
-        props.pages - currentPageNumber > 4 &&
-        props.pages > numberOfPaginatorSlots
-      ) {
-        sevenDisplayedSlots.push(<PageEllipsis />);
-      } else {
-        sevenDisplayedSlots.push(
-          <PageButton
-            pageNumber={props.pages - 2}
-            selected={currentPageNumber === props.pages - 2}
-            onClick={selectedPage => {
-              setPageNumber(selectedPage);
-              props.onPageChange(selectedPage);
-            }}
-          />,
-        );
-      }
-      continue;
-    }
-    if (slotNumber === 6) {
-      sevenDisplayedSlots.push(
-        <PageButton
-          pageNumber={props.pages - 1}
-          selected={currentPageNumber === props.pages - 1}
-          onClick={selectedPage => {
-            setPageNumber(selectedPage);
-            props.onPageChange(selectedPage);
-          }}
-        />,
-      );
-      continue;
-    }
+    const slotComponent = getSlotComponent({
+      currentPageNumber,
+      onPageChange: props.onPageChange,
+      setPageNumber,
+      slotNumber,
+      totalPages: props.totalPages,
+    });
+    sevenDisplayedSlots.push(slotComponent);
   }
 
   return (
@@ -218,7 +234,7 @@ export const Paginator = (props: {
             />
           )}
           {sevenDisplayedSlots}
-          {currentPageNumber < props.pages - 1 && (
+          {currentPageNumber < props.totalPages - 1 && (
             <NextPage
               onNextClick={() => {
                 setPageNumber(currentPageNumber + 1);
