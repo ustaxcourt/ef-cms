@@ -11,7 +11,10 @@ import {
 } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
 import { ServiceUnavailableError } from '../../../errors/errors';
-import { addPaperFilingInteractor } from './addPaperFilingInteractor';
+import {
+  addPaperFilingInteractor,
+  determineEntitiesToLock,
+} from './addPaperFilingInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { mockDocketEntry } from '../../../../../web-client/src/presenter/computeds/formattedDocketEntries.test';
@@ -693,5 +696,31 @@ describe('addPaperFilingInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledTimes(3);
     });
+  });
+});
+
+describe('determineEntitiesToLock', () => {
+  let mockParams;
+  beforeEach(() => {
+    mockParams = {
+      applicationContext,
+      consolidatedGroupDocketNumbers: [],
+      documentMetadata: {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+    };
+  });
+  it('should return an object that includes the prefix case', () => {
+    expect(determineEntitiesToLock(mockParams).prefix).toBe('case');
+  });
+  it('should return an object that includes the subjectCaseDocketNumber in the identifiers', () => {
+    mockParams.documentMetadata.docketNumber = '123-20';
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('123-20');
+  });
+  it('should return an object that includes all of the docketNumbers specified in the identifiers', () => {
+    mockParams.consolidatedGroupDocketNumbers = ['111-20', '222-20', '333-20'];
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('111-20');
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('222-20');
+    expect(determineEntitiesToLock(mockParams).identifier).toContain('333-20');
   });
 });
