@@ -113,11 +113,11 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   ).length;
 
   return {
-    [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
     [SESSION_TYPES.regular]: regularSwingSessions + regularNonSwingSessions,
+    [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
     [SESSION_TYPES.hybrid]: hybridSwingSessions + hybridNonSwingSessions,
-    [SESSION_TYPES.motionHearing]: motionHearingSessions,
     [SESSION_TYPES.special]: specialSessions,
+    [SESSION_TYPES.motionHearing]: motionHearingSessions,
   };
 };
 
