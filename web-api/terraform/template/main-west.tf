@@ -86,27 +86,6 @@ resource "null_resource" "api_public_west_object" {
   }
 }
 
-resource "null_resource" "send_emails_west_object" {
-  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
-  provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.zip_send_emails.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/send_emails_${var.deploying_color}.js.zip"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
-}
-
-resource "null_resource" "trial_session_west_object" {
-  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
-  provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.zip_trial_session.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/trial_session_${var.deploying_color}.js.zip"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
-}
 
 
 resource "null_resource" "puppeteer_layer_west_object" {
