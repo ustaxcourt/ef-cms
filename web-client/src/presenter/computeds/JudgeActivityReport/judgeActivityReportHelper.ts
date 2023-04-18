@@ -5,14 +5,16 @@ export const judgeActivityReportHelper = get => {
     state.judgeActivityReportData,
   );
 
-  // if casesClosedByJudge, opinions, orders, trialSessions, haven't submitted form
-  // if casesClosedByJudge, opinions, orders, trialSessions += 0, no results
+  let showDateRangeMessage = false;
+
   let closedCasesTotal,
     trialSessionsHeldTotal,
     opinionsFiledTotal,
     ordersFiledTotal;
   const hasFormBeenSubmitted =
     casesClosedByJudge && opinions && orders && trialSessions;
+
+  console.log('hasFormBeenSubmitted', hasFormBeenSubmitted);
 
   if (hasFormBeenSubmitted) {
     closedCasesTotal = Object.values(casesClosedByJudge).reduce(
@@ -29,6 +31,7 @@ export const judgeActivityReportHelper = get => {
 
     ordersFiledTotal = orders.reduce((a: any, b: any) => a + b.count, 0);
   } else {
+    showDateRangeMessage = true;
   }
 
   const resultsCount =
@@ -43,6 +46,7 @@ export const judgeActivityReportHelper = get => {
     closedCasesTotal,
     opinionsFiledTotal,
     ordersFiledTotal,
+    showDateRangeMessage,
     showResults,
     trialSessionsHeldTotal,
   };

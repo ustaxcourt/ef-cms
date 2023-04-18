@@ -222,7 +222,11 @@ export const JudgeActivityReport = connect(
         </section>
 
         <section className="usa-section grid-container">
-          {judgeActivityReportHelper.showResults ? (
+          {judgeActivityReportHelper.showDateRangeMessage ? (
+            <div className="text-semibold margin-0">
+              Enter a date range to view activity
+            </div>
+          ) : judgeActivityReportHelper.showResults ? (
             <>
               <div className="grid-row grid-gap">
                 <div className="grid-col-6">{closedCases()}</div>

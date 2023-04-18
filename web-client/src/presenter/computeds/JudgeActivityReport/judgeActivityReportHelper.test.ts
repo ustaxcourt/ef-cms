@@ -172,4 +172,41 @@ describe('judgeActivityReportHelper', () => {
       expect(showResults).toBe(true);
     });
   });
+
+  describe('showDateRangeMessage', () => {
+    it('should false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
+      const { showDateRangeMessage } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {
+            casesClosedByJudge: {
+              [CASE_STATUS_TYPES.closed]: 0,
+            },
+            opinions: [
+              {
+                count: 0,
+                documentType: 'TC Opinion',
+                eventCode: 'TCOP',
+              },
+            ],
+            orders: [],
+            trialSessions: {
+              [SESSION_TYPES.hybrid]: 0,
+            },
+          },
+        },
+      });
+
+      expect(showDateRangeMessage).toBe(false);
+    });
+
+    it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
+      const { showDateRangeMessage } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReportData: {},
+        },
+      });
+
+      expect(showDateRangeMessage).toBe(true);
+    });
+  });
 });
