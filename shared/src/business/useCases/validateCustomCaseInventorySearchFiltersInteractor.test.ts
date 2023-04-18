@@ -1,7 +1,14 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  calculateISODate,
+  createISODateString,
+} from '../utilities/DateHandler';
 import { validateCustomCaseInventorySearchFiltersInteractor } from './validateCustomCaseInventorySearchFiltersInteractor';
 
 describe('validateCustomCaseInventorySearchFiltersInteractor', () => {
+  const today = createISODateString();
+  const mockFutureDate = calculateISODate({ howMuch: 5, units: 'days' });
+
   it('should return formatted validation errors when the end date and search dates are not defined', () => {
     const errors = validateCustomCaseInventorySearchFiltersInteractor(
       applicationContext,
@@ -12,8 +19,8 @@ describe('validateCustomCaseInventorySearchFiltersInteractor', () => {
     );
 
     expect(errors).toMatchObject({
-      endDate: 'Enter a valid end date.',
-      startDate: 'Enter a valid start date.',
+      endDate: 'Enter an end date.',
+      startDate: 'Enter a start date.',
     });
   });
 
@@ -21,8 +28,8 @@ describe('validateCustomCaseInventorySearchFiltersInteractor', () => {
     const result = validateCustomCaseInventorySearchFiltersInteractor(
       applicationContext,
       {
-        endDate: '2021-01-23',
-        startDate: '2021-01-22',
+        endDate: mockFutureDate,
+        startDate: today,
       },
     );
 

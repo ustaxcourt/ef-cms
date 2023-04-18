@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCustomInventoryFiltersAction } from './validateCustomInventoryFiltersAction';
@@ -17,7 +17,9 @@ describe('validateCustomInventoryFiltersAction', () => {
   it('should call the success path when the date range is valid', async () => {
     applicationContext
       .getUseCases()
-      .validateJudgeActivityReportSearchInteractor.mockReturnValue(undefined);
+      .validateCustomCaseInventorySearchFiltersInteractor.mockReturnValue(
+        undefined,
+      );
 
     await runAction(validateCustomInventoryFiltersAction, {
       modules: {
@@ -25,8 +27,8 @@ describe('validateCustomInventoryFiltersAction', () => {
       },
       state: {
         customCaseInventoryFilters: {
-          createEndDate: '02/02/2000',
-          createStartDate: '01/01/1000',
+          createEndDate: '',
+          createStartDate: '',
         },
       },
     });
@@ -37,7 +39,7 @@ describe('validateCustomInventoryFiltersAction', () => {
   it('should call the error path when the date range is NOT valid', async () => {
     applicationContext
       .getUseCases()
-      .validateJudgeActivityReportSearchInteractor.mockReturnValue({
+      .validateCustomCaseInventorySearchFiltersInteractor.mockReturnValue({
         someProperty: 'Some Property is required.',
       });
 
