@@ -2,9 +2,12 @@ import {
   CASE_STATUSES,
   CASE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const customCaseInventoryReportHelper = get => {
+// TODO: WRITE TESTS FOR HELPER
+
+export const customCaseInventoryReportHelper = (get, applicationContext) => {
   const customCaseInventoryReportData =
     get(state.customCaseInventoryReportData) || {};
   const populatedFilters = get(state.customCaseInventoryFilters);
@@ -21,10 +24,27 @@ export const customCaseInventoryReportHelper = get => {
     value: type,
   }));
 
+  const formatDate = isoDateString =>
+    applicationContext
+      .getUtilities()
+      .formatDateString(isoDateString, FORMATS.MMDDYYYY);
+
+  console.log('customCaseInventoryReportData', customCaseInventoryReportData);
+
+  // TODO: FORMAT date for createdAt
+  // const reportData =
+  //   customCaseInventoryReportData.foundCases ||
+  //   [].map(entry => ({
+  //     ...entry,
+  //     createdAt: formatDate(entry.createdAt),
+  //   }));
+  // console.log('reportData', reportData);
+
   return {
     caseStatuses,
     caseTypes,
     customCaseInventoryReportData,
+    formatDate,
     isClearFiltersActive: true,
     isRunReportButtonActive,
   };
