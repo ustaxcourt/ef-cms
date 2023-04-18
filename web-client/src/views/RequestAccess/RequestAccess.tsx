@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedCaseGroupFilingCard } from '../FileDocument/ExternalConsolidatedCaseGroupFilingCard';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
@@ -14,6 +15,8 @@ export const RequestAccess = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isIrsPractitionerConsolidatedCasesFilingEnabled:
+      state.isIrsPractitionerConsolidatedCasesFilingEnabled,
     requestAccessHelper: state.requestAccessHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
@@ -26,6 +29,7 @@ export const RequestAccess = connect(
   function RequestAccess({
     form,
     formCancelToggleCancelSequence,
+    isIrsPractitionerConsolidatedCasesFilingEnabled,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -103,6 +107,9 @@ export const RequestAccess = connect(
           <RequestAccessDocumentForm />
           {requestAccessHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
+          )}
+          {isIrsPractitionerConsolidatedCasesFilingEnabled && (
+            <ExternalConsolidatedCaseGroupFilingCard />
           )}
           <div className="margin-top-5">
             <Button
