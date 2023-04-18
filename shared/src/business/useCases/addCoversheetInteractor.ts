@@ -41,7 +41,6 @@ export const addCoversheetInteractor = async (
 
     caseEntity = new Case(caseRecord, { applicationContext });
   }
-
   let pdfData;
   try {
     const { Body } = await applicationContext

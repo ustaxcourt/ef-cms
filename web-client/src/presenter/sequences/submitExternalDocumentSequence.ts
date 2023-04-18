@@ -9,24 +9,11 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { shouldFileAcrossConsolidatedGroupAction } from '../actions/CaseConsolidation/shouldFileAcrossConsolidatedGroupAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
-import { uploadExternalDocumentsAcrossConsolidatedGroupAction } from '../actions/FileDocument/uploadExternalDocumentsAcrossConsolidatedGroupAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
-const onSuccessForIndividualCase = [
-  submitRespondentCaseAssociationRequestAction,
-  setCaseAction,
-  closeFileUploadStatusModalAction,
-  getPrintableFilingReceiptSequence,
-  getFileExternalDocumentAlertSuccessAction,
-  setAlertSuccessAction,
-  setSaveAlertsForNavigationAction,
-  navigateToCaseDetailAction,
-];
-
-const onSuccessForConsolidatedGroup = [
+const onSuccess = [
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,
@@ -41,21 +28,9 @@ const onSuccessForConsolidatedGroup = [
 
 export const submitExternalDocumentSequence = showProgressSequenceDecorator([
   openFileUploadStatusModalAction,
-  shouldFileAcrossConsolidatedGroupAction,
+  uploadExternalDocumentsAction,
   {
-    no: [
-      uploadExternalDocumentsAction,
-      {
-        error: [openFileUploadErrorModal],
-        success: onSuccessForIndividualCase,
-      },
-    ],
-    yes: [
-      uploadExternalDocumentsAcrossConsolidatedGroupAction,
-      {
-        error: [openFileUploadErrorModal],
-        success: onSuccessForConsolidatedGroup,
-      },
-    ],
+    error: [openFileUploadErrorModal],
+    success: onSuccess,
   },
 ]);

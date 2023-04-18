@@ -2,6 +2,7 @@ import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
+  console.log('docketNumber', docketNumber);
   return applicationContext
     .getUseCases()
     .addCoversheetInteractor(applicationContext, {
@@ -29,7 +30,7 @@ export const uploadExternalDocumentsAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  const { docketNumber } = get(state.caseDetail);
+  const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
   let privatePractitioners = null;
@@ -46,6 +47,7 @@ export const uploadExternalDocumentsAction = async ({
 
   const documentMetadata = {
     ...form,
+    consolidatedCasesToFileAcross: consolidatedCases,
     docketNumber,
     filers,
     isFileAttached: true,
@@ -85,9 +87,15 @@ export const uploadExternalDocumentsAction = async ({
         documentMetadata,
         progressFunctions,
       });
-
+    console.log('caseDetail', caseDetail);
     for (let docketEntryId of docketEntryIdsAdded) {
-      await addCoversheet({ applicationContext, docketEntryId, docketNumber });
+      await addCoversheet({
+        applicationContext,
+        docketEntryId,
+        docketNumber: form.fileAcrossConsolidatedGroup
+          ? caseDetail.leadDocketNumber
+          : docketNumber,
+      });
     }
 
     return path.success({
