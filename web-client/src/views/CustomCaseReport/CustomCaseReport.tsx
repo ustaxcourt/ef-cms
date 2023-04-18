@@ -270,8 +270,9 @@ export const CustomCaseReport = connect(
 );
 
 const ReportTable = ({ customCaseInventoryReportHelper }) => {
-  const { customCaseInventoryReportData, formatDate } =
-    customCaseInventoryReportHelper;
+  const { customCaseInventoryReportData } = customCaseInventoryReportHelper;
+  console.log('customCaseInventoryReportData', customCaseInventoryReportData);
+
   return (
     <>
       <table
@@ -291,25 +292,24 @@ const ReportTable = ({ customCaseInventoryReportHelper }) => {
             <th>High Priority for calendaring</th>
           </tr>
         </thead>
-        {customCaseInventoryReportData &&
-          customCaseInventoryReportData.foundCases && (
-            <tbody>
-              {customCaseInventoryReportData.foundCases.map(entry => (
-                <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
-                  <td>
-                    <CaseLink formattedCase={entry} />
-                  </td>
-                  <td>{formatDate(entry.createdAt)}</td>
-                  <td>PLACEHOLDER</td>
-                  <td>{entry.status}</td>
-                  <td>{entry.caseType}</td>
-                  <td>{entry.associatedJudge}</td>
-                  <td>{entry.preferredTrialCity}</td>
-                  <td>PLACEHOLDER</td>
-                </tr>
-              ))}
-            </tbody>
-          )}
+        {customCaseInventoryReportData && (
+          <tbody>
+            {customCaseInventoryReportData.map(entry => (
+              <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
+                <td>
+                  <CaseLink formattedCase={entry} />
+                </td>
+                <td>{entry.createdAt}</td>
+                <td>PLACEHOLDER</td>
+                <td>{entry.status}</td>
+                <td>{entry.caseType}</td>
+                <td>{entry.associatedJudge}</td>
+                <td>{entry.preferredTrialCity}</td>
+                <td>PLACEHOLDER</td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
     </>
   );

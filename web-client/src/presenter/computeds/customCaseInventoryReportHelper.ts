@@ -10,6 +10,8 @@ import { state } from 'cerebral';
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
   const customCaseInventoryReportData =
     get(state.customCaseInventoryReportData) || {};
+  console.log('report data:', customCaseInventoryReportData);
+
   const populatedFilters = get(state.customCaseInventoryFilters);
   const isRunReportButtonActive =
     populatedFilters.createStartDate && populatedFilters.createEndDate;
@@ -27,24 +29,23 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
   const formatDate = isoDateString =>
     applicationContext
       .getUtilities()
-      .formatDateString(isoDateString, FORMATS.MMDDYYYY);
+      .formatDateString(isoDateString, FORMATS.MMDDYY);
 
   console.log('customCaseInventoryReportData', customCaseInventoryReportData);
 
   // TODO: FORMAT date for createdAt
-  // const reportData =
-  //   customCaseInventoryReportData.foundCases ||
-  //   [].map(entry => ({
-  //     ...entry,
-  //     createdAt: formatDate(entry.createdAt),
-  //   }));
-  // console.log('reportData', reportData);
+  const reportData = (customCaseInventoryReportData.foundCases || []).map(
+    entry => ({
+      ...entry,
+      createdAt: formatDate(entry.createdAt),
+    }),
+  );
+  console.log('reportData', reportData);
 
   return {
     caseStatuses,
     caseTypes,
-    customCaseInventoryReportData,
-    formatDate,
+    customCaseInventoryReportData: reportData,
     isClearFiltersActive: true,
     isRunReportButtonActive,
   };
