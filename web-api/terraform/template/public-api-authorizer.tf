@@ -11,7 +11,7 @@ resource "aws_lambda_function" "public_api_authorizer_lambda" {
   handler          = "public-api-authorizer.handler"
   source_code_hash = data.archive_file.zip_public_authorizer.output_base64sha256
 
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
 
   environment {
     variables = {
@@ -29,7 +29,7 @@ resource "aws_lambda_function" "public_api_authorizer_lambda_west" {
   handler          = "public-api-authorizer.handler"
   source_code_hash = data.archive_file.zip_public_authorizer.output_base64sha256
 
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
 
   environment {
     variables = {
