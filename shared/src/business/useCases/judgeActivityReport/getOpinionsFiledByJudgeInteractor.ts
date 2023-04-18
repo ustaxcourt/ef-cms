@@ -1,5 +1,6 @@
 import {
   COURT_ISSUED_EVENT_CODES,
+  MAX_ELASTICSEARCH_PAGINATION,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
@@ -52,6 +53,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
       endDate: searchEntity.endDate,
       isOpinionSearch: true,
       judge: searchEntity.judgeName,
+      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: searchEntity.startDate,
     });
 

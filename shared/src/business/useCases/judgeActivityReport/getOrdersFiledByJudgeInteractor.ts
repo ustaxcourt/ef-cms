@@ -1,6 +1,9 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
-import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
+import {
+  MAX_ELASTICSEARCH_PAGINATION,
+  ORDER_EVENT_CODES,
+} from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -53,6 +56,7 @@ export const getOrdersFiledByJudgeInteractor = async (
       documentEventCodes: orderEventCodesToSearch,
       endDate: searchEntity.endDate,
       judge: searchEntity.judgeName,
+      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: searchEntity.startDate,
     });
 
