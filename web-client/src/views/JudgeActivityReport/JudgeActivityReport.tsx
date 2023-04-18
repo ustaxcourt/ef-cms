@@ -174,10 +174,7 @@ export const JudgeActivityReport = connect(
           <ErrorNotification />
 
           <div className="title">
-            <h1>
-              Activity - {form.judgeName}{' '}
-              {judgeActivityReportHelper.currentDate}
-            </h1>
+            <h1>Activity - {judgeActivityReportHelper.reportHeader}</h1>
           </div>
 
           <div className="blue-container">
@@ -225,7 +222,7 @@ export const JudgeActivityReport = connect(
         </section>
 
         <section className="usa-section grid-container">
-          {judgeActivityReportHelper.showDateRangeMessage ? (
+          {judgeActivityReportHelper.showSelectDateRangeText ? (
             <div className="text-semibold margin-0">
               Enter a date range to view activity
             </div>
