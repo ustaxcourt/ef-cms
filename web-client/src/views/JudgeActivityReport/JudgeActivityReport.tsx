@@ -31,11 +31,15 @@ export const JudgeActivityReport = connect(
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
-          <caption className="table-caption-serif" id="casesClosed">
-            Cases Closed{' '}
-            <span className="float-right">
-              Total: {judgeActivityReportHelper.closedCasesTotal}
-            </span>
+          <caption className="inline" id="casesClosed">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Cases Closed{' '}
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.closedCasesTotal}
+              </div>
+            </div>
           </caption>
           <thead>
             <tr>
@@ -62,11 +66,15 @@ export const JudgeActivityReport = connect(
     const trialSessionsHeld: () => JSX.Element = () => (
       <>
         <table aria-describedby="sessionsHeld" className="usa-table ustc-table">
-          <caption className="table-caption-serif" id="sessionsHeld">
-            Sessions Held{' '}
-            <span className="float-right">
-              Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
-            </span>
+          <caption id="sessionsHeld">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Sessions Held
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
+              </div>
+            </div>
           </caption>
 
           <thead>
@@ -92,11 +100,15 @@ export const JudgeActivityReport = connect(
     const ordersIssued: () => JSX.Element = () => (
       <>
         <table aria-describedby="ordersIssued" className="usa-table ustc-table">
-          <caption className="table-caption-serif" id="ordersIssued">
-            Orders Issued{' '}
-            <span className="float-right">
-              Total: {judgeActivityReportHelper.ordersFiledTotal}
-            </span>
+          <caption id="ordersIssued">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Orders Issued
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.ordersFiledTotal}
+              </div>
+            </div>
           </caption>
           <thead>
             <tr>
@@ -124,11 +136,15 @@ export const JudgeActivityReport = connect(
           aria-describedby="opinionsIssued"
           className="usa-table ustc-table"
         >
-          <caption className="table-caption-serif" id="opinionsIssued">
-            Opinions Issued{' '}
-            <span className="float-right">
-              Total: {judgeActivityReportHelper.opinionsFiledTotal}
-            </span>
+          <caption id="opinionsIssued">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Opinions Issued
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.opinionsFiledTotal}
+              </div>
+            </div>
           </caption>
           <thead>
             <tr>
