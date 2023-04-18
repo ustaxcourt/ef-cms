@@ -42,7 +42,7 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
   const currentDate = applicationContext
     .getUtilities()
     .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString().toISOString(),
+      applicationContext.getUtilities().prepareDateFromString(),
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
