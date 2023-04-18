@@ -197,6 +197,12 @@ function getSlotComponent({
   }
 }
 
+/*
+This component is based off of USWDS implementation of a paginator: https://designsystem.digital.gov/components/pagination/
+The totalPages and selected page work similarly to counting arrays. TotalPages is similar to array.length and selectedPage is 0 based indexing.
+totalPages could be 20 but the maximum value selectedPage could be is 19 and the lowest pages is 0.
+*/
+
 export const Paginator = (props: {
   totalPages: number;
   onPageChange: (selectedPage: number) => any;
