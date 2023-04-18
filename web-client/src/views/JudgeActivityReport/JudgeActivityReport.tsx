@@ -8,8 +8,6 @@ import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
-    CLOSED_CASE_STATUSES: state.constants.CLOSED_CASE_STATUSES,
-    SESSION_TYPES: state.constants.SESSION_TYPES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
@@ -19,11 +17,9 @@ export const JudgeActivityReport = connect(
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
-    CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
     judgeActivityReportHelper,
-    SESSION_TYPES,
     submitJudgeActivityReportSequence,
     updateFormValueSequence,
     validationErrors,
@@ -43,21 +39,21 @@ export const JudgeActivityReport = connect(
           </caption>
           <thead>
             <tr>
-              <th aria-label="Case type">Case Type</th>
-              <th aria-label="Case type total" className="text-right">
+              <th aria-label="case type">Case Type</th>
+              <th aria-label="case type total" className="text-right">
                 Case Type Total
               </th>
             </tr>
           </thead>
           <tbody>
-            {CLOSED_CASE_STATUSES.map(status => (
-              <tr key={status}>
-                <td>{status}</td>
-                <td className="text-right">
-                  {judgeActivityReportData.casesClosedByJudge[status]}
-                </td>
-              </tr>
-            ))}
+            {Object.entries(judgeActivityReportData.casesClosedByJudge).map(
+              ([status, count]) => (
+                <tr key={status}>
+                  <td>{status}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -79,21 +75,21 @@ export const JudgeActivityReport = connect(
 
           <thead>
             <tr>
-              <th aria-label="Session type">Session Type</th>
-              <th aria-label="Session type total" className="text-right">
+              <th aria-label="session type">Session Type</th>
+              <th aria-label="session type total" className="text-right">
                 Session Type Total
               </th>
             </tr>
           </thead>
           <tbody>
-            {Object.values(SESSION_TYPES).map(status => (
-              <tr key={status}>
-                <td>{status}</td>
-                <td className="text-right">
-                  {judgeActivityReportData.trialSessions[status]}
-                </td>
-              </tr>
-            ))}
+            {Object.entries(judgeActivityReportData.trialSessions).map(
+              ([sessionStatus, count]) => (
+                <tr key={sessionStatus}>
+                  <td>{sessionStatus}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -124,13 +120,15 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.orders.map(order => (
-              <tr key={order.eventCode}>
-                <td className="width-15">{order.eventCode}</td>
-                <td>{order.documentType}</td>
-                <td className="text-right">{order.count}</td>
-              </tr>
-            ))}
+            {judgeActivityReportData.orders.map(
+              ({ count, documentType, eventCode }) => (
+                <tr key={eventCode}>
+                  <td className="width-15">{eventCode}</td>
+                  <td>{documentType}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -164,13 +162,15 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.opinions.map(opinion => (
-              <tr key={opinion.eventCode}>
-                <td className="width-15">{opinion.eventCode}</td>
-                <td>{opinion.documentType}</td>
-                <td className="text-right">{opinion.count}</td>
-              </tr>
-            ))}
+            {judgeActivityReportData.opinions.map(
+              ({ count, documentType, eventCode }) => (
+                <tr key={eventCode}>
+                  <td className="width-15">{eventCode}</td>
+                  <td>{documentType}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -236,7 +236,7 @@ export const JudgeActivityReport = connect(
             <div className="text-semibold margin-0">
               Enter a date range to view activity
             </div>
-          ) : judgeActivityReportHelper.showResults ? (
+          ) : judgeActivityReportHelper.showResultsTables ? (
             <>
               <div className="grid-row grid-gap">
                 <div className="grid-col-6">{closedCases()}</div>

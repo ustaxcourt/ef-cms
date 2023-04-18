@@ -119,24 +119,24 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
-  describe('showResults', () => {
+  describe('showResultsTables', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
-      const { showResults } = runCompute(judgeActivityReportHelper, {
+      const { showResultsTables } = runCompute(judgeActivityReportHelper, {
         state: {
           form: mockForm,
           judgeActivityReportData: {},
         },
       });
 
-      expect(showResults).toBe(false);
+      expect(showResultsTables).toBe(false);
     });
 
     it('should true when there are orders, opinions, trial sessions or cases for the specified judge', () => {
-      const { showResults } = runCompute(judgeActivityReportHelper, {
+      const { showResultsTables } = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
 
-      expect(showResults).toBe(true);
+      expect(showResultsTables).toBe(true);
     });
   });
 
