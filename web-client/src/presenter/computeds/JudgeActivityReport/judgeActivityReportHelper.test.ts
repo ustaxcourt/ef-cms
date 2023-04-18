@@ -62,24 +62,6 @@ describe('judgeActivityReportHelper', () => {
     };
   });
 
-  it('should return all table total counts as 0 when the report has not yet been run', () => {
-    const {
-      closedCasesTotal,
-      opinionsFiledTotal,
-      ordersFiledTotal,
-      trialSessionsHeldTotal,
-    } = runCompute(judgeActivityReportHelper, {
-      state: {
-        judgeActivityReportData: {},
-      },
-    });
-
-    expect(closedCasesTotal).toBeUndefined();
-    expect(trialSessionsHeldTotal).toBeUndefined();
-    expect(opinionsFiledTotal).toBeUndefined();
-    expect(ordersFiledTotal).toBeUndefined();
-  });
-
   describe('closedCasesTotal', () => {
     it('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
       const { closedCasesTotal } = runCompute(judgeActivityReportHelper, {

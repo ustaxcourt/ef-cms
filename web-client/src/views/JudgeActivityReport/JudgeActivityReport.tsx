@@ -31,7 +31,7 @@ export const JudgeActivityReport = connect(
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
-          <caption className="inline" id="casesClosed">
+          <caption id="casesClosed">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
                 Cases Closed{' '}
