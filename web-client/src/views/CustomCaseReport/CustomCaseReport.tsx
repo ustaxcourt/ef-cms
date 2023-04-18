@@ -31,6 +31,11 @@ export const CustomCaseReport = connect(
     setCustomCaseInventoryReportFiltersSequence,
     validationErrors,
   }) {
+    console.log(
+      'customCaseInventoryReportHelper',
+      customCaseInventoryReportHelper,
+    );
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -261,7 +266,12 @@ export const CustomCaseReport = connect(
               0}
           </div>
           <ReportTable
-            customCaseInventoryReportHelper={customCaseInventoryReportHelper}
+            customCaseInventoryReportData={
+              customCaseInventoryReportHelper.customCaseInventoryReportData
+            }
+            hasNoCustomCaseData={
+              customCaseInventoryReportHelper.hasNoCustomCaseData
+            }
           />
         </section>
       </>
@@ -269,10 +279,10 @@ export const CustomCaseReport = connect(
   },
 );
 
-const ReportTable = ({ customCaseInventoryReportHelper }) => {
-  const { customCaseInventoryReportData } = customCaseInventoryReportHelper;
-  console.log('customCaseInventoryReportData', customCaseInventoryReportData);
-
+const ReportTable = ({
+  customCaseInventoryReportData,
+  hasNoCustomCaseData,
+}) => {
   return (
     <>
       <table
@@ -292,9 +302,9 @@ const ReportTable = ({ customCaseInventoryReportHelper }) => {
             <th>High Priority for calendaring</th>
           </tr>
         </thead>
-        {customCaseInventoryReportData && (
-          <tbody>
-            {customCaseInventoryReportData.map(entry => (
+        <tbody>
+          {customCaseInventoryReportData &&
+            customCaseInventoryReportData.map(entry => (
               <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
                 <td>
                   <CaseLink formattedCase={entry} />
@@ -308,8 +318,12 @@ const ReportTable = ({ customCaseInventoryReportHelper }) => {
                 <td>PLACEHOLDER</td>
               </tr>
             ))}
-          </tbody>
-        )}
+          {!hasNoCustomCaseData && (
+            <tr>
+              <td>No data found.</td>
+            </tr>
+          )}
+        </tbody>
       </table>
     </>
   );
