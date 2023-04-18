@@ -174,7 +174,10 @@ export const JudgeActivityReport = connect(
           <ErrorNotification />
 
           <div className="title">
-            <h1>Activity - {form.judgeName} </h1>
+            <h1>
+              Activity - {form.judgeName}{' '}
+              {judgeActivityReportHelper.currentDate}
+            </h1>
           </div>
 
           <div className="blue-container">

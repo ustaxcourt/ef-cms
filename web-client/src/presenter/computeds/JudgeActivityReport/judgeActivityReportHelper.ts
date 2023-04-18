@@ -1,6 +1,5 @@
 import { state } from 'cerebral';
-
-export const judgeActivityReportHelper = get => {
+export const judgeActivityReportHelper = (get, applicationContext) => {
   const { casesClosedByJudge, opinions, orders, trialSessions } = get(
     state.judgeActivityReportData,
   );
@@ -40,8 +39,19 @@ export const judgeActivityReportHelper = get => {
 
   const showResults = resultsCount > 0;
 
+  const currentDate = applicationContext
+    .getUtilities()
+    .prepareDateFromString()
+    .toISOString();
+
+  // applicationContext
+  // .getUtilities()
+  // .prepareDateFromString(undefined, applicationContext.getConstants().FORMATS.MMDDYY)
+
+  console.log('currentDate', currentDate);
   return {
     closedCasesTotal,
+    currentDate,
     opinionsFiledTotal,
     ordersFiledTotal,
     showDateRangeMessage,
