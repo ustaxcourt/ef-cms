@@ -10,11 +10,13 @@ import { state } from 'cerebral';
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
   get,
+  props,
   store,
 }) => {
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { eventCode: documentToFileEventCode } = get(state.form);
+  const { overrideIsMultiDocketableEventCode } = props;
 
   const isConsolidatedGroupAccessEnabled = get(
     state.featureFlags[
@@ -22,17 +24,25 @@ export const setDefaultFileDocumentFormValuesAction = ({
     ],
   );
   const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
-  const isMultiDocketableEventCode = !!applicationContext
-    .getConstants()
-    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
+  const isMultiDocketableEventCode =
+    overrideIsMultiDocketableEventCode ??
+    !!applicationContext
+      .getConstants()
+      .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
 
+  console.log(
+    'isConsolidatedGroupAccessEnabled',
+    isConsolidatedGroupAccessEnabled,
+  );
+  console.log('isInConsolidatedGroup', isInConsolidatedGroup);
+  console.log('isMultiDocketableEventCode', isMultiDocketableEventCode);
   if (
     isConsolidatedGroupAccessEnabled &&
     isInConsolidatedGroup &&
     isMultiDocketableEventCode
   ) {
     store.set(state.isIrsPractitionerConsolidatedCasesFilingEnabled, true);
-    store.set(state.form.fileAcrossConsolidatedGroup, undefined);
+    store.set(state.form.fileAcrossConsolidatedGroup, true);
   }
 
   store.set(state.form.attachments, false);
