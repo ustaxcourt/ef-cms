@@ -171,10 +171,11 @@ function getSlotComponent({
     ) {
       return <PageEllipsis />;
     } else {
+      const subtractor = totalPages >= 7 ? 2 : 1;
       return (
         <PageButton
-          pageNumber={totalPages - 2}
-          selected={currentPageNumber === totalPages - 2}
+          pageNumber={totalPages - subtractor}
+          selected={currentPageNumber === totalPages - subtractor}
           onClick={selectedPage => {
             setPageNumber(selectedPage);
             onPageChange(selectedPage);
@@ -203,6 +204,7 @@ export const Paginator = (props: {
 }) => {
   const [currentPageNumber, setPageNumber] = useState(0);
   const sevenDisplayedSlots = [];
+  console.log('selected page number: ', currentPageNumber);
   // 1. Should it render the slot at all?
   // 2. Should it render a page button or an ellipse?
   // 3. Should it render The slot number it is or should it add some extras?
