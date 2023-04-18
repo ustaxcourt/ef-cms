@@ -181,17 +181,7 @@ describe('updateCaseAndAssociations', () => {
 
     // updateCaseWorkItems
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateAssociatedJudgeOnWorkItems,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseTitleOnWorkItems,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseStatusOnWorkItems,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialDateOnWorkItems,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toHaveBeenCalled();
 
     // updateUserCaseMappings
