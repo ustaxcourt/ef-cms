@@ -85,6 +85,21 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     ]);
   });
 
+  it('should return an empty list when no matching orders for the judge in the date range provided are found', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [],
+      });
+
+    const result = await getOrdersFiledByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
+
+    expect(result).toEqual([]);
+  });
+
   it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
     applicationContext
       .getPersistenceGateway()
