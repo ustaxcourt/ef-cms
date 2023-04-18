@@ -62,6 +62,14 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       mockValidRequest,
     );
 
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      endDate: '2020-03-22T03:59:59.999Z',
+      judge: mockValidRequest.judgeName,
+      startDate: '2020-02-12T05:00:00.000Z',
+    });
     expect(result).toEqual([
       { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
       {

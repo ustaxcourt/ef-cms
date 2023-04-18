@@ -1,32 +1,58 @@
 import { state } from 'cerebral';
-
-export const judgeActivityReportHelper = get => {
+export const judgeActivityReportHelper = (get, applicationContext) => {
   const { casesClosedByJudge, opinions, orders, trialSessions } = get(
     state.judgeActivityReportData,
   );
 
-  const closedCasesTotal: number = Object.values(
-    casesClosedByJudge || {},
-  ).reduce((a: number, b: number) => a + b, 0);
+  let showDateRangeMessage = false;
 
-  const trialSessionsHeldTotal: number = Object.values(
-    trialSessions || {},
-  ).reduce((a: number, b: number) => a + b, 0);
+  let closedCasesTotal,
+    trialSessionsHeldTotal,
+    opinionsFiledTotal,
+    ordersFiledTotal;
+  const hasFormBeenSubmitted =
+    casesClosedByJudge && opinions && orders && trialSessions;
 
-  const opinionsFiledTotal: number = (opinions || []).reduce(
-    (a: any, b: any) => a + b.count,
-    0,
-  );
+  if (hasFormBeenSubmitted) {
+    closedCasesTotal = Object.values(casesClosedByJudge).reduce(
+      (a: number, b: number) => a + b,
+      0,
+    );
 
-  const ordersFiledTotal: number = (orders || []).reduce(
-    (a: any, b: any) => a + b.count,
-    0,
-  );
+    trialSessionsHeldTotal = Object.values(trialSessions).reduce(
+      (a: number, b: number) => a + b,
+      0,
+    );
+
+    opinionsFiledTotal = opinions.reduce((a: any, b: any) => a + b.count, 0);
+
+    ordersFiledTotal = orders.reduce((a: any, b: any) => a + b.count, 0);
+  } else {
+    showDateRangeMessage = true;
+  }
+
+  const resultsCount =
+    ordersFiledTotal +
+    opinionsFiledTotal +
+    trialSessionsHeldTotal +
+    closedCasesTotal;
+
+  const showResults = resultsCount > 0;
+
+  const currentDate = applicationContext
+    .getUtilities()
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString(),
+      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+    );
 
   return {
     closedCasesTotal,
+    currentDate,
     opinionsFiledTotal,
     ordersFiledTotal,
+    showDateRangeMessage,
+    showResults,
     trialSessionsHeldTotal,
   };
 };

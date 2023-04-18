@@ -49,8 +49,10 @@ export const getOpinionsFiledByJudgeInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      endDate: searchEntity.endDate,
       isOpinionSearch: true,
       judge: searchEntity.judgeName,
+      startDate: searchEntity.startDate,
     });
 
   const result = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
