@@ -14,8 +14,6 @@ export const judgeActivityReportHelper = get => {
   const hasFormBeenSubmitted =
     casesClosedByJudge && opinions && orders && trialSessions;
 
-  console.log('hasFormBeenSubmitted', hasFormBeenSubmitted);
-
   if (hasFormBeenSubmitted) {
     closedCasesTotal = Object.values(casesClosedByJudge).reduce(
       (a: number, b: number) => a + b,
