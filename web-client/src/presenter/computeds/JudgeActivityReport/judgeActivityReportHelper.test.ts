@@ -16,50 +16,48 @@ describe('judgeActivityReportHelper', () => {
 
   beforeEach(() => {
     mockJudgeActivityReport = {
-      judgeActivityReportData: {
-        casesClosedByJudge: {
-          [CASE_STATUS_TYPES.closed]: 1,
-          [CASE_STATUS_TYPES.closedDismissed]: 5,
+      casesClosedByJudge: {
+        [CASE_STATUS_TYPES.closed]: 1,
+        [CASE_STATUS_TYPES.closedDismissed]: 5,
+      },
+      opinions: [
+        {
+          count: 1,
+          documentType: 'Memorandum Opinion',
+          eventCode: 'MOP',
         },
-        opinions: [
-          {
-            count: 1,
-            documentType: 'Memorandum Opinion',
-            eventCode: 'MOP',
-          },
-          {
-            count: 0,
-            documentType: 'S Opinion',
-            eventCode: 'SOP',
-          },
-          {
-            count: 0,
-            documentType: 'TC Opinion',
-            eventCode: 'TCOP',
-          },
-          {
-            count: 4,
-            documentType: 'Bench Opinion',
-            eventCode: 'OST',
-          },
-        ],
-        orders: [
-          {
-            count: 1,
-            documentType: 'Order',
-            eventCode: 'O',
-          },
-          {
-            count: 5,
-            documentType: 'Order for Dismissal',
-            eventCode: 'ODS',
-          },
-        ],
-        trialSessions: {
-          [SESSION_TYPES.regular]: 1,
-          [SESSION_TYPES.hybrid]: 0.5,
-          [SESSION_TYPES.motionHearing]: 1.5,
+        {
+          count: 0,
+          documentType: 'S Opinion',
+          eventCode: 'SOP',
         },
+        {
+          count: 0,
+          documentType: 'TC Opinion',
+          eventCode: 'TCOP',
+        },
+        {
+          count: 4,
+          documentType: 'Bench Opinion',
+          eventCode: 'OST',
+        },
+      ],
+      orders: [
+        {
+          count: 1,
+          documentType: 'Order',
+          eventCode: 'O',
+        },
+        {
+          count: 5,
+          documentType: 'Order for Dismissal',
+          eventCode: 'ODS',
+        },
+      ],
+      trialSessions: {
+        [SESSION_TYPES.regular]: 1,
+        [SESSION_TYPES.hybrid]: 0.5,
+        [SESSION_TYPES.motionHearing]: 1.5,
       },
     };
   });
@@ -83,7 +81,7 @@ describe('judgeActivityReportHelper', () => {
   });
 
   describe('closedCasesTotal', () => {
-    it.only('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
+    it('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
       const { closedCasesTotal } = runCompute(judgeActivityReportHelper, {
         state: {
           judgeActivityReportData: mockJudgeActivityReport,
@@ -134,7 +132,7 @@ describe('judgeActivityReportHelper', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
       const { showResults } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: mockJudgeActivityReport,
+          judgeActivityReportData: {},
         },
       });
 
