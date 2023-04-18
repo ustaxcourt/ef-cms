@@ -30,7 +30,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         message: 'End date cannot be in the future. Enter a valid date.',
       },
       {
-        contains: 'must be in',
+        contains: 'is required',
         message: 'Enter an end date.',
       },
       'Enter a valid end date.',
@@ -41,7 +41,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         message: 'Start date cannot be in the future. Enter a valid date.',
       },
       {
-        contains: 'must be in',
+        contains: 'is required',
         message: 'Enter a start date.',
       },
       'Enter a valid start date.',
