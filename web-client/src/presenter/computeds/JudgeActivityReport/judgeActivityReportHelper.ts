@@ -1,46 +1,45 @@
 import { state } from 'cerebral';
+import { sum, sumBy } from 'lodash';
+
 export const judgeActivityReportHelper = (get, applicationContext) => {
+  const { judgeName } = get(state.form);
+
   const { casesClosedByJudge, opinions, orders, trialSessions } = get(
     state.judgeActivityReportData,
   );
-  const { judgeName } = get(state.form);
 
-  let showSelectDateRangeText = false;
+  let closedCasesTotal: number = 0,
+    trialSessionsHeldTotal: number = 0,
+    opinionsFiledTotal: number = 0,
+    ordersFiledTotal: number = 0,
+    resultsCount: number = 0,
+    showSelectDateRangeText: boolean = false;
 
-  let closedCasesTotal,
-    trialSessionsHeldTotal,
-    opinionsFiledTotal,
-    ordersFiledTotal;
-  const hasFormBeenSubmitted =
+  const hasFormBeenSubmitted: boolean =
     casesClosedByJudge && opinions && orders && trialSessions;
 
   if (hasFormBeenSubmitted) {
-    closedCasesTotal = Object.values(casesClosedByJudge).reduce(
-      (a: number, b: number) => a + b,
-      0,
+    closedCasesTotal = sum(Object.values(casesClosedByJudge));
+
+    trialSessionsHeldTotal = sum(Object.values(trialSessions));
+
+    opinionsFiledTotal = sumBy(
+      opinions,
+      ({ count }: { count: number }) => count,
     );
 
-    trialSessionsHeldTotal = Object.values(trialSessions).reduce(
-      (a: number, b: number) => a + b,
-      0,
-    );
+    ordersFiledTotal = sumBy(orders, ({ count }: { count: number }) => count);
 
-    opinionsFiledTotal = opinions.reduce((a: any, b: any) => a + b.count, 0);
-
-    ordersFiledTotal = orders.reduce((a: any, b: any) => a + b.count, 0);
+    resultsCount =
+      ordersFiledTotal +
+      opinionsFiledTotal +
+      trialSessionsHeldTotal +
+      closedCasesTotal;
   } else {
     showSelectDateRangeText = true;
   }
 
-  const resultsCount =
-    ordersFiledTotal +
-    opinionsFiledTotal +
-    trialSessionsHeldTotal +
-    closedCasesTotal;
-
-  const showResults = resultsCount > 0;
-
-  const currentDate = applicationContext
+  const currentDate: string = applicationContext
     .getUtilities()
     .formatDateString(
       applicationContext.getUtilities().prepareDateFromString(),
@@ -54,7 +53,7 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
     opinionsFiledTotal,
     ordersFiledTotal,
     reportHeader,
-    showResults,
+    showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
     trialSessionsHeldTotal,
   };
