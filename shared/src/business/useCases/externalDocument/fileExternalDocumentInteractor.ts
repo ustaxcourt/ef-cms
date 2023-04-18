@@ -105,7 +105,10 @@ export const fileExternalDocumentInteractor = async (
   }
 
   let documentMetadataForConsolidatedCases = [];
-  if (documentMetadata.consolidatedCasesToFileAcross) {
+  if (
+    documentMetadata.consolidatedCasesToFileAcross &&
+    documentMetadata.consolidatedCasesToFileAcross.length > 0
+  ) {
     for (
       let index = 0;
       index < documentMetadata.consolidatedCasesToFileAcross.length;
@@ -226,7 +229,6 @@ export const fileExternalDocumentInteractor = async (
   );
 
   const resolvedCaseEntities = await Promise.all(consolidatedCaseEntities);
-
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
