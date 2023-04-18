@@ -9,6 +9,10 @@ RUN apt-get install -y zip
 COPY package.json /home/build/nodejs/package.json
 COPY package-lock.json /home/build/nodejs/package-lock.json
 RUN cd /home/build/nodejs/ && npm ci --production
+
+RUN mkdir -p /home/build/nodejs/.cache
+RUN mv /root/.cache/puppeteer /home/build/nodejs/.cache/puppeteer
+
 RUN zip -r puppeteer_lambda_layer.zip nodejs
 
 CMD echo "puppeteer zip has been created"
