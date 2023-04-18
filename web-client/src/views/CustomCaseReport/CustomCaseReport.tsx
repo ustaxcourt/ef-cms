@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -260,9 +261,7 @@ export const CustomCaseReport = connect(
               0}
           </div>
           <ReportTable
-            customCaseInventoryReportData={
-              customCaseInventoryReportHelper.customCaseInventoryReportData
-            }
+            customCaseInventoryReportHelper={customCaseInventoryReportHelper}
           />
         </section>
       </>
@@ -270,7 +269,9 @@ export const CustomCaseReport = connect(
   },
 );
 
-const ReportTable = ({ customCaseInventoryReportData }) => {
+const ReportTable = ({ customCaseInventoryReportHelper }) => {
+  const { customCaseInventoryReportData, formatDate } =
+    customCaseInventoryReportHelper;
   return (
     <>
       <table
@@ -295,8 +296,10 @@ const ReportTable = ({ customCaseInventoryReportData }) => {
             <tbody>
               {customCaseInventoryReportData.foundCases.map(entry => (
                 <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
-                  <td>{entry.docketNumber}</td>
-                  <td>{entry.createdAt}</td>
+                  <td>
+                    <CaseLink formattedCase={entry} />
+                  </td>
+                  <td>{formatDate(entry.createdAt)}</td>
                   <td>PLACEHOLDER</td>
                   <td>{entry.status}</td>
                   <td>{entry.caseType}</td>
