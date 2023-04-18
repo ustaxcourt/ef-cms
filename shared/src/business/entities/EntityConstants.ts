@@ -1234,11 +1234,11 @@ export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
 export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
 
 export const SESSION_TYPES = {
-  small: 'Small',
   regular: 'Regular',
+  small: 'Small',
   hybrid: 'Hybrid',
-  motionHearing: 'Motion/Hearing',
   special: 'Special',
+  motionHearing: 'Motion/Hearing',
 };
 
 export const SESSION_STATUS_TYPES = {
