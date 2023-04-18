@@ -292,8 +292,8 @@ export const baseState = {
   customCaseInventoryFilters: {
     caseStatuses: [],
     caseTypes: [],
-    createEndDate: '',
-    createStartDate: '',
+    createEndDate: undefined,
+    createStartDate: undefined,
     filingMethod: 'all',
   },
   // needs its own object because it's present when other forms are on screen

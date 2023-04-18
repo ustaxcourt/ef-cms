@@ -37,12 +37,12 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     ],
     startDate: [
       {
-        contains: 'is required',
-        message: 'Enter a start date.',
-      },
-      {
         contains: 'must be less than or equal to',
         message: 'Start date cannot be in the future. Enter a valid date.',
+      },
+      {
+        contains: 'is required',
+        message: 'Enter a start date.',
       },
       'Enter a valid start date.',
     ],
