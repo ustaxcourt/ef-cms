@@ -46,7 +46,7 @@ data "archive_file" "zip_api" {
 
 data "archive_file" "zip_send_emails" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/api.js.zip"
+  output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
     "api-public.js",
@@ -67,7 +67,7 @@ data "archive_file" "zip_send_emails" {
 
 data "archive_file" "zip_trial_session" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/api.js.zip"
+  output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
     "api-public.js",
