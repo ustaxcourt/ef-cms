@@ -131,6 +131,9 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
+        {judgeActivityReportData.orders.length === 0 && (
+          <p>There are no orders issued for the selected dates</p>
+        )}
       </>
     );
 
