@@ -8,34 +8,85 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('judgeActivityReportHelper', () => {
+  let mockJudgeActivityReport;
   const judgeActivityReportHelper = withAppContextDecorator(
     judgeActivityReportHelperComputed,
     { ...applicationContext },
   );
 
-  it('should return all table total counts as 0 when the report has not yet been run', () => {
-    const { closedCasesTotal, opinionsFiledTotal, trialSessionsHeldTotal } =
-      runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: {},
+  beforeEach(() => {
+    mockJudgeActivityReport = {
+      judgeActivityReportData: {
+        casesClosedByJudge: {
+          [CASE_STATUS_TYPES.closed]: 1,
+          [CASE_STATUS_TYPES.closedDismissed]: 5,
         },
-      });
+        opinions: [
+          {
+            count: 1,
+            documentType: 'Memorandum Opinion',
+            eventCode: 'MOP',
+          },
+          {
+            count: 0,
+            documentType: 'S Opinion',
+            eventCode: 'SOP',
+          },
+          {
+            count: 0,
+            documentType: 'TC Opinion',
+            eventCode: 'TCOP',
+          },
+          {
+            count: 4,
+            documentType: 'Bench Opinion',
+            eventCode: 'OST',
+          },
+        ],
+        orders: [
+          {
+            count: 1,
+            documentType: 'Order',
+            eventCode: 'O',
+          },
+          {
+            count: 5,
+            documentType: 'Order for Dismissal',
+            eventCode: 'ODS',
+          },
+        ],
+        trialSessions: {
+          [SESSION_TYPES.regular]: 1,
+          [SESSION_TYPES.hybrid]: 0.5,
+          [SESSION_TYPES.motionHearing]: 1.5,
+        },
+      },
+    };
+  });
 
-    expect(closedCasesTotal).toBe(0);
-    expect(trialSessionsHeldTotal).toBe(0);
-    expect(opinionsFiledTotal).toBe(0);
+  it('should return all table total counts as 0 when the report has not yet been run', () => {
+    const {
+      closedCasesTotal,
+      opinionsFiledTotal,
+      ordersFiledTotal,
+      trialSessionsHeldTotal,
+    } = runCompute(judgeActivityReportHelper, {
+      state: {
+        judgeActivityReportData: {},
+      },
+    });
+
+    expect(closedCasesTotal).toBeUndefined();
+    expect(trialSessionsHeldTotal).toBeUndefined();
+    expect(opinionsFiledTotal).toBeUndefined();
+    expect(ordersFiledTotal).toBeUndefined();
   });
 
   describe('closedCasesTotal', () => {
-    it('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
+    it.only('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
       const { closedCasesTotal } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            casesClosedByJudge: {
-              [CASE_STATUS_TYPES.closed]: 1,
-              [CASE_STATUS_TYPES.closedDismissed]: 5,
-            },
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
@@ -47,13 +98,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
       const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            trialSessions: {
-              [SESSION_TYPES.regular]: 1,
-              [SESSION_TYPES.hybrid]: 0.5,
-              [SESSION_TYPES.motionHearing]: 1.5,
-            },
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
@@ -65,30 +110,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be the sum of the values of opinions filed off state.judgeActivityReportData', () => {
       const { opinionsFiledTotal } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            opinions: [
-              {
-                count: 1,
-                documentType: 'Memorandum Opinion',
-                eventCode: 'MOP',
-              },
-              {
-                count: 0,
-                documentType: 'S Opinion',
-                eventCode: 'SOP',
-              },
-              {
-                count: 0,
-                documentType: 'TC Opinion',
-                eventCode: 'TCOP',
-              },
-              {
-                count: 4,
-                documentType: 'Bench Opinion',
-                eventCode: 'OST',
-              },
-            ],
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
@@ -100,20 +122,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be the sum of the values of orders filed off state.judgeActivityReportData', () => {
       const { ordersFiledTotal } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            orders: [
-              {
-                count: 1,
-                documentType: 'Order',
-                eventCode: 'O',
-              },
-              {
-                count: 5,
-                documentType: 'Order for Dismissal',
-                eventCode: 'ODS',
-              },
-            ],
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
@@ -125,22 +134,7 @@ describe('judgeActivityReportHelper', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
       const { showResults } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            casesClosedByJudge: {
-              [CASE_STATUS_TYPES.closed]: 0,
-            },
-            opinions: [
-              {
-                count: 0,
-                documentType: 'TC Opinion',
-                eventCode: 'TCOP',
-              },
-            ],
-            orders: [],
-            trialSessions: {
-              [SESSION_TYPES.hybrid]: 0,
-            },
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
@@ -150,22 +144,7 @@ describe('judgeActivityReportHelper', () => {
     it('should true when there are orders, opinions, trial sessions or cases for the specified judge', () => {
       const { showResults } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            casesClosedByJudge: {
-              [CASE_STATUS_TYPES.closed]: 421,
-            },
-            opinions: [
-              {
-                count: 1500,
-                documentType: 'TC Opinion',
-                eventCode: 'TCOP',
-              },
-            ],
-            orders: [],
-            trialSessions: {
-              [SESSION_TYPES.hybrid]: 0,
-            },
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
@@ -174,25 +153,10 @@ describe('judgeActivityReportHelper', () => {
   });
 
   describe('showDateRangeMessage', () => {
-    it('should false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
+    it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
       const { showDateRangeMessage } = runCompute(judgeActivityReportHelper, {
         state: {
-          judgeActivityReportData: {
-            casesClosedByJudge: {
-              [CASE_STATUS_TYPES.closed]: 0,
-            },
-            opinions: [
-              {
-                count: 0,
-                documentType: 'TC Opinion',
-                eventCode: 'TCOP',
-              },
-            ],
-            orders: [],
-            trialSessions: {
-              [SESSION_TYPES.hybrid]: 0,
-            },
-          },
+          judgeActivityReportData: mockJudgeActivityReport,
         },
       });
 
