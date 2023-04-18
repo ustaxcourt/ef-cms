@@ -8,9 +8,9 @@ import { state } from 'cerebral';
 // TODO: WRITE TESTS FOR HELPER
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
-  const customCaseInventoryReportData =
-    get(state.customCaseInventoryReportData) || {};
-  console.log('report data:', customCaseInventoryReportData);
+  const customCaseInventoryReportData = get(
+    state.customCaseInventoryReportData,
+  );
 
   const populatedFilters = get(state.customCaseInventoryFilters);
   const isRunReportButtonActive =
@@ -31,21 +31,21 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
-  console.log('customCaseInventoryReportData', customCaseInventoryReportData);
-
-  // TODO: FORMAT date for createdAt
   const reportData = (customCaseInventoryReportData.foundCases || []).map(
     entry => ({
       ...entry,
       createdAt: formatDate(entry.createdAt),
     }),
   );
-  console.log('reportData', reportData);
+
+  const hasNoCustomCaseData = customCaseInventoryReportData.foundCases; // rename this variable
+  console.log('hasNoCustomCaseData', hasNoCustomCaseData);
 
   return {
     caseStatuses,
     caseTypes,
     customCaseInventoryReportData: reportData,
+    hasNoCustomCaseData,
     isClearFiltersActive: true,
     isRunReportButtonActive,
   };
