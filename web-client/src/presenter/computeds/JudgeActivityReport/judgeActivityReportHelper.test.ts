@@ -4,11 +4,15 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('judgeActivityReportHelper', () => {
   let mockJudgeActivityReport;
+  let mockForm;
+  let baseState;
+
   const judgeActivityReportHelper = withAppContextDecorator(
     judgeActivityReportHelperComputed,
     { ...applicationContext },
@@ -60,53 +64,31 @@ describe('judgeActivityReportHelper', () => {
         [SESSION_TYPES.motionHearing]: 1.5,
       },
     };
+
+    mockForm = {
+      judgeName: judgeUser.name,
+    };
+
+    baseState = {
+      form: mockForm,
+      judgeActivityReportData: mockJudgeActivityReport,
+    };
   });
 
   describe('closedCasesTotal', () => {
     it('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
       const { closedCasesTotal } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: mockJudgeActivityReport,
-        },
+        state: baseState,
       });
 
       expect(closedCasesTotal).toBe(6);
     });
   });
 
-  it('should return reportHeader that includes judge name and the currentDate in MMDDYY format', () => {
-    applicationContext
-      .getUtilities()
-      .prepareDateFromString.mockReturnValue('2020-01-01');
-
-    const { reportHeader } = runCompute(judgeActivityReportHelper, {
-      state: {
-        form: { judgeName: '' },
-        judgeActivityReportData: mockJudgeActivityReport,
-      },
-    });
-
-    expect(currentDate).toBe('01/01/20');
-  });
-
-  describe('trialSessionsHeldCount', () => {
-    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
-      const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: mockJudgeActivityReport,
-        },
-      });
-
-      expect(trialSessionsHeldTotal).toBe(3);
-    });
-  });
-
   describe('opinionsFiledTotal', () => {
     it('should be the sum of the values of opinions filed off state.judgeActivityReportData', () => {
       const { opinionsFiledTotal } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: mockJudgeActivityReport,
-        },
+        state: baseState,
       });
 
       expect(opinionsFiledTotal).toBe(5);
@@ -116,12 +98,24 @@ describe('judgeActivityReportHelper', () => {
   describe('ordersFiledTotal', () => {
     it('should be the sum of the values of orders filed off state.judgeActivityReportData', () => {
       const { ordersFiledTotal } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: mockJudgeActivityReport,
-        },
+        state: baseState,
       });
 
       expect(ordersFiledTotal).toBe(6);
+    });
+  });
+
+  describe('reportHeader', () => {
+    it('should return reportHeader that includes judge name and the currentDate in MMDDYY format', () => {
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString.mockReturnValue('2020-01-01');
+
+      const { reportHeader } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+
+      expect(reportHeader).toBe(`${judgeUser.name} 01/01/20`);
     });
   });
 
@@ -129,6 +123,7 @@ describe('judgeActivityReportHelper', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
       const { showResults } = runCompute(judgeActivityReportHelper, {
         state: {
+          form: mockForm,
           judgeActivityReportData: {},
         },
       });
@@ -138,40 +133,47 @@ describe('judgeActivityReportHelper', () => {
 
     it('should true when there are orders, opinions, trial sessions or cases for the specified judge', () => {
       const { showResults } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: mockJudgeActivityReport,
-        },
+        state: baseState,
       });
 
       expect(showResults).toBe(true);
     });
   });
 
-  describe('showSelectDateRangeTextRangeMessage', () => {
+  describe('showSelectDateRangeText', () => {
     it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
-      const { showSelectDateRangeTextRangeMessage } = runCompute(
+      const { showSelectDateRangeText } = runCompute(
         judgeActivityReportHelper,
         {
-          state: {
-            judgeActivityReportData: mockJudgeActivityReport,
-          },
+          state: baseState,
         },
       );
 
-      expect(showSelectDateRangeTextRangeMessage).toBe(false);
+      expect(showSelectDateRangeText).toBe(false);
     });
 
     it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
-      const { showSelectDateRangeTextRangeMessage } = runCompute(
+      const { showSelectDateRangeText } = runCompute(
         judgeActivityReportHelper,
         {
           state: {
+            form: mockForm,
             judgeActivityReportData: {},
           },
         },
       );
 
-      expect(showSelectDateRangeTextRangeMessage).toBe(true);
+      expect(showSelectDateRangeText).toBe(true);
+    });
+  });
+
+  describe('trialSessionsHeldTotal', () => {
+    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+      const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+
+      expect(trialSessionsHeldTotal).toBe(3);
     });
   });
 });
