@@ -1,3 +1,4 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -67,6 +68,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     ).toMatchObject({
       endDate: '2020-03-22T03:59:59.999Z',
       judge: mockValidRequest.judgeName,
+      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: '2020-02-12T05:00:00.000Z',
     });
     expect(result).toEqual([
