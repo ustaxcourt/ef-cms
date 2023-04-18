@@ -102,17 +102,17 @@ describe('JudgeActivityReportSearch', () => {
       });
     });
 
-    it('should have validation errors when the start and end dates provided are NOT in the format `MM/DD/YYYY`', () => {
+    it('should have validation errors when the start and/or dates provided are NOT valid dates', () => {
       const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
-        endDate: '03-09-2020',
-        startDate: '03-01-2020',
+        endDate: '01--01--2000',
+        startDate: 'NOTADATE',
       });
 
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: 'Enter an end date.',
-        startDate: 'Enter a start date.',
+        endDate: 'Enter a valid end date.',
+        startDate: 'Enter a valid start date.',
       });
     });
   });

@@ -1,13 +1,17 @@
 const joi = require('joi').extend(require('@hapi/joi-date'));
-const {
+import {
+  FORMATS,
   calculateISODate,
   createEndOfDayISO,
   createStartOfDayISO,
-} = require('../../utilities/DateHandler');
+  isValidDateString,
+} from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
+  private VALID_DATE_FORMAT: string = FORMATS.MMDDYYYY;
+
   public endDate: string;
   public startDate: string;
   public judgeName: string;
@@ -25,26 +29,26 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       units: 'days',
     });
 
-    if (rawProps.startDate) {
-      const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
-      if (month && day && year) {
-        this.startDate = createStartOfDayISO({
-          day,
-          month,
-          year,
-        });
-      }
+    if (isValidDateString(rawProps.startDate, [this.VALID_DATE_FORMAT])) {
+      const [month, day, year] = rawProps.startDate.split('/');
+      this.startDate = createStartOfDayISO({
+        day,
+        month,
+        year,
+      });
+    } else {
+      this.startDate = rawProps.startDate;
     }
 
-    if (rawProps.endDate) {
+    if (isValidDateString(rawProps.endDate, [this.VALID_DATE_FORMAT])) {
       const [month, day, year] = rawProps.endDate.split('/');
-      if (month && day && year) {
-        this.endDate = createEndOfDayISO({
-          day,
-          month,
-          year,
-        });
-      }
+      this.endDate = createEndOfDayISO({
+        day,
+        month,
+        year,
+      });
+    } else {
+      this.endDate = rawProps.endDate;
     }
   }
 
@@ -97,7 +101,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
         contains: 'must be less than or equal to',
         message: 'Start date cannot be in the future. Enter a valid date.',
       },
-      'Enter a valid start date',
+      'Enter a valid start date.',
     ],
   };
 
