@@ -12,6 +12,7 @@ import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFa
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
+import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from '../actions/FileDocument/setIsExternalConsolidatedCaseGroupEnabledValueAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -48,6 +49,7 @@ export const completeDocumentSelectSequence = [
         getConstants().ALLOWLIST_FEATURE_FLAGS
           .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
       ),
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
       setDefaultFileDocumentFormValuesAction,
       clearOtherIterationAction,
       navigateToFileADocumentAction,
