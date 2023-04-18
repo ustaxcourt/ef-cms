@@ -41,14 +41,11 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const currentDate = applicationContext
     .getUtilities()
-    .prepareDateFromString()
-    .toISOString();
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString().toISOString(),
+      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+    );
 
-  // applicationContext
-  // .getUtilities()
-  // .prepareDateFromString(undefined, applicationContext.getConstants().FORMATS.MMDDYY)
-
-  console.log('currentDate', currentDate);
   return {
     closedCasesTotal,
     currentDate,
