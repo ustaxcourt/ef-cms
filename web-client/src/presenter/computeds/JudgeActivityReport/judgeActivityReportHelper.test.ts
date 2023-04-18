@@ -92,6 +92,20 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
+  it('should return currentDate in MMDDYY format', () => {
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString.mockReturnValue('2020-01-01');
+
+    const { currentDate } = runCompute(judgeActivityReportHelper, {
+      state: {
+        judgeActivityReportData: mockJudgeActivityReport,
+      },
+    });
+
+    expect(currentDate).toBe('01/01/20');
+  });
+
   describe('trialSessionsHeldCount', () => {
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
       const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
