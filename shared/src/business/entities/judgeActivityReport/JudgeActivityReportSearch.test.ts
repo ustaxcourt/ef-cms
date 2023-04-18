@@ -102,7 +102,7 @@ describe('JudgeActivityReportSearch', () => {
       });
     });
 
-    it('should have validation errors when the start and/or dates provided are NOT valid dates', () => {
+    it('should have validation errors when the start and/or end dates provided are NOT valid dates', () => {
       const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
         endDate: '01--01--2000',
         startDate: 'NOTADATE',
