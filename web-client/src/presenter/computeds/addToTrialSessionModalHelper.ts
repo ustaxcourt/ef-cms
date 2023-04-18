@@ -15,6 +15,9 @@ export const formatTrialSessionDisplayOptions = (
       case 'Hybrid':
         trialSession.sessionTypeFormatted = trialSession.sessionType.charAt(0);
         break;
+      case 'Hybrid-S':
+        trialSession.sessionTypeFormatted = 'HS';
+        break;
       case 'Special':
         trialSession.sessionTypeFormatted = 'SP';
         break;
