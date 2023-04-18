@@ -3,8 +3,7 @@
   "version": "0.0.2",
   "description": "Layer Only Packaging",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [
     "Lambda",
     "Layers"
@@ -12,6 +11,7 @@
   "license": "CC0-1.0",
   "dependencies": {
     "@sparticuz/chrome-aws-lambda": "14.1.0",
+    "aws-sdk": "^2.1360.0",
     "pug": "^3.0.2",
     "puppeteer-core": "^14.1.0",
     "sass": "^1.49.7"

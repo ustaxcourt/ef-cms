@@ -13,7 +13,7 @@ resource "aws_lambda_function" "api_async_lambda" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
 
   environment {
     variables = var.lambda_environment
