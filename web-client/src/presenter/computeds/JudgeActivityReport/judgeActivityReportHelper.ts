@@ -3,8 +3,9 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
   const { casesClosedByJudge, opinions, orders, trialSessions } = get(
     state.judgeActivityReportData,
   );
+  const { judgeName } = get(state.form);
 
-  let showDateRangeMessage = false;
+  let showSelectDateRangeText = false;
 
   let closedCasesTotal,
     trialSessionsHeldTotal,
@@ -28,7 +29,7 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
     ordersFiledTotal = orders.reduce((a: any, b: any) => a + b.count, 0);
   } else {
-    showDateRangeMessage = true;
+    showSelectDateRangeText = true;
   }
 
   const resultsCount =
@@ -46,13 +47,15 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
+  const reportHeader = `${judgeName} ${currentDate}`;
+
   return {
     closedCasesTotal,
-    currentDate,
     opinionsFiledTotal,
     ordersFiledTotal,
-    showDateRangeMessage,
+    reportHeader,
     showResults,
+    showSelectDateRangeText,
     trialSessionsHeldTotal,
   };
 };

@@ -74,13 +74,14 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
-  it('should return currentDate in MMDDYY format', () => {
+  it('should return reportHeader that includes judge name and the currentDate in MMDDYY format', () => {
     applicationContext
       .getUtilities()
       .prepareDateFromString.mockReturnValue('2020-01-01');
 
-    const { currentDate } = runCompute(judgeActivityReportHelper, {
+    const { reportHeader } = runCompute(judgeActivityReportHelper, {
       state: {
+        form: { judgeName: '' },
         judgeActivityReportData: mockJudgeActivityReport,
       },
     });
@@ -146,25 +147,31 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
-  describe('showDateRangeMessage', () => {
+  describe('showSelectDateRangeTextRangeMessage', () => {
     it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
-      const { showDateRangeMessage } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: mockJudgeActivityReport,
+      const { showSelectDateRangeTextRangeMessage } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: {
+            judgeActivityReportData: mockJudgeActivityReport,
+          },
         },
-      });
+      );
 
-      expect(showDateRangeMessage).toBe(false);
+      expect(showSelectDateRangeTextRangeMessage).toBe(false);
     });
 
     it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
-      const { showDateRangeMessage } = runCompute(judgeActivityReportHelper, {
-        state: {
-          judgeActivityReportData: {},
+      const { showSelectDateRangeTextRangeMessage } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: {
+            judgeActivityReportData: {},
+          },
         },
-      });
+      );
 
-      expect(showDateRangeMessage).toBe(true);
+      expect(showSelectDateRangeTextRangeMessage).toBe(true);
     });
   });
 });
