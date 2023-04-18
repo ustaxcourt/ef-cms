@@ -72,7 +72,6 @@ data "archive_file" "zip_trial_session" {
   excludes = [
     "api-public.js",
     "api.js",
-    "trial-session.js",
     "websockets.js",
     "send-emails.js",
     "maintenance-notify.js",
