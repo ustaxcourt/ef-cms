@@ -321,6 +321,10 @@ const isValidDateString = (
   dateString,
   formats = ['MM-dd-yyyy', 'MM/dd/yyyy', 'M-d-yyyy', 'M/d/yyyy'],
 ) => {
+  if (!dateString) {
+    return false;
+  }
+
   if (Array.isArray(formats)) {
     return formats.some(format => {
       return DateTime.fromFormat(dateString, format).isValid;

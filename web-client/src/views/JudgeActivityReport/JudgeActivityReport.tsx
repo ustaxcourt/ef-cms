@@ -131,6 +131,9 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
+        {judgeActivityReportData.orders.length === 0 && (
+          <p>There are no orders issued for the selected dates</p>
+        )}
       </>
     );
 
@@ -187,7 +190,7 @@ export const JudgeActivityReport = connect(
             <h1>Activity - {judgeActivityReportHelper.reportHeader}</h1>
           </div>
 
-          <div className="blue-container">
+          <div className="blue-container margin-bottom-30px">
             <div className="grid-row">
               <div className="grid-col-auto margin-x-3">
                 <DateRangePickerComponent
@@ -229,9 +232,7 @@ export const JudgeActivityReport = connect(
               </div>
             </div>
           </div>
-        </section>
 
-        <section className="usa-section grid-container">
           {judgeActivityReportHelper.showSelectDateRangeText ? (
             <div className="text-semibold margin-0">
               Enter a date range to view activity
