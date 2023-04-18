@@ -95,6 +95,10 @@ function getSlotComponent({
   totalPages: number;
   setPageNumber: (selectedPage: number) => any;
 }) {
+  const isHidingPreviousOptions =
+    currentPageNumber > 3 && totalPages > numberOfPaginatorSlots;
+  const isHidingFutureOptions =
+    totalPages - currentPageNumber > 4 && totalPages > numberOfPaginatorSlots;
   if (slotNumber === 0) {
     return (
       <PageButton
@@ -108,7 +112,7 @@ function getSlotComponent({
     );
   }
   if (slotNumber === 1) {
-    if (currentPageNumber > 3 && totalPages > numberOfPaginatorSlots) {
+    if (isHidingPreviousOptions) {
       return <PageEllipsis />;
     } else {
       return (
@@ -124,7 +128,7 @@ function getSlotComponent({
     }
   }
   if (slotNumber === 2 || slotNumber === 3 || slotNumber === 4) {
-    if (currentPageNumber < 4) {
+    if (!isHidingPreviousOptions) {
       return (
         <PageButton
           pageNumber={slotNumber}
@@ -136,19 +140,7 @@ function getSlotComponent({
         />
       );
     }
-    if (currentPageNumber >= 4 && totalPages - currentPageNumber > 3) {
-      return (
-        <PageButton
-          pageNumber={currentPageNumber + slotNumber - 3}
-          selected={currentPageNumber === currentPageNumber + slotNumber - 3}
-          onClick={selectedPage => {
-            setPageNumber(selectedPage);
-            onPageChange(selectedPage);
-          }}
-        />
-      );
-    }
-    if (currentPageNumber >= 4 && totalPages - currentPageNumber <= 3) {
+    if (!isHidingFutureOptions) {
       return (
         <PageButton
           pageNumber={totalPages - numberOfPaginatorSlots + slotNumber}
@@ -163,12 +155,19 @@ function getSlotComponent({
         />
       );
     }
+    return (
+      <PageButton
+        pageNumber={currentPageNumber + slotNumber - 3}
+        selected={currentPageNumber === currentPageNumber + slotNumber - 3}
+        onClick={selectedPage => {
+          setPageNumber(selectedPage);
+          onPageChange(selectedPage);
+        }}
+      />
+    );
   }
   if (slotNumber === 5) {
-    if (
-      totalPages - currentPageNumber > 4 &&
-      totalPages > numberOfPaginatorSlots
-    ) {
+    if (isHidingFutureOptions) {
       return <PageEllipsis />;
     } else {
       const subtractor = totalPages >= 7 ? 2 : 1;
