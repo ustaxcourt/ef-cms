@@ -15,8 +15,8 @@ export const RequestAccess = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isIrsPractitionerConsolidatedCasesFilingEnabled:
-      state.isIrsPractitionerConsolidatedCasesFilingEnabled,
+    isExternalConsolidatedCaseGroupFilingEnabled:
+      state.isExternalConsolidatedCaseGroupFilingEnabled,
     requestAccessHelper: state.requestAccessHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
@@ -29,7 +29,7 @@ export const RequestAccess = connect(
   function RequestAccess({
     form,
     formCancelToggleCancelSequence,
-    isIrsPractitionerConsolidatedCasesFilingEnabled,
+    isExternalConsolidatedCaseGroupFilingEnabled,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -108,7 +108,7 @@ export const RequestAccess = connect(
           {requestAccessHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
-          {isIrsPractitionerConsolidatedCasesFilingEnabled && (
+          {isExternalConsolidatedCaseGroupFilingEnabled && (
             <ExternalConsolidatedCaseGroupFilingCard />
           )}
           <div className="margin-top-5">

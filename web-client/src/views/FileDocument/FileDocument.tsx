@@ -15,8 +15,8 @@ export const FileDocument = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isIrsPractitionerConsolidatedCasesFilingEnabled:
-      state.isIrsPractitionerConsolidatedCasesFilingEnabled,
+    isExternalConsolidatedCaseGroupFilingEnabled:
+      state.isExternalConsolidatedCaseGroupFilingEnabled,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
@@ -25,7 +25,7 @@ export const FileDocument = connect(
   function FileDocument({
     fileDocumentHelper,
     formCancelToggleCancelSequence,
-    isIrsPractitionerConsolidatedCasesFilingEnabled,
+    isExternalConsolidatedCaseGroupFilingEnabled,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
     showModal,
@@ -59,7 +59,7 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        {isIrsPractitionerConsolidatedCasesFilingEnabled && (
+        {isExternalConsolidatedCaseGroupFilingEnabled && (
           <ExternalConsolidatedCaseGroupFilingCard />
         )}
 
