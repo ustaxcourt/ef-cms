@@ -51,7 +51,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 #### puppeteer / puppeteer-core
 
-`puppeteer` and `puppeteer-core` have a major version update to ^19.x.x, but they need to stay at the same major version as `chrome-aws-lambda` (17.1.3). If we upgrade `puppeteer`, we see a `cannot read property 'prototype' of undefined` error. As of 02/27/23 `@sparticuz/chromium` provides an upgrade path for `@sparticuz/chrome-aws-lambda` (now deprecated) which may allow `puppeteer` to finally be updated.
+`puppeteer` and `puppeteer-core` have a major version update to ^19.x.x, but they need to stay at the same major version as `chrome-aws-lambda` (17.1.3). If we upgrade `puppeteer`, we see a `cannot read property 'prototype' of undefined` error. As of 02/27/23 `@sparticuz/chromium` provides an upgrade path for `@sparticuz/chromium` (now deprecated) which may allow `puppeteer` to finally be updated.
 
 #### s3rver
 
