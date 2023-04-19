@@ -2,7 +2,6 @@ import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
-  console.log('docketNumber', docketNumber);
   return applicationContext
     .getUseCases()
     .addCoversheetInteractor(applicationContext, {
