@@ -8,7 +8,6 @@
 npm ci --production
 mkdir nodejs
 cp -R node_modules nodejs/
-cp -R .cache nodejs/.cache
 cp package.json nodejs/
 cp package-lock.json nodejs/
 zip -r puppeteer_lambda_layer.zip nodejs
