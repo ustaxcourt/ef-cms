@@ -18,5 +18,6 @@ export const getShouldGeneratePrintableFilingReceiptAction = ({
   if (!get(state.documentToEdit) && props.documentsFiled) {
     return path.true();
   }
+
   return path.false();
 };
