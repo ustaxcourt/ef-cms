@@ -75,7 +75,7 @@ export const generatePdfFromHtmlInteractor = async (
     applicationContext.logger.error(error);
     throw error;
   } finally {
-    if (browser !== null && process.env.NODE_ENV === 'production') {
+    if (browser !== null && process.env.NODE_ENV !== 'production') {
       // there is a bug in the chromium library we use which hangs when calling browser.close,
       // so let's only close when doing local development.
       await browser.close();
