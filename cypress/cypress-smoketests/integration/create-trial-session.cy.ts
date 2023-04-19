@@ -1,4 +1,4 @@
-const {
+import {
   blockCaseFromTrial,
   goToCaseOverview,
   manuallyAddCaseToCalendaredTrialSession,
@@ -7,8 +7,9 @@ const {
   setCaseAsHighPriority,
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
-} = require('../support/pages/case-detail');
-const {
+} from '../support/pages/case-detail';
+
+import {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -23,8 +24,9 @@ const {
   goToWizardStep5,
   hasIrsNotice,
   submitPetition,
-} = require('../support/pages/create-electronic-petition');
-const {
+} from '../support/pages/create-electronic-petition';
+
+import {
   createTrialSession,
   goToCreateTrialSession,
   goToTrialSession,
@@ -32,15 +34,15 @@ const {
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
-} = require('../support/pages/trial-sessions');
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const {
+} from '../support/pages/trial-sessions';
+
+import { faker } from '@faker-js/faker';
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
-} = require('../support/pages/reports');
-const { faker } = require('@faker-js/faker');
+} from '../support/pages/reports';
+import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
@@ -220,7 +222,7 @@ describe('Petitions Clerk', () => {
       // enough time has elapsed since we blocked second case. look for it on blocked cases report
       // warning: if there are elasticsearch delays, this test might be brittle...
       // view blocked report
-      cy.waitForElasticsearch();
+      waitForElasticsearch();
       viewBlockedCaseOnBlockedReport({
         ...testData,
         docketNumber: secondDocketNumber,
