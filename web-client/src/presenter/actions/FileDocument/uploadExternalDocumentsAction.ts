@@ -46,7 +46,9 @@ export const uploadExternalDocumentsAction = async ({
 
   const documentMetadata = {
     ...form,
-    consolidatedCasesToFileAcross: consolidatedCases,
+    consolidatedCasesToFileAcross: form.fileAcrossConsolidatedGroup
+      ? consolidatedCases
+      : undefined,
     docketNumber,
     filers,
     isFileAttached: true,
