@@ -8,8 +8,6 @@ import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
-    CLOSED_CASE_STATUSES: state.constants.CLOSED_CASE_STATUSES,
-    SESSION_TYPES: state.constants.SESSION_TYPES,
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
@@ -19,41 +17,43 @@ export const JudgeActivityReport = connect(
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
-    CLOSED_CASE_STATUSES,
     form,
     judgeActivityReportData,
     judgeActivityReportHelper,
-    SESSION_TYPES,
     submitJudgeActivityReportSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
     const closedCases: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
-            Cases Closed{' '}
-            <span className="float-right">
-              Total: {judgeActivityReportHelper.closedCasesTotal}
-            </span>
+        <table aria-describedby="casesClosed" className="usa-table ustc-table">
+          <caption id="casesClosed">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Cases Closed{' '}
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.closedCasesTotal}
+              </div>
+            </div>
           </caption>
           <thead>
             <tr>
-              <th aria-label="Case type">Case Type</th>
-              <th aria-label="Case type total" className="text-center">
+              <th aria-label="case type">Case Type</th>
+              <th aria-label="case type total" className="text-right">
                 Case Type Total
               </th>
             </tr>
           </thead>
           <tbody>
-            {CLOSED_CASE_STATUSES.map(status => (
-              <tr key={status}>
-                <td>{status}</td>
-                <td className="text-center">
-                  {judgeActivityReportData.casesClosedByJudge[status]}
-                </td>
-              </tr>
-            ))}
+            {Object.entries(judgeActivityReportData.casesClosedByJudge).map(
+              ([status, count]) => (
+                <tr key={status}>
+                  <td>{status}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -61,77 +61,119 @@ export const JudgeActivityReport = connect(
 
     const trialSessionsHeld: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
-            Sessions Held{' '}
-            <span className="float-right">
-              Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
-            </span>
+        <table aria-describedby="sessionsHeld" className="usa-table ustc-table">
+          <caption id="sessionsHeld">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Sessions Held
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
+              </div>
+            </div>
           </caption>
 
           <thead>
             <tr>
-              <th aria-label="Session type">Session Type</th>
-              <th aria-label="Session type total">Session Type Total</th>
+              <th aria-label="session type">Session Type</th>
+              <th aria-label="session type total" className="text-right">
+                Session Type Total
+              </th>
             </tr>
           </thead>
           <tbody>
-            {Object.values(SESSION_TYPES).map(status => (
-              <tr key={status}>
-                <td>{status}</td>
-                <td className="text-center">
-                  {judgeActivityReportData.trialSessions[status]}
-                </td>
-              </tr>
-            ))}
+            {Object.entries(judgeActivityReportData.trialSessions).map(
+              ([sessionStatus, count]) => (
+                <tr key={sessionStatus}>
+                  <td>{sessionStatus}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
     );
 
-    const ordersIssued: JSX.Element = (
+    const ordersIssued: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
-            Orders Issued <span className="float-right">Total: 4</span>
+        <table aria-describedby="ordersIssued" className="usa-table ustc-table">
+          <caption id="ordersIssued">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Orders Issued
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.ordersFiledTotal}
+              </div>
+            </div>
           </caption>
           <thead>
             <tr>
-              <th aria-label="TODO">Event</th>
-              <th aria-label="Docket Number">Order Type</th>
-              <th aria-label="Docket Number">Event Total</th>
+              <th aria-label="event code" className="width-15">
+                Event
+              </th>
+              <th aria-label="order type">Order Type</th>
+              <th aria-label="event total" className="text-right">
+                Event Total
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {judgeActivityReportData.orders.map(
+              ({ count, documentType, eventCode }) => (
+                <tr key={eventCode}>
+                  <td className="width-15">{eventCode}</td>
+                  <td>{documentType}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
+        {judgeActivityReportData.orders.length === 0 && (
+          <p>There are no orders issued for the selected dates</p>
+        )}
       </>
     );
 
-    const opinionsIssued: JSX.Element = (
+    const opinionsIssued: () => JSX.Element = () => (
       <>
-        <table aria-describedby="TODO" className="usa-table ustc-table">
-          <caption className="table-caption-serif">
-            Opinions Issued <span className="float-right">Total: 89</span>
+        <table
+          aria-describedby="opinionsIssued"
+          className="usa-table ustc-table"
+        >
+          <caption id="opinionsIssued">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Opinions Issued
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.opinionsFiledTotal}
+              </div>
+            </div>
           </caption>
           <thead>
             <tr>
-              <th aria-label="TODO">Event</th>
-              <th aria-label="Docket Number">Opinion Type</th>
-              <th aria-label="Docket Number">Event Total</th>
+              <th aria-label="event code" className="width-15">
+                Event
+              </th>
+              <th aria-label="opinion type">Opinion Type</th>
+              <th aria-label="event total" className="text-right">
+                Event Total
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {judgeActivityReportData.opinions.map(
+              ({ count, documentType, eventCode }) => (
+                <tr key={eventCode}>
+                  <td className="width-15">{eventCode}</td>
+                  <td>{documentType}</td>
+                  <td className="text-right">{count}</td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </>
@@ -145,10 +187,10 @@ export const JudgeActivityReport = connect(
           <ErrorNotification />
 
           <div className="title">
-            <h1>Activity - {form.judgeName} </h1>
+            <h1>Activity - {judgeActivityReportHelper.reportHeader}</h1>
           </div>
 
-          <div className="blue-container">
+          <div className="blue-container margin-bottom-30px">
             <div className="grid-row">
               <div className="grid-col-auto margin-x-3">
                 <DateRangePickerComponent
@@ -190,21 +232,29 @@ export const JudgeActivityReport = connect(
               </div>
             </div>
           </div>
+
+          {judgeActivityReportHelper.showSelectDateRangeText ? (
+            <div className="text-semibold margin-0">
+              Enter a date range to view activity
+            </div>
+          ) : judgeActivityReportHelper.showResultsTables ? (
+            <>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">{closedCases()}</div>
+                <div className="grid-col-6">{trialSessionsHeld()}</div>
+              </div>
+
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">{ordersIssued()}</div>
+                <div className="grid-col-6">{opinionsIssued()}</div>
+              </div>
+            </>
+          ) : (
+            <div className="text-semibold margin-0">
+              There is no activity for the selected dates
+            </div>
+          )}
         </section>
-
-        {judgeActivityReportData.casesClosedByJudge && (
-          <section className="usa-section grid-container">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{closedCases()}</div>
-              <div className="grid-col-6">{trialSessionsHeld()}</div>
-            </div>
-
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{ordersIssued}</div>
-              <div className="grid-col-6">{opinionsIssued}</div>
-            </div>
-          </section>
-        )}
       </>
     );
   },

@@ -58,4 +58,76 @@ describe('setJudgeActivityReportDataAction', () => {
 
     expect(state.judgeActivityReportData.trialSessions).toBe(mockTrialSessions);
   });
+
+  it('should set props.opinions on state', async () => {
+    const mockOpinions = [
+      {
+        count: 1,
+        documentType: 'Memorandum Opinion',
+        eventCode: 'MOP',
+      },
+      {
+        count: 0,
+        documentType: 'S Opinion',
+        eventCode: 'SOP',
+      },
+      {
+        count: 0,
+        documentType: 'TC Opinion',
+        eventCode: 'TCOP',
+      },
+      {
+        count: 4,
+        documentType: 'Bench Opinion',
+        eventCode: 'OST',
+      },
+    ];
+
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        opinions: mockOpinions,
+      },
+      state: {
+        judgeActivityReportData: {
+          opinions: undefined,
+        },
+      },
+    });
+
+    expect(state.judgeActivityReportData.opinions).toBe(mockOpinions);
+  });
+
+  it('should set props.orders on state', async () => {
+    const mockOrdersIssuedByJudge = [
+      {
+        count: 1,
+        documentType: 'Order',
+        eventCode: 'O',
+      },
+      {
+        count: 5,
+        documentType: 'Order for Dismissal',
+        eventCode: 'ODS',
+      },
+    ];
+
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        orders: mockOrdersIssuedByJudge,
+      },
+      state: {
+        judgeActivityReportData: {
+          orders: undefined,
+        },
+      },
+    });
+
+    expect(state.judgeActivityReportData.orders).toBe(mockOrdersIssuedByJudge);
+  });
 });

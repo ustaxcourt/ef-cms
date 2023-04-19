@@ -267,6 +267,12 @@ const {
   getMessagesForCaseLambda,
 } = require('./messages/getMessagesForCaseLambda');
 const {
+  getOpinionsFiledByJudgeLambda,
+} = require('./reports/getOpinionsFiledByJudgeLambda');
+const {
+  getOrdersFiledByJudgeLambda,
+} = require('./reports/getOrdersFiledByJudgeLambda');
+const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -301,7 +307,7 @@ const {
 } = require('./trialSessions/getTrialSessionDetailsLambda');
 const {
   getTrialSessionsForJudgeActivityReportLambda,
-} = require('./trialSessions/getTrialSessionsForJudgeActivityReportLambda');
+} = require('./reports/getTrialSessionsForJudgeActivityReportLambda');
 const {
   getTrialSessionsForJudgeLambda,
 } = require('./trialSessions/getTrialSessionsForJudgeLambda');
@@ -1097,6 +1103,14 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.post(
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/judge-activity-report/opinions',
+    lambdaWrapper(getOpinionsFiledByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/orders',
+    lambdaWrapper(getOrdersFiledByJudgeLambda),
   );
 }
 

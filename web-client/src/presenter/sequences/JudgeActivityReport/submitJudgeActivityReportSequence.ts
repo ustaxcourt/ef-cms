@@ -1,7 +1,9 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { getCasesClosedByJudgeAction } from '../../actions/JudgeActivityReport/getCasesClosedByJudgeAction';
-import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/TrialSession/getTrialSessionsForJudgeActivityReportAction';
+import { getOpinionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getOpinionsForJudgeActivityReportAction';
+import { getOrdersIssuedForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getOrdersIssuedForJudgeActivityReportAction';
+import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setJudgeActivityReportDataAction } from '../../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
@@ -28,6 +30,8 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       parallel([
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,
+        getOpinionsForJudgeActivityReportAction,
+        getOrdersIssuedForJudgeActivityReportAction,
       ]),
       setJudgeActivityReportDataAction,
     ],

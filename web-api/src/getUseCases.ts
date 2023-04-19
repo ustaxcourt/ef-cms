@@ -1,3 +1,5 @@
+import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor';
+import { getOrdersFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor';
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 const {
@@ -341,7 +343,7 @@ const {
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
 const {
   getTrialSessionsForJudgeActivityReportInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeActivityReportInteractor');
+} = require('../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor');
 const {
   getTrialSessionsForJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeInteractor');
@@ -682,6 +684,8 @@ const useCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
+  getOpinionsFiledByJudgeInteractor,
+  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
