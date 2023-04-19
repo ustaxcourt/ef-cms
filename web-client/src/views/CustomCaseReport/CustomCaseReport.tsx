@@ -9,7 +9,7 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const CustomCaseReport = connect(
   {
@@ -31,10 +31,8 @@ export const CustomCaseReport = connect(
     setCustomCaseInventoryReportFiltersSequence,
     validationErrors,
   }) {
-    console.log(
-      'customCaseInventoryReportHelper',
-      customCaseInventoryReportHelper,
-    );
+    // TODO: Decide if this is the best place to store this state (vs cerebral)
+    const [runOperation, runOperationSelected] = useState(false);
 
     return (
       <>
@@ -244,7 +242,10 @@ export const CustomCaseReport = connect(
           <Button
             isActive={customCaseInventoryReportHelper.isRunReportButtonActive}
             tooltip="Run Report"
-            onClick={() => getCustomCaseInventoryReportSequence()}
+            onClick={() => {
+              runOperationSelected(true);
+              getCustomCaseInventoryReportSequence();
+            }}
           >
             Run Report
           </Button>
@@ -269,9 +270,7 @@ export const CustomCaseReport = connect(
             customCaseInventoryReportData={
               customCaseInventoryReportHelper.customCaseInventoryReportData
             }
-            hasNoCustomCaseData={
-              customCaseInventoryReportHelper.hasNoCustomCaseData
-            }
+            runOperation={runOperation}
           />
         </section>
       </>
@@ -279,10 +278,7 @@ export const CustomCaseReport = connect(
   },
 );
 
-const ReportTable = ({
-  customCaseInventoryReportData,
-  hasNoCustomCaseData,
-}) => {
+const ReportTable = ({ customCaseInventoryReportData, runOperation }) => {
   return (
     <>
       <table
@@ -318,7 +314,7 @@ const ReportTable = ({
                 <td>PLACEHOLDER</td>
               </tr>
             ))}
-          {!hasNoCustomCaseData && (
+          {runOperation && customCaseInventoryReportData && (
             <tr>
               <td>No data found.</td>
             </tr>
