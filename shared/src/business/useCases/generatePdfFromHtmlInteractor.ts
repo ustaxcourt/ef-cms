@@ -29,12 +29,15 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
+  let browserPid;
   let browser = null;
   let result = null;
 
   try {
     browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
+    browserPid = browser.process()?.pid;
+
+    let page = await browser?.newPage();
 
     await page.setContent(contentHtml);
 
@@ -75,10 +78,12 @@ export const generatePdfFromHtmlInteractor = async (
     applicationContext.logger.error(error);
     throw error;
   } finally {
-    if (browser !== null && process.env.NODE_ENV !== 'production') {
-      // there is a bug in the chromium library we use which hangs when calling browser.close,
-      // so let's only close when doing local development.
-      await browser.close();
+    if (browser !== null) {
+      if (process.env.NODE_ENV !== 'production') {
+        await browser.close();
+      } else {
+        process.kill(browserPid);
+      }
     }
   }
   return result;
