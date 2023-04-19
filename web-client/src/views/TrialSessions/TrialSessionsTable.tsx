@@ -116,6 +116,7 @@ export const TrialSessionsTable = connect(
                 <tr className="trial-date">
                   <td colSpan={7 + trialSessionsHelper.additionalColumnsShown}>
                     <h4 className="margin-bottom-0">
+                      {'Week of '}
                       {trialDate.dateFormatted}
                     </h4>
                   </td>
