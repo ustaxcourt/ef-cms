@@ -87,7 +87,7 @@ export const uploadExternalDocumentsAction = async ({
         documentMetadata,
         progressFunctions,
       });
-    console.log('caseDetail', caseDetail);
+
     for (let docketEntryId of docketEntryIdsAdded) {
       await addCoversheet({
         applicationContext,
