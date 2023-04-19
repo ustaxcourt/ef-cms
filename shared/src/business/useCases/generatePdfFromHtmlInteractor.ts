@@ -79,8 +79,11 @@ export const generatePdfFromHtmlInteractor = async (
     throw error;
   } finally {
     if (browser !== null) {
-      process.kill(browserPid);
-      // await browser.close();
+      if (process.env.NODE_ENV !== 'production') {
+        await browser.close();
+      } else {
+        process.kill(browserPid);
+      }
     }
   }
   return result;
