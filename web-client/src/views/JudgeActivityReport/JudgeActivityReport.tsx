@@ -109,12 +109,14 @@ export const JudgeActivityReport = connect(
             </div>
           </caption>
           <thead>
-            <tr>
-              <th aria-label="event code" className="width-15">
+            <tr className="grid-row">
+              <th aria-label="event code" className="grid-col-2">
                 Event
               </th>
-              <th aria-label="order type">Order Type</th>
-              <th aria-label="event total" className="text-right">
+              <th aria-label="order type" className="grid-col-7">
+                Order Type
+              </th>
+              <th aria-label="event total" className="text-center grid-col-3">
                 Event Total
               </th>
             </tr>
@@ -122,10 +124,10 @@ export const JudgeActivityReport = connect(
           <tbody>
             {judgeActivityReportData.orders.map(
               ({ count, documentType, eventCode }) => (
-                <tr key={eventCode}>
-                  <td className="width-15">{eventCode}</td>
-                  <td>{documentType}</td>
-                  <td className="text-right">{count}</td>
+                <tr className="grid-row" key={eventCode}>
+                  <td className="grid-col-2">{eventCode}</td>
+                  <td className="grid-col-7">{documentType}</td>
+                  <td className="text-center grid-col-3">{count}</td>
                 </tr>
               ),
             )}
