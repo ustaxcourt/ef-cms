@@ -49,6 +49,7 @@ const {
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
   getChromiumBrowser,
+  getChromiumBrowserAWS,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   IrsPractitioner,
@@ -313,7 +314,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser,
+    getChromiumBrowser:
+      process.env.NODE_ENV === 'production'
+        ? getChromiumBrowserAWS
+        : getChromiumBrowser,
     getClerkOfCourtNameForSigning: () => {
       return clerkOfCourtNameForSigning;
     },
