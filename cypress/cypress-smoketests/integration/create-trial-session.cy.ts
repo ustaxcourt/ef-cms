@@ -42,6 +42,7 @@ import {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } from '../support/pages/reports';
+import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
@@ -221,7 +222,7 @@ describe('Petitions Clerk', () => {
       // enough time has elapsed since we blocked second case. look for it on blocked cases report
       // warning: if there are elasticsearch delays, this test might be brittle...
       // view blocked report
-      cy.waitForElasticsearch();
+      waitForElasticsearch();
       viewBlockedCaseOnBlockedReport({
         ...testData,
         docketNumber: secondDocketNumber,
