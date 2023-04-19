@@ -18,6 +18,17 @@ export const TrialSessionsTable = connect(
     proceedingTypes,
     trialSessionsHelper,
     trialSessionTypes,
+  }: {
+    formattedTrialSessions: any;
+    proceedingTypes: any;
+    trialSessionsHelper: {
+      additionalColumnsShown: number;
+      showNoticeIssued: boolean;
+      showSessionStatus: boolean;
+      showUnassignedJudgeFilter: boolean;
+      trialSessionJudges: any;
+    };
+    trialSessionTypes: any;
   }) {
     return (
       <React.Fragment>
