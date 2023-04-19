@@ -46,7 +46,7 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader = `${judgeName} ${currentDate}`;
+  const reportHeader: string = `${judgeName} ${currentDate}`;
 
   return {
     closedCasesTotal,

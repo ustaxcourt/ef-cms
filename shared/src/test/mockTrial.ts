@@ -1,12 +1,11 @@
-import { SESSION_STATUS_TYPES } from '../business/entities/EntityConstants';
-
-const {
+import { MOCK_CASE } from './mockCase';
+import {
+  SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} = require('../business/entities/EntityConstants');
-const { MOCK_CASE } = require('./mockCase');
+} from '../business/entities/EntityConstants';
 
-exports.MOCK_TRIAL_REMOTE = {
+export const MOCK_TRIAL_REMOTE = {
   chambersPhoneNumber: '1111111',
   joinPhoneNumber: '0987654321',
   judge: {
@@ -25,7 +24,7 @@ exports.MOCK_TRIAL_REMOTE = {
   trialSessionId: '48287e71-3754-4017-850d-476a663d1a8e',
 };
 
-exports.MOCK_TRIAL_REGULAR = {
+export const MOCK_TRIAL_REGULAR = {
   caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
   isCalendared: false,
   judge: {
@@ -43,7 +42,7 @@ exports.MOCK_TRIAL_REGULAR = {
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
 };
 
-exports.MOCK_TRIAL_INPERSON = {
+export const MOCK_TRIAL_INPERSON = {
   address1: '123 Street Lane',
   caseOrder: [
     { docketNumber: MOCK_CASE.docketNumber },
@@ -66,7 +65,7 @@ exports.MOCK_TRIAL_INPERSON = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-exports.MOCK_TRIAL_STANDALONE_REMOTE = {
+export const MOCK_TRIAL_STANDALONE_REMOTE = {
   chambersPhoneNumber: '1111111',
   joinPhoneNumber: '0987654321',
   judge: {
