@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { uploadExternalDocumentsForConsolidatedGroupInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsForConsolidatedGroupInteractor';
 /* eslint-disable max-lines */
 const {
   addCaseToTrialSessionInteractor,
@@ -767,7 +766,6 @@ const useCases = {
   updateUserCaseNoteInteractor,
   updateUserContactInformationInteractor,
   updateUserPendingEmailInteractor,
-  uploadExternalDocumentsForConsolidatedGroupInteractor,
   validatePdfInteractor,
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
