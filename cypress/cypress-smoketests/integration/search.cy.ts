@@ -20,6 +20,7 @@ import {
   serveCaseToIrs,
 } from '../support/pages/create-paper-case';
 import { goToMyDocumentQC } from '../support/pages/document-qc';
+import { waitForElasticsearch } from '../support/helpers';
 
 const barNumberToSearchBy = 'PT1234';
 let testData = {};
@@ -49,7 +50,7 @@ describe('Create and serve a case to search for', () => {
     fillInCreateCaseFromPaperForm(testData);
     goToReviewCase(testData);
     serveCaseToIrs();
-    cy.waitForElasticsearch();
+    waitForElasticsearch();
   });
 });
 
@@ -118,7 +119,7 @@ describe('Opinion Search', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
     createOpinion();
     addDocketEntryAndServeOpinion(testData);
-    cy.waitForElasticsearch();
+    waitForElasticsearch();
   });
 
   it('should be able to search for an opinion by keyword', () => {
