@@ -24,7 +24,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
           overrideIsMultiDocketableEventCode: undefined,
         },
         state: {
-          casesDetail: testCase,
+          caseDetail: testCase,
           featureFlags: {
             [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
               .key]: false,
@@ -38,6 +38,112 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
 
     expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
       false,
+    );
+  });
+
+  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when isConsolidatedGroupAccessEnabled is true, case has a leadDocketNumber and has a multiDocketable event code', async () => {
+    const testCase = { ...baseCase, leadDocketNumber: '111-11' };
+
+    const result = await runAction(
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
+      {
+        modules: { presenter },
+        props: {
+          overrideIsMultiDocketableEventCode: undefined,
+        },
+        state: {
+          caseDetail: testCase,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: true,
+          },
+          form: {
+            eventCode: 'ADMR',
+          },
+        },
+      },
+    );
+
+    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
+      true,
+    );
+  });
+
+  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to false on state when case does not have a leadDocketNumber', async () => {
+    const result = await runAction(
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
+      {
+        modules: { presenter },
+        props: {
+          overrideIsMultiDocketableEventCode: undefined,
+        },
+        state: {
+          caseDetail: baseCase,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: true,
+          },
+          form: {
+            eventCode: 'ADMR',
+          },
+        },
+      },
+    );
+
+    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
+      false,
+    );
+  });
+
+  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to false on state when there is not a multiDocketable event code', async () => {
+    const testCase = { ...baseCase, leadDocketNumber: '111-11' };
+    const result = await runAction(
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
+      {
+        modules: { presenter },
+        props: {
+          overrideIsMultiDocketableEventCode: undefined,
+        },
+        state: {
+          caseDetail: testCase,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: true,
+          },
+          form: {
+            eventCode: 'ACED',
+          },
+        },
+      },
+    );
+
+    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
+      false,
+    );
+  });
+
+  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when there is a overrideIsMultiDocketableEventCode', async () => {
+    const testCase = { ...baseCase, leadDocketNumber: '111-11' };
+    const result = await runAction(
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
+      {
+        modules: { presenter },
+        props: {
+          overrideIsMultiDocketableEventCode: true,
+        },
+        state: {
+          caseDetail: testCase,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+              .key]: true,
+          },
+          form: {},
+        },
+      },
+    );
+
+    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
+      true,
     );
   });
 });
