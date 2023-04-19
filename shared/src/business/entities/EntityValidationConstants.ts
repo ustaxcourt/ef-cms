@@ -161,12 +161,6 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .boolean()
     .optional()
     .description('Has an associated PDF in S3.'),
-  isFiledAcrossConsolidatedCasesByExternalUser: joi
-    .boolean()
-    .optional()
-    .description(
-      'Whether the docket entry was filed across all consolidated cases by en external user.',
-    ),
   isLegacy: joi
     .boolean()
     .when('isLegacySealed', {

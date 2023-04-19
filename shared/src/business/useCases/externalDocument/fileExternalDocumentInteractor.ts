@@ -148,7 +148,6 @@ export const fileExternalDocumentInteractor = async (
               docketEntryId,
               docketRecord: individualDocumentMetadata.docketRecord,
               documentType: metadata.documentType,
-              isFiledAcrossConsolidatedCasesByExternalUser: true,
               isOnDocketRecord: true,
               relationship,
               userId: user.userId,
