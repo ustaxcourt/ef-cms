@@ -8,7 +8,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   presenter.providers.applicationContext = applicationContext;
   const mockUserId = '082093a4-20e0-4a82-9d89-e24108535216';
 
-  it('sets up the form with default values', async () => {
+  it('sets up the form with default values when state.isExternalConsolidatedCaseGroupFilingEnabled is true', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.privatePractitioner,
       userId: mockUserId,
@@ -18,6 +18,32 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
       modules: { presenter },
       state: {
         form: {},
+        isExternalConsolidatedCaseGroupFilingEnabled: true,
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      attachments: false,
+      certificateOfService: false,
+      fileAcrossConsolidatedGroup: true,
+      filersMap: {},
+      hasSecondarySupportingDocuments: false,
+      hasSupportingDocuments: false,
+      practitioner: [],
+    });
+  });
+
+  it('sets up the form with default values when state.isExternalConsolidatedCaseGroupFilingEnabled is falsy', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: mockUserId,
+    });
+
+    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
+      modules: { presenter },
+      state: {
+        form: {},
+        isExternalConsolidatedCaseGroupFilingEnabled: undefined,
       },
     });
 
