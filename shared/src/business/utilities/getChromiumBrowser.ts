@@ -5,7 +5,7 @@ exports.getChromiumBrowser = async () => {
 
 exports.getChromiumBrowserAWS = async () => {
   const chromium = require('@sparticuz/chromium');
-  const puppeteer = require('puppeteer');
+  const puppeteer = require('puppeteer-core');
   return await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
