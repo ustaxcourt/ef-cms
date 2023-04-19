@@ -12,7 +12,8 @@ export const canRequestAccessAction = ({ get, path, props }) => {
   const { isDirectlyAssociated } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
   if (!isDirectlyAssociated) {
-    return path['proceed']({ overrideIsMultiDocketableEventCode: true });
+    const overrideIsMultiDocketableEventCode = true;
+    return path['proceed']({ overrideIsMultiDocketableEventCode });
   } else {
     return path['unauthorized']({ docketNumber });
   }
