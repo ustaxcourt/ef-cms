@@ -29,12 +29,15 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
+  let browserPid;
   let browser = null;
   let result = null;
 
   try {
     browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
+    browserPid = browser.process()?.pid;
+
+    let page = await browser?.newPage();
 
     await page.setContent(contentHtml);
 
@@ -76,7 +79,8 @@ export const generatePdfFromHtmlInteractor = async (
     throw error;
   } finally {
     if (browser !== null) {
-      await browser.close();
+      process.kill(browserPid);
+      // await browser.close();
     }
   }
   return result;
