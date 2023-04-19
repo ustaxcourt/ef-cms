@@ -1,28 +1,25 @@
-const {
+import {
   addDocketEntryAndServeOpinion,
   createOpinion,
+  goToOpinionSearch,
   gotoAdvancedPractitionerSearch,
   gotoAdvancedSearch,
-  goToOpinionSearch,
   searchByDocketNumber,
   searchByPetitionerName,
-  searchByPractitionerbarNumber,
   searchByPractitionerName,
+  searchByPractitionerbarNumber,
   searchOpinionByKeyword,
-} = require('../support/pages/advanced-search');
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../../cypress-integration/support/pages/create-paper-petition');
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const {
+} from '../support/pages/advanced-search';
+
+import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { goToCaseDetail } from '../support/pages/case-detail';
+import {
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const { goToCaseDetail } = require('../support/pages/case-detail');
-const { goToMyDocumentQC } = require('../support/pages/document-qc');
+} from '../support/pages/create-paper-case';
+import { goToMyDocumentQC } from '../support/pages/document-qc';
 
 const barNumberToSearchBy = 'PT1234';
 let testData = {};

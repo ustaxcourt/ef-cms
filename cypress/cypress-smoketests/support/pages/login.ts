@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 
 const awsRegion = 'us-east-1';
 
@@ -16,7 +16,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
-exports.confirmUser = async ({ email }) => {
+export const confirmUser = async ({ email }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
@@ -71,7 +71,7 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-exports.getUserToken = async (username, password) => {
+export const getUserToken = async (username, password) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
@@ -88,7 +88,7 @@ exports.getUserToken = async (username, password) => {
     .promise();
 };
 
-exports.login = token => {
+export const login = token => {
   cy.visit(`/log-in?token=${token}`);
 
   cy.waitUntilSettled(50);
@@ -96,7 +96,7 @@ exports.login = token => {
   cy.get('.progress-indicator').should('not.exist');
 };
 
-exports.getRestApi = async () => {
+export const getRestApi = async () => {
   let apigateway = new AWS.APIGateway({
     region: awsRegion,
   });
