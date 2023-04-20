@@ -1,14 +1,17 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../business/entities/EntityConstants';
+import { ServiceUnavailableError } from '../../errors/errors';
 
 export const checkLock = async ({
   applicationContext,
   identifier,
   onLockError,
+  options = {},
   prefix,
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
-  onLockError: Error;
+  onLockError?: Error | Function;
+  options?: any;
   prefix: string;
 }) => {
   const isCaseLockingEnabled = await applicationContext
@@ -21,25 +24,35 @@ export const checkLock = async ({
     .getPersistenceGateway()
     .getLock({ applicationContext, identifier, prefix });
 
-  if (currentLock) {
-    applicationContext.logger.warn('Entity is currently locked', {
-      currentLock,
-    });
-    if (isCaseLockingEnabled) {
-      throw onLockError;
-    }
-  } else {
+  if (!currentLock) {
     applicationContext.logger.warn('Entity is NOT currently locked', {
       identifier,
       prefix,
     });
+    return;
   }
+
+  applicationContext.logger.warn('Entity is currently locked', {
+    currentLock,
+  });
+
+  if (!isCaseLockingEnabled) {
+    return;
+  }
+
+  if (onLockError instanceof Error) {
+    throw onLockError;
+  } else if (typeof onLockError === 'function') {
+    await onLockError(applicationContext, options);
+  }
+  throw new ServiceUnavailableError('One of the cases is being updated');
 };
 
 export const acquireLock = async ({
   applicationContext,
   identifier,
   onLockError,
+  options = {},
   prefix,
   retries = 0,
   ttl = 30,
@@ -47,7 +60,8 @@ export const acquireLock = async ({
 }: {
   applicationContext: IApplicationContext;
   identifier: string | string[];
-  onLockError: Error;
+  onLockError: Error | Function;
+  options?: any;
   prefix: string;
   retries?: number;
   ttl?: number;
@@ -69,6 +83,7 @@ export const acquireLock = async ({
             applicationContext,
             identifier: entityIdentifier,
             onLockError,
+            options,
             prefix,
           }),
         ),
@@ -131,8 +146,8 @@ export const removeLock = ({
  */
 export function withLocking(
   cb: (applicationContext: IApplicationContext, options: any) => any,
-  getLockInfo,
-  onLockError,
+  getLockInfo: Function,
+  onLockError: Error | Function,
 ) {
   return async function (
     applicationContext: IApplicationContext,
@@ -144,6 +159,7 @@ export function withLocking(
       applicationContext,
       identifier,
       onLockError,
+      options,
       prefix,
       ttl,
     });
