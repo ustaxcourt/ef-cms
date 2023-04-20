@@ -1,5 +1,5 @@
+import * as DateHandler from '../../../business/utilities/DateHandler';
 import { createBarNumber } from './barNumberGenerator';
-import DateHandler from '../../../business/utilities/DateHandler';
 
 describe('Create bar number', function () {
   it('should create a bar number', async () => {
