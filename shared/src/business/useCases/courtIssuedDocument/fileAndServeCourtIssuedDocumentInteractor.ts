@@ -1,10 +1,6 @@
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -271,8 +267,22 @@ export const determineEntitiesToLock = ({
   prefix: 'case',
 });
 
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_file_and_serve_court_issued_document',
+      originalRequest,
+    },
+    userId: user.userId,
+  });
+};
+
 export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
   fileAndServeCourtIssuedDocument,
   determineEntitiesToLock,
-  new ServiceUnavailableError('One of the cases are currently being updated'),
+  handleLockError,
 );
