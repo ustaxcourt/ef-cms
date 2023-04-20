@@ -1,20 +1,20 @@
 // see ../docs/additional-resources/irs-super-user.md for detailed instructions
 
-const { requireEnvVars } = require('../shared/admin-tools/util');
+import { requireEnvVars } from '../shared/admin-tools/util';
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
   'IRS_CLIENT_ID',
   'IRS_SUPERUSER_EMAIL',
 ]);
 
-const readline = require('readline');
-const {
+import {
   AssociateSoftwareTokenCommand,
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
   RespondToAuthChallengeCommand,
   VerifySoftwareTokenCommand,
-} = require('@aws-sdk/client-cognito-identity-provider');
+} from '@aws-sdk/client-cognito-identity-provider';
+import readline from 'readline';
 
 const cognito = new CognitoIdentityProviderClient({
   region: 'us-east-1',
