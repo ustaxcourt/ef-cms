@@ -91,6 +91,9 @@ export const generatePdfFromHtmlInteractor = async (
       });
     } catch (err) {
       // this was probably a 1 page document
+      if (!err.message.includes('Page range exceeds page count')) {
+        throw err;
+      }
     }
 
     if (remainingPages) {
