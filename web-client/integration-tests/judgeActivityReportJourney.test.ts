@@ -15,10 +15,8 @@ describe('Judge activity report journey', () => {
   //verify resuls
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-  it('views the activity report', async () => {
-    await cerebralTest.runSequence('gotoJudgeActivityReportSequence', {});
-
-    // await cerebralTest.runSequence('submitJudgeActivityReportSequence', {});
+  it('should disable the submit button on inital page load when form has not yet been completed', async () => {
+    await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
     const judgeActivityReportHelper = withAppContextDecorator(
       judgeActivityReportHelperComputed,
@@ -29,5 +27,24 @@ describe('Judge activity report journey', () => {
     });
 
     expect(isFormPristine).toBe(true);
+  });
+
+  it('should display an error message when invalid dates are entered into the form', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'startDate',
+      value: '--_--',
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'endDate',
+      value: 'yabbadabaadooooo',
+    });
+
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      endDate: 'Enter a valid end date.',
+      startDate: 'Enter a valid start date.',
+    });
   });
 });
