@@ -85,6 +85,24 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
+  describe('isFormPristine', () => {
+    // submit should be disabled when either start date OR end date are not populated
+    it('should be true when either startDate or endDate are not populated', () => {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
+        state: {
+          ...baseState,
+          form: {
+            ...mockForm,
+            endDate: '01/02/2020',
+            startDate: undefined,
+          },
+        },
+      });
+
+      expect(isFormPristine).toBe(true);
+    });
+  });
+
   describe('opinionsFiledTotal', () => {
     it('should be the sum of the values of opinions filed off state.judgeActivityReportData', () => {
       const { opinionsFiledTotal } = runCompute(judgeActivityReportHelper, {
