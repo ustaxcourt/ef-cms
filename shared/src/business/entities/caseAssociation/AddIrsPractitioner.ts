@@ -1,18 +1,18 @@
-const joi = require('joi');
-const {
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
+} from '../JoiValidationDecorator';
+import joi from 'joi';
 
 /**
  *
  * @param {object} rawProps the metadata
  * @constructor
  */
-function AddIrsPractitioner() {}
-AddIrsPractitioner.prototype.init = function init(rawProps) {
+function AddIrsPractitionerClass() {}
+AddIrsPractitionerClass.prototype.init = function init(rawProps) {
   Object.assign(this, {
     email: rawProps.user?.email,
     serviceIndicator: rawProps.serviceIndicator,
@@ -20,7 +20,7 @@ AddIrsPractitioner.prototype.init = function init(rawProps) {
   });
 };
 
-AddIrsPractitioner.VALIDATION_ERROR_MESSAGES = {
+AddIrsPractitionerClass.VALIDATION_ERROR_MESSAGES = {
   serviceIndicator: [
     {
       contains: 'must be one of',
@@ -32,7 +32,7 @@ AddIrsPractitioner.VALIDATION_ERROR_MESSAGES = {
   user: 'Select a respondent counsel',
 };
 
-AddIrsPractitioner.schema = joi.object().keys({
+AddIrsPractitionerClass.schema = joi.object().keys({
   email: JoiValidationConstants.STRING.optional(),
   serviceIndicator: joi
     .when('email', {
@@ -50,11 +50,9 @@ AddIrsPractitioner.schema = joi.object().keys({
 });
 
 joiValidationDecorator(
-  AddIrsPractitioner,
-  AddIrsPractitioner.schema,
-  AddIrsPractitioner.VALIDATION_ERROR_MESSAGES,
+  AddIrsPractitionerClass,
+  AddIrsPractitionerClass.schema,
+  AddIrsPractitionerClass.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = {
-  AddIrsPractitioner: validEntityDecorator(AddIrsPractitioner),
-};
+export const AddIrsPractitioner = validEntityDecorator(AddIrsPractitionerClass);
