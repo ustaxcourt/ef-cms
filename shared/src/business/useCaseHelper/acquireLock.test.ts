@@ -70,73 +70,107 @@ describe('acquireLock', () => {
       mockLock = MOCK_LOCK;
     });
 
-    it('throws a ServiceUnavailableError error if the persistence gateway returns a lock for the given prefix and identifier', async () => {
-      await expect(acquireLock(mockCall)).rejects.toThrow(
-        ServiceUnavailableError,
-      );
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).not.toHaveBeenCalled();
+    describe('feature flag enabled', () => {
+      it('throws the onLockError provided', async () => {
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('does not create a lock for any of the cases if one of the cases is locked', async () => {
+        mockCall.identifier = ['123-45', '678-90'];
+        applicationContext
+          .getPersistenceGateway()
+          .getLock.mockReturnValueOnce(undefined)
+          .mockReturnValueOnce(MOCK_LOCK);
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('attempts to acquire the lock only once before throwing an error if retries is not specified', async () => {
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().getLock,
+        ).toHaveBeenCalledTimes(1);
+      });
+
+      it('attempts to acquire the lock multiple times before throwing an error if retries is specified', async () => {
+        mockCall.retries = 5;
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().getLock,
+        ).toHaveBeenCalledTimes(1 + mockCall.retries);
+      });
+
+      it('waits the specified number of milliseconds before trying to acquire the lock if retries and waitTime are specified', async () => {
+        mockCall.retries = 5;
+        mockCall.waitTime = 1000;
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().getLock,
+        ).toHaveBeenCalledTimes(1 + mockCall.retries);
+        expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(
+          mockCall.retries,
+        );
+        expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(
+          mockCall.waitTime,
+        );
+      });
+
+      it('calls the onLockError function if one is provided', async () => {
+        mockCall.options = { foo: 'bar' };
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+        await expect(acquireLock(mockCall)).rejects.toThrow();
+        expect(mockCallbackFunction).toHaveBeenCalled();
+        expect(mockCallbackFunction).toHaveBeenCalledWith(
+          applicationContext,
+          mockCall.options,
+        );
+      });
+
+      it('throws a ServiceUnavailableError if onLockError function is provided', async () => {
+        mockCall.onLockError = jest.fn();
+        await expect(acquireLock(mockCall)).rejects.toThrow();
+      });
     });
 
-    it('does not throw a ServiceUnavailableError error if the feature flag is disabled', async () => {
-      mockFeatureFlagValue = false;
-      await expect(acquireLock(mockCall)).resolves.not.toThrow();
+    describe('feature flag disabled', () => {
+      beforeEach(() => {
+        mockFeatureFlagValue = false;
+      });
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalled();
-    });
+      it('does not throw the onLockError error provided', async () => {
+        await expect(acquireLock(mockCall)).resolves.not.toThrow();
 
-    it('does not create a lock for any of the cases if one of the cases is locked', async () => {
-      mockCall.identifier = ['123-45', '678-90'];
-      applicationContext
-        .getPersistenceGateway()
-        .getLock.mockReturnValueOnce(undefined)
-        .mockReturnValueOnce(MOCK_LOCK);
-      await expect(acquireLock(mockCall)).rejects.toThrow(
-        ServiceUnavailableError,
-      );
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).toHaveBeenCalled();
+      });
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('attempts to acquire the lock only once before throwing an error if retries is not specified', async () => {
-      await expect(acquireLock(mockCall)).rejects.toThrow(
-        ServiceUnavailableError,
-      );
-      expect(
-        applicationContext.getPersistenceGateway().getLock,
-      ).toHaveBeenCalledTimes(1);
-    });
-
-    it('attempts to acquire the lock multiple times before throwing an error if retries is specified', async () => {
-      mockCall.retries = 5;
-      await expect(acquireLock(mockCall)).rejects.toThrow(
-        ServiceUnavailableError,
-      );
-      expect(
-        applicationContext.getPersistenceGateway().getLock,
-      ).toHaveBeenCalledTimes(1 + mockCall.retries);
-    });
-
-    it('waits the specified number of milliseconds before trying to acquire the lock if retries and waitTime are specified', async () => {
-      mockCall.retries = 5;
-      mockCall.waitTime = 1000;
-      await expect(acquireLock(mockCall)).rejects.toThrow(
-        ServiceUnavailableError,
-      );
-      expect(
-        applicationContext.getPersistenceGateway().getLock,
-      ).toHaveBeenCalledTimes(1 + mockCall.retries);
-      expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(
-        mockCall.retries,
-      );
-      expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(
-        mockCall.waitTime,
-      );
+      it('does not call the onLockError function provided', async () => {
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+        await expect(acquireLock(mockCall)).resolves.not.toThrow();
+        expect(mockCallbackFunction).not.toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).toHaveBeenCalled();
+      });
     });
   });
 
@@ -172,7 +206,7 @@ describe('withLocking', () => {
     prefix: 'case',
     ttl: 60,
   }));
-  const func = withLocking(callbackFunction, getLockInfo, onLockError);
+  let func;
   let mockFeatureFlagValue;
   let mockLock;
 
@@ -188,102 +222,165 @@ describe('withLocking', () => {
   });
 
   beforeEach(() => {
-    mockLock = undefined; // unlocked
-    mockFeatureFlagValue = true; // enabled
+    func = withLocking(callbackFunction, getLockInfo, onLockError);
   });
 
-  it('creates the lock for the specified prefix and identifier', async () => {
-    await func(applicationContext, { docketNumber: '123-45' });
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
-      ttl: 60,
+  describe('is locked', () => {
+    beforeEach(() => {
+      mockLock = MOCK_LOCK; // unlocked
     });
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledTimes(1);
-  });
 
-  it('throws a ServiceUnavailableError if the specified prefix and identifier are locked', async () => {
-    mockLock = MOCK_LOCK; // locked
-    await expect(
-      func(applicationContext, { docketNumber: '123-45' }),
-    ).rejects.toThrow(ServiceUnavailableError);
-  });
+    describe('feature flag is disabled', () => {
+      beforeEach(() => {
+        mockFeatureFlagValue = false; // disabled
+      });
 
-  it('calls the specified callback function', async () => {
-    await func(applicationContext, { docketNumber: '123-45' });
-    expect(callbackFunction).toHaveBeenCalledTimes(1);
-    expect(callbackFunction).toHaveBeenCalledWith(applicationContext, {
-      docketNumber: '123-45',
+      it('does not throw a ServiceUnavailableError if the feature flag is false and we could not acquire the lock on the specified prefix and identifier', async () => {
+        await expect(
+          func(applicationContext, { docketNumber: '123-45' }),
+        ).resolves.not.toThrow();
+        expect(callbackFunction).toHaveBeenCalledTimes(1);
+        expect(callbackFunction).toHaveBeenCalledWith(applicationContext, {
+          docketNumber: '123-45',
+        });
+      });
+
+      it('creates a lock for the specified entity', async () => {
+        await func(applicationContext, { docketNumber: '123-45' });
+
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).toHaveBeenCalledWith({
+          applicationContext,
+          identifier: '123-45',
+          prefix: 'case',
+          ttl: 60,
+        });
+      });
+
+      it('logs a warning that the entity was locked', async () => {
+        await func(applicationContext, { docketNumber: '123-45' });
+        expect(applicationContext.logger.warn).toHaveBeenCalledWith(
+          'Entity is currently locked',
+          { currentLock: MOCK_LOCK },
+        );
+      });
+    });
+
+    describe('feature flag is enabled', () => {
+      beforeEach(() => {
+        mockFeatureFlagValue = true; // enabled
+      });
+
+      it('throws the onLockError error', async () => {
+        await expect(
+          func(applicationContext, { docketNumber: '123-45' }),
+        ).rejects.toThrow(onLockError);
+      });
+
+      it('calls the onLockError function if one is provided', async () => {
+        const onLockErrorFunction = jest.fn();
+        func = withLocking(callbackFunction, getLockInfo, onLockErrorFunction);
+        await expect(
+          func(applicationContext, { docketNumber: '123-45' }),
+        ).rejects.toThrow(ServiceUnavailableError);
+        expect(onLockErrorFunction).toHaveBeenCalledWith(applicationContext, {
+          docketNumber: '123-45',
+        });
+      });
+
+      it('throws a ServiceUnavailableError if an onLockError function is provided', async () => {
+        func = withLocking(callbackFunction, getLockInfo, jest.fn());
+        await expect(
+          func(applicationContext, { docketNumber: '123-45' }),
+        ).rejects.toThrow(ServiceUnavailableError);
+      });
     });
   });
 
-  it('does not throw a ServiceUnavailableError if the feature flag is false and we could not acquire the lock on the specified prefix and identifier', async () => {
-    mockLock = MOCK_LOCK; // locked
-    mockFeatureFlagValue = false; // disabled
+  describe('is not locked', () => {
+    beforeEach(() => {
+      mockLock = undefined; // unlocked
+      mockFeatureFlagValue = true; // enabled
+    });
 
-    await expect(
-      func(applicationContext, { docketNumber: '123-45' }),
-    ).resolves.not.toThrow();
-    expect(callbackFunction).toHaveBeenCalledTimes(1);
-    expect(callbackFunction).toHaveBeenCalledWith(applicationContext, {
-      docketNumber: '123-45',
+    it('creates the lock for the specified prefix and identifier', async () => {
+      await func(applicationContext, { docketNumber: '123-45' });
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: '123-45',
+        prefix: 'case',
+        ttl: 60,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledTimes(1);
     });
-  });
 
-  it('removes the lock for the specified prefix and identifier', async () => {
-    await func(applicationContext, { docketNumber: '123-45' });
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+    it('calls the specified callback function', async () => {
+      await func(applicationContext, { docketNumber: '123-45' });
+      expect(callbackFunction).toHaveBeenCalledTimes(1);
+      expect(callbackFunction).toHaveBeenCalledWith(applicationContext, {
+        docketNumber: '123-45',
+      });
     });
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(1);
-  });
-  it('returns the results of the callback function', async () => {
-    callbackFunction.mockReturnValue(
-      'Serve the public trust, protect the innocent, uphold the law.',
-    );
-    const result = await func(applicationContext, { docketNumber: '123-45' });
-    expect(result).toBe(
-      'Serve the public trust, protect the innocent, uphold the law.',
-    );
-  });
-  it('removes the lock if the callback function throws an error', async () => {
-    callbackFunction.mockRejectedValueOnce(new Error('something went wrong'));
-    await expect(
-      func(applicationContext, { docketNumber: '123-45' }),
-    ).rejects.toThrow('something went wrong');
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+
+    it('removes the lock for the specified prefix and identifier', async () => {
+      await func(applicationContext, { docketNumber: '123-45' });
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: '123-45',
+        prefix: 'case',
+      });
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledTimes(1);
     });
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(1);
-  });
-  it('rethrows the error if if the callback function throws an error', async () => {
-    callbackFunction.mockRejectedValueOnce(new Error('something went wrong'));
-    await expect(
-      func(applicationContext, { docketNumber: '123-45' }),
-    ).rejects.toThrow('something went wrong');
+
+    it('returns the results of the callback function', async () => {
+      callbackFunction.mockReturnValue(
+        'Serve the public trust, protect the innocent, uphold the law.',
+      );
+      const result = await func(applicationContext, { docketNumber: '123-45' });
+      expect(result).toBe(
+        'Serve the public trust, protect the innocent, uphold the law.',
+      );
+    });
+
+    it('removes the lock if the callback function throws an error', async () => {
+      callbackFunction.mockRejectedValueOnce(new Error('something went wrong'));
+      await expect(
+        func(applicationContext, { docketNumber: '123-45' }),
+      ).rejects.toThrow('something went wrong');
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: '123-45',
+        prefix: 'case',
+      });
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('rethrows the error if if the callback function throws an error', async () => {
+      callbackFunction.mockRejectedValueOnce(new Error('something went wrong'));
+      await expect(
+        func(applicationContext, { docketNumber: '123-45' }),
+      ).rejects.toThrow('something went wrong');
+    });
   });
 });
 
 describe('checkLock', () => {
   let mockLock;
   let mockFeatureFlagValue;
+  let mockCall;
 
   beforeAll(() => {
     applicationContext
@@ -300,15 +397,15 @@ describe('checkLock', () => {
   beforeEach(() => {
     mockLock = undefined; // unlocked
     mockFeatureFlagValue = true; // enabled
+    mockCall = {
+      applicationContext,
+      identifier: '123-45',
+      prefix: 'case',
+    };
   });
 
   it('calls persistence to see if a lock exists for the specified identifier and prefix', async () => {
-    await checkLock({
-      applicationContext,
-      identifier: '123-45',
-      onLockError,
-      prefix: 'case',
-    });
+    await checkLock(mockCall);
     expect(
       applicationContext.getPersistenceGateway().getLock,
     ).toHaveBeenCalledWith({
@@ -318,40 +415,80 @@ describe('checkLock', () => {
     });
   });
 
-  it('throws the specified onLockError if a lock is found in persistence', async () => {
-    mockLock = MOCK_LOCK;
-    await expect(
-      checkLock({
-        applicationContext,
-        identifier: '123-45',
-        onLockError,
-        prefix: 'case',
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
+  describe('is not locked', () => {
+    beforeEach(() => {
+      mockLock = undefined; // locked
+    });
+
+    it('resolves successfully if a lock is not found in persistence', async () => {
+      await expect(checkLock(mockCall)).resolves.not.toThrow(
+        ServiceUnavailableError,
+      );
+    });
   });
 
-  it('does not throw the specified onLockError if the feature flag is disabled and a lock is found in persistence', async () => {
-    mockFeatureFlagValue = false; // disabled
-    mockLock = MOCK_LOCK; // locked
-    await expect(
-      checkLock({
-        applicationContext,
-        identifier: '123-45',
-        onLockError,
-        prefix: 'case',
-      }),
-    ).resolves.not.toThrow();
-  });
+  describe('is locked', () => {
+    beforeEach(() => {
+      mockLock = MOCK_LOCK; // locked
+    });
 
-  it('resolves successfully if a lock is not found in persistence', async () => {
-    await expect(
-      checkLock({
-        applicationContext,
-        identifier: '123-45',
-        onLockError,
-        prefix: 'case',
-      }),
-    ).resolves.not.toThrow(ServiceUnavailableError);
+    describe('feature flag enabled', () => {
+      beforeEach(() => {
+        mockFeatureFlagValue = true; // disabled
+      });
+
+      it('throws ServiceUnavailableError if onLockError is not specified', async () => {
+        await expect(checkLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+      });
+
+      it('throws the specified a ServiceUnavailableError', async () => {
+        mockCall.onLockError = onLockError;
+        await expect(
+          checkLock({
+            applicationContext,
+            identifier: '123-45',
+            onLockError,
+            prefix: 'case',
+          }),
+        ).rejects.toThrow(onLockError);
+      });
+
+      it('calls the specified onLockError function', async () => {
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+
+        await expect(checkLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(mockCallbackFunction).toHaveBeenCalled();
+      });
+
+      it('calls the specified onLockError function with applicationContext and options passed in', async () => {
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+        mockCall.options = { foo: 'bar' };
+
+        await expect(checkLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(mockCallbackFunction).toHaveBeenCalled();
+        expect(mockCallbackFunction).toHaveBeenCalledWith(
+          applicationContext,
+          mockCall.options,
+        );
+      });
+    });
+
+    describe('feature flag disabled', () => {
+      beforeEach(() => {
+        mockFeatureFlagValue = false; // disabled
+      });
+      it('does not throw an error', async () => {
+        await expect(checkLock(mockCall)).resolves.not.toThrow();
+      });
+    });
   });
 });
 
