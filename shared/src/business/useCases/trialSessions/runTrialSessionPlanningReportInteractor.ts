@@ -105,7 +105,7 @@ export const getTrialSessionPlanningReportData = async ({
           .compareISODateStrings(a.startDate, b.startDate);
       });
 
-      const previousTermSessionList: Object[] = [];
+      const previousTermSessionList: string[] = [];
       previousTermSessions.forEach(previousTermSession => {
         if (
           previousTermSession &&
