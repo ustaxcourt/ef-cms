@@ -14,6 +14,7 @@ import { ServiceUnavailableError } from '../../../errors/errors';
 import {
   addPaperFilingInteractor,
   determineEntitiesToLock,
+  handleLockError,
 } from './addPaperFilingInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
@@ -627,7 +628,7 @@ describe('addPaperFilingInteractor', () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+    it('should return a "retry_add_paper_filing" action if one of the cases are locked', async () => {
       applicationContext
         .getPersistenceGateway()
         .getLock.mockReturnValueOnce(undefined)
@@ -649,11 +650,23 @@ describe('addPaperFilingInteractor', () => {
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
+        applicationContext.getNotificationGateway().sendNotificationToUser,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        clientConnectionId: mockClientConnectionId,
+        message: {
+          action: 'retry_add_paper_filing',
+          originalRequest: mockConsolidatedGroupRequest,
+        },
+        userId: docketClerkUser.userId,
+      });
+
+      expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,
       ).not.toHaveBeenCalled();
     });
 
-    it('should acquire and remove the lock on the case', async () => {
+    it('should acquire and remove the lock on all of the cases', async () => {
       const mockConsolidatedGroup = [
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -722,5 +735,35 @@ describe('determineEntitiesToLock', () => {
     expect(determineEntitiesToLock(mockParams).identifier).toContain('111-20');
     expect(determineEntitiesToLock(mockParams).identifier).toContain('222-20');
     expect(determineEntitiesToLock(mockParams).identifier).toContain('333-20');
+  });
+});
+
+describe('handleLockError', () => {
+  const mockClientConnectionId = '987654';
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+  });
+
+  it('should determine who the user is based on applicationContext', async () => {
+    await handleLockError(applicationContext, { foo: 'bar' });
+    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
+  });
+
+  it('should send a notification to the user with "retry_add_paper_filing" and the originalRequest', async () => {
+    const mockOriginalRequest = {
+      clientConnectionId: mockClientConnectionId,
+      foo: 'bar',
+    };
+    await handleLockError(applicationContext, mockOriginalRequest);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    ).toMatchObject({
+      action: 'retry_add_paper_filing',
+      originalRequest: mockOriginalRequest,
+    });
   });
 });
