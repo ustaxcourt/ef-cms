@@ -293,6 +293,9 @@ export const CustomCaseReport = connect(
               customCaseInventoryReportHelper.customCaseInventoryReportData
             }
             hasRanCustomCaseReport={hasRanCustomCaseReport}
+            noCustomCasesAfterReportRan={
+              customCaseInventoryReportHelper.noCustomCasesAfterReportRan
+            }
           />
         </section>
       </>
@@ -303,6 +306,7 @@ export const CustomCaseReport = connect(
 const ReportTable = ({
   customCaseInventoryReportData,
   hasRanCustomCaseReport,
+  noCustomCasesAfterReportRan,
 }) => {
   return (
     <>
@@ -348,7 +352,7 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-          {hasRanCustomCaseReport && customCaseInventoryReportData && (
+          {hasRanCustomCaseReport && noCustomCasesAfterReportRan && (
             <tr>
               <div className="text-center">No data found.</div>
             </tr>

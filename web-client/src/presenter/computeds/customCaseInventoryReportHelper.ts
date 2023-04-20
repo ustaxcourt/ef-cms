@@ -11,7 +11,6 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
 
   const populatedFilters = get(state.customCaseInventoryFilters);
 
-  // TODO: ADD TEST FOR THIS LOGIC
   const isRunReportButtonDisabled = !(
     populatedFilters.originalCreatedEndDate &&
     populatedFilters.originalCreatedStartDate
@@ -45,6 +44,8 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     },
   );
 
+  const noCustomCasesAfterReportRan = !reportData.length;
+
   const isClearFiltersDisabled = ![
     ...(populatedFilters.caseStatuses || []),
     ...(populatedFilters.caseTypes || []),
@@ -56,5 +57,6 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     customCaseInventoryReportData: reportData,
     isClearFiltersDisabled,
     isRunReportButtonDisabled,
+    noCustomCasesAfterReportRan,
   };
 };

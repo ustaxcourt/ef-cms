@@ -136,6 +136,30 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
+  it('should set noCustomCasesAfterReportRan to false if there are cases queried', () => {
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: {
+        customCaseInventoryFilters: {},
+        customCaseInventoryReportData: {
+          foundCases: cases,
+        },
+      },
+    });
+    expect(result.noCustomCasesAfterReportRan).toEqual(false);
+  });
+
+  it('should set noCustomCasesAfterReportRan to true if there are no cases queried', () => {
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: {
+        customCaseInventoryFilters: {},
+        customCaseInventoryReportData: {
+          foundCases: [],
+        },
+      },
+    });
+    expect(result.noCustomCasesAfterReportRan).toEqual(true);
+  });
+
   it('should return false for isRunReportButtonDisabled if originalCreatedEndDate and originalCreatedStartDate are both falsy', () => {
     const result = runCompute(customCaseInventoryReportHelper, {
       state: {
