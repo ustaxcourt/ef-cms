@@ -6,6 +6,8 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '../../../errors/errors';
 import {
   applicationContext,
   testPdfDoc,
@@ -13,6 +15,7 @@ import {
 import {
   determineEntitiesToLock,
   fileAndServeCourtIssuedDocumentInteractor,
+  handleLockError,
 } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 
@@ -37,6 +40,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335ba';
 
   beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
     MOCK_DATE = '2022-12-06T22:54:06.000Z';
 
     mockWorkItem = {
@@ -580,6 +587,59 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       key: mockDocketEntryId,
     });
   });
+
+  it('should acquire a lock for all the cases passed in', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .addServedStampToDocument.mockReturnValue({});
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: ['123-20'],
+      form: {
+        ...caseRecord.docketEntries[0],
+        documentType: 'Notice',
+        eventCode: 'ODJ',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should send a notification to "retry_file_and_serve_court_issued_document" with the originalRequest if an entity is locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(MOCK_LOCK);
+    const mockRequest = {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: ['123-20'],
+      form: {
+        ...caseRecord.docketEntries[0],
+        documentType: 'Notice',
+        eventCode: 'ODJ',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    };
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(
+        applicationContext,
+        mockRequest,
+      ),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    ).toMatchObject({
+      action: 'retry_file_and_serve_court_issued_document',
+      originalRequest: mockRequest,
+    });
+  });
 });
 
 describe('determineEntitiesToLock', () => {
@@ -603,5 +663,35 @@ describe('determineEntitiesToLock', () => {
     expect(determineEntitiesToLock(mockParams).identifier).toContain('111-20');
     expect(determineEntitiesToLock(mockParams).identifier).toContain('222-20');
     expect(determineEntitiesToLock(mockParams).identifier).toContain('333-20');
+  });
+});
+
+describe('handleLockError', () => {
+  const mockClientConnectionId = '987654';
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+  });
+
+  it('should determine who the user is based on applicationContext', async () => {
+    await handleLockError(applicationContext, { foo: 'bar' });
+    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
+  });
+
+  it('should send a notification to the user with "retry_file_and_serve_court_issued_document" and the originalRequest', async () => {
+    const mockOriginalRequest = {
+      clientConnectionId: mockClientConnectionId,
+      foo: 'bar',
+    };
+    await handleLockError(applicationContext, mockOriginalRequest);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    ).toMatchObject({
+      action: 'retry_file_and_serve_court_issued_document',
+      originalRequest: mockOriginalRequest,
+    });
   });
 });
