@@ -1,12 +1,17 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
 
+import {
+  ERROR_MAP_429,
+  getCognitoLoginUrl,
+  getPublicSiteUrl,
+  getUniqueId,
+} from '../../sharedAppContext';
 import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
 import path from 'path';
-import sharedAppContext, { ERROR_MAP_429 } from '../../sharedAppContext';
 
 import {
   Case,
@@ -541,7 +546,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const applicationContext = {
-    ...sharedAppContext,
     barNumberGenerator: {
       createBarNumber: jest.fn().mockReturnValue('CS20001'),
     },
@@ -575,6 +579,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       }),
     }),
     getCognitoClientId: jest.fn(),
+    getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
@@ -634,6 +639,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
+    getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(require('pug')),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
@@ -643,7 +649,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
+    getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
