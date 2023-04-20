@@ -331,12 +331,21 @@ const ReportTable = ({
                   <CaseLink formattedCase={entry} />
                 </td>
                 <td>{entry.createdAt}</td>
-                <td>PLACEHOLDER</td>
+                <td>{entry.caseTitle}</td>
                 <td>{entry.status}</td>
                 <td>{entry.caseType}</td>
                 <td>{entry.associatedJudge}</td>
                 <td>{entry.preferredTrialCity}</td>
-                <td>PLACEHOLDER</td>
+                <td>
+                  {entry.highPriority && (
+                    <Icon
+                      aria-label={`high priority for calendering for case ${entry.docketNumber}`}
+                      className="margin-left-5 mini-success margin-top-1"
+                      icon="check"
+                      size="1x"
+                    />
+                  )}
+                </td>
               </tr>
             ))}
           {hasRanCustomCaseReport && customCaseInventoryReportData && (
