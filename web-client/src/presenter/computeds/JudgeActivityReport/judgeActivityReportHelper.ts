@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 import { sum, sumBy } from 'lodash';
 
 export const judgeActivityReportHelper = (get, applicationContext) => {
-  const { judgeName } = get(state.form);
+  const { endDate, judgeName, startDate } = get(state.form);
 
   const { casesClosedByJudge, opinions, orders, trialSessions } = get(
     state.judgeActivityReportData,
@@ -48,8 +48,10 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
+  console.log(!endDate, !startDate);
   return {
     closedCasesTotal,
+    isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
     ordersFiledTotal,
     reportHeader,
