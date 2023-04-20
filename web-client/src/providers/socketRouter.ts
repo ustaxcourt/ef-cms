@@ -101,8 +101,34 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'retry_add_paper_filing':
-        console.log('retry_add_paper_filing');
         await app.getSequence('retryAddPaperFilingSequence')(message);
+        break;
+      case 'retry_edit_paper_filing':
+        await app.getSequence('retryEditPaperFilingSequence')(message);
+        break;
+      case 'retry_file_and_serve_court_issued_document':
+        await app.getSequence('retryFileAndServeCourtIssuedDocumentSequence')(
+          message,
+        );
+        break;
+      case 'retry_set_notices_for_calendared_trial_session':
+        await app.getSequence(
+          'retrySetNoticesForCalendaredTrialSessionSequence',
+        )(message);
+        break;
+      case 'retry_update_practitioner_user':
+        await app.getSequence('retryUpdatePractitionerUserSequence')(message);
+        break;
+      case 'retry_update_trial_session':
+        await app.getSequence('retryUpdateTrialSessionSequence')(message);
+        break;
+      case 'retry_update_user_contact_information':
+        await app.getSequence('retryUpdateUserContactInformationSequence')(
+          message,
+        );
+        break;
+      case 'retry_verify_user_pending_email':
+        await app.getSequence('retryVerifyUserPendingEmailSequence')(message);
         break;
     }
 
