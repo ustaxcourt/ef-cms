@@ -1,4 +1,4 @@
-const {
+import {
   getCaseInfoTab,
   getCaseTitleContaining,
   getCaseTitleTextArea,
@@ -6,9 +6,9 @@ const {
   getIrsNoticeTab,
   getReviewPetitionButton,
   getSaveForLaterButton,
-  navigateTo: navigateToPetitionQc,
   navigateToCase,
-} = require('../support/pages/petition-qc');
+  navigateTo as navigateToPetitionQc,
+} from '../support/pages/petition-qc';
 
 describe('change the case caption via the petition qc page', () => {
   it('updates the case title header', () => {

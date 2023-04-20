@@ -1,8 +1,8 @@
-exports.navigateTo = username => {
+export const navigateTo = username => {
   cy.login(username, '/file-a-petition/step-1');
 };
 
-exports.fillInAndSubmitForm = () => {
+export const fillInAndSubmitForm = () => {
   //wizard step 1
   cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
 
