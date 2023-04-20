@@ -377,7 +377,7 @@ export const FileDocumentReview = connect(
         </div>
         {fileDocumentHelper.redactionAcknowledgementEnabled && (
           <div className="grid-row grid-gap">
-            <span className="margin-bottom-1">
+            <span className="margin-bottom-1 font-sans-pro">
               <b>Please read and acknowledge before submitting your filing</b>
             </span>
             <div className="tablet:grid-col-12">
@@ -398,7 +398,7 @@ export const FileDocumentReview = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label margin-top-0"
+                    className="usa-checkbox__label"
                     htmlFor="redaction-acknowledgement"
                     id="redaction-acknowledgement-label"
                   >
@@ -421,6 +421,7 @@ export const FileDocumentReview = connect(
           </div>
         )}
         <Button
+          className="margin-bottom-1"
           disabled={
             fileDocumentHelper.redactionAcknowledgementEnabled &&
             !form.redactionAcknowledgement
