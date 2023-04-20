@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 
 const awsRegion = 'us-east-1';
 
@@ -37,7 +37,7 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-exports.getUserToken = async (username, password) => {
+export const getUserToken = async (username, password) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
@@ -54,7 +54,7 @@ exports.getUserToken = async (username, password) => {
     .promise();
 };
 
-exports.login = token => {
+export const login = token => {
   cy.visit(`/log-in?token=${token}`);
   cy.get('.progress-indicator').should('not.exist');
   cy.get('.big-blue-header').should('exist');
