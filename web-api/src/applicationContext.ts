@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 import AWS from 'aws-sdk';
 
+import * as barNumberGenerator from '../../shared/src/persistence/dynamo/users/barNumberGenerator';
+import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import { addressLabelCoverSheet } from '../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet';
 import axios from 'axios';
-import barNumberGenerator from '../../shared/src/persistence/dynamo/users/barNumberGenerator';
-import docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
 import pug from 'pug';
 import sass from 'sass';
 import util from 'util';
