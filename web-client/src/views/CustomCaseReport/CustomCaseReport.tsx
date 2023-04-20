@@ -9,7 +9,7 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 export const CustomCaseReport = connect(
   {
@@ -72,24 +72,22 @@ export const CustomCaseReport = connect(
                 startName="caseCreationStartDate"
                 startPickerCls={'grid-col-6 padding-right-2'}
                 startValue=""
-                // onChangeEnd={e => {
-                //   setCustomCaseInventoryReportFiltersSequence({
-                //     createEndDate: e.target.value,
-                //   });
-                // }}
-                // onChangeStart={e => {
-                //   setCustomCaseInventoryReportFiltersSequence({
-                //     createStartDate: e.target.value,
-                //   });
-                // }}
+                onChangeEnd={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    createEndDate: e.target.value,
+                  });
+                }}
+                onChangeStart={e => {
+                  setCustomCaseInventoryReportFiltersSequence({
+                    createStartDate: e.target.value,
+                  });
+                }}
                 onInputEnd={e => {
-                  // setTruthyCreatedEndDate(e.target.value);
                   setCustomCaseInventoryReportFiltersSequence({
                     createEndDate: e.target.value,
                   });
                 }}
                 onInputStart={e => {
-                  // setTruthyCreatedStartDate(e.target.value);
                   setCustomCaseInventoryReportFiltersSequence({
                     createStartDate: e.target.value,
                   });
@@ -235,7 +233,6 @@ export const CustomCaseReport = connect(
                           caseStatus: status,
                         },
                       });
-                      // validateTrialSessionPlanningSequence();
                     }}
                   />
                 </span>
@@ -257,7 +254,6 @@ export const CustomCaseReport = connect(
                             caseType,
                           },
                         });
-                        // validateTrialSessionPlanningSequence();
                       }}
                     />
                   </span>

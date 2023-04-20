@@ -20,64 +20,133 @@ describe('setCustomCaseInventoryFiltersAction', () => {
     };
   });
 
-  it('should set customCaseInventoryFilters createStartDate in state', async () => {
-    const result = await runAction(setCustomCaseInventoryFiltersAction, {
-      modules: { presenter },
-      props: {
-        createStartDate: regularDate,
-      },
-      state: {
-        customCaseInventoryFilters: initialFilterState,
-      },
+  describe('createdStartDate', () => {
+    it('should set customCaseInventoryFilters createStartDate in state with fomated Date', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createStartDate: regularDate,
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
+
+      expect(result.state.customCaseInventoryFilters.createStartDate).toEqual(
+        expectedDate,
+      );
     });
 
-    expect(result.state.customCaseInventoryFilters.createStartDate).toEqual(
-      expectedDate,
-    );
+    it('should set customCaseInventoryFilters originalCreatedStartDate in state with original Date', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createStartDate: regularDate,
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
+      expect(
+        result.state.customCaseInventoryFilters.originalCreatedStartDate,
+      ).toEqual(regularDate);
+    });
+
+    it('should set customCaseInventoryFilters originalCreatedStartDate with an empty string if no createStartDate was provided', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createStartDate: '',
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
+
+      expect(result.state.customCaseInventoryFilters.createStartDate).toEqual(
+        '',
+      );
+    });
+
+    it('should set customCaseInventoryFilters createStartDate with an empty string if no createStartDate was provided', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createStartDate: '',
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
+
+      expect(
+        result.state.customCaseInventoryFilters.originalCreatedStartDate,
+      ).toEqual('');
+    });
   });
 
-  it('should set customCaseInventoryFilters createStartDate with an empty string if no createStartDate was provided', async () => {
-    const result = await runAction(setCustomCaseInventoryFiltersAction, {
-      modules: { presenter },
-      props: {
-        createStartDate: '',
-      },
-      state: {
-        customCaseInventoryFilters: initialFilterState,
-      },
+  describe('createdEndDate', () => {
+    it('should set customCaseInventoryFilters createEndDate in state with fomated Date', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createEndDate: regularDate,
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
+
+      expect(result.state.customCaseInventoryFilters.createEndDate).toEqual(
+        expectedDate,
+      );
     });
 
-    expect(result.state.customCaseInventoryFilters.createStartDate).toEqual('');
-  });
+    it('should set customCaseInventoryFilters originalCreatedEndDate in state with original Date', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createEndDate: regularDate,
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
 
-  it('should set customCaseInventoryFilters createEndDate in state', async () => {
-    const result = await runAction(setCustomCaseInventoryFiltersAction, {
-      modules: { presenter },
-      props: {
-        createEndDate: regularDate,
-      },
-      state: {
-        customCaseInventoryFilters: initialFilterState,
-      },
+      expect(
+        result.state.customCaseInventoryFilters.originalCreatedEndDate,
+      ).toEqual(regularDate);
     });
 
-    expect(result.state.customCaseInventoryFilters.createEndDate).toEqual(
-      expectedDate,
-    );
-  });
+    it('should set customCaseInventoryFilters should set customCaseInventoryFilters originalCreatedEndtDate with an empty string if no createEndDate was provided', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createEndDate: '',
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
 
-  it('should set customCaseInventoryFilters createEndDate with an empty string if no createEndDate was provided', async () => {
-    const result = await runAction(setCustomCaseInventoryFiltersAction, {
-      modules: { presenter },
-      props: {
-        createEndDate: '',
-      },
-      state: {
-        customCaseInventoryFilters: initialFilterState,
-      },
+      expect(
+        result.state.customCaseInventoryFilters.originalCreatedEndDate,
+      ).toEqual('');
     });
 
-    expect(result.state.customCaseInventoryFilters.createEndDate).toEqual('');
+    it('should set customCaseInventoryFilters createEndDate with empty strings if no createEndDate was provided', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          createEndDate: '',
+        },
+        state: {
+          customCaseInventoryFilters: initialFilterState,
+        },
+      });
+
+      expect(result.state.customCaseInventoryFilters.createEndDate).toEqual('');
+    });
   });
 
   it('should set customCaseInventoryFilters filing method in state', async () => {
