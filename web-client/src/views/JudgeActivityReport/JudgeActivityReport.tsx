@@ -40,9 +40,7 @@ export const JudgeActivityReport = connect(
           <thead>
             <tr>
               <th aria-label="case type">Case Type</th>
-              <th aria-label="case type total" className="text-center">
-                Case Type Total
-              </th>
+              <th aria-label="case type total">Case Type Total</th>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +48,7 @@ export const JudgeActivityReport = connect(
               ([status, count]) => (
                 <tr key={status}>
                   <td>{status}</td>
-                  <td className="text-center">{count}</td>
+                  <td>{count}</td>
                 </tr>
               ),
             )}
@@ -76,9 +74,7 @@ export const JudgeActivityReport = connect(
           <thead>
             <tr>
               <th aria-label="session type">Session Type</th>
-              <th aria-label="session type total" className="text-center">
-                Session Type Total
-              </th>
+              <th aria-label="session type total">Session Type Total</th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +82,7 @@ export const JudgeActivityReport = connect(
               ([sessionStatus, count]) => (
                 <tr key={sessionStatus}>
                   <td>{sessionStatus}</td>
-                  <td className="text-center">{count}</td>
+                  <td>{count}</td>
                 </tr>
               ),
             )}
@@ -112,9 +108,7 @@ export const JudgeActivityReport = connect(
             <tr>
               <th aria-label="event code">Event</th>
               <th aria-label="order type">Order Type</th>
-              <th aria-label="event total" className="text-center">
-                Event Total
-              </th>
+              <th aria-label="event total">Event Total</th>
             </tr>
           </thead>
           <tbody>
@@ -123,7 +117,7 @@ export const JudgeActivityReport = connect(
                 <tr key={eventCode}>
                   <td>{eventCode}</td>
                   <td>{documentType}</td>
-                  <td className="text-center">{count}</td>
+                  <td>{count}</td>
                 </tr>
               ),
             )}
@@ -157,9 +151,7 @@ export const JudgeActivityReport = connect(
                 Event
               </th>
               <th aria-label="opinion type">Opinion Type</th>
-              <th aria-label="event total" className="text-center">
-                Event Total
-              </th>
+              <th aria-label="event total">Event Total</th>
             </tr>
           </thead>
           <tbody>
@@ -168,7 +160,7 @@ export const JudgeActivityReport = connect(
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
                   <td>{documentType}</td>
-                  <td className="text-center">{count}</td>
+                  <td>{count}</td>
                 </tr>
               ),
             )}
