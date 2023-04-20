@@ -1,11 +1,12 @@
-const {
+import {
   docketRecordTable,
   enterPetitionerName,
-  navigateTo: navigateToDashboard,
+  navigateTo as navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
-} = require('../../support/pages/public/advanced-search');
-const { isValidRequest } = require('../../support/helpers');
+} from '../../support/pages/public/advanced-search';
+
+import { isValidRequest } from '../../support/helpers';
 
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');

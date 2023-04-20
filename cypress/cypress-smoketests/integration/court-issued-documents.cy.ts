@@ -1,4 +1,4 @@
-const {
+import {
   addDocketEntryForOrderAndSaveForLater,
   addDocketEntryForOrderAndServePaper,
   addDocketEntryForUploadedPdfAndServe,
@@ -10,8 +10,9 @@ const {
   reviewAndServePetition,
   serveCourtIssuedDocketEntry,
   uploadCourtIssuedDocPdf,
-} = require('../support/pages/case-detail');
-const {
+} from '../support/pages/case-detail';
+
+import {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -26,20 +27,17 @@ const {
   goToWizardStep5,
   hasIrsNotice,
   submitPetition,
-} = require('../support/pages/create-electronic-petition');
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../../cypress-integration/support/pages/create-paper-petition');
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const {
+} from '../support/pages/create-electronic-petition';
+
+import { faker } from '@faker-js/faker';
+import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import {
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const { faker } = require('@faker-js/faker');
-const { goToMyDocumentQC } = require('../support/pages/document-qc');
+} from '../support/pages/create-paper-case';
+import { goToMyDocumentQC } from '../support/pages/document-qc';
 
 let token = null;
 const testData = {};

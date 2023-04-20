@@ -1,4 +1,4 @@
-const {
+import {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -13,21 +13,18 @@ const {
   goToWizardStep5,
   hasIrsNotice,
   submitPetition,
-} = require('../support/pages/create-electronic-petition');
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../../cypress-integration/support/pages/create-paper-petition');
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const {
+} from '../support/pages/create-electronic-petition';
+
+import { faker } from '@faker-js/faker';
+import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import {
   goToCreateCase,
   goToReviewCase,
   saveCaseForLater,
   serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const { faker } = require('@faker-js/faker');
-const { goToMyDocumentQC } = require('../support/pages/document-qc');
+} from '../support/pages/create-paper-case';
+import { goToMyDocumentQC } from '../support/pages/document-qc';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 

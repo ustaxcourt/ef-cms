@@ -1,35 +1,35 @@
-exports.navigateTo = username => {
+export const navigateTo = username => {
   cy.login(username, '/');
 };
 
-exports.navigateToDashboard = () => {
+export const navigateToDashboard = () => {
   cy.visit('/');
 };
 
-exports.engageMaintenance = () => {
+export const engageMaintenance = () => {
   cy.exec('npm run maintenance:engage:local');
 };
 
-exports.disengageMaintenance = () => {
+export const disengageMaintenance = () => {
   cy.exec('npm run maintenance:disengage:local');
 };
 
-exports.getMaintenanceModal = () => {
+export const getMaintenanceModal = () => {
   return cy.get('.app-maintenance-modal');
 };
 
-exports.getLogoutButton = () => {
+export const getLogoutButton = () => {
   return cy.get('#maintenance-logout-btn');
 };
 
-exports.getCancelButton = () => {
+export const getCancelButton = () => {
   return cy.get('#maintenance-cancel-btn');
 };
 
-exports.getLoginHeader = () => {
+export const getLoginHeader = () => {
   return cy.get('h1').contains('Log in');
 };
 
-exports.getMaintenancePageContent = () => {
+export const getMaintenancePageContent = () => {
   return cy.get('.maintenance-content');
 };
