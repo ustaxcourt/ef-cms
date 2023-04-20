@@ -15,9 +15,7 @@ export const validateExternalDocumentInformationAction = ({
   get,
   path,
 }) => {
-  let documentMetadata = get(state.form);
-
-  documentMetadata = { ...documentMetadata };
+  const documentMetadata = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
