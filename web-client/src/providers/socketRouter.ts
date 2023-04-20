@@ -100,6 +100,10 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
+      case 'retry_add_paper_filing':
+        console.log('retry_add_paper_filing');
+        await app.getSequence('retryAddPaperFilingSequence')(message);
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);
