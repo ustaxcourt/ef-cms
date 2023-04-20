@@ -86,8 +86,7 @@ describe('judgeActivityReportHelper', () => {
   });
 
   describe('isFormPristine', () => {
-    // submit should be disabled when either start date OR end date are not populated
-    it('should be true when either startDate or endDate are not populated', () => {
+    it('should be true when startDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
           ...baseState,
@@ -100,6 +99,36 @@ describe('judgeActivityReportHelper', () => {
       });
 
       expect(isFormPristine).toBe(true);
+    });
+
+    it('should be true when endDate is not populated', () => {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
+        state: {
+          ...baseState,
+          form: {
+            ...mockForm,
+            endDate: undefined,
+            startDate: '01/02/2020',
+          },
+        },
+      });
+
+      expect(isFormPristine).toBe(true);
+    });
+
+    it('should be false when both startDate and endDate are populated', () => {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
+        state: {
+          ...baseState,
+          form: {
+            ...mockForm,
+            endDate: '01/02/2020',
+            startDate: '01/02/2020',
+          },
+        },
+      });
+
+      expect(isFormPristine).toBe(false);
     });
   });
 
