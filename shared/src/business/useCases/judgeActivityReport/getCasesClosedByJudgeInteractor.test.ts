@@ -33,10 +33,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(judgeUser);
-
-    applicationContext
-      .getPersistenceGateway()
       .getCasesClosedByJudge.mockResolvedValue(mockClosedCases);
   });
 

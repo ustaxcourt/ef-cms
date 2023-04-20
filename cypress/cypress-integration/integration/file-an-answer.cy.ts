@@ -1,3 +1,4 @@
+/* eslint-disable cypress/unsafe-to-chain-command */
 const {
   navigateTo: navigateToDashboard,
 } = require('../support/pages/dashboard');
@@ -28,7 +29,8 @@ describe('Filing an Answer', function () {
     cy.get('button#submit-document').click();
   });
 
-  it('can submit the filing from the review page', () => {
+  it('can acknowledge redaction and submit the filing from the review page', () => {
+    cy.get('label#redaction-acknowledgement-label').click();
     cy.get('button#submit-document').click();
     cy.showsSuccessMessage(true);
   });
