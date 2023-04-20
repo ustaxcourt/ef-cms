@@ -1,4 +1,4 @@
-const createApplicationContext = require('../applicationContext');
+const { createApplicationContext } = require('../applicationContext');
 
 /**
  * used for retroactively sealing a case in a lower environment after it is sealed in the Production environment

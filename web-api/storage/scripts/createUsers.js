@@ -1,4 +1,3 @@
-const createApplicationContext = require('../../src/applicationContext');
 const users = require('../fixtures/seed/users.json');
 const {
   createPetitionerUserRecords,
@@ -12,6 +11,7 @@ const {
 const {
   ROLES,
 } = require('../../../shared/src/business/entities/EntityConstants');
+const { createApplicationContext } = require('../../src/applicationContext');
 const { omit } = require('lodash');
 
 let usersByEmail = {};

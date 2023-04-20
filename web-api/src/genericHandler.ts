@@ -1,9 +1,9 @@
-const createApplicationContext = require('./applicationContext');
 const {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
 } = require('./middleware/apiGatewayHelper');
+const { createApplicationContext } = require('./applicationContext');
 
 exports.dataSecurityFilter = (data, { applicationContext }) => {
   let returnData = data;
