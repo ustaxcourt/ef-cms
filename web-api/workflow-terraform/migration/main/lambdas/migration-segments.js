@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk');
-const createApplicationContext = require('../../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
+const {
+  createApplicationContext,
+} = require('../../../../src/applicationContext');
 const {
   createISODateString,
   dateStringsCompared,

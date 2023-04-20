@@ -1,4 +1,4 @@
-const createApplicationContext = require('../applicationContext');
+const { createApplicationContext } = require('../applicationContext');
 
 /**
  * used for processing stream records from persistence
