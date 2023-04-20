@@ -2,7 +2,7 @@ import { clearJudgeActivityReportResultAction } from './clearJudgeActivityReport
 import { runAction } from 'cerebral/test';
 
 describe('clearJudgeActivityReportResultAction', () => {
-  it('clears judgeActivityReportData and sets advancedSearchForm.currentPage to 1', async () => {
+  it('should set judgeActivityReportData to an empty object', async () => {
     const result = await runAction(clearJudgeActivityReportResultAction, {
       state: {
         judgeActivityReportData: [
