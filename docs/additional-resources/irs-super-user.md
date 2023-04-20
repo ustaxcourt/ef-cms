@@ -6,7 +6,7 @@ You will only have to follow these steps once per environment. If you have alrea
 
 1. Install the `oathtool` utility:
     ```bash
-    brew install oathtool
+    brew install oath-toolkit
     ```
 1. Setup the [environment switcher](./environment-switcher.md) with a `.env` file for the desired environment.
     1. Be sure to populate the `IRS_SUPERUSER_EMAIL` value like so:
