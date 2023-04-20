@@ -1,9 +1,9 @@
-exports.goToCreateCase = () => {
+export const goToCreateCase = () => {
   cy.get('a#file-a-petition').click();
   cy.get('.big-blue-header').should('exist');
 };
 
-exports.goToReviewCase = testData => {
+export const goToReviewCase = testData => {
   cy.intercept('POST', '**/paper').as('postPaperCase');
   cy.get('button#submit-case').scrollIntoView().click();
   cy.wait('@postPaperCase').then(({ response }) => {
@@ -15,18 +15,18 @@ exports.goToReviewCase = testData => {
   cy.get('.big-blue-header').should('exist');
 };
 
-exports.saveCaseForLater = () => {
+export const saveCaseForLater = () => {
   cy.get('button:contains("Save for Later")').click();
 };
 
-exports.serveCaseToIrs = () => {
+export const serveCaseToIrs = () => {
   cy.get('#ustc-start-a-case-form button#submit-case').scrollIntoView().click();
   cy.get('button#confirm').scrollIntoView().click();
   cy.get('.progress-indicator').should('not.exist');
   cy.get('.big-blue-header').should('exist');
 };
 
-exports.closeScannerSetupDialog = () => {
+export const closeScannerSetupDialog = () => {
   cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
   cy.wait('@getDynamsoft');
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
