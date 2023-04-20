@@ -1,7 +1,5 @@
-const {
-  setServiceIndicatorsForCase,
-} = require('./setServiceIndicatorsForCase');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
+import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 /**
  * aggregatePartiesForService
@@ -10,7 +8,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  * @returns {object} the aggregated contact information for all parties,
  * electronically-served parties, and paper-served parties
  */
-const aggregatePartiesForService = caseEntity => {
+export const aggregatePartiesForService = caseEntity => {
   const formattedCase = setServiceIndicatorsForCase(caseEntity);
   const parties = [
     ...formattedCase.petitioners,
@@ -50,5 +48,3 @@ const aggregatePartiesForService = caseEntity => {
 
   return aggregated;
 };
-
-module.exports = { aggregatePartiesForService };

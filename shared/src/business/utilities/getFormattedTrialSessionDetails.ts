@@ -1,5 +1,5 @@
-const { compact, partition } = require('lodash');
-const { PARTIES_CODES } = require('../entities/EntityConstants');
+import { PARTIES_CODES } from '../entities/EntityConstants';
+import { compact, partition } from 'lodash';
 
 exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   let filingPartiesCode;

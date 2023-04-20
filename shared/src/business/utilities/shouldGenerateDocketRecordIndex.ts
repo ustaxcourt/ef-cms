@@ -1,9 +1,9 @@
-const {
+import {
   COURT_ISSUED_EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
   UNSERVABLE_EVENT_CODES,
-} = require('../entities/EntityConstants');
+} from '../entities/EntityConstants';
 
 const getIsInitialFilingType = docketEntry => {
   const INITIAL_DOCUMENT_EVENT_CODES = Object.keys(INITIAL_DOCUMENT_TYPES).map(

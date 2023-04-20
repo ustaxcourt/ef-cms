@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../test/mockCase';
 import { PARTIES_CODES } from '../entities/EntityConstants';
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { applicationContext } from '../test/createTestApplicationContext';
 import { setPretrialMemorandumFiler } from './getFormattedTrialSessionDetails';
 
 describe('getFormattedTrialSessionDetails', () => {
