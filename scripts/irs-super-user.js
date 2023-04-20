@@ -1,33 +1,28 @@
-// eslint-disable-next-line spellcheck/spell-checker
-/*
+// see ../docs/additional-resources/irs-super-user.md for detailed instructions
 
-This is an example script for setting up MFA for the irs super user.
-
-First, create a user with a temporary password and name in the irs cognito pool.
-
-Modify this script's ClientId, password, and email to match your setup.
-
-We recommend installing the oathtool for generating the MFA code (brew install oathtool).
-When running this script for the first time, you'll be asked for an MFA code twice.
-You'll be given a private key the first time you run the script which you can use here:
-
-oathtool -b --totp 'private_key'
-
-This will generate a MFA code which lasts for 60 seconds, so you need to input it before it expires.
-
-If everything is successful, you'll get back a ID Token which is the JWT you should use to validate your requests.
-
-*/
+const { requireEnvVars } = require('../shared/admin-tools/util');
+requireEnvVars([
+  'DEFAULT_ACCOUNT_PASS',
+  'IRS_CLIENT_ID',
+  'IRS_SUPERUSER_EMAIL',
+]);
 
 const readline = require('readline');
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
+const {
+  AssociateSoftwareTokenCommand,
+  CognitoIdentityProviderClient,
+  InitiateAuthCommand,
+  RespondToAuthChallengeCommand,
+  VerifySoftwareTokenCommand,
+} = require('@aws-sdk/client-cognito-identity-provider');
 
-const cognito = new CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProviderClient({
   region: 'us-east-1',
 });
 
-const ClientId = '5aatnhmbjcq2lhdcqc9r4mvaok';
-const email = 'service.agent.test@irs.gov';
+const ClientId = process.env.IRS_CLIENT_ID;
+const email = process.env.IRS_SUPERUSER_EMAIL;
+const password = process.env.DEFAULT_ACCOUNT_PASS;
 
 const askQuestion = query => {
   const rl = readline.createInterface({
@@ -46,96 +41,82 @@ const askQuestion = query => {
 const registerUser = async () => {
   let response;
 
-  response = await cognito
-    .initiateAuth({
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      AuthParameters: {
-        PASSWORD: 'WelcomeToFlavortown!',
-        USERNAME: email,
-      },
-      ClientId,
-    })
-    .promise();
+  const initiateAuthCommand = new InitiateAuthCommand({
+    AuthFlow: 'USER_PASSWORD_AUTH',
+    AuthParameters: {
+      PASSWORD: password,
+      USERNAME: email,
+    },
+    ClientId,
+  });
+  response = await cognito.send(initiateAuthCommand);
   console.log('logged in');
 
   if (response.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-    await cognito
-      .respondToAuthChallenge({
-        ChallengeName: 'NEW_PASSWORD_REQUIRED',
-        ChallengeResponses: {
-          NEW_PASSWORD: 'WelcomeToFlavortown!',
-          USERNAME: email,
-        },
-        ClientId,
-        Session: response.Session,
-      })
-      .promise();
-  }
-
-  console.log('password changed');
-
-  response = await cognito
-    .initiateAuth({
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      AuthParameters: {
-        PASSWORD: 'WelcomeToFlavortown!',
+    console.log('new password required...');
+    const respondToAuthChallengeCommand = new RespondToAuthChallengeCommand({
+      ChallengeName: 'NEW_PASSWORD_REQUIRED',
+      ChallengeResponses: {
+        NEW_PASSWORD: password,
         USERNAME: email,
       },
       ClientId,
-    })
-    .promise();
+      Session: response.Session,
+    });
+    await cognito.send(respondToAuthChallengeCommand);
+    console.log('password changed');
+  }
 
+  response = await cognito.send(initiateAuthCommand);
   console.log('logged in second time');
 
   if (response.ChallengeName === 'MFA_SETUP') {
-    response = await cognito
-      .associateSoftwareToken({
-        Session: response.Session,
-      })
-      .promise();
+    const associateSoftwareTokenCommand = new AssociateSoftwareTokenCommand({
+      Session: response.Session,
+    });
+    response = await cognito.send(associateSoftwareTokenCommand);
 
     console.log('associate software');
     console.log('your secret code: ', response.SecretCode);
 
     const UserCode = await askQuestion('enter your MFA code\n');
 
-    response = await cognito
-      .verifySoftwareToken({
-        Session: response.Session,
-        UserCode,
-      })
-      .promise();
+    const verifySoftwareTokenCommand = new VerifySoftwareTokenCommand({
+      Session: response.Session,
+      UserCode,
+    });
+    response = await cognito.send(verifySoftwareTokenCommand);
   }
   return response;
 };
 
 const login = async () => {
-  let response = await cognito
-    .initiateAuth({
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      AuthParameters: {
-        PASSWORD: 'WelcomeToFlavortown!',
-        USERNAME: email,
-      },
-      ClientId,
-    })
-    .promise();
+  let response;
 
+  const initiateAuthCommand = new InitiateAuthCommand({
+    AuthFlow: 'USER_PASSWORD_AUTH',
+    AuthParameters: {
+      PASSWORD: password,
+      USERNAME: email,
+    },
+    ClientId,
+  });
+
+  response = await cognito.send(initiateAuthCommand);
   console.log(response);
 
   if (response.ChallengeName === 'SOFTWARE_TOKEN_MFA') {
     const mfa = await askQuestion('enter your MFA code\n');
-    response = await cognito
-      .respondToAuthChallenge({
-        ChallengeName: 'SOFTWARE_TOKEN_MFA',
-        ChallengeResponses: {
-          SOFTWARE_TOKEN_MFA_CODE: mfa,
-          USERNAME: email,
-        },
-        ClientId,
-        Session: response.Session,
-      })
-      .promise();
+    const respondToAuthChallengeCommand = new RespondToAuthChallengeCommand({
+      ChallengeName: 'SOFTWARE_TOKEN_MFA',
+      ChallengeResponses: {
+        SOFTWARE_TOKEN_MFA_CODE: mfa,
+        USERNAME: email,
+      },
+      ClientId,
+      Session: response.Session,
+    });
+    response = await cognito.send(respondToAuthChallengeCommand);
     console.log(response);
   }
 };
