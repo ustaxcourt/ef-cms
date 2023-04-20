@@ -10,10 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { withLocking } from '../../useCaseHelper/acquireLock';
@@ -289,8 +286,22 @@ export const determineEntitiesToLock = ({
   prefix: 'case',
 });
 
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_add_paper_filing',
+      originalRequest,
+    },
+    userId: user.userId,
+  });
+};
+
 export const addPaperFilingInteractor = withLocking(
   addPaperFiling,
   determineEntitiesToLock,
-  new ServiceUnavailableError('The case is currently being updated'),
+  handleLockError,
 );
