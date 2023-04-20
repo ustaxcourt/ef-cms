@@ -31,7 +31,7 @@ export const generatePdfFromHtmlInteractor = async (
 ) => {
   let browserPid;
   let browser = null;
-  let result = null;
+  let result: any = null;
 
   try {
     browser = await applicationContext.getChromiumBrowser();
@@ -63,17 +63,46 @@ export const generatePdfFromHtmlInteractor = async (
             ${footerHtml || ''}
           </div>`;
 
-    result = await page.pdf({
-      displayHeaderFooter,
+    const firstPage = await page.pdf({
+      displayHeaderFooter: true,
       footerTemplate,
       format: 'Letter',
-      headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
       margin: {
         bottom: '100px',
         top: '80px',
       },
+      pageRanges: '1',
       printBackground: true,
     });
+
+    let remainingPages: any;
+    try {
+      remainingPages = await page.pdf({
+        displayHeaderFooter,
+        footerTemplate,
+        format: 'Letter',
+        headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
+        margin: {
+          bottom: '100px',
+          top: '80px',
+        },
+        pageRanges: '2-',
+        printBackground: true,
+      });
+    } catch (err) {
+      // this was probably a 1 page document
+    }
+
+    if (remainingPages) {
+      const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
+        applicationContext,
+        firstPdf: firstPage,
+        secondPdf: remainingPages,
+      });
+      result = Buffer.from(returnVal);
+    } else {
+      result = firstPage;
+    }
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
