@@ -1,7 +1,7 @@
-exports.navigateTo = (username, trialSessionId) => {
+export const navigateTo = (username, trialSessionId) => {
   cy.login(username, `/edit-trial-session/${trialSessionId}`);
 };
 
-exports.getCancelButton = () => {
+export const getCancelButton = () => {
   return cy.contains('Cancel');
 };
