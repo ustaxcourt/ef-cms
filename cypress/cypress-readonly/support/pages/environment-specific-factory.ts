@@ -1,10 +1,10 @@
-const {
-  getRestApi: getRestApiDeployed,
-  getUserToken: getUserTokenDeployed,
-  login: loginDeployed,
-} = require('./login');
+import {
+  getRestApi as getRestApiDeployed,
+  getUserToken as getUserTokenDeployed,
+  login as loginDeployed,
+} from './login';
 
-exports.getEnvironmentSpecificFunctions = () => {
+export const getEnvironmentSpecificFunctions = () => {
   return {
     getRestApi: getRestApiDeployed,
     getUserToken: getUserTokenDeployed,

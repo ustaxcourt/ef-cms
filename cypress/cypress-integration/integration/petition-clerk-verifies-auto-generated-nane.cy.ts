@@ -1,15 +1,9 @@
-const {
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
+import {
   getCreateACaseButton,
-  navigateTo: navigateToDocumentQC,
-} = require('../support/pages/document-qc');
-
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../support/pages/create-paper-petition');
-
-const {
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../../shared/src/business/entities/EntityConstants');
+  navigateTo as navigateToDocumentQC,
+} from '../support/pages/document-qc';
 
 const { noticeOfAttachmentsInNatureOfEvidence } =
   SYSTEM_GENERATED_DOCUMENT_TYPES;

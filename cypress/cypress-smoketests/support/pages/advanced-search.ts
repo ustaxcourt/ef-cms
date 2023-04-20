@@ -1,63 +1,63 @@
-const { faker } = require('@faker-js/faker');
+import { faker } from '@faker-js/faker';
 
 faker.seed(faker.datatype.number());
 
-exports.gotoAdvancedSearch = () => {
+export const gotoAdvancedSearch = () => {
   cy.get('a.advanced').click();
 };
 
-exports.gotoAdvancedPractitionerSearch = () => {
+export const gotoAdvancedPractitionerSearch = () => {
   cy.get('a.advanced').click();
   cy.get('button#tab-practitioner').click();
 };
 
-exports.goToOrderSearch = () => {
+export const goToOrderSearch = () => {
   cy.get('a.advanced').click();
   cy.get('button#tab-order').click();
 };
 
-exports.goToOpinionSearch = () => {
+export const goToOpinionSearch = () => {
   cy.get('a.advanced').click();
   cy.get('button#tab-opinion').click();
 };
 
-exports.searchByPetitionerName = petitionerName => {
+export const searchByPetitionerName = petitionerName => {
   cy.get('input#petitioner-name').clear().type(petitionerName);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
 
-exports.searchByDocketNumber = docketNumber => {
+export const searchByDocketNumber = docketNumber => {
   cy.get('input#docket-number').clear().type(docketNumber);
   cy.get('button#docket-search-button').click();
   cy.url().should('contain', docketNumber);
 };
 
-exports.searchByPractitionerName = () => {
+export const searchByPractitionerName = () => {
   cy.get('input#practitioner-name').clear().type('test');
   cy.get('button#practitioner-search-by-name-button').click();
   cy.get('table.search-results').should('exist');
 };
 
-exports.searchByPractitionerbarNumber = barNumber => {
+export const searchByPractitionerbarNumber = barNumber => {
   cy.get('input#bar-number').clear().type(barNumber);
   cy.get('button.advanced-search__button').eq(1).click();
   cy.url().should('contain', barNumber);
 };
 
-exports.searchOrderByKeyword = keyword => {
+export const searchOrderByKeyword = keyword => {
   cy.get('input#keyword-search').clear().type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
 
-exports.searchOpinionByKeyword = keyword => {
+export const searchOpinionByKeyword = keyword => {
   cy.get('input#keyword-search').clear().type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
 
-exports.createOpinion = () => {
+export const createOpinion = () => {
   cy.get('#case-detail-menu-button').click();
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
@@ -65,7 +65,7 @@ exports.createOpinion = () => {
   cy.get('#save-uploaded-pdf-button').scrollIntoView().click();
 };
 
-exports.addDocketEntryAndServeOpinion = testData => {
+export const addDocketEntryAndServeOpinion = testData => {
   cy.get('div.document-viewer--documents-list:last-child').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');

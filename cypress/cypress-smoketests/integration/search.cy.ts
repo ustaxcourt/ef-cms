@@ -1,28 +1,26 @@
-const {
+import {
   addDocketEntryAndServeOpinion,
   createOpinion,
+  goToOpinionSearch,
   gotoAdvancedPractitionerSearch,
   gotoAdvancedSearch,
-  goToOpinionSearch,
   searchByDocketNumber,
   searchByPetitionerName,
-  searchByPractitionerbarNumber,
   searchByPractitionerName,
+  searchByPractitionerbarNumber,
   searchOpinionByKeyword,
-} = require('../support/pages/advanced-search');
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../../cypress-integration/support/pages/create-paper-petition');
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const {
+} from '../support/pages/advanced-search';
+
+import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { goToCaseDetail } from '../support/pages/case-detail';
+import {
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const { goToCaseDetail } = require('../support/pages/case-detail');
-const { goToMyDocumentQC } = require('../support/pages/document-qc');
+} from '../support/pages/create-paper-case';
+import { goToMyDocumentQC } from '../support/pages/document-qc';
+import { waitForElasticsearch } from '../support/helpers';
 
 const barNumberToSearchBy = 'PT1234';
 let testData = {};
@@ -52,7 +50,7 @@ describe('Create and serve a case to search for', () => {
     fillInCreateCaseFromPaperForm(testData);
     goToReviewCase(testData);
     serveCaseToIrs();
-    cy.waitForElasticsearch();
+    waitForElasticsearch();
   });
 });
 
@@ -121,7 +119,7 @@ describe('Opinion Search', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
     createOpinion();
     addDocketEntryAndServeOpinion(testData);
-    cy.waitForElasticsearch();
+    waitForElasticsearch();
   });
 
   it('should be able to search for an opinion by keyword', () => {
