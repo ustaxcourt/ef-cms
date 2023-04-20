@@ -106,9 +106,7 @@ export const JudgeActivityReport = connect(
           </caption>
           <thead>
             <tr>
-              <th aria-label="event code" className="width-15">
-                Event
-              </th>
+              <th aria-label="event code">Event</th>
               <th aria-label="order type">Order Type</th>
               <th aria-label="event total">Event Total</th>
             </tr>
