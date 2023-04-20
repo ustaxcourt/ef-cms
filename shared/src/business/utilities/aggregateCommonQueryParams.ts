@@ -1,6 +1,6 @@
-const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
-const { formatNow, FORMATS } = require('./DateHandler');
-const removeAdvancedSyntaxSymbols = text => {
+import { CASE_SEARCH_MIN_YEAR } from '../entities/EntityConstants';
+import { FORMATS, formatNow } from './DateHandler';
+export const removeAdvancedSyntaxSymbols = text => {
   const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
   return text.replace(nonWordCharacters, ' ').trim();
 };
@@ -17,7 +17,7 @@ const removeAdvancedSyntaxSymbols = text => {
  * @param {string} providers.yearFiledMin the min year filed to search cases by
  * @returns {object} the case data
  */
-const aggregateCommonQueryParams = ({
+export const aggregateCommonQueryParams = ({
   countryType,
   petitionerName,
   petitionerState,
@@ -117,9 +117,4 @@ const aggregateCommonQueryParams = ({
     exactMatchesQuery,
     nonExactMatchesQuery,
   };
-};
-
-module.exports = {
-  aggregateCommonQueryParams,
-  removeAdvancedSyntaxSymbols,
 };
