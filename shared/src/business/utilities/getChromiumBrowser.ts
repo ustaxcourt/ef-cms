@@ -1,6 +1,8 @@
 exports.getChromiumBrowser = async () => {
   const puppeteer = require('puppeteer');
-  return await puppeteer.launch();
+  return await puppeteer.launch({
+    args: ['--no-sandbox'],
+  });
 };
 
 exports.getChromiumBrowserAWS = async () => {
