@@ -10,6 +10,15 @@ resource "aws_s3_bucket" "public_redirect" {
   tags = {
     environment = var.environment
   }
+    server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
+  
 }
 
 data "aws_iam_policy_document" "www_redirect_policy_bucket" {

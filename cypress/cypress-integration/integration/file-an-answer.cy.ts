@@ -1,6 +1,4 @@
-const {
-  navigateTo: navigateToDashboard,
-} = require('../support/pages/dashboard');
+import { navigateTo as navigateToDashboard } from '../support/pages/dashboard';
 
 describe('Filing an Answer', function () {
   it('should have a file first IRS document button', () => {

@@ -1,1 +1,1 @@
-exports.closeScannerSetupDialog = () => {};
+export const closeScannerSetupDialog = () => {};

@@ -6,7 +6,7 @@ export const unauthedUserSearchesForSealedCaseByName = cerebralTest => {
     await refreshElasticsearchIndex(3000);
 
     const queryParams = {
-      petitionerName: 'NOTAREALNAMEFORTESTINGPUBLIC',
+      petitionerName: 'Roland the Headless Thompson Gunner',
     };
 
     cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
