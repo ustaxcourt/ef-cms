@@ -1,5 +1,3 @@
-import { MULTI_DOCKET_FILING_EVENT_CODES } from '../EntityConstants';
-
 const joi = require('joi');
 const {
   addPropertyHelper,
@@ -61,7 +59,6 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Select a document type',
   ],
-  fileAcrossConsolidatedGroup: 'Select which case(s) you want to file in',
   filers: 'Select a filing party',
   freeText: [
     { contains: 'is required', message: 'Provide an answer' },
@@ -221,7 +218,6 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    fileAcrossConsolidatedGroup: joi.boolean().optional(),
     filers: joi
       .array()
       .items(JoiValidationConstants.UUID.required())
@@ -261,18 +257,6 @@ function ExternalDocumentInformationFactory(documentMetadata) {
 
   if (documentMetadata.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');
-  }
-
-  const isMultiDocketableEventCode = !!MULTI_DOCKET_FILING_EVENT_CODES.includes(
-    documentMetadata.eventCode,
-  );
-
-  if (
-    isMultiDocketableEventCode &&
-    documentMetadata.isInConsolidatedCasesGroup === true &&
-    typeof documentMetadata.fileAcrossConsolidatedGroup === 'undefined'
-  ) {
-    makeRequired('fileAcrossConsolidatedGroup');
   }
 
   const objectionDocumentTypes = [
