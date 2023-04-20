@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-You will only have to follow these steps once per environment. If you have already set up your IRS test user in the desired environment, proceed to [Generating an API Token for Your IRS Test User](#GeneratinganAPITokenforYourIRSTestUser).
+You will only have to follow these steps once per environment. If you have already set up your IRS test user in the desired environment, proceed to [Generating an API Token for Your IRS Test User](#generating-an-api-token-for-your-irs-test-user).
 
 1. Install the `oathtool` utility:
     ```bash
