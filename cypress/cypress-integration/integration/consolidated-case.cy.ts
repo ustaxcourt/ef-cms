@@ -1,4 +1,4 @@
-const { getCaseDetailTab } = require('../support/pages/case-detail');
+import { getCaseDetailTab } from '../support/pages/case-detail';
 
 describe('Docket clerk views consolidated case', function () {
   describe('case detail header', () => {
