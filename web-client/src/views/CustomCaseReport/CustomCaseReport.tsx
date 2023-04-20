@@ -273,7 +273,7 @@ export const CustomCaseReport = connect(
           </Button>
           <Button
             link
-            isActive={customCaseInventoryReportHelper.isClearFiltersActive}
+            disabled={customCaseInventoryReportHelper.isClearFiltersDisabled}
             tooltip="Clear Filters"
             onClick={() => clearOptionalCustomCaseInventoryFilterSequence()}
           >

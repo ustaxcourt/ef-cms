@@ -39,10 +39,16 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     }),
   );
 
+  const isClearFiltersDisabled = ![
+    ...(populatedFilters.caseStatuses || []),
+    ...(populatedFilters.caseTypes || []),
+  ].length;
+
   return {
     caseStatuses,
     caseTypes,
     customCaseInventoryReportData: reportData,
+    isClearFiltersDisabled,
     isRunReportButtonDisabled,
   };
 };
