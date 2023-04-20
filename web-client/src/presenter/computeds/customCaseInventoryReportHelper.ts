@@ -32,11 +32,17 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
+  let priority = false; // hack to add priority, will need to add to mappings
   const reportData = (customCaseInventoryReportData.foundCases || []).map(
-    entry => ({
-      ...entry,
-      createdAt: formatDate(entry.createdAt),
-    }),
+    entry => {
+      priority = !priority;
+      return {
+        ...entry,
+        caseTitle: 'Brett Osborne', // hack to add caseTitle, will need to add to mappings
+        createdAt: formatDate(entry.createdAt),
+        highPriority: priority,
+      };
+    },
   );
 
   const isClearFiltersDisabled = ![
