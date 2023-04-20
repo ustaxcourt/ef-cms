@@ -1,9 +1,9 @@
-const {
+import {
   disengageMaintenance,
   engageMaintenance,
   getMaintenancePageContent,
   navigateToDashboard,
-} = require('../../support/pages/maintenance');
+} from '../../support/pages/maintenance';
 
 describe('Maintenance mode public view', () => {
   before(() => {

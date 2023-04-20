@@ -1,11 +1,11 @@
-const {
+import {
   getButton,
   getCaptionTextArea,
   getCaseDetailTab,
   getCaseTitleContaining,
   getEditCaseCaptionButton,
-  navigateTo: navigateToCaseDetail,
-} = require('../support/pages/case-detail');
+  navigateTo as navigateToCaseDetail,
+} from '../support/pages/case-detail';
 
 describe('Edit a case caption from case detail header', function () {
   it('should changes the title of the case', () => {
