@@ -1,15 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const pixelmatch = require('pixelmatch');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { fromPath } = require('pdf2pic');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
-const { PNG } = require('pngjs');
+import { PNG } from 'pngjs';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fromPath } from 'pdf2pic';
+import { generatePdfFromHtmlInteractor } from '../../useCases/generatePdfFromHtmlInteractor';
+import { getChromiumBrowser } from '../getChromiumBrowser';
+import fs from 'fs';
+import path from 'path';
+import pixelmatch from 'pixelmatch';
 
 const convertPdfPageToImageFile = async ({ fileName, pageNumber }) => {
   const outputPath = './shared/test-output/document-generation';

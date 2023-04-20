@@ -1,4 +1,4 @@
-const { isEmpty } = require('lodash');
+import { isEmpty } from 'lodash';
 
 /**
  * scrapes the text content out of a pdf

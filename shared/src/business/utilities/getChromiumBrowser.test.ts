@@ -1,4 +1,4 @@
-const { getChromiumBrowser } = require('./getChromiumBrowser');
+import { getChromiumBrowser } from './getChromiumBrowser';
 
 describe('getChromiumBrowser', () => {
   let launchMock;
