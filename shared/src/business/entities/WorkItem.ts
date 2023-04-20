@@ -47,9 +47,11 @@ export class WorkItem extends JoiValidationEntity {
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
     this.associatedJudge =
-      caseEntity?.associatedJudge || rawWorkItem.associatedJudge || CHIEF_JUDGE;
+      caseEntity && caseEntity.associatedJudge
+        ? caseEntity.associatedJudge
+        : rawWorkItem.associatedJudge || CHIEF_JUDGE;
     this.caseIsInProgress = rawWorkItem.caseIsInProgress;
-    this.caseStatus = caseEntity?.status || rawWorkItem.caseStatus;
+    this.caseStatus = caseEntity ? caseEntity.status : rawWorkItem.caseStatus;
     this.caseTitle = rawWorkItem.caseTitle;
     this.completedAt = rawWorkItem.completedAt;
     this.completedBy = rawWorkItem.completedBy;
@@ -76,13 +78,16 @@ export class WorkItem extends JoiValidationEntity {
     ]);
 
     this.docketNumber = rawWorkItem.docketNumber;
-    this.leadDocketNumber =
-      caseEntity?.leadDocketNumber || rawWorkItem.leadDocketNumber;
-    this.docketNumberWithSuffix =
-      caseEntity?.docketNumberWithSuffix || rawWorkItem.docketNumberWithSuffix;
+    this.leadDocketNumber = caseEntity
+      ? caseEntity.leadDocketNumber
+      : rawWorkItem.leadDocketNumber;
+    this.docketNumberWithSuffix = caseEntity
+      ? caseEntity.docketNumberWithSuffix
+      : rawWorkItem.docketNumberWithSuffix;
     this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||
+      caseEntity?.status === CASE_STATUS_TYPES.calendared ||
       rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
     this.isInitializeCase = rawWorkItem.isInitializeCase;
@@ -91,8 +96,10 @@ export class WorkItem extends JoiValidationEntity {
     this.sentBy = rawWorkItem.sentBy;
     this.sentBySection = rawWorkItem.sentBySection;
     this.sentByUserId = rawWorkItem.sentByUserId;
-    this.trialDate = caseEntity?.trialDate || rawWorkItem.trialDate;
-    this.trialLocation = caseEntity?.trialLocation || rawWorkItem.trialLocation;
+    this.trialDate = caseEntity ? caseEntity.trialDate : rawWorkItem.trialDate;
+    this.trialLocation = caseEntity
+      ? caseEntity.trialLocation
+      : rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
     this.workItemId =
       rawWorkItem.workItemId || applicationContext.getUniqueId();
