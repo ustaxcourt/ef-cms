@@ -37,21 +37,24 @@ export const setCustomCaseInventoryFiltersAction = ({
       .createISODateString(props.createStartDate, FORMATS.MMDDYYYY);
 
     desiredFilters.createStartDate = dateWithTime;
+    desiredFilters.originalCreatedStartDate = props.createStartDate;
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   } else if (props.createStartDate === '') {
     desiredFilters.createStartDate = '';
+    desiredFilters.originalCreatedStartDate = '';
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   }
   if (props.createEndDate) {
     const dateWithTime = applicationContext
       .getUtilities()
       .createISODateString(props.createEndDate, FORMATS.MMDDYYYY);
-    console.log('dateWithTime in END DATE', dateWithTime);
 
     desiredFilters.createEndDate = dateWithTime;
+    desiredFilters.originalCreatedEndDate = props.createEndDate;
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   } else if (props.createEndDate === '') {
     desiredFilters.createEndDate = '';
+    desiredFilters.originalCreatedEndDate = '';
     store.merge(state.customCaseInventoryFilters, desiredFilters);
   }
   if (props.filingMethod) {

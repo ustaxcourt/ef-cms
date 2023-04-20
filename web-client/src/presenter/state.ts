@@ -296,7 +296,6 @@ export const baseState = {
     createStartDate: undefined,
     filingMethod: 'all',
   },
-  customCaseInventoryReportData: {},
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,

@@ -13,6 +13,8 @@ export const DateRangePickerComponent = ({
   formGroupCls,
   onChangeEnd,
   onChangeStart,
+  onInputEnd,
+  onInputStart,
   rangePickerCls,
   startDateErrorText,
   startLabel,
@@ -29,6 +31,8 @@ export const DateRangePickerComponent = ({
   rangePickerCls?: string;
   onChangeEnd: Function;
   onChangeStart: Function;
+  onInputStart: Function;
+  onInputEnd: Function;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string;
@@ -107,6 +111,12 @@ export const DateRangePickerComponent = ({
       window.document
         .getElementById(`${startName}-date-start`)
         .addEventListener('change', onChangeStart);
+      window.document
+        .getElementById(`${startName}-date-start`)
+        .addEventListener('input', onInputStart);
+      window.document
+        .getElementById(`${endName}-date-end`)
+        .addEventListener('input', onInputEnd);
     }
   }, [startDateInputRef, endDateInputRef]);
 

@@ -9,7 +9,7 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const CustomCaseReport = connect(
   {
@@ -32,7 +32,21 @@ export const CustomCaseReport = connect(
     validationErrors,
   }) {
     // TODO: Decide if this is the best place to store this state (vs cerebral)
-    const [runOperation, runOperationSelected] = useState(false);
+    const [hasRanCustomCaseReport, runOperationSelected] = useState(false);
+
+    // // SOLUTION 1
+    // // PROS: STATE STAYS ON COMPONENT,
+    // // CONS: CANT TEST THIS (WE DON'T TEST TSX FILES)
+    // const [truthyCreatedStartDate, setTruthyCreatedStartDate] = useState('');
+    // const [truthyCreatedEndDate, setTruthyCreatedEndDate] = useState('');
+    // const [isRunReportButtonDisabled, setIsRunReportButtonDisabled] =
+    //   useState(true);
+
+    // useEffect(() => {
+    //   if (truthyCreatedEndDate && truthyCreatedStartDate) {
+    //     setIsRunReportButtonDisabled(false);
+    //   }
+    // }, [truthyCreatedEndDate, truthyCreatedStartDate]);
 
     return (
       <>
@@ -58,12 +72,24 @@ export const CustomCaseReport = connect(
                 startName="caseCreationStartDate"
                 startPickerCls={'grid-col-6 padding-right-2'}
                 startValue=""
-                onChangeEnd={e => {
+                // onChangeEnd={e => {
+                //   setCustomCaseInventoryReportFiltersSequence({
+                //     createEndDate: e.target.value,
+                //   });
+                // }}
+                // onChangeStart={e => {
+                //   setCustomCaseInventoryReportFiltersSequence({
+                //     createStartDate: e.target.value,
+                //   });
+                // }}
+                onInputEnd={e => {
+                  // setTruthyCreatedEndDate(e.target.value);
                   setCustomCaseInventoryReportFiltersSequence({
                     createEndDate: e.target.value,
                   });
                 }}
-                onChangeStart={e => {
+                onInputStart={e => {
+                  // setTruthyCreatedStartDate(e.target.value);
                   setCustomCaseInventoryReportFiltersSequence({
                     createStartDate: e.target.value,
                   });
@@ -240,7 +266,7 @@ export const CustomCaseReport = connect(
             </div>
           </div>
           <Button
-            isActive={customCaseInventoryReportHelper.isRunReportButtonActive}
+            disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
             tooltip="Run Report"
             onClick={() => {
               runOperationSelected(true);
@@ -270,7 +296,7 @@ export const CustomCaseReport = connect(
             customCaseInventoryReportData={
               customCaseInventoryReportHelper.customCaseInventoryReportData
             }
-            runOperation={runOperation}
+            hasRanCustomCaseReport={hasRanCustomCaseReport}
           />
         </section>
       </>
@@ -278,7 +304,10 @@ export const CustomCaseReport = connect(
   },
 );
 
-const ReportTable = ({ customCaseInventoryReportData, runOperation }) => {
+const ReportTable = ({
+  customCaseInventoryReportData,
+  hasRanCustomCaseReport,
+}) => {
   return (
     <>
       <table
@@ -314,9 +343,9 @@ const ReportTable = ({ customCaseInventoryReportData, runOperation }) => {
                 <td>PLACEHOLDER</td>
               </tr>
             ))}
-          {runOperation && customCaseInventoryReportData && (
+          {hasRanCustomCaseReport && customCaseInventoryReportData && (
             <tr>
-              <td>No data found.</td>
+              <div className="text-center">No data found.</div>
             </tr>
           )}
         </tbody>

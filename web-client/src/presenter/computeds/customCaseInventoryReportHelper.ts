@@ -6,8 +6,15 @@ import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
-  const customCaseInventoryReportData = get(
-    state.customCaseInventoryReportData,
+  const customCaseInventoryReportData =
+    get(state.customCaseInventoryReportData) || {};
+
+  const populatedFilters = get(state.customCaseInventoryFilters);
+
+  // TODO: ADD TEST FOR THIS LOGIC
+  const isRunReportButtonDisabled = !(
+    populatedFilters.originalCreatedEndDate &&
+    populatedFilters.originalCreatedStartDate
   );
 
   const caseStatuses = CASE_STATUSES.map(status => ({
@@ -36,5 +43,6 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     caseStatuses,
     caseTypes,
     customCaseInventoryReportData: reportData,
+    isRunReportButtonDisabled,
   };
 };

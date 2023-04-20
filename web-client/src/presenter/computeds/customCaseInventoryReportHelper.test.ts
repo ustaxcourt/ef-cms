@@ -35,7 +35,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should format case statuses', () => {
     const result = runCompute(customCaseInventoryReportHelper, {
       state: {
-        customCaseInventoryReportData: {},
+        customCaseInventoryFilters: {},
       },
     });
 
@@ -67,7 +67,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should format case types', () => {
     const result = runCompute(customCaseInventoryReportHelper, {
       state: {
-        customCaseInventoryReportData: {},
+        customCaseInventoryFilters: {},
       },
     });
 
@@ -106,9 +106,10 @@ describe('customCaseInventoryReportHelper', () => {
     expect(result.caseTypes).toEqual(expectedResult);
   });
 
-  it('should generated formatted custom cases', () => {
+  it('should generated generate cases with formatted dates', () => {
     const result = runCompute(customCaseInventoryReportHelper, {
       state: {
+        customCaseInventoryFilters: {},
         customCaseInventoryReportData: {
           foundCases: cases,
         },
@@ -133,5 +134,30 @@ describe('customCaseInventoryReportHelper', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
     ]);
+  });
+
+  it('should return false for isRunReportButtonDisabled if originalCreatedEndDate and originalCreatedStartDate are both falsy', () => {
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: {
+        customCaseInventoryFilters: {
+          originalCreatedEndDate: 's',
+          originalCreatedStartDate: undefined,
+        },
+      },
+    });
+
+    expect(result.isRunReportButtonDisabled).toEqual(true);
+  });
+  it('should return true for isRunReportButtonDisabled if originalCreatedEndDate and originalCreatedStartDate are both truthy', () => {
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: {
+        customCaseInventoryFilters: {
+          originalCreatedEndDate: 'truthy',
+          originalCreatedStartDate: 'truthy',
+        },
+      },
+    });
+
+    expect(result.isRunReportButtonDisabled).toEqual(false);
   });
 });
