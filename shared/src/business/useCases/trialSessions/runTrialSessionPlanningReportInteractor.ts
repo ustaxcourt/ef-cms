@@ -2,7 +2,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TRIAL_CITIES, US_STATES } from '../../entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_CITIES,
+  US_STATES,
+} from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { capitalize, invert } from 'lodash';
 
@@ -54,7 +58,7 @@ export const getTrialSessionPlanningReportData = async ({
     .getTrialSessions({ applicationContext });
 
   allTrialSessions = allTrialSessions.filter(session =>
-    ['Regular', 'Small', 'Hybrid'].includes(session.sessionType),
+    ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
   );
 
   const trialLocationData = [];
@@ -104,7 +108,10 @@ export const getTrialSessionPlanningReportData = async ({
           previousTermSession.sessionType &&
           previousTermSession.judge
         ) {
-          const sessionTypeChar = previousTermSession.sessionType.charAt(0);
+          const sessionTypeChar =
+            previousTermSession.sessionType === SESSION_TYPES.hybridSmall
+              ? 'HS'
+              : previousTermSession.sessionType.charAt(0);
           const strippedJudgeName = previousTermSession.judge.name.replace(
             'Judge ',
             '',

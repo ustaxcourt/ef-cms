@@ -207,6 +207,9 @@ const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
 const {
+  getCasesClosedByJudgeLambda,
+} = require('./reports/getCasesClosedByJudgeLambda');
+const {
   getCompletedMessagesForSectionLambda,
 } = require('./messages/getCompletedMessagesForSectionLambda');
 const {
@@ -264,6 +267,12 @@ const {
   getMessagesForCaseLambda,
 } = require('./messages/getMessagesForCaseLambda');
 const {
+  getOpinionsFiledByJudgeLambda,
+} = require('./reports/getOpinionsFiledByJudgeLambda');
+const {
+  getOrdersFiledByJudgeLambda,
+} = require('./reports/getOrdersFiledByJudgeLambda');
+const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -296,6 +305,9 @@ const {
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
+const {
+  getTrialSessionsForJudgeActivityReportLambda,
+} = require('./reports/getTrialSessionsForJudgeActivityReportLambda');
 const {
   getTrialSessionsForJudgeLambda,
 } = require('./trialSessions/getTrialSessionsForJudgeLambda');
@@ -990,6 +1002,10 @@ app.get(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
   );
+  app.post(
+    '/judge-activity-report/closed-cases',
+    lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
 }
 
 /**
@@ -1083,6 +1099,18 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.get(
     '/judges/:judgeId/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/trial-sessions',
+    lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/judge-activity-report/opinions',
+    lambdaWrapper(getOpinionsFiledByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/orders',
+    lambdaWrapper(getOrdersFiledByJudgeLambda),
   );
 }
 

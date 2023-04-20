@@ -1,3 +1,5 @@
+import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor';
+import { getOrdersFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor';
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 const {
@@ -223,6 +225,9 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCasesClosedByJudgeInteractor,
+} = require('../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor');
+const {
   getCasesForUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesForUserInteractor');
 const {
@@ -336,6 +341,9 @@ const {
 const {
   getTrialSessionDetailsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
+const {
+  getTrialSessionsForJudgeActivityReportInteractor,
+} = require('../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor');
 const {
   getTrialSessionsForJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeInteractor');
@@ -652,6 +660,7 @@ const useCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
@@ -675,6 +684,8 @@ const useCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
+  getOpinionsFiledByJudgeInteractor,
+  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,
@@ -691,6 +702,7 @@ const useCases = {
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
+  getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUploadPolicyInteractor,
