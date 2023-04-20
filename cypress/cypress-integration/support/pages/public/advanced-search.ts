@@ -1,53 +1,51 @@
-const {
-  ADVANCED_SEARCH_OPINION_TYPES,
-} = require('../../../../../shared/src/business/entities/EntityConstants');
+import { ADVANCED_SEARCH_OPINION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 
-exports.navigateTo = () => {
+export const navigateTo = () => {
   cy.visit('/');
 };
 
-exports.clickOnSearchTab = tabName => {
+export const clickOnSearchTab = tabName => {
   cy.get(`button#tab-${tabName}`).click();
 };
 
-exports.searchForCaseByDocketNumber = docketNumber => {
+export const searchForCaseByDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
   cy.get('button#docket-search-button').click();
 };
 
-exports.enterPetitionerName = name => {
+export const enterPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
 };
 
-exports.getPetitionerNameInput = () => {
+export const getPetitionerNameInput = () => {
   return cy.get('input#petitioner-name');
 };
 
-exports.enterCaseTitleOrPetitionerName = name => {
+export const enterCaseTitleOrPetitionerName = name => {
   cy.get('input#title-or-name').type(name);
 };
 
-exports.getCaseTitleOrPetitionerNameInput = () => {
+export const getCaseTitleOrPetitionerNameInput = () => {
   return cy.get('input#title-or-name');
 };
 
-exports.enterDocumentKeywordForAdvancedSearch = keyword => {
+export const enterDocumentKeywordForAdvancedSearch = keyword => {
   cy.get('input#keyword-search').type(keyword);
 };
 
-exports.getKeywordInput = () => {
+export const getKeywordInput = () => {
   return cy.get('input#keyword-search');
 };
 
-exports.enterDocumentDocketNumber = docketNumber => {
+export const enterDocumentDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
 };
 
-exports.getDocketNumberInput = () => {
+export const getDocketNumberInput = () => {
   return cy.get('input#docket-number');
 };
 
-exports.unselectOpinionTypesExceptBench = () => {
+export const unselectOpinionTypesExceptBench = () => {
   let opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
     type => type !== 'Bench',
   );
@@ -57,38 +55,38 @@ exports.unselectOpinionTypesExceptBench = () => {
   });
 };
 
-exports.searchForCaseByPetitionerInformation = () => {
+export const searchForCaseByPetitionerInformation = () => {
   cy.get('button#advanced-search-button').click();
 };
 
-exports.searchForDocuments = () => {
+export const searchForDocuments = () => {
   cy.get('button#advanced-search-button').click();
 };
 
-exports.noSearchResultsContainer = () => {
+export const noSearchResultsContainer = () => {
   return cy.get('div#no-search-results');
 };
 
-exports.searchResultsTable = () => {
+export const searchResultsTable = () => {
   return cy.get('table.search-results');
 };
 
-exports.firstSearchResultJudgeField = () => {
+export const firstSearchResultJudgeField = () => {
   return cy.contains('td', 'Foley');
 };
 
-exports.docketRecordTable = () => {
+export const docketRecordTable = () => {
   return cy.get('table#docket-record-table');
 };
 
-exports.searchForOrderByJudge = judge => {
+export const searchForOrderByJudge = judge => {
   return cy.get('#order-judge').select(judge);
 };
 
-exports.publicHeader = () => {
+export const publicHeader = () => {
   return cy.get('h1.header-welcome-public');
 };
 
-exports.petitionHyperlink = () => {
+export const petitionHyperlink = () => {
   return cy.get('button.view-pdf-link').contains('Petition');
 };

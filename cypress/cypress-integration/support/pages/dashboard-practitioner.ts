@@ -1,11 +1,11 @@
-exports.navigateTo = username => {
+export const navigateTo = username => {
   cy.login(username, '/');
 };
 
-exports.getStartCaseButton = () => {
+export const getStartCaseButton = () => {
   return cy.get('a#file-a-petition');
 };
 
-exports.getCaseList = () => {
+export const getCaseList = () => {
   return cy.get('#case-list tbody tr');
 };
