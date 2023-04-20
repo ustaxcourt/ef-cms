@@ -148,6 +148,7 @@ describe('customCaseInventoryReportHelper', () => {
 
     expect(result.isRunReportButtonDisabled).toEqual(true);
   });
+
   it('should return true for isRunReportButtonDisabled if originalCreatedEndDate and originalCreatedStartDate are both truthy', () => {
     const result = runCompute(customCaseInventoryReportHelper, {
       state: {
@@ -159,5 +160,31 @@ describe('customCaseInventoryReportHelper', () => {
     });
 
     expect(result.isRunReportButtonDisabled).toEqual(false);
+  });
+
+  it('should return true for isClearFiltersDisabled when case status(es) or case type(s) selected are not selected', () => {
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: {
+        customCaseInventoryFilters: {
+          caseStatuses: [],
+          caseTypes: [],
+        },
+      },
+    });
+
+    expect(result.isClearFiltersDisabled).toEqual(true);
+  });
+
+  it('should return false for isClearFiltersDisabled when case status(es) or case type(s) selected are selected', () => {
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: {
+        customCaseInventoryFilters: {
+          caseStatuses: ['Assigned - Case', 'Closed'],
+          caseTypes: ['Deficiency'],
+        },
+      },
+    });
+
+    expect(result.isClearFiltersDisabled).toEqual(false);
   });
 });
