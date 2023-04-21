@@ -1,4 +1,4 @@
-const createApplicationContext = require('../../../src/applicationContext');
+const { createApplicationContext } = require('../../../src/applicationContext');
 
 exports.handler = async event => {
   const applicationContext = createApplicationContext({});
