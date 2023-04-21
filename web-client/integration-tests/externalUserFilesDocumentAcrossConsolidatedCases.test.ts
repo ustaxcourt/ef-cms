@@ -30,7 +30,7 @@ describe('External User files a document across a consolidated case group', () =
 
   describe('irsPractitioner', () => {
     loginAs(cerebralTest, 'irspractitioner@example.com');
-    it('should get the docket numbers and docketEntry count for each case in the consolidated group', async () => {
+    it('should set case detail on state for each case in the consolidated cases group', async () => {
       const docketNumber = '103-23';
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber,
@@ -51,8 +51,82 @@ describe('External User files a document across a consolidated case group', () =
 
       cerebralTest.consolidatedCaseDetailGroup = consolidatedCaseDetailGroup;
     });
+    it('should file an external document across a consolidated cases group in a case they are associated with. (File Document flow)', async () => {
+      const docketNumber = '103-23';
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
 
-    it('should file an external document across a consolidated case group in a case they are associated with. (File Document flow)', async () => {
+      cerebralTest.docketNumber = docketNumber;
+
+      const {
+        showFileDocumentButton,
+        showFileFirstDocumentButton,
+        showRequestAccessToCaseButton,
+      } = runCompute(caseDetailHeaderHelper, {
+        state: cerebralTest.getState(),
+      });
+      expect(showFileFirstDocumentButton).toBe(false);
+      expect(showRequestAccessToCaseButton).toBe(false);
+      expect(showFileDocumentButton).toBe(true);
+    });
+    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
+    it('should verify docket entry was filed across the entire consolidated case group', async () => {
+      cerebralTest.consolidatedCaseDetailGroup.forEach(
+        async consolidatedCaseBefore => {
+          await cerebralTest.runSequence('gotoCaseDetailSequence', {
+            docketNumber: consolidatedCaseBefore.docketNumber,
+          });
+
+          const consolidatedCaseAfter = cerebralTest.getState('caseDetail');
+
+          expect(consolidatedCaseAfter.docketEntries.length).toEqual(
+            consolidatedCaseBefore.docketEntries.length + 1,
+          );
+        },
+      );
+    });
+
+    loginAs(cerebralTest, 'irspractitioner@example.com');
+    it('should set case detail on state for each case in the consolidated cases group', async () => {
+      const docketNumber = '103-23';
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
+
+      const consolidatedCases = cerebralTest.getState(
+        'caseDetail.consolidatedCases',
+      );
+
+      const consolidatedCaseDetailGroup = await Promise.all(
+        consolidatedCases.map(async consolidatedCase => {
+          await cerebralTest.runSequence('gotoCaseDetailSequence', {
+            docketNumber: consolidatedCase.docketNumber,
+          });
+          return cerebralTest.getState('caseDetail');
+        }),
+      );
+
+      cerebralTest.consolidatedCaseDetailGroup = consolidatedCaseDetailGroup;
+    });
+    it('file on a case in the group where no irsPractitioner is associated (File First Document flow)', async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: '104-23',
+      });
+
+      const {
+        showFileDocumentButton,
+        showFileFirstDocumentButton,
+        showRequestAccessToCaseButton,
+      } = runCompute(caseDetailHeaderHelper, {
+        state: cerebralTest.getState(),
+      });
+      expect(showRequestAccessToCaseButton).toBe(false);
+      expect(showFileDocumentButton).toBe(false);
+      expect(showFileFirstDocumentButton).toBe(true);
+    });
+    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
+    it('should file an external document across a consolidated cases group in a case they are associated with. (File Document flow)', async () => {
       const docketNumber = '103-23';
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber,
@@ -72,45 +146,28 @@ describe('External User files a document across a consolidated case group', () =
       expect(showFileDocumentButton).toBe(true);
     });
 
-    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
-
-    it('should verify docket entry was filed across the entire consolidated case group', async () => {
-      cerebralTest.consolidatedCaseDetailGroup.forEach(
-        async consolidatedCaseBefore => {
-          await cerebralTest.runSequence('gotoCaseDetailSequence', {
-            docketNumber: consolidatedCaseBefore.docketNumber,
-          });
-
-          // console.log('consolidatedCaseBefore', consolidatedCaseBefore);
-
-          const consolidatedCaseAfter = cerebralTest.getState('caseDetail');
-
-          expect(consolidatedCaseAfter.docketEntries.length).toEqual(
-            consolidatedCaseBefore.docketEntries.length + 1,
-          );
-        },
-      );
-    });
-
-    loginAs(cerebralTest, 'irspractitioner@example.com');
-    it('file on a case in the group where no irsPractitioner is associated (File First Document flow)', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: '104-23',
-      });
-
-      const {
-        showFileDocumentButton,
-        showFileFirstDocumentButton,
-        showRequestAccessToCaseButton,
-      } = runCompute(caseDetailHeaderHelper, {
-        state: cerebralTest.getState(),
-      });
-      expect(showRequestAccessToCaseButton).toBe(false);
-      expect(showFileDocumentButton).toBe(false);
-      expect(showFileFirstDocumentButton).toBe(true);
-    });
-
     loginAs(cerebralTest, 'irspractitioner2@example.com');
+    it('should set case detail on state for each case in the consolidated cases group', async () => {
+      const docketNumber = '103-23';
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
+
+      const consolidatedCases = cerebralTest.getState(
+        'caseDetail.consolidatedCases',
+      );
+
+      const consolidatedCaseDetailGroup = await Promise.all(
+        consolidatedCases.map(async consolidatedCase => {
+          await cerebralTest.runSequence('gotoCaseDetailSequence', {
+            docketNumber: consolidatedCase.docketNumber,
+          });
+          return cerebralTest.getState('caseDetail');
+        }),
+      );
+
+      cerebralTest.consolidatedCaseDetailGroup = consolidatedCaseDetailGroup;
+    });
     it('file on a case where at least one irsPractitioner, but not themselves, is already associated (Request Access flow)', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: '105-23',
@@ -126,6 +183,26 @@ describe('External User files a document across a consolidated case group', () =
       expect(showFileFirstDocumentButton).toBe(false);
       expect(showFileDocumentButton).toBe(false);
       expect(showRequestAccessToCaseButton).toBe(true);
+    });
+    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
+    it('should file an external document across a consolidated cases group in a case they are associated with. (File Document flow)', async () => {
+      const docketNumber = '103-23';
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
+
+      cerebralTest.docketNumber = docketNumber;
+
+      const {
+        showFileDocumentButton,
+        showFileFirstDocumentButton,
+        showRequestAccessToCaseButton,
+      } = runCompute(caseDetailHeaderHelper, {
+        state: cerebralTest.getState(),
+      });
+      expect(showFileFirstDocumentButton).toBe(false);
+      expect(showRequestAccessToCaseButton).toBe(false);
+      expect(showFileDocumentButton).toBe(true);
     });
   });
 });
