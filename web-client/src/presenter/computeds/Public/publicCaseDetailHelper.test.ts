@@ -106,6 +106,15 @@ describe('publicCaseDetailHelper', () => {
 
       expect(result.isSealed).toBe(mockDocketEntry.isSealed);
     });
+
+    it('should not display the document link when the entry is stricken and the user is the terminal user', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        entry: { ...baseDocketEntry, isStricken: true },
+        isTerminalUser: true,
+      });
+
+      expect(result.showLinkToDocument).toBe(false);
+    });
   });
 
   describe('printableDocketRecord', () => {
