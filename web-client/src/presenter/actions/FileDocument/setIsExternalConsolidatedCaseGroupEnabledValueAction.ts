@@ -32,13 +32,6 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
       .getConstants()
       .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
 
-  console.log(
-    'isConsolidatedGroupAccessEnabled',
-    isConsolidatedGroupAccessEnabled,
-  );
-  console.log('isInConsolidatedGroup', isInConsolidatedGroup);
-  console.log('isMultiDocketableEventCode', isMultiDocketableEventCode);
-
   store.set(state.isExternalConsolidatedCaseGroupFilingEnabled, false);
   if (
     isConsolidatedGroupAccessEnabled &&
