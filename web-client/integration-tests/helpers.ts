@@ -114,7 +114,7 @@ let sqsCache;
 export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
   const environment = {
-    s3Endpoint: process.env.S3_ENDPOINT || 'http://localhost:9000',
+    s3Endpoint: process.env.S3_ENDPOINT || 'http://0.0.0.0:9000',
     stage: process.env.STAGE || 'local',
   };
   const apiApplicationContext = {
