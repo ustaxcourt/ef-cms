@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * removeSignatureFromDocumentInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketEntryId the id of the docket entry for the signed document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.removeSignatureFromDocumentInteractor = (
+export const removeSignatureFromDocumentInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

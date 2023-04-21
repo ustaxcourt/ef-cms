@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getUserPendingEmailStatusInteractor
@@ -9,7 +9,7 @@ const { get } = require('../requests');
  * @param {string} providers.userId the userId to update the pendingEmail
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUserPendingEmailStatusInteractor = (
+export const getUserPendingEmailStatusInteractor = (
   applicationContext,
   { userId },
 ) => {

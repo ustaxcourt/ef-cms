@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * get calendared cases for trial session
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.trialSessionId the id of the trial session to get the calendared cases
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCalendaredCasesForTrialSessionInteractor = (
+export const getCalendaredCasesForTrialSessionInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {
