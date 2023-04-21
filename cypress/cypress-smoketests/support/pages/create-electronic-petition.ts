@@ -1,47 +1,47 @@
-const { faker } = require('@faker-js/faker');
+import { faker } from '@faker-js/faker';
 
-exports.hasIrsNotice = {
+export const hasIrsNotice = {
   NO: 1,
   YES: 0,
 };
 
-exports.filingTypes = {
+export const filingTypes = {
   BUSINESS: 2,
   INDIVIDUAL: 0,
   OTHER: 3,
   PETITIONER_AND_SPOUSE: 1,
 };
 
-exports.goToStartCreatePetition = () => {
+export const goToStartCreatePetition = () => {
   cy.get('a#file-a-petition').click();
 };
 
-exports.goToWizardStep1 = () => {
+export const goToWizardStep1 = () => {
   cy.get('a[href*="file-a-petition/step-1"]').click();
   cy.url().should('contain', '/file-a-petition/step-1');
 };
 
-exports.goToWizardStep2 = () => {
+export const goToWizardStep2 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-2');
 };
 
-exports.goToWizardStep3 = () => {
+export const goToWizardStep3 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-3');
 };
 
-exports.goToWizardStep4 = () => {
+export const goToWizardStep4 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-4');
 };
 
-exports.goToWizardStep5 = () => {
+export const goToWizardStep5 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-5');
 };
 
-exports.submitPetition = testData => {
+export const submitPetition = testData => {
   cy.get('button#submit-case').scrollIntoView().click();
 
   cy.intercept('POST', '**/cases').as('postCase');
@@ -58,23 +58,23 @@ exports.submitPetition = testData => {
   cy.url().should('include', 'file-a-petition/success');
 };
 
-exports.goToDashboard = () => {
+export const goToDashboard = () => {
   cy.get('a#button-back-to-dashboard').click();
 };
 
-exports.completeWizardStep1 = () => {
+export const completeWizardStep1 = () => {
   cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
 };
 
-exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
+export const completeWizardStep2 = (hasIrsNoticeInput, caseType) => {
   cy.screenshot();
   cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#irs-notice-radios').scrollIntoView();
-  cy.get(`label#hasIrsNotice-${hasIrsNotice}`).click();
+  cy.get(`label#hasIrsNotice-${hasIrsNoticeInput}`).click();
   cy.get('#case-type').scrollIntoView().select(caseType);
 };
 
-exports.completeWizardStep3 = (filingType, petitionerName) => {
+export const completeWizardStep3 = (filingType, petitionerName) => {
   cy.get(`label#filing-type-${filingType}`).scrollIntoView().click();
 
   if (filingType === exports.filingTypes.PETITIONER_AND_SPOUSE) {
@@ -107,7 +107,7 @@ exports.completeWizardStep3 = (filingType, petitionerName) => {
   cy.get('input#phone').scrollIntoView().type(faker.phone.number());
 };
 
-exports.completeWizardStep4 = () => {
+export const completeWizardStep4 = () => {
   cy.get('label#procedure-type-0').scrollIntoView().click();
   cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
 };

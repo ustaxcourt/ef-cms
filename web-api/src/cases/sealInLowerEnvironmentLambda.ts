@@ -1,4 +1,4 @@
-const createApplicationContext = require('../applicationContext');
+import { createApplicationContext } from '../applicationContext';
 
 /**
  * used for retroactively sealing a case in a lower environment after it is sealed in the Production environment
@@ -6,7 +6,7 @@ const createApplicationContext = require('../applicationContext');
  * @param {object} event the AWS event object received that includes any messages from our SNS subscription
  * @returns {Promise<*>|undefined} the response to the topic
  */
-exports.sealInLowerEnvironmentLambda = async event => {
+export const sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
   const applicationContext = createApplicationContext(user);
 
