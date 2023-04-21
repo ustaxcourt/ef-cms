@@ -1,14 +1,191 @@
 /* eslint-disable max-lines */
-const cors = require('cors');
-const createApplicationContext = require('./applicationContext');
-const express = require('express');
-const logger = require('./logger');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
-const { lambdaWrapper } = require('./lambdaWrapper');
-const { set } = require('lodash');
+import { addCaseToTrialSessionLambda } from './trialSessions/addCaseToTrialSessionLambda';
+import { addConsolidatedCaseLambda } from './cases/addConsolidatedCaseLambda';
+import { addCoversheetLambda } from './documents/addCoversheetLambda';
+import { addDeficiencyStatisticLambda } from './cases/addDeficiencyStatisticLambda';
+import { addPaperFilingLambda } from './documents/addPaperFilingLambda';
+import { addPetitionerToCaseLambda } from './cases/addPetitionerToCaseLambda';
+import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
+import { appendAmendedPetitionFormLambda } from './courtIssuedOrder/appendAmendedPetitionFormLambda';
+import { archiveCorrespondenceDocumentLambda } from './correspondence/archiveCorrespondenceDocumentLambda';
+import { archiveDraftDocumentLambda } from './documents/archiveDraftDocumentLambda';
+import { assignWorkItemsLambda } from './workitems/assignWorkItemsLambda';
+import { associateIrsPractitionerWithCaseLambda } from './manualAssociation/associateIrsPractitionerWithCaseLambda';
+import { associatePrivatePractitionerWithCaseLambda } from './manualAssociation/associatePrivatePractitionerWithCaseLambda';
+import { authenticateUserLambda } from './auth/authenticateUserLambda';
+import { batchDownloadTrialSessionLambda } from './trialSessions/batchDownloadTrialSessionLambda';
+import { blockCaseFromTrialLambda } from './cases/blockCaseFromTrialLambda';
+import { caseAdvancedSearchLambda } from './cases/caseAdvancedSearchLambda';
+import { checkEmailAvailabilityLambda } from './users/checkEmailAvailabilityLambda';
+import { checkForReadyForTrialCasesLambda } from './cases/checkForReadyForTrialCasesLambda';
+import { closeTrialSessionLambda } from './trialSessions/closeTrialSessionLambda';
+import { completeDocketEntryQCLambda } from './documents/completeDocketEntryQCLambda';
+import { completeMessageLambda } from './messages/completeMessageLambda';
+import { completeWorkItemLambda } from './workitems/completeWorkItemLambda';
+import { createApplicationContext } from './applicationContext';
+import { createCaseDeadlineLambda } from './caseDeadline/createCaseDeadlineLambda';
+import { createCaseFromPaperLambda } from './cases/createCaseFromPaperLambda';
+import { createCaseLambda } from './cases/createCaseLambda';
+import { createCourtIssuedOrderPdfFromHtmlLambda } from './courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda';
+import { createMessageLambda } from './messages/createMessageLambda';
+import { createPractitionerDocumentLambda } from './practitioners/createPractitionerDocumentLambda';
+import { createPractitionerUserLambda } from './practitioners/createPractitionerUserLambda';
+import { createTrialSessionLambda } from './trialSessions/createTrialSessionLambda';
+import { createUserLambda } from './users/createUserLambda';
+import { deleteAuthCookieLambda } from './auth/deleteAuthCookieLambda';
+import { deleteCaseDeadlineLambda } from './caseDeadline/deleteCaseDeadlineLambda';
+import { deleteCaseNoteLambda } from './caseNote/deleteCaseNoteLambda';
+import { deleteCounselFromCaseLambda } from './cases/deleteCounselFromCaseLambda';
+import { deleteDeficiencyStatisticLambda } from './cases/deleteDeficiencyStatisticLambda';
+import { deletePractitionerDocumentLambda } from './practitioners/deletePractitionerDocumentLambda';
+import { deleteTrialSessionLambda } from './trialSessions/deleteTrialSessionLambda';
+import { deleteUserCaseNoteLambda } from './caseNote/deleteUserCaseNoteLambda';
+import { downloadPolicyUrlLambda } from './documents/downloadPolicyUrlLambda';
+import { editPaperFilingLambda } from './documents/editPaperFilingLambda';
+import { editPractitionerDocumentLambda } from './practitioners/editPractitionerDocumentLambda';
+import { fetchPendingItemsLambda } from './pendingItems/fetchPendingItemsLambda';
+import { fileAndServeCourtIssuedDocumentLambda } from './cases/fileAndServeCourtIssuedDocumentLambda';
+import { fileCorrespondenceDocumentLambda } from './correspondence/fileCorrespondenceDocumentLambda';
+import { fileCourtIssuedDocketEntryLambda } from './documents/fileCourtIssuedDocketEntryLambda';
+import { fileCourtIssuedOrderToCaseLambda } from './documents/fileCourtIssuedOrderToCaseLambda';
+import { fileExternalDocumentToCaseLambda } from './documents/fileExternalDocumentToCaseLambda';
+import { forwardMessageLambda } from './messages/forwardMessageLambda';
+import { generateDocketRecordPdfLambda } from './cases/generateDocketRecordPdfLambda';
+import { generateDraftStampOrderLambda } from './documents/generateDraftStampOrderLambda';
+import { generatePractitionerCaseListPdfLambda } from './cases/generatePractitionerCaseListPdfLambda';
+import { generatePrintableCaseInventoryReportLambda } from './reports/generatePrintableCaseInventoryReportLambda';
+import { generatePrintableFilingReceiptLambda } from './documents/generatePrintableFilingReceiptLambda';
+import { generatePrintablePendingReportLambda } from './pendingItems/generatePrintablePendingReportLambda';
+import { generateTrialCalendarPdfLambda } from './trialSessions/generateTrialCalendarPdfLambda';
+import { generateTrialSessionPaperServicePdfLambda } from './trialSessions/generateTrialSessionPaperServicePdfLambda';
+import { getBlockedCasesLambda } from './reports/getBlockedCasesLambda';
+import { getCalendaredCasesForTrialSessionLambda } from './trialSessions/getCalendaredCasesForTrialSessionLambda';
+import { getCaseDeadlinesForCaseLambda } from './caseDeadline/getCaseDeadlinesForCaseLambda';
+import { getCaseDeadlinesLambda } from './caseDeadline/getCaseDeadlinesLambda';
+import { getCaseExistsLambda } from './cases/getCaseExistsLambda';
+import { getCaseInventoryReportLambda } from './reports/getCaseInventoryReportLambda';
+import { getCaseLambda } from './cases/getCaseLambda';
+import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
+import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMessagesForSectionLambda';
+import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
+import { getConsolidatedCasesByCaseLambda } from './cases/getConsolidatedCasesByCaseLambda';
+import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getDocumentContentsForDocketEntryLambda } from './documents/getDocumentContentsForDocketEntryLambda';
+import { getDocumentDownloadUrlLambda } from './documents/getDocumentDownloadUrlLambda';
+import { getDocumentQCInboxForSectionLambda } from './workitems/getDocumentQCInboxForSectionLambda';
+import { getDocumentQCInboxForUserLambda } from './workitems/getDocumentQCInboxForUserLambda';
+import { getDocumentQCServedForSectionLambda } from './workitems/getDocumentQCServedForSectionLambda';
+import { getDocumentQCServedForUserLambda } from './workitems/getDocumentQCServedForUserLambda';
+import { getEligibleCasesForTrialSessionLambda } from './trialSessions/getEligibleCasesForTrialSessionLambda';
+import { getFeatureFlagValueLambda } from './featureFlag/getFeatureFlagValueLambda';
+import { getGeneratePrintableTrialSessionCopyReportLambda } from './trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
+import { getInboxMessagesForSectionLambda } from './messages/getInboxMessagesForSectionLambda';
+import { getInboxMessagesForUserLambda } from './messages/getInboxMessagesForUserLambda';
+import { getInternalUsersLambda } from './users/getInternalUsersLambda';
+import { getIrsPractitionersBySearchKeyLambda } from './users/getIrsPractitionersBySearchKeyLambda';
+import { getJudgeInSectionLambda } from './users/getJudgeInSectionLambda';
+import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
+import { getMessageThreadLambda } from './messages/getMessageThreadLambda';
+import { getMessagesForCaseLambda } from './messages/getMessagesForCaseLambda';
+import { getNotificationsLambda } from './users/getNotificationsLambda';
+import { getOutboxMessagesForSectionLambda } from './messages/getOutboxMessagesForSectionLambda';
+import { getOutboxMessagesForUserLambda } from './messages/getOutboxMessagesForUserLambda';
+import { getPractitionerByBarNumberLambda } from './practitioners/getPractitionerByBarNumberLambda';
+import { getPractitionerDocumentDownloadUrlLambda } from './practitioners/getPractitionerDocumentDownloadUrlLambda';
+import { getPractitionerDocumentLambda } from './practitioners/getPractitionerDocumentLambda';
+import { getPractitionerDocumentsLambda } from './practitioners/getPractitionerDocumentsLambda';
+import { getPractitionersByNameLambda } from './practitioners/getPractitionersByNameLambda';
+import { getPrivatePractitionersBySearchKeyLambda } from './users/getPrivatePractitionersBySearchKeyLambda';
+import { getStatusOfVirusScanLambda } from './documents/getStatusOfVirusScanLambda';
+import { getTrialSessionDetailsLambda } from './trialSessions/getTrialSessionDetailsLambda';
+import { getTrialSessionWorkingCopyLambda } from './trialSessions/getTrialSessionWorkingCopyLambda';
+import { getTrialSessionsForJudgeLambda } from './trialSessions/getTrialSessionsForJudgeLambda';
+import { getTrialSessionsLambda } from './trialSessions/getTrialSessionsLambda';
+import { getUploadPolicyLambda } from './documents/getUploadPolicyLambda';
+import { getUserByIdLambda } from './users/getUserByIdLambda';
+import { getUserCaseNoteForCasesLambda } from './caseNote/getUserCaseNoteForCasesLambda';
+import { getUserCaseNoteLambda } from './caseNote/getUserCaseNoteLambda';
+import { getUserLambda } from './users/getUserLambda';
+import { getUserPendingEmailLambda } from './users/getUserPendingEmailLambda';
+import { getUserPendingEmailStatusLambda } from './users/getUserPendingEmailStatusLambda';
+import { getUsersInSectionLambda } from './users/getUsersInSectionLambda';
+import { getUsersPendingEmailLambda } from './users/getUsersPendingEmailLambda';
+import { getWorkItemLambda } from './workitems/getWorkItemLambda';
+import { ipLimiter } from './middleware/ipLimiter';
+import { lambdaWrapper } from './lambdaWrapper';
+import { opinionAdvancedSearchLambda } from './documents/opinionAdvancedSearchLambda';
+import { orderAdvancedSearchLambda } from './documents/orderAdvancedSearchLambda';
+import { prioritizeCaseLambda } from './cases/prioritizeCaseLambda';
+import { privatePractitionerCaseAssociationLambda } from './cases/privatePractitionerCaseAssociationLambda';
+import { privatePractitionerPendingCaseAssociationLambda } from './cases/privatePractitionerPendingCaseAssociationLambda';
+import { refreshAuthTokenLambda } from './auth/refreshAuthTokenLambda';
+import { removeCaseFromTrialLambda } from './trialSessions/removeCaseFromTrialLambda';
+import { removeCasePendingItemLambda } from './cases/removeCasePendingItemLambda';
+import { removeConsolidatedCasesLambda } from './cases/removeConsolidatedCasesLambda';
+import { removePdfFromDocketEntryLambda } from './documents/removePdfFromDocketEntryLambda';
+import { removePetitionerAndUpdateCaptionLambda } from './cases/removePetitionerAndUpdateCaptionLambda';
+import { removeSignatureFromDocumentLambda } from './documents/removeSignatureFromDocumentLambda';
+import { replyToMessageLambda } from './messages/replyToMessageLambda';
+import { runTrialSessionPlanningReportLambda } from './trialSessions/runTrialSessionPlanningReportLambda';
+import { saveCalendarNoteLambda } from './trialSessions/saveCalendarNoteLambda';
+import { saveCaseDetailInternalEditLambda } from './cases/saveCaseDetailInternalEditLambda';
+import { saveCaseNoteLambda } from './caseNote/saveCaseNoteLambda';
+import { saveSignedDocumentLambda } from './documents/saveSignedDocumentLambda';
+import { sealCaseContactAddressLambda } from './cases/sealCaseContactAddressLambda';
+import { sealCaseLambda } from './cases/sealCaseLambda';
+import { sealDocketEntryLambda } from './documents/sealDocketEntryLambda';
+import { serveCaseToIrsLambda } from './cases/serveCaseToIrsLambda';
+import { serveCourtIssuedDocumentLambda } from './cases/serveCourtIssuedDocumentLambda';
+import { serveExternallyFiledDocumentLambda } from './documents/serveExternallyFiledDocumentLambda';
+import { set } from 'lodash';
+import { setForHearingLambda } from './trialSessions/setForHearingLambda';
+import { setMessageAsReadLambda } from './messages/setMessageAsReadLambda';
+import { setNoticesForCalendaredTrialSessionLambda } from './trialSessions/setNoticesForCalendaredTrialSessionLambda';
+import { setTrialSessionCalendarLambda } from './trialSessions/setTrialSessionCalendarLambda';
+import { setWorkItemAsReadLambda } from './workitems/setWorkItemAsReadLambda';
+import { strikeDocketEntryLambda } from './documents/strikeDocketEntryLambda';
+import { swaggerJsonLambda } from './swagger/swaggerJsonLambda';
+import { swaggerLambda } from './swagger/swaggerLambda';
+import { unblockCaseFromTrialLambda } from './cases/unblockCaseFromTrialLambda';
+import { unprioritizeCaseLambda } from './cases/unprioritizeCaseLambda';
+import { unsealCaseLambda } from './cases/unsealCaseLambda';
+import { unsealDocketEntryLambda } from './documents/unsealDocketEntryLambda';
+import { updateCaseContextLambda } from './cases/updateCaseContextLambda';
+import { updateCaseDeadlineLambda } from './caseDeadline/updateCaseDeadlineLambda';
+import { updateCaseDetailsLambda } from './cases/updateCaseDetailsLambda';
+import { updateCaseTrialSortTagsLambda } from './cases/updateCaseTrialSortTagsLambda';
+import { updateContactLambda } from './cases/updateContactLambda';
+import { updateCorrespondenceDocumentLambda } from './correspondence/updateCorrespondenceDocumentLambda';
+import { updateCounselOnCaseLambda } from './cases/updateCounselOnCaseLambda';
+import { updateCourtIssuedDocketEntryLambda } from './documents/updateCourtIssuedDocketEntryLambda';
+import { updateCourtIssuedOrderToCaseLambda } from './documents/updateCourtIssuedOrderToCaseLambda';
+import { updateDeficiencyStatisticLambda } from './cases/updateDeficiencyStatisticLambda';
+import { updateDocketEntryMetaLambda } from './documents/updateDocketEntryMetaLambda';
+import { updateOtherStatisticsLambda } from './cases/updateOtherStatisticsLambda';
+import { updatePetitionerInformationLambda } from './cases/updatePetitionerInformationLambda';
+import { updatePractitionerUserLambda } from './practitioners/updatePractitionerUserLambda';
+import { updateQcCompleteForTrialLambda } from './cases/updateQcCompleteForTrialLambda';
+import { updateTrialSessionLambda } from './trialSessions/updateTrialSessionLambda';
+import { updateTrialSessionWorkingCopyLambda } from './trialSessions/updateTrialSessionWorkingCopyLambda';
+import { updateUserCaseNoteLambda } from './caseNote/updateUserCaseNoteLambda';
+import { updateUserContactInformationLambda } from './users/updateUserContactInformationLambda';
+import { updateUserPendingEmailLambda } from './users/updateUserPendingEmailLambda';
+import { userIdLimiter } from './middleware/userIdLimiter';
+import { getCaseLambda as v1GetCaseLambda } from './v1/getCaseLambda';
+import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './v1/getDocumentDownloadUrlLambda';
+import { getCaseLambda as v2GetCaseLambda } from './v2/getCaseLambda';
+import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from './v2/getDocumentDownloadUrlLambda';
+import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './v2/getReconciliationReportLambda';
+import { validatePdfLambda } from './documents/validatePdfLambda';
+import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
+import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
+import cors from 'cors';
+import express from 'express';
+import logger from './logger';
+
 const applicationContext = createApplicationContext({});
 
-const app = express();
+export const app = express();
 
 const allowAccessOriginFunction = (origin, callback) => {
   //Origin header wasn't provided
@@ -58,451 +235,6 @@ app.use((req, res, next) => {
   next();
 });
 app.use(logger());
-
-const {
-  addCaseToTrialSessionLambda,
-} = require('./trialSessions/addCaseToTrialSessionLambda');
-const {
-  addConsolidatedCaseLambda,
-} = require('./cases/addConsolidatedCaseLambda');
-const {
-  addDeficiencyStatisticLambda,
-} = require('./cases/addDeficiencyStatisticLambda');
-const {
-  addPetitionerToCaseLambda,
-} = require('./cases/addPetitionerToCaseLambda');
-const {
-  appendAmendedPetitionFormLambda,
-} = require('./courtIssuedOrder/appendAmendedPetitionFormLambda');
-const {
-  archiveCorrespondenceDocumentLambda,
-} = require('./correspondence/archiveCorrespondenceDocumentLambda');
-const {
-  archiveDraftDocumentLambda,
-} = require('./documents/archiveDraftDocumentLambda');
-const {
-  associateIrsPractitionerWithCaseLambda,
-} = require('./manualAssociation/associateIrsPractitionerWithCaseLambda');
-const {
-  associatePrivatePractitionerWithCaseLambda,
-} = require('./manualAssociation/associatePrivatePractitionerWithCaseLambda');
-const {
-  batchDownloadTrialSessionLambda,
-} = require('./trialSessions/batchDownloadTrialSessionLambda');
-const {
-  blockCaseFromTrialLambda,
-} = require('./cases/blockCaseFromTrialLambda');
-const {
-  caseAdvancedSearchLambda,
-} = require('./cases/caseAdvancedSearchLambda');
-const {
-  checkEmailAvailabilityLambda,
-} = require('./users/checkEmailAvailabilityLambda');
-const {
-  checkForReadyForTrialCasesLambda,
-} = require('./cases/checkForReadyForTrialCasesLambda');
-const {
-  closeTrialSessionLambda,
-} = require('./trialSessions/closeTrialSessionLambda');
-const {
-  completeDocketEntryQCLambda,
-} = require('./documents/completeDocketEntryQCLambda');
-const {
-  completeWorkItemLambda,
-} = require('./workitems/completeWorkItemLambda');
-const {
-  createCaseDeadlineLambda,
-} = require('./caseDeadline/createCaseDeadlineLambda');
-const {
-  createCaseFromPaperLambda,
-} = require('./cases/createCaseFromPaperLambda');
-const {
-  createCourtIssuedOrderPdfFromHtmlLambda,
-} = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
-const {
-  createPractitionerDocumentLambda,
-} = require('./practitioners/createPractitionerDocumentLambda');
-const {
-  createPractitionerUserLambda,
-} = require('./practitioners/createPractitionerUserLambda');
-const {
-  createTrialSessionLambda,
-} = require('./trialSessions/createTrialSessionLambda');
-const {
-  deleteCaseDeadlineLambda,
-} = require('./caseDeadline/deleteCaseDeadlineLambda');
-const {
-  deleteCounselFromCaseLambda,
-} = require('./cases/deleteCounselFromCaseLambda');
-const {
-  deleteDeficiencyStatisticLambda,
-} = require('./cases/deleteDeficiencyStatisticLambda');
-const {
-  deletePractitionerDocumentLambda,
-} = require('./practitioners/deletePractitionerDocumentLambda');
-const {
-  deleteTrialSessionLambda,
-} = require('./trialSessions/deleteTrialSessionLambda');
-const {
-  deleteUserCaseNoteLambda,
-} = require('./caseNote/deleteUserCaseNoteLambda');
-const {
-  downloadPolicyUrlLambda,
-} = require('./documents/downloadPolicyUrlLambda');
-const {
-  editPractitionerDocumentLambda,
-} = require('./practitioners/editPractitionerDocumentLambda');
-const {
-  fetchPendingItemsLambda,
-} = require('./pendingItems/fetchPendingItemsLambda');
-const {
-  fileAndServeCourtIssuedDocumentLambda,
-} = require('./cases/fileAndServeCourtIssuedDocumentLambda');
-const {
-  fileCorrespondenceDocumentLambda,
-} = require('./correspondence/fileCorrespondenceDocumentLambda');
-const {
-  fileCourtIssuedDocketEntryLambda,
-} = require('./documents/fileCourtIssuedDocketEntryLambda');
-const {
-  fileCourtIssuedOrderToCaseLambda,
-} = require('./documents/fileCourtIssuedOrderToCaseLambda');
-const {
-  fileExternalDocumentToCaseLambda,
-} = require('./documents/fileExternalDocumentToCaseLambda');
-const {
-  generateDocketRecordPdfLambda,
-} = require('./cases/generateDocketRecordPdfLambda');
-const {
-  generateDraftStampOrderLambda,
-} = require('./documents/generateDraftStampOrderLambda');
-const {
-  generatePractitionerCaseListPdfLambda,
-} = require('./cases/generatePractitionerCaseListPdfLambda');
-const {
-  generatePrintableCaseInventoryReportLambda,
-} = require('./reports/generatePrintableCaseInventoryReportLambda');
-const {
-  generatePrintableFilingReceiptLambda,
-} = require('./documents/generatePrintableFilingReceiptLambda');
-const {
-  generatePrintablePendingReportLambda,
-} = require('./pendingItems/generatePrintablePendingReportLambda');
-const {
-  generateTrialCalendarPdfLambda,
-} = require('./trialSessions/generateTrialCalendarPdfLambda');
-const {
-  generateTrialSessionPaperServicePdfLambda,
-} = require('./trialSessions/generateTrialSessionPaperServicePdfLambda');
-const {
-  getCalendaredCasesForTrialSessionLambda,
-} = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
-const {
-  getCaseDeadlinesForCaseLambda,
-} = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
-const {
-  getCaseDeadlinesLambda,
-} = require('./caseDeadline/getCaseDeadlinesLambda');
-const {
-  getCaseInventoryReportLambda,
-} = require('./reports/getCaseInventoryReportLambda');
-const {
-  getCasesClosedByJudgeLambda,
-} = require('./reports/getCasesClosedByJudgeLambda');
-const {
-  getCompletedMessagesForSectionLambda,
-} = require('./messages/getCompletedMessagesForSectionLambda');
-const {
-  getCompletedMessagesForUserLambda,
-} = require('./messages/getCompletedMessagesForUserLambda');
-const {
-  getConsolidatedCasesByCaseLambda,
-} = require('./cases/getConsolidatedCasesByCaseLambda');
-const {
-  getDocumentContentsForDocketEntryLambda,
-} = require('./documents/getDocumentContentsForDocketEntryLambda');
-const {
-  getDocumentDownloadUrlLambda,
-} = require('./documents/getDocumentDownloadUrlLambda');
-const {
-  getDocumentDownloadUrlLambda: v1GetDocumentDownloadUrlLambda,
-} = require('./v1/getDocumentDownloadUrlLambda');
-const {
-  getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
-} = require('./v2/getDocumentDownloadUrlLambda');
-const {
-  getDocumentQCInboxForSectionLambda,
-} = require('./workitems/getDocumentQCInboxForSectionLambda');
-const {
-  getDocumentQCInboxForUserLambda,
-} = require('./workitems/getDocumentQCInboxForUserLambda');
-const {
-  getDocumentQCServedForSectionLambda,
-} = require('./workitems/getDocumentQCServedForSectionLambda');
-const {
-  getDocumentQCServedForUserLambda,
-} = require('./workitems/getDocumentQCServedForUserLambda');
-const {
-  getEligibleCasesForTrialSessionLambda,
-} = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
-const {
-  getFeatureFlagValueLambda,
-} = require('./featureFlag/getFeatureFlagValueLambda');
-const {
-  getGeneratePrintableTrialSessionCopyReportLambda,
-} = require('./trialSessions/getGeneratePrintableTrialSessionCopyReportLambda');
-const {
-  getInboxMessagesForSectionLambda,
-} = require('./messages/getInboxMessagesForSectionLambda');
-const {
-  getInboxMessagesForUserLambda,
-} = require('./messages/getInboxMessagesForUserLambda');
-const {
-  getIrsPractitionersBySearchKeyLambda,
-} = require('./users/getIrsPractitionersBySearchKeyLambda');
-const {
-  getMaintenanceModeLambda,
-} = require('./maintenance/getMaintenanceModeLambda');
-const {
-  getMessagesForCaseLambda,
-} = require('./messages/getMessagesForCaseLambda');
-const {
-  getOpinionsFiledByJudgeLambda,
-} = require('./reports/getOpinionsFiledByJudgeLambda');
-const {
-  getOrdersFiledByJudgeLambda,
-} = require('./reports/getOrdersFiledByJudgeLambda');
-const {
-  getOutboxMessagesForSectionLambda,
-} = require('./messages/getOutboxMessagesForSectionLambda');
-const {
-  getOutboxMessagesForUserLambda,
-} = require('./messages/getOutboxMessagesForUserLambda');
-const {
-  getPractitionerByBarNumberLambda,
-} = require('./practitioners/getPractitionerByBarNumberLambda');
-const {
-  getPractitionerDocumentDownloadUrlLambda,
-} = require('./practitioners/getPractitionerDocumentDownloadUrlLambda');
-const {
-  getPractitionerDocumentLambda,
-} = require('./practitioners/getPractitionerDocumentLambda');
-const {
-  getPractitionerDocumentsLambda,
-} = require('./practitioners/getPractitionerDocumentsLambda');
-const {
-  getPractitionersByNameLambda,
-} = require('./practitioners/getPractitionersByNameLambda');
-const {
-  getPrivatePractitionersBySearchKeyLambda,
-} = require('./users/getPrivatePractitionersBySearchKeyLambda');
-const {
-  getReconciliationReportLambda: v2GetReconciliationReportLambda,
-} = require('./v2/getReconciliationReportLambda');
-const {
-  getStatusOfVirusScanLambda,
-} = require('./documents/getStatusOfVirusScanLambda');
-const {
-  getTrialSessionDetailsLambda,
-} = require('./trialSessions/getTrialSessionDetailsLambda');
-const {
-  getTrialSessionsForJudgeActivityReportLambda,
-} = require('./reports/getTrialSessionsForJudgeActivityReportLambda');
-const {
-  getTrialSessionsForJudgeLambda,
-} = require('./trialSessions/getTrialSessionsForJudgeLambda');
-const {
-  getTrialSessionsLambda,
-} = require('./trialSessions/getTrialSessionsLambda');
-const {
-  getTrialSessionWorkingCopyLambda,
-} = require('./trialSessions/getTrialSessionWorkingCopyLambda');
-const {
-  getUserCaseNoteForCasesLambda,
-} = require('./caseNote/getUserCaseNoteForCasesLambda');
-const {
-  getUserPendingEmailLambda,
-} = require('./users/getUserPendingEmailLambda');
-const {
-  getUserPendingEmailStatusLambda,
-} = require('./users/getUserPendingEmailStatusLambda');
-const {
-  getUsersPendingEmailLambda,
-} = require('./users/getUsersPendingEmailLambda');
-const {
-  opinionAdvancedSearchLambda,
-} = require('./documents/opinionAdvancedSearchLambda');
-const {
-  orderAdvancedSearchLambda,
-} = require('./documents/orderAdvancedSearchLambda');
-const {
-  privatePractitionerCaseAssociationLambda,
-} = require('./cases/privatePractitionerCaseAssociationLambda');
-const {
-  privatePractitionerPendingCaseAssociationLambda,
-} = require('./cases/privatePractitionerPendingCaseAssociationLambda');
-const {
-  removeCaseFromTrialLambda,
-} = require('./trialSessions/removeCaseFromTrialLambda');
-const {
-  removeCasePendingItemLambda,
-} = require('./cases/removeCasePendingItemLambda');
-const {
-  removeConsolidatedCasesLambda,
-} = require('./cases/removeConsolidatedCasesLambda');
-const {
-  removePdfFromDocketEntryLambda,
-} = require('./documents/removePdfFromDocketEntryLambda');
-const {
-  removePetitionerAndUpdateCaptionLambda,
-} = require('./cases/removePetitionerAndUpdateCaptionLambda');
-const {
-  removeSignatureFromDocumentLambda,
-} = require('./documents/removeSignatureFromDocumentLambda');
-const {
-  runTrialSessionPlanningReportLambda,
-} = require('./trialSessions/runTrialSessionPlanningReportLambda');
-const {
-  saveCalendarNoteLambda,
-} = require('./trialSessions/saveCalendarNoteLambda');
-const {
-  saveCaseDetailInternalEditLambda,
-} = require('./cases/saveCaseDetailInternalEditLambda');
-const {
-  saveSignedDocumentLambda,
-} = require('./documents/saveSignedDocumentLambda');
-const {
-  sealCaseContactAddressLambda,
-} = require('./cases/sealCaseContactAddressLambda');
-const {
-  serveCourtIssuedDocumentLambda,
-} = require('./cases/serveCourtIssuedDocumentLambda');
-const {
-  serveExternallyFiledDocumentLambda,
-} = require('./documents/serveExternallyFiledDocumentLambda');
-const {
-  setNoticesForCalendaredTrialSessionLambda,
-} = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
-const {
-  setTrialSessionCalendarLambda,
-} = require('./trialSessions/setTrialSessionCalendarLambda');
-const {
-  setWorkItemAsReadLambda,
-} = require('./workitems/setWorkItemAsReadLambda');
-const {
-  strikeDocketEntryLambda,
-} = require('./documents/strikeDocketEntryLambda');
-const {
-  unblockCaseFromTrialLambda,
-} = require('./cases/unblockCaseFromTrialLambda');
-const {
-  unsealDocketEntryLambda,
-} = require('./documents/unsealDocketEntryLambda');
-const {
-  updateCaseDeadlineLambda,
-} = require('./caseDeadline/updateCaseDeadlineLambda');
-const {
-  updateCaseTrialSortTagsLambda,
-} = require('./cases/updateCaseTrialSortTagsLambda');
-const {
-  updateCorrespondenceDocumentLambda,
-} = require('./correspondence/updateCorrespondenceDocumentLambda');
-const {
-  updateCounselOnCaseLambda,
-} = require('./cases/updateCounselOnCaseLambda');
-const {
-  updateCourtIssuedDocketEntryLambda,
-} = require('./documents/updateCourtIssuedDocketEntryLambda');
-const {
-  updateCourtIssuedOrderToCaseLambda,
-} = require('./documents/updateCourtIssuedOrderToCaseLambda');
-const {
-  updateDeficiencyStatisticLambda,
-} = require('./cases/updateDeficiencyStatisticLambda');
-const {
-  updateDocketEntryMetaLambda,
-} = require('./documents/updateDocketEntryMetaLambda');
-const {
-  updateOtherStatisticsLambda,
-} = require('./cases/updateOtherStatisticsLambda');
-const {
-  updatePetitionerInformationLambda,
-} = require('./cases/updatePetitionerInformationLambda');
-const {
-  updatePractitionerUserLambda,
-} = require('./practitioners/updatePractitionerUserLambda');
-const {
-  updateQcCompleteForTrialLambda,
-} = require('./cases/updateQcCompleteForTrialLambda');
-const {
-  updateTrialSessionLambda,
-} = require('./trialSessions/updateTrialSessionLambda');
-const {
-  updateTrialSessionWorkingCopyLambda,
-} = require('./trialSessions/updateTrialSessionWorkingCopyLambda');
-const {
-  updateUserCaseNoteLambda,
-} = require('./caseNote/updateUserCaseNoteLambda');
-const {
-  updateUserContactInformationLambda,
-} = require('./users/updateUserContactInformationLambda');
-const {
-  updateUserPendingEmailLambda,
-} = require('./users/updateUserPendingEmailLambda');
-const {
-  verifyPendingCaseForUserLambda,
-} = require('./cases/verifyPendingCaseForUserLambda');
-const {
-  verifyUserPendingEmailLambda,
-} = require('./users/verifyUserPendingEmailLambda');
-const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
-const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
-const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
-const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
-const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
-const { completeMessageLambda } = require('./messages/completeMessageLambda');
-const { createCaseLambda } = require('./cases/createCaseLambda');
-const { createMessageLambda } = require('./messages/createMessageLambda');
-const { createUserLambda } = require('./users/createUserLambda');
-const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
-const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
-const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
-const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
-const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
-const { getCaseExistsLambda } = require('./cases/getCaseExistsLambda');
-const { getCaseLambda } = require('./cases/getCaseLambda');
-const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
-const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
-const { getCasesForUserLambda } = require('./cases/getCasesForUserLambda');
-const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
-const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
-const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
-const { getNotificationsLambda } = require('./users/getNotificationsLambda');
-const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
-const { getUserByIdLambda } = require('./users/getUserByIdLambda');
-const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
-const { getUserLambda } = require('./users/getUserLambda');
-const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
-const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { ipLimiter } = require('./middleware/ipLimiter');
-const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
-const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
-const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
-const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
-const { sealCaseLambda } = require('./cases/sealCaseLambda');
-const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
-const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
-const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
-const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
-const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
-const { swaggerLambda } = require('./swagger/swaggerLambda');
-const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
-const { unsealCaseLambda } = require('./cases/unsealCaseLambda');
-const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
-const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
-const { updateContactLambda } = require('./cases/updateContactLambda');
-const { userIdLimiter } = require('./middleware/userIdLimiter');
-const { validatePdfLambda } = require('./documents/validatePdfLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -1237,5 +969,3 @@ if (process.env.IS_LOCAL) {
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
 }
-
-exports.app = app;

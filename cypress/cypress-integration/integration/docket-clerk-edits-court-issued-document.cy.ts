@@ -1,6 +1,4 @@
-const {
-  navigateTo: navigateToDashboard,
-} = require('../support/pages/dashboard');
+import { navigateTo as navigateToDashboard } from '../support/pages/dashboard';
 import { uploadCourtIssuedDocumentAndEditViaDocumentQC } from '../support/pages/document-qc';
 
 describe('Docket clerk edits a court issued document', function () {

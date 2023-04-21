@@ -2,9 +2,13 @@ const { userIdLimiter } = require('./userIdLimiter');
 
 let mockPersistenceGateway = {};
 
-jest.mock('../applicationContext', () => () => ({
-  getPersistenceGateway: () => mockPersistenceGateway,
-}));
+jest.mock('../applicationContext', () => {
+  return {
+    createApplicationContext: () => ({
+      getPersistenceGateway: () => mockPersistenceGateway,
+    }),
+  };
+});
 
 describe('userIdLimiter', () => {
   let incrementKeyCountMock = jest.fn();

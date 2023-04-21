@@ -1,24 +1,24 @@
-exports.navigateTo = () => {
+export const navigateTo = () => {
   cy.visit('/');
 };
 
-exports.searchForCaseByDocketNumber = docketNumber => {
+export const searchForCaseByDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
   cy.get('button#docket-search-button').click();
 };
 
-exports.enterPetitionerName = name => {
+export const enterPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
 };
 
-exports.noSearchResultsContainer = () => {
+export const noSearchResultsContainer = () => {
   return cy.get('div#no-search-results');
 };
 
-exports.searchResultsTable = () => {
+export const searchResultsTable = () => {
   return cy.get('table.search-results');
 };
 
-exports.docketRecordTable = () => {
+export const docketRecordTable = () => {
   return cy.get('table#docket-record-table');
 };

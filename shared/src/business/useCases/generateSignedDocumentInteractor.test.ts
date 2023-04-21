@@ -3,10 +3,8 @@ import {
   computeCoordinates,
   generateSignedDocumentInteractor,
 } from './generateSignedDocumentInteractor';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { testPdfDoc } from '../test/getFakeFile';
 
 describe('generateSignedDocument', () => {
   let drawRectangleMock;
