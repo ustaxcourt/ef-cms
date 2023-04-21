@@ -316,6 +316,7 @@ import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
+import { selectDateRangeFromJudgeActivityReportSequence } from './sequences/selectDateRangeFromJudgeActivityReportSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
@@ -830,6 +831,7 @@ const sequences = {
   sealDocketEntrySequence,
   selectAssigneeSequence,
   selectDateRangeFromCalendarSequence,
+  selectDateRangeFromJudgeActivityReportSequence,
   selectDocumentForPreviewSequence,
   selectDocumentForScanSequence,
   selectScannerSequence,
