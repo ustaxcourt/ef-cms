@@ -1,6 +1,6 @@
-const { omit } = require('lodash');
-const { PARTIES_CODES } = require('../../business/entities/EntityConstants');
-const { search } = require('./searchClient');
+import { PARTIES_CODES } from '../../business/entities/EntityConstants';
+import { omit } from 'lodash';
+import { search } from './searchClient';
 
 /**
  * getReconciliationReport
@@ -10,7 +10,7 @@ const { search } = require('./searchClient');
  * @param {object} providers.applicationContext the application context
  * @returns {object} the docket entries
  */
-exports.getReconciliationReport = async ({
+export const getReconciliationReport = async ({
   applicationContext,
   reconciliationDateEnd,
   reconciliationDateStart,
