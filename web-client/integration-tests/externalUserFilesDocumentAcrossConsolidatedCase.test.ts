@@ -1,5 +1,6 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
-import { loginAs, setupTest } from './helpers';
+import { externalUserFilesDocumentAcrossConsolidatedCase } from './journey/externalUserFilesDocumentForOwnedCaseForFilingAcrossConsolidatedCases';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
 import { seedDatabase, seedFullDataset } from './utils/database';
@@ -30,9 +31,12 @@ describe('External User files a document across a consolidated case group', () =
   describe('irsPractitioner', () => {
     loginAs(cerebralTest, 'irspractitioner@example.com');
     it('should file an external document across a consolidated case group in a case they are associated with. (File Document flow)', async () => {
+      const docketNumber = '103-23';
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: '103-23',
+        docketNumber,
       });
+
+      cerebralTest.docketNumber = docketNumber;
 
       const {
         showFileDocumentButton,
@@ -45,6 +49,8 @@ describe('External User files a document across a consolidated case group', () =
       expect(showRequestAccessToCaseButton).toBe(false);
       expect(showFileDocumentButton).toBe(true);
     });
+
+    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
 
     loginAs(cerebralTest, 'irspractitioner@example.com');
     it('file on a case in the group where no irsPractitioner is associated (File First Document flow)', async () => {
