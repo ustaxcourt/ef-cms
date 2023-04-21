@@ -1,10 +1,9 @@
-const {
+import { fillInAndSubmitForm } from '../support/pages/start-a-case';
+import {
   getCaseList,
   getStartCaseButton,
-  navigateTo: navigateToDashboard,
-} = require('../support/pages/dashboard-practitioner');
-
-const { fillInAndSubmitForm } = require('../support/pages/start-a-case');
+  navigateTo as navigateToDashboard,
+} from '../support/pages/dashboard-practitioner';
 
 describe('Start a case as a practitioner', () => {
   it('go to the practitioner dashboard and expect that a case list table is displayed with eight cases', () => {

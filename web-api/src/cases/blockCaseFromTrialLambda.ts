@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for blocking a case
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.blockCaseFromTrialLambda = event =>
+export const blockCaseFromTrialLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const lambdaArguments = {
       ...event.pathParameters,

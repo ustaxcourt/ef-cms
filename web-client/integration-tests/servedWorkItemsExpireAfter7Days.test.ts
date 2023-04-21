@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -6,7 +7,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const {
   IRS_SYSTEM_SECTION,

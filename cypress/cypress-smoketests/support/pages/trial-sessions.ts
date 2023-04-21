@@ -1,21 +1,21 @@
-const { faker } = require('@faker-js/faker');
+import { faker } from '@faker-js/faker';
 
 faker.seed(faker.datatype.number());
 
-exports.goToTrialSessions = () => {
+export const goToTrialSessions = () => {
   cy.get('a[href="/trial-sessions"]').click();
   cy.waitUntilSettled(50);
   cy.get('h1').contains('Trial Sessions').should('exist');
 };
 
-exports.goToCreateTrialSession = () => {
+export const goToCreateTrialSession = () => {
   cy.get('a[href="/add-a-trial-session"]').click();
   cy.waitUntilSettled(50);
   cy.get('h1').contains('Create Trial Session').should('exist');
   cy.waitUntilSettled(50);
 };
 
-exports.createTrialSession = (testData, overrides = {}) => {
+export const createTrialSession = (testData, overrides = {}) => {
   const createFutureDate = () => {
     const month = faker.datatype.number({ max: 12, min: 1 });
     const day = faker.datatype.number({ max: 28, min: 1 });
@@ -70,12 +70,12 @@ exports.createTrialSession = (testData, overrides = {}) => {
   });
 };
 
-exports.goToTrialSession = trialSessionId => {
+export const goToTrialSession = trialSessionId => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
   cy.get('.big-blue-header').should('exist');
 };
 
-exports.setTrialSessionAsCalendared = trialSessionId => {
+export const setTrialSessionAsCalendared = trialSessionId => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
   cy.get('#set-calendar-button').should('exist').click();
   cy.get('#modal-root .modal-button-confirm').click();
@@ -83,17 +83,17 @@ exports.setTrialSessionAsCalendared = trialSessionId => {
   cy.get('.progress-indicator').should('not.exist');
 };
 
-exports.markCaseAsQcCompleteForTrial = docketNumber => {
+export const markCaseAsQcCompleteForTrial = docketNumber => {
   cy.get(`#upcoming-sessions label[for="${docketNumber}-complete"]`).click();
 };
 
-exports.verifyOpenCaseOnTrialSession = docketNumber => {
+export const verifyOpenCaseOnTrialSession = docketNumber => {
   cy.get(
     `#open-cases-tab-content a[href="/case-detail/${docketNumber}"]`,
   ).should('exist');
 };
 
-exports.goToTrialSessionWorkingCopy = ({
+export const goToTrialSessionWorkingCopy = ({
   docketNumbers,
   judgeName,
   trialSessionId,
@@ -105,16 +105,19 @@ exports.goToTrialSessionWorkingCopy = ({
   });
 };
 
-exports.changeCaseTrialStatus = (docketNumber, status = 'Set for Trial') => {
+export const changeCaseTrialStatus = (
+  docketNumber,
+  status = 'Set for Trial',
+) => {
   cy.get(`#trialSessionWorkingCopy-${docketNumber}`).select(status);
 };
 
-exports.checkShowAllFilterOnWorkingCopy = trialSessionId => {
+export const checkShowAllFilterOnWorkingCopy = trialSessionId => {
   cy.goToRoute(`/trial-session-working-copy/${trialSessionId}`);
   cy.get('label[for="filters.showAll"]').click();
 };
 
-exports.filterWorkingCopyByStatus = ({
+export const filterWorkingCopyByStatus = ({
   docketNumberShouldExist,
   docketNumberShouldNotExist,
   status,
@@ -126,7 +129,7 @@ exports.filterWorkingCopyByStatus = ({
   );
 };
 
-exports.addCaseNote = (docketNumber, note) => {
+export const addCaseNote = (docketNumber, note) => {
   cy.get('.no-wrap button:contains("Add Note")').click(); //TODO #add-note-${docketNumber}
   cy.get(`h5:contains("Docket ${docketNumber}")`).should('exist');
   cy.get('#case-notes').type(note);

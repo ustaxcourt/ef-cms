@@ -1,3 +1,5 @@
+import { getFakeFile } from '../../test/getFakeFile';
+
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -12,7 +14,6 @@ const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
-const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setNoticeOfChangeToInPersonProceeding', () => {

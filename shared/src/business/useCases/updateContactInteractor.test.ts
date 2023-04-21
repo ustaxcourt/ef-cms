@@ -11,10 +11,8 @@ import {
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '../../errors/errors';
 import { User } from '../entities/User';
-import {
-  applicationContext,
-  fakeData,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { fakeData } from '../test/getFakeFile';
 import { getContactPrimary } from '../entities/cases/Case';
 import { updateContactInteractor } from './updateContactInteractor';
 
