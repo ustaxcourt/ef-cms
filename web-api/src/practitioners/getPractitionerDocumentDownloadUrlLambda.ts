@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * Returns an upload url that allow the client to upload a practitioner document to an s3 bucket.
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getPractitionerDocumentDownloadUrlLambda = event =>
+export const getPractitionerDocumentDownloadUrlLambda = event =>
   genericHandler(event, ({ applicationContext }) => {
     return applicationContext
       .getUseCases()

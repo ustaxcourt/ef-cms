@@ -12,9 +12,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
   if (formattedTrialSession) {
     const {
       DATE_FORMATS,
+      HYBRID_SESSION_TYPES,
       SESSION_STATUS_GROUPS,
       SESSION_STATUS_TYPES,
-      SESSION_TYPES,
       TRIAL_SESSION_SCOPE_TYPES,
       USER_ROLES,
     } = applicationContext.getConstants();
@@ -30,8 +30,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
     }
 
-    formattedTrialSession.isHybridSession =
-      formattedTrialSession.sessionType === SESSION_TYPES.hybrid;
+    formattedTrialSession.isHybridSession = Object.values(
+      HYBRID_SESSION_TYPES,
+    ).includes(formattedTrialSession.sessionType);
 
     formattedTrialSession.disableHybridFilter =
       (formattedTrialSession.eligibleCases ?? []).length === 0;

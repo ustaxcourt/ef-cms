@@ -1,7 +1,7 @@
-const { get } = require('lodash');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
+import { get } from 'lodash';
+import { getCurrentInvoke } from '@vendia/serverless-express';
 
-exports.headerOverride = {
+export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ exports.headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-exports.lambdaWrapper = (lambda, options = {}) => {
+export const lambdaWrapper = (lambda, options = {}) => {
   return async (req, res) => {
     // This flag was added because when invoking async endpoints on API gateway, the api gateway will return
     // a 204 response with no body immediately.  This was causing discrepancies between how these endpoints
