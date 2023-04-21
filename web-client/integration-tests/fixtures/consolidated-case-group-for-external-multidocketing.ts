@@ -2,6 +2,11 @@
 
 export const seedData = [
   {
+    current: true,
+    pk: 'consolidated-cases-group-access-petitioner',
+    sk: 'consolidated-cases-group-access-petitioner',
+  },
+  {
     additionalPhone: '111-111-1111',
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
