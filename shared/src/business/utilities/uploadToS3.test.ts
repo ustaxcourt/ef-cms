@@ -1,9 +1,7 @@
 import { ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { testPdfDoc } from '../test/getFakeFile';
 import { uploadToS3 } from './uploadToS3';
 
 describe('uploadToS3', () => {

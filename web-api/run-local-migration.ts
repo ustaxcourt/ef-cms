@@ -1,6 +1,6 @@
+import { createApplicationContext } from './src/applicationContext';
 import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
 import AWS from 'aws-sdk';
-import createApplicationContext from './src/applicationContext';
 
 const applicationContext = createApplicationContext({});
 
