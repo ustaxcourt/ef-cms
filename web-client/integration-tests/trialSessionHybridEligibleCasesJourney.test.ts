@@ -36,6 +36,13 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     docketClerkViewsNewTrialSession(cerebralTest);
   });
 
+  describe(`Also create trial session with Hybrid-S session type for '${trialLocation}' with max case count = 2`, () => {
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkCreatesATrialSession(cerebralTest, overrides);
+    docketClerkViewsTrialSessionList(cerebralTest);
+    docketClerkViewsNewTrialSession(cerebralTest);
+  });
+
   describe('Create cases', () => {
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
       const caseOverrides = {
@@ -110,10 +117,30 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     });
   });
 
-  describe(`Result: Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, () => {
+  describe(`Result: Case #1, #2, and #3 should show as eligible for '${trialLocation}' Hybrid and Hybrid-S sessions`, () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-    it(`Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, async () => {
+    it('Case #1, #2, and #3 should show as eligible for the Hybrid-S session', async () => {
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
+      });
+
+      expect(
+        cerebralTest.getState('trialSession.eligibleCases').length,
+      ).toEqual(3);
+      expect(
+        cerebralTest.getState('trialSession.eligibleCases.0.docketNumber'),
+      ).toEqual(createdDocketNumbers[0]);
+      expect(
+        cerebralTest.getState('trialSession.eligibleCases.1.docketNumber'),
+      ).toEqual(createdDocketNumbers[1]);
+      expect(
+        cerebralTest.getState('trialSession.eligibleCases.2.docketNumber'),
+      ).toEqual(createdDocketNumbers[2]);
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
+    });
+
+    it('Case #1, #2, and #3 should show as eligible for the Hybrid session', async () => {
       await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: cerebralTest.trialSessionId,
       });
