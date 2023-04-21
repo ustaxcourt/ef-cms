@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * archives the draft document information from a case
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.archiveDraftDocumentLambda = event =>
+export const archiveDraftDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()

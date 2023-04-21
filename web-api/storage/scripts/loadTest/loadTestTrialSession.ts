@@ -1,12 +1,12 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
-const createApplicationContext = require('../../../src/applicationContext');
 const {
   addCaseToTrialSession,
   createCase,
   createTrialSession,
   getUserToken,
 } = require('./loadTestHelpers');
+const { createApplicationContext } = require('../../../src/applicationContext');
 
 Error.stackTraceLimit = Infinity;
 

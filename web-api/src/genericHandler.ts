@@ -1,11 +1,11 @@
-const createApplicationContext = require('./applicationContext');
-const {
+import { createApplicationContext } from './applicationContext';
+import {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
-} = require('./middleware/apiGatewayHelper');
+} from './middleware/apiGatewayHelper';
 
-exports.dataSecurityFilter = (data, { applicationContext }) => {
+export const dataSecurityFilter = (data, { applicationContext }) => {
   let returnData = data;
   if (data && Array.isArray(data) && data.length && data[0].entityName) {
     const entityConstructor = applicationContext.getEntityByName(
@@ -34,7 +34,7 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
   return returnData;
 };
 
-const checkMaintenanceMode = async ({ applicationContext }) => {
+export const checkMaintenanceMode = async ({ applicationContext }) => {
   const maintenanceRecord = await applicationContext
     .getPersistenceGateway()
     .getMaintenanceMode({ applicationContext });
@@ -48,8 +48,6 @@ const checkMaintenanceMode = async ({ applicationContext }) => {
   return maintenanceMode;
 };
 
-exports.checkMaintenanceMode = checkMaintenanceMode;
-
 /**
  * generic handler function for use in lambdas
  *
@@ -59,7 +57,7 @@ exports.checkMaintenanceMode = checkMaintenanceMode;
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 
-exports.genericHandler = (awsEvent, cb, options = {}) => {
+export const genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
     const user = options.user || getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
