@@ -1,38 +1,37 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
-import { retryUpdateTrialSessionSequence } from './retryUpdateTrialSessionSequence';
+import { retryAsyncRequestSequence } from './retryAsyncRequestSequence';
 
-describe('retryUpdateTrialSessionSequence', () => {
+describe('retryAsyncRequestSequence', () => {
   let cerebralTest;
-
   let mockMessage = {
     originalRequest: {
       foo: 'bar',
-      isSavingForLater: false,
     },
+    requestToRetry: 'file_and_serve_court_issued_document',
   };
-
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
-      retryUpdateTrialSessionSequence,
+      retryAsyncRequestSequence,
     };
     cerebralTest = CerebralTest(presenter);
   });
 
-  it('should call the updateTrialSessionInteractor with the information it received in the message', async () => {
-    await cerebralTest.runSequence('retryUpdateTrialSessionSequence', {
+  it('should call the interactor for the requestToRetry', async () => {
+    await cerebralTest.runSequence('retryAsyncRequestSequence', {
       ...mockMessage,
     });
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(3000);
     expect(
-      applicationContext.getUseCases().updateTrialSessionInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
+        .mock.calls[0][1],
     ).toMatchObject(mockMessage.originalRequest);
   });
 
   it('should wait 3 seconds by default', async () => {
-    await cerebralTest.runSequence('retryUpdateTrialSessionSequence', {
+    await cerebralTest.runSequence('retryAsyncRequestSequence', {
       ...mockMessage,
     });
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(3000);
@@ -40,7 +39,7 @@ describe('retryUpdateTrialSessionSequence', () => {
 
   it('should wait the specified amount of time', async () => {
     mockMessage.retryAfter = 5000;
-    await cerebralTest.runSequence('retryUpdateTrialSessionSequence', {
+    await cerebralTest.runSequence('retryAsyncRequestSequence', {
       ...mockMessage,
     });
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(5000);

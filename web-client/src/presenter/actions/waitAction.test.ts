@@ -1,14 +1,20 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
-import { retryUpdateUserContactInformationAction } from './retryUpdateUserContactInformationAction';
+import { retryUpdatePractitionerUserAction } from './waitAction';
 import { runAction } from 'cerebral/test';
 
-describe('retryUpdateUserContactInformationAction', () => {
+describe('retryUpdatePractitionerUserAction', () => {
   // this should receive an object to retry
   presenter.providers.applicationContext = applicationContext;
   let mockCall;
   const mockOriginalRequest = {
-    foo: 'bar',
+    clientConnectionId: 'abc123',
+    consolidatedGroupDocketNumbers: ['222-22', '333-33'],
+    docketEntryId: 'abc123',
+    documentMetadata: {
+      docketNumber: '111-11',
+    },
+    isSavingForLater: false,
   };
 
   beforeEach(() => {
@@ -25,16 +31,16 @@ describe('retryUpdateUserContactInformationAction', () => {
     };
   });
 
-  it('should call the updateUserContactInformationInteractor with the originalRequest that it received', async () => {
-    await runAction(retryUpdateUserContactInformationAction, mockCall);
+  it('should call the updatePractitionerUserInteractor with the originalRequest that it received', async () => {
+    await runAction(retryUpdatePractitionerUserAction, mockCall);
     expect(
-      applicationContext.getUseCases().updateUserContactInformationInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().updatePractitionerUserInteractor.mock
+        .calls[0][1],
     ).toMatchObject(mockOriginalRequest);
   });
 
-  it('should wait a default of 3 seconds before calling updateUserContactInformationInteractor', async () => {
-    await runAction(retryUpdateUserContactInformationAction, {
+  it('should wait a default of 3 seconds before calling updatePractitionerUserInteractor', async () => {
+    await runAction(retryUpdatePractitionerUserAction, {
       modules: {
         presenter,
       },
@@ -48,8 +54,8 @@ describe('retryUpdateUserContactInformationAction', () => {
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(3000);
   });
 
-  it('should wait the specified amount of time before calling updateUserContactInformationInteractor', async () => {
-    await runAction(retryUpdateUserContactInformationAction, {
+  it('should wait the specified amount of time before calling updatePractitionerUserInteractor', async () => {
+    await runAction(retryUpdatePractitionerUserAction, {
       modules: {
         presenter,
       },
