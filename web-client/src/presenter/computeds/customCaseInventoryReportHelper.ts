@@ -2,6 +2,7 @@ import {
   CASE_STATUSES,
   CASE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
@@ -31,15 +32,12 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
-  let priority = false; // hack to add priority, will need to add to mappings
   const reportData = (customCaseInventoryReportData.foundCases || []).map(
     entry => {
-      priority = !priority;
       return {
         ...entry,
-        caseTitle: 'Brett Osborne', // hack to add caseTitle, will need to add to mappings
+        caseTitle: Case.getCaseTitle(entry.caseCaption),
         createdAt: formatDate(entry.createdAt),
-        highPriority: priority,
       };
     },
   );

@@ -31,22 +31,7 @@ export const CustomCaseReport = connect(
     setCustomCaseInventoryReportFiltersSequence,
     validationErrors,
   }) {
-    // TODO: Decide if this is the best place to store this state (vs cerebral)
-    const [hasRanCustomCaseReport, runOperationSelected] = useState(false);
-
-    // // SOLUTION 1
-    // // PROS: STATE STAYS ON COMPONENT,
-    // // CONS: CANT TEST THIS (WE DON'T TEST TSX FILES)
-    // const [truthyCreatedStartDate, setTruthyCreatedStartDate] = useState('');
-    // const [truthyCreatedEndDate, setTruthyCreatedEndDate] = useState('');
-    // const [isRunReportButtonDisabled, setIsRunReportButtonDisabled] =
-    //   useState(true);
-
-    // useEffect(() => {
-    //   if (truthyCreatedEndDate && truthyCreatedStartDate) {
-    //     setIsRunReportButtonDisabled(false);
-    //   }
-    // }, [truthyCreatedEndDate, truthyCreatedStartDate]);
+    const [hasRanCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
 
     return (
       <>
@@ -82,16 +67,16 @@ export const CustomCaseReport = connect(
                     createStartDate: e.target.value,
                   });
                 }}
-                onInputEnd={e => {
-                  setCustomCaseInventoryReportFiltersSequence({
-                    createEndDate: e.target.value,
-                  });
-                }}
-                onInputStart={e => {
-                  setCustomCaseInventoryReportFiltersSequence({
-                    createStartDate: e.target.value,
-                  });
-                }}
+                // onInputEnd={e => {
+                //   setCustomCaseInventoryReportFiltersSequence({
+                //     createEndDate: e.target.value,
+                //   });
+                // }}
+                // onInputStart={e => {
+                //   setCustomCaseInventoryReportFiltersSequence({
+                //     createStartDate: e.target.value,
+                //   });
+                // }}
               />
             </div>
           </div>
@@ -265,7 +250,7 @@ export const CustomCaseReport = connect(
             disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
             tooltip="Run Report"
             onClick={() => {
-              runOperationSelected(true);
+              setHasRunCustomCaseReport(true);
               getCustomCaseInventoryReportSequence();
             }}
           >
