@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * run the trial session planning report
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.runTrialSessionPlanningReportLambda = event =>
+export const runTrialSessionPlanningReportLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
