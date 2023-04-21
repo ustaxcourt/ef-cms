@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for validating PDF documents
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.validatePdfLambda = event =>
+export const validatePdfLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { key } = event.pathParameters || {};
 

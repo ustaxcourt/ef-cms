@@ -1,4 +1,4 @@
-const { marshallContact } = require('./marshallContact');
+import { marshallContact } from './marshallContact';
 
 /**
  * The returned object is specified by the v2 API and any changes to these properties
@@ -7,7 +7,7 @@ const { marshallContact } = require('./marshallContact');
  * @param {object} practitionerObject the most up-to-date representation of a practitioner
  * @returns {object} the v2 representation of a practitioner
  */
-exports.marshallPractitioner = practitionerObject => {
+export const marshallPractitioner = practitionerObject => {
   return {
     barNumber: practitionerObject.barNumber,
     contact: practitionerObject.contact

@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * creates a new trial session.
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.setForHearingLambda = event =>
+export const setForHearingLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { docketNumber, trialSessionId } =
       event.pathParameters || event.path || {};
