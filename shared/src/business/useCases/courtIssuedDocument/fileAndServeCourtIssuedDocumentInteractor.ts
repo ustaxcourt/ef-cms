@@ -262,9 +262,11 @@ export const determineEntitiesToLock = ({
 }): {
   identifier: string[];
   prefix: string;
+  ttl: number;
 } => ({
   identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])],
   prefix: 'case',
+  ttl: 900,
 });
 
 export const handleLockError = async (applicationContext, originalRequest) => {
@@ -274,8 +276,9 @@ export const handleLockError = async (applicationContext, originalRequest) => {
     applicationContext,
     clientConnectionId: originalRequest.clientConnectionId,
     message: {
-      action: 'retry_file_and_serve_court_issued_document',
+      action: 'retry_async_request',
       originalRequest,
+      requestToRetry: 'file_and_serve_court_issued_document',
     },
     userId: user.userId,
   });
