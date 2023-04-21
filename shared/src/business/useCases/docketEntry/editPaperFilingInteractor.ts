@@ -4,11 +4,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -515,10 +511,26 @@ export const determineEntitiesToLock = ({
     ]),
   ],
   prefix: 'case',
+  ttl: 900,
 });
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'edit_paper_filing',
+    },
+    userId: user.userId,
+  });
+};
 
 export const editPaperFilingInteractor = withLocking(
   editPaperFiling,
   determineEntitiesToLock,
-  new ServiceUnavailableError('One of the cases are currently being updated'),
+  handleLockError,
 );
