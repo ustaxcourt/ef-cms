@@ -1,4 +1,4 @@
-exports.updateAssociatedJudgeOnWorkItems = async ({
+export const updateAssociatedJudgeOnWorkItems = async ({
   applicationContext,
   associatedJudge,
   workItemId,

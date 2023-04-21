@@ -1,4 +1,4 @@
-exports.updateCaseTitleOnWorkItems = async ({
+export const updateCaseTitleOnWorkItems = async ({
   applicationContext,
   caseTitle,
   workItemId,

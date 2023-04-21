@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateCaseStatusOnWorkItems,
-} = require('./updateCaseStatusOnWorkItems');
-const { faker } = require('@faker-js/faker');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { faker } from '@faker-js/faker';
+import { updateCaseStatusOnWorkItems } from './updateCaseStatusOnWorkItems';
 
 describe('updateCaseStatusOnWorkItems', () => {
   const workItemsResults = [

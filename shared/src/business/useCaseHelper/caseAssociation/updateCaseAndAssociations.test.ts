@@ -1,24 +1,22 @@
 /* eslint-disable max-lines */
 jest.mock('../../entities/Message');
 jest.mock('../../entities/CaseDeadline');
-const {
+
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { CaseDeadline } = require('../../entities/CaseDeadline');
-const { faker } = require('@faker-js/faker');
-const { Message } = require('../../entities/Message');
-const { MOCK_CASE } = require('../../../../src/test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+} from '../../entities/EntityConstants';
 
-const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
-
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
+import { Case } from '../../entities/cases/Case';
+import { CaseDeadline } from '../../entities/CaseDeadline';
+import { MOCK_CASE } from '../../../../src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { Message } from '../../entities/Message';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { faker } from '@faker-js/faker';
+import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 
 describe('updateCaseAndAssociations', () => {
   const MOCK_TRIAL_SESSION = {
