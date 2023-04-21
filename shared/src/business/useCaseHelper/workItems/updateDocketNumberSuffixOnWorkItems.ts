@@ -1,4 +1,4 @@
-exports.updateDocketNumberSuffixOnWorkItems = async ({
+export const updateDocketNumberSuffixOnWorkItems = async ({
   applicationContext,
   docketNumberSuffix,
   workItemId,

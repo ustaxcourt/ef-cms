@@ -1,17 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} = require('../../../test/mockCase');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_USERS } = require('../../../test/mockUsers');
-const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock');
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 
 describe('updateCaseAutomaticBlock', () => {
   beforeEach(() => {

@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateDocketNumberSuffixOnWorkItems,
-} = require('./updateDocketNumberSuffixOnWorkItems');
-const { faker } = require('@faker-js/faker');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { faker } from '@faker-js/faker';
+import { updateDocketNumberSuffixOnWorkItems } from './updateDocketNumberSuffixOnWorkItems';
 
 describe('updateDocketNumberSuffixOnWorkItems', () => {
   const workItemsResults = [

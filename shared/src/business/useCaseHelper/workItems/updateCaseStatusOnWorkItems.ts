@@ -1,4 +1,4 @@
-exports.updateCaseStatusOnWorkItems = async ({
+export const updateCaseStatusOnWorkItems = async ({
   applicationContext,
   caseStatus,
   workItemId,

@@ -1,4 +1,4 @@
-exports.updateTrialDateOnWorkItems = async ({
+export const updateTrialDateOnWorkItems = async ({
   applicationContext,
   trialDate,
   workItemId,

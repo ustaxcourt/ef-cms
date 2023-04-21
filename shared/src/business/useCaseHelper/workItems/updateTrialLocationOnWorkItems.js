@@ -1,4 +1,4 @@
-exports.updateTrialLocationOnWorkItems = async ({
+export const updateTrialLocationOnWorkItems = async ({
   applicationContext,
   trialLocation,
   workItemId,

@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateTrialLocationOnWorkItems,
-} = require('./updateTrialLocationOnWorkItems');
-const { faker } = require('@faker-js/faker');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { faker } from '@faker-js/faker';
+import { updateTrialLocationOnWorkItems } from './updateTrialLocationOnWorkItems';
 
 describe('updateTrialLocationOnWorkItems', () => {
   const workItemsResults = [
