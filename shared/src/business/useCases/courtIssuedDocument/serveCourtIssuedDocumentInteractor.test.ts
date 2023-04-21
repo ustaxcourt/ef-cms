@@ -2,15 +2,13 @@ import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../entities/EntityCon
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   serveCourtIssuedDocumentInteractor,
 } from './serveCourtIssuedDocumentInteractor';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';

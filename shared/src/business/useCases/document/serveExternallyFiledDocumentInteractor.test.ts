@@ -2,18 +2,13 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import {
-  determineEntitiesToLock,
-  serveExternallyFiledDocumentInteractor,
-} from './serveExternallyFiledDocumentInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
 import { addCoverToPdf } from '../addCoverToPdf';
 import { docketClerkUser } from '../../../test/mockUsers';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;

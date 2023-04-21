@@ -28,10 +28,6 @@ import {
   getLock,
   removeLock,
 } from '../../shared/src/persistence/dynamo/locks/acquireLock';
-import {
-  fakeData,
-  getFakeFile,
-} from '../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -67,12 +63,15 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
+import {
+  fakeData,
+  getFakeFile,
+} from '../../shared/src/business/test/getFakeFile';
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';

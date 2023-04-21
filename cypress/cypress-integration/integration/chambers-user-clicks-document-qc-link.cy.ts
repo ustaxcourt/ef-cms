@@ -1,6 +1,4 @@
-const {
-  navigateTo: navigateToDashboard,
-} = require('../support/pages/dashboard');
+import { navigateTo as navigateToDashboard } from '../support/pages/dashboard';
 
 describe('A Colvins chambers user has the correct flow for QC documents', function () {
   it('should log in as chambers user', () => {

@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for generating a printable PDF of a practitioners open and closed cases
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.generatePractitionerCaseListPdfLambda = event =>
+export const generatePractitionerCaseListPdfLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {

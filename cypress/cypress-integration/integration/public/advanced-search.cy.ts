@@ -1,11 +1,11 @@
-const {
+import {
   clickOnSearchTab,
   docketRecordTable,
   enterDocumentDocketNumber,
   enterDocumentKeywordForAdvancedSearch,
   enterPetitionerName,
   firstSearchResultJudgeField,
-  navigateTo: navigateToDashboard,
+  navigateTo as navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
   searchForCaseByPetitionerInformation,
@@ -13,7 +13,7 @@ const {
   searchForOrderByJudge,
   searchResultsTable,
   unselectOpinionTypesExceptBench,
-} = require('../../support/pages/public/advanced-search');
+} from '../../support/pages/public/advanced-search';
 
 describe('Advanced search', () => {
   describe('case - by name', () => {
