@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getDocumentQCServedForSectionInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.section the section to get the document qc served box
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getDocumentQCServedForSectionInteractor = (
+export const getDocumentQCServedForSectionInteractor = (
   applicationContext,
   { section },
 ) => {

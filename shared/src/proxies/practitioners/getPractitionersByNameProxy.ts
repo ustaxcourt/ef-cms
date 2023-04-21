@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getPractitionersByNameProxy
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} params.name the name to search by
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPractitionersByNameInteractor = (applicationContext, { name }) => {
+export const getPractitionersByNameInteractor = (
+  applicationContext,
+  { name },
+) => {
   return get({
     applicationContext,
     endpoint: '/practitioners',
