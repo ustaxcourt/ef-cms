@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { flatten, omit, sortBy, union, uniq, without } from 'lodash';
+import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
 import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
 import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
@@ -1248,9 +1248,15 @@ export const SESSION_TYPES = {
   regular: 'Regular',
   small: 'Small',
   hybrid: 'Hybrid',
+  hybridSmall: 'Hybrid-S',
   special: 'Special',
   motionHearing: 'Motion/Hearing',
 };
+
+export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
+  'hybrid',
+  'hybridSmall',
+]);
 
 export const SESSION_STATUS_TYPES = {
   closed: 'Closed',
