@@ -1,13 +1,11 @@
-const AWS = require('aws-sdk');
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-} = require('../../business/entities/EntityConstants');
-const { getCaseInventoryReport } = require('./getCaseInventoryReport');
-const { MOCK_USERS } = require('../../test/mockUsers');
+} from '../../business/entities/EntityConstants';
+import { MOCK_USERS } from '../../test/mockUsers';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getCaseInventoryReport } from './getCaseInventoryReport';
+import AWS from 'aws-sdk';
 
 describe('getCaseInventoryReport', () => {
   const searchSpy = jest.fn();
