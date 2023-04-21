@@ -29,15 +29,12 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
-  let browserPid;
   let browser = null;
-  let result: any = null;
+  let result = null;
 
   try {
     browser = await applicationContext.getChromiumBrowser();
-    browserPid = browser.process()?.pid;
-
-    let page = await browser?.newPage();
+    let page = await browser.newPage();
 
     await page.setContent(contentHtml);
 
@@ -63,59 +60,23 @@ export const generatePdfFromHtmlInteractor = async (
             ${footerHtml || ''}
           </div>`;
 
-    const firstPage = await page.pdf({
-      displayHeaderFooter: true,
+    result = await page.pdf({
+      displayHeaderFooter,
       footerTemplate,
       format: 'Letter',
+      headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
       margin: {
         bottom: '100px',
         top: '80px',
       },
-      pageRanges: '1',
       printBackground: true,
     });
-
-    let remainingPages: any;
-    try {
-      remainingPages = await page.pdf({
-        displayHeaderFooter,
-        footerTemplate,
-        format: 'Letter',
-        headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
-        margin: {
-          bottom: '100px',
-          top: '80px',
-        },
-        pageRanges: '2-',
-        printBackground: true,
-      });
-    } catch (err) {
-      // this was probably a 1 page document
-      if (!err.message.includes('Page range exceeds page count')) {
-        throw err;
-      }
-    }
-
-    if (remainingPages) {
-      const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
-        applicationContext,
-        firstPdf: firstPage,
-        secondPdf: remainingPages,
-      });
-      result = Buffer.from(returnVal);
-    } else {
-      result = firstPage;
-    }
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
   } finally {
     if (browser !== null) {
-      if (process.env.NODE_ENV !== 'production') {
-        await browser.close();
-      } else {
-        process.kill(browserPid);
-      }
+      await browser.close();
     }
   }
   return result;

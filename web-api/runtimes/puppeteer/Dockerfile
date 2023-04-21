@@ -1,5 +1,5 @@
 # this dockerfile is needed if building the puppeteer layer from a non-unix machine
-FROM node:18.14.1-slim
+FROM node:16.17.1-slim
 
 WORKDIR /home/build
 
@@ -8,8 +8,7 @@ RUN apt-get install -y zip
 
 COPY package.json /home/build/nodejs/package.json
 COPY package-lock.json /home/build/nodejs/package-lock.json
-RUN cd /home/build/nodejs/ && npm ci --production
-
+RUN cd /home/build/nodejs/ && npm ci
 RUN zip -r puppeteer_lambda_layer.zip nodejs
 
 CMD echo "puppeteer zip has been created"
