@@ -1,9 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
-export const externalUserFilesDocumentAcrossConsolidatedCase = (
+export const externalUserRequestAccessToFileAcrossConsolidatedCasesGroup = (
   cerebralTest,
   fakeFile,
+  overrides = {},
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
@@ -111,28 +112,45 @@ export const externalUserFilesDocumentAcrossConsolidatedCase = (
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+    if (overrides.fileAcrossConsolidatedGroup) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: 'partyIrsPractitioner',
+          value: true,
+        },
+      );
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: `filersMap.${contactPrimary.contactId}`,
+          value: false,
+        },
+      );
+    } else {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: `filersMap.${contactPrimary.contactId}`,
+          value: true,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    if (overrides.fileAcrossConsolidatedGroup) {
+      const form = cerebralTest.getState('form');
+
+      expect(form.fileAcrossConsolidatedGroup).toEqual(true);
+    }
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 
     expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
       docketEntriesBefore + 1,
     );
-
-    const consolidatedCases = cerebralTest.getState(
-      'caseDetail.consolidatedCases',
-    );
-
-    cerebralTest.consolidatedCases = consolidatedCases;
   });
 };

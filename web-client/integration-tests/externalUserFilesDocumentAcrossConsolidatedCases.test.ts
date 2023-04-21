@@ -1,5 +1,6 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
-import { externalUserFilesDocumentAcrossConsolidatedCase } from './journey/externalUserFilesDocumentForOwnedCaseForFilingAcrossConsolidatedCases';
+import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
+import { externalUserRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/externalUserRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
 import { runCompute } from 'cerebral/test';
@@ -19,7 +20,7 @@ const verifyCorrectFileDocumentButton = (
     docketNumber,
     shouldShowFileDocumentButton = false,
     shouldShowFileFirstDocumentButton = false,
-    shouldshowRequestAccessToCaseButton = false,
+    shouldShowRequestAccessToCaseButton = false,
   },
 ) => {
   return it('file on a case where at least one irsPractitioner, but not themselves, is already associated (Request Access flow)', async () => {
@@ -37,7 +38,7 @@ const verifyCorrectFileDocumentButton = (
     expect(showFileFirstDocumentButton).toBe(shouldShowFileFirstDocumentButton);
     expect(showFileDocumentButton).toBe(shouldShowFileDocumentButton);
     expect(showRequestAccessToCaseButton).toBe(
-      shouldshowRequestAccessToCaseButton,
+      shouldShowRequestAccessToCaseButton,
     );
   });
 };
@@ -67,6 +68,10 @@ describe('External User files a document across a consolidated case group', () =
   const consolidatedCaseDocketNumber2 = '104-23';
   const consolidatedCaseDocketNumber3 = '105-23';
 
+  const overrides = {
+    fileAcrossConsolidatedGroup: true,
+  };
+
   beforeAll(async () => {
     await seedDatabase(seedData);
   });
@@ -83,7 +88,7 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber1,
       shouldShowFileDocumentButton: true,
     });
-    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
+    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, overrides);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
     loginAs(cerebralTest, 'irspractitioner@example.com');
@@ -92,16 +97,19 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber2,
       shouldShowFileFirstDocumentButton: true,
     });
-    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
+    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
     loginAs(cerebralTest, 'irspractitioner2@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
-      shouldshowRequestAccessToCaseButton: true,
+      shouldShowRequestAccessToCaseButton: true,
     });
-    externalUserFilesDocumentAcrossConsolidatedCase(cerebralTest, fakeFile);
+    externalUserRequestAccessToFileAcrossConsolidatedCasesGroup(
+      cerebralTest,
+      fakeFile,
+    );
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 });
