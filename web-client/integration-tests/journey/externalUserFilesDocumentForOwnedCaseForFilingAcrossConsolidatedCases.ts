@@ -128,5 +128,11 @@ export const externalUserFilesDocumentAcrossConsolidatedCase = (
     expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
       docketEntriesBefore + 1,
     );
+
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+
+    cerebralTest.consolidatedCases = consolidatedCases;
   });
 };
