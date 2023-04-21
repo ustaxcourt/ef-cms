@@ -1,4 +1,4 @@
-const ROLE_PERMISSIONS = {
+export const ROLE_PERMISSIONS = {
   ADD_CASE_TO_TRIAL_SESSION: 'ADD_CASE_TO_TRIAL_SESSION',
   ADD_EDIT_JUDGE_USER: 'ADD_EDIT_JUDGE_USER',
   ADD_EDIT_PRACTITIONER_USER: 'ADD_EDIT_PRACTITIONER_USER',
@@ -72,8 +72,6 @@ const ROLE_PERMISSIONS = {
   VIEW_SEALED_CASE: 'VIEW_SEALED_CASE',
   WORKITEM: 'WORKITEM',
 };
-
-exports.ROLE_PERMISSIONS = ROLE_PERMISSIONS;
 
 const allInternalUserPermissions = [
   ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION,
@@ -149,7 +147,7 @@ const petitionsClerkPermissions = [
   ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE,
 ];
 
-const AUTHORIZATION_MAP = {
+export const AUTHORIZATION_MAP = {
   adc: [...allInternalUserPermissions, ROLE_PERMISSIONS.STAMP_MOTION],
   admin: [
     ROLE_PERMISSIONS.ADD_EDIT_JUDGE_USER,
@@ -254,8 +252,6 @@ const AUTHORIZATION_MAP = {
   ],
 };
 
-exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;
-
 /**
  * Checks user permissions for an action
  *
@@ -264,7 +260,7 @@ exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;
  * @param {string} owner the user id of the owner of the item to verify
  * @returns {boolean} true if user is authorized, false otherwise
  */
-exports.isAuthorized = (user, action, owner) => {
+export const isAuthorized = (user, action, owner) => {
   if (!user) {
     return false;
   }
