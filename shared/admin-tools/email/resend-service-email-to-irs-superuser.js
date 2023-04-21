@@ -5,7 +5,9 @@ if (!process.argv[2] || !process.argv[3]) {
   process.exit();
 }
 
-const createApplicationContext = require('../../../web-api/src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const {
   INITIAL_DOCUMENT_TYPES,
 } = require('../../src/business/entities/EntityConstants');

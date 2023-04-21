@@ -1,5 +1,5 @@
-const { genericHandler } = require('../genericHandler');
-const { parseCookieString } = require('../utilities/cookieFormatting');
+import { genericHandler } from '../genericHandler';
+import { parseCookieString } from '../utilities/cookieFormatting';
 
 /**
  * Sets the authentication cookie based on the OAuth code
@@ -8,7 +8,7 @@ const { parseCookieString } = require('../utilities/cookieFormatting');
  * @throws {Error} if the Cookie header is missing
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.refreshAuthTokenLambda = event =>
+export const refreshAuthTokenLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
