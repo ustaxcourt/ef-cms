@@ -1,14 +1,15 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../business/entities/EntityConstants');
-const { MOCK_DOCUMENTS } = require('./mockDocuments');
+} from '../business/entities/EntityConstants';
 
-exports.MOCK_CASE = {
+import { MOCK_DOCUMENTS } from './mockDocuments';
+
+export const MOCK_CASE = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
@@ -45,9 +46,10 @@ exports.MOCK_CASE = {
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
+
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
 
-exports.MOCK_CASE_WITHOUT_PENDING = {
+export const MOCK_CASE_WITHOUT_PENDING = {
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: mockDocketEntriesWithoutStipDecision,
@@ -77,7 +79,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   status: CASE_STATUS_TYPES.new,
 };
 
-exports.MOCK_CASE_WITHOUT_NOTICE = {
+export const MOCK_CASE_WITHOUT_NOTICE = {
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '101-18',
   entityName: 'Case',
@@ -103,7 +105,7 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   status: CASE_STATUS_TYPES.new,
 };
 
-exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
+export const MOCK_CASE_WITH_SECONDARY_OTHERS = {
   caseCaption: 'Test Petitioner, Test Petitioner 2, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -207,7 +209,7 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   status: CASE_STATUS_TYPES.generalDocket,
 };
 
-exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -254,7 +256,7 @@ exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-exports.MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -299,7 +301,7 @@ exports.MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-exports.MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -344,7 +346,7 @@ exports.MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-exports.MOCK_CASE_WITH_TRIAL_SESSION = {
+export const MOCK_CASE_WITH_TRIAL_SESSION = {
   archivedDocketEntries: [],
   associatedJudge: 'Judge Fieri',
   caseCaption: 'Test Petitioner, Petitioner',
@@ -383,7 +385,7 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
   trialTime: '10:00',
 };
 
-exports.MOCK_ELIGIBLE_CASE = {
+export const MOCK_ELIGIBLE_CASE = {
   caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
@@ -393,7 +395,7 @@ exports.MOCK_ELIGIBLE_CASE = {
   privatePractitioners: [],
 };
 
-exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
+export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
   caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
