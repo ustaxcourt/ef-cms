@@ -7,30 +7,33 @@ const mockGetDocketNumbersByUser = jest.fn();
 const mockGetWebSocketConnectionsByUserId = jest.fn();
 const mockGetCaseByDocketNumber = jest.fn();
 const mockUpdateUser = jest.fn();
-jest.mock('../../../src/applicationContext', () =>
-  jest.fn().mockReturnValue({
-    getNotificationClient: () => ({
-      postToConnection: () => ({
-        promise: () => Promise.resolve(),
+jest.mock('../../../src/applicationContext', () => {
+  return {
+    createApplicationContext: () => ({
+      getNotificationClient: () => ({
+        postToConnection: () => ({
+          promise: () => Promise.resolve(),
+        }),
       }),
+      getPersistenceGateway: () => ({
+        getCaseByDocketNumber: mockGetCaseByDocketNumber,
+        getDocketNumbersByUser: mockGetDocketNumbersByUser,
+        getUserById: mockGetUserById,
+        getWebSocketConnectionsByUserId: mockGetWebSocketConnectionsByUserId,
+        updateUser: mockUpdateUser,
+      }),
+      getUseCases: () => ({
+        createPetitionerAccountInteractor:
+          mockCreatePetitionerAccountInteractor,
+        setUserEmailFromPendingEmailInteractor:
+          mockSetUserEmailFromPendingEmailInteractor,
+      }),
+      logger: {
+        info: jest.fn(),
+      },
     }),
-    getPersistenceGateway: () => ({
-      getCaseByDocketNumber: mockGetCaseByDocketNumber,
-      getDocketNumbersByUser: mockGetDocketNumbersByUser,
-      getUserById: mockGetUserById,
-      getWebSocketConnectionsByUserId: mockGetWebSocketConnectionsByUserId,
-      updateUser: mockUpdateUser,
-    }),
-    getUseCases: () => ({
-      createPetitionerAccountInteractor: mockCreatePetitionerAccountInteractor,
-      setUserEmailFromPendingEmailInteractor:
-        mockSetUserEmailFromPendingEmailInteractor,
-    }),
-    logger: {
-      info: jest.fn(),
-    },
-  }),
-);
+  };
+});
 
 describe('cognito-triggers', () => {
   describe('PostConfirmation_ConfirmSignUp', () => {

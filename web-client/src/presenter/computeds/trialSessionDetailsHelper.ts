@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export const trialSessionDetailsHelper = (get, applicationContext) => {
-  const { DOCKET_NUMBER_SUFFIXES, SESSION_TYPES } =
+  const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 
   const { eligibleCases, sessionType, trialSessionId } = get(
@@ -32,7 +32,7 @@ export const trialSessionDetailsHelper = (get, applicationContext) => {
 
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
   const showSmallAndRegularQcComplete =
-    sessionType === SESSION_TYPES.hybrid && showQcComplete;
+    Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
 
   return {
     eligibleRegularCaseQcTotalCompleteCount,

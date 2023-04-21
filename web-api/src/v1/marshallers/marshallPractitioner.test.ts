@@ -1,13 +1,9 @@
-const { marshallPractitioner } = require('./marshallPractitioner');
-const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
-const { MOCK_USERS } = require('../../../../shared/src/test/mockUsers');
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
+import { marshallPractitioner } from './marshallPractitioner';
 const MOCK_PRACTITIONER = MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
-const {
-  getContactPrimary,
-} = require('../../../../shared/src/business/entities/cases/Case');
-const {
-  SERVICE_INDICATOR_TYPES,
-} = require('../../../../shared/src/business/entities/EntityConstants');
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 
 describe('marshallPractitioner', () => {
   const MOCK_CONTACT = getContactPrimary(MOCK_CASE);

@@ -1,10 +1,14 @@
-const { slowDownLimiter } = require('./slowDownLimiter');
+import { slowDownLimiter } from './slowDownLimiter';
 
 let mockPersistenceGateway = {};
 
-jest.mock('../applicationContext', () => () => ({
-  getPersistenceGateway: () => mockPersistenceGateway,
-}));
+jest.mock('../applicationContext', () => {
+  return {
+    createApplicationContext: () => ({
+      getPersistenceGateway: () => mockPersistenceGateway,
+    }),
+  };
+});
 
 describe('slowDownLimiter', () => {
   let incrementKeyCountMock = jest.fn();

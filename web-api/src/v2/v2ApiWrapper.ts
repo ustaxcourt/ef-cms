@@ -28,7 +28,7 @@ class v2ApiError extends Error {
   }
 }
 
-exports.v2ApiWrapper = async handler => {
+export const v2ApiWrapper = async handler => {
   try {
     return await handler();
   } catch (e) {

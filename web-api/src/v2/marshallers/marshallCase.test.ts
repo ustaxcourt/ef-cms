@@ -1,11 +1,11 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../../../shared/src/business/entities/EntityConstants');
-const { marshallCase } = require('./marshallCase');
-const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { marshallCase } from './marshallCase';
 
 describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   const mock = Object.assign({}, MOCK_CASE, {

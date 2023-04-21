@@ -1,4 +1,4 @@
-const { processStreamRecordsLambda } = require('./processStreamRecordsLambda');
+import { processStreamRecordsLambda } from './processStreamRecordsLambda';
 
 describe('processStreamRecordsLambda', () => {
   it('should throw an exception if the interactor throws an exception', async () => {
