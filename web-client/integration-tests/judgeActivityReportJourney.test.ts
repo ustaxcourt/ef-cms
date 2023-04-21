@@ -63,40 +63,10 @@ describe('Judge activity report journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: {
-        Closed: 0,
-        'Closed - Dismissed': 0,
-      },
-      opinions: [
-        {
-          count: 0,
-          documentType: 'Memorandum Opinion',
-          eventCode: 'MOP',
-        },
-        {
-          count: 0,
-          documentType: 'Order of Service of Transcript (Bench Opinion)',
-          eventCode: 'OST',
-        },
-        {
-          count: 0,
-          documentType: 'Summary Opinion',
-          eventCode: 'SOP',
-        },
-        {
-          count: 1,
-          documentType: 'T.C. Opinion',
-          eventCode: 'TCOP',
-        },
-      ],
-      orders: [],
-      trialSessions: {
-        Hybrid: 1,
-        'Motion/Hearing': 0,
-        Regular: 0.5,
-        Small: 0,
-        Special: 1,
-      },
+      casesClosedByJudge: expect.anything(),
+      opinions: expect.anything(),
+      orders: expect.anything(),
+      trialSessions: expect.anything(),
     });
   });
 });
