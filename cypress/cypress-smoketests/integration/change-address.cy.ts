@@ -1,12 +1,12 @@
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const {
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+
+import {
   goToEditContactInformation,
   goToMyAccount,
   saveContactInformation,
   updateAddress1,
-} = require('../support/pages/my-account');
+} from '../support/pages/my-account';
+
 const { getUserToken, login } = getEnvironmentSpecificFunctions();
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');

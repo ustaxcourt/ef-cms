@@ -1,12 +1,10 @@
-const AWS = require('aws-sdk');
-const { chunk } = require('lodash');
+import { chunk } from 'lodash';
+import AWS from 'aws-sdk';
 
 AWS.config = new AWS.Config();
 AWS.config.region = 'us-east-1';
 
-const {
-  seedLocalDatabase,
-} = require('../../../web-api/storage/scripts/seedLocalDatabase');
+import { seedLocalDatabase } from '../../../web-api/storage/scripts/seedLocalDatabase';
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   credentials: {
@@ -63,7 +61,7 @@ const clearDatabase = async () => {
   }
 };
 
-module.exports.getEmailVerificationToken = async ({ userId }) => {
+export const getEmailVerificationToken = async ({ userId }) => {
   return await documentClient
     .get({
       Key: {
@@ -78,7 +76,7 @@ module.exports.getEmailVerificationToken = async ({ userId }) => {
     });
 };
 
-module.exports.setAllowedTerminalIpAddresses = async ipAddresses => {
+export const setAllowedTerminalIpAddresses = async ipAddresses => {
   return await documentClient
     .put({
       Item: {
@@ -91,7 +89,7 @@ module.exports.setAllowedTerminalIpAddresses = async ipAddresses => {
     .promise();
 };
 
-module.exports.reseedDatabase = async () => {
+export const reseedDatabase = async () => {
   await clearDatabase();
   await seedLocalDatabase();
   return null;

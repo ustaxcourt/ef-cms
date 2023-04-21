@@ -1,8 +1,8 @@
-const {
+import {
   createCookieString,
   deleteCookieString,
   parseCookieString,
-} = require('./cookieFormatting');
+} from './cookieFormatting';
 
 describe('createCookieString', () => {
   const cookieKey = 'DogCow';

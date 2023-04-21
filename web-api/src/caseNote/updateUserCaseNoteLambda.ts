@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for updating a judge's case note
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.updateUserCaseNoteLambda = event =>
+export const updateUserCaseNoteLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const lambdaArguments = {
       ...event.pathParameters,
