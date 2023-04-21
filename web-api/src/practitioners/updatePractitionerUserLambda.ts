@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * updates a privatePractitioner or irsPractitioner user
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.updatePractitionerUserLambda = event =>
+export const updatePractitionerUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { bypassDocketEntry = false, user } = JSON.parse(event.body);
 
