@@ -3,15 +3,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { acquireLock } from '../../useCaseHelper/acquireLock';
+import { UnauthorizedError } from '../../../errors/errors';
 import { get } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,
@@ -134,42 +131,6 @@ const createWorkingCopyForNewUserOnSession = async ({
     });
 };
 
-export const lockCasesOnTrialSession = async ({
-  applicationContext,
-  trialSession,
-}) => {
-  if (trialSession.caseOrder && trialSession.caseOrder.length) {
-    await acquireLock({
-      applicationContext,
-      identifier: trialSession.caseOrder.map(
-        ({ docketNumber }) => docketNumber,
-      ),
-      onLockError: new ServiceUnavailableError(
-        'One of the cases on the Trial Session is currently being updated',
-      ),
-      prefix: 'case',
-      ttl: 900,
-    });
-  }
-};
-
-export const unlockCasesOnTrialSession = async ({
-  applicationContext,
-  trialSession,
-}) => {
-  if (trialSession.caseOrder && trialSession.caseOrder.length) {
-    await Promise.all(
-      trialSession.caseOrder.map(({ docketNumber }) =>
-        applicationContext.getPersistenceGateway().removeLock({
-          applicationContext,
-          identifier: docketNumber,
-          prefix: 'case',
-        }),
-      ),
-    );
-  }
-};
-
 /**
  * updateTrialSessionInteractor
  *
@@ -177,7 +138,7 @@ export const unlockCasesOnTrialSession = async ({
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
  */
-export const updateTrialSessionInteractor = async (
+export const updateTrialSession = async (
   applicationContext,
   { trialSession },
 ) => {
@@ -193,11 +154,6 @@ export const updateTrialSessionInteractor = async (
       applicationContext,
       trialSessionId: trialSession.trialSessionId,
     });
-
-  await lockCasesOnTrialSession({
-    applicationContext,
-    trialSession: currentTrialSession,
-  });
 
   if (
     currentTrialSession.startDate <
@@ -317,11 +273,6 @@ export const updateTrialSessionInteractor = async (
       });
   }
 
-  await unlockCasesOnTrialSession({
-    applicationContext,
-    trialSession: updatedTrialSessionEntity,
-  });
-
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
@@ -338,3 +289,44 @@ export const updateTrialSessionInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: object },
+) => {
+  const { caseOrder } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId: trialSession.trialSessionId,
+    });
+
+  return {
+    identifier: caseOrder?.map(({ docketNumber }) => docketNumber),
+    prefix: 'case',
+    ttl: 900,
+  };
+};
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_trial_session',
+    },
+    userId: user.userId,
+  });
+};
+
+export const updateTrialSessionInteractor = withLocking(
+  updateTrialSession,
+  determineEntitiesToLock,
+  handleLockError,
+);

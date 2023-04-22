@@ -1,5 +1,4 @@
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
 import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
@@ -9,7 +8,6 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
@@ -22,8 +20,6 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
-
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue({
@@ -33,9 +29,7 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
@@ -46,7 +40,7 @@ describe('updateTrialSessionInteractor', () => {
       role: ROLES.petitioner,
       userId: 'petitioner',
     });
-    applicationContext.getCurrentUser.mockReturnValueOnce(unauthedUser);
+    applicationContext.getCurrentUser.mockReturnValue(unauthedUser);
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {
@@ -472,48 +466,5 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
         .calls[0][1].swingSessionId,
     ).toEqual(mockSwingSessionId);
-  });
-
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
-
-    await expect(
-      updateTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL_INPERSON,
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
-    await updateTrialSessionInteractor(applicationContext, {
-      trialSession: MOCK_TRIAL_INPERSON,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: MOCK_TRIAL_INPERSON.caseOrder[0].docketNumber,
-      prefix: 'case',
-      ttl: 900,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: MOCK_TRIAL_INPERSON.caseOrder[0].docketNumber,
-      prefix: 'case',
-    });
   });
 });
