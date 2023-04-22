@@ -30,6 +30,7 @@ import {
   isUserPartOfGroup,
 } from '../entities/cases/Case';
 
+import { acquireLock } from '../useCaseHelper/acquireLock';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
