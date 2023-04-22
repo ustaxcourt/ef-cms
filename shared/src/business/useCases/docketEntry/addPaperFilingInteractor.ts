@@ -267,13 +267,16 @@ interface DocumentMetadata {
   mailingDate: string;
 }
 
-export const determineEntitiesToLock = ({
-  consolidatedGroupDocketNumbers = [],
-  documentMetadata,
-}: {
-  consolidatedGroupDocketNumbers?: string[];
-  documentMetadata: DocumentMetadata;
-}): {
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    consolidatedGroupDocketNumbers = [],
+    documentMetadata,
+  }: {
+    consolidatedGroupDocketNumbers?: string[];
+    documentMetadata: DocumentMetadata;
+  },
+): {
   identifier: string[];
   prefix: string;
   ttl: number;

@@ -86,7 +86,7 @@ export const removePetitionerAndUpdateCaption = async (
 
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(
   removePetitionerAndUpdateCaption,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

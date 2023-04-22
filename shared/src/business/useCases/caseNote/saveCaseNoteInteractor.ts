@@ -55,7 +55,7 @@ export const saveCaseNote = async (
 
 export const saveCaseNoteInteractor = withLocking(
   saveCaseNote,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

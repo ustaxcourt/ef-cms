@@ -213,7 +213,10 @@ export const fileCourtIssuedDocketEntry = async (
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(
   fileCourtIssuedDocketEntry,
-  ({ docketNumbers = [], subjectDocketNumber }) => ({
+  (
+    _applicationContext: IApplicationContext,
+    { docketNumbers = [], subjectDocketNumber },
+  ) => ({
     identifier: [...new Set([subjectDocketNumber, ...docketNumbers])],
     prefix: 'case',
   }),

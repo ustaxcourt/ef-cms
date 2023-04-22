@@ -58,7 +58,7 @@ export const blockCaseFromTrial = async (
 
 export const blockCaseFromTrialInteractor = withLocking(
   blockCaseFromTrial,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),
