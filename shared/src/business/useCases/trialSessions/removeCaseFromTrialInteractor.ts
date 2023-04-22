@@ -114,7 +114,10 @@ export const removeCaseFromTrial = async (
 
 export const removeCaseFromTrialInteractor = withLocking(
   removeCaseFromTrial,
-  ({ docketNumber }) => ({
+  (
+    _applicationContext: IApplicationContext,
+    { docketNumber }: { docketNumber: string },
+  ) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),
