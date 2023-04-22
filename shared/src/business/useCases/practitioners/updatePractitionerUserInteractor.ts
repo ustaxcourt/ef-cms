@@ -6,6 +6,7 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
   const isEmailAvailable = await applicationContext
@@ -56,7 +57,7 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
  * @param {object} providers.barNumber the barNumber of the user to update
  * @param {object} providers.user the user data
  */
-export const updatePractitionerUserInteractor = async (
+export const updatePractitionerUser = async (
   applicationContext: IApplicationContext,
   {
     barNumber,
@@ -184,3 +185,45 @@ export const updatePractitionerUserInteractor = async (
     userId: requestUser.userId,
   });
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_practitioner_user',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { user }: { user: Practitioner },
+): Promise<{ identifier: string[]; prefix: string; ttl: number }> => {
+  const docketNumbers: string[] = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByUserId({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  return {
+    identifier: docketNumbers,
+    prefix: 'case',
+    ttl: 900,
+  };
+};
+
+export const updatePractitionerUserInteractor = withLocking(
+  updatePractitionerUser,
+  determineEntitiesToLock,
+  handleLockError,
+);
