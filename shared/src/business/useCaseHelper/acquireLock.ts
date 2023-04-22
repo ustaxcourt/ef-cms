@@ -67,6 +67,7 @@ export const acquireLock = async ({
   ttl?: number;
   waitTime?: number;
 }) => {
+  if (!identifier) return;
   const identifiersToLock =
     typeof identifier === 'string' ? [identifier] : identifier;
 
@@ -119,6 +120,7 @@ export const removeLock = ({
   identifier: string | string[];
   prefix: string;
 }) => {
+  if (!identifier) return;
   if (typeof identifier === 'object') {
     return Promise.all(
       identifier.map(entityIdentifier =>
