@@ -1,14 +1,13 @@
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { ServiceUnavailableError } from '../../../errors/errors';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   handleLockError,
-  setNoticesForCalendaredTrialSessionInteractor,
-} from './setNoticesForCalendaredTrialSessionInteractor';
+  updateTrialSessionInteractor,
+} from './updateTrialSessionInteractor';
 import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('determineEntitiesToLock', () => {
@@ -22,11 +21,11 @@ describe('determineEntitiesToLock', () => {
 
   beforeEach(() => {
     mockParams = {
-      trialSessionId,
+      trialSession: { trialSessionId },
     };
     applicationContext
       .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
+      .getTrialSessionById.mockReturnValue({ caseOrder: mockCases });
   });
 
   it('should return an object that includes the prefix case', async () => {
@@ -38,11 +37,10 @@ describe('determineEntitiesToLock', () => {
     expect(prefix).toBe('case');
   });
 
-  it('should lookup the docket numbers for the specified trial session', async () => {
+  it('should lookup the specified trial session', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
     expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
+      applicationContext.getPersistenceGateway().getTrialSessionById,
     ).toHaveBeenCalledWith({
       applicationContext,
       trialSessionId,
@@ -82,48 +80,25 @@ describe('handleLockError', () => {
     ).toMatchObject({
       action: 'retry_async_request',
       originalRequest: mockOriginalRequest,
-      requestToRetry: 'set_notices_for_calendared_trial_session',
+      requestToRetry: 'update_trial_session',
     });
   });
 });
 
-describe('setNoticesForCalendaredTrialSessionInteractor', () => {
-  const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
-  const mockCases = [
-    MOCK_CASE,
-    { ...MOCK_CASE, docketNumber: '100-23' },
-    { ...MOCK_CASE, docketNumber: '101-23' },
-  ];
-  let mockRequest = { trialSessionId };
+describe('updateTrialSessionInteractor', () => {
+  let mockRequest = { trialSession: MOCK_TRIAL_INPERSON };
   let mockLock;
 
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockReturnValue({
-        unfinishedCases: 0,
-      });
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .isFileExists.mockResolvedValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
   });
 
   describe('is locked', () => {
@@ -133,10 +108,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        setNoticesForCalendaredTrialSessionInteractor(
-          applicationContext,
-          mockRequest,
-        ),
+        updateTrialSessionInteractor(applicationContext, mockRequest),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -146,10 +118,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        setNoticesForCalendaredTrialSessionInteractor(
-          applicationContext,
-          mockRequest,
-        ),
+        updateTrialSessionInteractor(applicationContext, mockRequest),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -159,7 +128,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         message: {
           action: 'retry_async_request',
           originalRequest: mockRequest,
-          requestToRetry: 'set_notices_for_calendared_trial_session',
+          requestToRetry: 'update_trial_session',
         },
         userId: docketClerkUser.userId,
       });
@@ -176,32 +145,31 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await setNoticesForCalendaredTrialSessionInteractor(
-        applicationContext,
-        mockRequest,
-      );
+      await updateTrialSessionInteractor(applicationContext, mockRequest);
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
-        ttl: 900,
+      MOCK_TRIAL_INPERSON.caseOrder.forEach(({ docketNumber }) => {
+        expect(
+          applicationContext.getPersistenceGateway().createLock,
+        ).toHaveBeenCalledWith({
+          applicationContext,
+          identifier: docketNumber,
+          prefix: 'case',
+          ttl: 900,
+        });
       });
     });
 
     it('should remove the lock', async () => {
-      await setNoticesForCalendaredTrialSessionInteractor(
-        applicationContext,
-        mockRequest,
-      );
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+      await updateTrialSessionInteractor(applicationContext, mockRequest);
+
+      MOCK_TRIAL_INPERSON.caseOrder.forEach(({ docketNumber }) => {
+        expect(
+          applicationContext.getPersistenceGateway().removeLock,
+        ).toHaveBeenCalledWith({
+          applicationContext,
+          identifier: docketNumber,
+          prefix: 'case',
+        });
       });
     });
   });
