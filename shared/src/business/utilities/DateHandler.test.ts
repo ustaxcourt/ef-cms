@@ -60,6 +60,7 @@ describe('DateHandler', () => {
       expect(result).toEqual(outputString);
     });
   });
+
   describe('pattern matcher', () => {
     describe('H:MM', () => {
       it('matches valid times', () => {
@@ -435,7 +436,12 @@ describe('DateHandler', () => {
         expect(isValidDateString(date)).toBeFalsy();
       });
     });
+
+    it('should return false when undefined is provided as the date value', () => {
+      expect(isValidDateString(undefined)).toBeFalsy();
+    });
   });
+
   describe('castToISO', () => {
     it('returns an iso string when the date string passed in is valid', () => {
       expect(castToISO('2010-10-10')).toEqual('2010-10-10T04:00:00.000Z');

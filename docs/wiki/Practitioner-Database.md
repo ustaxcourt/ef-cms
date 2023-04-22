@@ -8,7 +8,7 @@
 **Practitioner Name**
 * for input only, practitioner name should be entered as First Name, Middle Name, Last Name, Suffix
 * First Name, Last Name are required
-* System automatically assigns a Bar number in format: {Last_Initial}{First_Initial}{YY}{count}; where count is a 3-digit number that resets and starts at 001 each year and is the cumulative number of new practictioners for a given for that year
+* System automatically assigns a Bar number in format: {Last_Initial}{First_Initial}{YY}{count}; where count is a 3-digit number that resets and starts at 001 each year and is the cumulative number of new practitioners for a given for that year
 
 **Birth Year**
 * Required field

@@ -1,3 +1,4 @@
+/* eslint-disable cypress/unsafe-to-chain-command */
 import { navigateTo as navigateToDashboard } from '../support/pages/dashboard';
 
 describe('Filing an Answer', function () {
@@ -13,10 +14,11 @@ describe('Filing an Answer', function () {
   });
 
   it('can upload the answer with indication of success', () => {
-    cy.get('label#primary-document-label')
-      .scrollIntoView()
-      .should('not.have.class', 'validated');
-
+    cy.get('label#primary-document-label').scrollIntoView();
+    cy.get('label#primary-document-label').should(
+      'not.have.class',
+      'validated',
+    );
     cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });
@@ -26,7 +28,8 @@ describe('Filing an Answer', function () {
     cy.get('button#submit-document').click();
   });
 
-  it('can submit the filing from the review page', () => {
+  it('can acknowledge redaction and submit the filing from the review page', () => {
+    cy.get('label#redaction-acknowledgement-label').click();
     cy.get('button#submit-document').click();
     cy.showsSuccessMessage(true);
   });
