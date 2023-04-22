@@ -201,11 +201,13 @@ describe('acquireLock', () => {
 
 describe('withLocking', () => {
   const callbackFunction = jest.fn().mockReturnValue('salad');
-  const getLockInfo = jest.fn().mockImplementation(options => ({
-    identifier: options.docketNumber,
-    prefix: 'case',
-    ttl: 60,
-  }));
+  const getLockInfo = jest
+    .fn()
+    .mockImplementation((_applicationContext, options) => ({
+      identifier: options.docketNumber,
+      prefix: 'case',
+      ttl: 60,
+    }));
   let func;
   let mockFeatureFlagValue;
   let mockLock;
