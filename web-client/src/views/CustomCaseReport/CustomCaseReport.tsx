@@ -4,12 +4,14 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-import { Paginator } from '../../ustc-ui/Pagination/Paginator';
+import { PaginationerComponent } from '../../ustc-ui/Pagination/PaginationerComponent';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useState } from 'react';
+
+const ITEMS_PER_PAGE = 10;
 
 export const CustomCaseReport = connect(
   {
@@ -31,7 +33,16 @@ export const CustomCaseReport = connect(
     setCustomCaseInventoryReportFiltersSequence,
     validationErrors,
   }) {
-    const [hasRanCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
+    const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
+    // const [totalCases, setTotalCases] = useState(0);
+    const [casesItemOffset, setCaseItemOffset] = useState(0);
+
+    const paginateChange = event => {
+      const newOffset =
+        (event.selected * ITEMS_PER_PAGE) %
+        customCaseInventoryReportHelper.customCaseInventoryReportData.length;
+      setCaseItemOffset(newOffset);
+    };
 
     return (
       <>
@@ -252,6 +263,10 @@ export const CustomCaseReport = connect(
             onClick={() => {
               setHasRunCustomCaseReport(true);
               getCustomCaseInventoryReportSequence();
+              console.log(
+                customCaseInventoryReportHelper.customCaseInventoryReportData
+                  .length,
+              );
             }}
           >
             Run Report
@@ -265,22 +280,27 @@ export const CustomCaseReport = connect(
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
-          <Paginator totalPages={20} onPageChange={() => {}} />
+          <PaginationerComponent
+            pageCount={Math.ceil(
+              customCaseInventoryReportHelper.customCaseInventoryReportData
+                .length / ITEMS_PER_PAGE,
+            )}
+            pageRangeDisplayed={5}
+            onPageChange={paginateChange}
+          />
           <div className="text-right margin-bottom-2">
             <span className="text-bold">Count: &nbsp;</span>
-            {(customCaseInventoryReportHelper.customCaseInventoryReportData &&
+            {
               customCaseInventoryReportHelper.customCaseInventoryReportData
-                .totalCount) ||
-              0}
+                .length
+            }
           </div>
           <ReportTable
+            casesItemOffset={casesItemOffset}
             customCaseInventoryReportData={
               customCaseInventoryReportHelper.customCaseInventoryReportData
             }
-            hasRanCustomCaseReport={hasRanCustomCaseReport}
-            noCustomCasesAfterReportRan={
-              customCaseInventoryReportHelper.noCustomCasesAfterReportRan
-            }
+            hasRunCustomCaseReport={hasRunCustomCaseReport}
           />
         </section>
       </>
@@ -289,10 +309,20 @@ export const CustomCaseReport = connect(
 );
 
 const ReportTable = ({
+  casesItemOffset,
   customCaseInventoryReportData,
-  hasRanCustomCaseReport,
-  noCustomCasesAfterReportRan,
+  hasRunCustomCaseReport,
+}: {
+  casesItemOffset: number;
+  customCaseInventoryReportData: any[];
+  hasRunCustomCaseReport: boolean;
+  updateCount: Function;
 }) => {
+  const endOffset = casesItemOffset + ITEMS_PER_PAGE;
+  const paginatedCases = customCaseInventoryReportData.slice(
+    casesItemOffset,
+    endOffset,
+  );
   return (
     <>
       <table
@@ -313,8 +343,8 @@ const ReportTable = ({
           </tr>
         </thead>
         <tbody>
-          {customCaseInventoryReportData &&
-            customCaseInventoryReportData.map(entry => (
+          {paginatedCases &&
+            paginatedCases.map(entry => (
               <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
                 <td>
                   <CaseLink formattedCase={entry} />
@@ -337,11 +367,12 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-          {hasRanCustomCaseReport && noCustomCasesAfterReportRan && (
-            <tr>
-              <div className="text-center">No data found.</div>
-            </tr>
-          )}
+          {hasRunCustomCaseReport &&
+            customCaseInventoryReportData.length === 0 && (
+              <tr>
+                <div className="text-center">No data found.</div>
+              </tr>
+            )}
         </tbody>
       </table>
     </>

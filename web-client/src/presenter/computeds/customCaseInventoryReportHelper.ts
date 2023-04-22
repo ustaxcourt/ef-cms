@@ -42,8 +42,6 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     },
   );
 
-  const noCustomCasesAfterReportRan = !reportData.length;
-
   const isClearFiltersDisabled = ![
     ...(populatedFilters.caseStatuses || []),
     ...(populatedFilters.caseTypes || []),
@@ -55,6 +53,5 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     customCaseInventoryReportData: reportData,
     isClearFiltersDisabled,
     isRunReportButtonDisabled,
-    noCustomCasesAfterReportRan,
   };
 };
