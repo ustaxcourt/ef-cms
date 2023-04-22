@@ -493,13 +493,16 @@ const getDocketEntryToEdit = async ({
   return { caseEntity, docketEntryEntity };
 };
 
-export const determineEntitiesToLock = ({
-  consolidatedGroupDocketNumbers = [],
-  documentMetadata,
-}: {
-  consolidatedGroupDocketNumbers?: string[];
-  documentMetadata: object;
-}): {
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    consolidatedGroupDocketNumbers = [],
+    documentMetadata,
+  }: {
+    consolidatedGroupDocketNumbers?: string[];
+    documentMetadata: object;
+  },
+): {
   identifier: string[];
   prefix: string;
   ttl?: number;

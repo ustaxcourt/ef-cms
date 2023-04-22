@@ -47,7 +47,7 @@ export const deleteDeficiencyStatistic = async (
 
 export const deleteDeficiencyStatisticInteractor = withLocking(
   deleteDeficiencyStatistic,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

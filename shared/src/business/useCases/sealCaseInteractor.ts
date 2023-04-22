@@ -51,7 +51,7 @@ export const sealCase = async (
 
 export const sealCaseInteractor = withLocking(
   sealCase,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

@@ -97,7 +97,7 @@ export const updateCounselOnCase = async (
 
 export const updateCounselOnCaseInteractor = withLocking(
   updateCounselOnCase,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

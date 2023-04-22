@@ -61,7 +61,7 @@ export const archiveCorrespondenceDocument = async (
 
 export const archiveCorrespondenceDocumentInteractor = withLocking(
   archiveCorrespondenceDocument,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

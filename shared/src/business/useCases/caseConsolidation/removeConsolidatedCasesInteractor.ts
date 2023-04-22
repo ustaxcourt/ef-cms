@@ -120,7 +120,7 @@ export const removeConsolidatedCases = async (
 
 export const removeConsolidatedCasesInteractor = withLocking(
   removeConsolidatedCases,
-  ({ docketNumber, docketNumbersToRemove = [] }) => ({
+  (_applicationContext, { docketNumber, docketNumbersToRemove = [] }) => ({
     identifier: [docketNumber, ...docketNumbersToRemove],
     prefix: 'case',
   }),

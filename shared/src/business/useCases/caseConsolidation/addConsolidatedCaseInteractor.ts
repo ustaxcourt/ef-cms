@@ -105,7 +105,7 @@ export const addConsolidatedCase = async (
 
 export const addConsolidatedCaseInteractor = withLocking(
   addConsolidatedCase,
-  ({ docketNumber, docketNumberToConsolidateWith }) => ({
+  (_applicationContext, { docketNumber, docketNumberToConsolidateWith }) => ({
     identifier: [docketNumber, docketNumberToConsolidateWith],
     prefix: 'case',
   }),

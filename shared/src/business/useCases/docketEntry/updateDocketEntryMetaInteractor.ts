@@ -221,7 +221,7 @@ export const shouldGenerateCoversheetForDocketEntry = ({
 
 export const updateDocketEntryMetaInteractor = withLocking(
   updateDocketEntryMeta,
-  ({ docketNumber }) => ({
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

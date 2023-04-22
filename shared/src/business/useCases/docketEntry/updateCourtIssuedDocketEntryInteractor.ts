@@ -115,7 +115,7 @@ export const updateCourtIssuedDocketEntry = async (
 
 export const updateCourtIssuedDocketEntryInteractor = withLocking(
   updateCourtIssuedDocketEntry,
-  ({ documentMeta }) => ({
+  (_applicationContext: IApplicationContext, { documentMeta }) => ({
     identifier: documentMeta.docketNumber,
     prefix: 'case',
   }),

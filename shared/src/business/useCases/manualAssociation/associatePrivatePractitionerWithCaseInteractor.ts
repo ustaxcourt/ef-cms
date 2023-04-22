@@ -57,11 +57,9 @@ export const associatePrivatePractitionerWithCase = async (
 
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(
   associatePrivatePractitionerWithCase,
-  params => {
-    return {
-      identifier: params.docketNumber,
-      prefix: 'case',
-    };
-  },
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifier: docketNumber,
+    prefix: 'case',
+  }),
   new ServiceUnavailableError('The case is currently being updated'),
 );

@@ -218,13 +218,16 @@ export const serveCourtIssuedDocument = async (
   });
 };
 
-export const determineEntitiesToLock = ({
-  docketNumbers = [],
-  subjectCaseDocketNumber,
-}: {
-  docketNumbers?: string[];
-  subjectCaseDocketNumber;
-}): {
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber;
+  },
+): {
   identifier: string[];
   prefix: string;
   ttl?: number;

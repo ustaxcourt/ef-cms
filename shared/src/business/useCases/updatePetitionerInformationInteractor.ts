@@ -311,7 +311,7 @@ export const updatePetitionerInformation = async (
 
 export const updatePetitionerInformationInteractor = withLocking(
   updatePetitionerInformation,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

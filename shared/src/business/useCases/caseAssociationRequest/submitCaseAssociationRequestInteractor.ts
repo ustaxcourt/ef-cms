@@ -61,7 +61,7 @@ export const submitCaseAssociationRequest = async (
 
 export const submitCaseAssociationRequestInteractor = withLocking(
   submitCaseAssociationRequest,
-  ({ docketNumber }) => ({
+  (_applicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),

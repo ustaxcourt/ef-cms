@@ -227,13 +227,16 @@ export const serveExternallyFiledDocument = async (
   });
 };
 
-export const determineEntitiesToLock = ({
-  docketNumbers = [],
-  subjectCaseDocketNumber,
-}: {
-  docketNumbers?: string[];
-  subjectCaseDocketNumber: string;
-}): {
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber: string;
+  },
+): {
   identifier: string[];
   prefix: string;
   ttl?: number;

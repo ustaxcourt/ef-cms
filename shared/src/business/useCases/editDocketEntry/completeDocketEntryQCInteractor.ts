@@ -382,7 +382,7 @@ const completeDocketEntryQC = async (
 
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
-  ({ entryMetadata }) => ({
+  (_applicationContext: IApplicationContext, { entryMetadata }) => ({
     identifier: entryMetadata.docketEntryId,
     prefix: 'docket-entry',
   }),

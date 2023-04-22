@@ -139,7 +139,7 @@ export const updateCourtIssuedOrder = async (
 
 export const updateCourtIssuedOrderInteractor = withLocking(
   updateCourtIssuedOrder,
-  ({ documentMetadata }) => ({
+  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
     identifier: documentMetadata.docketNumber,
     prefix: 'case',
   }),
