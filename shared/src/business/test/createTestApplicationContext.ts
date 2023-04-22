@@ -506,6 +506,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getTrialSessionJobStatusForCase: jest.fn(),
+    getTrialSessionProcessingStatus: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
@@ -524,6 +525,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
+    setTrialSessionProcessingStatus: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
       .fn()
@@ -646,7 +648,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
-    getNotificationGateway: emptyAppContextProxy,
+    getNotificationGateway: appContextProxy({
+      sendNotificationToUser: jest.fn(),
+    }),
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
