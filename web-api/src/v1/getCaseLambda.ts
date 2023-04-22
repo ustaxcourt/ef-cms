@@ -1,6 +1,6 @@
-const { genericHandler } = require('../genericHandler');
-const { marshallCase } = require('./marshallers/marshallCase');
-const { v1ApiWrapper } = require('./v1ApiWrapper');
+import { genericHandler } from '../genericHandler';
+import { marshallCase } from './marshallers/marshallCase';
+import { v1ApiWrapper } from './v1ApiWrapper';
 
 /**
  * used for fetching a single case and returning it in v1 api format
@@ -9,7 +9,7 @@ const { v1ApiWrapper } = require('./v1ApiWrapper');
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getCaseLambda = (event, options) =>
+export const getCaseLambda = (event, options) =>
   genericHandler(
     event,
     ({ applicationContext }) =>

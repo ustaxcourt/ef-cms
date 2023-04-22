@@ -1,8 +1,10 @@
-const createApplicationContext = require('../../../web-api/src/applicationContext');
 const {
   batchDelete,
   queryFull,
 } = require('../../src/persistence/dynamodbClientService');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const {
   createSectionOutboxRecords,
 } = require('../../src/persistence/dynamo/workitems/createSectionOutboxRecords');

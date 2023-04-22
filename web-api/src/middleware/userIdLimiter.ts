@@ -1,7 +1,7 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('./apiGatewayHelper');
+import { createApplicationContext } from '../applicationContext';
+import { getUserFromAuthHeader } from './apiGatewayHelper';
 
-exports.userIdLimiter = key => async (req, res, next) => {
+export const userIdLimiter = key => async (req, res, next) => {
   const user = getUserFromAuthHeader(req);
   if (!user) return res.status(401).json({ message: 'auth header required' });
   const MAX_COUNT = parseInt(process.env.USER_LIMITER_THRESHOLD ?? '15');

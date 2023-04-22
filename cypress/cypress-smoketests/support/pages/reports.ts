@@ -1,11 +1,11 @@
-exports.viewBlockedCaseOnBlockedReport = testData => {
+export const viewBlockedCaseOnBlockedReport = testData => {
   cy.get('#reports-btn').click();
   cy.get('#all-blocked-cases').click();
   cy.get('#trial-location').select(testData.preferredTrialCity);
   cy.get(`a[href="/case-detail/${testData.docketNumber}"]`).should('exist');
 };
 
-exports.runTrialSessionPlanningReport = () => {
+export const runTrialSessionPlanningReport = () => {
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const nextYear = new Date().getUTCFullYear() + 1;
   cy.get('#reports-btn').click();

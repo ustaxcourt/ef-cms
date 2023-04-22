@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * gets the value of the provided feature flag
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getFeatureFlagValueLambda = event =>
+export const getFeatureFlagValueLambda = event =>
   genericHandler(event, ({ applicationContext }) =>
     applicationContext
       .getUseCases()

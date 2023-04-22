@@ -1,6 +1,6 @@
-const cookie = require('cookie');
+import cookie from 'cookie';
 
-exports.createCookieString = (
+export const createCookieString = (
   cookieKey,
   cookieValue,
   expiresDateTime,
@@ -17,7 +17,7 @@ exports.createCookieString = (
   });
 };
 
-exports.deleteCookieString = (
+export const deleteCookieString = (
   cookieKey,
   domain,
   secure = true,
@@ -32,6 +32,6 @@ exports.deleteCookieString = (
   });
 };
 
-exports.parseCookieString = cookieString => {
+export const parseCookieString = cookieString => {
   return cookie.parse(cookieString);
 };
