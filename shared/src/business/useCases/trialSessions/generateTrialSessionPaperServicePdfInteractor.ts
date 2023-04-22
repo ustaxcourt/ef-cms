@@ -80,9 +80,6 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   if (hasPaper) {
     applicationContext.logger.info(
       'generateTrialSessionPaperServicePdfInteractor saveFileAndGenerateUrl start',
-      {
-        key: trialNoticePdfsKeys[index],
-      },
     );
     ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
       .getUseCaseHelpers()
