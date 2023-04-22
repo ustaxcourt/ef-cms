@@ -105,7 +105,7 @@ export const addCaseToTrialSession = async (
 
 export const addCaseToTrialSessionInteractor = withLocking(
   addCaseToTrialSession,
-  ({ docketNumber }) => ({
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
     identifier: docketNumber,
     prefix: 'case',
   }),
