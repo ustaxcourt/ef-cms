@@ -1,9 +1,7 @@
 jest.mock('../../../shared/src/persistence/dynamodbClientService');
-const client = require('../../../shared/src/persistence/dynamodbClientService');
-const {
-  applicationContext,
-} = require('../business/test/createTestApplicationContext');
-const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
+import { applicationContext } from '../business/test/createTestApplicationContext';
+import { incrementCounter } from './dynamo/helpers/incrementCounter';
+import client from '../../../shared/src/persistence/dynamodbClientService';
 
 describe('awsDynamoPersistence', function () {
   beforeEach(() => {
