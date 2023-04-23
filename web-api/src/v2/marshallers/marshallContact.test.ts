@@ -1,8 +1,6 @@
-const {
-  getContactPrimary,
-} = require('../../../../shared/src/business/entities/cases/Case');
-const { marshallContact } = require('./marshallContact');
-const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
+import { marshallContact } from './marshallContact';
 const MOCK_CONTACT = Object.assign({}, getContactPrimary(MOCK_CASE), {
   serviceIndicator: 'Electronic',
 });

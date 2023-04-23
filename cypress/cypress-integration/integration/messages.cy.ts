@@ -1,4 +1,4 @@
-const {
+import {
   createMessage,
   enterSubject,
   fillOutMessageField,
@@ -8,12 +8,13 @@ const {
   selectRecipient,
   selectSection,
   sendMessage,
-} = require('../support/pages/document-qc');
-const {
+} from '../support/pages/document-qc';
+
+import {
   getCaseStatusFilter,
   messagesShouldBeFiltered,
   selectsCaseStatusFilterNew,
-} = require('../support/pages/dashboard');
+} from '../support/pages/dashboard';
 
 describe('Messages', () => {
   describe('Docket clerk completes qc and sends a message', () => {

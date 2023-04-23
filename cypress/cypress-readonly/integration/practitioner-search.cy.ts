@@ -1,7 +1,5 @@
-const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const { isValidRequest } = require('../support/helpers');
+import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { isValidRequest } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');

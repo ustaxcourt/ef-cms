@@ -3,7 +3,9 @@
 const { requireEnvVars } = require('../util');
 requireEnvVars(['ENV', 'REGION']);
 
-const createApplicationContext = require('../../../web-api/src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const { computeDate } = require('../../src/business/utilities/DateHandler');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
