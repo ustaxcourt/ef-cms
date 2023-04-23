@@ -65,6 +65,7 @@ import { getCaseDeadlinesLambda } from './caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './cases/getCaseLambda';
+import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
@@ -88,6 +89,8 @@ import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda
 import { getMessageThreadLambda } from './messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './messages/getMessagesForCaseLambda';
 import { getNotificationsLambda } from './users/getNotificationsLambda';
+import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
+import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
 import { getOutboxMessagesForSectionLambda } from './messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './messages/getOutboxMessagesForUserLambda';
 import { getPractitionerByBarNumberLambda } from './practitioners/getPractitionerByBarNumberLambda';
@@ -99,6 +102,7 @@ import { getPrivatePractitionersBySearchKeyLambda } from './users/getPrivatePrac
 import { getStatusOfVirusScanLambda } from './documents/getStatusOfVirusScanLambda';
 import { getTrialSessionDetailsLambda } from './trialSessions/getTrialSessionDetailsLambda';
 import { getTrialSessionWorkingCopyLambda } from './trialSessions/getTrialSessionWorkingCopyLambda';
+import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
 import { getTrialSessionsForJudgeLambda } from './trialSessions/getTrialSessionsForJudgeLambda';
 import { getTrialSessionsLambda } from './trialSessions/getTrialSessionsLambda';
 import { getUploadPolicyLambda } from './documents/getUploadPolicyLambda';
@@ -734,6 +738,10 @@ app.get(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
   );
+  app.post(
+    '/judge-activity-report/closed-cases',
+    lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
 }
 
 /**
@@ -827,6 +835,18 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.get(
     '/judges/:judgeId/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/trial-sessions',
+    lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/judge-activity-report/opinions',
+    lambdaWrapper(getOpinionsFiledByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/orders',
+    lambdaWrapper(getOrdersFiledByJudgeLambda),
   );
 }
 

@@ -1,5 +1,9 @@
+import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
+
 export const unauthedUserViewsCaseDetailForSealedCase = cerebralTest => {
   return it('View case detail for a sealed case', async () => {
+    await refreshElasticsearchIndex(3000);
+
     await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
