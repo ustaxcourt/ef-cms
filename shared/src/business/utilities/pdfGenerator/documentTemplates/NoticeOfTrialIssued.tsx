@@ -1,6 +1,6 @@
+import { DocketHeader } from '../components/DocketHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
 import React from 'react';
-const { DocketHeader } = require('../components/DocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 
 export const NoticeOfTrialIssued = ({
   caseCaptionExtension,

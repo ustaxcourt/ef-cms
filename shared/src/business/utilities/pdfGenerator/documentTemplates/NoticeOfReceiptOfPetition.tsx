@@ -1,9 +1,7 @@
+import { AddressLabel } from '../components/AddressLabel.tsx';
+import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
 import React from 'react';
-const {
-  CompressedDocketHeader,
-} = require('../components/CompressedDocketHeader.tsx');
-const { AddressLabel } = require('../components/AddressLabel.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 
 const StandardNOTRText = () => (
   <div className="info-box-content">

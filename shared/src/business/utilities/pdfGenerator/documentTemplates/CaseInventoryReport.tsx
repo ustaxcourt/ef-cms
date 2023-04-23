@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader.tsx';
 import React from 'react';
-const { PrimaryHeader } = require('../components/PrimaryHeader');
-const { ReportsHeader } = require('../components/ReportsHeader.tsx');
 
 export const CaseInventoryReport = ({
   formattedCases,
