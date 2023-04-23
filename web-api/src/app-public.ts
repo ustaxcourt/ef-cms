@@ -1,9 +1,9 @@
 import { createApplicationContext } from './applicationContext';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logger } from './logger';
 import cors from 'cors';
 import express from 'express';
-import logger from './logger';
 const app = express();
 import { get } from '../../shared/src/persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
