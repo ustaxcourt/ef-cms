@@ -13,6 +13,7 @@ import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRec
 import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
 import path from 'path';
 
+import * as pdfLib from 'pdf-lib';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -29,6 +30,8 @@ import {
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
+import pug from 'pug';
+import sass from 'sass';
 
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
@@ -630,17 +633,17 @@ export const createTestApplicationContext = ({ user } = {}) => {
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    getNodeSass: jest.fn().mockReturnValue(require('sass')),
+    getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfLib: jest.fn().mockResolvedValue(require('pdf-lib')),
+    getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPublicSiteUrl,
-    getPug: jest.fn().mockReturnValue(require('pug')),
+    getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
