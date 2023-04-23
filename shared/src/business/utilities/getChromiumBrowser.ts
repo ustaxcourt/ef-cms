@@ -1,5 +1,6 @@
+import chromium from '@sparticuz/chrome-aws-lambda';
+
 export const getChromiumBrowser = async () => {
-  const chromium = require('@sparticuz/chrome-aws-lambda');
   return await chromium.puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
