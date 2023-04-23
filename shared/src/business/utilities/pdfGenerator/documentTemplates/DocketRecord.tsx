@@ -1,5 +1,5 @@
 const classNames = require('classnames');
-const React = require('react');
+import React from 'react';
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.tsx');
