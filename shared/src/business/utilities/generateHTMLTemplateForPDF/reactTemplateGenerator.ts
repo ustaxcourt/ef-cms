@@ -1,8 +1,5 @@
 import 'regenerator-runtime';
-require('@babel/register')({
-  extensions: ['.tsx'],
-  presets: ['@babel/preset-react', '@babel/preset-env'],
-});
+import babelRegister from '@babel/register';
 
 // Documents
 import { AddressLabelCoverSheet } from '../pdfGenerator/documentTemplates/AddressLabelCoverSheet.tsx';
@@ -42,6 +39,11 @@ import { DocumentService } from '../emailGenerator/emailTemplates/DocumentServic
 import { PetitionService } from '../emailGenerator/emailTemplates/PetitionService.tsx';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+
+babelRegister({
+  extensions: ['.tsx'],
+  presets: ['@babel/preset-react', '@babel/preset-env'],
+});
 
 const components = {
   AddressLabelCoverSheet,
