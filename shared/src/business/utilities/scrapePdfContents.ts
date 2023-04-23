@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
  * @param {string} pdfBuffer the buffer for the pdf content
  * @returns {Promise} the template with the brackets replaced with replacement values
  */
-const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
+export const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
   let pdfjsLib;
 
   try {
@@ -48,5 +48,3 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
     );
   }
 };
-
-exports.scrapePdfContents = scrapePdfContents;
