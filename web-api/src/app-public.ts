@@ -5,6 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import logger from './logger';
 const app = express();
+import { get } from '../../shared/src/persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { set } from 'lodash';
 
@@ -29,9 +30,6 @@ app.use(async (req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const {
-      get,
-    } = require('../../shared/src/persistence/dynamodbClientService.ts');
     const whitelist = await get({
       Key: {
         pk: 'allowed-terminal-ips',
