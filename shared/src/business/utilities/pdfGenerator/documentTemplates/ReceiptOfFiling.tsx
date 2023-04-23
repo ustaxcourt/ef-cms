@@ -1,9 +1,7 @@
 /* eslint-disable react/no-array-index-key */
+import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
 import React from 'react';
-const {
-  CompressedDocketHeader,
-} = require('../components/CompressedDocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 
 const DocumentRow = ({ document }) => {
   const hasAttachments = !!document.attachments;
