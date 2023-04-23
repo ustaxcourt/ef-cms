@@ -1,3 +1,7 @@
+button:disabled {
+  cursor: default;
+}
+
 .usa-button {
   &.red-warning {
     &:not(.usa-button--unstyled) {
