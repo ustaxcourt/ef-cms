@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * Append form to a provided PDF
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.appendAmendedPetitionFormLambda = event =>
+export const appendAmendedPetitionFormLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {

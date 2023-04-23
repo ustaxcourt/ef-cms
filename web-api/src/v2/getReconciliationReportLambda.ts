@@ -1,5 +1,5 @@
-const { genericHandler } = require('../genericHandler');
-const { v2ApiWrapper } = require('./v2ApiWrapper');
+import { genericHandler } from '../genericHandler';
+import { v2ApiWrapper } from './v2ApiWrapper';
 
 /**
  * used for getting the reconciliation report for IRS Superuser that lists all
@@ -10,7 +10,7 @@ const { v2ApiWrapper } = require('./v2ApiWrapper');
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the reconciliation report
  */
-exports.getReconciliationReportLambda = (event, options = {}) =>
+export const getReconciliationReportLambda = (event, options = {}) =>
   genericHandler(
     event,
     ({ applicationContext }) => {

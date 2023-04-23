@@ -1,17 +1,17 @@
-exports.goToMyDocumentQC = () => {
+export const goToMyDocumentQC = () => {
   cy.get('a[href*="document-qc/my/inbox"]').click();
   cy.get('.big-blue-header').should('exist');
 };
 
-exports.goToSectionDocumentQC = () => {
+export const goToSectionDocumentQC = () => {
   cy.get('button:contains("Switch to Section Document QC")').click();
 };
 
-exports.goToPetitionNeedingQC = () => {
+export const goToPetitionNeedingQC = () => {
   cy.get('a[href*="petition-qc"]').first().click();
 };
 
-exports.goToPetitionNeedingQCByCaseTitle = caseTitle => {
+export const goToPetitionNeedingQCByCaseTitle = caseTitle => {
   cy.get(`td:contains(${caseTitle})`)
     .first()
     .parent()
@@ -19,35 +19,35 @@ exports.goToPetitionNeedingQCByCaseTitle = caseTitle => {
     .click();
 };
 
-exports.goToReviewPetition = () => {
+export const goToReviewPetition = () => {
   cy.get('button#submit-case').click();
 };
 
-exports.savePetitionForLater = () => {
+export const savePetitionForLater = () => {
   cy.get('button:contains("Save for Later")').click();
 
   cy.get('div.usa-alert--success').should('exist');
 };
 
-exports.selectTab = tabName => {
+export const selectTab = tabName => {
   cy.get(`button#tab-${tabName}`).click();
 };
 
-exports.selectCaseType = caseType => {
+export const selectCaseType = caseType => {
   cy.get('#case-type').scrollIntoView().select(caseType);
 };
 
-exports.addStatistic = (year, deficiencyAmount, totalPenalties) => {
+export const addStatistic = (year, deficiencyAmount, totalPenalties) => {
   cy.get('input[id^=year-]').last().type(year);
   cy.get('input[id^=deficiency-amount-]').last().type(deficiencyAmount);
   cy.get('input[id^=total-penalties-]').last().type(totalPenalties);
 };
 
-exports.servePetition = () => {
+export const servePetition = () => {
   cy.get('#ustc-start-a-case-form button#submit-case').scrollIntoView().click();
 };
 
-exports.confirmServePetition = () => {
+export const confirmServePetition = () => {
   cy.get('button#confirm').click();
 
   cy.get('div.usa-alert--success').should('exist');
