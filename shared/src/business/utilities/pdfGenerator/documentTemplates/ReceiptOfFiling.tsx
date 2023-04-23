@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-const React = require('react');
+import React from 'react';
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.tsx');

@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 const { PretrialMemorandum } = require('../components/PretrialMemorandum.tsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
 

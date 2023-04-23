@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 const { AddressLabel } = require('../components/AddressLabel.tsx');
 
 export const AddressLabelCoverSheet = ({
