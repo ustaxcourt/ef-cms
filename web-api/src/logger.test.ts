@@ -1,6 +1,6 @@
+import { logger } from './logger';
 import { transports } from 'winston';
 import fs from 'fs';
-import logger from './logger';
 jest.mock('@vendia/serverless-express');
 import { getCurrentInvoke } from '@vendia/serverless-express';
 
