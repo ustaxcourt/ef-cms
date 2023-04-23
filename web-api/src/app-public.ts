@@ -1,13 +1,14 @@
 import { createApplicationContext } from './applicationContext';
+import { get } from '../../shared/src/persistence/dynamodbClientService';
+import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { logger } from './logger';
+import { set } from 'lodash';
 import cors from 'cors';
 import express from 'express';
-const app = express();
-import { get } from '../../shared/src/persistence/dynamodbClientService';
-import { getCurrentInvoke } from '@vendia/serverless-express';
-import { set } from 'lodash';
+
+export const app = express();
 
 const applicationContext = createApplicationContext({});
 
@@ -133,5 +134,3 @@ app.get(
 );
 
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
-
-exports.app = app;
