@@ -49,7 +49,7 @@ const DWObject = {
   SelectSourceByIndex: () => null,
 };
 
-export const getScannerInterface = () => {
+export const getScannerMockInterface = () => {
   const completeScanSession = () => {
     DWObject.RemoveAllImages();
     DWObject.CloseSource();

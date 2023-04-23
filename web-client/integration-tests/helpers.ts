@@ -33,7 +33,7 @@ import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCa
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
-import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
@@ -97,7 +97,7 @@ Object.assign(applicationContext, {
     dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
-  getScanner: getScannerInterface,
+  getScanner: getScannerMockInterface,
 });
 
 export const fakeFile = (() => {
