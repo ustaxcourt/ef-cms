@@ -6,6 +6,7 @@ import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/case
 import * as pdfLib from 'pdf-lib';
 import { addressLabelCoverSheet } from '../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet';
 import axios from 'axios';
+import pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import pug from 'pug';
 import sass from 'sass';
 import util from 'util';
@@ -486,7 +487,6 @@ export const createApplicationContext = (
       return notificationServiceCache;
     },
     getPdfJs: () => {
-      const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
     },

@@ -1,18 +1,18 @@
-const colorize = require('logform/colorize');
-const combine = require('logform/combine');
-const errors = require('logform/errors');
-const json = require('logform/json');
-const printf = require('logform/printf');
-const util = require('util');
-const {
+import { cloneDeep, isEqual, unset } from 'lodash';
+import {
   config,
-  createLogger: createWinstonLogger,
+  createLogger as createWinstonLogger,
   format,
   transports,
-} = require('winston');
-const { cloneDeep, isEqual, unset } = require('lodash');
+} from 'winston';
+import colorize from 'logform/colorize';
+import combine from 'logform/combine';
+import errors from 'logform/errors';
+import json from 'logform/json';
+import printf from 'logform/printf';
+import util from 'util';
 
-exports.redact = format(logEntry => {
+export const redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
   [
     'user.token',
@@ -22,7 +22,7 @@ exports.redact = format(logEntry => {
   return copy;
 });
 
-exports.removeDuplicateLogInformation = format(logEntry => {
+export const removeDuplicateLogInformation = format(logEntry => {
   const copy = cloneDeep(logEntry);
 
   if (!copy.context) return copy;
@@ -37,7 +37,7 @@ exports.removeDuplicateLogInformation = format(logEntry => {
   return copy;
 });
 
-exports.createLogger = (opts = {}) => {
+export const createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
     level: opts.logLevel || process.env.LOG_LEVEL || 'debug',
@@ -48,8 +48,8 @@ exports.createLogger = (opts = {}) => {
 
   const formatters = [
     errors({ stack: true }),
-    exports.redact(),
-    exports.removeDuplicateLogInformation(),
+    redact(),
+    removeDuplicateLogInformation(),
   ];
 
   if (process.env.NODE_ENV === 'production') {
@@ -59,7 +59,7 @@ exports.createLogger = (opts = {}) => {
       ...formatters,
       colorize(),
       printf(info => {
-        const lines = exports.getMetadataLines(info);
+        const lines = getMetadataLines(info);
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
       }),
     );
@@ -72,7 +72,7 @@ exports.createLogger = (opts = {}) => {
   return logger;
 };
 
-exports.getMetadataLines = info => {
+export const getMetadataLines = info => {
   const metadata = Object.assign({}, info, {
     level: undefined,
     message: undefined,
