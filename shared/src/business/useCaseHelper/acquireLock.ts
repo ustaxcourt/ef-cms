@@ -121,21 +121,18 @@ export const removeLock = ({
   prefix: string;
 }) => {
   if (!identifier) return;
-  if (typeof identifier === 'object') {
-    return Promise.all(
-      identifier.map(entityIdentifier =>
-        removeLock({
-          applicationContext,
-          identifier: entityIdentifier,
-          prefix,
-        }),
-      ),
-    );
-  }
+  const identifiersToUnlock =
+    typeof identifier === 'string' ? [identifier] : identifier;
 
-  return applicationContext
-    .getPersistenceGateway()
-    .removeLock({ applicationContext, identifier, prefix });
+  return Promise.all(
+    identifiersToUnlock.map(entityIdentifier =>
+      applicationContext.getPersistenceGateway().removeLock({
+        applicationContext,
+        identifier: entityIdentifier,
+        prefix,
+      }),
+    ),
+  );
 };
 
 /**

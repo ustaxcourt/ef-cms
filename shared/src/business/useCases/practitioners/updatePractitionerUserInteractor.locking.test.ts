@@ -32,7 +32,7 @@ describe('determineEntitiesToLock', () => {
   it('should lookup the docket numbers for the specified user', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
     expect(
-      applicationContext.getPersistenceGateway().getCasesByUserId,
+      applicationContext.getPersistenceGateway().getDocketNumbersByUser,
     ).toHaveBeenCalledWith({
       applicationContext,
       userId: mockPractitioner.userId,
@@ -41,7 +41,7 @@ describe('determineEntitiesToLock', () => {
   it('should return an object that includes all of the docketNumbers associated with the user', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(['111-20', '222-20', '333-20']);
+      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
     const { identifier } = await determineEntitiesToLock(
       applicationContext,
       mockParams,
@@ -116,7 +116,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([MOCK_CASE.docketNumber]);
+      .getDocketNumbersByUser.mockReturnValue([MOCK_CASE.docketNumber]);
   });
 
   describe('locked', () => {
