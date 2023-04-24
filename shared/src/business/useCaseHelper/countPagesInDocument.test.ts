@@ -1,7 +1,6 @@
-const {
-  applicationContext,
-  testPdfDoc,
-} = require('../test/createTestApplicationContext');
+import { testPdfDoc } from '../test/getFakeFile';
+
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { countPagesInDocument } = require('./countPagesInDocument');
 
 describe('countPagesInDocument', () => {

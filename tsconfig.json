@@ -10,7 +10,8 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "strict": true
   },
   "ts-node": {
     "files": true
@@ -20,7 +21,8 @@
     "./web-api/src/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
-    "./web-client/integration-tests/fixtures/consolidated-cases.ts"
+    "./web-client/integration-tests/fixtures/consolidated-cases.ts",
+    "./cypress/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,14 +1,13 @@
-const {
+import {
   changeEmailTo,
   clickChangeEmail,
   clickConfirmModal,
   confirmEmailPendingAlert,
   goToMyAccount,
-} = require('../support/pages/my-account');
-const {
-  confirmEmailVerificationSuccessful,
-} = require('../support/pages/public/email-verification');
-const { navigateTo: loginAs } = require('../support/pages/maintenance');
+} from '../support/pages/my-account';
+
+import { confirmEmailVerificationSuccessful } from '../support/pages/public/email-verification';
+import { navigateTo as loginAs } from '../support/pages/maintenance';
 
 describe('Petitioner updates and verifies their email', () => {
   it('petitioner should be able to change their email', () => {

@@ -1,39 +1,39 @@
-exports.navigateTo = (username, docketNumber, docketEntryId) => {
+export const navigateTo = (username, docketNumber, docketEntryId) => {
   cy.login(username, `/case-detail/${docketNumber}/documents/${docketEntryId}`);
 };
 
-exports.getMessagesTab = () => {
+export const getMessagesTab = () => {
   return cy.get('button#tab-pending-messages');
 };
 
-exports.getInProgressTab = () => {
+export const getInProgressTab = () => {
   return cy.get('button#tab-messages-in-progress');
 };
 
-exports.getCreateMessageButton = () => {
+export const getCreateMessageButton = () => {
   return cy.get('button#create-message-button');
 };
 
-exports.getSectionSelect = () => {
+export const getSectionSelect = () => {
   return cy.get('select#section');
 };
 
-exports.getAssigneeIdSelect = () => {
+export const getAssigneeIdSelect = () => {
   return cy.get('select#assigneeId');
 };
 
-exports.getMessageTextArea = () => {
+export const getMessageTextArea = () => {
   return cy.get('textarea#message');
 };
 
-exports.getSendMessageButton = () => {
+export const getSendMessageButton = () => {
   return cy.get('.modal-dialog').contains('Send');
 };
 
-exports.getCardContaining = text => {
+export const getCardContaining = text => {
   return cy.get('.card').contains(text);
 };
 
-exports.getModal = () => {
+export const getModal = () => {
   return cy.get('.modal-dialog');
 };

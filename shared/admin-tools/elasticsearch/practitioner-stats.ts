@@ -5,8 +5,8 @@ requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
 import { computeDate } from '../../src/business/utilities/DateHandler';
+import { createApplicationContext } from '../../../web-api/src/applicationContext';
 import { searchAll } from '../../src/persistence/elasticsearch/searchClient';
-import createApplicationContext from '../../../web-api/src/applicationContext';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
