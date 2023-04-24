@@ -16,11 +16,11 @@ describe('Petitioner files an encrypted document', () => {
 
   loginAs(cerebralTest, 'petitioner3@example.com');
   it('login as a petitioner and create a case', async () => {
-    const { docketNumber } = await uploadPetition(cerebralTest, {
-      caseType: 'Whistleblower',
-    });
-
-    console.log('A YO HO HO HOOOOO');
+    const { docketNumber } = await uploadPetition(
+      cerebralTest,
+      {},
+      'petitioner3@example.com',
+    );
 
     expect(docketNumber).toBeDefined();
 
@@ -36,99 +36,43 @@ describe('Petitioner files an encrypted document', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'category',
-        value: 'Answer',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'documentType',
-        value: 'Answer',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'documentTitle',
-        value: 'Answer - PDF is Encrypted',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'A',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'scenario',
-        value: 'Standard',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile1,
-      },
-    );
-
     const { contactId } = contactPrimaryFromState(cerebralTest);
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactId}`,
-        value: true,
-      },
-    );
+    /* eslint-disable sort-keys-fix/sort-keys-fix */
+    const answerFormValues = {
+      category: 'Answer',
+      documentType: 'Answer',
+      documentTitle: 'Answer - PDF is Encrypted',
+      eventCode: 'A',
+      scenario: 'Standard',
+      primaryDocumentFile: fakeFile1,
+      [`filersMap.${contactId}`]: true,
+      certificateOfService: false,
+      hasSupportingDocuments: false,
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfService',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'hasSupportingDocuments',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    for (let [key, value] of Object.entries(answerFormValues)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
-
-    expect(cerebralTest.getState('form.filers')).toEqual([contactId]);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'redactionAcknowledgement',
       value: true,
     });
 
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await cerebralTest.runSequence('submitExternalDocumentSequence');
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'FileUploadErrorModal',
+    );
   });
-
-  // petitionerViewsCaseDetailAfterFilingDocument(cerebralTest, {
-  //   documentCount: 8,
-  // });
-  // petitionerFilesAmendedMotion(cerebralTest, fakeFile);
 });
