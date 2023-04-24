@@ -5,13 +5,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
-import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
@@ -214,7 +211,7 @@ export const updatePractitionerCases = async ({
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
  */
-export const verifyUserPendingEmailInteractor = async (
+export const verifyUserPendingEmail = async (
   applicationContext: IApplicationContext,
   { token }: { token: string },
 ) => {
@@ -234,16 +231,6 @@ export const verifyUserPendingEmailInteractor = async (
       applicationContext,
       userId: user.userId,
     });
-
-  await acquireLock({
-    applicationContext,
-    identifier: docketNumbersAssociatedWithUser,
-    onLockError: new ServiceUnavailableError(
-      'One of the cases is currently being updated',
-    ),
-    prefix: 'case',
-    ttl: 900,
-  });
 
   let userEntity;
   if (user.role === ROLES.petitioner) {
@@ -299,15 +286,6 @@ export const verifyUserPendingEmailInteractor = async (
         user: updatedRawUser,
       });
     }
-    await Promise.all(
-      docketNumbersAssociatedWithUser.map(docketNumber =>
-        applicationContext.getPersistenceGateway().removeLock({
-          applicationContext,
-          identifier: docketNumber,
-          prefix: 'case',
-        }),
-      ),
-    );
   } catch (error) {
     applicationContext.logger.error('Unable to verify pending user email', {
       error,
@@ -315,3 +293,45 @@ export const verifyUserPendingEmailInteractor = async (
     throw error;
   }
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'verify_user_pending_email',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+): Promise<{ identifier: string[]; prefix: string; ttl: number }> => {
+  const user = await applicationContext.getCurrentUser();
+
+  const docketNumbers: string[] = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  return {
+    identifier: docketNumbers,
+    prefix: 'case',
+    ttl: 900,
+  };
+};
+
+export const verifyUserPendingEmailInteractor = withLocking(
+  verifyUserPendingEmail,
+  determineEntitiesToLock,
+  handleLockError,
+);
