@@ -23,10 +23,24 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  applicationContext.logger.info(
+    'generateTrialSessionPaperServicePdfInteractor start',
+    {
+      trialNoticePdfsKeys,
+    },
+  );
+
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
   for (let index = 0; index < trialNoticePdfsKeys.length; index++) {
+    applicationContext.logger.info(
+      'generateTrialSessionPaperServicePdfInteractor begin stich',
+      {
+        key: trialNoticePdfsKeys[index],
+      },
+    );
+
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
@@ -36,12 +50,26 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
         useTempBucket: true,
       });
 
+    applicationContext.logger.info(
+      'generateTrialSessionPaperServicePdfInteractor data downloaded',
+      {
+        key: trialNoticePdfsKeys[index],
+      },
+    );
+
     const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
 
     await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
       copyFrom: calendaredCasePdf,
       copyInto: paperServiceDocumentsPdf,
     });
+
+    applicationContext.logger.info(
+      'generateTrialSessionPaperServicePdfInteractor complete stich',
+      {
+        key: trialNoticePdfsKeys[index],
+      },
+    );
   }
 
   const hasPaper = !!paperServiceDocumentsPdf.getPageCount();
@@ -50,6 +78,9 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   let docketEntryId, pdfUrl;
 
   if (hasPaper) {
+    applicationContext.logger.info(
+      'generateTrialSessionPaperServicePdfInteractor saveFileAndGenerateUrl start',
+    );
     ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl({
