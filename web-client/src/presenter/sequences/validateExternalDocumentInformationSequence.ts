@@ -7,33 +7,33 @@ import { validateExternalDocumentInformationAction } from '../actions/FileDocume
 import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const validateExternalDocumentInformationSequence = [
-  shouldValidateAction,
+  // shouldValidateAction,
+  // {
+  //   ignore: [],
+  //   validate: [
+  // computeCertificateOfServiceFormDateAction,
+  // setFilersFromFilersMapAction,
+  // upload the pdf so our lambda can validatePdfInteractor
+  validateFileAction,
   {
-    ignore: [],
-    validate: [
-      computeCertificateOfServiceFormDateAction,
-      setFilersFromFilersMapAction,
-      // upload the pdf so our lambda can validatePdfInteractor
-      validateFileAction,
-      {
-        error: [
-          () => {
-            console.log('pdf has been validated, it is BORKED!');
-          },
-        ],
-        success: [
-          () => {
-            console.log('pdf has been validated, it is NOT borked!');
-          },
-        ],
+    error: [
+      () => {
+        console.log('pdf has been validated, it is BORKED!');
       },
-      validateExternalDocumentInformationAction,
-      {
-        error: [setValidationErrorsAction],
-        success: [clearAlertsAction],
+    ],
+    success: [
+      () => {
+        console.log('pdf has been validated, it is NOT borked!');
       },
     ],
   },
+  validateExternalDocumentInformationAction,
+  {
+    error: [setValidationErrorsAction],
+    success: [clearAlertsAction],
+  },
+  //   ],
+  // },
 ];
 
 // upload to s3, validatePdfInteractor, return id
