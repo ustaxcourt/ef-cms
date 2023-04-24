@@ -4,14 +4,14 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-import { PaginationerComponent } from '../../ustc-ui/Pagination/PaginationerComponent';
+import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 2;
 
 export const CustomCaseReport = connect(
   {
@@ -34,7 +34,6 @@ export const CustomCaseReport = connect(
     validationErrors,
   }) {
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
-    // const [totalCases, setTotalCases] = useState(0);
     const [casesItemOffset, setCaseItemOffset] = useState(0);
 
     const paginateChange = event => {
@@ -263,10 +262,6 @@ export const CustomCaseReport = connect(
             onClick={() => {
               setHasRunCustomCaseReport(true);
               getCustomCaseInventoryReportSequence();
-              console.log(
-                customCaseInventoryReportHelper.customCaseInventoryReportData
-                  .length,
-              );
             }}
           >
             Run Report
@@ -280,7 +275,7 @@ export const CustomCaseReport = connect(
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
-          <PaginationerComponent
+          <Paginator
             pageCount={Math.ceil(
               customCaseInventoryReportHelper.customCaseInventoryReportData
                 .length / ITEMS_PER_PAGE,
