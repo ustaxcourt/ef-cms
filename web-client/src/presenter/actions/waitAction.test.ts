@@ -1,11 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
-import { retryUpdatePractitionerUserAction } from './waitAction';
 import { runAction } from 'cerebral/test';
+import { waitAction } from './waitAction';
 
 describe('retryUpdatePractitionerUserAction', () => {
   // this should receive an object to retry
-  presenter.providers.applicationContext = applicationContext;
   let mockCall;
   const mockOriginalRequest = {
     clientConnectionId: 'abc123',
@@ -16,6 +15,10 @@ describe('retryUpdatePractitionerUserAction', () => {
     },
     isSavingForLater: false,
   };
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
 
   beforeEach(() => {
     mockCall = {
@@ -31,42 +34,14 @@ describe('retryUpdatePractitionerUserAction', () => {
     };
   });
 
-  it('should call the updatePractitionerUserInteractor with the originalRequest that it received', async () => {
-    await runAction(retryUpdatePractitionerUserAction, mockCall);
-    expect(
-      applicationContext.getUseCases().updatePractitionerUserInteractor.mock
-        .calls[0][1],
-    ).toMatchObject(mockOriginalRequest);
-  });
-
-  it('should wait a default of 3 seconds before calling updatePractitionerUserInteractor', async () => {
-    await runAction(retryUpdatePractitionerUserAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        originalRequest: mockOriginalRequest,
-      },
-      state: {
-        form: {},
-      },
-    });
+  it('should wait a default of 3 seconds', async () => {
+    await runAction(waitAction, mockCall);
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(3000);
   });
 
-  it('should wait the specified amount of time before calling updatePractitionerUserInteractor', async () => {
-    await runAction(retryUpdatePractitionerUserAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        mockOriginalRequest,
-        retryAfter: 5000,
-      },
-      state: {
-        form: {},
-      },
-    });
+  it('should wait the specified amount of time', async () => {
+    mockCall.props.retryAfter = 5000;
+    await runAction(waitAction, mockCall);
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(5000);
   });
 });
