@@ -40,45 +40,49 @@ exports.associateIrsPractitionerToCase = async ({
   }
 
   const associatedCaseEntities = await Promise.all(
-    docketNumbersToAssociate.map( async caseDocketNumber => {
+    docketNumbersToAssociate.map(async caseDocketNumber => {
       const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      caseDocketNumber,
-      userId: user.userId,
-    });
+        .getPersistenceGateway()
+        .verifyCaseForUser({
+          applicationContext,
+          caseDocketNumber,
+          userId: user.userId,
+        });
 
-  if (!isAssociated) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+      if (!isAssociated) {
+        const caseToUpdate = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber,
+          });
 
-    const userCaseEntity = new UserCase(caseToUpdate);
+        const userCaseEntity = new UserCase(caseToUpdate);
 
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    });
+        await applicationContext.getPersistenceGateway().associateUserWithCase({
+          applicationContext,
+          docketNumber,
+          userCase: userCaseEntity.validate().toRawObject(),
+          userId: user.userId,
+        });
 
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+        const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    caseEntity.attachIrsPractitioner(
-      new IrsPractitioner({ ...user, serviceIndicator }),
-    );
+        caseEntity.attachIrsPractitioner(
+          new IrsPractitioner({ ...user, serviceIndicator }),
+        );
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
+        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+          applicationContext,
+          caseToUpdate: caseEntity,
+        });
 
-    return caseEntity.toRawObject();
-    });
+        return caseEntity.toRawObject();
+      }
+    }),
   );
-  return caseEntity.toRawObject();
+
+  return associatedCaseEntities.find(caseEntity => {
+    return caseEntity.docketNumber === docketNumber;
+  });
 };
