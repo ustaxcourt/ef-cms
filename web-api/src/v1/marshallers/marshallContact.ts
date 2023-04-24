@@ -5,7 +5,7 @@
  * @param {object} contactObject the most up-to-date representation of a contact
  * @returns {object} the v1 representation of a contact
  */
-exports.marshallContact = contactObject => {
+export const marshallContact = contactObject => {
   return {
     address1: contactObject.address1,
     address2: contactObject.address2,

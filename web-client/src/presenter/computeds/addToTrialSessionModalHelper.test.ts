@@ -45,6 +45,14 @@ describe('addToTrialSessionModalHelper', () => {
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
       sessionStatus: 'Open',
+      sessionType: 'Hybrid-S',
+      startDate: '2018-01-02T21:40:46.415Z',
+      trialLocation: 'Spokane, Washington',
+      trialSessionId: '8',
+    },
+    {
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      sessionStatus: 'Open',
       sessionType: 'Special',
       startDate: '2019-01-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
@@ -245,6 +253,12 @@ describe('addToTrialSessionModalHelper', () => {
           trialSessionId: '7',
         },
       ],
+      Washington: [
+        {
+          optionText: 'Spokane, Washington 01/02/18 (HS)',
+          trialSessionId: '8',
+        },
+      ],
     });
   });
 
@@ -264,6 +278,7 @@ describe('addToTrialSessionModalHelper', () => {
       'Remote',
       US_STATES.AL,
       US_STATES.ID,
+      US_STATES.WA,
     ]);
   });
 

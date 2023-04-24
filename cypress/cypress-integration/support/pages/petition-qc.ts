@@ -1,35 +1,35 @@
-exports.navigateTo = (username, docketNumber) => {
+export const navigateTo = (username, docketNumber) => {
   cy.login(username, `/case-detail/${docketNumber}/petition-qc`);
 };
 
-exports.navigateToCase = (username, docketNumber) => {
+export const navigateToCase = (username, docketNumber) => {
   cy.login(username, `/case-detail/${docketNumber}`);
 };
 
-exports.getCaseInfoTab = () => {
+export const getCaseInfoTab = () => {
   return cy.get('button#tab-case-info');
 };
 
-exports.getCaseTitleTextArea = () => {
+export const getCaseTitleTextArea = () => {
   return cy.get('textarea#case-caption');
 };
 
-exports.getCaseTitleContaining = text => {
+export const getCaseTitleContaining = text => {
   return cy.contains('p#case-title', text);
 };
 
-exports.getIrsNoticeTab = () => {
+export const getIrsNoticeTab = () => {
   return cy.get('button#tab-irs-notice');
 };
 
-exports.getHasIrsNoticeYesRadioButton = () => {
+export const getHasIrsNoticeYesRadioButton = () => {
   return cy.get('#has-irs-verified-notice-yes');
 };
 
-exports.getReviewPetitionButton = () => {
+export const getReviewPetitionButton = () => {
   return cy.contains('button', 'Review Petition');
 };
 
-exports.getSaveForLaterButton = () => {
+export const getSaveForLaterButton = () => {
   return cy.contains('button', 'Save for Later');
 };

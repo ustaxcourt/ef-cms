@@ -1,177 +1,90 @@
 /* eslint-disable max-lines */
-const AWS = require('aws-sdk');
-const axios = require('axios');
-const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
-const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const pdfLib = require('pdf-lib');
-const pug = require('pug');
-const sass = require('sass');
-const util = require('util');
-const {
-  addressLabelCoverSheet,
-} = require('../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet');
-const {
+import AWS from 'aws-sdk';
+
+import * as barNumberGenerator from '../../shared/src/persistence/dynamo/users/barNumberGenerator';
+import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
+import * as pdfLib from 'pdf-lib';
+import { addressLabelCoverSheet } from '../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet';
+import axios from 'axios';
+import pug from 'pug';
+import sass from 'sass';
+import util from 'util';
+
+import {
   CASE_STATUS_TYPES,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
+  ORDER_TYPES,
   SESSION_STATUS_GROUPS,
-} = require('../../shared/src/business/entities/EntityConstants');
-const {
-  CaseDeadline,
-} = require('../../shared/src/business/entities/CaseDeadline');
-const {
-  caseInventoryReport,
-} = require('../../shared/src/business/utilities/documentGenerators/caseInventoryReport');
-const {
-  changeOfAddress,
-} = require('../../shared/src/business/utilities/documentGenerators/changeOfAddress');
-const {
+} from '../../shared/src/business/entities/EntityConstants';
+
+// eslint-disable-next-line import/no-unresolved
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
+import { Client } from '@opensearch-project/opensearch';
+import { Correspondence } from '../../shared/src/business/entities/Correspondence';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
+import { Message } from '../../shared/src/business/entities/Message';
+import { Practitioner } from '../../shared/src/business/entities/Practitioner';
+import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { User } from '../../shared/src/business/entities/User';
+import { UserCase } from '../../shared/src/business/entities/UserCase';
+import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
+import { WorkItem } from '../../shared/src/business/entities/WorkItem';
+import { caseInventoryReport } from '../../shared/src/business/utilities/documentGenerators/caseInventoryReport';
+import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
+import {
   clerkOfCourtNameForSigning,
   getEnvironment,
   getUniqueId,
-} = require('../../shared/src/sharedAppContext');
-const {
-  Correspondence,
-} = require('../../shared/src/business/entities/Correspondence');
-const {
-  coverSheet,
-} = require('../../shared/src/business/utilities/documentGenerators/coverSheet');
-const {
-  DocketEntry,
-} = require('../../shared/src/business/entities/DocketEntry');
-const {
-  docketRecord,
-} = require('../../shared/src/business/utilities/documentGenerators/docketRecord');
-const {
-  documentUrlTranslator,
-} = require('../../shared/src/business/utilities/documentUrlTranslator');
-const {
-  getChromiumBrowser,
-  getChromiumBrowserAWS,
-} = require('../../shared/src/business/utilities/getChromiumBrowser');
-const {
-  IrsPractitioner,
-} = require('../../shared/src/business/entities/IrsPractitioner');
-const {
-  isAuthorized,
-} = require('../../shared/src/authorization/authorizationClientService');
-const {
-  isCurrentColorActive,
-} = require('../../shared/src/persistence/dynamo/helpers/isCurrentColorActive');
-const {
-  noticeOfChangeOfTrialJudge,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge');
-const {
-  noticeOfChangeToInPersonProceeding,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding');
-const {
-  noticeOfChangeToRemoteProceeding,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding');
-const {
-  noticeOfDocketChange,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange');
-const {
-  noticeOfReceiptOfPetition,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfReceiptOfPetition');
-const {
-  noticeOfTrialIssued,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssued');
-const {
-  noticeOfTrialIssuedInPerson,
-} = require('../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson');
-const {
-  order,
-} = require('../../shared/src/business/utilities/documentGenerators/order');
-const {
-  ORDER_TYPES,
-} = require('../../shared/src/business/entities/EntityConstants');
-const {
-  pendingReport,
-} = require('../../shared/src/business/utilities/documentGenerators/pendingReport');
-const {
-  Practitioner,
-} = require('../../shared/src/business/entities/Practitioner');
-const {
-  practitionerCaseList,
-} = require('../../shared/src/business/utilities/documentGenerators/practitionerCaseList');
-const {
-  printableWorkingCopySessionList,
-} = require('../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList');
-const {
-  PrivatePractitioner,
-} = require('../../shared/src/business/entities/PrivatePractitioner');
-const {
-  receiptOfFiling,
-} = require('../../shared/src/business/utilities/documentGenerators/receiptOfFiling');
-const {
-  retrySendNotificationToConnections,
-} = require('../../shared/src/notifications/retrySendNotificationToConnections');
-const {
-  sendBulkTemplatedEmail,
-} = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
-const {
-  sendEmailEventToQueue,
-} = require('../../shared/src/persistence/messages/sendEmailEventToQueue');
-const {
-  sendNotificationOfSealing,
-} = require('../../shared/src/dispatchers/sns/sendNotificationOfSealing');
-const {
-  sendNotificationToConnection,
-} = require('../../shared/src/notifications/sendNotificationToConnection');
-const {
-  sendNotificationToUser,
-} = require('../../shared/src/notifications/sendNotificationToUser');
-const {
-  sendSetTrialSessionCalendarEvent,
-} = require('../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent');
-const {
-  sendSlackNotification,
-} = require('../../shared/src/dispatchers/slack/sendSlackNotification');
-const {
-  sendUpdatePetitionerCasesMessage,
-} = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
-const {
-  standingPretrialOrder,
-} = require('../../shared/src/business/utilities/documentGenerators/standingPretrialOrder');
-const {
-  standingPretrialOrderForSmallCase,
-} = require('../../shared/src/business/utilities/documentGenerators/standingPretrialOrderForSmallCase');
-const {
-  trialCalendar,
-} = require('../../shared/src/business/utilities/documentGenerators/trialCalendar');
-const {
-  TrialSession,
-} = require('../../shared/src/business/entities/trialSessions/TrialSession');
-const {
-  trialSessionPlanningReport,
-} = require('../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport');
-const {
-  TrialSessionWorkingCopy,
-} = require('../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy');
-const {
-  updatePetitionerCasesInteractor,
-} = require('../../shared/src/business/useCases/users/updatePetitionerCasesInteractor');
-const {
-  UserCaseNote,
-} = require('../../shared/src/business/entities/notes/UserCaseNote');
-const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
-const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { Client } = require('@opensearch-project/opensearch');
-const { createLogger } = require('./createLogger');
-const { exec } = require('child_process');
-const { fallbackHandler } = require('./fallbackHandler');
-const { getPersistenceGateway } = require('./getPersistenceGateway');
-const { getUseCaseHelpers } = require('./getUseCaseHelpers');
-const { getUseCases } = require('./getUseCases');
-const { getUtilities } = require('./getUtilities');
-const { Message } = require('../../shared/src/business/entities/Message');
-const { scan } = require('../../shared/src/persistence/dynamodbClientService');
-const { User } = require('../../shared/src/business/entities/User');
-const { UserCase } = require('../../shared/src/business/entities/UserCase');
-const { v4: uuidv4 } = require('uuid');
-const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
+} from '../../shared/src/sharedAppContext';
+import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import { createLogger } from './createLogger';
+import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
+import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
+import { exec } from 'child_process';
+import { fallbackHandler } from './fallbackHandler';
+import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
+import { getPersistenceGateway } from './getPersistenceGateway';
+import { getUseCaseHelpers } from './getUseCaseHelpers';
+import { getUseCases } from './getUseCases';
+import { getUtilities } from './getUtilities';
+import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
+import { isCurrentColorActive } from '../../shared/src/persistence/dynamo/helpers/isCurrentColorActive';
+import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
+import { noticeOfChangeToInPersonProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding';
+import { noticeOfChangeToRemoteProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding';
+import { noticeOfDocketChange } from '../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange';
+import { noticeOfReceiptOfPetition } from '../../shared/src/business/utilities/documentGenerators/noticeOfReceiptOfPetition';
+import { noticeOfTrialIssued } from '../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssued';
+import { noticeOfTrialIssuedInPerson } from '../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson';
+import { order } from '../../shared/src/business/utilities/documentGenerators/order';
+import { pendingReport } from '../../shared/src/business/utilities/documentGenerators/pendingReport';
+import { practitionerCaseList } from '../../shared/src/business/utilities/documentGenerators/practitionerCaseList';
+import { printableWorkingCopySessionList } from '../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList';
+import { receiptOfFiling } from '../../shared/src/business/utilities/documentGenerators/receiptOfFiling';
+import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
+import { scan } from '../../shared/src/persistence/dynamodbClientService';
+import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
+import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
+import { sendNotificationOfSealing } from '../../shared/src/dispatchers/sns/sendNotificationOfSealing';
+import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
+import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
+import { sendSetTrialSessionCalendarEvent } from '../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent';
+import { sendSlackNotification } from '../../shared/src/dispatchers/slack/sendSlackNotification';
+import { sendUpdatePetitionerCasesMessage } from '../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage';
+import { standingPretrialOrder } from '../../shared/src/business/utilities/documentGenerators/standingPretrialOrder';
+import { standingPretrialOrderForSmallCase } from '../../shared/src/business/utilities/documentGenerators/standingPretrialOrderForSmallCase';
+import { trialCalendar } from '../../shared/src/business/utilities/documentGenerators/trialCalendar';
+import { trialSessionPlanningReport } from '../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport';
+import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
+import { v4 as uuidv4 } from 'uuid';
 const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -284,7 +197,10 @@ const entitiesByName = {
   WorkItem,
 };
 
-module.exports = (appContextUser, logger = createLogger()) => {
+export const createApplicationContext = (
+  appContextUser,
+  logger = createLogger(),
+) => {
   let user;
 
   if (appContextUser) {

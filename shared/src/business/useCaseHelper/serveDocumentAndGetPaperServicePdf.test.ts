@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-  testPdfDoc,
-} = require('../test/createTestApplicationContext');
+import { testPdfDoc } from '../test/getFakeFile';
+
 const {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
@@ -9,6 +7,7 @@ const {
 const {
   serveDocumentAndGetPaperServicePdf,
 } = require('./serveDocumentAndGetPaperServicePdf');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 

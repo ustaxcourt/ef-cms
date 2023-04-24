@@ -8,10 +8,8 @@ import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { addCoverToPdf } from './addCoverToPdf';
 import { addCoversheetInteractor } from './addCoversheetInteractor';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { testPdfDoc } from '../test/getFakeFile';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
