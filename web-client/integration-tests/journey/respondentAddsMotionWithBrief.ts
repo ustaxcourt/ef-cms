@@ -168,6 +168,11 @@ export const respondentAddsMotionWithBrief = (
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'redactionAcknowledgement',
+      value: true,
+    });
+
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 
     expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
