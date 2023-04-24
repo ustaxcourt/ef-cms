@@ -1,21 +1,14 @@
 import { getChromiumBrowser } from './getChromiumBrowser';
+import chromium from '@sparticuz/chrome-aws-lambda';
+jest.mock('@sparticuz/chrome-aws-lambda', () => ({
+  puppeteer: {
+    launch: jest.fn(),
+  },
+}));
 
 describe('getChromiumBrowser', () => {
-  let launchMock;
-
-  beforeEach(() => {
-    launchMock = jest.fn();
-
-    const mockChromium = {
-      puppeteer: {
-        launch: launchMock,
-      },
-    };
-    jest.mock('@sparticuz/chrome-aws-lambda', () => mockChromium);
-  });
-
   it('launches a chromium.puppeteer instance', async () => {
     await getChromiumBrowser();
-    expect(launchMock).toHaveBeenCalled();
+    expect(chromium.puppeteer.launch).toHaveBeenCalled();
   });
 });

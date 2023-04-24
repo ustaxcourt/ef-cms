@@ -1,13 +1,11 @@
-jest.mock('../../../shared/src/persistence/dynamodbClientService');
 import { applicationContext } from '../business/test/createTestApplicationContext';
 import { incrementCounter } from './dynamo/helpers/incrementCounter';
-import client from '../../../shared/src/persistence/dynamodbClientService';
+import { updateConsistent } from './dynamodbClientService';
+jest.mock('../../../shared/src/persistence/dynamodbClientService');
 
 describe('awsDynamoPersistence', function () {
   beforeEach(() => {
-    client.updateConsistent = jest.fn().mockReturnValue({
-      id: 1,
-    });
+    (updateConsistent as jest.Mock).mockReturnValue({ id: 1 });
   });
 
   describe('incrementCounter', () => {
@@ -20,10 +18,10 @@ describe('awsDynamoPersistence', function () {
         .getUtilities()
         .getMonthDayYearInETObj();
 
-      expect(client.updateConsistent.mock.calls[0][0].Key.pk).toEqual(
+      expect((updateConsistent as jest.Mock).mock.calls[0][0].Key.pk).toEqual(
         `docketNumberCounter-${year}`,
       );
-      expect(client.updateConsistent.mock.calls[0][0].Key.sk).toEqual(
+      expect((updateConsistent as jest.Mock).mock.calls[0][0].Key.sk).toEqual(
         `docketNumberCounter-${year}`,
       );
     });
