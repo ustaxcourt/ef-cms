@@ -17,10 +17,12 @@ export const submitCaseAssociationRequestAction = async ({
     applicationContext.getConstants();
 
   const { primaryDocumentId } = props.documentsFiled;
-  const { docketNumber } = get(state.caseDetail);
+  const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
 
-  let documentMetadata = get(state.form);
+  let { documentMetadata, fileAcrossConsolidatedGroup } = get(state.form);
+
+  console.log('fileAcrossConsolidatedGroup', fileAcrossConsolidatedGroup);
 
   documentMetadata = {
     ...documentMetadata,
@@ -33,6 +35,18 @@ export const submitCaseAssociationRequestAction = async ({
       },
     ],
   };
+
+  let consolidatedCasesDocketNumbers = [];
+
+  if (fileAcrossConsolidatedGroup && consolidatedCases.length > 0) {
+    console.log('inside if for fileAcrossConsolidatedGroup');
+
+    consolidatedCasesDocketNumbers = consolidatedCases.map(
+      individualCase => individualCase.docketNumber,
+    );
+  }
+
+  console.log('consolidatedCasesDocketNumbers', consolidatedCasesDocketNumbers);
 
   const isDocumentWithImmediateAssociation =
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
@@ -52,6 +66,7 @@ export const submitCaseAssociationRequestAction = async ({
     await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
+        consolidatedCasesDocketNumbers,
         docketNumber,
         filers: documentMetadata.filers,
       });
@@ -62,6 +77,8 @@ export const submitCaseAssociationRequestAction = async ({
         docketNumber,
       });
   }
+
+  console.log('leavinig submitCaseAssociationRequestAction');
 
   return {
     docketNumber,

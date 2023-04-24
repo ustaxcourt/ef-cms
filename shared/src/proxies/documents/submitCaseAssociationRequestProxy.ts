@@ -11,12 +11,13 @@ const { put } = require('../requests');
  */
 exports.submitCaseAssociationRequestInteractor = (
   applicationContext,
-  { docketNumber, filers },
+  { consolidatedCasesDocketNumbers, docketNumber, filers },
 ) => {
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
     body: {
+      consolidatedCasesDocketNumbers,
       filers,
     },
     endpoint: `/users/${user.userId}/case/${docketNumber}`,

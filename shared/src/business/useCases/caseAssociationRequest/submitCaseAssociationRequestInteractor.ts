@@ -21,7 +21,15 @@ import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAsso
  */
 export const submitCaseAssociationRequestInteractor = async (
   applicationContext: IApplicationContext,
-  { docketNumber, filers }: { docketNumber: string; filers: string[] },
+  {
+    consolidatedCasesDocketNumbers,
+    docketNumber,
+    filers,
+  }: {
+    docketNumber: string;
+    filers: string[];
+    consolidatedCasesDocketNumbers: string[];
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -49,6 +57,7 @@ export const submitCaseAssociationRequestInteractor = async (
   } else if (isIrsPractitioner) {
     return await associateIrsPractitionerToCase({
       applicationContext,
+      consolidatedCasesDocketNumbers,
       docketNumber,
       user,
     });
