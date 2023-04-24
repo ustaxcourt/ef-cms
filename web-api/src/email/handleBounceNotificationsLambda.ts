@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * This lambda handles SNS notifications that occur whenever a service Email bounces. We
@@ -7,7 +7,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object received that includes any messages from our SNS subscription
  * @returns {Promise} the results from interactor processing the notifications
  */
-exports.handleBounceNotificationsLambda = event =>
+export const handleBounceNotificationsLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {

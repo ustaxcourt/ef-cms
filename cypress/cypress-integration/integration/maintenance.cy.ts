@@ -1,4 +1,4 @@
-const {
+import {
   disengageMaintenance,
   engageMaintenance,
   getCancelButton,
@@ -6,8 +6,8 @@ const {
   getLogoutButton,
   getMaintenanceModal,
   getMaintenancePageContent,
-  navigateTo: loginAs,
-} = require('../support/pages/maintenance');
+  navigateTo as loginAs,
+} from '../support/pages/maintenance';
 
 describe('Maintenance mode', () => {
   after(() => {

@@ -21,7 +21,8 @@
     "./web-api/src/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
-    "./web-client/integration-tests/fixtures/consolidated-cases.ts"
+    "./web-client/integration-tests/fixtures/consolidated-cases.ts",
+    "./cypress/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

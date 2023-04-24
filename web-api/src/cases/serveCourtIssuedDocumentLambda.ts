@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for serving a court-issued document on all parties and closing the case for some document types
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.serveCourtIssuedDocumentLambda = event =>
+export const serveCourtIssuedDocumentLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
