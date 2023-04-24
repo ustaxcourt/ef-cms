@@ -4,6 +4,7 @@ import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapA
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
+import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const validateExternalDocumentInformationSequence = [
   shouldValidateAction,
@@ -12,6 +13,20 @@ export const validateExternalDocumentInformationSequence = [
     validate: [
       computeCertificateOfServiceFormDateAction,
       setFilersFromFilersMapAction,
+      // upload the pdf so our lambda can validatePdfInteractor
+      validateFileAction,
+      {
+        error: [
+          () => {
+            console.log('pdf has been validated, it is BORKED!');
+          },
+        ],
+        success: [
+          () => {
+            console.log('pdf has been validated, it is NOT borked!');
+          },
+        ],
+      },
       validateExternalDocumentInformationAction,
       {
         error: [setValidationErrorsAction],
@@ -20,3 +35,7 @@ export const validateExternalDocumentInformationSequence = [
     ],
   },
 ];
+
+// upload to s3, validatePdfInteractor, return id
+// change it - delete old uploaded file
+// submit - pass the id
