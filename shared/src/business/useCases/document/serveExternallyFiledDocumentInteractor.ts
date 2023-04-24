@@ -5,11 +5,7 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -243,10 +239,29 @@ export const determineEntitiesToLock = (
 } => ({
   identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])],
   prefix: 'case',
+  ttl: 900,
 });
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'serve_externally_filed_document',
+    },
+    userId: user.userId,
+  });
+};
 
 export const serveExternallyFiledDocumentInteractor = withLocking(
   serveExternallyFiledDocument,
   determineEntitiesToLock,
-  new ServiceUnavailableError('One of the cases are currently being updated'),
+  handleLockError,
 );
