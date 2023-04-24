@@ -15,6 +15,7 @@ export const StateDrivenFileInput = connect(
     form: state.form,
     id: props.id,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
+    validateFileInputSequence: sequences.validateFileInputSequence,
     validationSequence: sequences[props.validationSequence],
   },
   function StateDrivenFileInput({
@@ -26,6 +27,7 @@ export const StateDrivenFileInput = connect(
     form,
     id,
     updateFormValueSequence,
+    validateFileInputSequence,
     validationSequence,
   }) {
     let inputRef;
@@ -59,6 +61,7 @@ export const StateDrivenFileInput = connect(
                     key: `${inputName}Size`,
                     value: clonedFile.size,
                   });
+                  validateFileInputSequence();
                   return validationSequence();
                 })
                 .catch(() => {
