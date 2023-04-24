@@ -20,9 +20,7 @@ export const submitCaseAssociationRequestAction = async ({
   const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
 
-  let { documentMetadata, fileAcrossConsolidatedGroup } = get(state.form);
-
-  console.log('fileAcrossConsolidatedGroup', fileAcrossConsolidatedGroup);
+  let documentMetadata = get(state.form);
 
   documentMetadata = {
     ...documentMetadata,
@@ -38,7 +36,10 @@ export const submitCaseAssociationRequestAction = async ({
 
   let consolidatedCasesDocketNumbers = [];
 
-  if (fileAcrossConsolidatedGroup && consolidatedCases.length > 0) {
+  if (
+    documentMetadata.fileAcrossConsolidatedGroup &&
+    consolidatedCases.length > 0
+  ) {
     console.log('inside if for fileAcrossConsolidatedGroup');
 
     consolidatedCasesDocketNumbers = consolidatedCases.map(
