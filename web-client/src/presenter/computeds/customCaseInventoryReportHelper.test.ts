@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
@@ -33,17 +34,30 @@ const cases = [
 ];
 
 describe('customCaseInventoryReportHelper', () => {
-  it('should generated generate cases with formatted dates', () => {
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {},
-        customCaseInventoryReportData: {
-          foundCases: cases,
-        },
+  let defaultCustomCaseState: CustomCaseInventoryReportState;
+  beforeEach(() => {
+    defaultCustomCaseState = {
+      cases: [],
+      filters: {
+        caseStatuses: [],
+        caseTypes: [],
+        createEndDate: '2024-03-01T00:00:00.000Z',
+        createStartDate: '2018-03-01T00:00:00.000Z',
+        filingMethod: 'all',
       },
+      pageNumber: 0,
+      totalCases: 0,
+    };
+  });
+
+  it('should generated generate cases with formatted dates', () => {
+    defaultCustomCaseState.cases = cases;
+
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.customCaseInventoryReportData).toMatchObject([
+    expect(result.cases).toMatchObject([
       {
         associatedJudge: 'Chief Judge',
         caseType: 'New',
@@ -69,16 +83,13 @@ describe('customCaseInventoryReportHelper', () => {
       { ...cases[1], caseCaption: 'Daffy Duck' },
     ];
 
+    defaultCustomCaseState.cases = foundCases;
+
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {},
-        customCaseInventoryReportData: {
-          foundCases,
-        },
-      },
+      state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.customCaseInventoryReportData).toMatchObject([
+    expect(result.cases).toMatchObject([
       {
         caseTitle: 'Bugs Bunny',
       },
@@ -88,77 +99,42 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should set noCustomCasesAfterReportRan to false if there are cases queried', () => {
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {},
-        customCaseInventoryReportData: {
-          foundCases: cases,
-        },
-      },
-    });
-    expect(result.noCustomCasesAfterReportRan).toEqual(false);
-  });
+  it('should return true for isRunReportButtonDisabled if createEndDate or createStartDate are falsy', () => {
+    defaultCustomCaseState.filters.createEndDate = 's';
+    defaultCustomCaseState.filters.createStartDate = undefined;
 
-  it('should set noCustomCasesAfterReportRan to true if there are no cases queried', () => {
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {},
-        customCaseInventoryReportData: {
-          foundCases: [],
-        },
-      },
-    });
-    expect(result.noCustomCasesAfterReportRan).toEqual(true);
-  });
-
-  it('should return false for isRunReportButtonDisabled if originalCreatedEndDate and originalCreatedStartDate are both falsy', () => {
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {
-          originalCreatedEndDate: 's',
-          originalCreatedStartDate: undefined,
-        },
-      },
+      state: { customCaseInventory: defaultCustomCaseState },
     });
 
     expect(result.isRunReportButtonDisabled).toEqual(true);
   });
 
-  it('should return true for isRunReportButtonDisabled if originalCreatedEndDate and originalCreatedStartDate are both truthy', () => {
+  it('should return true for isRunReportButtonDisabled if createEndDate and createStartDate are both truthy', () => {
+    defaultCustomCaseState.filters.createEndDate = 's';
+    defaultCustomCaseState.filters.createStartDate = 's';
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {
-          originalCreatedEndDate: 'truthy',
-          originalCreatedStartDate: 'truthy',
-        },
-      },
+      state: { customCaseInventory: defaultCustomCaseState },
     });
 
     expect(result.isRunReportButtonDisabled).toEqual(false);
   });
 
   it('should return true for isClearFiltersDisabled when case status(es) or case type(s) selected are not selected', () => {
+    defaultCustomCaseState.filters.caseTypes = [];
+    defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {
-          caseStatuses: [],
-          caseTypes: [],
-        },
-      },
+      state: { customCaseInventory: defaultCustomCaseState },
     });
 
     expect(result.isClearFiltersDisabled).toEqual(true);
   });
 
   it('should return false for isClearFiltersDisabled when case status(es) or case type(s) selected are selected', () => {
+    defaultCustomCaseState.filters.caseTypes = ['CDP (Lien/Levy)'];
+    defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: {
-        customCaseInventoryFilters: {
-          caseStatuses: ['Assigned - Case', 'Closed'],
-          caseTypes: ['Deficiency'],
-        },
-      },
+      state: { customCaseInventory: defaultCustomCaseState },
     });
 
     expect(result.isClearFiltersDisabled).toEqual(false);

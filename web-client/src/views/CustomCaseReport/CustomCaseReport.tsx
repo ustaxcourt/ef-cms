@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../presenter/actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -11,18 +12,17 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 
-const ITEMS_PER_PAGE = 2;
-
 export const CustomCaseReport = connect(
   {
     clearOptionalCustomCaseInventoryFilterSequence:
       sequences.clearOptionalCustomCaseInventoryFilterSequence,
-    customCaseInventoryFilters: state.customCaseInventoryFilters,
+    customCaseInventoryFilters: state.customCaseInventory.filters,
     customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence:
       sequences.getCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence:
       sequences.setCustomCaseInventoryReportFiltersSequence,
+    totalCases: state.customCaseInventory.totalCases,
     validationErrors: state.validationErrors,
   },
   function CustomCaseReport({
@@ -31,17 +31,11 @@ export const CustomCaseReport = connect(
     customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence,
+    totalCases,
     validationErrors,
   }) {
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
-    const [casesItemOffset, setCaseItemOffset] = useState(0);
-
-    const paginateChange = event => {
-      const newOffset =
-        (event.selected * ITEMS_PER_PAGE) %
-        customCaseInventoryReportHelper.customCaseInventoryReportData.length;
-      setCaseItemOffset(newOffset);
-    };
+    const [casesItemOffset] = useState(0);
 
     return (
       <>
@@ -257,11 +251,11 @@ export const CustomCaseReport = connect(
             </div>
           </div>
           <Button
-            disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
+            // disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
-              getCustomCaseInventoryReportSequence();
+              getCustomCaseInventoryReportSequence({ selectedPage: 0 });
             }}
           >
             Run Report
@@ -276,26 +270,23 @@ export const CustomCaseReport = connect(
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
           <Paginator
-            pageCount={Math.ceil(
-              customCaseInventoryReportHelper.customCaseInventoryReportData
-                .length / ITEMS_PER_PAGE,
-            )}
+            pageCount={Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE)}
             pageRangeDisplayed={5}
-            onPageChange={paginateChange}
+            onPageChange={pageChange => {
+              getCustomCaseInventoryReportSequence({
+                selectedPage: pageChange.selected,
+              });
+            }}
           />
           <div className="text-right margin-bottom-2">
             <span className="text-bold">Count: &nbsp;</span>
-            {
-              customCaseInventoryReportHelper.customCaseInventoryReportData
-                .length
-            }
+            {totalCases}
           </div>
           <ReportTable
+            cases={customCaseInventoryReportHelper.cases}
             casesItemOffset={casesItemOffset}
-            customCaseInventoryReportData={
-              customCaseInventoryReportHelper.customCaseInventoryReportData
-            }
             hasRunCustomCaseReport={hasRunCustomCaseReport}
+            totalCases={totalCases}
           />
         </section>
       </>
@@ -304,20 +295,18 @@ export const CustomCaseReport = connect(
 );
 
 const ReportTable = ({
+  cases,
   casesItemOffset,
-  customCaseInventoryReportData,
   hasRunCustomCaseReport,
+  totalCases,
 }: {
   casesItemOffset: number;
-  customCaseInventoryReportData: any[];
+  cases: any[];
   hasRunCustomCaseReport: boolean;
-  updateCount: Function;
+  totalCases: number;
 }) => {
-  const endOffset = casesItemOffset + ITEMS_PER_PAGE;
-  const paginatedCases = customCaseInventoryReportData.slice(
-    casesItemOffset,
-    endOffset,
-  );
+  const endOffset = casesItemOffset + CUSTOM_CASE_INVENTORY_PAGE_SIZE;
+  const paginatedCases = cases.slice(casesItemOffset, endOffset);
   return (
     <>
       <table
@@ -362,12 +351,11 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-          {hasRunCustomCaseReport &&
-            customCaseInventoryReportData.length === 0 && (
-              <tr>
-                <div className="text-center">No data found.</div>
-              </tr>
-            )}
+          {hasRunCustomCaseReport && totalCases === 0 && (
+            <tr>
+              <div className="text-center">No data found.</div>
+            </tr>
+          )}
         </tbody>
       </table>
     </>

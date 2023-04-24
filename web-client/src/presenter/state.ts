@@ -67,6 +67,7 @@ import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
+import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -289,13 +290,7 @@ export const baseState = {
       tab: null,
     },
   },
-  customCaseInventoryFilters: {
-    caseStatuses: [],
-    caseTypes: [],
-    createEndDate: undefined,
-    createStartDate: undefined,
-    filingMethod: 'all',
-  },
+  customCaseInventory: initialCustomCaseInventoryReportState,
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
