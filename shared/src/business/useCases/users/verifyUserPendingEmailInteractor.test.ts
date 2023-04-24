@@ -5,8 +5,6 @@ import {
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
-import { MOCK_LOCK } from '../../../test/mockLock';
-import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { calculateISODate } from '../../utilities/DateHandler';
 import { getContactPrimary } from '../../entities/cases/Case';
@@ -54,10 +52,6 @@ describe('verifyUserPendingEmailInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     applicationContext.getCurrentUser.mockReturnValue(mockPractitioner);
     applicationContext
       .getPersistenceGateway()
@@ -187,47 +181,6 @@ describe('verifyUserPendingEmailInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
-  });
-
-  describe('locking', () => {
-    it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getLock.mockReturnValue(MOCK_LOCK);
-
-      await expect(
-        verifyUserPendingEmailInteractor(applicationContext, {
-          token: TOKEN,
-        }),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should acquire and remove the lock on the case', async () => {
-      await verifyUserPendingEmailInteractor(applicationContext, {
-        token: TOKEN,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
-        ttl: 900,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
-      });
-    });
   });
 
   describe('update cases', () => {
