@@ -105,7 +105,7 @@ export const fakeFile = (() => {
 })();
 
 export const fakeFile1 = (() => {
-  return getFakeFile(false, true);
+  return getFakeFile({ returnArray: false, useFakeData1: true });
 })();
 
 let s3Cache;
@@ -874,7 +874,10 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       };
     },
     pdfjsObj: {
-      getData: () => Promise.resolve(getFakeFile(true)),
+      getData: () =>
+        Promise.resolve(
+          getFakeFile({ returnArray: true, useFakeData1: false }),
+        ),
     },
   };
 

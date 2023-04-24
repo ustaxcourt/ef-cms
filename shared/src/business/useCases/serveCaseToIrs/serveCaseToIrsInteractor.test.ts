@@ -682,8 +682,14 @@ describe('serveCaseToIrsInteractor', () => {
         .getPersistenceGateway()
         .isFileExists.mockReturnValueOnce(true);
 
-      const primaryContactNotr = getFakeFile(true, true);
-      const secondaryContactNotr = getFakeFile(true);
+      const primaryContactNotr = getFakeFile({
+        returnArray: true,
+        useFakeData1: true,
+      });
+      const secondaryContactNotr = getFakeFile({
+        returnArray: true,
+        useFakeData1: false,
+      });
 
       applicationContext
         .getDocumentGenerators()
