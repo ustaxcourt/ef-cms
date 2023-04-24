@@ -39,14 +39,6 @@ describe('Petitioner files an encrypted document', () => {
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
-        key: 'primaryDocumentFile',
-        value: fakeFile1,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
         key: 'category',
         value: 'Answer',
       },
@@ -84,6 +76,14 @@ describe('Petitioner files an encrypted document', () => {
       },
     );
 
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile1,
+      },
+    );
+
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
@@ -93,13 +93,25 @@ describe('Petitioner files an encrypted document', () => {
       },
     );
 
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfService',
+        value: false,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'hasSupportingDocuments',
+        value: false,
+      },
+    );
+
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    await cerebralTest.runSequence('completeDocumentSelectSequence');
-
-    expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
@@ -112,7 +124,7 @@ describe('Petitioner files an encrypted document', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    // await cerebralTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 
   // petitionerViewsCaseDetailAfterFilingDocument(cerebralTest, {
