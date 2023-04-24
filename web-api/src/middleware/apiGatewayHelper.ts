@@ -1,12 +1,13 @@
-const createApplicationContext = require('../applicationContext');
-const jwt = require('jsonwebtoken');
-const {
+import {
   NotFoundError,
   UnauthorizedError,
   UnsanitizedEntityError,
-} = require('../../../shared/src/errors/errors');
-const { headerOverride } = require('../lambdaWrapper');
-const { pick } = require('lodash');
+} from '../../../shared/src/errors/errors';
+import { createApplicationContext } from '../applicationContext';
+import { headerOverride } from '../lambdaWrapper';
+import { pick } from 'lodash';
+import jwt from 'jsonwebtoken';
+
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
  *
@@ -14,7 +15,7 @@ const { pick } = require('lodash');
  * @param {Function} fun an function which either returns a promise containing payload data, or throws an exception
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handle = async (event, fun) => {
+export const handle = async (event, fun) => {
   const applicationContext = createApplicationContext({});
   try {
     let response = await fun();
@@ -32,11 +33,7 @@ exports.handle = async (event, fun) => {
       response.headers
     ) {
       // the lambda function is more advanced and wants to control more aspects of the response
-      return exports.sendOk(
-        response.body,
-        response.statusCode,
-        response.headers,
-      );
+      return sendOk(response.body, response.statusCode, response.headers);
     } else if (isPdfBuffer) {
       return {
         body: response.toString('base64'),
@@ -65,7 +62,7 @@ exports.handle = async (event, fun) => {
         }
       }
 
-      return exports.sendOk(response);
+      return sendOk(response);
     }
   } catch (err) {
     if (!process.env.CI && !err.skipLogging) {
@@ -73,12 +70,12 @@ exports.handle = async (event, fun) => {
     }
     if (err instanceof NotFoundError) {
       err.statusCode = 404;
-      return exports.sendError(err);
+      return sendError(err);
     } else if (err instanceof UnauthorizedError) {
       err.statusCode = 403;
-      return exports.sendError(err);
+      return sendError(err);
     } else {
-      return exports.sendError(err);
+      return sendError(err);
     }
   }
 };
@@ -89,7 +86,7 @@ exports.handle = async (event, fun) => {
  * @param {number} statusCode the statusCode to return in the api gateway response object (defaults to 302)
  * @returns {object} the api gateway response object with the Location set to the url returned from fun
  */
-exports.redirect = async (event, fun, statusCode = 302) => {
+export const redirect = async (event, fun, statusCode = 302) => {
   try {
     const { url } = await fun();
     return {
@@ -99,7 +96,7 @@ exports.redirect = async (event, fun, statusCode = 302) => {
       statusCode,
     };
   } catch (err) {
-    return exports.sendError(err);
+    return sendError(err);
   }
 };
 
@@ -109,7 +106,7 @@ exports.redirect = async (event, fun, statusCode = 302) => {
  * @param {Error} err the error to convert to the api gateway response event
  * @returns {object} an api gateway response object
  */
-exports.sendError = err => {
+export const sendError = err => {
   return {
     body: JSON.stringify(err.message),
     headers: headerOverride,
@@ -125,7 +122,7 @@ exports.sendError = err => {
  * @param {object} headers any headers that you want to add to the response.  Defaults to no additional headers.
  * @returns {object} an api gateway response object
  */
-exports.sendOk = (response, statusCode = '200', headers = {}) => {
+export const sendOk = (response, statusCode = '200', headers = {}) => {
   return {
     body: JSON.stringify(response),
     headers: {
@@ -147,7 +144,7 @@ exports.sendOk = (response, statusCode = '200', headers = {}) => {
  * @param {object} event the API gateway request event with would contain headers, params, or query string, etc.
  * @returns {string} the token found in either the header or ?token query string
  */
-exports.getAuthHeader = event => {
+export const getAuthHeader = event => {
   let usernameTokenArray;
   const authorizationHeader =
     event.headers &&
@@ -177,8 +174,8 @@ exports.getAuthHeader = event => {
  * @param {object} event the api gateway request event
  * @returns {object} the user decoded from the JWT token
  */
-exports.getUserFromAuthHeader = event => {
-  const token = exports.getAuthHeader(event);
+export const getUserFromAuthHeader = event => {
+  const token = getAuthHeader(event);
   if (!token) return null;
   const decoded = jwt.decode(token);
   if (decoded) {
@@ -197,7 +194,7 @@ exports.getUserFromAuthHeader = event => {
  * @param {object} event the api gateway request event
  * @returns {string|void} the connectionId
  */
-exports.getConnectionIdFromEvent = event => {
+export const getConnectionIdFromEvent = event => {
   if (
     event.queryStringParameters &&
     event.queryStringParameters.clientConnectionId

@@ -1,33 +1,33 @@
-exports.navigateTo = (username, docketNumber) => {
+export const navigateTo = (username, docketNumber) => {
   cy.login(username, `/case-detail/${docketNumber}`);
 };
 
-exports.getActionMenuButton = () => {
+export const getActionMenuButton = () => {
   return cy.get('button.case-detail-menu__button');
 };
 
-exports.getEditCaseCaptionButton = () => {
+export const getEditCaseCaptionButton = () => {
   return cy.get('button#menu-edit-case-context-button');
 };
 
-exports.getCaptionTextArea = () => {
+export const getCaptionTextArea = () => {
   return cy.get('textarea.caption');
 };
 
-exports.getButton = buttonText => {
+export const getButton = buttonText => {
   return cy.contains('button', buttonText);
 };
 
-exports.getCaseTitleContaining = text => {
+export const getCaseTitleContaining = text => {
   return cy.contains('p#case-title', text);
 };
 
-exports.getCaseDetailTab = tabName => {
+export const getCaseDetailTab = tabName => {
   // tabName can be: docket-record, tracked-items, drafts, correspondence, case-information, case-messages, notes
   return cy.get(`button#tab-${tabName}`);
 };
 
-exports.createOrder = docketNumber => {
+export const createOrder = docketNumber => {
   cy.goToRoute(
     `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
   );
