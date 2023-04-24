@@ -1,10 +1,10 @@
-const {
+import {
   getWorkItemCheckboxLabel,
   getWorkItemRow,
-  navigateTo: navigateToDashboard,
+  navigateTo as navigateToDashboard,
   selectAssignee,
   viewDocumentQCSectionInbox,
-} = require('../support/pages/dashboard');
+} from '../support/pages/dashboard';
 
 describe('Assign a work item', () => {
   it('views the section inbox', () => {

@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * gets practitioner users by a search string (name or bar number)
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getPractitionersByNameLambda = event =>
+export const getPractitionersByNameLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { name } = event.queryStringParameters;
 

@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for striking docket records
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.strikeDocketEntryLambda = event =>
+export const strikeDocketEntryLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const {
       pathParameters: { docketEntryId, docketNumber },
