@@ -270,6 +270,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       debug: () => {},
       error: () => {},
       info: () => {},
+      warn: () => {},
     },
   };
 
