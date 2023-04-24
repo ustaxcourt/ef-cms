@@ -421,6 +421,12 @@ export const MOTION_EVENT_CODES = [
   'M112',
 ];
 
+export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
