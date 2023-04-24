@@ -1,4 +1,4 @@
-const {
+import {
   addCaseNote,
   changeCaseTrialStatus,
   createTrialSession,
@@ -6,8 +6,9 @@ const {
   goToTrialSession,
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
-} = require('../../cypress-smoketests/support/pages/trial-sessions');
-const {
+} from '../../cypress-smoketests/support/pages/trial-sessions';
+
+import {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -22,12 +23,13 @@ const {
   goToWizardStep5,
   hasIrsNotice,
   submitPetition,
-} = require('../../cypress-smoketests/support/pages/create-electronic-petition');
-const {
+} from '../../cypress-smoketests/support/pages/create-electronic-petition';
+
+import { faker } from '@faker-js/faker';
+import {
   goToCaseOverview,
   manuallyAddCaseToNewTrialSession,
-} = require('../../cypress-smoketests/support/pages/case-detail');
-const { faker } = require('@faker-js/faker');
+} from '../../cypress-smoketests/support/pages/case-detail';
 
 faker.seed(faker.datatype.number());
 
@@ -96,8 +98,6 @@ describe.skip('Petitioner', () => {
   });
 });
 
-// eslint-disable-next-line no-unused-vars
-let judgeUserId;
 describe.skip('Petitions Clerk', () => {
   describe('should create and set a trial session', () => {
     beforeEach(() => {

@@ -1,12 +1,12 @@
-const cors = require('cors');
-const createApplicationContext = require('./applicationContext');
-const express = require('express');
-const logger = require('./logger');
-const { json, urlencoded } = require('body-parser');
-const { lambdaWrapper } = require('./lambdaWrapper');
+import { createApplicationContext } from './applicationContext';
+import { json, urlencoded } from 'body-parser';
+import { lambdaWrapper } from './lambdaWrapper';
+import cors from 'cors';
+import express from 'express';
+import logger from './logger';
 const app = express();
-const { getCurrentInvoke } = require('@vendia/serverless-express');
-const { set } = require('lodash');
+import { getCurrentInvoke } from '@vendia/serverless-express';
+import { set } from 'lodash';
 
 const applicationContext = createApplicationContext({});
 
@@ -53,41 +53,22 @@ app.use(async (req, res, next) => {
 });
 app.use(logger());
 
-const {
-  casePublicSearchLambda,
-} = require('./public-api/casePublicSearchLambda');
-const {
-  generatePublicDocketRecordPdfLambda,
-} = require('./public-api/generatePublicDocketRecordPdfLambda');
-const {
-  getCaseForPublicDocketSearchLambda,
-} = require('./public-api/getCaseForPublicDocketSearchLambda');
-const {
-  getFeatureFlagValueLambda,
-} = require('./featureFlag/getFeatureFlagValueLambda');
-const {
-  getMaintenanceModeLambda,
-} = require('./maintenance/getMaintenanceModeLambda');
-const {
-  getPublicCaseExistsLambda,
-} = require('./public-api/getPublicCaseExistsLambda');
-const {
-  getPublicDocumentDownloadUrlLambda,
-} = require('./public-api/getPublicDocumentDownloadUrlLambda');
-const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
-const { getPublicCaseLambda } = require('./public-api/getPublicCaseLambda');
-const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
-const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
-const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
-
-const {
-  opinionPublicSearchLambda,
-} = require('./public-api/opinionPublicSearchLambda');
-const {
-  orderPublicSearchLambda,
-} = require('./public-api/orderPublicSearchLambda');
-const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
-const { ipLimiter } = require('./middleware/ipLimiter');
+import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
+import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
+import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
+import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
+import { getFeatureFlagValueLambda } from './featureFlag/getFeatureFlagValueLambda';
+import { getHealthCheckLambda } from './health/getHealthCheckLambda';
+import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
+import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
+import { getPublicCaseLambda } from './public-api/getPublicCaseLambda';
+import { getPublicDocumentDownloadUrlLambda } from './public-api/getPublicDocumentDownloadUrlLambda';
+import { getPublicJudgesLambda } from './public-api/getPublicJudgesLambda';
+import { ipLimiter } from './middleware/ipLimiter';
+import { opinionPublicSearchLambda } from './public-api/opinionPublicSearchLambda';
+import { orderPublicSearchLambda } from './public-api/orderPublicSearchLambda';
+import { todaysOpinionsLambda } from './public-api/todaysOpinionsLambda';
+import { todaysOrdersLambda } from './public-api/todaysOrdersLambda';
 
 /**
  * public-api

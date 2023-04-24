@@ -1,5 +1,5 @@
-const { marshallDocketEntry } = require('./marshallDocketEntry');
-const { MOCK_DOCUMENTS } = require('../../../../shared/src/test/mockDocuments');
+import { MOCK_DOCUMENTS } from '../../../../shared/src/test/mockDocuments';
+import { marshallDocketEntry } from './marshallDocketEntry';
 const MOCK_DOCUMENT = MOCK_DOCUMENTS[0];
 
 describe('marshallDocketEntry', () => {

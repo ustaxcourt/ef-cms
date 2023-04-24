@@ -1,15 +1,11 @@
-const createSilentApplicationContext = require('../../../shared/src/business/test/createSilentApplicationContext');
-const {
-  MOCK_CASE_WITH_TRIAL_SESSION,
-} = require('../../../shared/src/test/mockCase');
-const {
-  MOCK_COMPLEX_CASE,
-} = require('../../../shared/src/test/mockComplexCase');
-const {
+import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../shared/src/test/mockCase';
+import { MOCK_COMPLEX_CASE } from '../../../shared/src/test/mockComplexCase';
+import {
   MOCK_PRACTITIONER,
   MOCK_USERS,
-} = require('../../../shared/src/test/mockUsers');
-const { getCaseLambda } = require('./getCaseLambda');
+} from '../../../shared/src/test/mockUsers';
+import { createSilentApplicationContext } from '../../../shared/src/business/test/createSilentApplicationContext';
+import { getCaseLambda } from './getCaseLambda';
 
 const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   entityName: 'Case',

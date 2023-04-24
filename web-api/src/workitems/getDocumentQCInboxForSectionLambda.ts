@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * returns all sent work items in a particular section
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getDocumentQCInboxForSectionLambda = event =>
+export const getDocumentQCInboxForSectionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { section } = event.pathParameters || {};
 

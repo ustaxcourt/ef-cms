@@ -1,14 +1,9 @@
-const {
+import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
+import {
   getCreateACaseButton,
-  navigateTo: navigateToDocumentQC,
-} = require('../support/pages/document-qc');
-
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../support/pages/create-paper-petition');
-const {
-  unchecksOrdersAndNoticesBoxesInCase,
-} = require('../support/pages/unchecks-orders-and-notices-boxes-in-case');
+  navigateTo as navigateToDocumentQC,
+} from '../support/pages/document-qc';
+import { unchecksOrdersAndNoticesBoxesInCase } from '../support/pages/unchecks-orders-and-notices-boxes-in-case';
 
 describe('Create case and submit to IRS', function () {
   it('should display parties tab when user navigates to create a case', () => {
