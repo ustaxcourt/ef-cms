@@ -1,6 +1,6 @@
 import { applicationContext } from './applicationContext';
 
-export const withAppContextDecorator = (f, ctx = {}) => {
+export const withAppContextDecorator = (f, ctx?) => {
   return get => {
     try {
       return f(get, ctx || applicationContext);
