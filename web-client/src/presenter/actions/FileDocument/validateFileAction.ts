@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the document info form.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -22,7 +21,7 @@ export const validateFileAction = async ({ applicationContext, get, path }) => {
       alertError: {
         title: 'File is borked.',
       },
-      errors,
+      // errors,
     });
   }
 
