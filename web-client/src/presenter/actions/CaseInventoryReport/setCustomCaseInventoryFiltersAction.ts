@@ -2,7 +2,6 @@ import {
   CaseStatus,
   CaseType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { GetCaseInventoryReportRequest } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
@@ -13,12 +12,10 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.customCaseInventoryFilters.createStartDate or state.customCaseInventoryFilters.createEndDate
  */
 export const setCustomCaseInventoryFiltersAction = ({
-  applicationContext,
   get,
   props,
   store,
 }: {
-  applicationContext: IApplicationContext;
   get: any;
   props: Partial<GetCaseInventoryReportRequest> & {
     caseStatuses: { action: 'add' | 'remove'; caseStatus: CaseStatus };
@@ -27,38 +24,18 @@ export const setCustomCaseInventoryFiltersAction = ({
   store: any;
 }) => {
   const currentFilters: GetCaseInventoryReportRequest = get(
-    state.customCaseInventoryFilters,
+    state.customCaseInventory.filters,
   );
   const desiredFilters = cloneDeep(props);
 
-  if (props.createStartDate) {
-    const dateWithTime = applicationContext
-      .getUtilities()
-      .createISODateString(props.createStartDate, FORMATS.MMDDYYYY);
-
-    desiredFilters.createStartDate = dateWithTime;
-    desiredFilters.originalCreatedStartDate = props.createStartDate;
-    store.merge(state.customCaseInventoryFilters, desiredFilters);
-  } else if (props.createStartDate === '') {
-    desiredFilters.createStartDate = '';
-    desiredFilters.originalCreatedStartDate = '';
-    store.merge(state.customCaseInventoryFilters, desiredFilters);
+  if (props.createStartDate || props.createStartDate === '') {
+    store.merge(state.customCaseInventory.filters, props.createStartDate);
   }
-  if (props.createEndDate) {
-    const dateWithTime = applicationContext
-      .getUtilities()
-      .createISODateString(props.createEndDate, FORMATS.MMDDYYYY);
-
-    desiredFilters.createEndDate = dateWithTime;
-    desiredFilters.originalCreatedEndDate = props.createEndDate;
-    store.merge(state.customCaseInventoryFilters, desiredFilters);
-  } else if (props.createEndDate === '') {
-    desiredFilters.createEndDate = '';
-    desiredFilters.originalCreatedEndDate = '';
-    store.merge(state.customCaseInventoryFilters, desiredFilters);
+  if (props.createEndDate || props.createEndDate === '') {
+    store.merge(state.customCaseInventory.filters, props.createEndDate);
   }
   if (props.filingMethod) {
-    store.merge(state.customCaseInventoryFilters, desiredFilters);
+    store.merge(state.customCaseInventory.filters, desiredFilters);
   }
   if (props.caseStatuses) {
     if (
@@ -66,13 +43,13 @@ export const setCustomCaseInventoryFiltersAction = ({
       !currentFilters.caseStatuses.includes(props.caseStatuses.caseStatus)
     ) {
       currentFilters.caseStatuses.push(props.caseStatuses.caseStatus);
-      store.merge(state.customCaseInventoryFilters, currentFilters);
+      store.merge(state.customCaseInventory.filters, currentFilters);
     } else if (props.caseStatuses.action === 'remove') {
       const foundIndex = currentFilters.caseStatuses.findIndex(
         caseStatus => caseStatus === props.caseStatuses.caseStatus,
       );
       currentFilters.caseStatuses.splice(foundIndex, 1);
-      store.merge(state.customCaseInventoryFilters, currentFilters);
+      store.merge(state.customCaseInventory.filters, currentFilters);
     }
   }
   if (props.caseTypes) {
@@ -81,13 +58,13 @@ export const setCustomCaseInventoryFiltersAction = ({
       !currentFilters.caseTypes.includes(props.caseTypes.caseType)
     ) {
       currentFilters.caseTypes.push(props.caseTypes.caseType);
-      store.merge(state.customCaseInventoryFilters, currentFilters);
+      store.merge(state.customCaseInventory.filters, currentFilters);
     } else if (props.caseTypes.action === 'remove') {
       const foundIndex = currentFilters.caseTypes.findIndex(
         caseType => caseType === props.caseTypes.caseType,
       );
       currentFilters.caseTypes.splice(foundIndex, 1);
-      store.merge(state.customCaseInventoryFilters, currentFilters);
+      store.merge(state.customCaseInventory.filters, currentFilters);
     }
   }
 };

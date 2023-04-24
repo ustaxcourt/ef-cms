@@ -5,12 +5,17 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-export type GetCaseInventoryReportRequest = {
+export type CustomCaseInventoryReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
   createEndDate: string;
   createStartDate: string;
   filingMethod: 'all' | 'electronic' | 'paper';
+};
+
+export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
+  pageNumber: number;
+  pageSize: number;
 };
 
 export type CaseInventory = Pick<

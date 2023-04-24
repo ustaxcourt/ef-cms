@@ -7,14 +7,12 @@ import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
-  const customCaseInventoryReportData =
-    get(state.customCaseInventoryReportData) || {};
+  const cases = get(state.customCaseInventory.cases);
 
-  const populatedFilters = get(state.customCaseInventoryFilters);
+  const populatedFilters = get(state.customCaseInventory.filters);
 
   const isRunReportButtonDisabled = !(
-    populatedFilters.originalCreatedEndDate &&
-    populatedFilters.originalCreatedStartDate
+    populatedFilters.createStartDate && populatedFilters.createEndDate
   );
 
   const caseStatuses = CASE_STATUSES.map(status => ({
@@ -32,25 +30,23 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
-  const reportData = (customCaseInventoryReportData.foundCases || []).map(
-    entry => {
-      return {
-        ...entry,
-        caseTitle: Case.getCaseTitle(entry.caseCaption),
-        createdAt: formatDate(entry.createdAt),
-      };
-    },
-  );
+  const reportData = cases.map(entry => {
+    return {
+      ...entry,
+      caseTitle: Case.getCaseTitle(entry.caseCaption),
+      createdAt: formatDate(entry.createdAt),
+    };
+  });
 
   const isClearFiltersDisabled = ![
-    ...(populatedFilters.caseStatuses || []),
-    ...(populatedFilters.caseTypes || []),
+    ...populatedFilters.caseStatuses,
+    ...populatedFilters.caseTypes,
   ].length;
 
   return {
     caseStatuses,
     caseTypes,
-    customCaseInventoryReportData: reportData,
+    cases: reportData,
     isClearFiltersDisabled,
     isRunReportButtonDisabled,
   };

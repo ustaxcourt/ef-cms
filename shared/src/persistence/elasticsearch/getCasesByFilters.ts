@@ -76,8 +76,9 @@ export const getCasesByFilters = async ({
         },
         sort: [{ 'createdAt.S': 'asc' }],
       },
+      from: params.pageNumber * params.pageSize,
       index: 'efcms-case',
-      size: 10000,
+      size: params.pageSize,
       track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
   });

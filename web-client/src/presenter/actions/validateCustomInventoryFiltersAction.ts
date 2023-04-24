@@ -15,7 +15,7 @@ export const validateCustomInventoryFiltersAction = ({
   path,
 }) => {
   const { createEndDate, createStartDate } = get(
-    state.customCaseInventoryFilters,
+    state.customCaseInventory.filters,
   );
 
   const errors = applicationContext
