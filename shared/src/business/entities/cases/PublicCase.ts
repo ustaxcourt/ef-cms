@@ -59,6 +59,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
+    //Needed for irsPractitioners to file a Request Access type document across consolidated cases
+    if (rawCase.leadDocketNumber) {
+      this.leadDocketNumber = rawCase.leadDocketNumber;
+    }
   } else if (!this.isSealed) {
     this.petitioners = [];
     rawCase.petitioners.map(petitioner => {

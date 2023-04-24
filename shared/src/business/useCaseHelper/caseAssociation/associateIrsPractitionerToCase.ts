@@ -18,11 +18,34 @@ exports.associateIrsPractitionerToCase = async ({
   serviceIndicator,
   user,
 }) => {
-  const isAssociated = await applicationContext
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  let docketNumbersToAssociate = [];
+  if (caseRecord.leadDocketNumber) {
+    const consolidatedCases = await getConsolidatedCasesForLeadCase(
+      applicationContext,
+      caseRecord.leadDocketNumber,
+    );
+
+    docketNumbersToAssociate = consolidatedCases.map(
+      individualCase => individualCase.docketNumber,
+    );
+  } else {
+    docketNumbersToAssociate.push(docketNumber);
+  }
+
+  const associatedCaseEntities = await Promise.all(
+    docketNumbersToAssociate.map( async caseDocketNumber => {
+      const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
-      docketNumber,
+      caseDocketNumber,
       userId: user.userId,
     });
 
@@ -55,5 +78,7 @@ exports.associateIrsPractitionerToCase = async ({
     });
 
     return caseEntity.toRawObject();
-  }
+    });
+  );
+  return caseEntity.toRawObject();
 };
