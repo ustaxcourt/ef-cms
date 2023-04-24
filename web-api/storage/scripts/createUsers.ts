@@ -1,24 +1,16 @@
-const createApplicationContext = require('../../src/applicationContext');
-const users = require('../fixtures/seed/users.json');
-const {
-  createPetitionerUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createPetitionerUserRecords');
-const {
-  createUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createOrUpdateUser');
-const {
-  createUserRecords: createPractitionerUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser');
-const {
-  ROLES,
-} = require('../../../shared/src/business/entities/EntityConstants');
-const { omit } = require('lodash');
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
+import { createApplicationContext } from '../../src/applicationContext';
+import { createPetitionerUserRecords } from '../../../shared/src/persistence/dynamo/users/createPetitionerUserRecords';
+import { createUserRecords as createPractitionerUserRecords } from '../../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
+import { createUserRecords } from '../../../shared/src/persistence/dynamo/users/createOrUpdateUser';
+import { omit } from 'lodash';
+import users from '../fixtures/seed/users.json';
 
 let usersByEmail = {};
 
 const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
 
-module.exports.createUsers = async () => {
+export const createUsers = async () => {
   usersByEmail = {};
 
   const user = {
@@ -81,7 +73,7 @@ module.exports.createUsers = async () => {
   );
 };
 
-module.exports.asUserFromEmail = async (email, callback) => {
+export const asUserFromEmail = async (email, callback) => {
   const asUser = usersByEmail[email];
   if (!asUser) {
     throw new Error('User not found');

@@ -11,10 +11,9 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
-  const { SESSION_TYPES } = applicationContext.getConstants();
+  const { HYBRID_SESSION_TYPES, SESSION_TYPES } =
+    applicationContext.getConstants();
   const REGULAR_SESSION_TYPE = SESSION_TYPES.regular;
-  const HYBRID_SESSION_TYPE = SESSION_TYPES.hybrid;
-
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
   const formattedTrialSessionDetails = withAppContextDecorator(
@@ -73,12 +72,24 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ isHybridSession: false });
   });
 
-  it('should be true for isHybridSession when sessionType is set to Hybrid', () => {
+  it('should be true for isHybridSession when sessionType is set to Hybrid or Hybrid-S', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
-      sessionType: HYBRID_SESSION_TYPE,
+      sessionType: HYBRID_SESSION_TYPES.hybrid,
     };
-    const result = runCompute(formattedTrialSessionDetails, {
+    let result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ isHybridSession: true });
+
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: HYBRID_SESSION_TYPES.hybridSmall,
+    };
+    result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
       },
@@ -107,7 +118,7 @@ describe('formattedTrialSessionDetails', () => {
           qcCompleteForTrial: {},
         },
       ],
-      sessionType: HYBRID_SESSION_TYPE,
+      sessionType: HYBRID_SESSION_TYPES[0],
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
@@ -121,7 +132,7 @@ describe('formattedTrialSessionDetails', () => {
   it('should be true for disableHybridFilter when there are no cases in formattedEligibleCases', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
-      sessionType: HYBRID_SESSION_TYPE,
+      sessionType: HYBRID_SESSION_TYPES[1],
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {

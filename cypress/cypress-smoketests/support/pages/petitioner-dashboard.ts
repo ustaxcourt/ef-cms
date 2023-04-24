@@ -1,4 +1,4 @@
-exports.goToCaseDetail = caseTitle => {
+export const goToCaseDetail = caseTitle => {
   cy.get(`td:contains(${caseTitle})`)
     .first()
     .parent()
@@ -7,24 +7,25 @@ exports.goToCaseDetail = caseTitle => {
     .click();
 };
 
-exports.goToFileADocument = () => {
+export const goToFileADocument = () => {
   cy.get('a#button-file-document').click();
 };
 
-exports.goToSelectDocumentType = () => {
+export const goToSelectDocumentType = () => {
   cy.get('a[href*="/file-a-document"]').scrollIntoView().click();
 };
 
-exports.goToFileYourDocument = () => {
+export const goToFileYourDocument = () => {
   cy.get('button#submit-document').click();
 };
-exports.goToReviewDocument = exports.goToFileYourDocument;
 
-exports.uploadDocumentFile = () => {
+export const goToReviewDocument = exports.goToFileYourDocument;
+
+export const uploadDocumentFile = () => {
   cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
 };
 
-exports.submitDocument = () => {
+export const submitDocument = () => {
   cy.get('button#submit-document').click();
 
   cy.get('div.usa-alert--success').should('exist');
