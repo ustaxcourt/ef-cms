@@ -188,7 +188,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
         applicationContext: appContext,
         user,
       }) => {
-        console.log('updatePetitionerCasesInteractor!');
         return updatePetitionerCasesInteractor({
           applicationContext: appContext,
           user,
@@ -275,7 +274,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   };
 
   const user = await getUserRecordById(userId);
-  console.log('callCognitoTriggerForPendingEmail', { user });
   await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
     user,
   });
