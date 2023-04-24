@@ -32,20 +32,41 @@ const branchToBeComparedTypescriptOutput = spawnSync(
 const branchToBeComparedErrorCount = countTypescriptErrors(
   branchToBeComparedTypescriptOutput.stdout,
 );
-console.log('Typescript errors in your branch: ', branchToBeComparedErrorCount);
+const branchToBeComparedCypressOutput = spawnSync('npx', ['tsc', '--noEmit'], {
+  cwd: './cypress',
+  encoding: 'utf-8',
+  maxBuffer: 1024 * 5000,
+});
+const branchToBeComparedCypressErrorCount = countTypescriptErrors(
+  branchToBeComparedCypressOutput.stdout,
+);
+const compareBranchTotalErrors: number =
+  branchToBeComparedErrorCount + branchToBeComparedCypressErrorCount;
 
+// ************************************ Staging Errors ***********************************
 console.log('Typechecking staging...');
 const stagingTypescriptOutput = spawnSync('npx', ['tsc', '--noEmit'], {
   cwd: '../stagingBranch',
   encoding: 'utf-8',
   maxBuffer: 1024 * 5000,
 });
-const stagingErrorCount = countTypescriptErrors(stagingTypescriptOutput.stdout);
-console.log('Typescript errors in staging: ', stagingErrorCount);
+const stagingProjectErrorCount = countTypescriptErrors(
+  stagingTypescriptOutput.stdout,
+);
+const stagingCypressOutput = spawnSync('npx', ['tsc', '--noEmit'], {
+  cwd: '../stagingBranch/cypress',
+  encoding: 'utf-8',
+  maxBuffer: 1024 * 5000,
+});
+const stagingCypressErrorCount = countTypescriptErrors(
+  stagingCypressOutput.stdout,
+);
+const stagingTotalErrors: number =
+  stagingProjectErrorCount + stagingCypressErrorCount;
 
-if (branchToBeComparedErrorCount >= stagingErrorCount) {
-  console.log('Staging errors: ', stagingErrorCount);
-  console.log('Your branch errors: ', branchToBeComparedErrorCount);
+console.log('Staging errors: ', stagingProjectErrorCount);
+console.log('Your branch errors: ', compareBranchTotalErrors);
+if (compareBranchTotalErrors > stagingTotalErrors) {
   console.log(
     'ERROR: Your branch has more errors or the same number of errors as staging. Failing. :(',
   );
