@@ -11,6 +11,17 @@ export const WarningNotificationComponent =
     dismissAlertSequence,
     messageNotBold = false,
     scrollToTop = true,
+  }: {
+    alertWarning: {
+      title?: string;
+      linkUrl?: string;
+      linkText?: string;
+      message: string;
+    };
+    dismissable?: boolean;
+    dismissAlertSequence?: Function;
+    messageNotBold?: boolean;
+    scrollToTop?: boolean;
   }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
