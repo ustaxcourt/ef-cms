@@ -133,7 +133,6 @@ export const fileCourtIssuedDocketEntry = async (
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           hideFromPendingMessages: true,
           inProgress: true,
-          leadDocketNumber: caseEntity.leadDocketNumber,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,
@@ -141,6 +140,7 @@ export const fileCourtIssuedDocketEntry = async (
           trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       );
 
       if (isUnservable) {

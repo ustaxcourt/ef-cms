@@ -1,3 +1,4 @@
+/* eslint-disable cypress/unsafe-to-chain-command */
 import { navigateTo as navigateToDashboard } from '../support/pages/dashboard';
 
 describe('Filing an Answer', function () {
