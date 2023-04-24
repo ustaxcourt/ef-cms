@@ -210,7 +210,7 @@ export const determineEntitiesToLock = async (
 ): Promise<{ identifier: string[]; prefix: string; ttl: number }> => {
   const docketNumbers: string[] = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getDocketNumbersByUser({
       applicationContext,
       userId: user.userId,
     });
