@@ -1,7 +1,9 @@
+// const {
+//   getConsolidatedCasesForLeadCase,
+// } = require('../consolidatedCases/getConsolidatedCasesForLeadCase');
 const { Case } = require('../../entities/cases/Case');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { UserCase } = require('../../entities/UserCase');
-
 /**
  * associateIrsPractitionerToCase
  *
@@ -14,30 +16,21 @@ const { UserCase } = require('../../entities/UserCase');
  */
 exports.associateIrsPractitionerToCase = async ({
   applicationContext,
+  consolidatedCasesDocketNumbers = [],
   docketNumber,
   serviceIndicator,
   user,
 }) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
   let docketNumbersToAssociate = [];
-  if (caseRecord.leadDocketNumber) {
-    const consolidatedCases = await getConsolidatedCasesForLeadCase(
-      applicationContext,
-      caseRecord.leadDocketNumber,
-    );
+  if (consolidatedCasesDocketNumbers.length > 0) {
+    console.log('YES greater than 0!!!!!');
 
-    docketNumbersToAssociate = consolidatedCases.map(
-      individualCase => individualCase.docketNumber,
-    );
+    docketNumbersToAssociate = [...consolidatedCasesDocketNumbers];
   } else {
     docketNumbersToAssociate.push(docketNumber);
   }
+
+  console.log('docketNumbersToAssociate', docketNumbersToAssociate);
 
   const associatedCaseEntities = await Promise.all(
     docketNumbersToAssociate.map(async caseDocketNumber => {
@@ -45,7 +38,7 @@ exports.associateIrsPractitionerToCase = async ({
         .getPersistenceGateway()
         .verifyCaseForUser({
           applicationContext,
-          caseDocketNumber,
+          docketNumber: caseDocketNumber,
           userId: user.userId,
         });
 
@@ -54,19 +47,20 @@ exports.associateIrsPractitionerToCase = async ({
           .getPersistenceGateway()
           .getCaseByDocketNumber({
             applicationContext,
-            docketNumber,
+            docketNumber: caseDocketNumber,
           });
 
         const userCaseEntity = new UserCase(caseToUpdate);
 
         await applicationContext.getPersistenceGateway().associateUserWithCase({
           applicationContext,
-          docketNumber,
+          docketNumber: caseDocketNumber,
           userCase: userCaseEntity.validate().toRawObject(),
           userId: user.userId,
         });
 
         const caseEntity = new Case(caseToUpdate, { applicationContext });
+        console.log('caseEntity*****', caseEntity);
 
         caseEntity.attachIrsPractitioner(
           new IrsPractitioner({ ...user, serviceIndicator }),
@@ -81,6 +75,8 @@ exports.associateIrsPractitionerToCase = async ({
       }
     }),
   );
+
+  console.log('associatedCaseEntities*****', associatedCaseEntities);
 
   return associatedCaseEntities.find(caseEntity => {
     return caseEntity.docketNumber === docketNumber;
