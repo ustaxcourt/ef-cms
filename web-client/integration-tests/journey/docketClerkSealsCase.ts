@@ -13,6 +13,6 @@ export const docketClerkSealsCase = cerebralTest => {
     expect(cerebralTest.getState('caseDetail.sealedDate')).toBeDefined();
     expect(cerebralTest.getState('caseDetail.isSealed')).toEqual(true);
 
-    await refreshElasticsearchIndex(3000);
+    await refreshElasticsearchIndex();
   });
 };

@@ -367,7 +367,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
