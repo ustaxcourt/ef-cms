@@ -1,11 +1,8 @@
-const {
+import {
   getCancelButton,
-  navigateTo: navigateToTrialSessionDetail,
-} = require('../support/pages/edit-trial-session');
-
-const {
-  getCancelModalTitle,
-} = require('../support/pages/form-cancel-modal-dialog');
+  navigateTo as navigateToTrialSessionDetail,
+} from '../support/pages/edit-trial-session';
+import { getCancelModalTitle } from '../support/pages/form-cancel-modal-dialog';
 
 describe('Edit a trial session', () => {
   it('should display a modal to confirm discarding changes when cancel is clicked', () => {

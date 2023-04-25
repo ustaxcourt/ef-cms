@@ -1,4 +1,4 @@
-const {
+import {
   enterCaseTitleOrPetitionerName,
   enterDocumentDocketNumber,
   enterDocumentKeywordForAdvancedSearch,
@@ -7,7 +7,7 @@ const {
   getDocketNumberInput,
   getKeywordInput,
   getPetitionerNameInput,
-} = require('../../support/pages/public/advanced-search');
+} from '../../support/pages/public/advanced-search';
 
 describe('Public user experiences seamless reload after deployment', function () {
   it('should reload the page after deploy', () => {

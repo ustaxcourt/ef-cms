@@ -1,58 +1,58 @@
-exports.navigateTo = username => {
+export const navigateTo = username => {
   cy.login(username, '/');
 };
 
-exports.viewMyOutbox = () => {
+export const viewMyOutbox = () => {
   cy.get('button#individual-sent-tab').click();
 };
 
-exports.viewSectionOutbox = () => {
+export const viewSectionOutbox = () => {
   cy.get('button.button-switch-box').click();
   cy.get('button#section-sent-tab').click();
 };
 
-exports.viewDocumentQCSectionInbox = () => {
+export const viewDocumentQCSectionInbox = () => {
   cy.visit('/document-qc/section/inbox');
 };
 
-exports.getWorkItemContaining = text => {
+export const getWorkItemContaining = text => {
   return cy.contains(text);
 };
 
-exports.getTableRows = () => {
+export const getTableRows = () => {
   return cy.get('tbody');
 };
 
-exports.getWorkItemCheckboxLabel = workItemId => {
+export const getWorkItemCheckboxLabel = workItemId => {
   return cy.get(`label#label-${workItemId}`);
 };
 
-exports.getSectionUsersSelect = () => {
+export const getSectionUsersSelect = () => {
   return cy.get('select#options');
 };
 
-exports.selectAssignee = user => {
+export const selectAssignee = user => {
   cy.intercept('PUT', '/work-items').as('assignWorkItem');
-  exports.getSectionUsersSelect().select(user);
+  getSectionUsersSelect().select(user);
   cy.wait('@assignWorkItem');
 };
 
-exports.getWorkItemRow = docketNumber => {
+export const getWorkItemRow = docketNumber => {
   return cy.contains('tr', docketNumber);
 };
 
-exports.getSendButton = () => {
+export const getSendButton = () => {
   return cy.contains('button', 'Send');
 };
 
-exports.getCaseStatusFilter = () => {
+export const getCaseStatusFilter = () => {
   return cy.get('select#caseStatusFilter');
 };
 
-exports.selectsCaseStatusFilterNew = () => {
-  exports.getCaseStatusFilter().select('New');
+export const selectsCaseStatusFilterNew = () => {
+  getCaseStatusFilter().select('New');
 };
 
-exports.messagesShouldBeFiltered = () => {
+export const messagesShouldBeFiltered = () => {
   return cy.get('table').contains('td', 'Calendared').should('not.exist');
 };

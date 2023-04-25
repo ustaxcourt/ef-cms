@@ -1,4 +1,4 @@
-const { v2ApiWrapper } = require('./v2ApiWrapper');
+import { v2ApiWrapper } from './v2ApiWrapper';
 
 describe('v2ApiWrapper', () => {
   const throwWithStatus = (statusCode, message) => () => {
