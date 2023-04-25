@@ -3,7 +3,7 @@ import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserSearchesForSealedCaseByName = cerebralTest => {
   return it('Search for sealed case by name', async () => {
-    await refreshElasticsearchIndex(6000);
+    await refreshElasticsearchIndex(3000);
 
     const queryParams = {
       petitionerName: 'Roland the Headless Thompson Gunner',
