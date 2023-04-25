@@ -646,7 +646,6 @@ select[disabled] {
 
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
-      padding-left: 86px;
       padding-left: 100px;
     }
   }
@@ -1635,34 +1634,34 @@ button.change-scanner-button {
   }
 
   .custom-col-7 {
-    @media only screen and (min-width: 1200px) {
+    @media only screen and (width >= 1200px) {
       width: calc(6 / 12 * 100%);
       flex: 0 1 auto;
     }
 
-    @media only screen and (min-width: 1250px) {
+    @media only screen and (width >= 1250px) {
       width: calc(6.5 / 12 * 100%);
       flex: 0 10 auto;
     }
 
-    @media only screen and (min-width: 1400px) {
+    @media only screen and (width >= 1400px) {
       width: calc(7 / 12 * 100%);
       flex: 0 2 auto;
     }
   }
 
   .custom-col-5 {
-    @media only screen and (min-width: 1200px) {
+    @media only screen and (width >= 1200px) {
       width: calc(6 / 12 * 100%);
       flex: 0 10 auto;
     }
 
-    @media only screen and (min-width: 1250px) {
+    @media only screen and (width >= 1250px) {
       width: calc(5.5 / 12 * 100%);
       flex: 0 1 auto;
     }
 
-    @media only screen and (min-width: 1400px) {
+    @media only screen and (width >= 1400px) {
       width: calc(5 / 12 * 100%);
       flex: 0 1 auto;
     }
@@ -1921,7 +1920,7 @@ button.change-scanner-button {
     }
   }
 
-  @media only screen and (max-width: 820px) {
+  @media only screen and (width <= 820px) {
     .usa-footer__secondary-section {
       .footer-left,
       .footer-right {

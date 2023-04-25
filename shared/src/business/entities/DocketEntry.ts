@@ -90,6 +90,7 @@ export class DocketEntry extends JoiValidationEntity {
   public draftOrderState: object;
   public stampData: object;
   public isDraft?: boolean;
+  public redactionAcknowledgement?: boolean;
   public judge?: string;
   public judgeUserId?: string;
   public pending: boolean;
@@ -175,6 +176,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.mailingDate = rawDocketEntry.mailingDate;
     this.numberOfPages = rawDocketEntry.numberOfPages;
     this.objections = rawDocketEntry.objections;
+    this.redactionAcknowledgement = rawDocketEntry.redactionAcknowledgement;
     this.sealedTo = rawDocketEntry.sealedTo;
     this.filers = rawDocketEntry.filers || [];
     this.ordinalValue = rawDocketEntry.ordinalValue;
