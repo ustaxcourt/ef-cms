@@ -129,6 +129,11 @@ export const respondentFilesDocumentForAssociatedCase = (
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'redactionAcknowledgement',
+      value: true,
+    });
+
     await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };
