@@ -438,7 +438,7 @@ describe('DateHandler', () => {
     });
 
     it('should return false when undefined is provided as the date value', () => {
-      expect(DateHandler.isValidDateString(undefined)).toBeFalsy();
+      expect(isValidDateString(undefined)).toBeFalsy();
     });
   });
 
