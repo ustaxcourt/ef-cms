@@ -46,3 +46,7 @@ export class Correspondence extends JoiValidationEntity {
     return {};
   }
 }
+
+declare global {
+  type RawCorrespondence = ExcludeMethods<Correspondence>;
+}
