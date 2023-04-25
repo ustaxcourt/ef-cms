@@ -40,14 +40,10 @@ export const submitCaseAssociationRequestAction = async ({
     documentMetadata.fileAcrossConsolidatedGroup &&
     consolidatedCases.length > 0
   ) {
-    console.log('inside if for fileAcrossConsolidatedGroup');
-
     consolidatedCasesDocketNumbers = consolidatedCases.map(
       individualCase => individualCase.docketNumber,
     );
   }
-
-  console.log('consolidatedCasesDocketNumbers', consolidatedCasesDocketNumbers);
 
   const isDocumentWithImmediateAssociation =
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
@@ -78,8 +74,6 @@ export const submitCaseAssociationRequestAction = async ({
         docketNumber,
       });
   }
-
-  console.log('leavinig submitCaseAssociationRequestAction');
 
   return {
     docketNumber,
