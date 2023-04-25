@@ -19,9 +19,14 @@ export const validateFileAction = async ({ applicationContext, get, path }) => {
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'File is borked.',
+        message:
+          'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
+        title: 'Please correct the following errors on the page:',
       },
-      // errors,
+      errors: {
+        primaryDocumentFile:
+          'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
+      },
     });
   }
 
