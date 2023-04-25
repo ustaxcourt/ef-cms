@@ -5,7 +5,7 @@
  * @param {object} docketEntry the docketEntry
  * @returns {object} the document title
  */
-export const getDocumentTitleWithAdditionalInfo = ({ docketEntry }) => {
+const getDocumentTitleWithAdditionalInfo = ({ docketEntry }) => {
   let { documentTitle } = docketEntry;
 
   if (docketEntry.addToCoversheet) {
@@ -15,3 +15,5 @@ export const getDocumentTitleWithAdditionalInfo = ({ docketEntry }) => {
   }
   return documentTitle;
 };
+
+module.exports = { getDocumentTitleWithAdditionalInfo };
