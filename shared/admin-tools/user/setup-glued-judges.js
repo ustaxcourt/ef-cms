@@ -6,7 +6,9 @@ requireEnvVars([
   'REGION',
 ]);
 
-const createApplicationContext = require('../../../web-api/src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const {
   MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../src/business/entities/EntityConstants');

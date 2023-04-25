@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * used for saving a case note
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.saveCaseNoteLambda = event =>
+export const saveCaseNoteLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const lambdaArguments = {
       ...event.pathParameters,
