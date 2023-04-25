@@ -1,9 +1,9 @@
-const {
-  navigateTo: navigateToDashboard,
+import {
+  navigateTo as navigateToDashboard,
   petitionHyperlink,
   publicHeader,
   searchForCaseByDocketNumber,
-} = require('../../support/pages/public/advanced-search');
+} from '../../support/pages/public/advanced-search';
 
 describe('Terminal user', () => {
   after(() => {

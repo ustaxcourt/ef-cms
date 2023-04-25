@@ -388,5 +388,6 @@ declare global {
     constants: ReturnType<typeof getConstants>;
     modal: any;
     screenMetadata: any;
+    featureFlags: any;
   };
 }

@@ -1,49 +1,49 @@
-exports.navigateTo = username => {
+export const navigateTo = username => {
   cy.login(username, '/document-qc');
 };
 
-exports.getCreateACaseButton = () => {
+export const getCreateACaseButton = () => {
   return cy.get('a#file-a-petition');
 };
 
-exports.goToDocumentNeedingQC = () => {
+export const goToDocumentNeedingQC = () => {
   cy.get('a.case-link').first().click();
 };
 
-exports.createMessage = () => {
+export const createMessage = () => {
   cy.get('#case-detail-menu-button').click();
   cy.get('#menu-button-add-new-message').click();
 };
 
-exports.openCompleteAndSendMessageDialog = () => {
+export const openCompleteAndSendMessageDialog = () => {
   cy.get('button#save-and-add-supporting').click();
 };
 
-exports.selectSection = section => {
+export const selectSection = section => {
   cy.get('#toSection').scrollIntoView().select(section);
 };
 
-exports.selectRecipient = recipient => {
+export const selectRecipient = recipient => {
   cy.get('#toUserId').scrollIntoView().select(recipient);
 };
 
-exports.fillOutMessageField = () => {
+export const fillOutMessageField = () => {
   cy.get('#message').clear().type("I don't appreciate your lack of sarcasm.");
 };
 
-exports.enterSubject = () => {
+export const enterSubject = () => {
   cy.get('#subject').clear().type('Demeanor');
 };
 
-exports.sendMessage = () => {
+export const sendMessage = () => {
   cy.get('#confirm').click();
 };
 
-exports.progressIndicatorDoesNotExist = () => {
+export const progressIndicatorDoesNotExist = () => {
   cy.get('.progress-indicator').should('not.exist');
 };
 
-exports.uploadCourtIssuedDocumentAndEditViaDocumentQC = attempt => {
+export const uploadCourtIssuedDocumentAndEditViaDocumentQC = attempt => {
   cy.visit('case-detail/104-20/upload-court-issued');
   const freeText = `court document ${attempt}`;
   cy.get('#upload-description').clear().type(freeText);

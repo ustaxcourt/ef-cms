@@ -146,6 +146,10 @@ export const externalUserFilesDocumentForOwnedCase = (
 
       expect(form.fileAcrossConsolidatedGroup).toEqual(true);
     }
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'redactionAcknowledgement',
+      value: true,
+    });
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 

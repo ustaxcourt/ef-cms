@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * calls the interactor for obtaining a mapping of a given array of userIds and
@@ -7,7 +7,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getUsersPendingEmailLambda = event =>
+export const getUsersPendingEmailLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const userIds = event.queryStringParameters.userIds?.split(',') || [];
 

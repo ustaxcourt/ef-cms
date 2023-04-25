@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * lambda for adding a case to a trial session
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.addCaseToTrialSessionLambda = event =>
+export const addCaseToTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { docketNumber, trialSessionId } = event.pathParameters || event.path;
     const { calendarNotes } = JSON.parse(event.body);
