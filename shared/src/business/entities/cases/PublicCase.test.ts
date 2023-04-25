@@ -303,6 +303,47 @@ describe('PublicCase', () => {
     }).not.toThrow();
   });
 
+  it('should not show leadDocketNumber if user is does not have IRS Practitioner role', () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce({
+      role: ROLES.privatePractitioner,
+    });
+
+    const rawCase = {
+      ...MOCK_CASE,
+      irsPractitioners: [
+        {
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isSealed: false,
+      leadDocketNumber: 'number',
+      otherFilers: [
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary },
+        {
+          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.otherPetitioner,
+        },
+      ],
+      privatePractitioners: [
+        {
+          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+    const entity = new PublicCase(rawCase, { applicationContext });
+
+    expect(entity.irsPractitioners).toBeUndefined();
+    expect(entity.otherFilers).toBeUndefined();
+    expect(entity.privatePractitioners).toBeUndefined();
+    expect(entity.leadDocketNumber).toBeUndefined();
+  });
+
   describe('irsPractitioner', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(
@@ -359,7 +400,7 @@ describe('PublicCase', () => {
       expect(entity.irsPractitioners).toBeTruthy();
     });
 
-    it('should show all contact and practitioner information if user has IRS Practitioner role', () => {
+    it('should show all contact and practitioner information and leadDocketNumber if user has IRS Practitioner role', () => {
       applicationContext.getCurrentUser.mockReturnValueOnce({
         role: ROLES.irsPractitioner,
       });
@@ -406,6 +447,7 @@ describe('PublicCase', () => {
             userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
+        leadDocketNumber: 'number',
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: [
           {
@@ -465,13 +507,14 @@ describe('PublicCase', () => {
         docketNumberWithSuffix: 'testingtesting',
         hasIrsPractitioner: true,
         isSealed: false,
+        leadDocketNumber: 'number',
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: rawCase.petitioners,
         receivedAt: 'testing',
       });
     });
 
-    it('should not show practitioner and other filer information if user has IRS Practitioner role and the case is sealed', () => {
+    it('should not show practitioner and other filer information and leadDocketNumber if user has IRS Practitioner role and the case is sealed', () => {
       applicationContext.getCurrentUser.mockReturnValueOnce({
         role: ROLES.irsPractitioner,
       });
@@ -484,6 +527,7 @@ describe('PublicCase', () => {
           },
         ],
         isSealed: true,
+        leadDocketNumber: 'number',
         otherFilers: [
           {
             contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -508,6 +552,7 @@ describe('PublicCase', () => {
       expect(entity.irsPractitioners).toBeUndefined();
       expect(entity.otherFilers).toBeUndefined();
       expect(entity.privatePractitioners).toBeUndefined();
+      expect(entity.leadDocketNumber).toBeUndefined();
     });
   });
   // eslint-disable-next-line max-lines
