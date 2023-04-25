@@ -17,7 +17,7 @@ export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportSta
       caseTypes: [],
       createEndDate: '',
       createStartDate: '',
-      filingMethod: 'electronic',
+      filingMethod: 'all',
     },
     totalCases: 0,
   };
