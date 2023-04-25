@@ -52,4 +52,30 @@ describe('validateCustomInventoryFiltersAction', () => {
 
     expect(mockErrorPath).toHaveBeenCalled();
   });
+
+  it('should notify the user that the createStartDate and createEndDate are required when they are not filled out', async () => {
+    customCaseInventoryState.filters.createStartDate = '';
+    customCaseInventoryState.filters.createEndDate = '';
+
+    await runAction(validateCustomInventoryFiltersAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        customCaseInventory: customCaseInventoryState,
+      },
+    });
+
+    expect(mockErrorPath).toHaveBeenCalledWith({
+      alertError: {
+        messages: ['Enter a start date.', 'Enter an end date.'],
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
+      errors: {
+        endDate: 'Enter an end date.',
+        startDate: 'Enter a start date.',
+      },
+    });
+  });
 });

@@ -19,13 +19,17 @@ export const validateCustomInventoryFiltersAction = ({
     state.customCaseInventory.filters,
   );
 
-  const formattedEndDate = applicationContext
-    .getUtilities()
-    .createISODateString(createEndDate, FORMATS.MMDDYYYY);
+  const formattedEndDate = createEndDate
+    ? applicationContext
+        .getUtilities()
+        .createISODateString(createEndDate, FORMATS.MMDDYYYY)
+    : undefined;
 
-  const formattedStartDate = applicationContext
-    .getUtilities()
-    .createISODateString(createStartDate, FORMATS.MMDDYYYY);
+  const formattedStartDate = createStartDate
+    ? applicationContext
+        .getUtilities()
+        .createISODateString(createStartDate, FORMATS.MMDDYYYY)
+    : undefined;
 
   const errors = applicationContext
     .getUseCases()
