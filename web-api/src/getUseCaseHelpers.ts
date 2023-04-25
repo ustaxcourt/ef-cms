@@ -39,15 +39,9 @@ import { setNoticeOfChangeToInPersonProceeding } from '../../shared/src/business
 import { setNoticeOfChangeToRemoteProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/setPdfFormFields';
 import { stampDocumentForService } from '../../shared/src/business/useCaseHelper/stampDocumentForService';
-import { updateAssociatedJudgeOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { updateCaseStatusOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateCaseStatusOnWorkItems';
-import { updateCaseTitleOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems';
-import { updateDocketNumberSuffixOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems';
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
-import { updateTrialDateOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems';
-import { updateTrialLocationOnWorkItems } from '../../shared/src/business/useCaseHelper/workItems/updateTrialLocationOnWorkItems';
 
 const useCaseHelpers = {
   addDocketEntryForSystemGeneratedOrder,
@@ -90,15 +84,9 @@ const useCaseHelpers = {
   setNoticeOfChangeToRemoteProceeding,
   setPdfFormFields,
   stampDocumentForService,
-  updateAssociatedJudgeOnWorkItems,
   updateCaseAndAssociations,
   updateCaseAutomaticBlock,
-  updateCaseStatusOnWorkItems,
-  updateCaseTitleOnWorkItems,
-  updateDocketNumberSuffixOnWorkItems,
   updateInitialFilingDocuments,
-  updateTrialDateOnWorkItems,
-  updateTrialLocationOnWorkItems,
 };
 
 export const getUseCaseHelpers = () => useCaseHelpers;
