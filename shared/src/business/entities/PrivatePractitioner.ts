@@ -63,3 +63,7 @@ export class PrivatePractitioner extends User {
     return PrivatePractitioner.VALIDATION_RULES as any;
   }
 }
+
+declare global {
+  type RawPrivatePractitioner = ExcludeMethods<PrivatePractitioner>;
+}

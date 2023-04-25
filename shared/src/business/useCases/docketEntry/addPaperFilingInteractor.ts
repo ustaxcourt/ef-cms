@@ -137,7 +137,6 @@ export const addPaperFilingInteractor = async (
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
-        leadDocketNumber: caseEntity.leadDocketNumber,
         section: user.section,
         sentBy: user.name,
         sentBySection: user.section,
@@ -146,6 +145,7 @@ export const addPaperFilingInteractor = async (
         trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
+      caseEntity,
     );
 
     if (isReadyForService) {
