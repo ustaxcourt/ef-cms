@@ -259,6 +259,26 @@ describe('headerHelper', () => {
     expect(result.pageIsTrialSessions).toBeTruthy();
   });
 
+  it('should show border under Reports tab when page is CaseDeadlines', () => {
+    const result = runCompute(headerHelper, {
+      state: {
+        ...getBaseState({ role: ROLES.petitionsClerk }),
+        currentPage: 'CaseDeadlines',
+      },
+    });
+    expect(result.pageIsReports).toBeTruthy();
+  });
+
+  it('should show border under Reports tab when page is BlockedCasesReport', () => {
+    const result = runCompute(headerHelper, {
+      state: {
+        ...getBaseState({ role: ROLES.petitionsClerk }),
+        currentPage: 'BlockedCasesReport',
+      },
+    });
+    expect(result.pageIsReports).toBeTruthy();
+  });
+
   it('should show the number of unread messages for a user', () => {
     const baseState = getBaseState({ role: ROLES.petitionsClerk });
     const { notifications: baseNotifications } = baseState;
