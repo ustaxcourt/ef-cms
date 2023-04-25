@@ -1,4 +1,4 @@
-import { GetCaseInventoryReportRequest } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { CustomCaseInventoryReportState } from '../../customCaseInventoryReportState';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -7,145 +7,85 @@ import { setCustomCaseInventoryFiltersAction } from './setCustomCaseInventoryFil
 presenter.providers.applicationContext = applicationContext;
 
 describe('setCustomCaseInventoryFiltersAction', () => {
-  const expectedDate = '2019-05-14T04:00:00.000Z';
-  const regularDate = '05/14/2019';
-  let initialFilterState: GetCaseInventoryReportRequest;
+  let initialFilterState: CustomCaseInventoryReportState;
   beforeEach(() => {
     initialFilterState = {
-      caseStatuses: [],
-      caseTypes: [],
-      createEndDate: '',
-      createStartDate: '',
-      filingMethod: 'all',
+      cases: [],
+      filters: {
+        caseStatuses: [],
+        caseTypes: [],
+        createEndDate: '',
+        createStartDate: '',
+        filingMethod: 'all',
+      },
+      totalCases: 0,
     };
   });
 
   describe('createdStartDate', () => {
-    it('should set customCaseInventoryFilters createStartDate in state with fomated Date', async () => {
-      const result = await runAction(setCustomCaseInventoryFiltersAction, {
-        modules: { presenter },
-        props: {
-          createStartDate: regularDate,
-        },
-        state: {
-          customCaseInventoryFilters: initialFilterState,
-        },
-      });
-
-      expect(result.state.customCaseInventoryFilters.createStartDate).toEqual(
-        expectedDate,
-      );
-    });
-
-    it('should set customCaseInventoryFilters originalCreatedStartDate in state with original Date', async () => {
-      const result = await runAction(setCustomCaseInventoryFiltersAction, {
-        modules: { presenter },
-        props: {
-          createStartDate: regularDate,
-        },
-        state: {
-          customCaseInventoryFilters: initialFilterState,
-        },
-      });
-      expect(
-        result.state.customCaseInventoryFilters.originalCreatedStartDate,
-      ).toEqual(regularDate);
-    });
-
-    it('should set customCaseInventoryFilters originalCreatedStartDate with an empty string if no createStartDate was provided', async () => {
+    it('should set customCaseInventoryFilters createStartDate with an empty string when no createStartDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
           createStartDate: '',
         },
         state: {
-          customCaseInventoryFilters: initialFilterState,
+          customCaseInventory: initialFilterState,
         },
       });
 
-      expect(result.state.customCaseInventoryFilters.createStartDate).toEqual(
+      expect(result.state.customCaseInventory.filters.createStartDate).toEqual(
         '',
       );
     });
-
-    it('should set customCaseInventoryFilters createStartDate with an empty string if no createStartDate was provided', async () => {
+    it('should set customCaseInventoryFilters createStartDate with a string when a createStartDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createStartDate: '',
+          createStartDate: 'a truthy item',
         },
         state: {
-          customCaseInventoryFilters: initialFilterState,
+          customCaseInventory: initialFilterState,
         },
       });
 
-      expect(
-        result.state.customCaseInventoryFilters.originalCreatedStartDate,
-      ).toEqual('');
+      expect(result.state.customCaseInventory.filters.createStartDate).toEqual(
+        'a truthy item',
+      );
     });
   });
 
   describe('createdEndDate', () => {
-    it('should set customCaseInventoryFilters createEndDate in state with fomated Date', async () => {
+    it('should set customCaseInventoryFilters createEndDate with an empty string when no createEndDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createEndDate: regularDate,
+          createEndDate: '',
         },
         state: {
-          customCaseInventoryFilters: initialFilterState,
+          customCaseInventory: initialFilterState,
         },
       });
 
-      expect(result.state.customCaseInventoryFilters.createEndDate).toEqual(
-        expectedDate,
+      expect(result.state.customCaseInventory.filters.createEndDate).toEqual(
+        '',
       );
     });
 
-    it('should set customCaseInventoryFilters originalCreatedEndDate in state with original Date', async () => {
+    it('should set customCaseInventoryFilters createEndDate with a string when a createEndDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createEndDate: regularDate,
+          createEndDate: 'a truthy item',
         },
         state: {
-          customCaseInventoryFilters: initialFilterState,
+          customCaseInventory: initialFilterState,
         },
       });
 
-      expect(
-        result.state.customCaseInventoryFilters.originalCreatedEndDate,
-      ).toEqual(regularDate);
-    });
-
-    it('should set customCaseInventoryFilters should set customCaseInventoryFilters originalCreatedEndtDate with an empty string if no createEndDate was provided', async () => {
-      const result = await runAction(setCustomCaseInventoryFiltersAction, {
-        modules: { presenter },
-        props: {
-          createEndDate: '',
-        },
-        state: {
-          customCaseInventoryFilters: initialFilterState,
-        },
-      });
-
-      expect(
-        result.state.customCaseInventoryFilters.originalCreatedEndDate,
-      ).toEqual('');
-    });
-
-    it('should set customCaseInventoryFilters createEndDate with empty strings if no createEndDate was provided', async () => {
-      const result = await runAction(setCustomCaseInventoryFiltersAction, {
-        modules: { presenter },
-        props: {
-          createEndDate: '',
-        },
-        state: {
-          customCaseInventoryFilters: initialFilterState,
-        },
-      });
-
-      expect(result.state.customCaseInventoryFilters.createEndDate).toEqual('');
+      expect(result.state.customCaseInventory.filters.createEndDate).toEqual(
+        'a truthy item',
+      );
     });
   });
 
@@ -156,116 +96,116 @@ describe('setCustomCaseInventoryFiltersAction', () => {
         filingMethod: 'electronic',
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.filingMethod).toEqual(
+    expect(result.state.customCaseInventory.filters.filingMethod).toEqual(
       'electronic',
     );
   });
 
   it('should add a caseStatus filter in customCaseInventoryFilters', async () => {
-    initialFilterState.caseStatuses = ['Assigned - Case'];
+    initialFilterState.filters.caseStatuses = ['Assigned - Case'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
         caseStatuses: { action: 'add', caseStatus: 'CAV' },
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.caseStatuses).toEqual([
+    expect(result.state.customCaseInventory.filters.caseStatuses).toEqual([
       'Assigned - Case',
       'CAV',
     ]);
   });
 
   it('should not add a case status that has previously been selected', async () => {
-    initialFilterState.caseStatuses = ['Assigned - Case'];
+    initialFilterState.filters.caseStatuses = ['Assigned - Case'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
         caseStatuses: { action: 'add', caseStatus: 'Assigned - Case' },
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.caseStatuses).toEqual([
+    expect(result.state.customCaseInventory.filters.caseStatuses).toEqual([
       'Assigned - Case',
     ]);
   });
 
   it('should remove a caseStatus filter from customCaseInventoryFilters', async () => {
-    initialFilterState.caseStatuses = ['Assigned - Case', 'CAV'];
+    initialFilterState.filters.caseStatuses = ['Assigned - Case', 'CAV'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
         caseStatuses: { action: 'remove', caseStatus: 'CAV' },
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.caseStatuses).toEqual([
+    expect(result.state.customCaseInventory.filters.caseStatuses).toEqual([
       'Assigned - Case',
     ]);
   });
 
   it('should add a caseType filter to customCaseInventoryFilters', async () => {
-    initialFilterState.caseTypes = ['Deficiency'];
+    initialFilterState.filters.caseTypes = ['Deficiency'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
         caseTypes: { action: 'add', caseType: 'Disclosure' },
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.caseTypes).toEqual([
+    expect(result.state.customCaseInventory.filters.caseTypes).toEqual([
       'Deficiency',
       'Disclosure',
     ]);
   });
 
   it('should not add a caseType filter that has previously been selected', async () => {
-    initialFilterState.caseTypes = ['Deficiency', 'Disclosure'];
+    initialFilterState.filters.caseTypes = ['Deficiency', 'Disclosure'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
         caseTypes: { action: 'add', caseType: 'Deficiency' },
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.caseTypes).toEqual([
+    expect(result.state.customCaseInventory.filters.caseTypes).toEqual([
       'Deficiency',
       'Disclosure',
     ]);
   });
 
   it('should remove a case type filter from state', async () => {
-    initialFilterState.caseTypes = ['Deficiency', 'Disclosure'];
+    initialFilterState.filters.caseTypes = ['Deficiency', 'Disclosure'];
     const result = await runAction(setCustomCaseInventoryFiltersAction, {
       modules: { presenter },
       props: {
         caseTypes: { action: 'remove', caseType: 'Disclosure' },
       },
       state: {
-        customCaseInventoryFilters: initialFilterState,
+        customCaseInventory: initialFilterState,
       },
     });
 
-    expect(result.state.customCaseInventoryFilters.caseTypes).toEqual([
+    expect(result.state.customCaseInventory.filters.caseTypes).toEqual([
       'Deficiency',
     ]);
   });

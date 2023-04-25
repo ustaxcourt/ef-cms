@@ -2,20 +2,4 @@ import { setCustomCaseInventoryFiltersAction } from '../actions/CaseInventoryRep
 
 export const setCustomCaseInventoryReportFiltersSequence = [
   setCustomCaseInventoryFiltersAction,
-
-  // shouldValidateAction,
-  // {
-  //   ignore: [],
-  //   validate: [
-  //     validateSearchDeadlinesAction,
-  //     {
-  //       error: [
-  //         setAlertErrorAction,
-  //         setValidationErrorsAction,
-  //         setValidationAlertErrorsAction,
-  //       ],
-  //       success: [clearAlertsAction],
-  //     },
-  //   ],
-  // },
 ];

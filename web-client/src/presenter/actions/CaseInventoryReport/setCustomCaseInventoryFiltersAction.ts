@@ -2,8 +2,7 @@ import {
   CaseStatus,
   CaseType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { GetCaseInventoryReportRequest } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { cloneDeep } from 'lodash';
+import { CustomCaseInventoryReportFilters } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { state } from 'cerebral';
 
 /**
@@ -17,25 +16,33 @@ export const setCustomCaseInventoryFiltersAction = ({
   store,
 }: {
   get: any;
-  props: Partial<GetCaseInventoryReportRequest> & {
+  props: Partial<CustomCaseInventoryReportFilters> & {
     caseStatuses: { action: 'add' | 'remove'; caseStatus: CaseStatus };
     caseTypes: { action: 'add' | 'remove'; caseType: CaseType };
   };
   store: any;
 }) => {
-  const currentFilters: GetCaseInventoryReportRequest = get(
+  const currentFilters: CustomCaseInventoryReportFilters = get(
     state.customCaseInventory.filters,
   );
-  const desiredFilters = cloneDeep(props);
 
   if (props.createStartDate || props.createStartDate === '') {
-    store.merge(state.customCaseInventory.filters, props.createStartDate);
+    store.set(
+      state.customCaseInventory.filters.createStartDate,
+      props.createStartDate,
+    );
   }
   if (props.createEndDate || props.createEndDate === '') {
-    store.merge(state.customCaseInventory.filters, props.createEndDate);
+    store.set(
+      state.customCaseInventory.filters.createEndDate,
+      props.createEndDate,
+    );
   }
   if (props.filingMethod) {
-    store.merge(state.customCaseInventory.filters, desiredFilters);
+    store.set(
+      state.customCaseInventory.filters.filingMethod,
+      props.filingMethod,
+    );
   }
   if (props.caseStatuses) {
     if (

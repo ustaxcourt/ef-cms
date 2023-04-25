@@ -1,3 +1,4 @@
+import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 /**
@@ -18,11 +19,19 @@ export const validateCustomInventoryFiltersAction = ({
     state.customCaseInventory.filters,
   );
 
+  const formattedEndDate = applicationContext
+    .getUtilities()
+    .createISODateString(createEndDate, FORMATS.MMDDYYYY);
+
+  const formattedStartDate = applicationContext
+    .getUtilities()
+    .createISODateString(createStartDate, FORMATS.MMDDYYYY);
+
   const errors = applicationContext
     .getUseCases()
     .validateCustomCaseInventorySearchFiltersInteractor(applicationContext, {
-      endDate: createEndDate,
-      startDate: createStartDate,
+      endDate: formattedEndDate,
+      startDate: formattedStartDate,
     });
 
   if (errors) {
