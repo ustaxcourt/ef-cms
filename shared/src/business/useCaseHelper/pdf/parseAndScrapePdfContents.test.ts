@@ -1,6 +1,7 @@
+import { getFakeFile } from '../../test/getFakeFile';
+
 const {
   applicationContext,
-  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const { parseAndScrapePdfContents } = require('./parseAndScrapePdfContents');
 

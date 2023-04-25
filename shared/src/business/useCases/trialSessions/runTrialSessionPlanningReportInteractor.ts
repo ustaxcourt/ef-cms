@@ -2,7 +2,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TRIAL_CITIES, US_STATES } from '../../entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_CITIES,
+  US_STATES,
+} from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { capitalize, invert } from 'lodash';
 
@@ -29,8 +33,12 @@ export const getTrialSessionPlanningReportData = async ({
   applicationContext,
   term,
   year,
+}: {
+  applicationContext: IApplicationContext;
+  term: string;
+  year: string;
 }) => {
-  const previousTerms = [];
+  const previousTerms: any[] = [];
   let currentTerm = term;
   let currentYear = year;
   for (let i = 0; i < 3; i++) {
@@ -54,10 +62,10 @@ export const getTrialSessionPlanningReportData = async ({
     .getTrialSessions({ applicationContext });
 
   allTrialSessions = allTrialSessions.filter(session =>
-    ['Regular', 'Small', 'Hybrid'].includes(session.sessionType),
+    ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
   );
 
-  const trialLocationData = [];
+  const trialLocationData: Object[] = [];
   for (const trialLocation of trialCities) {
     const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
     const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
@@ -82,7 +90,7 @@ export const getTrialSessionPlanningReportData = async ({
     const regularCaseCount = eligibleCasesRegular.length;
     const allCaseCount = smallCaseCount + regularCaseCount;
 
-    const previousTermsData = [];
+    const previousTermsData: Object[] = [];
     previousTerms.forEach(previousTerm => {
       const previousTermSessions = allTrialSessions.filter(
         trialSession =>
@@ -97,14 +105,17 @@ export const getTrialSessionPlanningReportData = async ({
           .compareISODateStrings(a.startDate, b.startDate);
       });
 
-      const previousTermSessionList = [];
+      const previousTermSessionList: string[] = [];
       previousTermSessions.forEach(previousTermSession => {
         if (
           previousTermSession &&
           previousTermSession.sessionType &&
           previousTermSession.judge
         ) {
-          const sessionTypeChar = previousTermSession.sessionType.charAt(0);
+          const sessionTypeChar =
+            previousTermSession.sessionType === SESSION_TYPES.hybridSmall
+              ? 'HS'
+              : previousTermSession.sessionType.charAt(0);
           const strippedJudgeName = previousTermSession.judge.name.replace(
             'Judge ',
             '',

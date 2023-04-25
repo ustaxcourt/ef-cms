@@ -5,7 +5,7 @@
  * @param {object} urlObject the most up-to-date representation of a url
  * @returns {object} the v1 representation of a url
  */
-exports.marshallDocumentDownloadUrl = urlObject => {
+export const marshallDocumentDownloadUrl = urlObject => {
   return {
     url: urlObject.url,
   };

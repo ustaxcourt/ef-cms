@@ -26,13 +26,9 @@ module.exports = {
   ignorePatterns: '**/*_.js',
   overrides: [
     {
-      files: [
-        'cypress-integration/**/*.js',
-        'cypress-smoketests/**/*.js',
-        'cypress-readonly/**/*.js',
-        'cypress/**/*.ts',
-      ],
+      files: ['cypress/**/*.ts'],
       rules: {
+        'cypress/unsafe-to-chain-command': 'warn',
         'jest/expect-expect': 'off',
         'jest/valid-expect': 'off',
         'jest/valid-expect-in-promise': 'off',
@@ -113,7 +109,6 @@ module.exports = {
     'jsdoc/check-param-names': 'off', // todo: warn
     'jsdoc/check-tag-names': 'off', // todo: warn
     'jsdoc/check-types': 'off', // todo: warn
-    'jsdoc/newline-after-description': 'warn',
     'jsdoc/no-undefined-types': 'off', // todo: warn
     'jsdoc/require-jsdoc': 'warn',
     'jsdoc/require-param': 'off', // todo: warn
