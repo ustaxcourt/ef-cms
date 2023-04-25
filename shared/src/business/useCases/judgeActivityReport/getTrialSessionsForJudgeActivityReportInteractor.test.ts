@@ -63,12 +63,38 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     startDate: '2020-03-02T00:00:00.000Z',
   };
 
+  const mockHybridSmallSwingTrialSession = {
+    ...MOCK_TRIAL_REGULAR,
+    endDate: '2020-03-03T00:00:00.000Z',
+    judge: {
+      name: judgeUser.name,
+      userId: judgeUser.userId,
+    },
+    sessionType: SESSION_TYPES.hybridSmall,
+    startDate: '2020-03-02T00:00:00.000Z',
+    swingSession: true,
+    swingSessionId: '0875bab4-5bfe-4b3a-a62d-565d7d950bd9',
+  };
+
+  const mockHybridSmallNonSwingTrialSession = {
+    ...MOCK_TRIAL_REGULAR,
+    endDate: '2020-03-03T00:00:00.000Z',
+    judge: {
+      name: judgeUser.name,
+      userId: judgeUser.userId,
+    },
+    sessionType: SESSION_TYPES.hybridSmall,
+    startDate: '2020-03-02T00:00:00.000Z',
+  };
+
   const mockTrialSessions = [
     mockRegularTrialSession,
     mockMotionHearingTrialSession,
     mockSmallSwingTrialSession,
     mockHybridNonSwingTrialSession,
     mockHybridSwingTrialSession,
+    mockHybridSmallSwingTrialSession,
+    mockHybridSmallNonSwingTrialSession,
   ];
 
   const mockValidRequest = {
@@ -129,7 +155,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     );
 
     expect(result).toEqual({
-      Hybrid: 1.5,
+      Hybrid: 3, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
       'Motion/Hearing': 0.5, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
       Regular: 1,
       Small: 0.5, // .5 for each R/S/H that is a part of a swing session

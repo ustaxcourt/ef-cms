@@ -89,7 +89,8 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   const hybridNonSwingSessions = judgeSessionsInDateRange.filter(
     session =>
-      isTypeOf(SESSION_TYPES.hybrid)(session) &&
+      (isTypeOf(SESSION_TYPES.hybrid)(session) ||
+        isTypeOf(SESSION_TYPES.hybridSmall)(session)) &&
       !isNew(session) &&
       !isSwingSession(session),
   ).length;
@@ -97,7 +98,8 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   const hybridSwingSessions =
     judgeSessionsInDateRange.filter(
       session =>
-        isTypeOf(SESSION_TYPES.hybrid)(session) &&
+        (isTypeOf(SESSION_TYPES.hybrid)(session) ||
+          isTypeOf(SESSION_TYPES.hybridSmall)(session)) &&
         !isNew(session) &&
         isSwingSession(session),
     ).length / 2;
