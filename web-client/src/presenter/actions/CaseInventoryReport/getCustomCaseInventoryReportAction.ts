@@ -1,3 +1,8 @@
+import {
+  CustomCaseInventoryReportFilters,
+  GetCaseInventoryReportResponse,
+} from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 5;
@@ -16,13 +21,23 @@ export const getCustomCaseInventoryReportAction = async ({
   props,
   store,
 }) => {
-  const filterValues = get(state.customCaseInventory.filters);
+  const filterValues: CustomCaseInventoryReportFilters = get(
+    state.customCaseInventory.filters,
+  );
 
-  // TODO 9723:  add a type to reportData
-  const reportData = await applicationContext
+  const formattedStartDate = applicationContext
+    .getUtilities()
+    .createISODateString(filterValues.createStartDate, FORMATS.MMDDYYYY);
+  const formattedEndDate = applicationContext
+    .getUtilities()
+    .createISODateString(filterValues.createEndDate, FORMATS.MMDDYYYY);
+
+  const reportData: GetCaseInventoryReportResponse = await applicationContext
     .getUseCases()
     .getCustomCaseInventoryReportInteractor(applicationContext, {
       ...filterValues,
+      createEndDate: formattedEndDate,
+      createStartDate: formattedStartDate,
       pageNumber: props.selectedPage,
       pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
     });

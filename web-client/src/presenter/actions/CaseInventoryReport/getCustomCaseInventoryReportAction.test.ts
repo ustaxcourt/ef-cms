@@ -2,7 +2,10 @@ import {
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
   getCustomCaseInventoryReportAction,
 } from './getCustomCaseInventoryReportAction';
-import { GetCaseInventoryReportRequest } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import {
+  CustomCaseInventoryReportFilters,
+  GetCaseInventoryReportRequest,
+} from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -24,21 +27,19 @@ describe('getCustomCaseInventoryReportAction', () => {
   });
 
   it('should get the custom case inventory report with filter values that the user has selected', async () => {
-    const expectedRequest: GetCaseInventoryReportRequest = {
+    const filterValues: CustomCaseInventoryReportFilters = {
       caseStatuses: ['Assigned - Case'],
       caseTypes: ['Deficiency'],
-      createEndDate: '2022-05-01T17:21:05.483Z',
-      createStartDate: '2022-01-01T17:21:05.483Z',
+      createEndDate: '05/14/2022',
+      createStartDate: '05/10/2022',
       filingMethod: 'electronic',
+    };
+    const expectedRequest: GetCaseInventoryReportRequest = {
+      ...filterValues,
+      createEndDate: '2022-05-14T04:00:00.000Z',
+      createStartDate: '2022-05-10T04:00:00.000Z',
       pageNumber: 0,
       pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
-    };
-    const filterValues = {
-      caseStatuses: expectedRequest.caseStatuses,
-      caseTypes: expectedRequest.caseTypes,
-      createEndDate: expectedRequest.createEndDate,
-      createStartDate: expectedRequest.createStartDate,
-      filingMethod: expectedRequest.filingMethod,
     };
 
     const result = await runAction(getCustomCaseInventoryReportAction, {
