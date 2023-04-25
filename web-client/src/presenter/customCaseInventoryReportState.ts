@@ -15,8 +15,8 @@ export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportSta
     filters: {
       caseStatuses: [],
       caseTypes: [],
-      createEndDate: '2024-03-01T00:00:00.000Z',
-      createStartDate: '2018-03-01T00:00:00.000Z',
+      createEndDate: '',
+      createStartDate: '',
       filingMethod: 'electronic',
     },
     totalCases: 0,
