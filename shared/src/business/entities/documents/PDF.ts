@@ -1,6 +1,7 @@
 const joi = require('joi').extend(require('@hapi/joi-date'));
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { MAX_FILE_SIZE_MB } from '../EntityConstants';
 
 export class PDF extends JoiValidationEntity {
   public file: object;
@@ -20,7 +21,15 @@ export class PDF extends JoiValidationEntity {
     ),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
+  static VALIDATION_ERROR_MESSAGES = {
+    size: [
+      {
+        contains: 'must be less than or equal to',
+        message: `File size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'The file you uploaded is empty.',
+    ],
+  };
 
   getValidationRules() {
     return PDF.VALIDATION_RULES;

@@ -1,12 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('./CaseExternal');
+} from '../EntityConstants';
+import { CaseExternal } from './CaseExternal';
+import { PDF } from '../documents/PDF';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
@@ -225,8 +224,8 @@ describe('CaseExternal entity', () => {
     });
   });
 
-  describe('corporate disclosure file size', () => {
-    it('should inform you if corporate disclosure file size is greater than the PDF max file size', () => {
+  describe('Corporate disclosure file size', () => {
+    it('should inform the user when the corporate disclosure file size is greater than the allowed file size', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
@@ -240,14 +239,14 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
-      ).toEqual(
-        VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[0].message,
-      );
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFile
+          .size,
+      ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[0].message);
     });
 
-    it('should inform you if corporate disclosure file size is zero', () => {
+    it('should inform the user when the corporate disclosure file is an empty file', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
@@ -261,44 +260,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
-      expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
-    });
 
-    it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
-      const caseExternal = new CaseExternal(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
-      ).toBeUndefined();
-    });
-
-    it('should error on corporateDisclosureFileSize when corporateDisclosureFile is defined', () => {
-      const caseExternal = new CaseExternal(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: new File([], 'testStinFile.pdf'),
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
-      expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+        caseExternal.getFormattedValidationErrors().corporateDisclosureFile
+          .size,
+      ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[1]);
     });
   });
 });

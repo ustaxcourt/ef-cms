@@ -13,9 +13,11 @@ export const validateFileAction = async ({ applicationContext, get, path }) => {
   const { primaryDocumentFile } = get(state.form);
 
   try {
-    await applicationContext.getUseCases().validateFileInteractor({
-      primaryDocumentFile,
-    });
+    await applicationContext
+      .getUseCases()
+      .validateFileInteractor(applicationContext, {
+        primaryDocumentFile,
+      });
   } catch (e) {
     return path.error({
       alertError: {

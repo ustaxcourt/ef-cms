@@ -1,3 +1,4 @@
+import { PDF } from '../documents/PDF';
 const joi = require('joi');
 const {
   BUSINESS_TYPES,
@@ -21,7 +22,6 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 /**
  * CaseExternal Entity
  * Represents a Case with required documents that a Petitioner is attempting to add to the system.
- *
  * @param {object} rawCase the raw case data
  * @constructor
  */
@@ -31,6 +31,24 @@ CaseExternal.prototype.init = function init(rawCase, { applicationContext }) {
   CaseExternal.prototype.initContacts.call(this, rawCase, {
     applicationContext,
   });
+  CaseExternal.prototype.initCorporateDisclosureFile.call(this, rawCase, {
+    applicationContext,
+  });
+};
+
+CaseExternal.prototype.initSelf = function (rawCase) {
+  this.businessType = rawCase.businessType;
+  this.caseType = rawCase.caseType;
+  this.countryType = rawCase.countryType;
+  this.filingType = rawCase.filingType;
+  this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.partyType = rawCase.partyType;
+  this.petitionFile = rawCase.petitionFile;
+  this.petitionFileSize = rawCase.petitionFileSize;
+  this.preferredTrialCity = rawCase.preferredTrialCity;
+  this.procedureType = rawCase.procedureType;
+  this.stinFile = rawCase.stinFile;
+  this.stinFileSize = rawCase.stinFileSize;
 };
 
 CaseExternal.prototype.initContacts = function (
@@ -51,21 +69,16 @@ CaseExternal.prototype.initContacts = function (
   }
 };
 
-CaseExternal.prototype.initSelf = function (rawCase) {
-  this.businessType = rawCase.businessType;
-  this.caseType = rawCase.caseType;
-  this.countryType = rawCase.countryType;
-  this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
-  this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
-  this.partyType = rawCase.partyType;
-  this.petitionFile = rawCase.petitionFile;
-  this.petitionFileSize = rawCase.petitionFileSize;
-  this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.procedureType = rawCase.procedureType;
-  this.stinFile = rawCase.stinFile;
-  this.stinFileSize = rawCase.stinFileSize;
+CaseExternal.prototype.initCorporateDisclosureFile = function (
+  rawCase,
+  { applicationContext },
+) {
+  if (rawCase.corporateDisclosureFile) {
+    this.corporateDisclosureFile = new PDF({
+      file: rawCase.corporateDisclosureFile,
+      size: rawCase.corporateDisclosureFileSize,
+    });
+  }
 };
 
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
@@ -81,21 +94,11 @@ CaseExternal.commonRequirements = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  corporateDisclosureFile: joi.object().when('filingType', {
+  corporateDisclosureFile: joi.object(PDF.VALIDATION_RULES).when('filingType', {
     is: 'A business',
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  corporateDisclosureFileSize: joi
-    .number()
-    .integer()
-    .min(1)
-    .max(MAX_FILE_SIZE_BYTES)
-    .when('corporateDisclosureFile', {
-      is: joi.exist(),
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
   countryType: JoiValidationConstants.STRING.optional(),
   filingType: JoiValidationConstants.STRING.valid(
     ...FILING_TYPES[ROLES.petitioner],
