@@ -60,6 +60,29 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     }
   }
 
+  static VALIDATION_RULES = {
+    wizardStep: JoiValidationConstants.STRING.valid(
+      '1',
+      '2',
+      '3',
+      '4',
+    ).required(),
+    ...CaseExternalInformationFactory.wizardStep1(),
+    ...CaseExternalInformationFactory.wizardStep2(),
+    ...CaseExternalInformationFactory.wizardStep3(),
+    ...CaseExternalInformationFactory.wizardStep4(),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
+
+  getValidationRules() {
+    return CaseExternalInformationFactory.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
+  }
+
   static atWizardStep(stepNum, schemaObj) {
     const stepNumArray = [];
     for (let i = +stepNum; i <= CaseExternalInformationFactory.MAX_STEPS; i++) {
@@ -107,28 +130,5 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
       preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
       procedureType: CaseExternal.VALIDATION_RULES.procedureType,
     });
-  }
-
-  static VALIDATION_RULES = {
-    wizardStep: JoiValidationConstants.STRING.valid(
-      '1',
-      '2',
-      '3',
-      '4',
-    ).required(),
-    ...CaseExternalInformationFactory.wizardStep1(),
-    ...CaseExternalInformationFactory.wizardStep2(),
-    ...CaseExternalInformationFactory.wizardStep3(),
-    ...CaseExternalInformationFactory.wizardStep4(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
-
-  getValidationRules() {
-    return CaseExternalInformationFactory.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
   }
 }
