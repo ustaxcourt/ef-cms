@@ -9,19 +9,10 @@ export const validateFileInputSequence = [
   validateFileAction,
   {
     error: [
-      () => {
-        console.log('pdf has been validated, it is BORKED!');
-      },
       startShowValidationAction,
       setAlertErrorAction,
       setValidationErrorsAction,
     ],
-    success: [
-      () => {
-        console.log('pdf has been validated, it is NOT borked!');
-      },
-      stopShowValidationAction,
-      clearAlertsAction,
-    ],
+    success: [stopShowValidationAction, clearAlertsAction],
   },
 ];
