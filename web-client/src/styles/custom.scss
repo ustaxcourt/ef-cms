@@ -2105,3 +2105,8 @@ button.change-scanner-button {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.optional-light-text {
+  color: color($theme-color-base-dark);
+  font-size: 15px;
+}
