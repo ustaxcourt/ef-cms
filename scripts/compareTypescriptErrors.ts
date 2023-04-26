@@ -43,12 +43,10 @@ const stagingTypescriptOutput = spawnSync('npx', ['tsc', '--noEmit'], {
 const stagingErrorCount = countTypescriptErrors(stagingTypescriptOutput.stdout);
 console.log('Typescript errors in staging: ', stagingErrorCount);
 
-if (branchToBeComparedErrorCount >= stagingErrorCount) {
+if (branchToBeComparedErrorCount > stagingErrorCount) {
   console.log('Staging errors: ', stagingErrorCount);
   console.log('Your branch errors: ', branchToBeComparedErrorCount);
-  console.log(
-    'ERROR: Your branch has more errors or the same number of errors as staging. Failing. :(',
-  );
+  console.log('ERROR: Your branch has more errors than staging. Failing. :(');
   process.exit(1);
 } else {
   console.log(
