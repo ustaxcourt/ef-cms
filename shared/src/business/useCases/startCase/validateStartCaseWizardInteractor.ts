@@ -15,5 +15,6 @@ export const validateStartCaseWizardInteractor = (
   const errors = new CaseExternalInformationFactory(petition, {
     applicationContext,
   }).getFormattedValidationErrors();
+
   return errors || null;
 };
