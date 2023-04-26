@@ -62,6 +62,10 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
     await blockCaseFromTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',

@@ -125,6 +125,10 @@ describe('deleteDeficiencyStatisticInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
     await deleteDeficiencyStatisticInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',

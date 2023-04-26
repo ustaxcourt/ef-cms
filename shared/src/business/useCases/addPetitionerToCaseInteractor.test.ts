@@ -157,6 +157,10 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
     await addPetitionerToCaseInteractor(applicationContext, {
       caseCaption: MOCK_CASE.caseCaption,
       contact: mockContact,

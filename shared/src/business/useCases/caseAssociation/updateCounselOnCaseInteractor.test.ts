@@ -165,6 +165,10 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
+
     await updateCounselOnCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userData: {
