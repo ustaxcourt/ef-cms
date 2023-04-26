@@ -60,10 +60,6 @@ describe('updateOtherStatisticsInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updateOtherStatisticsInteractor(applicationContext, {
       damages: 1234,
       docketNumber: MOCK_CASE.docketNumber,

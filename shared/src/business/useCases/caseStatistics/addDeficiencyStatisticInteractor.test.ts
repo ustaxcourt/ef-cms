@@ -61,10 +61,6 @@ describe('addDeficiencyStatisticInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await addDeficiencyStatisticInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       ...mockStatistic,
