@@ -2,6 +2,7 @@ import joi from 'joi';
 const { Case } = require('./Case');
 import { CaseExternal } from './CaseExternal';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { PDF } from '../documents/PDF';
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
@@ -38,10 +39,20 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     this.filingType = rawCase.filingType;
     this.hasIrsNotice = rawCase.hasIrsNotice;
     this.partyType = rawCase.partyType;
-    this.petitionFile = rawCase.petitionFile;
+    if (rawCase.petitionFile) {
+      this.petitionFile = new PDF({
+        file: rawCase.petitionFile,
+        size: rawCase.petitionFileSize,
+      });
+    }
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
-    this.stinFile = rawCase.stinFile;
+    if (rawCase.stinFile) {
+      this.stinFile = new PDF({
+        file: rawCase.stinFile,
+        size: rawCase.stinFileSize,
+      });
+    }
     this.wizardStep = rawCase.wizardStep;
 
     if (+this.wizardStep >= 3) {
