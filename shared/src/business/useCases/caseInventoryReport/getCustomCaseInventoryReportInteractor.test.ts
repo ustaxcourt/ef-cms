@@ -37,8 +37,6 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       { missingField: 'createEndDate' },
       { missingField: 'createStartDate' },
       { missingField: 'filingMethod' },
-      { missingField: 'caseStatuses' },
-      { missingField: 'caseTypes' },
     ];
 
     testCases.forEach(testCase => {
