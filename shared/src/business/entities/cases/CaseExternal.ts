@@ -146,7 +146,6 @@ CaseExternal.commonRequirements = {
     }),
 };
 
-// 7839 TODO - docs
 CaseExternal.prototype.getContactPrimary = function () {
   return getContactPrimary(this);
 };
