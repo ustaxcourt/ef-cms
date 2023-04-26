@@ -13,8 +13,6 @@ export const DateRangePickerComponent = ({
   formGroupCls,
   onChangeEnd,
   onChangeStart,
-  onInputEnd,
-  onInputStart,
   rangePickerCls,
   startDateErrorText,
   startLabel,
@@ -29,10 +27,8 @@ export const DateRangePickerComponent = ({
   endValue: string;
   formGroupCls?: string;
   rangePickerCls?: string;
-  onChangeEnd: Function;
-  onChangeStart: Function;
-  onInputStart: Function;
-  onInputEnd: Function;
+  onChangeEnd: (event: CustomEvent) => void;
+  onChangeStart: (event: CustomEvent) => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string;
@@ -43,8 +39,8 @@ export const DateRangePickerComponent = ({
   const startDatePickerRef = useRef();
   const endDatePickerRef = useRef();
 
-  const startDateInputRef = useRef();
-  const endDateInputRef = useRef();
+  const startDateInputRef = useRef<HTMLInputElement>(null);
+  const endDateInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (
@@ -55,23 +51,16 @@ export const DateRangePickerComponent = ({
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
       dateRangePicker.on(dateRangePickerRef.current);
-    } else if (
-      startDatePickerRef.current ||
-      (endDatePickerRef.current && dateRangePickerRef.current)
-    ) {
-      datePicker.on(startDatePickerRef.current);
-      datePicker.on(endDatePickerRef.current);
-      dateRangePicker.on(dateRangePickerRef.current);
     }
   }, [dateRangePickerRef]);
 
   useEffect(() => {
     const startInput = window.document.getElementById(
       `${startName}-date-start`,
-    );
+    ) as HTMLInputElement;
     const startHiddenInput = window.document.querySelector(
       `input[name="${startName}-date-start"]`,
-    );
+    ) as HTMLInputElement;
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
@@ -86,10 +75,12 @@ export const DateRangePickerComponent = ({
   }, [startValue]);
 
   useEffect(() => {
-    const endInput = window.document.getElementById(`${endName}-date-end`);
+    const endInput = window.document.getElementById(
+      `${endName}-date-end`,
+    ) as HTMLInputElement;
     const endHiddenInput = window.document.querySelector(
       `input[name="${endName}-date-end"]`,
-    );
+    ) as HTMLInputElement;
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';
@@ -105,18 +96,18 @@ export const DateRangePickerComponent = ({
 
   useEffect(() => {
     if (startDateInputRef.current && endDateInputRef.current) {
-      window.document
-        .getElementById(`${endName}-date-end`)
-        .addEventListener('change', onChangeEnd);
-      window.document
-        .getElementById(`${startName}-date-start`)
-        .addEventListener('change', onChangeStart);
-      window.document
-        .getElementById(`${startName}-date-start`)
-        .addEventListener('input', onInputStart);
-      window.document
-        .getElementById(`${endName}-date-end`)
-        .addEventListener('input', onInputEnd);
+      const dateEndInput = window.document.getElementById(
+        `${endName}-date-end`,
+      );
+      if (dateEndInput) {
+        dateEndInput.addEventListener('change', onChangeEnd);
+      }
+      const dateStartInput = window.document.getElementById(
+        `${startName}-date-start`,
+      );
+      if (dateStartInput) {
+        dateStartInput.addEventListener('change', onChangeStart);
+      }
     }
   }, [startDateInputRef, endDateInputRef]);
 
