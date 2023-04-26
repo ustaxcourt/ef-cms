@@ -933,14 +933,6 @@ export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.other]: 'Other',
 };
 
-export const DEFAULT_CUSTOM_CASE_INVENTORY_FILTERS = {
-  caseStatuses: [],
-  caseTypes: [],
-  createEndDate: '',
-  createStartDate: '',
-  filingMethod: 'all',
-};
-
 export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
   [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
   [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',

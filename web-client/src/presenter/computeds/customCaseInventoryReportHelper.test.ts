@@ -98,7 +98,7 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should return true for isRunReportButtonDisabled if createEndDate or createStartDate are falsy', () => {
+  it('should return true for runReportButtonIsDisabled if createEndDate or createStartDate are falsy', () => {
     defaultCustomCaseState.filters.createEndDate = 's';
     defaultCustomCaseState.filters.createStartDate = undefined;
 
@@ -106,36 +106,36 @@ describe('customCaseInventoryReportHelper', () => {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isRunReportButtonDisabled).toEqual(true);
+    expect(result.runReportButtonIsDisabled).toEqual(true);
   });
 
-  it('should return true for isRunReportButtonDisabled if createEndDate and createStartDate are both truthy', () => {
+  it('should return true for runReportButtonIsDisabled if createEndDate and createStartDate are both truthy', () => {
     defaultCustomCaseState.filters.createEndDate = 's';
     defaultCustomCaseState.filters.createStartDate = 's';
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isRunReportButtonDisabled).toEqual(false);
+    expect(result.runReportButtonIsDisabled).toEqual(false);
   });
 
-  it('should return true for isClearFiltersDisabled when case status(es) or case type(s) selected are not selected', () => {
+  it('should return true for clearFiltersIsDisabled when case status(es) or case type(s) selected are not selected', () => {
     defaultCustomCaseState.filters.caseTypes = [];
     defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isClearFiltersDisabled).toEqual(true);
+    expect(result.clearFiltersIsDisabled).toEqual(true);
   });
 
-  it('should return false for isClearFiltersDisabled when case status(es) or case type(s) selected are selected', () => {
+  it('should return false for clearFiltersIsDisabled when case status(es) or case type(s) selected are selected', () => {
     defaultCustomCaseState.filters.caseTypes = ['CDP (Lien/Levy)'];
     defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isClearFiltersDisabled).toEqual(false);
+    expect(result.clearFiltersIsDisabled).toEqual(false);
   });
 });

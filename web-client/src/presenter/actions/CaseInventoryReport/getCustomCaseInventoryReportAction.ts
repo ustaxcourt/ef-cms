@@ -5,8 +5,7 @@ import {
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 2; // TODO: change to 100
-// TODO 9723: add a type to this action
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
 /**
  * get the case inventory report data
  *
@@ -20,6 +19,11 @@ export const getCustomCaseInventoryReportAction = async ({
   get,
   props,
   store,
+}: {
+  applicationContext: IApplicationContext;
+  get: any;
+  props: { selectedPage: number };
+  store: any;
 }) => {
   const filterValues: CustomCaseInventoryReportFilters = get(
     state.customCaseInventory.filters,
