@@ -46,7 +46,7 @@ export const CustomCaseReport = connect(
           <div className="title">
             <h1>Custom Case Report</h1>
           </div>
-          <div className="grid-col-12 blue-container margin-bottom-3">
+          <div className="grid-col-12 blue-container margin-bottom-4">
             <div className="grid-col-auto margin-x-3">
               <DateRangePickerComponent
                 endDateErrorText={validationErrors.endDate}
@@ -84,8 +84,8 @@ export const CustomCaseReport = connect(
               />
             </div>
           </div>
-          <div className="grid-col-6 margin-bottom-2">
-            <legend>Petition Filing Method</legend>
+          <div className="grid-col-6 margin-bottom-4">
+            <legend>Petition filing method</legend>
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby="petition-filing-method-radios"
@@ -160,7 +160,7 @@ export const CustomCaseReport = connect(
                   htmlFor="case-status"
                   id="case-status-label"
                 >
-                  Case Status{' '}
+                  Case status{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
@@ -185,7 +185,7 @@ export const CustomCaseReport = connect(
                   htmlFor="case-type"
                   id="case-type-label"
                 >
-                  Case Types{' '}
+                  Case types{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
@@ -275,7 +275,7 @@ export const CustomCaseReport = connect(
           <Paginator
             forcePage={activePage}
             pageCount={Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE)}
-            pageRangeDisplayed={5}
+            pageRangeDisplayed={3}
             onPageChange={pageChange => {
               setActivePage(pageChange.selected);
               getCustomCaseInventoryReportSequence({
@@ -326,8 +326,8 @@ const ReportTable = ({
               Requested Place <br /> of Trial
             </th>
             <th>
-              High Priority for <br />
-              Calendaring
+              Calendaring <br />
+              High Priority
             </th>
           </tr>
         </thead>
@@ -356,15 +356,11 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-          {hasRunCustomCaseReport && totalCases === 0 && (
-            <tr>
-              <td className="text-center" colSpan={100}>
-                No data found.
-              </td>
-            </tr>
-          )}
         </tbody>
       </table>
+      {hasRunCustomCaseReport && totalCases === 0 && (
+        <p>There are no cases for the selected criteria.</p>
+      )}
     </>
   );
 };
