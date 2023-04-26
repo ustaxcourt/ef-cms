@@ -268,10 +268,6 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('should acquire and remove the lock on the cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await removeConsolidatedCasesInteractor(applicationContext, {
       docketNumber: '105-19',
       docketNumbersToRemove: ['104-19'],
