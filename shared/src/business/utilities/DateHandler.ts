@@ -7,7 +7,6 @@ export const FORMATS = {
   DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
-  ISO_DATE: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
@@ -26,7 +25,6 @@ export const FORMATS = {
   YEAR_TWO_DIGIT: 'yy',
   YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
-  YYYYMMDD_DASH: 'YYYY-MM-DD',
   YYYYMMDD_NUMERIC: 'yyyyMMdd',
 };
 
