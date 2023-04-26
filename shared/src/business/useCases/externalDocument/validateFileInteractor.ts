@@ -1,11 +1,6 @@
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
-
 /**
  * Uploads external documents and calls the interactor to associate them with one or more cases
+ *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {Array} providers.primaryDocumentFile pdf to
@@ -27,7 +22,6 @@ export const validateFileInteractor = async (
   try {
     await PDFDocument.load(arrayBuffer);
   } catch (e) {
-    console.log('***** e ', e.message, typeof e);
     if (
       e.message.includes('Input document to `PDFDocument.load` is encrypted')
     ) {

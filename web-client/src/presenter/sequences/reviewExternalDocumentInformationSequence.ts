@@ -21,9 +21,6 @@ export const reviewExternalDocumentInformationSequence = [
   validateFileAction,
   {
     error: [
-      () => {
-        console.log('pdf has been validated, it is BORKED!');
-      },
       startShowValidationAction,
       setAlertErrorAction,
       setValidationErrorsAction,
