@@ -71,16 +71,6 @@ export const CustomCaseReport = connect(
                     createStartDate: e.target.value,
                   });
                 }}
-                // onInputEnd={e => {
-                //   setCustomCaseInventoryReportFiltersSequence({
-                //     createEndDate: e.target.value,
-                //   });
-                // }}
-                // onInputStart={e => {
-                //   setCustomCaseInventoryReportFiltersSequence({
-                //     createStartDate: e.target.value,
-                //   });
-                // }}
               />
             </div>
           </div>

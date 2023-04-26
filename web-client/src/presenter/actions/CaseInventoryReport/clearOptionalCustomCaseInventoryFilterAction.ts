@@ -7,12 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const clearOptionalCustomCaseInventoryFilterAction = ({ store }) => {
-  const filtersWithDefaultCaseTypesAndStatus = {
-    caseStatuses: [],
-    caseTypes: [],
-  };
-  store.merge(
-    state.customCaseInventoryFilters,
-    filtersWithDefaultCaseTypesAndStatus,
-  );
+  store.set(state.customCaseInventory.filters.caseStatuses, []);
+  store.set(state.customCaseInventory.filters.caseTypes, []);
 };
