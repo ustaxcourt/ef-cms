@@ -15,7 +15,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
     this.startDate = rawProps.startDate;
-    this.endDate = rawProps.endDate; // TODO; DECIDE IF WE NEED TO RESTRICT END DATE VALIDATION TO 'TODAY'
+    this.endDate = rawProps.endDate;
   }
 
   static VALIDATION_ERROR_MESSAGES = {

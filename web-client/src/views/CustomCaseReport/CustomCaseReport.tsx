@@ -243,7 +243,7 @@ export const CustomCaseReport = connect(
             </div>
           </div>
           <Button
-            disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
+            disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
@@ -255,7 +255,7 @@ export const CustomCaseReport = connect(
           </Button>
           <Button
             link
-            disabled={customCaseInventoryReportHelper.isClearFiltersDisabled}
+            disabled={customCaseInventoryReportHelper.clearFiltersIsDisabled}
             tooltip="Clear Filters"
             onClick={() => clearOptionalCustomCaseInventoryFilterSequence()}
           >

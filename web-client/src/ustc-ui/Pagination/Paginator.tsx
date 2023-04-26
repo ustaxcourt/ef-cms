@@ -38,4 +38,4 @@ export const Paginator = ({
   );
 };
 
-Paginator.displayName = 'PaginationerComponent';
+Paginator.displayName = 'Paginator';
