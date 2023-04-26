@@ -11,26 +11,40 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
+import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const reviewExternalDocumentInformationSequence = [
   clearAlertsAction,
   startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setFilersFromFilersMapAction,
-  validateExternalDocumentInformationAction,
+  validateFileAction,
   {
     error: [
+      () => {
+        console.log('pdf has been validated, it is BORKED!');
+      },
+      startShowValidationAction,
       setAlertErrorAction,
       setValidationErrorsAction,
-      setValidationAlertErrorsAction,
     ],
     success: [
-      setSupportingDocumentScenarioAction,
-      generateTitleAction,
-      generateTitleForSupportingDocumentsAction,
-      stopShowValidationAction,
-      clearAlertsAction,
-      navigateToReviewFileADocumentAction,
+      validateExternalDocumentInformationAction,
+      {
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
+        success: [
+          setSupportingDocumentScenarioAction,
+          generateTitleAction,
+          generateTitleForSupportingDocumentsAction,
+          stopShowValidationAction,
+          clearAlertsAction,
+          navigateToReviewFileADocumentAction,
+        ],
+      },
     ],
   },
 ];
