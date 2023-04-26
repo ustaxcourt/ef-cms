@@ -2111,3 +2111,14 @@ button.change-scanner-button {
   color: color($theme-color-base-dark);
   font-size: 15px;
 }
+
+.paginator-current {
+  background-color: color($theme-color-primary);
+  color: $color-white;
+}
+.paginator-current:focus {
+  color: $color-white;
+}
+.paginator-current:hover {
+  color: $color-white;
+}

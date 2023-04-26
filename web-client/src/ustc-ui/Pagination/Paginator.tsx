@@ -16,7 +16,7 @@ export const Paginator = ({
     <>
       <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
         <ReactPaginate
-          activeLinkClassName="usa-current"
+          activeLinkClassName="paginator-current"
           breakClassName="usa-pagination__item"
           breakLinkClassName="usa-pagination__button cursor-pointer border-none"
           className="usa-pagination__list"

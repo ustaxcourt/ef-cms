@@ -5,7 +5,7 @@ import {
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 5;
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 2; // TODO: change to 100
 // TODO 9723: add a type to this action
 /**
  * get the case inventory report data
