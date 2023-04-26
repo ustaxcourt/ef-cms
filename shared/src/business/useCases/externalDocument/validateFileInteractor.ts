@@ -1,10 +1,10 @@
 /**
- * Uploads external documents and calls the interactor to associate them with one or more cases
+ * Validates an uploaded file
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {Array} providers.primaryDocumentFile pdf to
- * @returns {Promise<Object>} the case details with the uploaded document(s) attached
+ * @param {Array} providers.primaryDocumentFile the primary document file getting uploaded
+ * @returns {void}
  */
 export const validateFileInteractor = async (
   applicationContext: any,
