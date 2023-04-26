@@ -156,7 +156,6 @@ import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditU
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuccessSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
-import { gotoJudgeActivityReportSequence } from './sequences/JudgeActivityReport/gotoJudgeActivityReportSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
@@ -394,7 +393,6 @@ import { submitEditPractitionerDocumentSequence } from './sequences/submitEditPr
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
-import { submitJudgeActivityReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityReportSequence';
 import { submitLocalLoginSequence } from './sequences/submitLocalLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
@@ -451,7 +449,6 @@ import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormVal
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
-import { updateJudgeActivityReportFormSequence } from './sequences/updateJudgeActivityReportFormSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -675,7 +672,6 @@ const sequences = {
   gotoFileDocumentSequence,
   gotoFilePetitionSuccessSequence,
   gotoIdleLogoutSequence,
-  gotoJudgeActivityReportSequence,
   gotoLoginSequence,
   gotoMaintenanceSequence,
   gotoMessageDetailSequence,
@@ -911,7 +907,6 @@ const sequences = {
   submitEditRespondentCounselSequence,
   submitExternalDocumentSequence,
   submitFilePetitionSequence,
-  submitJudgeActivityReportSequence,
   submitLocalLoginSequence,
   submitOpinionAdvancedSearchSequence,
   submitOrderAdvancedSearchSequence,
@@ -968,7 +963,6 @@ const sequences = {
   updateFormValueAndSecondaryContactInfoSequence,
   updateFormValueSequence,
   updateHearingNoteSequence,
-  updateJudgeActivityReportFormSequence,
   updateJudgesCaseNoteOnCaseDetailSequence,
   updateMessageModalAttachmentsSequence,
   updateModalFormValueSequence,

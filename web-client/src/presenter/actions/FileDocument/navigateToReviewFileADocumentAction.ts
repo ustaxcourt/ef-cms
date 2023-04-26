@@ -8,10 +8,22 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store that contains the caseDetail.docketNumber
  */
 export const navigateToReviewFileADocumentAction = async ({
+  applicationContext,
   get,
   router,
   store,
 }) => {
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+
+  const redactionAcknowledgementEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
+    ],
+  );
+  if (redactionAcknowledgementEnabled) {
+    store.set(state.form.redactionAcknowledgement, false);
+  }
+
   store.set(state.wizardStep, 'FileDocumentReview');
   const { docketNumber } = get(state.caseDetail);
   await router.route(`/case-detail/${docketNumber}/file-a-document/review`);

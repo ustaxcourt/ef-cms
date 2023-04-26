@@ -109,7 +109,6 @@ module.exports = {
     'jsdoc/check-param-names': 'off', // todo: warn
     'jsdoc/check-tag-names': 'off', // todo: warn
     'jsdoc/check-types': 'off', // todo: warn
-    'jsdoc/newline-after-description': 'warn',
     'jsdoc/no-undefined-types': 'off', // todo: warn
     'jsdoc/require-jsdoc': 'warn',
     'jsdoc/require-param': 'off', // todo: warn
@@ -355,7 +354,6 @@ module.exports = {
           'params',
           'paris',
           'pdfjs',
-          'pdfs',
           'petitionsclerk',
           'petr',
           'petrs',
@@ -427,7 +425,6 @@ module.exports = {
           'vasquezs',
           'viewport',
           'washington',
-          'websockets',
           'whistleblower',
           'whitelist',
           'wicg',
