@@ -8,7 +8,7 @@ if (!process.argv[2]) {
 
 (async () => {
   // check the domain
-  const es: ES = new ES();
+  const es: ES = new ES({ region: 'us-east-1' });
   const DomainName: string = process.argv[2];
   const [, , ENV, VERSION]: string[] = DomainName.split('-');
 
