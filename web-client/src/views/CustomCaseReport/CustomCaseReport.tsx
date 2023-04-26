@@ -35,7 +35,7 @@ export const CustomCaseReport = connect(
     validationErrors,
   }) {
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
-    const [casesItemOffset] = useState(0);
+    const [activePage, setActivePage] = useState(0);
 
     return (
       <>
@@ -160,7 +160,8 @@ export const CustomCaseReport = connect(
                   htmlFor="case-status"
                   id="case-status-label"
                 >
-                  Case Status (optional)
+                  Case Status{' '}
+                  <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
                   aria-labelledby="case-status-label"
@@ -184,7 +185,8 @@ export const CustomCaseReport = connect(
                   htmlFor="case-type"
                   id="case-type-label"
                 >
-                  Case Types (optional)
+                  Case Types{' '}
+                  <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
                   aria-labelledby="case-type-label"
@@ -251,11 +253,12 @@ export const CustomCaseReport = connect(
             </div>
           </div>
           <Button
-            // disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
+            disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
               getCustomCaseInventoryReportSequence({ selectedPage: 0 });
+              setActivePage(0);
             }}
           >
             Run Report
@@ -268,11 +271,13 @@ export const CustomCaseReport = connect(
           >
             Clear Filters
           </Button>
-          <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-darker" />
+          <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           <Paginator
+            forcePage={activePage}
             pageCount={Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE)}
             pageRangeDisplayed={5}
             onPageChange={pageChange => {
+              setActivePage(pageChange.selected);
               getCustomCaseInventoryReportSequence({
                 selectedPage: pageChange.selected,
               });
@@ -284,7 +289,6 @@ export const CustomCaseReport = connect(
           </div>
           <ReportTable
             cases={customCaseInventoryReportHelper.cases}
-            casesItemOffset={casesItemOffset}
             hasRunCustomCaseReport={hasRunCustomCaseReport}
             totalCases={totalCases}
           />
@@ -296,17 +300,13 @@ export const CustomCaseReport = connect(
 
 const ReportTable = ({
   cases,
-  casesItemOffset,
   hasRunCustomCaseReport,
   totalCases,
 }: {
-  casesItemOffset: number;
   cases: any[];
   hasRunCustomCaseReport: boolean;
   totalCases: number;
 }) => {
-  const endOffset = casesItemOffset + CUSTOM_CASE_INVENTORY_PAGE_SIZE;
-  const paginatedCases = cases.slice(casesItemOffset, endOffset);
   return (
     <>
       <table
@@ -322,13 +322,18 @@ const ReportTable = ({
             <th>Case Status</th>
             <th>Case Type</th>
             <th>Judge</th>
-            <th>Request Place of Trial</th>
-            <th>High Priority for calendaring</th>
+            <th>
+              Requested Place <br /> of Trial
+            </th>
+            <th>
+              High Priority for <br />
+              Calendaring
+            </th>
           </tr>
         </thead>
         <tbody>
-          {paginatedCases &&
-            paginatedCases.map(entry => (
+          {cases &&
+            cases.map(entry => (
               <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
                 <td>
                   <CaseLink formattedCase={entry} />
@@ -353,7 +358,9 @@ const ReportTable = ({
             ))}
           {hasRunCustomCaseReport && totalCases === 0 && (
             <tr>
-              <div className="text-center">No data found.</div>
+              <td className="text-center" colSpan={100}>
+                No data found.
+              </td>
             </tr>
           )}
         </tbody>

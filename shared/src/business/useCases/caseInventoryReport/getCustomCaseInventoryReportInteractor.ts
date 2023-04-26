@@ -18,6 +18,11 @@ export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
   pageSize: number;
 };
 
+export type GetCaseInventoryReportResponse = {
+  foundCases: CaseInventory[];
+  totalCount: number;
+};
+
 export type CaseInventory = Pick<
   TCase,
   | 'associatedJudge'
@@ -48,7 +53,7 @@ export type CaseInventory = Pick<
 export const getCustomCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCaseInventoryReportRequest,
-): Promise<{ totalCount: number; foundCases: CaseInventory[] }> => {
+): Promise<GetCaseInventoryReportResponse> => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');

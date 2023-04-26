@@ -2,6 +2,7 @@ import React from 'react';
 import ReactPaginate from 'react-paginate';
 
 export const Paginator = ({
+  forcePage,
   onPageChange,
   pageCount,
   pageRangeDisplayed,
@@ -9,6 +10,7 @@ export const Paginator = ({
   pageCount: number;
   pageRangeDisplayed: number;
   onPageChange: (selectedItem: { selected: number }) => void;
+  forcePage: number;
 }) => {
   return (
     <>
@@ -19,6 +21,7 @@ export const Paginator = ({
           breakLinkClassName="usa-pagination__button cursor-pointer border-none"
           className="usa-pagination__list"
           disabledClassName="hide"
+          forcePage={forcePage}
           nextClassName="usa-pagination__item usa-pagination__arrow"
           nextLinkClassName="usa-pagination__link usa-pagination__next-page cursor-pointer"
           pageClassName="usa-pagination__item usa-pagination__page-no"
