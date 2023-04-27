@@ -4,11 +4,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -220,5 +216,4 @@ export const fileCourtIssuedDocketEntryInteractor = withLocking(
     identifier: [...new Set([subjectDocketNumber, ...docketNumbers])],
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );

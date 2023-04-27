@@ -5,11 +5,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { addCoverToPdf } from './addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
@@ -242,5 +238,4 @@ export const updateContactInteractor = withLocking(
     identifier: docketNumber,
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );

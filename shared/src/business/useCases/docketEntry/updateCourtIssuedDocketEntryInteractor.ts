@@ -1,10 +1,6 @@
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -119,5 +115,4 @@ export const updateCourtIssuedDocketEntryInteractor = withLocking(
     identifier: documentMeta.docketNumber,
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );

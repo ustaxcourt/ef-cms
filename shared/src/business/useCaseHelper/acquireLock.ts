@@ -45,7 +45,9 @@ export const checkLock = async ({
   } else if (typeof onLockError === 'function') {
     await onLockError(applicationContext, options);
   }
-  throw new ServiceUnavailableError('One of the cases is being updated');
+  throw new ServiceUnavailableError(
+    'One of the items you are trying to update is being updated by someone else',
+  );
 };
 
 export const acquireLock = async ({
@@ -60,7 +62,7 @@ export const acquireLock = async ({
 }: {
   applicationContext: IApplicationContext;
   identifier: string | string[];
-  onLockError: Error | Function;
+  onLockError?: Error | Function;
   options?: any;
   prefix: string;
   retries?: number;
@@ -146,7 +148,7 @@ export const removeLock = ({
 export function withLocking(
   cb: (applicationContext: IApplicationContext, options: any) => any,
   getLockInfo: Function,
-  onLockError: Error | Function,
+  onLockError?: Error | Function,
 ) {
   return async function (
     applicationContext: IApplicationContext,
