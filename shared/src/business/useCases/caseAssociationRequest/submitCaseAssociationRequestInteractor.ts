@@ -4,8 +4,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
-import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -48,18 +46,22 @@ export const submitCaseAssociationRequestInteractor = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner) {
-    return await associatePrivatePractitionerToCase({
-      applicationContext,
-      docketNumber,
-      representing: filers,
-      user,
-    });
+    return await applicationContext
+      .getUseCaseHelpers()
+      .associatePrivatePractitionerToCase({
+        applicationContext,
+        docketNumber,
+        representing: filers,
+        user,
+      });
   } else if (isIrsPractitioner) {
-    return await associateIrsPractitionerToCase({
-      applicationContext,
-      consolidatedCasesDocketNumbers,
-      docketNumber,
-      user,
-    });
+    return await applicationContext
+      .getUseCaseHelpers()
+      .associateIrsPractitionerToCase({
+        applicationContext,
+        consolidatedCasesDocketNumbers,
+        docketNumber,
+        user,
+      });
   }
 };

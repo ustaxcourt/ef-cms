@@ -48,6 +48,7 @@ export const fileExternalDocumentInteractor = async (
   let currentCaseEntity = new Case(currentCase, { applicationContext });
 
   const {
+    consolidatedCasesToFileAcross,
     secondaryDocument,
     secondarySupportingDocuments,
     supportingDocuments,
@@ -106,18 +107,13 @@ export const fileExternalDocumentInteractor = async (
 
   let documentMetadataForConsolidatedCases = [];
   if (
-    documentMetadata.consolidatedCasesToFileAcross &&
-    documentMetadata.consolidatedCasesToFileAcross.length > 0
+    consolidatedCasesToFileAcross &&
+    consolidatedCasesToFileAcross.length > 0
   ) {
-    for (
-      let index = 0;
-      index < documentMetadata.consolidatedCasesToFileAcross.length;
-      index++
-    ) {
+    for (let index = 0; index < consolidatedCasesToFileAcross.length; index++) {
       documentMetadataForConsolidatedCases.push({
         ...documentMetadata,
-        docketNumber:
-          documentMetadata.consolidatedCasesToFileAcross[index].docketNumber,
+        docketNumber: consolidatedCasesToFileAcross[index].docketNumber,
       });
     }
   } else {

@@ -222,53 +222,7 @@ export const RequestAccessReview = connect(
                         </ul>
                       </div>
                     </div>
-                    <div className="tablet:grid-col-6 margin-bottom-1">
-                      {fileDocumentHelper.showFilingIncludes && (
-                        <div
-                          className={classNames(
-                            !fileDocumentHelper.primaryDocument.showObjection
-                              ? 'margin-bottom-0'
-                              : 'margin-bottom-5',
-                          )}
-                        >
-                          <label
-                            className="usa-label"
-                            htmlFor="filing-includes"
-                          >
-                            Document includes
-                          </label>
-                          <ul className="ustc-unstyled-list without-margins">
-                            {form.certificateOfService && (
-                              <li>
-                                Certificate of Service{' '}
-                                {
-                                  fileDocumentHelper.certificateOfServiceDateFormatted
-                                }
-                              </li>
-                            )}
-                            {form.attachments && <li>Attachment(s)</li>}
-                          </ul>
-                        </div>
-                      )}
-
-                      {fileDocumentHelper.primaryDocument.showObjection && (
-                        <div className="margin-bottom-0">
-                          <label className="usa-label" htmlFor="objections">
-                            Objections?
-                          </label>
-                          {form.objections}
-                        </div>
-                      )}
-                    </div>
                   </div>
-
-                  {form.supportingDocuments && supportingDocuments()}
-
-                  {fileDocumentHelper.showSecondaryDocument &&
-                    secondaryDocument()}
-
-                  {form.secondarySupportingDocuments &&
-                    secondarySupportingDocuments()}
                 </div>
               </div>
             </div>
