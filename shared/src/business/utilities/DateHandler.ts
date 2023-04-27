@@ -26,7 +26,9 @@ export const FORMATS = {
   YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
   YYYYMMDD_NUMERIC: 'yyyyMMdd',
-};
+} as const;
+const FORMATS1 = Object.values(FORMATS);
+export type TimeFormats = (typeof FORMATS1)[number];
 
 export const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
@@ -119,6 +121,10 @@ export const calculateISODate = ({
   dateString = undefined,
   howMuch = 0,
   units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
 }) => {
   if (!howMuch) return dateString;
 
