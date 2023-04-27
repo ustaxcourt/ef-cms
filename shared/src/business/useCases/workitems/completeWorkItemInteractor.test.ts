@@ -5,8 +5,6 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
-import { ServiceUnavailableError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
 
@@ -39,9 +37,6 @@ describe('completeWorkItemInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
     mockUser = {
       name: 'docket clerk',
       role: ROLES.docketClerk,
@@ -141,50 +136,5 @@ describe('completeWorkItemInteractor', () => {
         }),
       ]),
     );
-  });
-
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
-
-    await expect(
-      completeWorkItemInteractor(applicationContext, {
-        completedMessage: 'Completed',
-        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
-    await completeWorkItemInteractor(applicationContext, {
-      completedMessage: 'Completed',
-      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: MOCK_CASE.docketNumber,
-      prefix: 'case',
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: MOCK_CASE.docketNumber,
-      prefix: 'case',
-    });
   });
 });

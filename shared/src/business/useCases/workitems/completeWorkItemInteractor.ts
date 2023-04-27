@@ -3,13 +3,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
-import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { createISODateString } from '../../utilities/DateHandler';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * completeWorkItemInteractor
@@ -20,7 +17,7 @@ import { createISODateString } from '../../utilities/DateHandler';
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-export const completeWorkItemInteractor = async (
+export const completeWorkItem = async (
   applicationContext: IApplicationContext,
   {
     completedMessage,
@@ -44,16 +41,6 @@ export const completeWorkItemInteractor = async (
     });
   const originalWorkItemEntity = new WorkItem(originalWorkItem, {
     applicationContext,
-  });
-
-  await acquireLock({
-    applicationContext,
-    identifier: originalWorkItem.docketNumber,
-    onLockError: new ServiceUnavailableError(
-      'The case is currently being updated',
-    ),
-    prefix: 'case',
-    ttl: 30,
   });
 
   const completedWorkItem = originalWorkItemEntity
@@ -101,11 +88,27 @@ export const completeWorkItemInteractor = async (
     caseToUpdate,
   });
 
-  await applicationContext.getPersistenceGateway().removeLock({
-    applicationContext,
-    identifier: completedWorkItem.docketNumber,
-    prefix: 'case',
-  });
-
   return completedWorkItem;
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { workItemId }: { workItemId: string },
+) => {
+  const originalWorkItem: RawWorkItem = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemById({
+      applicationContext,
+      workItemId,
+    });
+
+  return {
+    identifier: originalWorkItem.docketNumber,
+    prefix: 'case',
+  };
+};
+
+export const completeWorkItemInteractor = withLocking(
+  completeWorkItem,
+  determineEntitiesToLock,
+);
