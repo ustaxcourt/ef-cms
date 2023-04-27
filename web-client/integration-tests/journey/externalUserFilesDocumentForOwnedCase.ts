@@ -4,7 +4,7 @@ import { contactPrimaryFromState } from '../helpers';
 export const externalUserFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
-  overrides = {},
+  fileAcrossConsolidatedGroup,
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
@@ -112,7 +112,7 @@ export const externalUserFilesDocumentForOwnedCase = (
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    if (overrides.fileAcrossConsolidatedGroup) {
+    if (fileAcrossConsolidatedGroup) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
@@ -141,7 +141,7 @@ export const externalUserFilesDocumentForOwnedCase = (
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    if (overrides.fileAcrossConsolidatedGroup) {
+    if (fileAcrossConsolidatedGroup) {
       const form = cerebralTest.getState('form');
 
       expect(form.fileAcrossConsolidatedGroup).toEqual(true);
