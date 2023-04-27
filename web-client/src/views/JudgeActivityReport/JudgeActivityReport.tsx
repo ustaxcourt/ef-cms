@@ -209,7 +209,7 @@ export const JudgeActivityReport = connect(
                   }}
                 />
               </div>
-              <div className="grid-col-auto display-flex flex-align-end">
+              <div className="grid-col-auto display-flex flex-align-center">
                 <Button
                   className="position-relative margin-bottom-35"
                   onClick={() => {
