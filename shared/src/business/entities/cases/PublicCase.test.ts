@@ -14,12 +14,16 @@ const {
 const { getContactSecondary } = require('./Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
-const { MOCK_USERS } = require('../../../test/mockUsers');
 const { PublicCase } = require('./PublicCase');
 
 const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
 const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
 describe('PublicCase', () => {
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+    });
+  });
   describe('validation', () => {
     it('should validate when all information is provided and case is not sealed', () => {
       const entity = new PublicCase(
@@ -303,11 +307,7 @@ describe('PublicCase', () => {
     }).not.toThrow();
   });
 
-  it('should not show leadDocketNumber if user is does not have IRS Practitioner role', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.privatePractitioner,
-    });
-
+  it('should not show leadDocketNumber if user does not have a Practitioner role', () => {
     const rawCase = {
       ...MOCK_CASE,
       irsPractitioners: [
@@ -344,215 +344,221 @@ describe('PublicCase', () => {
     expect(entity.leadDocketNumber).toBeUndefined();
   });
 
-  describe('irsPractitioner', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-    });
+  describe('practitioner', () => {
+    const practitionerRoles = [
+      ROLES.irsPractitioner,
+      ROLES.privatePractitioner,
+    ];
 
-    it('an irsPractitioner should be able to see otherPetitioners and otherFilers', () => {
-      const mockOtherFiler = {
-        address1: '42 Lamb Sauce Blvd',
-        city: 'Nashville',
-        contactType: CONTACT_TYPES.participant,
-        country: 'USA',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
-        phone: '1234567890',
-        postalCode: '05198',
-        state: 'AK',
-        title: UNIQUE_OTHER_FILER_TYPE,
-      };
-      const mockOtherPetitioner = {
-        address1: '42 Lamb Sauce Blvd',
-        city: 'Nashville',
-        contactType: CONTACT_TYPES.otherPetitioner,
-        country: 'USA',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
-        phone: '1234567890',
-        postalCode: '05198',
-        state: 'AK',
-        title: UNIQUE_OTHER_FILER_TYPE,
-      };
+    practitionerRoles.forEach(role => {
+      it(`an ${role} should be able to see otherPetitioners and otherFilers`, () => {
+        applicationContext.getCurrentUser.mockReturnValueOnce({
+          role,
+        });
 
-      const entity = new PublicCase(
-        {
+        const mockOtherFiler = {
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          contactType: CONTACT_TYPES.participant,
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'gordon@example.com',
+          name: 'Gordon Ramsay',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
+        };
+        const mockOtherPetitioner = {
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          contactType: CONTACT_TYPES.otherPetitioner,
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'gordon@example.com',
+          name: 'Gordon Ramsay',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
+        };
+
+        const entity = new PublicCase(
+          {
+            ...MOCK_CASE,
+            petitioners: [
+              { contactType: CONTACT_TYPES.primary },
+              mockOtherFiler,
+              mockOtherPetitioner,
+            ],
+          },
+          { applicationContext },
+        );
+
+        expect(entity.petitioners).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining(mockOtherFiler),
+            expect.objectContaining(mockOtherPetitioner),
+          ]),
+        );
+        expect(entity.irsPractitioners).toBeTruthy();
+        expect(entity.privatePractitioners).toBeTruthy();
+      });
+
+      it(`should show all contact and practitioner information and leadDocketNumber if user has ${role} role`, () => {
+        applicationContext.getCurrentUser.mockReturnValueOnce({
+          role,
+        });
+
+        const rawContactPrimary = {
+          address1: '907 West Rocky Cowley Parkway',
+          address2: '104 West 120th Street',
+          address3: 'Nisi quisquam ea har',
+          city: 'Ut similique id erro',
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          isAddressSealed: false,
+          name: 'Garrett Carpenter',
+          phone: '+1 (241) 924-9153',
+          postalCode: '26371',
+          sealedAndUnavailable: false,
+          secondaryName: 'Leslie Bullock',
+          state: 'MD',
+        };
+        const rawCase = {
+          caseCaption: 'testing',
+          docketEntries: [],
+          docketNumber: 'testing',
+          docketNumberSuffix: 'testing',
+          irsPractitioners: [
+            {
+              barNumber: 'RT6789',
+              contact: {
+                address1: '234 Main St',
+                address2: 'Apartment 4',
+                address3: 'Under the stairs',
+                city: 'Chicago',
+                countryType: 'domestic',
+                phone: '+1 (555) 555-5555',
+                postalCode: '61234',
+                state: 'IL',
+              },
+              email: 'irspractitioner@example.com',
+              entityName: 'IrsPractitioner',
+              name: 'Test IRS Practitioner',
+              role: 'irsPractitioner',
+              serviceIndicator: 'Electronic',
+              userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+          leadDocketNumber: 'number',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            {
+              ...rawContactPrimary,
+              contactType: CONTACT_TYPES.primary,
+              isPaper: true,
+            },
+            {
+              address1: '907 West Rocky Cowley Parkway',
+              address2: '104 West 120th Street',
+              address3: 'Nisi quisquam ea har',
+              city: 'Ut similique id erro',
+              contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              contactType: CONTACT_TYPES.otherFiler,
+              countryType: 'domestic',
+              email: 'petitioner@example.com',
+              isAddressSealed: false,
+              name: 'Barrett Carpenter',
+              phone: '+1 (241) 924-9153',
+              postalCode: '26371',
+              sealedAndUnavailable: false,
+              secondaryName: 'Leslie Bullock',
+              state: 'MD',
+            },
+          ],
+          privatePractitioners: [
+            {
+              barNumber: 'PT1234',
+              contact: {
+                address1: '234 Main St',
+                address2: 'Apartment 4',
+                address3: 'Under the stairs',
+                city: 'Chicago',
+                countryType: 'domestic',
+                phone: '+1 (555) 555-5555',
+                postalCode: '61234',
+                state: 'IL',
+              },
+              email: 'privatepractitioner@example.com',
+              entityName: 'PrivatePractitioner',
+              name: 'Test Private Practitioner',
+              representing: ['28cae029-bae2-4eef-ac54-878fbbab65e3'],
+              role: 'privatePractitioner',
+              serviceIndicator: 'Electronic',
+              userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+          receivedAt: 'testing',
+        };
+        const entity = new PublicCase(rawCase, { applicationContext });
+
+        expect(entity.toRawObject()).toMatchObject({
+          caseCaption: 'testing',
+          docketEntries: [],
+          docketNumber: 'testing',
+          docketNumberSuffix: 'testing',
+          docketNumberWithSuffix: 'testingtesting',
+          hasIrsPractitioner: true,
+          isSealed: false,
+          leadDocketNumber: 'number',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: rawCase.petitioners,
+          receivedAt: 'testing',
+        });
+      });
+
+      it(`should not show practitioner and other filer information and leadDocketNumber if user has ${role} role and the case is sealed`, () => {
+        applicationContext.getCurrentUser.mockReturnValueOnce({
+          role,
+        });
+
+        const rawCase = {
           ...MOCK_CASE,
+          irsPractitioners: [
+            {
+              userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+          isSealed: true,
+          leadDocketNumber: 'number',
+          otherFilers: [
+            {
+              contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
           petitioners: [
             { contactType: CONTACT_TYPES.primary },
-            mockOtherFiler,
-            mockOtherPetitioner,
+            {
+              contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+              contactType: CONTACT_TYPES.otherPetitioner,
+            },
           ],
-        },
-        { applicationContext },
-      );
-
-      expect(entity.petitioners).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining(mockOtherFiler),
-          expect.objectContaining(mockOtherPetitioner),
-        ]),
-      );
-      expect(entity.irsPractitioners).toBeTruthy();
-    });
-
-    it('should show all contact and practitioner information and leadDocketNumber if user has IRS Practitioner role', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsPractitioner,
-      });
-
-      const rawContactPrimary = {
-        address1: '907 West Rocky Cowley Parkway',
-        address2: '104 West 120th Street',
-        address3: 'Nisi quisquam ea har',
-        city: 'Ut similique id erro',
-        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        countryType: 'domestic',
-        email: 'petitioner@example.com',
-        isAddressSealed: false,
-        name: 'Garrett Carpenter',
-        phone: '+1 (241) 924-9153',
-        postalCode: '26371',
-        sealedAndUnavailable: false,
-        secondaryName: 'Leslie Bullock',
-        state: 'MD',
-      };
-      const rawCase = {
-        caseCaption: 'testing',
-        docketEntries: [],
-        docketNumber: 'testing',
-        docketNumberSuffix: 'testing',
-        irsPractitioners: [
-          {
-            barNumber: 'RT6789',
-            contact: {
-              address1: '234 Main St',
-              address2: 'Apartment 4',
-              address3: 'Under the stairs',
-              city: 'Chicago',
-              countryType: 'domestic',
-              phone: '+1 (555) 555-5555',
-              postalCode: '61234',
-              state: 'IL',
+          privatePractitioners: [
+            {
+              userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
             },
-            email: 'irspractitioner@example.com',
-            entityName: 'IrsPractitioner',
-            name: 'Test IRS Practitioner',
-            role: 'irsPractitioner',
-            serviceIndicator: 'Electronic',
-            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-        leadDocketNumber: 'number',
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          {
-            ...rawContactPrimary,
-            contactType: CONTACT_TYPES.primary,
-            isPaper: true,
-          },
-          {
-            address1: '907 West Rocky Cowley Parkway',
-            address2: '104 West 120th Street',
-            address3: 'Nisi quisquam ea har',
-            city: 'Ut similique id erro',
-            contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            contactType: CONTACT_TYPES.otherFiler,
-            countryType: 'domestic',
-            email: 'petitioner@example.com',
-            isAddressSealed: false,
-            name: 'Barrett Carpenter',
-            phone: '+1 (241) 924-9153',
-            postalCode: '26371',
-            sealedAndUnavailable: false,
-            secondaryName: 'Leslie Bullock',
-            state: 'MD',
-          },
-        ],
-        privatePractitioners: [
-          {
-            barNumber: 'PT1234',
-            contact: {
-              address1: '234 Main St',
-              address2: 'Apartment 4',
-              address3: 'Under the stairs',
-              city: 'Chicago',
-              countryType: 'domestic',
-              phone: '+1 (555) 555-5555',
-              postalCode: '61234',
-              state: 'IL',
-            },
-            email: 'privatepractitioner@example.com',
-            entityName: 'PrivatePractitioner',
-            name: 'Test Private Practitioner',
-            representing: ['28cae029-bae2-4eef-ac54-878fbbab65e3'],
-            role: 'privatePractitioner',
-            serviceIndicator: 'Electronic',
-            userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-        receivedAt: 'testing',
-      };
-      const entity = new PublicCase(rawCase, { applicationContext });
+          ],
+        };
+        const entity = new PublicCase(rawCase, { applicationContext });
 
-      expect(entity.toRawObject()).toMatchObject({
-        caseCaption: 'testing',
-        docketEntries: [],
-        docketNumber: 'testing',
-        docketNumberSuffix: 'testing',
-        docketNumberWithSuffix: 'testingtesting',
-        hasIrsPractitioner: true,
-        isSealed: false,
-        leadDocketNumber: 'number',
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: rawCase.petitioners,
-        receivedAt: 'testing',
+        expect(entity.irsPractitioners).toBeUndefined();
+        expect(entity.otherFilers).toBeUndefined();
+        expect(entity.privatePractitioners).toBeUndefined();
+        expect(entity.leadDocketNumber).toBeUndefined();
       });
-    });
-
-    it('should not show practitioner and other filer information and leadDocketNumber if user has IRS Practitioner role and the case is sealed', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsPractitioner,
-      });
-
-      const rawCase = {
-        ...MOCK_CASE,
-        irsPractitioners: [
-          {
-            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-        isSealed: true,
-        leadDocketNumber: 'number',
-        otherFilers: [
-          {
-            contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          { contactType: CONTACT_TYPES.primary },
-          {
-            contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
-            contactType: CONTACT_TYPES.otherPetitioner,
-          },
-        ],
-        privatePractitioners: [
-          {
-            userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-      };
-      const entity = new PublicCase(rawCase, { applicationContext });
-
-      expect(entity.irsPractitioners).toBeUndefined();
-      expect(entity.otherFilers).toBeUndefined();
-      expect(entity.privatePractitioners).toBeUndefined();
-      expect(entity.leadDocketNumber).toBeUndefined();
     });
   });
   // eslint-disable-next-line max-lines
