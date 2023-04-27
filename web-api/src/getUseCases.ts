@@ -1,5 +1,3 @@
-import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor';
-import { getOrdersFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor';
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 import { addCaseToTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor';
@@ -100,6 +98,8 @@ import { getMaintenanceModeInteractor } from '../../shared/src/business/useCases
 import { getMessageThreadInteractor } from '../../shared/src/business/useCases/messages/getMessageThreadInteractor';
 import { getMessagesForCaseInteractor } from '../../shared/src/business/useCases/messages/getMessagesForCaseInteractor';
 import { getNotificationsInteractor } from '../../shared/src/business/useCases/getNotificationsInteractor';
+import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor';
+import { getOrdersFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getOutboxMessagesForUserInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor';
