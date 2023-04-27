@@ -1,5 +1,6 @@
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { clearFormAction } from '../../actions/clearFormAction';
+import { clearJudgeActivityReportResultAction } from '../../actions/JudgeActivityReport/clearJudgeActivityReportResultAction';
 import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
@@ -16,6 +17,7 @@ const gotoJudgeActivityReport = [
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   clearFormAction,
+  clearJudgeActivityReportResultAction,
   setJudgeLastNameOnFormAction,
   setCurrentPageAction('JudgeActivityReport'),
 ];
