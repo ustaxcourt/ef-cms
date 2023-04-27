@@ -22,7 +22,7 @@ exports.associatePrivatePractitionerToCase = async ({
   serviceIndicator,
   user,
 }) => {
-  let docketNumbersToAssociate = [];
+  let docketNumbersToAssociate: string[] = [];
 
   if (consolidatedCasesDocketNumbers.length > 0) {
     docketNumbersToAssociate = [...consolidatedCasesDocketNumbers];

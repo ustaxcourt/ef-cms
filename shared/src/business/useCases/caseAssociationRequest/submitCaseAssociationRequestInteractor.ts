@@ -24,9 +24,9 @@ export const submitCaseAssociationRequestInteractor = async (
     docketNumber,
     filers,
   }: {
+    consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
     filers: string[];
-    consolidatedCasesDocketNumbers: string[];
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
