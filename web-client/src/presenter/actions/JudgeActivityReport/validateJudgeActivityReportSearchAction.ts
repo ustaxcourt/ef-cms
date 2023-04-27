@@ -18,7 +18,7 @@ export const validateJudgeActivityReportSearchAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateJudgeActivityReportSearchInteractor(applicationContext, {
+    .validateJudgeActivityReportSearchInteractor({
       endDate,
       judgeName,
       startDate,
