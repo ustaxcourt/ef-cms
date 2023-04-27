@@ -1,11 +1,11 @@
-const { headerOverride } = require('../lambdaWrapper');
+import { headerOverride } from '../lambdaWrapper';
 
 /**
  * render the swagger html page
  *
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
-exports.swaggerLambda = () => {
+export const swaggerLambda = () => {
   const body = `<html>
     <body>
       <head>

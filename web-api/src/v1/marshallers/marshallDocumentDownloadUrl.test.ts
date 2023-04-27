@@ -1,6 +1,4 @@
-const {
-  marshallDocumentDownloadUrl,
-} = require('./marshallDocumentDownloadUrl');
+import { marshallDocumentDownloadUrl } from './marshallDocumentDownloadUrl';
 const MOCK_URL = {
   url: 'https://example.com/path?queryparam=passed',
 };
