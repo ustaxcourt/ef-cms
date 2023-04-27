@@ -147,7 +147,6 @@ export const serveExternallyFiledDocumentInteractor = async (
             ...originalSubjectDocketEntry,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
-            // if it's not a simultaneous, change filingDate to servedDate (now)
             ...(!isSimultaneousDocumentType && {
               filingDate: applicationContext
                 .getUtilities()
