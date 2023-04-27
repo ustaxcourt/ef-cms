@@ -16,11 +16,8 @@ import { PDF } from '../documents/PDF';
 import joi from 'joi';
 
 /**
- * CaseExternal Entity
- * Represents a Case with required documents that a Petitioner is attempting to add to the system.
- *
- * @param {object} rawCase the raw case data
- * @constructor
+ * Represents a Case with required documents that a Petitioner is attempting to
+ * add to the system.
  */
 export class CaseExternal extends JoiValidationEntity {
   public businessType: string;
@@ -31,10 +28,10 @@ export class CaseExternal extends JoiValidationEntity {
   public hasIrsNotice: boolean;
   public partyType: string;
   public petitioners: any;
-  public petitionFile: object;
+  public petitionFile?: object;
   public preferredTrialCity: string;
   public procedureType: string;
-  public stinFile: object;
+  public stinFile?: object;
 
   constructor(rawCase, { applicationContext }) {
     super('CaseExternal');
@@ -45,10 +42,29 @@ export class CaseExternal extends JoiValidationEntity {
     this.filingType = rawCase.filingType;
     this.hasIrsNotice = rawCase.hasIrsNotice;
     this.partyType = rawCase.partyType;
-    this.petitionFile = rawCase.petitionFile;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
-    this.stinFile = rawCase.stinFile;
+
+    if (rawCase.stinFile) {
+      this.stinFile = new PDF({
+        file: rawCase.stinFile,
+        size: rawCase.stinFileSize,
+      });
+    }
+
+    if (rawCase.petitionFile) {
+      this.petitionFile = new PDF({
+        file: rawCase.petitionFile,
+        size: rawCase.petitionFileSize,
+      });
+    }
+
+    if (rawCase.corporateDisclosureFile) {
+      this.corporateDisclosureFile = new PDF({
+        file: rawCase.corporateDisclosureFile,
+        size: rawCase.corporateDisclosureFileSize,
+      });
+    }
 
     const contacts = ContactFactory.createContacts({
       applicationContext,
@@ -60,15 +76,9 @@ export class CaseExternal extends JoiValidationEntity {
     });
 
     this.petitioners = [contacts.primary];
+
     if (contacts.secondary) {
       this.petitioners.push(contacts.secondary);
-    }
-
-    if (rawCase.corporateDisclosureFile) {
-      this.corporateDisclosureFile = new PDF({
-        file: rawCase.corporateDisclosureFile,
-        size: rawCase.corporateDisclosureFileSize,
-      });
     }
   }
 
@@ -126,4 +136,12 @@ export class CaseExternal extends JoiValidationEntity {
   getErrorToMessageMap() {
     return CaseExternal.VALIDATION_ERROR_MESSAGES;
   }
+
+  getContactPrimary = function () {
+    return getContactPrimary(this);
+  };
+
+  getContactSecondary = function () {
+    return getContactSecondary(this);
+  };
 }

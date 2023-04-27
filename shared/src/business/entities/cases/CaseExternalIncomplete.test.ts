@@ -1,14 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
+} from '../EntityConstants';
+import { CaseExternalIncomplete } from './CaseExternalIncomplete';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
+// TODO: this can probably be replace with CaseExternal
 describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {

@@ -58,6 +58,7 @@ describe('ContactFactory', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.isValid()).toEqual(false);
     });
 
@@ -70,6 +71,7 @@ describe('ContactFactory', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
@@ -83,6 +85,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
@@ -95,6 +98,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
@@ -114,6 +118,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
@@ -125,6 +130,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.isValid()).toEqual(false);
   });
 
@@ -155,6 +161,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getContactPrimary().isAddressSealed).toBe(true);
   });
 
@@ -167,6 +174,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getContactPrimary().sealedAndUnavailable).toBe(false);
   });
 
@@ -184,6 +192,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getContactPrimary().sealedAndUnavailable).toBe(true);
   });
 
@@ -218,6 +227,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.isValid()).toEqual(false);
   });
 
@@ -230,6 +240,7 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
@@ -275,6 +286,7 @@ describe('ContactFactory', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.isValid()).toEqual(false);
     });
 
@@ -287,6 +299,7 @@ describe('ContactFactory', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
@@ -301,6 +314,7 @@ describe('ContactFactory', () => {
           },
           { applicationContext },
         );
+
         expect(caseExternal.isValid()).toEqual(false);
       });
 
@@ -319,6 +333,7 @@ describe('ContactFactory', () => {
           },
           { applicationContext },
         );
+
         expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
       });
     },

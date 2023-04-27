@@ -1,38 +1,36 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const {
-  CaseExternalInformationFactory,
-} = require('./CaseExternalInformationFactory');
-const { ContactFactory } = require('../contacts/ContactFactory');
+} from '../EntityConstants';
+import { CaseExternalInformationFactory } from './CaseExternalInformationFactory';
+import { ContactFactory } from '../contacts/ContactFactory';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const caseExternalErrorMessages =
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
 const contactErrorMessages = ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES;
 
-describe('CaseExternalInformationFactory entity', () => {
-  it('requires wizard step', () => {
-    const caseExternal = new CaseExternalInformationFactory(
-      {},
-      {
-        applicationContext,
-      },
-    );
-    expect(caseExternal.getFormattedValidationErrors().wizardStep).toEqual(
-      '"wizardStep" is required',
-    );
-    expect(caseExternal.isValid()).toBeFalsy();
+describe('CaseExternalInformationFactory', () => {
+  describe('validation', () => {
+    it('should require a wizard step', () => {
+      const caseExternal = new CaseExternalInformationFactory(
+        {},
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseExternal.getFormattedValidationErrors().wizardStep).toEqual(
+        '"wizardStep" is required',
+      );
+      expect(caseExternal.isValid()).toBeFalsy();
+    });
   });
 
   describe('wizard step 1', () => {
-    it('requires stinFile', () => {
+    it('should require a statement of taxpayer identification (STIN) file', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           wizardStep: '1',
@@ -41,12 +39,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
         caseExternalErrorMessages.stinFile,
       );
     });
 
-    it('should be valid if all step 1 and step 2 params are present', () => {
+    it('should be valid when wizardStep and all step 1 requirements are present', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           stinFile: new File([], 'test.pdf'),
@@ -57,75 +56,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-    });
-
-    describe('STIN file size', () => {
-      it('should inform you if stin file size is greater than the PDF max file size', () => {
-        const caseExternal = new CaseExternalInformationFactory(
-          {
-            stinFile: new File([], 'test.pdf'),
-            stinFileSize: MAX_FILE_SIZE_BYTES + 5,
-            wizardStep: '1',
-          },
-          {
-            applicationContext,
-          },
-        );
-        expect(
-          caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(caseExternalErrorMessages.stinFileSize[0].message);
-      });
-
-      it('should inform you if stin file size is zero', () => {
-        const caseExternal = new CaseExternalInformationFactory(
-          {
-            stinFile: new File([], 'test.pdf'),
-            stinFileSize: 0,
-            wizardStep: '1',
-          },
-          {
-            applicationContext,
-          },
-        );
-        expect(
-          caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(caseExternalErrorMessages.stinFileSize[1]);
-      });
-
-      it('should not error on stinFileSize when stinFile is undefined', () => {
-        const caseExternal = new CaseExternalInformationFactory(
-          {
-            wizardStep: '1',
-          },
-          {
-            applicationContext,
-          },
-        );
-        expect(
-          caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toBeUndefined();
-      });
-
-      it('should error on stinFileSize when stinFile is defined', () => {
-        const caseExternal = new CaseExternalInformationFactory(
-          {
-            stinFile: new File([], 'testStinFile.pdf'),
-            wizardStep: '1',
-          },
-          {
-            applicationContext,
-          },
-        );
-        expect(
-          caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(caseExternalErrorMessages.stinFileSize[1]);
-      });
     });
   });
 
   describe('wizard step 2', () => {
-    it('requires all wizard step 1 and 2 items', () => {
+    it('should require all wizard step 1 and 2 items', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           wizardStep: '2',
@@ -134,29 +71,15 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
         petitionFile: caseExternalErrorMessages.petitionFile,
         stinFile: caseExternalErrorMessages.stinFile,
       });
-
-      caseExternal = new CaseExternalInformationFactory(
-        {
-          stinFile: new File([], 'test.pdf'),
-          wizardStep: '2',
-        },
-        {
-          applicationContext,
-        },
-      );
-      expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
-        petitionFile: caseExternalErrorMessages.petitionFile,
-        stinFileSize: caseExternalErrorMessages.stinFileSize[1],
-      });
     });
 
-    it('requires hasIrsNotice and petitionFile if no params from step 2 are present', () => {
+    it('should require hasIrsNotice and petitionFile', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           stinFile: new File([], 'test.pdf'),
@@ -167,13 +90,14 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
         petitionFile: caseExternalErrorMessages.petitionFile,
       });
     });
 
-    it('requires caseType if hasIrsNotice is present', () => {
+    it('should require caseType when hasIrsNotice is present', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           hasIrsNotice: true,
@@ -187,12 +111,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: caseExternalErrorMessages.caseType,
       });
     });
 
-    it('should be valid if all step 1 and step 2 params are present', () => {
+    it('should be valid when all step 1 and step 2 params are present', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -207,10 +132,11 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should be valid if all step 1 and step 2 params are present, but a partyType and invalid contactPrimary are present', () => {
+    it('should be valid when all step 1 and step 2 params are present, but a partyType and invalid contactPrimary are present', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -231,12 +157,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
 
   describe('wizard step 3', () => {
-    it('requires all wizard step 1, 2, and 3 items', () => {
+    it('should require all wizard step 1, 2, and 3 items', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           wizardStep: '3',
@@ -245,6 +172,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         filingType: caseExternalErrorMessages.filingType,
         hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
@@ -257,23 +185,24 @@ describe('CaseExternalInformationFactory entity', () => {
         {
           hasIrsNotice: true,
           petitionFile: new File([], 'test.pdf'),
+          petitionFileSize: 1,
           stinFile: new File([], 'test.pdf'),
+          stinFileSize: 1,
           wizardStep: '3',
         },
         {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: caseExternalErrorMessages.caseType,
         filingType: caseExternalErrorMessages.filingType,
         partyType: caseExternalErrorMessages.partyType,
-        petitionFileSize: caseExternalErrorMessages.petitionFileSize[1],
-        stinFileSize: caseExternalErrorMessages.stinFileSize[1],
       });
     });
 
-    it('requires filingType and partyType if wizard step 1 and 2 required fields are present', () => {
+    it('should require filingType and partyType when wizard step 1 and 2 required fields are present', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -288,13 +217,14 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         filingType: caseExternalErrorMessages.filingType,
         partyType: caseExternalErrorMessages.partyType,
       });
     });
 
-    it('requires corporateDisclosureFile if filingType is A business', () => {
+    it('should require corporateDisclosureFile when filingType is a business', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -311,12 +241,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
       ).toEqual(caseExternalErrorMessages.corporateDisclosureFile);
     });
 
-    it('does not require corporateDisclosureFile if filingType is not A business', () => {
+    it('should NOT require corporateDisclosureFile when filingType is NOT a business', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -333,12 +264,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
       ).toBeUndefined();
     });
 
-    it('requires only contactPrimary if partyType is Petitioner', () => {
+    it('should only require contactPrimary when partyType is Petitioner', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -355,6 +287,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         petitioners: [
           {
@@ -371,7 +304,7 @@ describe('CaseExternalInformationFactory entity', () => {
       });
     });
 
-    it('requires contactPrimary and contactSecondary if partyType is Petitioner & Spouse', () => {
+    it('should require contactPrimary and contactSecondary when partyType is Petitioner & Spouse', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -388,6 +321,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors().petitioners,
       ).toBeDefined();
@@ -395,7 +329,7 @@ describe('CaseExternalInformationFactory entity', () => {
   });
 
   describe('wizard step 4', () => {
-    it('requires all wizard step 1, 2, 3, and 4 items', () => {
+    it('should require all wizard step 1, 2, 3, and 4 items', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           wizardStep: '4',
@@ -404,6 +338,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         filingType: caseExternalErrorMessages.filingType,
         hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
@@ -420,16 +355,18 @@ describe('CaseExternalInformationFactory entity', () => {
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitionerSpouse,
           petitionFile: new File([], 'test.pdf'),
+          petitionFileSize: 1,
           stinFile: new File([], 'test.pdf'),
+          stinFileSize: 1,
           wizardStep: '4',
         },
         {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: caseExternalErrorMessages.caseType,
-        petitionFileSize: caseExternalErrorMessages.petitionFileSize[1],
         petitioners: [
           {
             address1: contactErrorMessages.address1,
@@ -454,11 +391,10 @@ describe('CaseExternalInformationFactory entity', () => {
         ],
         preferredTrialCity: caseExternalErrorMessages.preferredTrialCity,
         procedureType: caseExternalErrorMessages.procedureType,
-        stinFileSize: caseExternalErrorMessages.stinFileSize[1],
       });
     });
 
-    it('returns no validation errors if all required fields from all steps are present', () => {
+    it('should return no validation errors when all required fields from all steps are present', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
@@ -498,6 +434,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
+
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseExternal.isValid()).toBeTruthy();
     });

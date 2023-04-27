@@ -1,9 +1,10 @@
-import joi from 'joi';
-const { Case } = require('./Case');
+import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { CaseExternal } from './CaseExternal';
+import { ContactFactory } from '../contacts/ContactFactory';
+import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PDF } from '../documents/PDF';
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import joi from 'joi';
 
 /**
  * CaseExternalInformationFactory Entity
@@ -24,10 +25,10 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
   public hasIrsNotice: boolean;
   public partyType: string;
   public petitioners: any;
-  public petitionFile: object;
+  public petitionFile?: object;
   public preferredTrialCity: string;
   public procedureType: string;
-  public stinFile: object;
+  public stinFile?: object;
   public wizardStep: any;
 
   constructor(rawCase, { applicationContext }) {
@@ -39,21 +40,30 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     this.filingType = rawCase.filingType;
     this.hasIrsNotice = rawCase.hasIrsNotice;
     this.partyType = rawCase.partyType;
-    if (rawCase.petitionFile) {
-      this.petitionFile = new PDF({
-        file: rawCase.petitionFile,
-        size: rawCase.petitionFileSize,
-      });
-    }
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
+    this.wizardStep = rawCase.wizardStep;
+
     if (rawCase.stinFile) {
       this.stinFile = new PDF({
         file: rawCase.stinFile,
         size: rawCase.stinFileSize,
       });
     }
-    this.wizardStep = rawCase.wizardStep;
+
+    if (rawCase.petitionFile) {
+      this.petitionFile = new PDF({
+        file: rawCase.petitionFile,
+        size: rawCase.petitionFileSize,
+      });
+    }
+
+    if (rawCase.corporateDisclosureFile) {
+      this.corporateDisclosureFile = new PDF({
+        file: rawCase.corporateDisclosureFile,
+        size: rawCase.corporateDisclosureFileSize,
+      });
+    }
 
     if (+this.wizardStep >= 3) {
       const contacts = ContactFactory.createContacts({

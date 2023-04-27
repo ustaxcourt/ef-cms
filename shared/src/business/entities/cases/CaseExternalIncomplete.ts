@@ -5,12 +5,9 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 /**
- * CaseExternalIncomplete
- * Represents a Case without required documents that a Petitioner is attempting to add to the system.
- * After the Case's files have been saved, a Petition is created to include the document metadata.
- *
- * @param {object} rawCase the raw case data
- * @constructor
+ * Represents a case without required documents that a Petitioner is attempting
+ *  to add to the system. After the case's files have been saved, a Petition is
+ *  created to include the document metadata.
  */
 export class CaseExternalIncomplete extends JoiValidationEntity {
   public businessType: string;
@@ -76,11 +73,11 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
     return CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES;
   }
 
-  // getContactPrimary = function () {
-  //   return getContactPrimary(this);
-  // };
+  getContactPrimary = function () {
+    return getContactPrimary(this);
+  };
 
-  // getContactSecondary = function () {
-  //   return getContactSecondary(this);
-  // };
+  getContactSecondary = function () {
+    return getContactSecondary(this);
+  };
 }
