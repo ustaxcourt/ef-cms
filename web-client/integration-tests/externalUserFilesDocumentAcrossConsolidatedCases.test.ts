@@ -110,6 +110,13 @@ describe('External User files a document across a consolidated case group', () =
       cerebralTest,
       fakeFile,
     );
+    // verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+  });
+
+  describe('petitioner', () => {
+    loginAs(cerebralTest, 'petitioner@example.com');
+    getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber1);
+    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, overrides);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 });
