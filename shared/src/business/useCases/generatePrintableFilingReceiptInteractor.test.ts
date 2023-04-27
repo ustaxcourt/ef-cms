@@ -52,6 +52,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         primaryDocumentId: mockPrimaryDocketEntryId,
       },
+      fileAcrossConsolidatedGroup: false,
     });
 
     expect(
@@ -80,18 +81,19 @@ describe('generatePrintableFilingReceiptInteractor', () => {
         ],
         supportingDocuments: [{ docketEntryId: '1' }, { docketEntryId: '2' }],
       },
+      fileAcrossConsolidatedGroup: false,
     });
 
     const receiptMockCall =
       applicationContext.getDocumentGenerators().receiptOfFiling.mock
         .calls[0][0].data; // 'data' property of first arg (an object) of first call
 
-    const expectedFilingDateForamtted = applicationContext
+    const expectedFilingDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(MOCK_CASE.docketEntries[0].filingDate, 'DATE_TIME_TZ');
 
     expect(receiptMockCall.filedBy).toBe(getContactPrimary(MOCK_CASE).name);
-    expect(receiptMockCall.filedAt).toBe(expectedFilingDateForamtted);
+    expect(receiptMockCall.filedAt).toBe(expectedFilingDateFormatted);
   });
 
   it('acquires document information', async () => {
@@ -109,6 +111,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
         ],
         supportingDocuments: [{ docketEntryId: '1' }, { docketEntryId: '2' }],
       },
+      fileAcrossConsolidatedGroup: false,
     });
 
     const receiptMockCall =
@@ -127,6 +130,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
         certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
         primaryDocumentId: mockPrimaryDocketEntryId,
       },
+      fileAcrossConsolidatedGroup: false,
     });
 
     const receiptMockCall =

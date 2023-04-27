@@ -36,7 +36,7 @@ export const fileExternalDocumentInteractor = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const { docketNumber } = documentMetadata;
-  const workItems = [];
+  const workItems: WorkItem[] = [];
 
   const currentCase = await applicationContext
     .getPersistenceGateway()
@@ -105,7 +105,7 @@ export const fileExternalDocumentInteractor = async (
     }
   }
 
-  let documentMetadataForConsolidatedCases = [];
+  let documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
   if (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
@@ -120,7 +120,7 @@ export const fileExternalDocumentInteractor = async (
     documentMetadataForConsolidatedCases.push(documentMetadata);
   }
 
-  let consolidatedCaseEntities = [];
+  let consolidatedCaseEntities: Promise<TCase>[] = [];
 
   consolidatedCaseEntities = documentMetadataForConsolidatedCases.map(
     async individualDocumentMetadata => {
@@ -142,7 +142,6 @@ export const fileExternalDocumentInteractor = async (
               ...baseMetadata,
               ...metadata,
               docketEntryId,
-              docketRecord: individualDocumentMetadata.docketRecord,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,
@@ -223,7 +222,9 @@ export const fileExternalDocumentInteractor = async (
     },
   );
 
-  const resolvedCaseEntities = await Promise.all(consolidatedCaseEntities);
+  const resolvedCaseEntities: TCase[] = await Promise.all(
+    consolidatedCaseEntities,
+  );
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );

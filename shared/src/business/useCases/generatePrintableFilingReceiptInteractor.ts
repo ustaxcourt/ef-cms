@@ -59,7 +59,7 @@ export const generatePrintableFilingReceiptInteractor = async (
     });
   let caseEntity = new Case(caseRecord, { applicationContext }).validate();
 
-  let consolidatedCasesDocketNumbers = [];
+  let consolidatedCasesDocketNumbers: string[] = [];
 
   if (fileAcrossConsolidatedGroup) {
     const consolidatedCases = await applicationContext
