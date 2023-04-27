@@ -50,19 +50,22 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
   const currentUser = applicationContext.getCurrentUser();
 
-  if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
+  if (
+    (currentUser.role === ROLES.irsPractitioner ||
+      currentUser.role === ROLES.privatePractitioner) &&
+    !this.isSealed
+  ) {
     this.petitioners = rawCase.petitioners;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
     );
+
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
-    //Needed for irsPractitioners to file a Request Access type document across consolidated cases
-    if (rawCase.leadDocketNumber) {
-      this.leadDocketNumber = rawCase.leadDocketNumber;
-    }
+
+    this.leadDocketNumber = rawCase.leadDocketNumber;
   } else if (!this.isSealed) {
     this.petitioners = [];
     rawCase.petitioners.map(petitioner => {

@@ -45,7 +45,6 @@ exports.associateIrsPractitionerToCase = async ({
           });
 
         const userCaseEntity = new UserCase(caseToUpdate);
-        console.log('userCaseEntity', userCaseEntity);
 
         await applicationContext.getPersistenceGateway().associateUserWithCase({
           applicationContext,

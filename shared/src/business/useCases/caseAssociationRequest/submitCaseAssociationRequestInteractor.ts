@@ -50,6 +50,7 @@ export const submitCaseAssociationRequestInteractor = async (
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
         applicationContext,
+        consolidatedCasesDocketNumbers,
         docketNumber,
         representing: filers,
         user,
