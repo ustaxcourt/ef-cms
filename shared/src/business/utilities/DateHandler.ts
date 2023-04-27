@@ -131,7 +131,7 @@ export const calculateISODate = ({
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-export const createISODateString = (dateString, inputFormat) => {
+export const createISODateString = (dateString?, inputFormat?) => {
   let result;
 
   if (!dateString) {
