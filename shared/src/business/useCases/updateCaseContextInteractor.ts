@@ -4,11 +4,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../errors/errors';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../errors/errors';
 import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
@@ -129,5 +126,4 @@ export const updateCaseContextInteractor = withLocking(
     identifier: docketNumber,
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );

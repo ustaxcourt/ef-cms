@@ -8,11 +8,7 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
 } from '../entities/cases/Case';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -315,5 +311,4 @@ export const updatePetitionerInformationInteractor = withLocking(
     identifier: docketNumber,
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );

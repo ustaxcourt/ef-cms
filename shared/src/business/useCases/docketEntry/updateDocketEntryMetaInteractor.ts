@@ -4,11 +4,7 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry, isServed } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -225,5 +221,4 @@ export const updateDocketEntryMetaInteractor = withLocking(
     identifier: docketNumber,
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );

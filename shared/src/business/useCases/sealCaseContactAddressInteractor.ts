@@ -4,7 +4,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import {
-  ServiceUnavailableError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from '../../errors/errors';
@@ -67,5 +66,4 @@ export const sealCaseContactAddressInteractor = withLocking(
     identifier: docketNumber,
     prefix: 'case',
   }),
-  new ServiceUnavailableError('The case is currently being updated'),
 );
