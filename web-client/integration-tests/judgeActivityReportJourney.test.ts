@@ -16,6 +16,7 @@ describe('Judge activity report journey', () => {
 
     const judgeActivityReportHelper = withAppContextDecorator(
       judgeActivityReportHelperComputed,
+      {},
     );
 
     const { isFormPristine, reportHeader } = runCompute(
