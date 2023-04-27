@@ -86,10 +86,12 @@ export const uploadExternalDocumentsInteractor = async (
     }
   }
 
-  let currentCaseDetail = await applicationContext
-    .getUseCases()
-    .fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata,
-    });
-  return { caseDetail: currentCaseDetail, docketEntryIdsAdded };
+  return {
+    caseDetail: await applicationContext
+      .getUseCases()
+      .fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata,
+      }),
+    docketEntryIdsAdded,
+  };
 };

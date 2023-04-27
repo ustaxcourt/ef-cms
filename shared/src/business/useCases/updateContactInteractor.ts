@@ -174,6 +174,7 @@ export const updateContactInteractor = async (
           trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       );
 
       changeOfAddressDocketEntry.setWorkItem(workItem);

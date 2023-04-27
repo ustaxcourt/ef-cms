@@ -106,11 +106,11 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
     });
-    externalUserRequestAccessToFileAcrossConsolidatedCasesGroup(
-      cerebralTest,
+    externalUserRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
+      docketNumber: consolidatedCaseDocketNumber3,
       fakeFile,
-    );
-    // verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+    });
+    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 
   describe('petitioner', () => {
