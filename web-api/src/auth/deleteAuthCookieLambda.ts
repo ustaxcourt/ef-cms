@@ -1,5 +1,5 @@
-const { deleteCookieString } = require('../utilities/cookieFormatting');
-const { genericHandler } = require('../genericHandler');
+import { deleteCookieString } from '../utilities/cookieFormatting';
+import { genericHandler } from '../genericHandler';
 
 /**
  * Clears the refresh token from the cookie
@@ -7,7 +7,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.deleteAuthCookieLambda = event =>
+export const deleteAuthCookieLambda = event =>
   genericHandler(
     event,
     () => {

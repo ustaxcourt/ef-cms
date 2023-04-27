@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * gets the inbox messages for the user
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getInboxMessagesForUserLambda = event =>
+export const getInboxMessagesForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()

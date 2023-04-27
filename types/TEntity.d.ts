@@ -65,13 +65,14 @@ type TCaseEntity = {
 } & TCase;
 
 type TCase = {
-  associatedJudge: string;
+  archivedDocketEntries?: RawDocketEntry[];
+  associatedJudge?: string;
   automaticBlocked?: string;
   automaticBlockedDate?: string;
   automaticBlockedReason?: string;
-  statistics: any[];
+  statistics?: any[];
   blocked?: boolean;
-  isSealed: boolean;
+  isSealed?: boolean;
   blockedDate?: string;
   blockedReason?: string;
   docketEntries?: RawDocketEntry[];
@@ -81,6 +82,8 @@ type TCase = {
   caseCaption: string;
   caseNote?: string;
   caseType: string;
+  contactPrimary?: any;
+  correspondence?: RawCorrespondence[];
   closedDate?: string;
   hearings?: {
     trialSessionId: string;
@@ -88,39 +91,41 @@ type TCase = {
   createdAt: string;
   damages?: string;
   docketNumber: string;
-  docketNumberSuffix: string;
+  docketNumberSuffix?: string;
   docketNumberWithSuffix: string;
   entityName: string;
   filingType?: string;
-  hasPendingItems: boolean;
+  hasPendingItems?: boolean;
   hasVerifiedIrsNotice: boolean;
   highPriority?: boolean;
   highPriorityReason?: string;
-  initialCaption: string;
-  initialDocketNumberSuffix: string;
+  initialCaption?: string;
+  initialDocketNumberSuffix?: string;
   irsNoticeDate?: string;
-  isPaper: boolean;
+  irsPractitioners?: RawIrsPractitioner[];
+  isPaper?: boolean;
   judgeUserId?: string;
-  leadDocketNumber: string;
+  leadDocketNumber?: string;
   litigationCosts?: string;
   mailingDate?: string;
-  noticeOfAttachments: boolean;
+  noticeOfAttachments?: boolean;
   noticeOfTrialDate?: string;
-  orderDesignatingPlaceOfTrial: boolean;
-  orderForAmendedPetition: boolean;
-  orderForAmendedPetitionAndFilingFee: boolean;
-  orderForFilingFee: boolean;
-  orderForCds: boolean;
-  orderForRatification: boolean;
-  orderToShowCause: boolean;
+  privatePractitioners?: RawPrivatePractitioner[];
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForAmendedPetition?: boolean;
+  orderForAmendedPetitionAndFilingFee?: boolean;
+  orderForFilingFee?: boolean;
+  orderForCds?: boolean;
+  orderForRatification?: boolean;
+  orderToShowCause?: boolean;
   partyType: string;
-  petitionPaymentDate?: string | null;
+  petitionPaymentDate?: string;
   petitionPaymentMethod?: string;
   petitionPaymentStatus: string;
-  petitionPaymentWaivedDate: string | null;
+  petitionPaymentWaivedDate?: string;
   preferredTrialCity: string;
   procedureType: string;
-  qcCompleteForTrial: object;
+  qcCompleteForTrial?: object;
   receivedAt: string;
   sealedDate?: string;
   sortableDocketNumber: number;
@@ -138,8 +143,8 @@ type TPetitioner = {
   email?: string;
   confirmEmail?: string;
   address1: string;
-  address2: string;
-  address3: string;
+  address2?: string;
+  address3?: string;
   city: string;
   contactId: string;
   contactType: string;
@@ -152,6 +157,7 @@ type TPetitioner = {
   sealedAndUnavailable: boolean;
   serviceIndicator: string;
   state: string;
+  title: string;
 };
 
 type TCaseNote = {

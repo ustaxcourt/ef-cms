@@ -1255,14 +1255,6 @@ const router = {
     );
 
     registerRoute(
-      '/reports/judge-activity-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Activity Report');
-        return app.getSequence('gotoJudgeActivityReportSequence')();
-      }),
-    );
-
-    registerRoute(
       '/reports/case-inventory-report',
       ifHasAccess({ app }, () => {
         setPageTitle('Case Inventory Report');
