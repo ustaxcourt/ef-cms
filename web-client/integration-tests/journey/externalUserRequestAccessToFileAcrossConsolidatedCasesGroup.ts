@@ -1,171 +1,138 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
-import { contactPrimaryFromState } from '../helpers';
+import { externalConsolidatedCaseGroupHelper as externalConsolidatedCaseGroupHelperComputed } from '../../src/presenter/computeds/externalConsolidatedCaseGroupHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderComputed,
-);
+const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
 export const externalUserRequestAccessToFileAcrossConsolidatedCasesGroup = (
   cerebralTest,
-  { docketNumber, fakeFile, overrides = {} },
+  { docketNumber, fakeFile },
 ) => {
-  // const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('external user files a document for owned case', async () => {
+    const caseDetailHeaderHelper = withAppContextDecorator(
+      caseDetailHeaderComputed,
+    );
+    const externalConsolidatedCaseGroupHelper = withAppContextDecorator(
+      externalConsolidatedCaseGroupHelperComputed,
+    );
+
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber,
     });
 
-    // const docketEntriesBefore = cerebralTest.getState(
-    //   'caseDetail.docketEntries',
-    // ).length;
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: cerebralTest.getState(),
+    });
 
-    // await cerebralTest.runSequence('gotoFileDocumentSequence', {
-    //   docketNumber: cerebralTest.docketNumber,
-    // });
+    expect(headerHelper.showRequestAccessToCaseButton).toBe(true);
 
-    const { showRequestAccessToCaseButton } = runCompute(
-      caseDetailHeaderHelper,
+    const docketEntriesBefore = cerebralTest.getState(
+      'caseDetail.docketEntries',
+    ).length;
+
+    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+      docketNumber,
+    });
+
+    const documentToSelect = {
+      category: 'Appearance and Representation',
+      certificateOfService: false,
+      documentTitle: 'Entry of Appearance',
+      documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
+      documentType: 'Entry of Appearance',
+      eventCode: 'EA',
+      scenario: 'Standard',
+    };
+
+    for (const key of Object.keys(documentToSelect)) {
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key,
+        value: documentToSelect[key],
+      });
+    }
+
+    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'primaryDocumentFile',
+      value: fakeFile,
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfService',
+      value: true,
+    });
+
+    await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      certificateOfServiceDate:
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfServiceMonth',
+      value: '12',
+    });
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfServiceDay',
+      value: '12',
+    });
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfServiceYear',
+      value: '5000',
+    });
+
+    await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      certificateOfServiceDate:
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfServiceYear',
+      value: '2000',
+    });
+
+    await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    let externalConsolidatedCasesHelper = runCompute(
+      externalConsolidatedCaseGroupHelper,
       {
         state: cerebralTest.getState(),
       },
     );
 
-    expect(showRequestAccessToCaseButton).toBe(true);
+    expect(
+      externalConsolidatedCasesHelper.formattedConsolidatedCaseList.length,
+    ).toEqual(4);
 
-    //   const documentToSelect = {
-    //     category: 'Miscellaneous',
-    //     documentTitle: 'Civil Penalty Approval Form',
-    //     documentType: 'Civil Penalty Approval Form',
-    //     eventCode: 'CIVP',
-    //     scenario: 'Standard',
-    //   };
+    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
-    //   for (const key of Object.keys(documentToSelect)) {
-    //     await cerebralTest.runSequence(
-    //       'updateFileDocumentWizardFormValueSequence',
-    //       {
-    //         key,
-    //         value: documentToSelect[key],
-    //       },
-    //     );
-    //   }
+    externalConsolidatedCasesHelper = runCompute(
+      externalConsolidatedCaseGroupHelper,
+      {
+        state: cerebralTest.getState(),
+      },
+    );
 
-    //   await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
+    expect(
+      externalConsolidatedCasesHelper.formattedConsolidatedCaseList.length,
+    ).toEqual(4);
+    expect(
+      externalConsolidatedCasesHelper.consolidatedGroupServiceParties.length,
+    ).toEqual(4);
 
-    //   expect(cerebralTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
 
-    //   await cerebralTest.runSequence('completeDocumentSelectSequence');
-
-    //   expect(cerebralTest.getState('form.documentType')).toEqual(
-    //     'Civil Penalty Approval Form',
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'certificateOfService',
-    //       value: true,
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'hasSupportingDocuments',
-    //       value: false,
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'attachments',
-    //       value: false,
-    //     },
-    //   );
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'objections',
-    //       value: OBJECTIONS_OPTIONS_MAP.NO,
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'certificateOfServiceMonth',
-    //       value: '12',
-    //     },
-    //   );
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'certificateOfServiceDay',
-    //       value: '12',
-    //     },
-    //   );
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'certificateOfServiceYear',
-    //       value: '2000',
-    //     },
-    //   );
-
-    //   await cerebralTest.runSequence(
-    //     'updateFileDocumentWizardFormValueSequence',
-    //     {
-    //       key: 'primaryDocumentFile',
-    //       value: fakeFile,
-    //     },
-    //   );
-
-    //   const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    //   if (overrides.fileAcrossConsolidatedGroup) {
-    //     await cerebralTest.runSequence(
-    //       'updateFileDocumentWizardFormValueSequence',
-    //       {
-    //         key: 'partyIrsPractitioner',
-    //         value: true,
-    //       },
-    //     );
-    //     await cerebralTest.runSequence(
-    //       'updateFileDocumentWizardFormValueSequence',
-    //       {
-    //         key: `filersMap.${contactPrimary.contactId}`,
-    //         value: false,
-    //       },
-    //     );
-    //   } else {
-    //     await cerebralTest.runSequence(
-    //       'updateFileDocumentWizardFormValueSequence',
-    //       {
-    //         key: `filersMap.${contactPrimary.contactId}`,
-    //         value: true,
-    //       },
-    //     );
-    //   }
-
-    //   await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
-
-    //   expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    //   if (overrides.fileAcrossConsolidatedGroup) {
-    //     const form = cerebralTest.getState('form');
-
-    //     expect(form.fileAcrossConsolidatedGroup).toEqual(true);
-    //   }
-
-    //   await cerebralTest.runSequence('submitExternalDocumentSequence');
-
-    //   expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
-    //     docketEntriesBefore + 1,
-    //   );
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
+      docketEntriesBefore + 1,
+    );
   });
 };
