@@ -36,7 +36,7 @@ export class CaseExternal extends JoiValidationEntity {
   public procedureType: string;
   public stinFile: object;
 
-  constructor(rawCase) {
+  constructor(rawCase, { applicationContext }) {
     super('CaseExternal');
 
     this.businessType = rawCase.businessType;
@@ -120,10 +120,10 @@ export class CaseExternal extends JoiValidationEntity {
   static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
   getValidationRules() {
-    return PDF.VALIDATION_RULES;
+    return CaseExternal.VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return PDF.VALIDATION_ERROR_MESSAGES;
+    return CaseExternal.VALIDATION_ERROR_MESSAGES;
   }
 }
