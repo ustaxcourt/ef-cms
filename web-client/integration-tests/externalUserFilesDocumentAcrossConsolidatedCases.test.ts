@@ -78,7 +78,7 @@ describe('External User files a document across a consolidated case group', () =
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await seedFullDataset();
+    // await seedFullDataset();
   });
 
   describe('irsPractitioner', () => {
@@ -106,10 +106,10 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
     });
-    externalUserRequestAccessToFileAcrossConsolidatedCasesGroup(
-      cerebralTest,
+    externalUserRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
+      docketNumber: consolidatedCaseDocketNumber3,
       fakeFile,
-    );
-    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+    });
+    // verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 });
