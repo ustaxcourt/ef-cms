@@ -1,23 +1,24 @@
-//TODO fix this
+import { judgeUser } from '../../test/mockUsers';
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const {
-  MAX_ELASTICSEARCH_PAGINATION,
-} = require('../../business/entities/EntityConstants');
-const { getCasesByUserId } = require('./getCasesByUserId');
+const { getCasesClosedByJudge } = require('./getCasesClosedByJudge');
 
-describe('getCasesByUserId', () => {
-  const userId = 'user-id-123';
+describe('getCasesClosedByJudge', () => {
+  const mockValidRequest = {
+    endDate: '03/21/2020',
+    judgeName: judgeUser.name,
+    startDate: '02/12/2020',
+  };
 
-  it('obtains all cases associated with the given user', async () => {
+  it('should obtain all closed cases associated with the given judge within the selected date range', async () => {
     applicationContext.getSearchClient().search.mockReturnValue({
       body: {},
     });
 
-    await getCasesByUserId({
+    await getCasesClosedByJudge({
       applicationContext,
-      userId,
+      ...mockValidRequest,
     });
 
     expect(
@@ -27,39 +28,24 @@ describe('getCasesByUserId', () => {
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
     ).toMatchObject({
       bool: {
-        should: [
+        filter: [
           {
-            term: {
-              'privatePractitioners.L.M.userId.S': `${userId}`,
+            range: {
+              'closedDate.S': {
+                gte: '02/12/2020||/h',
+                lte: '03/21/2020||/h',
+              },
             },
           },
+        ],
+        must: [
           {
-            term: { 'irsPractitioners.L.M.userId.S': `${userId}` },
-          },
-          {
-            term: { 'userId.S': `${userId}` },
+            match_phrase: {
+              'associatedJudge.S': 'Sotomayor',
+            },
           },
         ],
       },
     });
-  });
-
-  it('should warn if total search results exceeds MAX_ELASTICSEARCH_PAGINATION', async () => {
-    applicationContext.getSearchClient().search.mockReturnValue({
-      body: {
-        hits: {
-          total: {
-            value: MAX_ELASTICSEARCH_PAGINATION + 1,
-          },
-        },
-      },
-    });
-
-    await getCasesByUserId({
-      applicationContext,
-      userId,
-    });
-
-    expect(applicationContext.logger.warn).toHaveBeenCalled();
   });
 });
