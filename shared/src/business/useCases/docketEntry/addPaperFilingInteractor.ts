@@ -138,7 +138,6 @@ export const addPaperFiling = async (
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
-        leadDocketNumber: caseEntity.leadDocketNumber,
         section: user.section,
         sentBy: user.name,
         sentBySection: user.section,
@@ -147,6 +146,7 @@ export const addPaperFiling = async (
         trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
+      caseEntity,
     );
 
     if (isReadyForService) {

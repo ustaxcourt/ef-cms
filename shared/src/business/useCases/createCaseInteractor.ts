@@ -42,6 +42,7 @@ const addPetitionDocketEntryToCase = ({
       trialLocation: caseToAdd.trialLocation,
     },
     { applicationContext },
+    caseToAdd,
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);

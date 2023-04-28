@@ -151,6 +151,7 @@ export const saveCaseDetailInternalEdit = async (
         trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
+      caseEntity,
     );
 
     await applicationContext.getPersistenceGateway().saveWorkItem({
