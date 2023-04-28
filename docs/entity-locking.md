@@ -27,7 +27,7 @@ await applicationContext.getUseCaseHelpers().acquireLock({
 // or for multiple entities: 
 await applicationContext.getUseCaseHelpers().acquireLock({
   applicationContext,
-  identifier: ['case|111-20', 'case|222-20'] ,
+  identifier: ['case|111-20', 'case|222-20'],
 });
 ```
 
