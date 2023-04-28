@@ -58,7 +58,6 @@ export const unblockCaseFromTrial = async (
 export const unblockCaseFromTrialInteractor = withLocking(
   unblockCaseFromTrial,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

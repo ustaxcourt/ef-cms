@@ -1,6 +1,5 @@
 import { Practitioner } from '../../entities/Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { ServiceUnavailableError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
@@ -40,11 +39,7 @@ export const setUserEmailFromPendingEmailInteractor = async (
     });
     await acquireLock({
       applicationContext,
-      identifier: docketNumbersAssociatedWithUser,
-      onLockError: new ServiceUnavailableError(
-        'One of the cases are currently being updated',
-      ),
-      prefix: 'case',
+      identifier: docketNumbersAssociatedWithUser.map(item => `case|${item}`),
       retries: 5,
       waitTime: 3000,
     });
@@ -81,8 +76,7 @@ export const setUserEmailFromPendingEmailInteractor = async (
         docketNumbersAssociatedWithUser.map(docketNumber =>
           applicationContext.getPersistenceGateway().removeLock({
             applicationContext,
-            identifier: docketNumber,
-            prefix: 'case',
+            identifier: `case|${docketNumber}`,
           }),
         ),
       );

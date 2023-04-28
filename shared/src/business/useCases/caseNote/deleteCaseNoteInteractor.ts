@@ -46,7 +46,6 @@ export const deleteCaseNote = async (
 export const deleteCaseNoteInteractor = withLocking(
   deleteCaseNote,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

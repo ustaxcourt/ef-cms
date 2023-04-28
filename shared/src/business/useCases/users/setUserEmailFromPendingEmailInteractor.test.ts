@@ -182,8 +182,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
         ttl: 30,
       });
 
@@ -191,8 +190,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
       });
     });
   });

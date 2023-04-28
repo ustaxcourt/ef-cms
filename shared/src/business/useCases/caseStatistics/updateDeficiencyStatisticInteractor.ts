@@ -95,7 +95,6 @@ export const updateDeficiencyStatistic = async (
 export const updateDeficiencyStatisticInteractor = withLocking(
   updateDeficiencyStatistic,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

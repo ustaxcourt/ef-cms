@@ -154,7 +154,6 @@ export const fileCourtIssuedOrder = async (
 export const fileCourtIssuedOrderInteractor = withLocking(
   fileCourtIssuedOrder,
   (_applicationContext: IApplicationContext, { documentMetadata }) => ({
-    identifier: documentMetadata.docketNumber,
-    prefix: 'case',
+    identifier: `case|${documentMetadata.docketNumber}`,
   }),
 );

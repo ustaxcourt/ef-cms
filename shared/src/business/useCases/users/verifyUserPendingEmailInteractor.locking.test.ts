@@ -12,24 +12,15 @@ import {
 const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
 
 describe('determineEntitiesToLock', () => {
-  let mockParams;
   beforeEach(() => {
-    mockParams = {
-      token: TOKEN,
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
     applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
   });
 
-  it('should return an object that includes the prefix case', async () => {
-    const { prefix } = await determineEntitiesToLock(
-      applicationContext,
-      mockParams,
-    );
-
-    expect(prefix).toBe('case');
-  });
   it('should lookup the docket numbers for the current user', async () => {
-    await determineEntitiesToLock(applicationContext, mockParams);
+    await determineEntitiesToLock(applicationContext);
     expect(
       applicationContext.getPersistenceGateway().getDocketNumbersByUser,
     ).toHaveBeenCalledWith({
@@ -38,17 +29,11 @@ describe('determineEntitiesToLock', () => {
     });
   });
   it('should return an object that includes all of the docketNumbers associated with the user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
-    const { identifier } = await determineEntitiesToLock(
-      applicationContext,
-      mockParams,
-    );
+    const { identifier } = await determineEntitiesToLock(applicationContext);
 
-    expect(identifier).toContain('111-20');
-    expect(identifier).toContain('222-20');
-    expect(identifier).toContain('333-20');
+    expect(identifier).toContain('case|111-20');
+    expect(identifier).toContain('case|222-20');
+    expect(identifier).toContain('case|333-20');
   });
 });
 
@@ -161,8 +146,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
         ttl: 900,
       });
     });
@@ -174,8 +158,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
       });
     });
   });

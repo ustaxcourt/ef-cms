@@ -6,8 +6,7 @@ describe('createLock', () => {
   it('should persist a record with the specified prefix and identifier', async () => {
     await createLock({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
 
     expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
@@ -33,8 +32,7 @@ describe('getLock', () => {
 
     const result = await getLock({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
     expect(result).toMatchObject(MOCK_ACTIVE_LOCK);
   });
@@ -45,8 +43,7 @@ describe('getLock', () => {
 
     const result = await getLock({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
     expect(result).toBeUndefined();
   });
@@ -61,8 +58,7 @@ describe('getLock', () => {
 
     const result = await getLock({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
     expect(result).toBeUndefined();
   });
@@ -72,8 +68,7 @@ describe('removeLock', () => {
   it('deletes the specified lock from persistence', async () => {
     await removeLock({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
 
     expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({

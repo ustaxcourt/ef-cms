@@ -65,7 +65,6 @@ export const archiveDraftDocument = async (
 export const archiveDraftDocumentInteractor = withLocking(
   archiveDraftDocument,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

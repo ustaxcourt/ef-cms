@@ -278,7 +278,6 @@ export const determineEntitiesToLock = (
   },
 ): {
   identifier: string[];
-  prefix: string;
   ttl: number;
 } => ({
   identifier: [
@@ -286,8 +285,7 @@ export const determineEntitiesToLock = (
       ...consolidatedGroupDocketNumbers,
       documentMetadata?.docketNumber,
     ]),
-  ],
-  prefix: 'case',
+  ].map(item => `case|${item}`),
   ttl: 900,
 });
 

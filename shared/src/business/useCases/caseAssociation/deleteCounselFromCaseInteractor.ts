@@ -88,7 +88,6 @@ export const setupServiceIndicatorForUnrepresentedPetitioners = (
 export const deleteCounselFromCaseInteractor = withLocking(
   deleteCounselFromCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );
