@@ -36,6 +36,7 @@ describe('SupportingDocumentInformationFactory', () => {
           certificateOfService: false,
           supportingDocument: 'Affidavit in Support',
           supportingDocumentFile: {},
+          supportingDocumentFileSize: 1,
         },
         VALIDATION_ERROR_MESSAGES,
       );
@@ -52,6 +53,7 @@ describe('SupportingDocumentInformationFactory', () => {
           certificateOfService: false,
           supportingDocument: 'Brief in Support',
           supportingDocumentFile: {},
+          supportingDocumentFileSize: 1,
         },
         VALIDATION_ERROR_MESSAGES,
       );
@@ -66,6 +68,7 @@ describe('SupportingDocumentInformationFactory', () => {
             certificateOfService: true,
             supportingDocument: 'Brief in Support',
             supportingDocumentFile: {},
+            supportingDocumentFileSize: 1,
           },
           VALIDATION_ERROR_MESSAGES,
         );

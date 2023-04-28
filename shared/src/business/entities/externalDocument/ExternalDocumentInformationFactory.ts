@@ -1,3 +1,5 @@
+import { PDF } from '../documents/PDF';
+
 const joi = require('joi');
 const {
   addPropertyHelper,
@@ -8,7 +10,6 @@ const {
   ALL_EVENT_CODES,
   AMENDMENT_EVENT_CODES,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
@@ -154,12 +155,24 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     this.ordinalValue = rawProps.ordinalValue;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
     this.previousDocument = rawProps.previousDocument;
-    this.primaryDocumentFile = rawProps.primaryDocumentFile;
     this.secondaryDocument = rawProps.secondaryDocument;
-    this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
     this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
     this.selectedCases = rawProps.selectedCases;
     this.supportingDocuments = rawProps.supportingDocuments;
+
+    if (rawProps.primaryDocumentFile) {
+      this.primaryDocumentFile = new PDF({
+        file: rawProps.primaryDocumentFile,
+        size: rawProps.primaryDocumentFileSize,
+      });
+    }
+
+    if (rawProps.secondaryDocumentFile) {
+      this.secondaryDocumentFile = new PDF({
+        file: rawProps.secondaryDocumentFile,
+        size: rawProps.secondaryDocumentFileSize,
+      });
+    }
 
     if (this.secondaryDocument) {
       this.secondaryDocument = SecondaryDocumentInformationFactory(
@@ -207,13 +220,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     lodged: joi.boolean().optional(),
     ordinalValue: JoiValidationConstants.STRING.optional(),
     previousDocument: joi.object().optional(),
-    primaryDocumentFile: joi.object().required(),
-    primaryDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    primaryDocumentFile: joi.object(PDF.VALIDATION_RULES).required(),
   };
 
   let schemaOptionalItems = {
@@ -225,13 +232,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: JoiValidationConstants.STRING,
     partyIrsPractitioner: joi.boolean(),
-    secondaryDocumentFile: joi.object(),
-    secondaryDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    secondaryDocumentFile: joi.object(PDF.VALIDATION_RULES),
     secondarySupportingDocuments: joi.array().optional(),
     selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
     supportingDocuments: joi.array().optional(),

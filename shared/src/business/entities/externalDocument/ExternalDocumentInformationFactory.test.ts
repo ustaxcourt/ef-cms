@@ -30,6 +30,8 @@ describe('ExternalDocumentInformationFactory', () => {
         VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       );
       baseDoc.primaryDocumentFile = {};
+      baseDoc.primaryDocumentFileSize = 1;
+
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
@@ -44,6 +46,7 @@ describe('ExternalDocumentInformationFactory', () => {
     it('should set a default value for attachments when a value has not been provided', () => {
       baseDoc.certificateOfService = false;
       baseDoc.primaryDocumentFile = {};
+      baseDoc.primaryDocumentFileSize = 1;
       baseDoc.partyIrsPractitioner = true;
       baseDoc.hasSupportingDocuments = false;
       baseDoc.attachments = undefined;
@@ -301,6 +304,7 @@ describe('ExternalDocumentInformationFactory', () => {
             VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
           );
           baseDoc.secondaryDocumentFile = {};
+          baseDoc.secondaryDocumentFileSize = 1;
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 

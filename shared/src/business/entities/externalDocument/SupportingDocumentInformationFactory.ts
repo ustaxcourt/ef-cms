@@ -1,3 +1,5 @@
+import { PDF } from '../documents/PDF';
+
 const joi = require('joi');
 const {
   joiValidationDecorator,
@@ -6,7 +8,6 @@ const {
 const { includes } = require('lodash');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
-const { MAX_FILE_SIZE_BYTES } = require('../EntityConstants');
 
 /**
  * Supporting Document Information Factory entity
@@ -29,9 +30,14 @@ function SupportingDocumentInformationFactory(
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
     this.supportingDocument = rawProps.supportingDocument;
-    this.supportingDocumentFile = rawProps.supportingDocumentFile;
-    this.supportingDocumentFileSize = rawProps.supportingDocumentFileSize;
     this.supportingDocumentFreeText = rawProps.supportingDocumentFreeText;
+
+    if (rawProps.supportingDocumentFile) {
+      this.supportingDocumentFile = new PDF({
+        file: rawProps.supportingDocumentFile,
+        size: rawProps.supportingDocumentFileSize,
+      });
+    }
   };
 
   let schema = {
@@ -42,13 +48,7 @@ function SupportingDocumentInformationFactory(
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    supportingDocumentFile: joi.object(),
-    supportingDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    supportingDocumentFile: joi.object(PDF.VALIDATION_RULES),
     supportingDocumentFreeText: JoiValidationConstants.STRING,
   };
 
