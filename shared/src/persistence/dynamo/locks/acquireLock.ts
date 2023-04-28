@@ -42,22 +42,29 @@ export async function removeLock({
   identifier,
 }: {
   applicationContext: IApplicationContext;
-  identifier: string;
+  identifier: string | string[];
 }) {
-  await applicationContext
-    .getDocumentClient({
-      useMasterRegion: true,
-    })
-    .delete({
-      Key: {
-        pk: identifier,
-        sk: 'lock',
-      },
-      TableName: getTableName({
-        applicationContext,
-      }),
-    })
-    .promise();
+  const identifiers =
+    typeof identifier === 'string' ? [identifier] : identifier;
+
+  await Promise.all(
+    identifiers.map(identifierToUnlock =>
+      applicationContext
+        .getDocumentClient({
+          useMasterRegion: true,
+        })
+        .delete({
+          Key: {
+            pk: identifierToUnlock,
+            sk: 'lock',
+          },
+          TableName: getTableName({
+            applicationContext,
+          }),
+        })
+        .promise(),
+    ),
+  );
 }
 
 /**

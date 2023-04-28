@@ -79,4 +79,27 @@ describe('removeLock', () => {
       TableName: expect.anything(),
     });
   });
+
+  it('deletes all of the specified locks from persistence when handed an array of identifiers', async () => {
+    await removeLock({
+      applicationContext,
+      identifier: ['case|111-45', 'case|222-45'],
+    });
+
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
+      Key: {
+        pk: 'case|111-45',
+        sk: 'lock',
+      },
+      TableName: expect.anything(),
+    });
+
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
+      Key: {
+        pk: 'case|222-45',
+        sk: 'lock',
+      },
+      TableName: expect.anything(),
+    });
+  });
 });
