@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/Enti
 import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -149,5 +149,16 @@ describe('customCaseInventoryReportHelper', () => {
 
     const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
     expect(result.pageCount).toEqual(expectedPageCount);
+  });
+
+  it('should set the maxDate to today', () => {
+    const mockToday = '2022-04-13';
+    applicationContext.getUtilities().formatNow.mockReturnValue(mockToday);
+
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: { customCaseInventory: defaultCustomCaseState },
+    });
+
+    expect(result.today).toEqual(mockToday);
   });
 });
