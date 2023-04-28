@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
@@ -100,7 +101,7 @@ describe('customCaseInventoryReportHelper', () => {
 
   it('should return true for runReportButtonIsDisabled if createEndDate or createStartDate are falsy', () => {
     defaultCustomCaseState.filters.createEndDate = 's';
-    defaultCustomCaseState.filters.createStartDate = undefined;
+    defaultCustomCaseState.filters.createStartDate = '';
 
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
@@ -137,5 +138,16 @@ describe('customCaseInventoryReportHelper', () => {
     });
 
     expect(result.clearFiltersIsDisabled).toEqual(false);
+  });
+
+  it('should return the number of pages rounded up to the nearest whole number', () => {
+    defaultCustomCaseState.totalCases = 305;
+
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: { customCaseInventory: defaultCustomCaseState },
+    });
+
+    const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+    expect(result.pageCount).toEqual(expectedPageCount);
   });
 });
