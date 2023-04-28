@@ -47,6 +47,8 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
   const totalCases = get(state.customCaseInventory.totalCases);
   const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
 
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
   return {
     caseStatuses,
     caseTypes,
@@ -54,5 +56,6 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     clearFiltersIsDisabled,
     pageCount,
     runReportButtonIsDisabled,
+    today,
   };
 };

@@ -216,7 +216,10 @@ export const createISODateStringFromObject = options => {
  * @param {string} formatArg the desired formatting as specified by the luxon library
  * @returns {string|void} a formatted date string
  */
-export const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
+export const formatDateString = (
+  dateString,
+  formatArg: TimeFormats = FORMATS.ISO,
+) => {
   if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
 
@@ -243,10 +246,7 @@ export const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   return result;
 };
 
-export const formatNow = formatStr => {
-  /*
-  Using `module.exports` to allow mocking in tests
-  */
+export const formatNow = (formatStr: TimeFormats) => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };

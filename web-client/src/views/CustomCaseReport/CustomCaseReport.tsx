@@ -54,6 +54,7 @@ export const CustomCaseReport = connect(
                 endPickerCls={'grid-col-6 padding-left-2'}
                 endValue=""
                 formGroupCls={'margin-bottom-0'}
+                maxDate={customCaseInventoryReportHelper.today}
                 rangePickerCls={'grid-row '}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Case created start date"
