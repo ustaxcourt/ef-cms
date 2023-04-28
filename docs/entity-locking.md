@@ -61,7 +61,7 @@ If you are working within a very large interactor that has many lines, it may be
 import { withLocking } from '../../useCaseHelper/acquireLock';
 ```
 
-Then rename your original interactor function; will reference it later:
+Then rename your original interactor function; you will reference it later:
 
 ```typescript
 // this had been updateSomethingInteractor
@@ -70,13 +70,28 @@ export const updateSomething = async (applicationContext, { docketNumber }) => {
 };
 ```
 
-The wrapper will need to know which entities to lock, and so you can create a small function that returns an object with same attributes that you would pass to `acquireLock`. The only required attribute is `identifier`. This function gets called with `applicationContext` and the original request.
+The wrapper will need to know which entities to lock, and so you can create a small function that returns an object with same attributes that you would pass to `acquireLock`. The only required attribute is `identifier`. This function always gets called with `applicationContext` and the original request, and it can be an async function.
 
 ```typescript
 // a function that determines the entity or entities to lock
 const getLockInfo = (_applicationContext, { docketNumber }) => ({
   identifier: `case|${docketNumber}`
 });
+
+// async example that determines the entity or entities to lock
+const getLockInfo = async (applicationContext, { workItemId }) => {
+  const rawWorkItem = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemById({ 
+      applicationContext, 
+      workItemId,
+    });
+
+  return {
+    identifier: `case|${rawWorkItem.docketNumber}`
+  };
+};
+
 ```
 
 Now it's time to export the wrapped interactor with the function that returns the lock information.
