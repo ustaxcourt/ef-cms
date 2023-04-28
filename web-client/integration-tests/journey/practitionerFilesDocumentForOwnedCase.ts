@@ -118,6 +118,14 @@ export const practitionerFilesDocumentForOwnedCase = (
       },
     );
 
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'fileAcrossConsolidatedGroup',
+        value: false,
+      },
+    );
+
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
