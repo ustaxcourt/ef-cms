@@ -113,7 +113,7 @@ const getCaseRow = ({
         <tr className="notes-row">
           <td></td>
           <td></td>
-          <td className="font-body-2xs" colSpan="5">
+          <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Calendar notes:</span>
             {formattedCase.calendarNotes}
           </td>
@@ -124,7 +124,7 @@ const getCaseRow = ({
         <tr className="notes-row">
           <td></td>
           <td></td>
-          <td className="font-body-2xs" colSpan="4">
+          <td className="font-body-2xs" colSpan={4}>
             <span className="text-bold margin-right-1">Notes:</span>
             <TextView
               bind={`trialSessionWorkingCopy.userNotes.${formattedCase.docketNumber}.notes`}

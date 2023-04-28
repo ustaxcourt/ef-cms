@@ -25,7 +25,10 @@ export const formatDocketEntryOnDocketRecord = (
   const isServedDocument = !record.isNotServedDocument;
 
   const canTerminalUserSeeLink =
-    record.isFileAttached && isServedDocument && !record.isSealed;
+    record.isFileAttached &&
+    isServedDocument &&
+    !record.isSealed &&
+    !record.isStricken;
 
   const canPublicUserSeeLink =
     record.isCourtIssuedDocument &&

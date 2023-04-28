@@ -175,6 +175,7 @@ export const updateContact = async (
           trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       );
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
