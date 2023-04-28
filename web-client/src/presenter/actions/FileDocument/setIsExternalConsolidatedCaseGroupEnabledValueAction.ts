@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Sets value for isExternalConsolidatedCaseGroupEnabled
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -18,7 +17,7 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { eventCode: documentToFileEventCode } = get(state.form);
-  const { overrideIsMultiDocketableEventCode } = props;
+  const { overrideForRequestAccess } = props;
 
   const isConsolidatedGroupAccessEnabled = get(
     state.featureFlags[
@@ -27,7 +26,7 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
   );
   const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
   const isMultiDocketableEventCode =
-    overrideIsMultiDocketableEventCode ??
+    overrideForRequestAccess ??
     !!applicationContext
       .getConstants()
       .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);

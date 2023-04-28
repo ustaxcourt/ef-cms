@@ -37,7 +37,7 @@ export const externalConsolidatedCaseGroupHelper = (
         return CONTACT_TYPE_TITLES[party.contactType];
       }
     };
-    // simplify with lodash groupBy function
+
     caseDetail.consolidatedCases.forEach((memberCase, i) => {
       consolidatedGroupServiceParties[i] = {};
       const combinedPartiesList = [
