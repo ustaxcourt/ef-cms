@@ -64,6 +64,20 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
 
       if (
+        formattedTrialSession.formattedStartDate &&
+        formattedTrialSession.isCalendared
+      ) {
+        const { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted } =
+          applicationContext.getUtilities().isDateWithinDateRange({
+            trialStartDate: formattedTrialSession.formattedStartDate,
+          });
+
+        formattedTrialSession.showAlertForNOTT = shouldShowAlertForNOTT;
+        //gotta fix this
+        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}.\nHave notices been served?`;
+      }
+
+      if (
         hasNoActiveCases &&
         !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
