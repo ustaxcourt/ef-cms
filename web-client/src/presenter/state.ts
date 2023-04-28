@@ -69,6 +69,7 @@ import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
@@ -90,6 +91,7 @@ import { practitionerSearchFormHelper } from './computeds/practitionerSearchForm
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
+import { reportMenuHelper } from './computeds/reportMenuHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -189,6 +191,7 @@ const helpers = {
   headerHelper,
   internalPetitionPartiesHelper,
   internalTypesHelper,
+  judgeActivityReportHelper,
   loadingHelper,
   menuHelper,
   messageDocumentHelper,
@@ -210,6 +213,7 @@ const helpers = {
   printPaperServiceHelper,
   recentMessagesHelper,
   removeFromTrialSessionModalHelper,
+  reportMenuHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
@@ -307,6 +311,7 @@ export const baseState = {
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  judgeActivityReportData: {},
   judges: [],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
