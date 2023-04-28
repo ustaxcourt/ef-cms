@@ -1,3 +1,5 @@
+import { PDF } from '../documents/PDF';
+
 const joi = require('joi');
 const {
   ALL_DOCUMENT_TYPES,
@@ -83,15 +85,27 @@ function DocketEntryFactory(rawProps) {
     this.partyIrsPractitioner = rawPropsParam.partyIrsPractitioner;
     this.partyPrivatePractitioner = rawPropsParam.partyPrivatePractitioner;
     this.previousDocument = rawPropsParam.previousDocument;
-    this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
-    this.primaryDocumentFileSize = rawPropsParam.primaryDocumentFileSize;
-    this.secondaryDocumentFile = rawPropsParam.secondaryDocumentFile;
     this.serviceDate = rawPropsParam.serviceDate;
     this.trialLocation = rawPropsParam.trialLocation;
 
-    const { secondaryDocument } = rawPropsParam;
-    if (secondaryDocument) {
-      this.secondaryDocument = ExternalDocumentFactory(secondaryDocument);
+    if (rawPropsParam.primaryDocumentFile) {
+      this.primaryDocumentFile = new PDF({
+        file: rawPropsParam.primaryDocumentFile,
+        size: rawPropsParam.primaryDocumentFileSize,
+      });
+    }
+
+    if (rawPropsParam.secondaryDocumentFile) {
+      this.secondaryDocumentFile = new PDF({
+        file: rawPropsParam.secondaryDocumentFile,
+        size: rawPropsParam.secondaryDocumentFileSize,
+      });
+    }
+
+    if (rawPropsParam.secondaryDocument) {
+      this.secondaryDocument = ExternalDocumentFactory(
+        rawPropsParam.secondaryDocument,
+      );
     }
   };
 
@@ -149,19 +163,13 @@ function DocketEntryFactory(rawProps) {
     otherFilingParty: DOCKET_ENTRY_VALIDATION_RULE_KEYS.otherFilingParty,
     otherIteration: DOCKET_ENTRY_VALIDATION_RULE_KEYS.otherIteration,
     previousDocument: joi.object().optional(),
-    primaryDocumentFile: joi.object().when('isDocumentRequired', {
-      is: true,
-      otherwise: joi.optional(),
-      then: joi.required(),
-    }),
-    primaryDocumentFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
-      'primaryDocumentFile',
-      {
-        is: joi.exist().not(null),
-        otherwise: joi.optional().allow(null),
+    primaryDocumentFile: joi
+      .object(PDF.VALIDATION_RULES)
+      .when('isDocumentRequired', {
+        is: true,
+        otherwise: joi.optional(),
         then: joi.required(),
-      },
-    ),
+      }),
     serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS.serviceDate,
     trialLocation: DOCKET_ENTRY_VALIDATION_RULE_KEYS.trialLocation,
   });

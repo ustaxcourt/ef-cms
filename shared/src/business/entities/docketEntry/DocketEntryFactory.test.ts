@@ -1,3 +1,5 @@
+import { PDF } from '../documents/PDF';
+
 const {
   AMICUS_BRIEF_EVENT_CODE,
   OBJECTIONS_OPTIONS_MAP,
@@ -44,12 +46,8 @@ describe('DocketEntryFactory', () => {
 
     expect(
       DocketEntryFactory(rawEntity).getFormattedValidationErrors()
-        .primaryDocumentFile,
-    ).toEqual(undefined);
-    expect(
-      DocketEntryFactory(rawEntity).getFormattedValidationErrors()
-        .primaryDocumentFileSize,
-    ).toEqual(VALIDATION_ERROR_MESSAGES.primaryDocumentFileSize[1]);
+        .primaryDocumentFile.size,
+    ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[1]);
   });
 
   it('should not require a filing status selection', () => {
