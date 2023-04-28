@@ -97,7 +97,7 @@ const getLockInfo = async (applicationContext, { workItemId }) => {
 Now it's time to export the wrapped interactor with the function that returns the lock information.
 
 ```typescript
-// your new wrapped interactor
+// your newly wrapped interactor
 export const updateSomethingInteractor = withLocking(
   updateSomething,
   getLockInfo
@@ -119,7 +119,7 @@ const getLockInfo = (_applicationContext, { docketNumber }) => ({
   identifier: `case|${docketNumber}`
 });
 
-// your new wrapped interactor
+// your newly wrapped interactor
 export const updateSomethingInteractor = withLocking(
   updateSomething,
   getLockInfo
