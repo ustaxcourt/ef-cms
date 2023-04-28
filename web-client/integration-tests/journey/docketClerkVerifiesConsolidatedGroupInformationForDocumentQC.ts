@@ -23,10 +23,12 @@ export const docketClerkVerifiesConsolidatedGroupInformationForDocumentQC = (
       state: cerebralTest.getState(),
     });
 
-    const foundWorkItem = sectionDocumentQCInbox.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
-    );
+    const foundWorkItem = sectionDocumentQCInbox.find(workItem => {
+      return (
+        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId &&
+        workItem.docketEntry.docketNumber === cerebralTest.docketNumber
+      );
+    });
 
     expect(foundWorkItem).toMatchObject({
       consolidatedIconTooltipText: 'Lead case',
