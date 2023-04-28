@@ -29784,7 +29784,7 @@
     "proceedingType": "Remote",
     "createdAt": "2020-10-25T05:00:00.000Z",
     "sk": "trial-session|111ac21b-99f9-4321-98c8-b95db00af96b",
-    "sessionType": "Regular",
+    "sessionType": "Special",
     "sessionScope": "Standalone Remote",
     "termYear": "2020",
     "startTime": "13:00",
@@ -30131,6 +30131,10 @@
     "startDate": "2020-08-10T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
+    "judge": {
+      "name": "Colvin",
+      "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+    },
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195fb"
   },
   {
