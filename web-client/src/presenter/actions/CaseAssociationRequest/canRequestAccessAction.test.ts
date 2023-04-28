@@ -10,8 +10,8 @@ describe('canRequestAccessAction', () => {
     };
   });
 
-  it('should call path.proceed with overrideIsMultiDocketableEventCode as an argument if props.isAssociated is false or undefined', async () => {
-    const overrideIsMultiDocketableEventCode = true;
+  it('should call path.proceed with overrideForRequestAccess as an argument if props.isAssociated is false or undefined', async () => {
+    const overrideForRequestAccess = true;
 
     await runAction(canRequestAccessAction, {
       modules: {
@@ -23,7 +23,7 @@ describe('canRequestAccessAction', () => {
 
     expect(presenter.providers.path.proceed).toHaveBeenCalled();
     expect(presenter.providers.path.proceed).toHaveBeenCalledWith({
-      overrideIsMultiDocketableEventCode,
+      overrideForRequestAccess,
     });
   });
 
