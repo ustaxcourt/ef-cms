@@ -76,24 +76,7 @@ export class Case extends JoiValidationEntity {
   public orderForCds: boolean;
   public orderForRatification: boolean;
   public orderToShowCause: boolean;
-  public petitioners: {
-    isAddressSealed: boolean;
-    address3: string;
-    address2: string;
-    city: string;
-    contactId: string;
-    address1: string;
-    postalCode: string;
-    contactType: string;
-    sealedAndUnavailable: boolean;
-    countryType: string;
-    serviceIndicator: string;
-    phone: string;
-    entityName: string;
-    name: string;
-    state: string;
-    additionalName: string;
-  }[];
+  public petitioners: TPetitioner[];
   public caseCaption: string;
   public caseType: string;
   public closedDate?: string;
@@ -127,7 +110,7 @@ export class Case extends JoiValidationEntity {
   public docketNumberWithSuffix: string;
   public canAllowDocumentService: string;
   public canAllowPrintableDocketRecord: string;
-  public archivedDocketEntries: any[];
+  public archivedDocketEntries: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed: boolean;
   public hearings: any[];
