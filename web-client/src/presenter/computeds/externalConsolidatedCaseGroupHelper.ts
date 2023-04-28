@@ -9,8 +9,8 @@ export const externalConsolidatedCaseGroupHelper = (
   const { CONTACT_TYPE_TITLES, USER_ROLES } = applicationContext.getConstants();
 
   let formattedCurrentCasePetitionerNames;
-  let formattedConsolidatedCaseList = [];
-  let consolidatedGroupServiceParties = [];
+  let formattedConsolidatedCaseList: string[] = [];
+  let consolidatedGroupServiceParties: any[] = [];
 
   if (caseDetail.consolidatedCases) {
     const currentCasePetitioners = caseDetail.petitioners

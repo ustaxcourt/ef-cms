@@ -80,11 +80,15 @@ describe('uploadExternalDocumentsAction', () => {
 
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the leadDocketNumber for the added document', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
-    const testCase = { ...MOCK_CASE, leadDocketNumber: '111-11' };
-    testCase.consolidatedCases = [
-      { docketNumber: '111-11' },
-      { docketNumber: '108-19' },
-    ];
+    const testCase = {
+      ...MOCK_CASE,
+      consolidatedCases: [
+        { docketNumber: '111-11' },
+        { docketNumber: '108-19' },
+      ],
+      leadDocketNumber: '111-11',
+    };
+
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({

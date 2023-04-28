@@ -32,7 +32,7 @@ export const uploadExternalDocumentsAction = async ({
   const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
-  let privatePractitioners = null;
+  let privatePractitioners: any = null;
   let { filers } = form;
   if (
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
@@ -44,7 +44,7 @@ export const uploadExternalDocumentsAction = async ({
     privatePractitioners = form.practitioner;
   }
 
-  const documentMetadata = {
+  const documentMetadata: any = {
     ...form,
     consolidatedCasesToFileAcross: form.fileAcrossConsolidatedGroup
       ? consolidatedCases
@@ -55,7 +55,7 @@ export const uploadExternalDocumentsAction = async ({
     privatePractitioners,
   };
 
-  const documentFiles = {
+  const documentFiles: any = {
     primary: form.primaryDocumentFile,
   };
 
