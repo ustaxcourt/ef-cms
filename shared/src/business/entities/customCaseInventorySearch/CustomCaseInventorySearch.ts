@@ -1,5 +1,12 @@
+import {
+  CASE_STATUSES,
+  CASE_TYPES,
+  CaseStatus,
+  CaseType,
+} from '../EntityConstants';
 import { DATE_RANGE_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import joi from 'joi';
 
 /**
  * Custom Case Inventory Report Entity
@@ -7,15 +14,32 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
  * @param {object} rawProps the raw activity search data
  * @constructor
  */
+export const CUSTOM_CASE_REPORT_FILING_METHODS = [
+  'all',
+  'electronic',
+  'paper',
+] as const;
+export type CustomCaseFilingMethods =
+  (typeof CUSTOM_CASE_REPORT_FILING_METHODS)[number];
 
 export class CustomCaseInventorySearch extends JoiValidationEntity {
   public startDate: string;
   public endDate: string;
+  public caseStatuses: CaseStatus[];
+  public pageNumber: number;
+  public pageSize: number;
+  public caseTypes: CaseType[];
+  public filingMethod: CustomCaseFilingMethods;
 
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
     this.startDate = rawProps.startDate;
     this.endDate = rawProps.endDate;
+    this.caseStatuses = rawProps.caseStatuses;
+    this.pageNumber = rawProps.pageNumber;
+    this.pageSize = rawProps.pageSize;
+    this.caseTypes = rawProps.caseTypes;
+    this.filingMethod = rawProps.filingMethod;
   }
 
   static VALIDATION_ERROR_MESSAGES = {
@@ -50,7 +74,12 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
 
   getValidationRules() {
     return {
+      caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
+      caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
       endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
+      filingMethod: joi.string().valid(...CUSTOM_CASE_REPORT_FILING_METHODS),
+      pageNumber: joi.number(),
+      pageSize: joi.number(),
       startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
     };
   }
