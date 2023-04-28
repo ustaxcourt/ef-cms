@@ -146,6 +146,14 @@ export const formattedTrialSessions = (get, applicationContext) => {
 
     const formattedSession = formatSession(session, applicationContext);
 
+    if (formattedSession.formattedStartDate && formattedSession.isCalendared) {
+      formattedSession.showAlertForNOTT = applicationContext
+        .getUtilities()
+        .isDateWithinDateRange({
+          trialStartDate: formattedSession.formattedStartDate,
+        });
+    }
+
     let sessionWeek = find(formattedSessions, {
       startOfWeekSortable: formattedSession.startOfWeekSortable,
     });
@@ -189,8 +197,11 @@ export const formattedTrialSessions = (get, applicationContext) => {
     }
   }
 
+  const filteredTrialSessions =
+    filterFormattedSessionsByStatus(formattedSessions);
+
   return {
-    filteredTrialSessions: filterFormattedSessionsByStatus(formattedSessions),
+    filteredTrialSessions,
     formattedSessions,
     sessionsByTerm,
     showSwingSessionList: get(state.form.swingSession),

@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -524,4 +524,29 @@ export const getBusinessDateInFuture = ({
   }
 
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+};
+
+export const isDateWithinDateRange = ({ trialStartDate }): boolean => {
+  const thirtyFiveDaysBeforeTrial = prepareDateFromString(
+    trialStartDate,
+    FORMATS.MMDDYY,
+  ).minus({
+    ['days']: 35,
+  });
+
+  const thirtyDaysBeforeTrial = prepareDateFromString(
+    trialStartDate,
+    FORMATS.MMDDYY,
+  ).minus({
+    ['days']: 30,
+  });
+
+  const today = prepareDateFromString(null, null);
+
+  const dateRangeInterval = Interval.fromDateTimes(
+    thirtyFiveDaysBeforeTrial,
+    thirtyDaysBeforeTrial,
+  );
+
+  return dateRangeInterval.contains(today);
 };
