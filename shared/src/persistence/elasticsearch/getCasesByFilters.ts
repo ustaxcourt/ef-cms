@@ -2,6 +2,8 @@ import {
   CaseInventory,
   GetCaseInventoryReportRequest,
 } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+// eslint-disable-next-line import/no-unresolved
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
 export const getCasesByFilters = async ({
@@ -25,7 +27,7 @@ export const getCasesByFilters = async ({
     'highPriority',
   ];
 
-  const filters = [];
+  const filters: QueryDslQueryContainer[] = [];
 
   const createDateFilter = {
     range: {
