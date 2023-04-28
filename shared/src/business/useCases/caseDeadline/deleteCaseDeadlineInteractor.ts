@@ -59,7 +59,6 @@ export const deleteCaseDeadline = async (
 export const deleteCaseDeadlineInteractor = withLocking(
   deleteCaseDeadline,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

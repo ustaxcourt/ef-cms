@@ -172,7 +172,6 @@ export const saveCaseDetailInternalEdit = async (
 export const saveCaseDetailInternalEditInteractor = withLocking(
   saveCaseDetailInternalEdit,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

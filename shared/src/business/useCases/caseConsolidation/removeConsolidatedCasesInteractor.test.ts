@@ -285,8 +285,7 @@ describe('removeConsolidatedCasesInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: docketNumber,
-        prefix: 'case',
+        identifier: `case|${docketNumber}`,
         ttl: 30,
       });
 
@@ -294,8 +293,7 @@ describe('removeConsolidatedCasesInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: docketNumber,
-        prefix: 'case',
+        identifier: `case|${docketNumber}`,
       });
     });
   });

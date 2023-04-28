@@ -174,8 +174,9 @@ export const determineEntitiesToLock = async (
     .getCalendaredCasesForTrialSession({ applicationContext, trialSessionId });
 
   return {
-    identifier: calendaredCases.map(({ docketNumber }) => docketNumber),
-    prefix: 'case',
+    identifier: calendaredCases.map(
+      ({ docketNumber }) => `case|${docketNumber}`,
+    ),
     ttl: 900,
   };
 };

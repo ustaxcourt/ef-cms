@@ -117,8 +117,7 @@ describe('addConsolidatedCaseInteractor', () => {
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: '519-19',
-      prefix: 'case',
+      identifier: 'case|519-19',
       ttl: 30,
     });
   });

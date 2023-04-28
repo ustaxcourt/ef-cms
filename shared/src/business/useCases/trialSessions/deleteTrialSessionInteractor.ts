@@ -3,11 +3,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 import { acquireLock } from '../../useCaseHelper/acquireLock';
 
 /**
@@ -64,11 +61,7 @@ export const deleteTrialSessionInteractor = async (
   );
   await acquireLock({
     applicationContext,
-    identifier: docketNumbers,
-    onLockError: new ServiceUnavailableError(
-      'The case is currently being updated',
-    ),
-    prefix: 'case',
+    identifier: docketNumbers.map(item => `case|${item}`),
   });
 
   if (trialSessionEntity.judge) {
@@ -113,8 +106,7 @@ export const deleteTrialSessionInteractor = async (
     docketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().removeLock({
         applicationContext,
-        identifier: docketNumber,
-        prefix: 'case',
+        identifier: `case|${docketNumber}`,
       }),
     ),
   );

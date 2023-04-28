@@ -6,13 +6,11 @@ export const checkLock = async ({
   identifier,
   onLockError,
   options = {},
-  prefix,
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
   onLockError?: Error | Function;
   options?: any;
-  prefix: string;
 }) => {
   const isCaseLockingEnabled = await applicationContext
     .getUseCases()
@@ -22,12 +20,11 @@ export const checkLock = async ({
 
   const currentLock = await applicationContext
     .getPersistenceGateway()
-    .getLock({ applicationContext, identifier, prefix });
+    .getLock({ applicationContext, identifier });
 
   if (!currentLock) {
     applicationContext.logger.warn('Entity is NOT currently locked', {
       identifier,
-      prefix,
     });
     return;
   }
@@ -55,7 +52,6 @@ export const acquireLock = async ({
   identifier,
   onLockError,
   options = {},
-  prefix,
   retries = 0,
   ttl = 30,
   waitTime = 3000,
@@ -64,7 +60,6 @@ export const acquireLock = async ({
   identifier: string | string[];
   onLockError?: Error | Function;
   options?: any;
-  prefix: string;
   retries?: number;
   ttl?: number;
   waitTime?: number;
@@ -87,7 +82,6 @@ export const acquireLock = async ({
             identifier: entityIdentifier,
             onLockError,
             options,
-            prefix,
           }),
         ),
       );
@@ -106,7 +100,6 @@ export const acquireLock = async ({
       applicationContext.getPersistenceGateway().createLock({
         applicationContext,
         identifier: entityIdentifier,
-        prefix,
         ttl,
       }),
     ),
@@ -116,11 +109,9 @@ export const acquireLock = async ({
 export const removeLock = ({
   applicationContext,
   identifier,
-  prefix,
 }: {
   applicationContext: IApplicationContext;
   identifier: string | string[];
-  prefix: string;
 }) => {
   if (!identifier) return;
   const identifiersToUnlock =
@@ -131,7 +122,6 @@ export const removeLock = ({
       applicationContext.getPersistenceGateway().removeLock({
         applicationContext,
         identifier: entityIdentifier,
-        prefix,
       }),
     ),
   );
@@ -154,17 +144,13 @@ export function withLocking(
     applicationContext: IApplicationContext,
     options: any,
   ) {
-    const { identifier, prefix, ttl } = await getLockInfo(
-      applicationContext,
-      options,
-    );
+    const { identifier, ttl } = await getLockInfo(applicationContext, options);
 
     await acquireLock({
       applicationContext,
       identifier,
       onLockError,
       options,
-      prefix,
       ttl,
     });
 
@@ -179,7 +165,6 @@ export function withLocking(
     await removeLock({
       applicationContext,
       identifier,
-      prefix,
     });
 
     if (caughtError) {

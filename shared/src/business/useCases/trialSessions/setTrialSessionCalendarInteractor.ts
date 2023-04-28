@@ -3,12 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '../../../errors/errors';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 import { acquireLock } from '../../useCaseHelper/acquireLock';
 import { flatten, partition, uniq } from 'lodash';
 
@@ -123,11 +120,7 @@ export const setTrialSessionCalendarInteractor = async (
 
   await acquireLock({
     applicationContext,
-    identifier: allDocketNumbers,
-    onLockError: new ServiceUnavailableError(
-      'One of the cases is currently being updated',
-    ),
-    prefix: 'case',
+    identifier: allDocketNumbers.map(item => `case|${item}`),
     ttl: 900,
   });
 
@@ -204,8 +197,7 @@ export const setTrialSessionCalendarInteractor = async (
     allDocketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().removeLock({
         applicationContext,
-        identifier: docketNumber,
-        prefix: 'case',
+        identifier: `case|${docketNumber}`,
       }),
     ),
   );

@@ -66,7 +66,6 @@ export const prioritizeCase = async (
 export const prioritizeCaseInteractor = withLocking(
   prioritizeCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

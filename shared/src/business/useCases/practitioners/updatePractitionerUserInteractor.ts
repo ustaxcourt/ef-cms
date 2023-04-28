@@ -207,7 +207,7 @@ export const handleLockError = async (
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { user }: { user: Practitioner },
-): Promise<{ identifier: string[]; prefix: string; ttl: number }> => {
+): Promise<{ identifier: string[]; ttl: number }> => {
   const docketNumbers: string[] = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({
@@ -216,8 +216,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: docketNumbers,
-    prefix: 'case',
+    identifier: docketNumbers.map(item => `case|${item}`),
     ttl: 900,
   };
 };

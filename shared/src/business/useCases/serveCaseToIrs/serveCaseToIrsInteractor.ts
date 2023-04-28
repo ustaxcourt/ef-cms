@@ -618,7 +618,6 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
 export const serveCaseToIrsInteractor = withLocking(
   serveCaseToIrs,
   (_applicationContext: IApplicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

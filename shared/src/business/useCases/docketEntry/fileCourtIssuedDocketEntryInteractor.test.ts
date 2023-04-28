@@ -378,8 +378,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: caseRecord.docketNumber,
-      prefix: 'case',
+      identifier: `case|${caseRecord.docketNumber}`,
       ttl: 30,
     });
 
@@ -387,8 +386,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: caseRecord.docketNumber,
-      prefix: 'case',
+      identifier: `case|${caseRecord.docketNumber}`,
     });
   });
 
@@ -421,8 +419,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: docketNumber,
-        prefix: 'case',
+        identifier: `case|${docketNumber}`,
         ttl: 30,
       });
 
@@ -430,8 +427,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: docketNumber,
-        prefix: 'case',
+        identifier: `case|${docketNumber}`,
       });
     });
   });

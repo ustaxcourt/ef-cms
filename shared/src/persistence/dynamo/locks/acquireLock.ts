@@ -7,12 +7,10 @@ import { getTableName } from '../../dynamodbClientService';
 export async function createLock({
   applicationContext,
   identifier,
-  prefix,
   ttl = 30,
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
-  prefix: string;
   ttl?: number;
 }) {
   const now = formatNow();
@@ -24,7 +22,7 @@ export async function createLock({
     })
     .put({
       Item: {
-        pk: `${prefix}|${identifier}`,
+        pk: identifier,
         sk: 'lock',
         timestamp: now,
         ttl: ttl + nowUnix,
@@ -42,11 +40,9 @@ export async function createLock({
 export async function removeLock({
   applicationContext,
   identifier,
-  prefix,
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
-  prefix: string;
 }) {
   await applicationContext
     .getDocumentClient({
@@ -54,7 +50,7 @@ export async function removeLock({
     })
     .delete({
       Key: {
-        pk: `${prefix}|${identifier}`,
+        pk: identifier,
         sk: 'lock',
       },
       TableName: getTableName({
@@ -70,11 +66,9 @@ export async function removeLock({
 export async function getLock({
   applicationContext,
   identifier,
-  prefix,
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
-  prefix: string;
 }) {
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
@@ -84,7 +78,7 @@ export async function getLock({
     .get({
       ConsistentRead: true,
       Key: {
-        pk: `${prefix}|${identifier}`,
+        pk: identifier,
         sk: 'lock',
       },
       TableName: getTableName({
