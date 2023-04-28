@@ -2,6 +2,7 @@ import {
   CASE_STATUSES,
   CASE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
@@ -43,11 +44,15 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     ...populatedFilters.caseTypes,
   ].length;
 
+  const totalCases = get(state.customCaseInventory.totalCases);
+  const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+
   return {
     caseStatuses,
     caseTypes,
     cases: reportData,
     clearFiltersIsDisabled,
+    pageCount,
     runReportButtonIsDisabled,
   };
 };

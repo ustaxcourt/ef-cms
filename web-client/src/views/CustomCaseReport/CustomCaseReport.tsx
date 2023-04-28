@@ -1,6 +1,5 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../presenter/actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -262,17 +261,19 @@ export const CustomCaseReport = connect(
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
-          <Paginator
-            forcePage={activePage}
-            pageCount={Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE)}
-            pageRangeDisplayed={3}
-            onPageChange={pageChange => {
-              setActivePage(pageChange.selected);
-              getCustomCaseInventoryReportSequence({
-                selectedPage: pageChange.selected,
-              });
-            }}
-          />
+          {customCaseInventoryReportHelper.pageCount > 1 && (
+            <Paginator
+              forcePage={activePage}
+              pageCount={customCaseInventoryReportHelper.pageCount}
+              pageRangeDisplayed={3}
+              onPageChange={pageChange => {
+                setActivePage(pageChange.selected);
+                getCustomCaseInventoryReportSequence({
+                  selectedPage: pageChange.selected,
+                });
+              }}
+            />
+          )}
           <div className="text-right margin-bottom-2">
             <span className="text-bold">Count: &nbsp;</span>
             {totalCases}
