@@ -197,7 +197,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: docketNumbers.map(item => `case|${item}`),
+    identifier: docketNumbers?.map(item => `case|${item}`),
     ttl: 900,
   };
 };
