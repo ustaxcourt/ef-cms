@@ -22,8 +22,14 @@ You can directly attempt to acquire a lock within the body of an interactor. Tow
 await applicationContext.getUseCaseHelpers().acquireLock({
   applicationContext,
   identifier: 'case|123-20', 
-  // or for multiple entities: 
+  
   // identifier: ['case|111-20', 'case|222-20'] 
+});
+
+// or for multiple entities: 
+await applicationContext.getUseCaseHelpers().acquireLock({
+  applicationContext,
+  identifier: ['case|111-20', 'case|222-20'] ,
 });
 ```
 
@@ -40,8 +46,12 @@ To remove the lock when you are finished with it (e.g., after calling `updateCas
 await applicationContext.getPersistenceGateway().removeLock({
   applicationContext,
   identifier: 'case|123-20', 
-  // or for multiple entities:
-  // identifier: ['case|111-20', 'case|222-20'] 
+});
+
+// or for multiple entities:
+await applicationContext.getPersistenceGateway().removeLock({
+  applicationContext,
+  identifier: ['case|111-20', 'case|222-20'],
 });
 ```
 
