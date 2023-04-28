@@ -1,40 +1,43 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
-} = require('../EntityConstants');
-const { CaseInternal } = require('./CaseInternal');
-const { Correspondence } = require('../Correspondence');
-const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
+} from '../EntityConstants';
+import { CaseInternal } from './CaseInternal';
+import { Correspondence } from '../Correspondence';
+import { PDF } from '../documents/PDF';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('CaseInternal entity', () => {
+describe('CaseInternal', () => {
+  it('should throw an exception when the constructor is provided an application context', () => {
+    expect(
+      () => new CaseInternal({}, { applicationContext: undefined }),
+    ).toThrow();
+  });
+
   describe('validation', () => {
-    it('throws an exception when not provided an application context', () => {
-      expect(() => new CaseInternal({}, {})).toThrow();
-    });
-
-    it('returns the expected set of errors for an empty object', () => {
+    it('should return errors for all the required fields when an empty object is provided to the constructor', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        caseCaption: VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: VALIDATION_ERROR_MESSAGES.caseType,
-        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
-        mailingDate: VALIDATION_ERROR_MESSAGES.mailingDate,
-        partyType: VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
-        petitionPaymentStatus: VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
-        procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
-        receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
+        caseCaption: CaseInternal.VALIDATION_ERROR_MESSAGES.caseCaption,
+        caseType: CaseInternal.VALIDATION_ERROR_MESSAGES.caseType,
+        chooseAtLeastOneValue:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        mailingDate: CaseInternal.VALIDATION_ERROR_MESSAGES.mailingDate,
+        partyType: CaseInternal.VALIDATION_ERROR_MESSAGES.partyType,
+        petitionFile: CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFile,
+        petitionPaymentStatus:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
+        procedureType: CaseInternal.VALIDATION_ERROR_MESSAGES.procedureType,
+        receivedAt: CaseInternal.VALIDATION_ERROR_MESSAGES.receivedAt[1],
       });
     });
 
-    it('creates a valid petition with minimal information', () => {
+    it('should be valid when all the required information is provided', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -74,6 +77,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -128,6 +132,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -166,6 +171,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -203,44 +209,41 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
 
-    it('fails validation if date cannot be in the future.', () => {
+    it('should return an error when the received at date is in the future.', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
           receivedAt: '9999-01-01T00:00:00.000Z',
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).not.toEqual(null);
     });
 
-    it('fails validation if petitionFile is set, but petitionFileSize is not', () => {
-      const caseInternal = new CaseInternal(
+    it('should return errors when the petition file has been provided but it does not have a size', () => {
+      const caseInternal: CaseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: new File([], 'test.pdf'),
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          petitionFileSize: undefined,
         },
         { applicationContext },
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+        caseInternal.getFormattedValidationErrors().petitionFile.size,
+      ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[1]);
     });
 
-    it('fails validation if petitionPaymentStatus is Waived but applicationForWaiverOfFilingFeeFile is not set', () => {
+    it('should return errors when the petition payment status is `Waived` but application for waiver of filing fee file has not been provided', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
+          applicationForWaiverOfFilingFeeFile: undefined,
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -248,12 +251,16 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors()
           .applicationForWaiverOfFilingFeeFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFile);
+      ).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES
+          .applicationForWaiverOfFilingFeeFile,
+      );
     });
 
-    it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
+    it('should return errors when party type is `Corporation` and order for CDS is undefined', () => {
       const caseInternal = new CaseInternal(
         {
+          orderForCds: undefined,
           partyType: PARTY_TYPES.corporation,
         },
         { applicationContext },
@@ -261,10 +268,10 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().corporateDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
-    it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
+    it('should return errors when party type is `Partnership As Tax Matters Partner` and Order For Cds is false', () => {
       const caseInternal = new CaseInternal(
         {
           orderForCds: false,
@@ -275,78 +282,72 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().corporateDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
-    it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
+    it('should return errors when Application For Waiver Of Filing Fee file has been provided but it does not have a size', () => {
       const caseInternal = new CaseInternal(
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          applicationForWaiverOfFilingFeeFileSize: undefined,
         },
         { applicationContext },
       );
 
       expect(
         caseInternal.getFormattedValidationErrors()
-          .applicationForWaiverOfFilingFeeFileSize,
-      ).toEqual(
-        VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFileSize[1],
-      );
+          .applicationForWaiverOfFilingFeeFile.size,
+      ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[1]);
     });
 
-    it('fails validation if stinFile is set, but stinFileSize is not', () => {
+    it('should return errors when a Statement of Taxpayer Identification (STIN) file has been provided but it does not have a size', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: new File([], 'test.pdf'),
+          stinFileSize: undefined,
         },
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+      expect(caseInternal.getFormattedValidationErrors().stinFile.size).toEqual(
+        PDF.VALIDATION_ERROR_MESSAGES.size[1],
       );
     });
 
-    it('fails validation if corporateDisclosureFile is set, but corporateDisclosureFileSize is not', () => {
+    it('should return errors when a Corporate Disclosure file has been provided but it does not have a size', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
           corporateDisclosureFile: new File([], 'test.pdf'),
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          corporateDisclosureFileSize: undefined,
         },
         { applicationContext },
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+        caseInternal.getFormattedValidationErrors().corporateDisclosureFile
+          .size,
+      ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[1]);
     });
 
-    it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
+    it('should return errors when a Request For Place Of Trial file has been provided but it does not have a size', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
+          requestForPlaceOfTrialFileSize: undefined,
         },
         { applicationContext },
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()
-          .requestForPlaceOfTrialFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFileSize[1]);
+        caseInternal.getFormattedValidationErrors().requestForPlaceOfTrialFile
+          .size,
+      ).toEqual(PDF.VALIDATION_ERROR_MESSAGES.size[1]);
     });
 
-    it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
+    it('should return errors when a Request For Place Of Trial file has been provided but a preferred Trial City has not been selected', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          preferredTrialCity: undefined,
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -354,25 +355,26 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().preferredTrialCity,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.preferredTrialCity);
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.preferredTrialCity);
     });
 
-    it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
+    it('should return errors when a preferred trial city has been selected but a Request For Place Of Trial file has not been provided', () => {
       const caseInternal = new CaseInternal(
         {
-          caseCaption: 'Dr. Guy Fieri, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          requestForPlaceOfTrialFile: undefined,
         },
         { applicationContext },
       );
 
       expect(
         caseInternal.getFormattedValidationErrors().requestForPlaceOfTrialFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
+      ).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile,
+      );
     });
 
-    it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
+    it('should return errors when one of preferred trial city, RQT file, or order designating place of trial is not selected', () => {
       const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
@@ -407,13 +409,15 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        chooseAtLeastOneValue:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
 
-    it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
+    it('should return errors when only orderDesignatingPlaceOfTrial is present and it is false', () => {
       const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
@@ -451,18 +455,19 @@ describe('CaseInternal entity', () => {
       );
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        chooseAtLeastOneValue:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
   });
 
   it('should populate archivedCorrespondences', () => {
-    const mockGuid = applicationContext.getUniqueId();
+    const mockCorrespondenceId = '43065758-3930-4e11-9635-3cc21e83165c';
     const mockCorrespondence = new Correspondence({
-      correspondenceId: mockGuid,
+      correspondenceId: mockCorrespondenceId,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
-      userId: mockGuid,
+      userId: mockCorrespondenceId,
     });
 
     const caseInternal = new CaseInternal(
