@@ -270,8 +270,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: MOCK_CASE.docketNumber,
-      prefix: 'case',
+      identifier: `case|${MOCK_CASE.docketNumber}`,
       ttl: 900,
     });
 
@@ -279,8 +278,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: MOCK_CASE.docketNumber,
-      prefix: 'case',
+      identifier: `case|${MOCK_CASE.docketNumber}`,
     });
   });
 });

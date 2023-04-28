@@ -186,8 +186,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
         ttl: 900,
       });
 
@@ -195,8 +194,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
       });
     });
 
@@ -209,8 +207,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
       });
     });
   });

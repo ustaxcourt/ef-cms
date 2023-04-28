@@ -235,7 +235,6 @@ export const updateContact = async (
 export const updateContactInteractor = withLocking(
   updateContact,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

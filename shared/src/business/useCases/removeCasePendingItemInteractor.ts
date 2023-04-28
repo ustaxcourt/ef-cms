@@ -55,7 +55,6 @@ export const removeCasePendingItem = async (
 export const removeCasePendingItemInteractor = withLocking(
   removeCasePendingItem,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

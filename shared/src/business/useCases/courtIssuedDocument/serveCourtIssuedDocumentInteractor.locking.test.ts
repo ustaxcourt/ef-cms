@@ -183,8 +183,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
         ttl: 900,
       });
     });
@@ -196,8 +195,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
       });
     });
   });

@@ -181,8 +181,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: MOCK_CASE.docketNumber,
-      prefix: 'case',
+      identifier: `case|${MOCK_CASE.docketNumber}`,
       ttl: 30,
     });
 
@@ -190,8 +189,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: MOCK_CASE.docketNumber,
-      prefix: 'case',
+      identifier: `case|${MOCK_CASE.docketNumber}`,
     });
   });
 

@@ -69,7 +69,6 @@ export const unprioritizeCase = async (
 export const unprioritizeCaseInteractor = withLocking(
   unprioritizeCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

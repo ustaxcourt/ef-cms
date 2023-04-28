@@ -63,7 +63,6 @@ export const createCaseDeadline = async (
 export const createCaseDeadlineInteractor = withLocking(
   createCaseDeadline,
   (_applicationContext, { caseDeadline }) => ({
-    identifier: caseDeadline.docketNumber,
-    prefix: 'case',
+    identifier: `case|${caseDeadline.docketNumber}`,
   }),
 );

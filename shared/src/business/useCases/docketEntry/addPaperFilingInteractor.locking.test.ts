@@ -166,8 +166,7 @@ describe('addPaperFilingInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
         ttl: 900,
       });
     });
@@ -178,8 +177,7 @@ describe('addPaperFilingInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
       });
     });
   });

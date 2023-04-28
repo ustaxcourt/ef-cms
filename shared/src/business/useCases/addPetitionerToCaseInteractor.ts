@@ -67,7 +67,6 @@ export const addPetitionerToCase = async (
 export const addPetitionerToCaseInteractor = withLocking(
   addPetitionerToCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

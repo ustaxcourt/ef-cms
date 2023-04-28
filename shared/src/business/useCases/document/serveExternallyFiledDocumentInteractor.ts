@@ -234,11 +234,11 @@ export const determineEntitiesToLock = (
   },
 ): {
   identifier: string[];
-  prefix: string;
   ttl?: number;
 } => ({
-  identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])],
-  prefix: 'case',
+  identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+    item => `case|${item}`,
+  ),
   ttl: 900,
 });
 

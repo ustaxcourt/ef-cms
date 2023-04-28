@@ -46,11 +46,10 @@ export const checkForReadyForTrialCasesInteractor = async (
     try {
       await acquireLock({
         applicationContext,
-        identifier: docketNumber,
+        identifier: `case|${docketNumber}`,
         onLockError: new ServiceUnavailableError(
           `${docketNumber} is currently being updated`,
         ),
-        prefix: 'case',
         ttl: 900,
       });
     } catch (err) {
@@ -89,8 +88,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     }
     await applicationContext.getPersistenceGateway().removeLock({
       applicationContext,
-      identifier: docketNumber,
-      prefix: 'case',
+      identifier: `case|${docketNumber}`,
     });
   };
 

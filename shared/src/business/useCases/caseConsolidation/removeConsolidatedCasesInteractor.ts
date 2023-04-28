@@ -114,10 +114,20 @@ export const removeConsolidatedCases = async (
   await Promise.all(updateCasePromises);
 };
 
+const determineEntitiesToLock = (
+  _applicationContext,
+  { docketNumber, docketNumbersToRemove = [] },
+) => {
+  const docketNumbers = [docketNumber, ...docketNumbersToRemove].map(
+    item => `case|${item}`,
+  );
+
+  return {
+    identifier: docketNumbers,
+  };
+};
+
 export const removeConsolidatedCasesInteractor = withLocking(
   removeConsolidatedCases,
-  (_applicationContext, { docketNumber, docketNumbersToRemove = [] }) => ({
-    identifier: [docketNumber, ...docketNumbersToRemove],
-    prefix: 'case',
-  }),
+  determineEntitiesToLock,
 );

@@ -61,7 +61,6 @@ export const removePdfFromDocketEntry = async (
 export const removePdfFromDocketEntryInteractor = withLocking(
   removePdfFromDocketEntry,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

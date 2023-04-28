@@ -52,7 +52,6 @@ export const updateOtherStatistics = async (
 export const updateOtherStatisticsInteractor = withLocking(
   updateOtherStatistics,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );
