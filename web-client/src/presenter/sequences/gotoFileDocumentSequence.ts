@@ -6,7 +6,6 @@ import { getConstants } from '../../getConstants';
 import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
@@ -23,24 +22,22 @@ const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
   clearFormAction,
   clearScreenMetadataAction,
   setDefaultFilersMapAction,
-  parallel([
-    getFeatureFlagFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED
-        .key,
-    ),
-    setFeatureFlagFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED
-        .key,
-    ),
-    getFeatureFlagFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS
-        .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-    ),
-    setFeatureFlagFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS
-        .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-    ),
-  ]),
+  getFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED
+      .key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED
+      .key,
+  ),
+  getFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS
+      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS
+      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
+  ),
   getCaseAction,
   setCaseAction,
   isFeatureFlagEnabledFactoryAction(
