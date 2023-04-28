@@ -22,8 +22,6 @@ You can directly attempt to acquire a lock within the body of an interactor. Tow
 await applicationContext.getUseCaseHelpers().acquireLock({
   applicationContext,
   identifier: 'case|123-20', 
-  
-  // identifier: ['case|111-20', 'case|222-20'] 
 });
 
 // or for multiple entities: 
