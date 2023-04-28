@@ -3,7 +3,6 @@ const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { UserCase } = require('../../entities/UserCase');
 /**
  * associateIrsPractitionerToCase
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -17,6 +16,12 @@ exports.associateIrsPractitionerToCase = async ({
   docketNumber,
   serviceIndicator,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  consolidatedCasesDocketNumbers: string[];
+  serviceIndicator: string;
+  user: RawUser;
 }) => {
   let docketNumbersToAssociate: string[] = [];
 

@@ -21,7 +21,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideIsMultiDocketableEventCode: undefined,
+          overrideForRequestAccess: undefined,
         },
         state: {
           caseDetail: testCase,
@@ -49,7 +49,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideIsMultiDocketableEventCode: undefined,
+          overrideForRequestAccess: undefined,
         },
         state: {
           caseDetail: testCase,
@@ -75,7 +75,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideIsMultiDocketableEventCode: undefined,
+          overrideForRequestAccess: undefined,
         },
         state: {
           caseDetail: baseCase,
@@ -102,7 +102,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideIsMultiDocketableEventCode: undefined,
+          overrideForRequestAccess: undefined,
         },
         state: {
           caseDetail: testCase,
@@ -122,14 +122,14 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
     );
   });
 
-  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when there is a overrideIsMultiDocketableEventCode', async () => {
+  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when there is a overrideForRequestAccess', async () => {
     const testCase = { ...baseCase, leadDocketNumber: '111-11' };
     const result = await runAction(
       setIsExternalConsolidatedCaseGroupEnabledValueAction,
       {
         modules: { presenter },
         props: {
-          overrideIsMultiDocketableEventCode: true,
+          overrideForRequestAccess: true,
         },
         state: {
           caseDetail: testCase,

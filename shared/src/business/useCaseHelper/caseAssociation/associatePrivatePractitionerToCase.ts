@@ -5,7 +5,6 @@ const { UserCase } = require('../../entities/UserCase');
 
 /**
  * associatePrivatePractitionerToCase
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -21,6 +20,13 @@ exports.associatePrivatePractitionerToCase = async ({
   representing,
   serviceIndicator,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  consolidatedCasesDocketNumbers: string[];
+  serviceIndicator: string;
+  user: RawUser;
+  representing: string[];
 }) => {
   let docketNumbersToAssociate: string[] = [];
 
