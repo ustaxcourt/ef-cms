@@ -45,7 +45,7 @@ const verifyCorrectFileDocumentButton = (
 
 const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   return it('should verify docket entry was filed across the entire consolidated case group', async () => {
-    cerebralTest.consolidatedCaseDetailGroup.forEach(
+    cerebralTest.consolidatedCaseDetailGroup.map(
       async consolidatedCaseBefore => {
         await cerebralTest.runSequence('gotoCaseDetailSequence', {
           docketNumber: consolidatedCaseBefore.docketNumber,
