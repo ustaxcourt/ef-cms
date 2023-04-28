@@ -24,27 +24,25 @@ describe('acquireLock', () => {
   beforeEach(() => {
     mockCall = {
       applicationContext,
-      identifier: '123-45',
+      identifier: 'case|123-45',
       onLockError,
-      prefix: 'case',
     };
     mockFeatureFlagValue = true; // enabled
     mockLock = undefined; // unlocked
   });
 
-  it('gets the current lock from persistence for the given prefix and identifier', async () => {
+  it('gets the current lock from persistence for the given identifier', async () => {
     await acquireLock(mockCall);
     expect(
       applicationContext.getPersistenceGateway().getLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
   });
 
-  it('gets the current lock for the given prefix and an array of identifiers', async () => {
-    mockCall.identifier = ['123-45', '678-90'];
+  it('gets the current lock for the given array of identifiers', async () => {
+    mockCall.identifier = ['case|123-45', 'case|678-90'];
     await acquireLock(mockCall);
     expect(
       applicationContext.getPersistenceGateway().getLock,
@@ -53,15 +51,13 @@ describe('acquireLock', () => {
       applicationContext.getPersistenceGateway().getLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
     expect(
       applicationContext.getPersistenceGateway().getLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: '678-90',
-      prefix: 'case',
+      identifier: 'case|678-90',
     });
   });
 
@@ -188,7 +184,6 @@ describe('acquireLock', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         identifier: mockCall.identifier,
-        prefix: mockCall.prefix,
         ttl: 30,
       });
     });
@@ -200,8 +195,7 @@ describe('withLocking', () => {
   const getLockInfo = jest
     .fn()
     .mockImplementation((_applicationContext, options) => ({
-      identifier: options.docketNumber,
-      prefix: 'case',
+      identifier: `case|${options.docketNumber}`,
       ttl: 60,
     }));
   let func;
@@ -233,7 +227,7 @@ describe('withLocking', () => {
         mockFeatureFlagValue = false; // disabled
       });
 
-      it('does not throw a ServiceUnavailableError if the feature flag is false and we could not acquire the lock on the specified prefix and identifier', async () => {
+      it('does not throw a ServiceUnavailableError if the feature flag is false and we could not acquire the lock on the specified identifier', async () => {
         await expect(
           func(applicationContext, { docketNumber: '123-45' }),
         ).resolves.not.toThrow();
@@ -250,8 +244,7 @@ describe('withLocking', () => {
           applicationContext.getPersistenceGateway().createLock,
         ).toHaveBeenCalledWith({
           applicationContext,
-          identifier: '123-45',
-          prefix: 'case',
+          identifier: 'case|123-45',
           ttl: 60,
         });
       });
@@ -308,14 +301,13 @@ describe('withLocking', () => {
       mockLock = undefined; // unlocked
     });
 
-    it('creates the lock for the specified prefix and identifier', async () => {
+    it('creates the lock for the specified identifier', async () => {
       await func(applicationContext, { docketNumber: '123-45' });
       expect(
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: '123-45',
-        prefix: 'case',
+        identifier: 'case|123-45',
         ttl: 60,
       });
       expect(
@@ -331,14 +323,13 @@ describe('withLocking', () => {
       });
     });
 
-    it('removes the lock for the specified prefix and identifier', async () => {
+    it('removes the lock for the specified identifier', async () => {
       await func(applicationContext, { docketNumber: '123-45' });
       expect(
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: '123-45',
-        prefix: 'case',
+        identifier: 'case|123-45',
       });
       expect(
         applicationContext.getPersistenceGateway().removeLock,
@@ -364,8 +355,7 @@ describe('withLocking', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: '123-45',
-        prefix: 'case',
+        identifier: 'case|123-45',
       });
       expect(
         applicationContext.getPersistenceGateway().removeLock,
@@ -403,19 +393,17 @@ describe('checkLock', () => {
     mockFeatureFlagValue = true; // enabled
     mockCall = {
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     };
   });
 
-  it('calls persistence to see if a lock exists for the specified identifier and prefix', async () => {
+  it('calls persistence to see if a lock exists for the specified identifier', async () => {
     await checkLock(mockCall);
     expect(
       applicationContext.getPersistenceGateway().getLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
   });
 
@@ -494,8 +482,7 @@ describe('removeLock', () => {
   beforeEach(() => {
     mockCall = {
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     };
   });
 
@@ -508,8 +495,7 @@ describe('removeLock', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: '123-45',
-      prefix: 'case',
+      identifier: 'case|123-45',
     });
   });
 
@@ -525,7 +511,6 @@ describe('removeLock', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         identifier,
-        prefix: 'case',
       });
     });
   });
