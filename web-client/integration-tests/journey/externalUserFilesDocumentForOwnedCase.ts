@@ -4,7 +4,7 @@ import { contactPrimaryFromState } from '../helpers';
 export const externalUserFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
-  fileAcrossConsolidatedGroup,
+  fileAcrossConsolidatedGroup?,
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
