@@ -13,7 +13,7 @@ export const createTrialSessionWorkingCopy = ({
   trialSessionWorkingCopy,
 }: {
   applicationContext: IApplicationContext;
-  trialSessionWorkingCopy: TTrialSessionWorkingCopyData;
+  trialSessionWorkingCopy: RawTrialSessionWorkingCopy;
 }) =>
   put({
     Item: {

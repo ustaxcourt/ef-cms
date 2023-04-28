@@ -4,59 +4,6 @@
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
 */
 
-type TRawPenalty = {
-  name: string;
-  penaltyAmount: number;
-  penaltyType: string;
-};
-
-type TSectionWorkItem = {
-  createdAt: string;
-  docketEntry: RawDocketEntry[];
-  docketNumber: string;
-  docketNumberSuffix: string;
-  messages: any;
-  section: string;
-  sentBy: string;
-};
-
-type TUserContact = {
-  address1: string;
-  address2: string;
-  address3: string;
-  city: string;
-  country: string;
-  countryType: string;
-  phone: string;
-  postalCode: string;
-  state: string;
-};
-
-type TTrialSessionWorkingCopyData = {
-  caseMetadata: any;
-  filters: {
-    basisReached: boolean;
-    continued: boolean;
-    definiteTrial: boolean;
-    dismissed: boolean;
-    motionToDismiss: boolean;
-    probableSettlement: boolean;
-    probableTrial: boolean;
-    recall: boolean;
-    rule122: boolean;
-    setForTrial: boolean;
-    settled: boolean;
-    showAll: boolean;
-    statusUnassigned: boolean;
-    submittedCAV: boolean;
-  };
-  sessionNotes: string;
-  sort: string;
-  sortOrder: string;
-  trialSessionId: string;
-  userId: string;
-};
-
 type TCaseEntity = {
   getDocketEntryById: (options: { docketEntryId: string }) => any;
   addDocketEntry: (docketEntry: any) => unknown;
