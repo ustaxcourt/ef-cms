@@ -294,6 +294,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
+    isDateWithinDateRange: jest.fn(),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
