@@ -99,10 +99,16 @@ export const addConsolidatedCase = async (
   await Promise.all(updateCasePromises);
 };
 
+export const determineEntitiesToLock = (
+  _applicationContext,
+  { docketNumber, docketNumberToConsolidateWith },
+) => ({
+  identifier: [docketNumber, docketNumberToConsolidateWith].map(
+    item => `case|${item}`,
+  ),
+});
+
 export const addConsolidatedCaseInteractor = withLocking(
   addConsolidatedCase,
-  (_applicationContext, { docketNumber, docketNumberToConsolidateWith }) => ({
-    identifier: [docketNumber, docketNumberToConsolidateWith],
-    prefix: 'case',
-  }),
+  determineEntitiesToLock,
 );

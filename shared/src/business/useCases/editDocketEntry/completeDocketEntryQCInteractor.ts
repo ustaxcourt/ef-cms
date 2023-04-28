@@ -383,8 +383,7 @@ const completeDocketEntryQC = async (
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
   (_applicationContext: IApplicationContext, { entryMetadata }) => ({
-    identifier: entryMetadata.docketEntryId,
-    prefix: 'docket-entry',
+    identifier: `docket-entry|${entryMetadata.docketEntryId}`,
   }),
   new InvalidRequest('The document is currently being updated'),
 );

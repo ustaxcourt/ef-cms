@@ -302,8 +302,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: caseOrder?.map(({ docketNumber }) => docketNumber),
-    prefix: 'case',
+    identifier: caseOrder?.map(({ docketNumber }) => `case|${docketNumber}`),
     ttl: 900,
   };
 };

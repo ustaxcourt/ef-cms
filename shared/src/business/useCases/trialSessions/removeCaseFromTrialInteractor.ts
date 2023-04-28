@@ -115,7 +115,6 @@ export const removeCaseFromTrialInteractor = withLocking(
     _applicationContext: IApplicationContext,
     { docketNumber }: { docketNumber: string },
   ) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

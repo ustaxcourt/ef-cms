@@ -49,7 +49,6 @@ export const sealCase = async (
 export const sealCaseInteractor = withLocking(
   sealCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

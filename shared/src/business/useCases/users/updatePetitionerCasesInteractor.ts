@@ -1,4 +1,3 @@
-import { ServiceUnavailableError } from '../../../errors/errors';
 import { updatePetitionerCases } from './verifyUserPendingEmailInteractor';
 
 export const updatePetitionerCasesInteractor = async ({
@@ -14,11 +13,7 @@ export const updatePetitionerCasesInteractor = async ({
 
   await applicationContext.getUseCaseHelpers().acquireLock({
     applicationContext,
-    identifier: docketNumbers,
-    onLockError: new ServiceUnavailableError(
-      'One of the docket numbers is being updated',
-    ),
-    prefix: 'case',
+    identifier: docketNumbers.map(item => `case|${item}`),
     retries: 10,
     ttl: 900,
     waitTime: 5000,
@@ -32,7 +27,6 @@ export const updatePetitionerCasesInteractor = async ({
 
   await applicationContext.getPersistenceGateway().removeLock({
     applicationContext,
-    identifier: docketNumbers,
-    prefix: 'case',
+    identifier: docketNumbers.map(item => `case|${item}`),
   });
 };

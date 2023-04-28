@@ -29,16 +29,11 @@ describe('determineEntitiesToLock', () => {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     };
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue(['111-20', '222-20', '333-20']);
   });
 
-  it('should return an object that includes the prefix case', async () => {
-    const { prefix } = await determineEntitiesToLock(
-      applicationContext,
-      mockParams,
-    );
-
-    expect(prefix).toBe('case');
-  });
   it('should lookup the docket numbers for the specified user', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
     expect(
@@ -49,17 +44,14 @@ describe('determineEntitiesToLock', () => {
     });
   });
   it('should return an object that includes all of the docketNumbers associated with the user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(['111-20', '222-20', '333-20']);
     const { identifier } = await determineEntitiesToLock(
       applicationContext,
       mockParams,
     );
 
-    expect(identifier).toContain('111-20');
-    expect(identifier).toContain('222-20');
-    expect(identifier).toContain('333-20');
+    expect(identifier).toContain('case|111-20');
+    expect(identifier).toContain('case|222-20');
+    expect(identifier).toContain('case|333-20');
   });
 });
 
@@ -175,8 +167,7 @@ describe('updateUserContactInformationInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
         ttl: 900,
       });
     });
@@ -191,8 +182,7 @@ describe('updateUserContactInformationInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: MOCK_CASE.docketNumber,
-        prefix: 'case',
+        identifier: `case|${MOCK_CASE.docketNumber}`,
       });
     });
   });

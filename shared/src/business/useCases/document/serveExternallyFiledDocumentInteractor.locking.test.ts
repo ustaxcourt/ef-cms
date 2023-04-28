@@ -22,30 +22,24 @@ describe('determineEntitiesToLock', () => {
     };
   });
 
-  it('should return an object that includes the prefix case', () => {
-    expect(determineEntitiesToLock(applicationContext, mockParams).prefix).toBe(
-      'case',
-    );
-  });
-
   it('should return an object that includes the subjectCaseDocketNumber in the identifiers', () => {
     mockParams.subjectCaseDocketNumber = '123-20';
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifier,
-    ).toContain('123-20');
+    ).toContain('case|123-20');
   });
 
   it('should return an object that includes all of the docketNumbers specified in the identifiers', () => {
     mockParams.docketNumbers = ['111-20', '222-20', '333-20'];
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifier,
-    ).toContain('111-20');
+    ).toContain('case|111-20');
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifier,
-    ).toContain('222-20');
+    ).toContain('case|222-20');
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifier,
-    ).toContain('333-20');
+    ).toContain('case|333-20');
   });
 });
 
@@ -186,8 +180,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
         ttl: 900,
       });
     });
@@ -202,8 +195,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCase.docketNumber,
-        prefix: 'case',
+        identifier: `case|${mockCase.docketNumber}`,
       });
     });
   });

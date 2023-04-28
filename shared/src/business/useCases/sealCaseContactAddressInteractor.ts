@@ -63,7 +63,6 @@ export const sealCaseContactAddress = async (
 export const sealCaseContactAddressInteractor = withLocking(
   sealCaseContactAddress,
   (_applicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

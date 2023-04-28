@@ -28,15 +28,6 @@ describe('determineEntitiesToLock', () => {
       .getTrialSessionById.mockReturnValue({ caseOrder: mockCases });
   });
 
-  it('should return an object that includes the prefix case', async () => {
-    const { prefix } = await determineEntitiesToLock(
-      applicationContext,
-      mockParams,
-    );
-
-    expect(prefix).toBe('case');
-  });
-
   it('should lookup the specified trial session', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
     expect(
@@ -53,9 +44,9 @@ describe('determineEntitiesToLock', () => {
       mockParams,
     );
 
-    expect(identifier).toContain(mockCases[0].docketNumber);
-    expect(identifier).toContain(mockCases[1].docketNumber);
-    expect(identifier).toContain(mockCases[2].docketNumber);
+    expect(identifier).toContain(`case|${mockCases[1].docketNumber}`);
+    expect(identifier).toContain(`case|${mockCases[0].docketNumber}`);
+    expect(identifier).toContain(`case|${mockCases[2].docketNumber}`);
   });
 });
 
@@ -152,8 +143,7 @@ describe('updateTrialSessionInteractor', () => {
           applicationContext.getPersistenceGateway().createLock,
         ).toHaveBeenCalledWith({
           applicationContext,
-          identifier: docketNumber,
-          prefix: 'case',
+          identifier: `case|${docketNumber}`,
           ttl: 900,
         });
       });
@@ -167,8 +157,7 @@ describe('updateTrialSessionInteractor', () => {
           applicationContext.getPersistenceGateway().removeLock,
         ).toHaveBeenCalledWith({
           applicationContext,
-          identifier: docketNumber,
-          prefix: 'case',
+          identifier: `case|${docketNumber}`,
         });
       });
     });

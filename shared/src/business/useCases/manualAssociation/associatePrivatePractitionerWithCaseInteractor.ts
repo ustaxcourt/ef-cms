@@ -55,7 +55,6 @@ export const associatePrivatePractitionerWithCase = async (
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(
   associatePrivatePractitionerWithCase,
   (_applicationContext: IApplicationContext, { docketNumber }) => ({
-    identifier: docketNumber,
-    prefix: 'case',
+    identifier: `case|${docketNumber}`,
   }),
 );

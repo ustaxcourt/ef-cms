@@ -71,8 +71,7 @@ describe('deleteCaseDeadlineInteractor', () => {
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: MOCK_CASE_WITHOUT_PENDING.docketNumber,
-      prefix: 'case',
+      identifier: `case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`,
       ttl: 30,
     });
 
@@ -80,8 +79,7 @@ describe('deleteCaseDeadlineInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: MOCK_CASE_WITHOUT_PENDING.docketNumber,
-      prefix: 'case',
+      identifier: `case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`,
     });
   });
 

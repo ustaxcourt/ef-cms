@@ -313,7 +313,7 @@ export const handleLockError = async (
 
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
-): Promise<{ identifier: string[]; prefix: string; ttl: number }> => {
+): Promise<{ identifier: string[]; ttl: number }> => {
   const user = await applicationContext.getCurrentUser();
 
   const docketNumbers: string[] = await applicationContext
@@ -324,8 +324,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: docketNumbers,
-    prefix: 'case',
+    identifier: docketNumbers.map(item => `case|${item}`),
     ttl: 900,
   };
 };

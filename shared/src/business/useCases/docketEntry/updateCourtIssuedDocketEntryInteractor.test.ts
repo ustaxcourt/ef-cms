@@ -185,8 +185,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: caseRecord.docketNumber,
-      prefix: 'case',
+      identifier: `case|${caseRecord.docketNumber}`,
       ttl: 30,
     });
 
@@ -194,8 +193,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: caseRecord.docketNumber,
-      prefix: 'case',
+      identifier: `case|${caseRecord.docketNumber}`,
     });
   });
 });
