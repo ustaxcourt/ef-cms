@@ -68,10 +68,6 @@ describe('External User files a document across a consolidated case group', () =
   const consolidatedCaseDocketNumber2 = '104-23';
   const consolidatedCaseDocketNumber3 = '105-23';
 
-  const overrides = {
-    fileAcrossConsolidatedGroup: true,
-  };
-
   beforeAll(async () => {
     await seedDatabase(seedData);
   });
@@ -88,7 +84,7 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber1,
       shouldShowFileDocumentButton: true,
     });
-    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, overrides);
+    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
     loginAs(cerebralTest, 'irspractitioner@example.com');
@@ -116,7 +112,7 @@ describe('External User files a document across a consolidated case group', () =
   describe('petitioner', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber1);
-    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, overrides);
+    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 });
