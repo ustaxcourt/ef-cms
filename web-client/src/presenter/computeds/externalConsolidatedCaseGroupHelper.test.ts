@@ -70,7 +70,7 @@ describe('externalConsolidatedCaseGroupHelper', () => {
       caseDetail: unconsolidatedCase,
     };
 
-    const results = runCompute(externalConsolidatedCaseGroupHelper, {
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
       state,
     });
 
@@ -80,7 +80,7 @@ describe('externalConsolidatedCaseGroupHelper', () => {
   });
 
   it('should return formattedCurrentCasePetitionerNames when a consolidated case is on state', () => {
-    const results = runCompute(externalConsolidatedCaseGroupHelper, {
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
       state,
     });
 
@@ -90,7 +90,7 @@ describe('externalConsolidatedCaseGroupHelper', () => {
   });
 
   it('should return consolidatedGroupServiceParties when a consolidated case is on state', () => {
-    const results = runCompute(externalConsolidatedCaseGroupHelper, {
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
       state,
     });
 
@@ -110,7 +110,7 @@ describe('externalConsolidatedCaseGroupHelper', () => {
   });
 
   it('should return formattedConsolidatedCaseList when a consolidated case is on state', () => {
-    const results = runCompute(externalConsolidatedCaseGroupHelper, {
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
       state,
     });
 
