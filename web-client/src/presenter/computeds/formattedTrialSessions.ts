@@ -29,11 +29,14 @@ export const formatSession = (session, applicationContext) => {
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
   if (session.formattedStartDate && session.isCalendared) {
-    session.showAlertForNOTT = applicationContext
-      .getUtilities()
-      .isDateWithinDateRange({
+    const { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted } =
+      applicationContext.getUtilities().isDateWithinDateRange({
         trialStartDate: session.formattedStartDate,
       });
+
+    session.showAlertForNOTT = shouldShowAlertForNOTT;
+    session.thirtyDaysBeforeTrialFormatted = thirtyDaysBeforeTrialFormatted;
+    session.alertMessageForNOTT = `The 30-day notice is due before ${thirtyDaysBeforeTrialFormatted}`;
   }
 
   return session;

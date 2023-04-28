@@ -526,7 +526,8 @@ export const getBusinessDateInFuture = ({
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
 };
 
-export const isDateWithinDateRange = ({ trialStartDate }): boolean => {
+export const isDateWithinDateRange = ({ trialStartDate }) => {
+  console.log('???', trialStartDate);
   const thirtyFiveDaysBeforeTrial = prepareDateFromString(
     trialStartDate,
     FORMATS.MMDDYY,
@@ -541,12 +542,18 @@ export const isDateWithinDateRange = ({ trialStartDate }): boolean => {
     ['days']: 30,
   });
 
-  const today = prepareDateFromString(null, null);
-
+  const today = DateTime.now().setZone(USTC_TZ);
   const dateRangeInterval = Interval.fromDateTimes(
     thirtyFiveDaysBeforeTrial,
     thirtyDaysBeforeTrial,
   );
 
-  return dateRangeInterval.contains(today);
+  const shouldShowAlertForNOTT = dateRangeInterval.contains(today);
+
+  const thirtyDaysBeforeTrialFormatted = formatDateString(
+    thirtyDaysBeforeTrial,
+    FORMATS.MMDDYY,
+  );
+
+  return { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted };
 };
