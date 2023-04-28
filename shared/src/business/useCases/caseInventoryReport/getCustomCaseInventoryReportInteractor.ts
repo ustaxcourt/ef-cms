@@ -1,4 +1,5 @@
 import { CaseStatus, CaseType } from '../../entities/EntityConstants';
+import { CustomCaseFilingMethods } from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,7 +11,7 @@ export type CustomCaseInventoryReportFilters = {
   caseTypes: CaseType[];
   createEndDate: string;
   createStartDate: string;
-  filingMethod: 'all' | 'electronic' | 'paper';
+  filingMethod: CustomCaseFilingMethods;
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
