@@ -318,7 +318,6 @@ import { validateDocumentInteractor } from '../../shared/src/business/useCases/v
 import { validateEditPetitionerCounselInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPetitionerCounselInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
-import { validateFileInteractor } from '../../shared/src/business/useCases/externalDocument/validateFileInteractor';
 import { validateHearingNoteInteractor } from '../../shared/src/business/useCases/validateHearingNoteInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
@@ -563,7 +562,6 @@ const allUseCases = {
   validateEditPetitionerCounselInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
-  validateFileInteractor,
   validateHearingNoteInteractor,
   validateNoteInteractor,
   validateOpinionAdvancedSearchInteractor,

@@ -11,37 +11,26 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
-import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const reviewExternalDocumentInformationSequence = [
   clearAlertsAction,
   startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setFilersFromFilersMapAction,
-  validateFileAction,
+  validateExternalDocumentInformationAction,
   {
     error: [
-      startShowValidationAction,
       setAlertErrorAction,
       setValidationErrorsAction,
+      setValidationAlertErrorsAction,
     ],
     success: [
-      validateExternalDocumentInformationAction,
-      {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          setValidationAlertErrorsAction,
-        ],
-        success: [
-          setSupportingDocumentScenarioAction,
-          generateTitleAction,
-          generateTitleForSupportingDocumentsAction,
-          stopShowValidationAction,
-          clearAlertsAction,
-          navigateToReviewFileADocumentAction,
-        ],
-      },
+      setSupportingDocumentScenarioAction,
+      generateTitleAction,
+      generateTitleForSupportingDocumentsAction,
+      stopShowValidationAction,
+      clearAlertsAction,
+      navigateToReviewFileADocumentAction,
     ],
   },
 ];

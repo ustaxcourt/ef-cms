@@ -494,7 +494,6 @@ import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
-import { validateFileInputSequence } from './sequences/validateFileInputSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
@@ -1005,7 +1004,6 @@ const sequences = {
   validateEditPetitionerCounselSequence,
   validateEditRespondentCounselSequence,
   validateExternalDocumentInformationSequence,
-  validateFileInputSequence,
   validateNoteSequence,
   validateOpinionSearchSequence,
   validateOrderSearchSequence,

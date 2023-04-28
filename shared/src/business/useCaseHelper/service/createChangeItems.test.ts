@@ -5,16 +5,11 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndServeDocketEntry } from './createChangeItems';
 
 describe('generateAndServeDocketEntry', () => {
-  let testCaseEntity;
   let testArguments;
+  let testCaseEntity;
   let testUser;
 
   beforeEach(() => {
-    testUser = {
-      name: 'Test Admissionsclerk',
-      role: 'Admissionsclerk',
-    };
-    testCaseEntity = new Case(MOCK_CASE, { applicationContext });
     testArguments = {
       applicationContext,
       barNumber: 'DD44444',
@@ -50,6 +45,13 @@ describe('generateAndServeDocketEntry', () => {
         },
       ],
     };
+
+    testCaseEntity = new Case(MOCK_CASE, { applicationContext });
+
+    testUser = {
+      name: 'Test Admissionsclerk',
+      role: 'Admissionsclerk',
+    };
   });
 
   it('should send service emails', async () => {
@@ -59,6 +61,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
+
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
@@ -71,6 +74,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toHaveBeenCalled();
@@ -83,6 +87,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: false,
       user: testUser,
     });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
@@ -106,6 +111,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
@@ -129,6 +135,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toHaveBeenCalled();
@@ -155,6 +162,7 @@ describe('generateAndServeDocketEntry', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
     });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toHaveBeenCalled();
@@ -181,6 +189,7 @@ describe('generateAndServeDocketEntry', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
     });
+
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();

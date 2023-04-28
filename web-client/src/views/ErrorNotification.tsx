@@ -32,9 +32,7 @@ export const ErrorNotification = connect(
                 <h3 className="usa-alert__heading">{alertError.title}</h3>
               </Focus>
               {alertHelper.showSingleMessage && (
-                <ul>
-                  <li className="usa-alert__text">{alertError.message}</li>
-                </ul>
+                <p className="usa-alert__text">{alertError.message}</p>
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
