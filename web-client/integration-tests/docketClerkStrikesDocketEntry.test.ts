@@ -45,7 +45,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     index: 3,
     value: false,
   });
-  docketClerkQCsDocketEntry(cerebralTest, { index: 2 });
+  docketClerkQCsDocketEntry(cerebralTest, { index: 3 });
   docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
 
   docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 4);
