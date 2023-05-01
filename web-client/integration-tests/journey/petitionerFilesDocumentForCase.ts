@@ -1,10 +1,8 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('petitioner files document for case', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -395,6 +393,15 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: fakeFile,
       },
     );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFileSize',
+        value: 1,
+      },
+    );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -402,11 +409,28 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: fakeFile,
       },
     );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'secondaryDocumentFileSize',
+        value: 1,
+      },
+    );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.supportingDocumentFile',
         value: fakeFile,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.supportingDocumentFileSize',
+        value: 1,
       },
     );
 
@@ -487,6 +511,14 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       {
         key: 'secondarySupportingDocuments.0.supportingDocumentFile',
         value: fakeFile,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'secondarySupportingDocuments.0.supportingDocumentFileSize',
+        value: 1,
       },
     );
 

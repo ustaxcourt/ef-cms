@@ -34,11 +34,11 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     cerebralTest.docketNumber = docketNumber;
   });
 
-  loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
-
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkChecksDocketEntryEditLink(cerebralTest, {

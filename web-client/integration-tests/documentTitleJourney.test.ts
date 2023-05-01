@@ -12,11 +12,11 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Document title journey', () => {
+  const cerebralTest = setupTest();
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const cerebralTest = setupTest();
 
   const formattedWorkQueue = withAppContextDecorator(
     formattedWorkQueueComputed,
@@ -50,12 +50,12 @@ describe('Document title journey', () => {
       scenario: 'Standard',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentToSelect)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
@@ -68,39 +68,24 @@ describe('Document title journey', () => {
 
     expect(cerebralTest.getState('form.documentType')).toEqual('Exhibit(s)');
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'hasSupportingDocuments',
-        value: false,
-      },
-    );
+    const { contactId } = contactPrimaryFromState(cerebralTest);
+    const documentDetails = {
+      attachments: false,
+      hasSupportingDocuments: false,
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
+      [`filersMap.${contactId}`]: true,
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'attachments',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+    for (const [key, value] of Object.entries(documentDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
@@ -187,15 +172,16 @@ describe('Document title journey', () => {
       ordinalValue: 'Other',
       otherIteration: '16',
       primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
       scenario: 'Nonstandard F',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentToSelect)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
