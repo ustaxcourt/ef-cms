@@ -125,7 +125,7 @@ export const TrialSessionsTable = connect(
                 <tbody key={item.trialSessionId}>
                   <tr className="trial-sessions-row">
                     <td>
-                      {item.showAlertForNOTT && (
+                      {item.showAlertForNOTTReminder && (
                         <FontAwesomeIcon
                           className="fa-icon-blue margin-right-05"
                           icon="clock"

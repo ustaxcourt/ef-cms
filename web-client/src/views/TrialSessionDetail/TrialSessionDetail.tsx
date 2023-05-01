@@ -42,7 +42,7 @@ export const TrialSessionDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WarningNotification />
-          {formattedTrialSessionDetails.showAlertForNOTT && (
+          {formattedTrialSessionDetails.showAlertForNOTTReminder && (
             <WarningNotificationComponent
               alertWarning={{
                 dismissIcon: 'paper-plane',
