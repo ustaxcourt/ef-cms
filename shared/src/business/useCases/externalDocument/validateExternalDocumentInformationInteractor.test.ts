@@ -15,7 +15,7 @@ describe('validateExternalDocumentInformationInteractor', () => {
     });
   });
 
-  it('returns no errors when all fields are defined', () => {
+  it('returns no errors when all required fields are defined', () => {
     const errors = validateExternalDocumentInformationInteractor({
       documentMetadata: {
         attachments: false,
@@ -23,6 +23,7 @@ describe('validateExternalDocumentInformationInteractor', () => {
         filers: ['759c5880-0c81-4a50-a38b-662da37e2954'],
         hasSupportingDocuments: false,
         primaryDocumentFile: { file: 'yes!' },
+        primaryDocumentFileSize: 1,
       },
     });
 

@@ -198,7 +198,10 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
           ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
+          baseDoc.supportingDocuments[0].supportingDocumentFileSize = 1;
+
           expect(errors().supportingDocuments).toEqual(undefined);
         });
       });
@@ -214,7 +217,10 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
           ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
+          baseDoc.supportingDocuments[0].supportingDocumentFileSize = 1;
+
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
           ).toEqual(undefined);
@@ -374,8 +380,11 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
                 {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFileSize = 1;
+
               expect(errors().secondarySupportingDocuments).toEqual(undefined);
             });
           });
@@ -395,8 +404,11 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
                 {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFileSize = 1;
+
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(undefined);
