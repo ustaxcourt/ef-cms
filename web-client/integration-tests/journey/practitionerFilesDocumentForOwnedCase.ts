@@ -23,12 +23,12 @@ export const practitionerFilesDocumentForOwnedCase = (
       scenario: 'Standard',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentToSelect)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
@@ -44,19 +44,18 @@ export const practitionerFilesDocumentForOwnedCase = (
     );
     expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-    /* eslint-disable sort-keys-fix/sort-keys-fix */
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     const filingDetails = {
-      certificateOfService: true,
-      hasSupportingDocuments: false,
       attachments: false,
-      objections: OBJECTIONS_OPTIONS_MAP.NO,
-      certificateOfServiceMonth: '12',
+      certificateOfService: true,
       certificateOfServiceDay: '12',
+      certificateOfServiceMonth: '12',
       certificateOfServiceYear: '2000',
+      hasSupportingDocuments: false,
+      objections: OBJECTIONS_OPTIONS_MAP.NO,
       primaryDocumentFile: fakeFile,
       primaryDocumentFileSize: 1,
-      [`filersMap.${contactPrimary.contactId}`]: true,
+      [`filersMap.${contactId}`]: true,
     };
 
     for (const [key, value] of Object.entries(filingDetails)) {
