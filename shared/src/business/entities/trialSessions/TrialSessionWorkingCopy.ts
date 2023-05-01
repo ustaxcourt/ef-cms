@@ -1,3 +1,4 @@
+import { DOCKET_NUMBER_MATCHER } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
