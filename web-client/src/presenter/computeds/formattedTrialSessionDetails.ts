@@ -98,8 +98,8 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
 
       if (
-        formattedTrialSession.formattedStartDate &&
-        formattedTrialSession.isCalendared
+        formattedTrialSession.isCalendared &&
+        formattedTrialSession.formattedStartDate
       ) {
         const {
           isCurrentDateWithinReminderRange,
