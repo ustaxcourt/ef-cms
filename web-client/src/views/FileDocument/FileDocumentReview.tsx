@@ -353,20 +353,21 @@ export const FileDocumentReview = connect(
               <div className="tablet:grid-col-6 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Service Parties</h3>
+                    <h3 className="underlined margin-bottom-0">
+                      Service Parties
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-12 margin-bottom-1">
                         {externalConsolidatedCaseGroupHelper.consolidatedGroupServiceParties.map(
-                          (partyGroup, index1, parties) => (
+                          (partyGroup, index1) => (
                             <React.Fragment key={index1}>
-                              <ul className="ustc-unstyled-list without-margins">
+                              <ul className="ustc-unstyled-list without-margins service-party-divider">
                                 {Object.values(partyGroup).map(
                                   (serviceParty, index2) => {
                                     return <li key={index2}>{serviceParty}</li>;
                                   },
                                 )}
                               </ul>
-                              {index1 < parties.length - 1 && <hr />}
                             </React.Fragment>
                           ),
                         )}
