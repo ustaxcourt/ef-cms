@@ -13,7 +13,6 @@ export const fieldsToOmitBeforePersisting = [
 
 /**
  * createCase -- should usually be called via createCaseAndAssociations use-case helper.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseToCreate the case data
@@ -24,7 +23,7 @@ export const createCase = ({
   caseToCreate,
 }: {
   applicationContext: IApplicationContext;
-  caseToCreate: TCase;
+  caseToCreate: Case;
 }) =>
   put({
     Item: {

@@ -9,7 +9,6 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 
 /**
  * deleteCounselFromCaseInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case the user is attached to
@@ -71,7 +70,7 @@ export const deleteCounselFromCaseInteractor = async (
 };
 
 export const setupServiceIndicatorForUnrepresentedPetitioners = (
-  caseEntity: TCaseEntity,
+  caseEntity: Case,
 ) => {
   caseEntity.petitioners.forEach(petitioner => {
     if (
