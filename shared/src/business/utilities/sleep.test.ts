@@ -1,12 +1,13 @@
+jest.useFakeTimers();
+jest.spyOn(global, 'setTimeout');
 import { sleep } from './sleep';
 
 describe('sleep', () => {
   it('waits the specified amount of time before proceeding', async () => {
-    const start = new Date().getTime();
     const waitMs = 50;
-
+    Promise.resolve().then(() => jest.advanceTimersByTime(100));
     await sleep(waitMs);
-    const finish = new Date().getTime();
-    expect(finish).toBeGreaterThanOrEqual(start + waitMs);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 50);
   });
 });
