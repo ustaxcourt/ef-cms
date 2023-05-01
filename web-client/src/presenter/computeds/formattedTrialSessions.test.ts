@@ -324,7 +324,7 @@ describe('formattedTrialSessions', () => {
         proceedingType: 'Remote',
         sessionStatus: 'New',
         sessionType: SESSION_TYPES.small,
-        showAlertForNOTT: undefined,
+        showAlertForNOTTReminder: undefined,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -552,7 +552,7 @@ describe('formattedTrialSessions', () => {
     ]);
   });
 
-  it('should set showAlertForNOTT for calendared sessions based on whether the current date falls within the range for an NOTT reminder or not', () => {
+  it('should set showAlertForNOTTReminder for calendared sessions based on whether the current date falls within the range for an NOTT reminder or not', () => {
     applicationContext
       .getUtilities()
       .isDateWithinDateRange.mockReturnValueOnce(false)
@@ -566,13 +566,13 @@ describe('formattedTrialSessions', () => {
     });
     expect(result.filteredTrialSessions['Open'][0].sessions).toMatchObject([
       {
-        showAlertForNOTT: true,
+        showAlertForNOTTReminder: true,
       },
       {
-        showAlertForNOTT: false,
+        showAlertForNOTTReminder: false,
       },
       {
-        showAlertForNOTT: true,
+        showAlertForNOTTReminder: true,
       },
     ]);
   });

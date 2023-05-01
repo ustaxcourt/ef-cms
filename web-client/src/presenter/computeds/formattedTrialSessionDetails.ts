@@ -7,14 +7,14 @@ export const setNoticeOfTrialReminder = ({
 }) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
 
-  const thirtyFiveDaysBeforeTrial = applicationContext
+  const thirtyFiveDaysBeforeTrial: any = applicationContext
     .getUtilities()
     .prepareDateFromString(trialStartDate, DATE_FORMATS.MMDDYY)
     .minus({
       ['days']: 35,
     });
 
-  const thirtyDaysBeforeTrial = applicationContext
+  const thirtyDaysBeforeTrial: any = applicationContext
     .getUtilities()
     .prepareDateFromString(trialStartDate, DATE_FORMATS.MMDDYY)
     .minus({
@@ -28,13 +28,11 @@ export const setNoticeOfTrialReminder = ({
       intervalStartDate: thirtyFiveDaysBeforeTrial,
     });
 
-  const shouldShowAlertForNOTT: boolean = isCurrentDateWithinReminderRange;
-
-  const thirtyDaysBeforeTrialFormatted = applicationContext
+  const thirtyDaysBeforeTrialFormatted: any = applicationContext
     .getUtilities()
     .formatDateString(thirtyDaysBeforeTrial, DATE_FORMATS.MMDDYY);
 
-  return { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted };
+  return { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted };
 };
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
@@ -103,13 +101,16 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         formattedTrialSession.formattedStartDate &&
         formattedTrialSession.isCalendared
       ) {
-        const { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted } =
-          setNoticeOfTrialReminder({
-            applicationContext,
-            trialStartDate: formattedTrialSession.formattedStartDate,
-          });
+        const {
+          isCurrentDateWithinReminderRange,
+          thirtyDaysBeforeTrialFormatted,
+        } = setNoticeOfTrialReminder({
+          applicationContext,
+          trialStartDate: formattedTrialSession.formattedStartDate,
+        });
 
-        formattedTrialSession.showAlertForNOTT = shouldShowAlertForNOTT;
+        formattedTrialSession.showAlertForNOTTReminder =
+          isCurrentDateWithinReminderRange;
         formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}.
         Have notices been served?`;
       }

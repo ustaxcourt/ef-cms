@@ -30,14 +30,13 @@ export const formatSession = (session, applicationContext) => {
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
   if (session.formattedStartDate && session.isCalendared) {
-    const { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted } =
+    const { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted } =
       setNoticeOfTrialReminder({
         applicationContext,
         trialStartDate: session.formattedStartDate,
       });
 
-    session.showAlertForNOTT = shouldShowAlertForNOTT;
-    session.thirtyDaysBeforeTrialFormatted = thirtyDaysBeforeTrialFormatted;
+    session.showAlertForNOTTReminder = isCurrentDateWithinReminderRange;
     session.alertMessageForNOTT = `The 30-day notice is due before ${thirtyDaysBeforeTrialFormatted}`;
   }
 
