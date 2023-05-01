@@ -1,11 +1,11 @@
 /* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
-import { ServicePartiesCard } from './ServicePartiesCard';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -14,8 +14,6 @@ import classNames from 'classnames';
 
 export const FileDocumentReview = connect(
   {
-    externalConsolidatedCaseGroupHelper:
-      state.externalConsolidatedCaseGroupHelper,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -25,7 +23,6 @@ export const FileDocumentReview = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function FileDocumentReview({
-    externalConsolidatedCaseGroupHelper,
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
@@ -322,36 +319,7 @@ export const FileDocumentReview = connect(
           </div>
 
           {form.fileAcrossConsolidatedGroup && (
-            <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-6 margin-bottom-4">
-                <div className="card height-full margin-bottom-0">
-                  <div className="content-wrapper">
-                    <h3 className="underlined">
-                      Case(s) The Document(s) Will Be Filed In
-                    </h3>
-                    <div className="grid-row grid-gap">
-                      <div className="tablet:grid-col-12 margin-bottom-1">
-                        <div className="tablet:margin-bottom-0 margin-bottom-205">
-                          <label className="usa-label" htmlFor="primary-filing">
-                            Docket Numbers and Petitioners
-                          </label>
-                          <ul className="ustc-unstyled-consolidated-case-list padding-left-0">
-                            {externalConsolidatedCaseGroupHelper.formattedConsolidatedCaseList.map(
-                              (item, index) => (
-                                <li className="margin-bottom-2" key={index}>
-                                  {item}
-                                </li>
-                              ),
-                            )}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <ServicePartiesCard />
-            </div>
+            <ExternalConsolidatedGroupCards />
           )}
         </div>
 

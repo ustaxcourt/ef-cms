@@ -1,10 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedGroupCards } from '../FileDocument/ExternalConsolidatedGroupCards';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
-import { ServicePartiesCard } from '../FileDocument/ServicePartiesCard';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,8 +12,6 @@ import classNames from 'classnames';
 
 export const RequestAccessReview = connect(
   {
-    externalConsolidatedCaseGroupHelper:
-      state.externalConsolidatedCaseGroupHelper,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -24,7 +22,6 @@ export const RequestAccessReview = connect(
       sequences.submitCaseAssociationRequestSequence,
   },
   function RequestAccessReview({
-    externalConsolidatedCaseGroupHelper,
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
@@ -198,39 +195,7 @@ export const RequestAccessReview = connect(
           </div>
         </div>
 
-        {form.fileAcrossConsolidatedGroup && (
-          <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-6 margin-bottom-4">
-              <div className="card height-full margin-bottom-0">
-                <div className="content-wrapper">
-                  <h3 className="underlined">
-                    Case(s) The Document(s) Will Be Filed In
-                  </h3>
-                  <div className="grid-row grid-gap">
-                    <div className="tablet:grid-col-12 margin-bottom-1">
-                      <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label className="usa-label" htmlFor="primary-filing">
-                          Docket Numbers and Petitioners
-                        </label>
-                        <ul className="ustc-unstyled-consolidated-case-list padding-left-0">
-                          {externalConsolidatedCaseGroupHelper.formattedConsolidatedCaseList.map(
-                            (item, index) => (
-                              <li className="margin-bottom-2" key={index}>
-                                {item}
-                              </li>
-                            ),
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <ServicePartiesCard />
-          </div>
-        )}
+        {form.fileAcrossConsolidatedGroup && <ExternalConsolidatedGroupCards />}
 
         <div className="grid-row grid-gap margin-bottom-5">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
