@@ -1,6 +1,7 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
+import { setNoticeOfTrialReminder } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -30,7 +31,8 @@ export const formatSession = (session, applicationContext) => {
 
   if (session.formattedStartDate && session.isCalendared) {
     const { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted } =
-      applicationContext.getUtilities().isDateWithinDateRange({
+      setNoticeOfTrialReminder({
+        applicationContext,
         trialStartDate: session.formattedStartDate,
       });
 
