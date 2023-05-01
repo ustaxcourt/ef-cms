@@ -1,16 +1,17 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { contactPrimaryFromState } from '../helpers';
 import { externalConsolidatedCaseGroupHelper as externalConsolidatedCaseGroupHelperComputed } from '../../src/presenter/computeds/externalConsolidatedCaseGroupHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
-export const externalUserRequestAccessToFileAcrossConsolidatedCasesGroup = (
+export const practitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
   cerebralTest,
   { docketNumber, fakeFile },
 ) => {
-  return it('external user files a document for owned case', async () => {
+  return it('practitioner requests access to consolidated cases group', async () => {
     const caseDetailHeaderHelper = withAppContextDecorator(
       caseDetailHeaderComputed,
     );
@@ -52,6 +53,12 @@ export const externalUserRequestAccessToFileAcrossConsolidatedCasesGroup = (
         value: documentToSelect[key],
       });
     }
+
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
+    });
 
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
