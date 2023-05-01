@@ -1,13 +1,11 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const practitionerFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('Practitioner files document for owned case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDocketNumber || cerebralTest.docketNumber,
@@ -44,79 +42,32 @@ export const practitionerFilesDocumentForOwnedCase = (
     expect(cerebralTest.getState('form.documentType')).toEqual(
       'Civil Penalty Approval Form',
     );
-
     expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfService',
-        value: true,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'hasSupportingDocuments',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'attachments',
-        value: false,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'objections',
-        value: OBJECTIONS_OPTIONS_MAP.NO,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceMonth',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceDay',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceYear',
-        value: '2000',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
-
     const contactPrimary = contactPrimaryFromState(cerebralTest);
+    /* eslint-disable sort-keys-fix/sort-keys-fix */
+    const filingDetails = {
+      certificateOfService: true,
+      hasSupportingDocuments: false,
+      attachments: false,
+      objections: OBJECTIONS_OPTIONS_MAP.NO,
+      certificateOfServiceMonth: '12',
+      certificateOfServiceDay: '12',
+      certificateOfServiceYear: '2000',
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
+      [`filersMap.${contactPrimary.contactId}`]: true,
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+    for (const [key, value] of Object.entries(filingDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
