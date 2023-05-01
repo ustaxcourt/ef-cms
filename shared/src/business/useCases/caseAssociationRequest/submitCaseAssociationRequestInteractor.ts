@@ -4,8 +4,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
-import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -21,7 +19,15 @@ import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAsso
  */
 export const submitCaseAssociationRequestInteractor = async (
   applicationContext: IApplicationContext,
-  { docketNumber, filers }: { docketNumber: string; filers: string[] },
+  {
+    consolidatedCasesDocketNumbers,
+    docketNumber,
+    filers,
+  }: {
+    consolidatedCasesDocketNumbers?: string[];
+    docketNumber: string;
+    filers: string[];
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -40,17 +46,23 @@ export const submitCaseAssociationRequestInteractor = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner) {
-    return await associatePrivatePractitionerToCase({
-      applicationContext,
-      docketNumber,
-      representing: filers,
-      user,
-    });
+    return await applicationContext
+      .getUseCaseHelpers()
+      .associatePrivatePractitionerToCase({
+        applicationContext,
+        consolidatedCasesDocketNumbers,
+        docketNumber,
+        representing: filers,
+        user,
+      });
   } else if (isIrsPractitioner) {
-    return await associateIrsPractitionerToCase({
-      applicationContext,
-      docketNumber,
-      user,
-    });
+    return await applicationContext
+      .getUseCaseHelpers()
+      .associateIrsPractitionerToCase({
+        applicationContext,
+        consolidatedCasesDocketNumbers,
+        docketNumber,
+        user,
+      });
   }
 };
