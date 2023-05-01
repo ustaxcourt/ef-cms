@@ -47,15 +47,14 @@ export class Practitioner extends User {
     this.firstName = rawUser.firstName;
     this.lastName = rawUser.lastName;
     this.middleName = rawUser.middleName;
-    this.name = Practitioner.getFullName(rawUser);
+    this.name = Practitioner.getFullName(this);
     this.originalBarState = rawUser.originalBarState;
     this.practitionerNotes = rawUser.practitionerNotes;
     this.practitionerType = rawUser.practitionerType;
     this.section = this.role;
     this.suffix = rawUser.suffix;
     this.serviceIndicator =
-      rawUser.serviceIndicator ||
-      Practitioner.getDefaultServiceIndicator(rawUser);
+      rawUser.serviceIndicator || Practitioner.getDefaultServiceIndicator(this);
     this.updatedEmail = rawUser.updatedEmail;
     if (this.admissionsStatus === 'Active') {
       this.role = roleMap[this.employer];
@@ -214,7 +213,6 @@ export class Practitioner extends User {
 
   /**
    * returns the full concatenated name for the given practitioner data
-   *
    * @param {object} practitionerData data to pull name parts from
    * @returns {string} the concatenated firstName, middleName, and lastName with suffix
    */
@@ -230,7 +228,6 @@ export class Practitioner extends User {
 
   /**
    * returns a default service indicator based on whether the presence of an email address
-   *
    * @param {object} practitionerData data where an email may exist
    * @returns {string} the service indicator for the given condition
    */

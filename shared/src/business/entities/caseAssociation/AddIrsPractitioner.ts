@@ -10,7 +10,7 @@ export class AddIrsPractitioner extends JoiValidationEntity {
 
   constructor(rawProps: any) {
     super('AddIrsPractitioner');
-    this.email = rawProps.email;
+    this.email = rawProps.user?.email;
     this.serviceIndicator = rawProps.serviceIndicator;
     this.user = rawProps.user;
   }
