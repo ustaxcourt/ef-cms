@@ -1,9 +1,6 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -271,6 +268,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
