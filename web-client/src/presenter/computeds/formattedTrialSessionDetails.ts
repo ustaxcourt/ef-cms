@@ -1,6 +1,42 @@
 import { isEmpty, isEqual } from 'lodash';
 import { state } from 'cerebral';
 
+export const setNoticeOfTrialReminder = ({
+  applicationContext,
+  trialStartDate,
+}) => {
+  const { DATE_FORMATS } = applicationContext.getConstants();
+
+  const thirtyFiveDaysBeforeTrial = applicationContext
+    .getUtilities()
+    .prepareDateFromString(trialStartDate, DATE_FORMATS.MMDDYY)
+    .minus({
+      ['days']: 35,
+    });
+
+  const thirtyDaysBeforeTrial = applicationContext
+    .getUtilities()
+    .prepareDateFromString(trialStartDate, DATE_FORMATS.MMDDYY)
+    .minus({
+      ['days']: 30,
+    });
+
+  const isCurrentDateWithinReminderRange: boolean = applicationContext
+    .getUtilities()
+    .isTodayWithinGivenInterval({
+      intervalEndDate: thirtyDaysBeforeTrial,
+      intervalStartDate: thirtyFiveDaysBeforeTrial,
+    });
+
+  const shouldShowAlertForNOTT: boolean = isCurrentDateWithinReminderRange;
+
+  const thirtyDaysBeforeTrialFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(thirtyDaysBeforeTrial, DATE_FORMATS.MMDDYY);
+
+  return { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted };
+};
+
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -68,7 +104,8 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         formattedTrialSession.isCalendared
       ) {
         const { shouldShowAlertForNOTT, thirtyDaysBeforeTrialFormatted } =
-          applicationContext.getUtilities().isDateWithinDateRange({
+          setNoticeOfTrialReminder({
+            applicationContext,
             trialStartDate: formattedTrialSession.formattedStartDate,
           });
 
