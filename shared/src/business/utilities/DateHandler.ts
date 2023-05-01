@@ -131,7 +131,7 @@ export const calculateISODate = ({
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-export const createISODateString = (dateString, inputFormat) => {
+export const createISODateString = (dateString?, inputFormat?) => {
   let result;
 
   if (!dateString) {
@@ -325,6 +325,10 @@ export const isValidDateString = (
   dateString,
   formats = ['MM-dd-yyyy', 'MM/dd/yyyy', 'M-d-yyyy', 'M/d/yyyy'],
 ) => {
+  if (!dateString) {
+    return false;
+  }
+
   if (Array.isArray(formats)) {
     return formats.some(format => {
       return DateTime.fromFormat(dateString, format).isValid;

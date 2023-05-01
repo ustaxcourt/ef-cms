@@ -55,10 +55,7 @@ describe('publicCaseDetailHelper', () => {
   describe('formatDocketEntryOnDocketRecord', () => {
     it('should compute sealedToTooltip value when the entry is sealed', () => {
       const mockSealedDocketEntry = {
-        description: 'Request for Place of Trial at Flavortown, TN',
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        ...baseDocketEntry,
         isSealed: true,
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         sealedToTooltip: undefined,
@@ -74,10 +71,7 @@ describe('publicCaseDetailHelper', () => {
 
     it('should NOT compute sealedToTooltip value when the entry is NOT sealed', () => {
       const mockDocketEntry = {
-        description: 'Request for Place of Trial at Flavortown, TN',
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        ...baseDocketEntry,
         isSealed: false,
         sealedToTooltip: undefined,
       };
@@ -92,10 +86,7 @@ describe('publicCaseDetailHelper', () => {
 
     it('should set the value of isSealed on the record', () => {
       const mockDocketEntry = {
-        description: 'Request for Place of Trial at Flavortown, TN',
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        ...baseDocketEntry,
         isSealed: false,
       };
 
@@ -105,6 +96,15 @@ describe('publicCaseDetailHelper', () => {
       });
 
       expect(result.isSealed).toBe(mockDocketEntry.isSealed);
+    });
+
+    it('should not display the document link when the entry is stricken and the user is the terminal user', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        entry: { ...baseDocketEntry, isStricken: true },
+        isTerminalUser: true,
+      });
+
+      expect(result.showLinkToDocument).toBe(false);
     });
   });
 
