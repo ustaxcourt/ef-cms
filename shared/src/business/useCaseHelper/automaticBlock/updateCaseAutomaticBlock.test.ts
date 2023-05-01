@@ -5,11 +5,15 @@ import {
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
 import { MOCK_USERS } from '../../../test/mockUsers';
+import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocuments';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 
 describe('updateCaseAutomaticBlock', () => {
+  let mockCase;
   beforeEach(() => {
+    mockCase = cloneDeep(MOCK_CASE);
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
@@ -20,8 +24,9 @@ describe('updateCaseAutomaticBlock', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
-    const caseEntity = new Case(MOCK_CASE, { applicationContext });
+    const caseEntity = new Case(mockCase, { applicationContext });
     const updatedCase = await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,

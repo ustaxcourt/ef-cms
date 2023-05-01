@@ -4,12 +4,12 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
+  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
-
 import { MOCK_DOCUMENTS } from './mockDocuments';
 
-export const MOCK_CASE = {
+export const MOCK_CASE: TCase = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
@@ -20,10 +20,12 @@ export const MOCK_CASE = {
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hasVerifiedIrsNotice: false,
   hearings: [],
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
+  petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
   petitioners: [
     {
       address1: '123 Main St',
@@ -32,9 +34,12 @@ export const MOCK_CASE = {
       contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
+      entityName: 'Petitioner',
+      isAddressSealed: false,
       name: 'Test Petitioner',
       phone: '1234567',
       postalCode: '12345',
+      sealedAndUnavailable: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       state: 'TN',
       title: 'Executor',
@@ -43,6 +48,7 @@ export const MOCK_CASE = {
   preferredTrialCity: 'Washington, District of Columbia',
   privatePractitioners: [],
   procedureType: 'Regular',
+  receivedAt: '2018-03-01T21:40:46.415Z',
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
