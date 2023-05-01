@@ -16,79 +16,33 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const documentToSelect = {
+    const { contactId } = contactPrimaryFromState(cerebralTest);
+    const filingDocumentDetails = {
+      [`filersMap.${contactId}`]: true,
       category: 'Miscellaneous',
+      certificateOfService: false,
       documentTitle: 'Certificate of Service of [Document Name] [Date]',
       documentType: 'Certificate of Service',
       eventCode: 'CS',
+      hasSupportingDocuments: false,
+      previousDocument: cerebralTest.previousDocumentId,
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
       scenario: 'Nonstandard D',
+      serviceDateDay: '03',
+      serviceDateMonth: '03',
+      serviceDateYear: '2003',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(filingDocumentDetails)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfService',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'hasSupportingDocuments',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'serviceDateMonth',
-        value: '03',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'serviceDateDay',
-        value: '03',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'serviceDateYear',
-        value: '2003',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'previousDocument',
-        value: cerebralTest.previousDocumentId,
-      },
-    );
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
@@ -103,16 +57,6 @@ export const petitionerFilesANonstardardDDocumentForCase = (
     runCompute(withAppContextDecorator(formattedCaseDetail), {
       state: cerebralTest.getState(),
     });
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

@@ -1,13 +1,11 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('petitioner files amended motion', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -17,50 +15,25 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'category',
-        value: 'Miscellaneous',
-      },
-    );
+    const amendedMotionFilingDetails = {
+      category: 'Miscellaneous',
+      documentTitle: '[First, Second, etc.] Amended [Document Name]',
+      documentType: 'Amended',
+      eventCode: 'AMAT',
+      ordinalValue: '1',
+      scenario: 'Nonstandard F',
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'documentType',
-        value: 'Amended',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'documentTitle',
-        value: '[First, Second, etc.] Amended [Document Name]',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'AMAT',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'scenario',
-        value: 'Nonstandard F',
-      },
-    );
+    for (const [key, value] of Object.entries(amendedMotionFilingDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'ordinalValue',
-        value: '1',
-      },
-    );
     const caseDetail = cerebralTest.getState('caseDetail');
     const previousDocument = caseDetail.docketEntries.find(
       document =>
@@ -86,6 +59,14 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
       {
         key: 'primaryDocumentFile',
         value: fakeFile,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFileSize',
+        value: 1,
       },
     );
 
