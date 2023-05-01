@@ -4,6 +4,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
+import { ServicePartiesCard } from '../FileDocument/ServicePartiesCard';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -227,31 +228,7 @@ export const RequestAccessReview = connect(
               </div>
             </div>
 
-            <div className="tablet:grid-col-6 margin-bottom-4">
-              <div className="card height-full margin-bottom-0">
-                <div className="content-wrapper">
-                  <h3 className="underlined">Service Parties</h3>
-                  <div className="grid-row grid-gap">
-                    <div className="tablet:grid-col-12 margin-bottom-1">
-                      {externalConsolidatedCaseGroupHelper.consolidatedGroupServiceParties.map(
-                        (partyGroup, index1, parties) => (
-                          <React.Fragment key={index1}>
-                            <ul className="ustc-unstyled-list without-margins">
-                              {Object.values(partyGroup).map(
-                                (serviceParty, index2) => {
-                                  return <li key={index2}>{serviceParty}</li>;
-                                },
-                              )}
-                            </ul>
-                            {index1 < parties.length - 1 && <hr />}
-                          </React.Fragment>
-                        ),
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ServicePartiesCard />
           </div>
         )}
 
