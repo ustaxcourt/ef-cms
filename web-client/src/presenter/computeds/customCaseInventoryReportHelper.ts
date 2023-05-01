@@ -2,6 +2,7 @@ import {
   CASE_STATUSES,
   CASE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
@@ -11,7 +12,7 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
 
   const populatedFilters = get(state.customCaseInventory.filters);
 
-  const isRunReportButtonDisabled = !(
+  const runReportButtonIsDisabled = !(
     populatedFilters.createStartDate && populatedFilters.createEndDate
   );
 
@@ -38,16 +39,23 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     };
   });
 
-  const isClearFiltersDisabled = ![
+  const clearFiltersIsDisabled = ![
     ...populatedFilters.caseStatuses,
     ...populatedFilters.caseTypes,
   ].length;
+
+  const totalCases = get(state.customCaseInventory.totalCases);
+  const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
   return {
     caseStatuses,
     caseTypes,
     cases: reportData,
-    isClearFiltersDisabled,
-    isRunReportButtonDisabled,
+    clearFiltersIsDisabled,
+    pageCount,
+    runReportButtonIsDisabled,
+    today,
   };
 };

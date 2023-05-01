@@ -11,9 +11,21 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 /**
- * AccordionItem
+ * AccordionItem: This is a strange hollow component that is being used in renderAccordianFactory + Accordian to make a styled component
  */
-export function AccordionItem() {}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function AccordionItem(properties: {
+  children: React.ReactNode;
+  customClassName?: string;
+  displayIcon?: boolean;
+  iconClassName?: string;
+  iconSize?: string;
+  iconTypes?: string[];
+  id?: string;
+  title?: string;
+}) {
+  return <></>;
+}
 
 const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
   function AccordionContent(child, index) {

@@ -1,6 +1,5 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../presenter/actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -46,7 +45,7 @@ export const CustomCaseReport = connect(
           <div className="title">
             <h1>Custom Case Report</h1>
           </div>
-          <div className="grid-col-12 blue-container margin-bottom-3">
+          <div className="grid-col-12 blue-container margin-bottom-4">
             <div className="grid-col-auto margin-x-3">
               <DateRangePickerComponent
                 endDateErrorText={validationErrors.endDate}
@@ -55,6 +54,7 @@ export const CustomCaseReport = connect(
                 endPickerCls={'grid-col-6 padding-left-2'}
                 endValue=""
                 formGroupCls={'margin-bottom-0'}
+                maxDate={customCaseInventoryReportHelper.today}
                 rangePickerCls={'grid-row '}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Case created start date"
@@ -71,21 +71,11 @@ export const CustomCaseReport = connect(
                     createStartDate: e.target.value,
                   });
                 }}
-                // onInputEnd={e => {
-                //   setCustomCaseInventoryReportFiltersSequence({
-                //     createEndDate: e.target.value,
-                //   });
-                // }}
-                // onInputStart={e => {
-                //   setCustomCaseInventoryReportFiltersSequence({
-                //     createStartDate: e.target.value,
-                //   });
-                // }}
               />
             </div>
           </div>
-          <div className="grid-col-6 margin-bottom-2">
-            <legend>Petition Filing Method</legend>
+          <div className="grid-col-6 margin-bottom-4">
+            <legend>Petition filing method</legend>
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby="petition-filing-method-radios"
@@ -160,7 +150,7 @@ export const CustomCaseReport = connect(
                   htmlFor="case-status"
                   id="case-status-label"
                 >
-                  Case Status{' '}
+                  Case status{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
@@ -185,7 +175,7 @@ export const CustomCaseReport = connect(
                   htmlFor="case-type"
                   id="case-type-label"
                 >
-                  Case Types{' '}
+                  Case types{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
@@ -253,7 +243,7 @@ export const CustomCaseReport = connect(
             </div>
           </div>
           <Button
-            disabled={customCaseInventoryReportHelper.isRunReportButtonDisabled}
+            disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
@@ -265,24 +255,26 @@ export const CustomCaseReport = connect(
           </Button>
           <Button
             link
-            disabled={customCaseInventoryReportHelper.isClearFiltersDisabled}
+            disabled={customCaseInventoryReportHelper.clearFiltersIsDisabled}
             tooltip="Clear Filters"
             onClick={() => clearOptionalCustomCaseInventoryFilterSequence()}
           >
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
-          <Paginator
-            forcePage={activePage}
-            pageCount={Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE)}
-            pageRangeDisplayed={5}
-            onPageChange={pageChange => {
-              setActivePage(pageChange.selected);
-              getCustomCaseInventoryReportSequence({
-                selectedPage: pageChange.selected,
-              });
-            }}
-          />
+          {customCaseInventoryReportHelper.pageCount > 1 && (
+            <Paginator
+              forcePage={activePage}
+              pageCount={customCaseInventoryReportHelper.pageCount}
+              pageRangeDisplayed={3}
+              onPageChange={pageChange => {
+                setActivePage(pageChange.selected);
+                getCustomCaseInventoryReportSequence({
+                  selectedPage: pageChange.selected,
+                });
+              }}
+            />
+          )}
           <div className="text-right margin-bottom-2">
             <span className="text-bold">Count: &nbsp;</span>
             {totalCases}
@@ -326,8 +318,8 @@ const ReportTable = ({
               Requested Place <br /> of Trial
             </th>
             <th>
-              High Priority for <br />
-              Calendaring
+              Calendaring <br />
+              High Priority
             </th>
           </tr>
         </thead>
@@ -356,15 +348,11 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-          {hasRunCustomCaseReport && totalCases === 0 && (
-            <tr>
-              <td className="text-center" colSpan={100}>
-                No data found.
-              </td>
-            </tr>
-          )}
         </tbody>
       </table>
+      {hasRunCustomCaseReport && totalCases === 0 && (
+        <p>There are no cases for the selected criteria.</p>
+      )}
     </>
   );
 };
