@@ -33,6 +33,8 @@ import {
 import pug from 'pug';
 import sass from 'sass';
 
+import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
+import { abbreviateState } from '../utilities/abbreviateState';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -44,12 +46,15 @@ import {
   compareStrings,
 } from '../utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
+import { createCase } from '../../persistence/dynamo/cases/createCase';
 import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createDocketNumber } from '../../persistence/dynamo/cases/docketNumberGenerator';
+import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '../../persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
 import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
 import {
   formatCase,
@@ -57,6 +62,7 @@ import {
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '../../../src/business/utilities/getFormattedCaseDetail';
+import { formatDollars } from '../utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -71,28 +77,12 @@ import {
 import { getAllWebSocketConnections } from '../../persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getFakeFile } from './getFakeFile';
-
 import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
 } from '../../persistence/dynamo/chambers/getJudgesChambers';
-
-import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
-import {
-  DocketEntry,
-  getServedPartiesCode,
-  isServed,
-} from '../entities/DocketEntry';
-import { ROLES } from '../entities/EntityConstants';
-import { User } from '../entities/User';
-import { abbreviateState } from '../utilities/abbreviateState';
-import { createCase } from '../../persistence/dynamo/cases/createCase';
-import { createMockDocumentClient } from './createMockDocumentClient';
-import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
-import { formatDollars } from '../utilities/formatDollars';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -102,9 +92,11 @@ import {
 } from '../utilities/getWorkQueueFilters';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
+import { getServedPartiesCode } from '../entities/DocketEntry';
 import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '../utilities/getTextByCount';
 import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/users/getUserById';
@@ -279,6 +271,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),

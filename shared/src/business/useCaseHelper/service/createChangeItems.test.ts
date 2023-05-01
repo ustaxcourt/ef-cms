@@ -186,7 +186,7 @@ describe('generateAndServeDocketEntry', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should pass the correct index to the coverSheet', async () => {
+  it('should pass the number of docket entries on the docket Record + 1 to the coverSheet', async () => {
     await generateAndServeDocketEntry({
       ...testArguments,
       caseEntity: new Case(

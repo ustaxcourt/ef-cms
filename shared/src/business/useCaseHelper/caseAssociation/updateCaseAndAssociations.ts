@@ -5,12 +5,12 @@ import { DocketEntry } from '../../entities/DocketEntry';
 import { IrsPractitioner } from '../../entities/IrsPractitioner';
 import { Message } from '../../entities/Message';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { WorkItem } from '../../entities/WorkItem';
 import { pick } from 'lodash';
 import diff from 'diff-arrays-of-objects';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -62,7 +62,6 @@ const updateCaseDocketEntries = ({
 
 /**
  * Identifies case messages which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -117,7 +116,6 @@ const updateCaseMessages = async ({
 
 /**
  * Identifies correspondences which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated correspondence data
@@ -171,7 +169,6 @@ const updateCorrespondence = ({
 /**
  * Identifies hearings to be removed, and issues persistence calls
  * where needed
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated hearings data
@@ -202,7 +199,6 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
 /**
  * Identifies IRS practitioners to be updated or removed, and issues persistence calls
  * where needed
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated IRS practitioner data
@@ -258,7 +254,6 @@ const updateIrsPractitioners = ({
 /**
  * Identifies private practitioners to be updated or removed, and issues persistence calls
  * where needed
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated private practitioner data
@@ -317,7 +312,6 @@ const updatePrivatePractitioners = ({
 
 /**
  * Identifies work item entries which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -335,100 +329,48 @@ const updateCaseWorkItems = async ({
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.status !== caseToUpdate.status ||
     oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.trialLocation !== caseToUpdate.trialLocation;
+    oldCase.trialLocation !== caseToUpdate.trialLocation ||
+    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
 
   if (!workItemsRequireUpdate) {
     return [];
   }
 
-  const workItems = await applicationContext
+  const rawWorkItems = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });
 
-  const updateWorkItemRecordFunctions = (
-    updatedCase,
-    previousCase,
-    workItemId,
-  ) => {
-    const workItemRequestFunctions = [];
-    if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
-      workItemRequestFunctions.push(() =>
-        applicationContext
-          .getUseCaseHelpers()
-          .updateAssociatedJudgeOnWorkItems({
-            applicationContext,
-            associatedJudge: updatedCase.associatedJudge,
-            workItemId,
-          }),
-      );
-    }
-    if (previousCase.caseCaption !== updatedCase.caseCaption) {
-      workItemRequestFunctions.push(() =>
-        applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems({
-          applicationContext,
-          caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
-          workItemId,
-        }),
-      );
-    }
-    if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
-      workItemRequestFunctions.push(() =>
-        applicationContext
-          .getUseCaseHelpers()
-          .updateDocketNumberSuffixOnWorkItems({
-            applicationContext,
-            docketNumberSuffix: updatedCase.docketNumberSuffix,
-            workItemId,
-          }),
-      );
-    }
-    if (previousCase.status !== updatedCase.status) {
-      workItemRequestFunctions.push(() =>
-        applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems({
-          applicationContext,
-          caseStatus: updatedCase.status,
-          workItemId,
-        }),
-      );
-    }
-    if (previousCase.trialDate !== updatedCase.trialDate) {
-      workItemRequestFunctions.push(() =>
-        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems({
-          applicationContext,
-          trialDate: updatedCase.trialDate || null,
-          workItemId,
-        }),
-      );
-    }
-    if (previousCase.trialLocation !== updatedCase.trialLocation) {
-      workItemRequestFunctions.push(() =>
-        applicationContext.getUseCaseHelpers().updateTrialLocationOnWorkItems({
-          applicationContext,
-          trialLocation: updatedCase.trialLocation || null,
-          workItemId,
-        }),
-      );
-    }
+  const updatedWorkItems = rawWorkItems.map(rawWorkItem => ({
+    ...rawWorkItem,
+    associatedJudge: caseToUpdate.associatedJudge,
+    caseStatus: caseToUpdate.status,
+    caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
+    docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+    leadDocketNumber: caseToUpdate.leadDocketNumber,
+    trialDate: caseToUpdate.trialDate || null,
+    trialLocation: caseToUpdate.trialLocation || null,
+  }));
 
-    return workItemRequestFunctions;
-  };
+  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems, {
+    applicationContext,
+  });
 
-  const workItemIds = workItems.map(mapping => mapping.sk.split('|')[1]);
-  const workItemUpdateFunctions = workItemIds
-    .map(workItemId =>
-      updateWorkItemRecordFunctions(caseToUpdate, oldCase, workItemId),
-    )
-    .flat();
-
-  return workItemUpdateFunctions;
+  return validWorkItems.map(
+    validWorkItem =>
+      function () {
+        return applicationContext.getPersistenceGateway().saveWorkItem({
+          applicationContext,
+          workItem: validWorkItem,
+        });
+      },
+  );
 };
 
 /**
  * Identifies user case mappings which require updates and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -479,7 +421,6 @@ const updateUserCaseMappings = async ({
 
 /**
  * Identifies user case mappings which require updates and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -523,7 +464,6 @@ const updateCaseDeadlines = async ({
 
 /**
  * updateCaseAndAssociations
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseToUpdate the case object which was updated

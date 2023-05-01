@@ -40,6 +40,7 @@ export const fileAndServeDocumentOnOneCase = async ({
         trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
+      caseEntity,
     );
   }
 

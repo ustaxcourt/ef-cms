@@ -10,7 +10,7 @@ export const ReportsMenu = connect(
       sequences.openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    pageIsReports: state.headerHelper.pageIsReports,
+    reportMenuHelper: state.reportMenuHelper,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
@@ -19,7 +19,7 @@ export const ReportsMenu = connect(
     isExpanded,
     openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence,
-    pageIsReports,
+    reportMenuHelper,
     resetHeaderAccordionsSequence,
     toggleMenuSequence,
     toggleMobileMenuSequence,
@@ -30,7 +30,7 @@ export const ReportsMenu = connect(
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
-            pageIsReports && 'usa-current',
+            reportMenuHelper && 'usa-current',
           )}
           id="reports-btn"
           onClick={() => {
@@ -41,6 +41,19 @@ export const ReportsMenu = connect(
         </button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
+            {reportMenuHelper.showActivityReport && (
+              <li className="usa-nav__submenu-item">
+                <a
+                  href="/reports/judge-activity-report"
+                  onClick={() => {
+                    resetHeaderAccordionsSequence();
+                    toggleMobileMenuSequence();
+                  }}
+                >
+                  Activity
+                </a>
+              </li>
+            )}
             <li className="usa-nav__submenu-item">
               <Button
                 link

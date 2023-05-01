@@ -146,6 +146,7 @@ export const createWorkItemForChange = async ({
       trialLocation: caseEntity.trialLocation,
     },
     { applicationContext },
+    caseEntity,
   );
 
   changeOfAddressDocketEntry.setWorkItem(workItem);

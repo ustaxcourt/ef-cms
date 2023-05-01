@@ -1,5 +1,6 @@
 import { MOCK_CASE } from './mockCase';
 import {
+  SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../business/entities/EntityConstants';
@@ -32,6 +33,7 @@ export const MOCK_TRIAL_REGULAR = {
   },
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+  sessionStatus: SESSION_STATUS_TYPES.open,
   sessionType: 'Regular',
   startDate: '2001-12-01T00:00:00.000Z',
   term: 'Fall',
