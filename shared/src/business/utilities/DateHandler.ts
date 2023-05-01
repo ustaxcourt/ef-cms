@@ -81,7 +81,7 @@ export const combineISOandEasternTime = (dateString, timeString) => {
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {luxon} a luxon object
  */
-export const prepareDateFromString = (dateString, inputFormat) => {
+export const prepareDateFromString = (dateString?, inputFormat?) => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
@@ -404,7 +404,7 @@ export const castToISO = dateString => {
  */
 export const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
-  let result = null;
+  let result: any = null;
 
   // use unique characters in "undefined" ⬇
   if (updatedDateString.replace(/[-,undefi]/g, '') === '') {
@@ -526,6 +526,13 @@ export const getBusinessDateInFuture = ({
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
 };
 
+/**
+ * Returns whether or not the current date falls within the given date time range
+ *
+ * @param {string} intervalStartDate the interval start date
+ * @param {string} intervalEndDate the interval end date
+ * @returns {boolean} whether or not the current date falls within the given date time range
+ */
 export const isTodayWithinGivenInterval = ({
   intervalEndDate,
   intervalStartDate,

@@ -294,7 +294,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
-    isDateWithinDateRange: jest.fn(),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
@@ -307,6 +306,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isTodayWithinGivenInterval: jest
+      .fn()
+      .mockImplementation(DateHandler.isTodayWithinGivenInterval),
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
