@@ -100,7 +100,20 @@ describe('External User files a document across a consolidated case group', () =
 
     loginAs(cerebralTest, 'irspractitioner2@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
-    //verify that irsPractitioner is not associated with any of the cases in the consolidated cases group
+
+    it('verify that irsPractitioner is not associated with any of the cases in the consolidated group', async () => {
+      const userId: string = cerebralTest.getState('user.userId');
+      let expectedAssociation: boolean;
+      const consolidatedCases = cerebralTest.getState(
+        'caseDetail.consolidatedCases',
+      );
+      consolidatedCases.forEach(aCase => {
+        expectedAssociation = aCase.irsPractitioners.includes(practitioner => {
+          return practitioner.userId === userId;
+        });
+        expect(expectedAssociation).toBe(false);
+      });
+    });
 
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
