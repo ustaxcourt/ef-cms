@@ -3,12 +3,13 @@
  *
  * @type {module.NotFoundError}
  */
-module.exports.NotFoundError = class NotFoundError extends Error {
+export const NotFoundError = class NotFoundError extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
   constructor(message) {
     super(message);
 
@@ -21,12 +22,13 @@ module.exports.NotFoundError = class NotFoundError extends Error {
  *
  * @type {module.NotFoundError}
  */
-module.exports.InvalidRequest = class InvalidRequest extends Error {
+export const InvalidRequest = class InvalidRequest extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
   constructor(message) {
     super(message);
 
@@ -39,12 +41,13 @@ module.exports.InvalidRequest = class InvalidRequest extends Error {
  *
  * @type {module.UnknownUserError}
  */
-module.exports.UnknownUserError = class UnknownUserError extends Error {
+export const UnknownUserError = class UnknownUserError extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
   constructor(message) {
     super(message);
 
@@ -57,12 +60,13 @@ module.exports.UnknownUserError = class UnknownUserError extends Error {
  *
  * @type {module.UnauthorizedError}
  */
-module.exports.UnauthorizedError = class UnauthorizedError extends Error {
+export const UnauthorizedError = class UnauthorizedError extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
   constructor(message) {
     super(message);
 
@@ -75,14 +79,13 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
  *
  * @type {module.UnprocessableEntity}
  */
-module.exports.UnprocessableEntityError = class UnprocessableEntityError extends (
-  Error
-) {
+export const UnprocessableEntityError = class UnprocessableEntityError extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
   constructor(message = 'cannot process') {
     super(message);
 
@@ -95,14 +98,13 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
  *
  * @type {module.UnsanitizedEntity}
  */
-module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
-  Error
-) {
+export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
   constructor(message = 'Unsanitized entity') {
     super(message);
 
@@ -110,14 +112,14 @@ module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
   }
 };
 
-module.exports.ServiceUnavailableError = class ServiceUnavailableError extends (
-  Error
-) {
+export const ServiceUnavailableError = class ServiceUnavailableError extends Error {
   /**
    * constructor
    *
    * @param {string} message the error message
    */
+  statusCode: number;
+  retryAfter?: number;
   constructor(message = 'Service Unavailable', retryAfter = 3000) {
     super(message);
 
@@ -131,7 +133,7 @@ module.exports.ServiceUnavailableError = class ServiceUnavailableError extends (
  *
  * @type {module.InvalidEntityError}
  */
-module.exports.InvalidEntityError = class InvalidEntityError extends Error {
+export const InvalidEntityError = class InvalidEntityError extends Error {
   /**
    * constructor
    *
