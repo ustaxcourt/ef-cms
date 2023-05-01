@@ -20,6 +20,7 @@ import {
   getBusinessDateInFuture,
   getMonthDayYearInETObj,
   isStringISOFormatted,
+  isTodayWithinGivenInterval,
   isValidDateString,
   prepareDateFromEST,
   prepareDateFromString,
@@ -670,6 +671,44 @@ describe('DateHandler', () => {
       });
 
       expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
+    });
+  });
+
+  describe('isTodayWithinGivenInterval)', () => {
+    it('should return false when the current date does not fall within the specified date time range', () => {
+      const mockPastStartDate = prepareDateFromString(
+        '10/10/2020',
+        FORMATS.MMDDYY,
+      );
+      const mockPastEndDate = prepareDateFromString(
+        '12/12/2020',
+        FORMATS.MMDDYY,
+      );
+
+      const result = isTodayWithinGivenInterval({
+        intervalEndDate: mockPastEndDate,
+        intervalStartDate: mockPastStartDate,
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('should return true when the current date does fall within the specified date time range', () => {
+      const mockPastStartDate = prepareDateFromString(
+        Date.now(),
+        FORMATS.MMDDYY,
+      ).minus({ ['days']: 2 });
+      const mockPastEndDate = prepareDateFromString(
+        Date.now(),
+        FORMATS.MMDDYY,
+      ).plus({ ['days']: 2 });
+
+      const result = isTodayWithinGivenInterval({
+        intervalEndDate: mockPastEndDate,
+        intervalStartDate: mockPastStartDate,
+      });
+
+      expect(result).toBe(true);
     });
   });
 });
