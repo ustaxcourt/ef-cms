@@ -47,14 +47,15 @@ export class Practitioner extends User {
     this.firstName = rawUser.firstName;
     this.lastName = rawUser.lastName;
     this.middleName = rawUser.middleName;
+    this.name = Practitioner.getFullName(rawUser);
     this.originalBarState = rawUser.originalBarState;
     this.practitionerNotes = rawUser.practitionerNotes;
     this.practitionerType = rawUser.practitionerType;
     this.section = this.role;
     this.suffix = rawUser.suffix;
-    this.name = Practitioner.getFullName(rawUser);
     this.serviceIndicator =
-      rawUser.serviceIndicator || Practitioner.getDefaultServiceIndicator(this);
+      rawUser.serviceIndicator ||
+      Practitioner.getDefaultServiceIndicator(rawUser);
     this.updatedEmail = rawUser.updatedEmail;
     if (this.admissionsStatus === 'Active') {
       this.role = roleMap[this.employer];
