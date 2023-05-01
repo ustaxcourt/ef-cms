@@ -153,6 +153,7 @@ import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditU
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuccessSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
+import { gotoJudgeActivityReportSequence } from './sequences/JudgeActivityReport/gotoJudgeActivityReportSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
@@ -315,6 +316,7 @@ import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
+import { selectDateRangeFromJudgeActivityReportSequence } from './sequences/selectDateRangeFromJudgeActivityReportSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
@@ -389,6 +391,7 @@ import { submitEditPractitionerDocumentSequence } from './sequences/submitEditPr
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
+import { submitJudgeActivityReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityReportSequence';
 import { submitLocalLoginSequence } from './sequences/submitLocalLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
@@ -665,6 +668,7 @@ const sequences = {
   gotoFileDocumentSequence,
   gotoFilePetitionSuccessSequence,
   gotoIdleLogoutSequence,
+  gotoJudgeActivityReportSequence,
   gotoLoginSequence,
   gotoMaintenanceSequence,
   gotoMessageDetailSequence,
@@ -827,6 +831,7 @@ const sequences = {
   sealDocketEntrySequence,
   selectAssigneeSequence,
   selectDateRangeFromCalendarSequence,
+  selectDateRangeFromJudgeActivityReportSequence,
   selectDocumentForPreviewSequence,
   selectDocumentForScanSequence,
   selectScannerSequence,
@@ -899,6 +904,7 @@ const sequences = {
   submitEditRespondentCounselSequence,
   submitExternalDocumentSequence,
   submitFilePetitionSequence,
+  submitJudgeActivityReportSequence,
   submitLocalLoginSequence,
   submitOpinionAdvancedSearchSequence,
   submitOrderAdvancedSearchSequence,
