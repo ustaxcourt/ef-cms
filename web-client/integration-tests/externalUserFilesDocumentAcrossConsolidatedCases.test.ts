@@ -63,6 +63,38 @@ const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   });
 };
 
+const verifyPractitionerAssociationAcrossConsolidatedCaseGroup = (
+  cerebralTest,
+  {
+    expectedAssociation,
+    practitionerRole,
+  }: { expectedAssociation: boolean; practitionerRole: string },
+) => {
+  return it(`verify that ${practitionerRole} is ${
+    expectedAssociation ? '' : 'not'
+  } associated with all of the cases in the consolidated group`, async () => {
+    const userId: string = cerebralTest.getState('user.userId');
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+    // console.log(
+    //   `consolidatedCases - ${expectedAssociation}::`,
+    //   consolidatedCases,
+    // );
+    consolidatedCases.forEach(aCase => {
+      if (expectedAssociation) {
+        console.log('userId', userId);
+        console.log('irsPractitioners', aCase.irsPractitioners);
+        console.log('docketNumber', aCase.docketNumber);
+      }
+      const isAssociated = aCase.irsPractitioners.includes(practitioner => {
+        return practitioner.userId === userId;
+      });
+      expect(isAssociated).toBe(expectedAssociation);
+    });
+  });
+};
+
 describe('External User files a document across a consolidated case group', () => {
   const cerebralTest = setupTest();
 
@@ -101,18 +133,9 @@ describe('External User files a document across a consolidated case group', () =
     loginAs(cerebralTest, 'irspractitioner2@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
 
-    it('verify that irsPractitioner is not associated with any of the cases in the consolidated group', async () => {
-      const userId: string = cerebralTest.getState('user.userId');
-      let expectedAssociation: boolean;
-      const consolidatedCases = cerebralTest.getState(
-        'caseDetail.consolidatedCases',
-      );
-      consolidatedCases.forEach(aCase => {
-        expectedAssociation = aCase.irsPractitioners.includes(practitioner => {
-          return practitioner.userId === userId;
-        });
-        expect(expectedAssociation).toBe(false);
-      });
+    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+      expectedAssociation: false,
+      practitionerRole: 'irsPractitioner',
     });
 
     verifyCorrectFileDocumentButton(cerebralTest, {
@@ -124,7 +147,10 @@ describe('External User files a document across a consolidated case group', () =
       fakeFile,
     });
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
-    //verify that irsPractitioner IS now associated with all of the cases in the consolidated cases group
+    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+      expectedAssociation: true,
+      practitionerRole: 'irsPractitioner',
+    });
   });
 
   describe('petitioner', () => {
