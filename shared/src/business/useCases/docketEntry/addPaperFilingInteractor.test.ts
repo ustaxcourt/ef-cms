@@ -19,9 +19,6 @@ describe('addPaperFilingInteractor', () => {
   const mockCase = { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext

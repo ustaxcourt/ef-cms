@@ -14,6 +14,7 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
+  let mockLock;
 
   beforeAll(() => {
     caseRecord = {
@@ -52,12 +53,13 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -141,9 +143,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateCourtIssuedDocketEntryInteractor(applicationContext, {
@@ -165,10 +165,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',

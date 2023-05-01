@@ -20,11 +20,16 @@ describe('fileExternalDocumentInteractor', () => {
   const mockDocketEntryId = applicationContext.getUniqueId();
 
   let caseRecord;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -444,9 +449,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       fileExternalDocumentInteractor(applicationContext, {
@@ -468,10 +471,6 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         category: 'Application',

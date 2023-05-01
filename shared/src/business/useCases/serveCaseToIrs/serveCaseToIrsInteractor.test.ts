@@ -69,11 +69,16 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     };
   };
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     mockCase = { ...MOCK_CASE };
     mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
@@ -1397,9 +1402,7 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       serveCaseToIrsInteractor(applicationContext, {
@@ -1413,10 +1416,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });

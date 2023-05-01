@@ -6,13 +6,18 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
 
 let mockCases;
+let mockLock;
 const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
 
 describe('removeConsolidatedCasesInteractor', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     mockCases = {
       '101-19': {
         ...MOCK_CASE,
@@ -251,9 +256,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       removeConsolidatedCasesInteractor(applicationContext, {

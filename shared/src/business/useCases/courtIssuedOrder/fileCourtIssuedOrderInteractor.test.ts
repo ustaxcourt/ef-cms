@@ -68,11 +68,16 @@ describe('fileCourtIssuedOrderInteractor', () => {
     status: CASE_STATUS_TYPES.new,
     userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -447,9 +452,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       fileCourtIssuedOrderInteractor(applicationContext, {
@@ -472,10 +475,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,

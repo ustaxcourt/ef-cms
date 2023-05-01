@@ -6,6 +6,13 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
 
 describe('blockCaseFromTrialInteractor', () => {
+  let mockLock;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -19,9 +26,7 @@ describe('blockCaseFromTrialInteractor', () => {
       .updateCaseAndAssociations.mockImplementation(
         ({ caseToUpdate }) => caseToUpdate,
       );
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
   });
 
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
@@ -45,9 +50,7 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       blockCaseFromTrialInteractor(applicationContext, {

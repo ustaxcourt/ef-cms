@@ -21,11 +21,15 @@ describe('createCaseDeadlineInteractor', () => {
   };
   let user;
   let mockCase;
-
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
 
     user = new User({
       name: 'Test Petitionsclerk',
@@ -116,9 +120,7 @@ describe('createCaseDeadlineInteractor', () => {
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       createCaseDeadlineInteractor(applicationContext, {

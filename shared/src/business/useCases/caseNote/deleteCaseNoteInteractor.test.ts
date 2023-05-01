@@ -10,16 +10,22 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
 
 describe('deleteCaseNoteInteractor', () => {
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
     const mockUser = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
@@ -75,9 +81,7 @@ describe('deleteCaseNoteInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       deleteCaseNoteInteractor(applicationContext, {
@@ -91,10 +95,6 @@ describe('deleteCaseNoteInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await deleteCaseNoteInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });

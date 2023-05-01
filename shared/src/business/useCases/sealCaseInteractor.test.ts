@@ -6,10 +6,15 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { sealCaseInteractor } from './sealCaseInteractor';
 
 describe('sealCaseInteractor', () => {
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -48,9 +53,7 @@ describe('sealCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       sealCaseInteractor(applicationContext, {
@@ -64,10 +67,6 @@ describe('sealCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await sealCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });

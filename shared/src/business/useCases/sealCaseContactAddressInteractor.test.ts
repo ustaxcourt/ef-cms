@@ -10,10 +10,15 @@ import { getOtherFilers } from '../entities/cases/Case';
 import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
 
 describe('sealCaseContactAddressInteractor', () => {
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -124,9 +129,7 @@ describe('sealCaseContactAddressInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       sealCaseContactAddressInteractor(applicationContext, {
@@ -141,10 +144,6 @@ describe('sealCaseContactAddressInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await sealCaseContactAddressInteractor(applicationContext, {
       contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
       docketNumber: MOCK_CASE.docketNumber,

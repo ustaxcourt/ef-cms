@@ -44,6 +44,7 @@ describe('updatePetitionerInformationInteractor', () => {
       name: 'Test Secondary Petitioner',
     },
   ];
+  let mockLock;
 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
@@ -59,12 +60,13 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
     mockUser = docketClerkUser;
 
     mockCase = {
@@ -721,9 +723,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
@@ -741,10 +741,6 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updatePetitionerInformationInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       updatedPetitionerData: {

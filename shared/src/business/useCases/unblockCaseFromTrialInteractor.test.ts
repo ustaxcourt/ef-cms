@@ -6,10 +6,15 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
 
 describe('unblockCaseFromTrialInteractor', () => {
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
@@ -74,9 +79,7 @@ describe('unblockCaseFromTrialInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       unblockCaseFromTrialInteractor(applicationContext, {
@@ -90,10 +93,6 @@ describe('unblockCaseFromTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
