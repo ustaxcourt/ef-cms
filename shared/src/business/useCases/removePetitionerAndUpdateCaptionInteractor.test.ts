@@ -19,10 +19,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
   let petitionerToRemove;
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     petitionerToRemove = {
       address1: '2729 Chicken St',
       city: 'Eggyolk',
@@ -216,9 +221,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     ).toEqual([otherPetitioner.contactId]);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       removePetitionerAndUpdateCaptionInteractor(applicationContext, {
@@ -234,10 +237,6 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
       caseCaption: 'some caption',
       contactId: MOCK_CASE.petitioners[0].contactId,

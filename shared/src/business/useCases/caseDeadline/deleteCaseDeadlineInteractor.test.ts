@@ -16,8 +16,11 @@ describe('deleteCaseDeadlineInteractor', () => {
   let user;
   let mockCase;
   let mockDeadlines;
-
+  let mockLock;
   beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
     mockCase = MOCK_CASE_WITHOUT_PENDING;
 
     applicationContext.environment.stage = 'local';
@@ -36,14 +39,12 @@ describe('deleteCaseDeadlineInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       deleteCaseDeadlineInteractor(applicationContext, {
@@ -58,10 +59,6 @@ describe('deleteCaseDeadlineInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await deleteCaseDeadlineInteractor(applicationContext, {
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,

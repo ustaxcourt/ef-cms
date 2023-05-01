@@ -144,7 +144,8 @@ export function withLocking(
     applicationContext: IApplicationContext,
     options: any,
   ) {
-    const { identifier, ttl } = await getLockInfo(applicationContext, options);
+    const { identifier, ttl }: { identifier: string; ttl?: number } =
+      await getLockInfo(applicationContext, options);
 
     await acquireLock({
       applicationContext,

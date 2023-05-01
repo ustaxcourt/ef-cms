@@ -44,12 +44,16 @@ describe('updateCase', () => {
       },
     ],
   };
-
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(petitionsClerkUser);
@@ -346,9 +350,7 @@ describe('updateCase', () => {
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       saveCaseDetailInternalEditInteractor(applicationContext, {
@@ -369,10 +371,6 @@ describe('updateCase', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
         ...mockCase,

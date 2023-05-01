@@ -12,11 +12,16 @@ import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 
 describe('remove case from trial session', () => {
   let mockTrialSession;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -319,9 +324,7 @@ describe('remove case from trial session', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       removeCaseFromTrialInteractor(applicationContext, {
@@ -339,10 +342,6 @@ describe('remove case from trial session', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: 'Judge Dredd',
       caseStatus: CASE_STATUS_TYPES.cav,

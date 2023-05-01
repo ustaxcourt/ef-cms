@@ -6,12 +6,17 @@ import { addConsolidatedCaseInteractor } from './addConsolidatedCaseInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 let mockCases;
+let mockLock;
 
 describe('addConsolidatedCaseInteractor', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     mockCases = {
       '119-19': {
         ...MOCK_CASE,
@@ -88,9 +93,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       addConsolidatedCaseInteractor(applicationContext, {

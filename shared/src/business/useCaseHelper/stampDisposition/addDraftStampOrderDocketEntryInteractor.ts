@@ -123,7 +123,7 @@ export const addDraftStampOrderDocketEntry = async (
 
 export const addDraftStampOrderDocketEntryInteractor = withLocking(
   addDraftStampOrderDocketEntry,
-  (_applicationContext, { docketNumber }) => ({
+  (_applicationContext, { docketNumber }): { identifier: string } => ({
     identifier: `case|${docketNumber}`,
   }),
 );

@@ -63,7 +63,15 @@ describe('deleteCounselFromCaseInteractor', () => {
     },
   ];
 
+  let mockLock;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'fb39f224-7985-438d-8327-2df162c20c8e',
@@ -102,9 +110,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       deleteCounselFromCaseInteractor(applicationContext, {
@@ -119,10 +125,6 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await deleteCounselFromCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',

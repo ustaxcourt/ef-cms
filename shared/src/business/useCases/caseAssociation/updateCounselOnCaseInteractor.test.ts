@@ -66,11 +66,15 @@ describe('updateCounselOnCaseInteractor', () => {
       userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
     },
   ];
-
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Saul Goodman',
       role: ROLES.docketClerk,
@@ -143,9 +147,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateCounselOnCaseInteractor(applicationContext, {

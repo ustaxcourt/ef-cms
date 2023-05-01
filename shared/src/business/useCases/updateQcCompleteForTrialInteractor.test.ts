@@ -7,20 +7,24 @@ import { updateQcCompleteForTrialInteractor } from './updateQcCompleteForTrialIn
 
 describe('updateQcCompleteForTrialInteractor', () => {
   let user;
-
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
     applicationContext.getCurrentUser.mockImplementation(() => user);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) =>
         Promise.resolve(caseToUpdate),
       );
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('should throw an error if the user is unauthorized to update a trial session', async () => {
@@ -58,9 +62,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateQcCompleteForTrialInteractor(applicationContext, {
@@ -76,10 +78,6 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updateQcCompleteForTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       qcCompleteForTrial: true,

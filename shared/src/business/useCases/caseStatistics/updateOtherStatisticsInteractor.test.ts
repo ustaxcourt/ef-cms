@@ -6,10 +6,16 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateOtherStatisticsInteractor } from './updateOtherStatisticsInteractor';
 
 describe('updateOtherStatisticsInteractor', () => {
-  beforeEach(() => {
+  let mockLock;
+
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'docketClerk',
@@ -42,9 +48,7 @@ describe('updateOtherStatisticsInteractor', () => {
     });
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateOtherStatisticsInteractor(applicationContext, {

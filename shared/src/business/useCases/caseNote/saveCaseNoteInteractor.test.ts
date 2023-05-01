@@ -7,10 +7,15 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
 
 describe('saveCaseNoteInteractor', () => {
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     const mockJudge = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
@@ -52,9 +57,7 @@ describe('saveCaseNoteInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       saveCaseNoteInteractor(applicationContext, {
@@ -69,10 +72,6 @@ describe('saveCaseNoteInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await saveCaseNoteInteractor(applicationContext, {
       caseNote: 'This is my case note',
       docketNumber: MOCK_CASE.docketNumber,

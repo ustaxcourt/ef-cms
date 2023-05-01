@@ -14,20 +14,12 @@ describe('addCaseToTrialSessionInteractor', () => {
   let mockCurrentUser;
   let mockTrialSession;
   let mockCase;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-    mockCurrentUser = {
-      role: ROLES.petitionsClerk,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
-    mockTrialSession = MOCK_TRIAL_REMOTE;
-
-    mockCase = MOCK_CASE;
-
+      .getLock.mockImplementation(() => mockLock);
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
@@ -35,6 +27,16 @@ describe('addCaseToTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    mockCurrentUser = {
+      role: ROLES.petitionsClerk,
+      userId: '8675309b-18d0-43ec-bafb-654e83405411',
+    };
+    mockTrialSession = MOCK_TRIAL_REMOTE;
+    mockCase = MOCK_CASE;
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -171,9 +173,7 @@ describe('addCaseToTrialSessionInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
@@ -189,10 +189,6 @@ describe('addCaseToTrialSessionInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,

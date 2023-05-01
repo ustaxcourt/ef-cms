@@ -20,11 +20,16 @@ describe('completeDocketEntryQCInteractor', () => {
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     const workItem = {
       docketEntry: {
         docketEntryId: mockDocketEntryId,
@@ -609,9 +614,7 @@ describe('completeDocketEntryQCInteractor', () => {
       caseServicesSupervisorUser,
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_ACTIVE_LOCK);
+    mockLock = MOCK_ACTIVE_LOCK;
 
     await expect(() =>
       completeDocketEntryQCInteractor(applicationContext, {

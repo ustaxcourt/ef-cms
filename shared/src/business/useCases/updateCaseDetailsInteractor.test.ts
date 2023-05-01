@@ -17,17 +17,19 @@ import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
+  let mockLock;
 
   beforeAll(() => {
     applicationContext.getUniqueId.mockReturnValue(
       '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
     );
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
     mockCase = cloneDeep(MOCK_CASE);
     generalDocketReadyForTrialCase = cloneDeep({
       ...MOCK_CASE,
@@ -395,9 +397,7 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateCaseDetailsInteractor(applicationContext, {
@@ -415,10 +415,6 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
         ...mockCase,

@@ -20,6 +20,7 @@ import { MOCK_LOCK } from '../../../test/mockLock';
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
+  let mockLock;
   const mockSigningName = 'Guy Fieri';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -35,7 +36,14 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     stampedDocketEntryId: mockStampedDocketEntryId,
   };
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
 
     applicationContext
@@ -144,9 +152,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       addDraftStampOrderDocketEntryInteractor(applicationContext, args),
@@ -158,10 +164,6 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
 
     expect(

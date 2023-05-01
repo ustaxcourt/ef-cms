@@ -29,22 +29,25 @@ describe('setTrialSessionCalendarInteractor', () => {
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
   };
+  let mockLock;
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
     user = new User({
       name: 'petitionsClerk',
       role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
@@ -242,9 +245,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       setTrialSessionCalendarInteractor(applicationContext, {
@@ -258,10 +259,6 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });

@@ -22,11 +22,16 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     section: DOCKET_SECTION,
     userId: mockUserId,
   };
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -334,9 +339,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
@@ -358,10 +361,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       docketNumbers: [],
       documentMeta: {
@@ -391,10 +390,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should acquire and remove the lock for every case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       docketNumbers: ['888-88', '999-99'],
       documentMeta: {

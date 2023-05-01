@@ -16,12 +16,16 @@ import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('addPetitionerToCaseInteractor', () => {
   let mockContact;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
 
+  beforeEach(() => {
+    mockLock = undefined;
     mockContact = {
       address1: '2729 Chicken St',
       city: 'Eggyolk',
@@ -139,9 +143,7 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       addPetitionerToCaseInteractor(applicationContext, {

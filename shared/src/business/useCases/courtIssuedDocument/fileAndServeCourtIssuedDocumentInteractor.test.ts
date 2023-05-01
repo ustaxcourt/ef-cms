@@ -32,10 +32,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335ba';
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     MOCK_DATE = '2022-12-06T22:54:06.000Z';
 
     mockWorkItem = {

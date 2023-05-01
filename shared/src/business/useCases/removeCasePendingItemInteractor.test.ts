@@ -12,11 +12,16 @@ import { removeCasePendingItemInteractor } from './removeCasePendingItemInteract
 
 describe('removeCasePendingItemInteractor', () => {
   let user;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     user = new User({
       name: 'Petitions Clerk',
       role: ROLES.petitionsClerk,
@@ -105,9 +110,7 @@ describe('removeCasePendingItemInteractor', () => {
     ).toHaveBeenCalled();
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       removeCasePendingItemInteractor(applicationContext, {
@@ -122,10 +125,6 @@ describe('removeCasePendingItemInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await removeCasePendingItemInteractor(applicationContext, {
       docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // docketEntries[3] from MOCK_CASE
       docketNumber: MOCK_CASE.docketNumber,

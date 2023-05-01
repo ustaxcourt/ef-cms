@@ -64,6 +64,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     role: ROLES.docketClerk,
     userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
   };
+  let mockLock;
 
   beforeAll(() => {
     applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
@@ -79,13 +80,14 @@ describe('removePdfFromDocketEntryInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(caseDetail => caseDetail);
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -173,9 +175,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     ).not.toHaveBeenCalled();
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       removePdfFromDocketEntryInteractor(applicationContext, {
@@ -190,10 +190,6 @@ describe('removePdfFromDocketEntryInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await removePdfFromDocketEntryInteractor(applicationContext, {
       docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: MOCK_CASE.docketNumber,

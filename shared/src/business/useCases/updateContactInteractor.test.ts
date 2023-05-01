@@ -20,11 +20,15 @@ describe('updates the contact on a case', () => {
   let mockCase;
   let mockUser;
   let mockCaseContactPrimary;
-
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     mockCase = {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
@@ -417,9 +421,7 @@ describe('updates the contact on a case', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateContactInteractor(applicationContext, {
@@ -437,10 +439,6 @@ describe('updates the contact on a case', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,

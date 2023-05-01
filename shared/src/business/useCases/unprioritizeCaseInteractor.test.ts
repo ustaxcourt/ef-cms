@@ -7,22 +7,26 @@ import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 
 describe('unprioritizeCaseInteractor', () => {
   let mockUser;
-
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    };
-
+      .getLock.mockImplementation(() => mockLock);
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+
     applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock.mockImplementation(
         ({ caseEntity }) => caseEntity,
       );
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    mockUser = {
+      role: ROLES.petitionsClerk,
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
+    };
   });
 
   it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
@@ -118,9 +122,7 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       unprioritizeCaseInteractor(applicationContext, {
@@ -134,9 +136,7 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+    mockLock = undefined;
 
     await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,

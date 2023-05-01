@@ -69,11 +69,16 @@ describe('updateCourtIssuedOrderInteractor', () => {
     role: ROLES.petitioner,
     userId: '3433e36f-3b50-4c92-aa55-6efb4e432883',
   };
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     mockCurrentUser = new User({
       name: 'Olivia Jade',
       role: ROLES.petitionsClerk,
@@ -372,9 +377,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       updateCourtIssuedOrderInteractor(applicationContext, {
@@ -398,10 +401,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {

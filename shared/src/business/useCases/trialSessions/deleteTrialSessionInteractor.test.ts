@@ -9,11 +9,19 @@ import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
 
 describe('deleteTrialSessionInteractor', () => {
   let mockTrialSession;
+  let mockLock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
@@ -24,10 +32,6 @@ describe('deleteTrialSessionInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -161,9 +165,7 @@ describe('deleteTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       deleteTrialSessionInteractor(applicationContext, {
@@ -185,10 +187,6 @@ describe('deleteTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
 
     await deleteTrialSessionInteractor(applicationContext, {
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

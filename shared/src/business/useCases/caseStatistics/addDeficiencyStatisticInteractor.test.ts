@@ -28,10 +28,16 @@ describe('addDeficiencyStatisticInteractor', () => {
     year: 2012,
     yearOrPeriod: 'Year',
   };
-  beforeEach(() => {
+  let mockLock;
+
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
@@ -44,9 +50,7 @@ describe('addDeficiencyStatisticInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       addDeficiencyStatisticInteractor(applicationContext, {

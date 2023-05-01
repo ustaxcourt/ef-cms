@@ -6,10 +6,14 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { archiveDraftDocumentInteractor } from './archiveDraftDocumentInteractor';
 
 describe('archiveDraftDocumentInteractor', () => {
-  beforeEach(() => {
+  let mockLock;
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+  beforeEach(() => {
+    mockLock = undefined;
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -97,9 +101,7 @@ describe('archiveDraftDocumentInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(MOCK_LOCK);
+    mockLock = MOCK_LOCK;
 
     await expect(
       archiveDraftDocumentInteractor(applicationContext, {
@@ -114,10 +116,6 @@ describe('archiveDraftDocumentInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
-
     await await archiveDraftDocumentInteractor(applicationContext, {
       docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,

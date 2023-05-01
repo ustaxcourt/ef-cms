@@ -42,10 +42,16 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     ],
     privatePractitioners: [mockPractitioner],
   };
-  beforeEach(() => {
+  let mockLock;
+
+  beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockReturnValue(mockPetitioner);
@@ -158,9 +164,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
 
   describe('locking', () => {
     it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getLock.mockReturnValue(MOCK_LOCK);
+      mockLock = MOCK_LOCK;
 
       await expect(
         setUserEmailFromPendingEmailInteractor(applicationContext, {
