@@ -527,7 +527,6 @@ export const getBusinessDateInFuture = ({
 };
 
 export const isDateWithinDateRange = ({ trialStartDate }) => {
-  console.log('???', trialStartDate);
   const thirtyFiveDaysBeforeTrial = prepareDateFromString(
     trialStartDate,
     FORMATS.MMDDYY,

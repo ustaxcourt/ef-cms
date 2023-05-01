@@ -73,8 +73,8 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
           });
 
         formattedTrialSession.showAlertForNOTT = shouldShowAlertForNOTT;
-        //gotta fix this
-        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}.\nHave notices been served?`;
+        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}.
+        Have notices been served?`;
       }
 
       if (

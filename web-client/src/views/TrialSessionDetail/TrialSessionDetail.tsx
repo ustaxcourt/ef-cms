@@ -45,9 +45,12 @@ export const TrialSessionDetail = connect(
           {formattedTrialSessionDetails.showAlertForNOTT && (
             <WarningNotificationComponent
               alertWarning={{
+                dismissIcon: 'paper-plane',
+                dismissText: 'Yes, served',
                 message: formattedTrialSessionDetails.alertMessageForNOTT,
               }}
-              dismissable={false}
+              dismissable={true}
+              messageNotBold={true}
               scrollToTop={false}
             />
           )}
