@@ -32,8 +32,8 @@ export const CaseStatusHistory = connect(
             </thead>
             <tbody>
               {caseStatusHistoryHelper.formattedCaseStatusHistory.map(
-                history => (
-                  <tr key={history.formattedDateChanged}>
+                (history, idx) => (
+                  <tr key={idx}>
                     <td className="date-changed">
                       {history.formattedDateChanged}
                     </td>

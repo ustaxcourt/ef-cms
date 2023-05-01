@@ -1,7 +1,8 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -98,44 +99,66 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should return true for isRunReportButtonDisabled if createEndDate or createStartDate are falsy', () => {
+  it('should return true for runReportButtonIsDisabled if createEndDate or createStartDate are falsy', () => {
     defaultCustomCaseState.filters.createEndDate = 's';
-    defaultCustomCaseState.filters.createStartDate = undefined;
+    defaultCustomCaseState.filters.createStartDate = '';
 
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isRunReportButtonDisabled).toEqual(true);
+    expect(result.runReportButtonIsDisabled).toEqual(true);
   });
 
-  it('should return true for isRunReportButtonDisabled if createEndDate and createStartDate are both truthy', () => {
+  it('should return true for runReportButtonIsDisabled if createEndDate and createStartDate are both truthy', () => {
     defaultCustomCaseState.filters.createEndDate = 's';
     defaultCustomCaseState.filters.createStartDate = 's';
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isRunReportButtonDisabled).toEqual(false);
+    expect(result.runReportButtonIsDisabled).toEqual(false);
   });
 
-  it('should return true for isClearFiltersDisabled when case status(es) or case type(s) selected are not selected', () => {
+  it('should return true for clearFiltersIsDisabled when case status(es) or case type(s) selected are not selected', () => {
     defaultCustomCaseState.filters.caseTypes = [];
     defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isClearFiltersDisabled).toEqual(true);
+    expect(result.clearFiltersIsDisabled).toEqual(true);
   });
 
-  it('should return false for isClearFiltersDisabled when case status(es) or case type(s) selected are selected', () => {
+  it('should return false for clearFiltersIsDisabled when case status(es) or case type(s) selected are selected', () => {
     defaultCustomCaseState.filters.caseTypes = ['CDP (Lien/Levy)'];
     defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });
 
-    expect(result.isClearFiltersDisabled).toEqual(false);
+    expect(result.clearFiltersIsDisabled).toEqual(false);
+  });
+
+  it('should return the number of pages rounded up to the nearest whole number', () => {
+    defaultCustomCaseState.totalCases = 305;
+
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: { customCaseInventory: defaultCustomCaseState },
+    });
+
+    const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+    expect(result.pageCount).toEqual(expectedPageCount);
+  });
+
+  it('should set the maxDate to today', () => {
+    const mockToday = '2022-04-13';
+    applicationContext.getUtilities().formatNow.mockReturnValue(mockToday);
+
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: { customCaseInventory: defaultCustomCaseState },
+    });
+
+    expect(result.today).toEqual(mockToday);
   });
 });

@@ -423,6 +423,12 @@ export const MOTION_EVENT_CODES = [
   'M112',
 ];
 
+export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -931,14 +937,6 @@ export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.interestAbatement]:
     'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
   [CASE_TYPES_MAP.other]: 'Other',
-};
-
-export const DEFAULT_CUSTOM_CASE_INVENTORY_FILTERS = {
-  caseStatuses: [],
-  caseTypes: [],
-  createEndDate: '',
-  createStartDate: '',
-  filingMethod: 'all',
 };
 
 export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {

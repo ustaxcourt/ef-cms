@@ -53,7 +53,6 @@ import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
-import { JudgeActivityReport } from './JudgeActivityReport/JudgeActivityReport';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
@@ -146,7 +145,6 @@ const pages = {
   FilePetitionSuccess,
   IdleLogout,
   Interstitial,
-  JudgeActivityReport,
   Loading,
   LogIn,
   MessageDetail,

@@ -7,7 +7,6 @@ export const FORMATS = {
   DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
-  ISO_DATE: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
@@ -26,9 +25,10 @@ export const FORMATS = {
   YEAR_TWO_DIGIT: 'yy',
   YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
-  YYYYMMDD_DASH: 'YYYY-MM-DD',
   YYYYMMDD_NUMERIC: 'yyyyMMdd',
-};
+} as const;
+const FORMATS1 = Object.values(FORMATS);
+export type TimeFormats = (typeof FORMATS1)[number];
 
 export const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
@@ -83,7 +83,10 @@ export const combineISOandEasternTime = (dateString, timeString) => {
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {luxon} a luxon object
  */
-export const prepareDateFromString = (dateString, inputFormat) => {
+export const prepareDateFromString = (
+  dateString?: string,
+  inputFormat?: TimeFormats,
+) => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
@@ -120,6 +123,10 @@ export const calculateISODate = ({
   dateString,
   howMuch = 0,
   units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
 }) => {
   if (!howMuch) return dateString;
 
@@ -133,7 +140,7 @@ export const calculateISODate = ({
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-export const createISODateString = (dateString, inputFormat) => {
+export const createISODateString = (dateString?, inputFormat?) => {
   let result;
 
   if (!dateString) {
@@ -209,7 +216,10 @@ export const createISODateStringFromObject = options => {
  * @param {string} formatArg the desired formatting as specified by the luxon library
  * @returns {string|void} a formatted date string
  */
-export const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
+export const formatDateString = (
+  dateString,
+  formatArg: TimeFormats = FORMATS.ISO,
+) => {
   if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
 
@@ -236,10 +246,7 @@ export const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   return result;
 };
 
-export const formatNow = formatStr => {
-  /*
-  Using `module.exports` to allow mocking in tests
-  */
+export const formatNow = (formatStr: TimeFormats) => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };

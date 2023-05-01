@@ -13,8 +13,8 @@ describe('validateCustomCaseInventorySearchFiltersInteractor', () => {
     const errors = validateCustomCaseInventorySearchFiltersInteractor(
       applicationContext,
       {
-        endDate: undefined,
-        startDate: undefined,
+        endDate: undefined as any,
+        startDate: undefined as any,
       },
     );
 

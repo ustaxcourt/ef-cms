@@ -18,15 +18,9 @@ import { Case, getContactPrimary } from './Case';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_USERS } from '../../../test/mockUsers';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
-import {
-  docketClerkUser,
-  irsSuperuserUser,
-  petitionerUser,
-  petitionsClerkUser,
-  privatePractitionerUser,
-} from '../../../test/mockUsers';
 
 jest.mock('../../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../../utilities/DateHandler');
@@ -40,12 +34,13 @@ jest.mock('../../utilities/DateHandler', () => {
 describe('Case entity', () => {
   describe('init', () => {
     it('should add case status information including the internal users NAME to the `caseStatusHistory` if a new case is created by an internal user', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce(docketClerkUser);
+      const internalUser = MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'];
+      applicationContext.getCurrentUser.mockReturnValueOnce(internalUser);
       const mockCreateIsoDateString = createISODateString as jest.Mock;
       mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
 
       const expectedCaseStatus = {
-        changedBy: docketClerkUser.name,
+        changedBy: internalUser.name,
         date: createISODateString(),
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       };
@@ -63,6 +58,7 @@ describe('Case entity', () => {
     });
 
     it('should add case status information including the petitioners ROLE to the `caseStatusHistory` if a new case is created by an petitioner', () => {
+      const petitionerUser = MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'];
       applicationContext.getCurrentUser.mockReturnValueOnce(petitionerUser);
       const mockCreateIsoDateString = createISODateString as jest.Mock;
       mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
@@ -86,6 +82,8 @@ describe('Case entity', () => {
     });
 
     it('should add case status information including a private practitioners ROLE to the `caseStatusHistory` if a new case is created by an private practitioners', () => {
+      const privatePractitionerUser =
+        MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
       applicationContext.getCurrentUser.mockReturnValueOnce(
         privatePractitionerUser,
       );
@@ -272,7 +270,9 @@ describe('Case entity', () => {
 
   describe('filtered', () => {
     it('does not return private data if filtered is true and the user is external', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         {
@@ -291,7 +291,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         {
@@ -310,7 +312,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is external', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
@@ -324,7 +328,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
@@ -338,7 +344,9 @@ describe('Case entity', () => {
     });
 
     it('returns STIN docket entry if filtered is false and the user is docketclerk', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE },
@@ -355,7 +363,9 @@ describe('Case entity', () => {
     });
 
     it('returns STIN docket entry if filtered is true and the user is IRS superuser', () => {
-      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'],
+      ); //irsSuperuser user
 
       const myCase = new Case(
         { ...MOCK_CASE },
@@ -372,7 +382,9 @@ describe('Case entity', () => {
     });
 
     it('returns STIN docket entry if filtered is true and the user is petitionsclerk and the petition is not served', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitionsclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE },
@@ -389,7 +401,9 @@ describe('Case entity', () => {
     });
 
     it('does not return STIN docket entry if filtered is true and the user is docketclerk and the petition is not served', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE },
@@ -406,7 +420,9 @@ describe('Case entity', () => {
     });
 
     it('does not return STIN docket entry if filtered is true and the user is petitionsclerk and the petition is served', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitionsclerk user
 
       const myCase = new Case(
         {
@@ -1144,6 +1160,9 @@ describe('Case entity', () => {
 
   describe('Statistics', () => {
     it('should be required for deficiency cases when hasVerifiedIrsNotice is true', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
@@ -1162,6 +1181,9 @@ describe('Case entity', () => {
     });
 
     it('should not be required for deficiency cases when hasVerifiedIrsNotice is false', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
@@ -1177,6 +1199,9 @@ describe('Case entity', () => {
     });
 
     it('should not be required for other cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
