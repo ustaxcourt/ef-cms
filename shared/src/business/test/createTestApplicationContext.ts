@@ -1,18 +1,5 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
-
-import {
-  ERROR_MAP_429,
-  getCognitoLoginUrl,
-  getPublicSiteUrl,
-  getUniqueId,
-} from '../../sharedAppContext';
-import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
-import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
-import path from 'path';
-
 import * as pdfLib from 'pdf-lib';
 import {
   Case,
@@ -30,11 +17,25 @@ import {
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import pug from 'pug';
-import sass from 'sass';
-
 import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
+import {
+  DocketEntry,
+  getServedPartiesCode,
+  isServed,
+} from '../entities/DocketEntry';
+import {
+  ERROR_MAP_429,
+  getCognitoLoginUrl,
+  getPublicSiteUrl,
+  getUniqueId,
+} from '../../sharedAppContext';
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
 import { abbreviateState } from '../utilities/abbreviateState';
+import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -96,7 +97,6 @@ import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
-import { getServedPartiesCode } from '../entities/DocketEntry';
 import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '../utilities/getTextByCount';
 import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/users/getUserById';
@@ -128,6 +128,9 @@ import { updateUserRecords } from '../../persistence/dynamo/users/updateUserReco
 import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
+import path from 'path';
+import pug from 'pug';
+import sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
