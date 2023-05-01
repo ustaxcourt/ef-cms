@@ -49,6 +49,7 @@ export const TrialSessionDetail = connect(
                 dismissText: 'Yes, served',
                 message: formattedTrialSessionDetails.alertMessageForNOTT,
               }}
+              // dismissAlertSequence={tbd}
               dismissable={true}
               messageNotBold={true}
               scrollToTop={false}

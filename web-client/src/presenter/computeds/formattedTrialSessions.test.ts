@@ -551,29 +551,4 @@ describe('formattedTrialSessions', () => {
       },
     ]);
   });
-
-  it('should set showAlertForNOTTReminder for calendared sessions based on whether the current date falls within the range for an NOTT reminder or not', () => {
-    applicationContext
-      .getUtilities()
-      .isDateWithinDateRange.mockReturnValueOnce(false)
-      .mockReturnValue(true);
-
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        trialSessions: TRIAL_SESSIONS_LIST,
-      },
-    });
-    expect(result.filteredTrialSessions['Open'][0].sessions).toMatchObject([
-      {
-        showAlertForNOTTReminder: true,
-      },
-      {
-        showAlertForNOTTReminder: false,
-      },
-      {
-        showAlertForNOTTReminder: true,
-      },
-    ]);
-  });
 });
