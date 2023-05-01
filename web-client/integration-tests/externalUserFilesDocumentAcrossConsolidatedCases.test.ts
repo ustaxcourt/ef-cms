@@ -100,6 +100,8 @@ describe('External User files a document across a consolidated case group', () =
 
     loginAs(cerebralTest, 'irspractitioner2@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
+    //verify that irsPractitioner is not associated with any of the cases in the consolidated cases group
+
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
@@ -109,6 +111,7 @@ describe('External User files a document across a consolidated case group', () =
       fakeFile,
     });
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+    //verify that irsPractitioner IS now associated with all of the cases in the consolidated cases group
   });
 
   describe('petitioner', () => {
