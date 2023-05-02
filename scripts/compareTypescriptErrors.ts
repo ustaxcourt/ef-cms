@@ -20,6 +20,7 @@ function countTypescriptErrors(text: string): number {
   return (text.match(/: error TS/g) || []).length;
 }
 
+// ************************************ Your Branch Errors ***********************************
 console.log('Typechecking your branch...');
 const branchToBeComparedTypescriptOutput = spawnSync(
   'npx',
