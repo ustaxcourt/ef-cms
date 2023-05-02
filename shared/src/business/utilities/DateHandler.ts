@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -149,7 +149,7 @@ export const createISODateString = (dateString?, inputFormat?) => {
  * @param {string} dateString a date string to be updated to ISO in USTC_TZ (ET)
  * @returns {string} the ISO formatted date set at midnight of today USTC_TZ (ET)
  */
-export const createISODateAtStartOfDayEST = dateString => {
+export const createISODateAtStartOfDayEST = (dateString?: any) => {
   const dtObj = dateString
     ? DateTime.fromISO(dateString, { zone: USTC_TZ })
     : DateTime.now().setZone(USTC_TZ);
@@ -528,4 +528,24 @@ export const getBusinessDateInFuture = ({
   }
 
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+};
+
+/**
+ * Returns whether or not the current date falls within the given date time range
+ *
+ * @param {string} intervalStartDate the interval start ISO date string
+ * @param {string} intervalEndDate the interval end ISO date string
+ * @returns {boolean} whether or not the current date falls within the given date time range
+ */
+export const isTodayWithinGivenInterval = ({
+  intervalEndDate,
+  intervalStartDate,
+}): Boolean => {
+  const today = DateTime.now().setZone(USTC_TZ);
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDate,
+    intervalEndDate,
+  );
+
+  return dateRangeInterval.contains(today);
 };
