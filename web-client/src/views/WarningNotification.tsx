@@ -9,6 +9,7 @@ export const WarningNotificationComponent =
     alertWarning,
     dismissable = true,
     dismissAlertSequence,
+    iconRight = true,
     messageNotBold = false,
     scrollToTop = true,
   }: {
@@ -24,6 +25,7 @@ export const WarningNotificationComponent =
     dismissAlertSequence?: Function;
     messageNotBold?: boolean;
     scrollToTop?: boolean;
+    iconRight?: boolean;
   }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
@@ -84,7 +86,7 @@ export const WarningNotificationComponent =
                         link
                         className="no-underline padding-0"
                         icon={alertWarning.dismissIcon || 'times-circle'}
-                        iconRight={true}
+                        iconRight={iconRight}
                         onClick={() => dismissAlertSequence()}
                       >
                         {alertWarning.dismissText || 'Clear'}

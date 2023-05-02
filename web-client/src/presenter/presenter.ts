@@ -352,6 +352,7 @@ import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerC
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
+import { showDismissThirtyDayAlertModalSequence } from './sequences/showDismissThirtyDayAlertModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
@@ -866,6 +867,7 @@ const sequences = {
   setViewerDocumentToDisplaySequence,
   setViewerDraftDocumentToDisplaySequence,
   showCalculatePenaltiesModalSequence,
+  showDismissThirtyDayAlertModalSequence,
   showDocketRecordDetailModalSequence,
   showMoreClosedCasesSequence,
   showMoreOpenCasesSequence,
