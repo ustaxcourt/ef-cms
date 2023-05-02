@@ -404,7 +404,7 @@ export const castToISO = dateString => {
  */
 export const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
-  let result: any = null;
+  let result: string | null = null;
 
   // use unique characters in "undefined" ⬇
   if (updatedDateString.replace(/[-,undefi]/g, '') === '') {
