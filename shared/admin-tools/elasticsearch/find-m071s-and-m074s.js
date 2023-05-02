@@ -1,9 +1,11 @@
-// usage: npx ts-node shared/admin-tools/elasticsearch/find-m071s-and-m074s.js > ~/Desktop/m071s-and-m074s-filed-in-2021-and-2022.csv
+// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-m071s-and-m074s.js > ~/Desktop/m071s-and-m074s-filed-in-2021-and-2022.csv
 
 const { requireEnvVars } = require('../util');
 requireEnvVars(['ENV', 'REGION']);
 
-const createApplicationContext = require('../../../web-api/src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const { computeDate } = require('../../src/business/utilities/DateHandler');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
 

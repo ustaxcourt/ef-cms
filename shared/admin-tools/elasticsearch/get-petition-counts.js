@@ -1,10 +1,12 @@
-// usage: npx ts-node shared/admin-tools/elasticsearch/get-petition-counts.js 2022
+// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/get-petition-counts.js 2022
 
-const createApplicationContext = require('../../../web-api/src/applicationContext');
 const {
   computeDate,
   dateStringsCompared,
 } = require('../../src/business/utilities/DateHandler');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const {
   searchAll,
 } = require('../../src/persistence/elasticsearch/searchClient');

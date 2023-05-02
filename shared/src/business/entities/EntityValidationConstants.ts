@@ -274,6 +274,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   qcAt: JoiValidationConstants.ISO_DATE.optional(),
   qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+  redactionAcknowledgement: joi.boolean().optional().invalid(false),
   relationship: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_RELATIONSHIPS),
   ).optional(),
@@ -435,7 +436,8 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
     .description('The name of the user that sent the WorkItem'),
   sentBySection: JoiValidationConstants.STRING.optional(),
   sentByUserId: JoiValidationConstants.UUID.optional(),
-  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+  trialDate: joi.string().optional().allow(null),
+  trialLocation: joi.string().optional().allow(null),
   updatedAt: JoiValidationConstants.ISO_DATE.required(),
   workItemId: JoiValidationConstants.UUID.required(),
 };

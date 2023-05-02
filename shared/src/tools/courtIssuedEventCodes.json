@@ -407,6 +407,14 @@
     "requiresSignature": true
   },
   {
+    "eventCode": "NOTT",
+    "documentType": "30-Day Notice of Trial",
+    "documentTitle": "30 Day Notice of Trial on [Date] at [Place]",
+    "isNotice": true,
+    "scenario": "Type G",
+    "requiresSignature": false
+  },
+  {
     "eventCode": "PTRL",
     "documentType": "Partial Trial before",
     "documentTitle": "Partial Trial before [Judge] at [Place]. [Anything]",

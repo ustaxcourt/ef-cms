@@ -1,11 +1,13 @@
-// usage: npx ts-node shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
+// usage: npx ts-node --transpile-only shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
 
 const { requireEnvVars } = require('./util');
 requireEnvVars(['ENV', 'HOME', 'REGION']);
 
-const createApplicationContext = require('../../web-api/src/applicationContext');
 const fs = require('fs');
 const tiff2pdf = require('tiff2pdf');
+const {
+  createApplicationContext,
+} = require('../../web-api/src/applicationContext');
 const {
   createISODateString,
 } = require('../src/business/utilities/DateHandler');

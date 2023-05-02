@@ -1,9 +1,7 @@
 import { PDFDocument, PDFFont } from 'pdf-lib';
-import {
-  applicationContextForClient as applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../test/createTestApplicationContext';
 import { setupPdfDocument } from './setupPdfDocument';
+import { testPdfDoc } from '../test/getFakeFile';
 
 describe('setupPdfDocument', () => {
   const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);

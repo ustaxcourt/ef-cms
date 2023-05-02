@@ -26,7 +26,6 @@ export const fileExternalDocumentInteractor = async (
   { documentMetadata }: { documentMetadata: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
@@ -36,6 +35,7 @@ export const fileExternalDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  const { docketNumber } = documentMetadata;
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -141,8 +141,10 @@ export const fileExternalDocumentInteractor = async (
           sentBy: user.name,
           sentByUserId: user.userId,
           trialDate: caseEntity.trialDate,
+          trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       ).validate();
 
       docketEntryEntity.setWorkItem(workItem);
