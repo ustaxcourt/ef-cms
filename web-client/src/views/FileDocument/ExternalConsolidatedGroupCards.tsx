@@ -21,9 +21,9 @@ export const ExternalConsolidatedGroupCards = connect(
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12 margin-bottom-1">
                   <div className="tablet:margin-bottom-0 margin-bottom-205">
-                    <label className="usa-label" htmlFor="primary-filing">
-                      Docket Numbers and Petitioners
-                    </label>
+                    <h3 className="usa-label">
+                      Docket numbers and petitioners
+                    </h3>
                     <ul className="ustc-unstyled-consolidated-case-list padding-left-0">
                       {externalConsolidatedCaseGroupHelper.formattedConsolidatedCaseList.map(
                         (item, index) => (
