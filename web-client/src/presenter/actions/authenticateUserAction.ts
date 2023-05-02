@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Gets the JWT token and refresh token using the cognito authorization code.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {Function} providers.props the cerebral props argument stream containing 'code'
@@ -33,7 +32,14 @@ export const authenticateUserAction = async ({
         path: '/change-password-local',
       });
     }
-    return path.no({ alertError: { title: response.alertError } });
+    return path.no({
+      alertError: {
+        message: response.alertError.message,
+        title: response.alertError.title
+          ? response.alertError.title
+          : response.alertError,
+      },
+    });
   } else {
     return path.yes({ token: response.token });
   }

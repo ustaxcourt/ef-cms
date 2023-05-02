@@ -21,7 +21,7 @@ describe('Admissions clerk creates practitioner account', () => {
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   admissionsClerkAddsNewPractitioner(cerebralTest, emailAddress);
 
-  it('practitioner logs in with temporary password', async () => {
+  it('practitioner attempts to log in with temporary password', async () => {
     await cerebralTest.runSequence('signOutSequence');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
