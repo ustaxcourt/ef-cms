@@ -230,9 +230,7 @@ export const FileDocumentReview = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label className="usa-label" htmlFor="primary-filing">
-                          {form.documentTitle}
-                        </label>
+                        <h3 className="usa-label">{form.documentTitle}</h3>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
                             <PDFPreviewButton
@@ -300,9 +298,7 @@ export const FileDocumentReview = connect(
                   <h3 className="underlined">Parties Filing The Document(s)</h3>
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-12 margin-bottom-1">
-                      <label className="usa-label" htmlFor="filing-parties">
-                        Filing parties
-                      </label>
+                      <h3 className="usa-label">Filing parties</h3>
                       <ul className="ustc-unstyled-list without-margins">
                         {fileDocumentHelper.formattedFilingParties.map(
                           party => (
