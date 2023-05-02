@@ -1,39 +1,6 @@
 import { isEmpty, isEqual } from 'lodash';
+import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { state } from 'cerebral';
-
-export const setNoticeOfTrialReminder = ({
-  applicationContext,
-  trialStartDate,
-}) => {
-  const { DATE_FORMATS } = applicationContext.getConstants();
-
-  const thirtyFiveDaysBeforeTrial: any = applicationContext
-    .getUtilities()
-    .prepareDateFromString(trialStartDate, DATE_FORMATS.MMDDYY)
-    .minus({
-      ['days']: 35,
-    });
-
-  const thirtyDaysBeforeTrial: any = applicationContext
-    .getUtilities()
-    .prepareDateFromString(trialStartDate, DATE_FORMATS.MMDDYY)
-    .minus({
-      ['days']: 30,
-    });
-
-  const isCurrentDateWithinReminderRange: boolean = applicationContext
-    .getUtilities()
-    .isTodayWithinGivenInterval({
-      intervalEndDate: thirtyDaysBeforeTrial,
-      intervalStartDate: thirtyFiveDaysBeforeTrial,
-    });
-
-  const thirtyDaysBeforeTrialFormatted: any = applicationContext
-    .getUtilities()
-    .formatDateString(thirtyDaysBeforeTrial, DATE_FORMATS.MMDDYY);
-
-  return { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted };
-};
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const formattedTrialSession = applicationContext
@@ -104,15 +71,14 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         const {
           isCurrentDateWithinReminderRange,
           thirtyDaysBeforeTrialFormatted,
-        } = setNoticeOfTrialReminder({
+        } = set30DayNoticeOfTrialReminder({
           applicationContext,
           trialStartDate: formattedTrialSession.formattedStartDate,
         });
 
         formattedTrialSession.showAlertForNOTTReminder =
           isCurrentDateWithinReminderRange;
-        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}.
-        Have notices been served?`;
+        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}. \nHave notices been served?`;
       }
 
       if (
