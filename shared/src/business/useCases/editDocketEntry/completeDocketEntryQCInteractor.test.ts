@@ -6,15 +6,13 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
   docketClerkUser,
 } from '../../../test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;

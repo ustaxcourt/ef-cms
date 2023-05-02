@@ -137,7 +137,6 @@ export const fileExternalDocumentInteractor = async (
           docketNumber: caseToUpdate.docketNumber,
           docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           highPriority: highPriorityWorkItem,
-          leadDocketNumber: caseToUpdate.leadDocketNumber,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,
@@ -145,6 +144,7 @@ export const fileExternalDocumentInteractor = async (
           trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       ).validate();
 
       docketEntryEntity.setWorkItem(workItem);
