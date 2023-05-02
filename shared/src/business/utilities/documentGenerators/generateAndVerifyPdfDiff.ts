@@ -58,19 +58,12 @@ export const generateAndVerifyPdfDiff = ({
   );
 
   beforeAll(() => {
-    fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-      if (err) throw err;
-    });
+    fs.mkdirSync(testOutputPath, { recursive: true });
 
-    applicationContext.getChromiumBrowser.mockImplementation(
-      getChromiumBrowser,
-    );
+    applicationContext.getChromiumBrowser = getChromiumBrowser as any;
 
-    applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(
-        generatePdfFromHtmlInteractor,
-      );
+    applicationContext.getUseCases().generatePdfFromHtmlInteractor =
+      generatePdfFromHtmlInteractor as any;
 
     applicationContext.getUtilities().formatNow = () => '01/15/22';
   });
