@@ -37,7 +37,9 @@ if (!process.argv[2]) {
 
   // get the count for the domain
   if (res.body.count > 0) {
-    console.log('cluster is NOT empty, exiting with status code 1');
+    console.log(
+      `cluster is NOT empty (${res.body.count} items found), exiting with status code 1`,
+    );
     process.exit(1);
   }
 
