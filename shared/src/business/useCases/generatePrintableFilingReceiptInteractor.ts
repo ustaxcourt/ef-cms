@@ -32,11 +32,11 @@ const getDocumentInfo = ({
 
 /**
  * generatePrintableFilingReceiptInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case the documents were filed in
  * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
+ * @param {boolean} providers.fileAcrossConsolidatedGroup flag to determine whether the document should be filed across the consolidated cases group
  * @returns {string} url for the generated document on the storage client
  */
 export const generatePrintableFilingReceiptInteractor = async (

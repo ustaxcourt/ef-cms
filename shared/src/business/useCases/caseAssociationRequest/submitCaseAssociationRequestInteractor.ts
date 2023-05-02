@@ -7,14 +7,11 @@ import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * submitCaseAssociationRequestInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.representingPrimary true if the user is representing
- * the primary contact on the case, false otherwise
- * @param {string} providers.representingSecondary true if the user is representing
- * the secondary contact on the case, false otherwise
+ * @param {string} providers.filers the parties represented by the practitioner
  * @returns {Promise<*>} the promise of the case association request
  */
 export const submitCaseAssociationRequestInteractor = async (

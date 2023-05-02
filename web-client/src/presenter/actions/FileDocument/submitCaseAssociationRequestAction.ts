@@ -2,9 +2,9 @@ import { state } from 'cerebral';
 
 /**
  * set practitioner to a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
  * @returns {Promise} async action
  */

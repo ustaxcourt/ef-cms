@@ -15,7 +15,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 import { pick } from 'lodash';
 
 /**
- *
+ * fileExternalDocumentInteractor
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the metadata for all the documents
