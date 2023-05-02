@@ -53,8 +53,12 @@ module.exports.createCase1 = async () => {
             filingType: 'Myself',
             hasIrsNotice: false,
             partyType: PARTY_TYPES.petitioner,
+            petitionFile,
+            petitionFileSize: 1,
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
+            stinFile,
+            stinFileSize: 1,
           },
           stinFileId,
         });

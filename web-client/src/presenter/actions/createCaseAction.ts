@@ -37,7 +37,7 @@ export const createCaseAction = async ({
     },
     store,
   );
-
+  console.log('form ', form);
   let filePetitionResult;
   try {
     filePetitionResult = await applicationContext

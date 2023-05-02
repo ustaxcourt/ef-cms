@@ -62,8 +62,6 @@ const createDocketEntryForChange = async ({
       },
     });
 
-  console.log(changeOfAddressPdf);
-
   const newDocketEntryId = applicationContext.getUniqueId();
 
   const changeOfAddressDocketEntry = new DocketEntry(
