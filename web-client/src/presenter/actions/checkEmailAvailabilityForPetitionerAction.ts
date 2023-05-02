@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * check if the email is already in use
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { updatedEmail } = get(state.form.contact);
 
   const isEmailAvailable = await applicationContext

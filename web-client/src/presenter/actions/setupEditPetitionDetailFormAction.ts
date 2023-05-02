@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the form with the necessary date related state that is found on the caseDetail for petition fee payments.
- *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object containing the props.caseDetail
  * @param {object} providers.store the cerebral store used for setting the state.caseDetail
@@ -11,7 +10,7 @@ export const setupEditPetitionDetailFormAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const paymentStatus = applicationContext.getConstants().PAYMENT_STATUS;
 

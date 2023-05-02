@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the applicationContext
  * @param {object} providers.store the cerebral store object
  */
-export const setJudgeLastNameOnFormAction = ({ applicationContext, store }) => {
+export const setJudgeLastNameOnFormAction = ({
+  applicationContext,
+  store,
+}: ActionProps) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const user = applicationContext.getCurrentUser();
