@@ -54,6 +54,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
@@ -181,6 +182,7 @@ import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForU
 import {
   getChambersSections,
   getChambersSectionsLabels,
+  getJudgesChambers,
 } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { getChiefJudgeNameForSigningInteractor } from '../../shared/src/proxies/getChiefJudgeNameForSigningProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
@@ -206,6 +208,8 @@ import { getJudgeInSectionInteractor } from '../../shared/src/proxies/users/getJ
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOpinionsFiledByJudgeProxy';
+import { getOrdersFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOrdersFiledByJudgeProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
@@ -220,6 +224,7 @@ import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
+import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/getTrialSessionsForJudgeActivityReportProxy';
 import { getTrialSessionsForJudgeInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsForJudgeProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserByIdInteractor } from '../../shared/src/proxies/users/getUserByIdProxy';
@@ -323,6 +328,7 @@ import { validateEditPetitionerCounselInteractor } from '../../shared/src/busine
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateHearingNoteInteractor } from '../../shared/src/business/useCases/validateHearingNoteInteractor';
+import { validateJudgeActivityReportSearchInteractor } from '../../shared/src/business/useCases/judgeActivityReport/validateJudgeActivityReportSearchInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -437,6 +443,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getChiefJudgeNameForSigningInteractor,
   getCompletedMessagesForSectionInteractor,
@@ -461,6 +468,8 @@ const allUseCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
+  getOpinionsFiledByJudgeInteractor,
+  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
@@ -476,6 +485,7 @@ const allUseCases = {
       : getStatusOfVirusScanInteractor(applicationContext, args),
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
+  getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUserByIdInteractor,
@@ -570,6 +580,7 @@ const allUseCases = {
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateHearingNoteInteractor,
+  validateJudgeActivityReportSearchInteractor,
   validateNoteInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -757,6 +768,7 @@ const applicationContext = {
       getFormattedPartiesNameAndTitle,
       getFormattedTrialSessionDetails,
       getJudgeLastName,
+      getJudgesChambers,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,

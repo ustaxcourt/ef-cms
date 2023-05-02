@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -9,7 +10,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import applicationContextFactory from '../../web-api/src/applicationContext';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();

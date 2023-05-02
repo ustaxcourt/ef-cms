@@ -1,6 +1,7 @@
+import { testPdfDoc } from '../../test/getFakeFile';
+
 const {
   applicationContext,
-  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { PDFDocument } = require('pdf-lib');
