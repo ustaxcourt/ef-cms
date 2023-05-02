@@ -312,7 +312,7 @@ export const baseState = {
   judgeActivityReportData: {},
   judges: [],
   legacyAndCurrentJudges: [],
-  listOfBanners: {},
+  listOfBanners: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {

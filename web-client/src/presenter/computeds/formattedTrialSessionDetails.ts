@@ -5,7 +5,9 @@ import { state } from 'cerebral';
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const trialSession = get(state.trialSession);
   const listOfBanners = get(state.listOfBanners);
-  const hasNOTTBannerBeenDismissed = listOfBanners[trialSession.trialSessionId];
+  const hasNOTTBannerBeenDismissed = listOfBanners.find(
+    session => session.trialSessionId === trialSession.trialSessionId,
+  )?.dismissed;
 
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -69,7 +71,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
 
       if (
-        !hasNOTTBannerBeenDismissed &&
+        !!hasNOTTBannerBeenDismissed &&
         formattedTrialSession.isCalendared &&
         formattedTrialSession.formattedStartDate
       ) {

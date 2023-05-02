@@ -7,8 +7,10 @@ import { state } from 'cerebral';
 export const formatSession = (session, applicationContext, get) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
   const listOfBanners = get(state.listOfBanners);
-  const hasNOTTBannerBeenDismissed =
-    listOfBanners[session.trialSessionId] === true;
+  console.log(listOfBanners, 'listOfBannerslistOfBannerslistOfBanners--');
+  const hasNOTTBannerBeenDismissed = listOfBanners.find(
+    sessionObject => sessionObject.trialSessionId === session.trialSessionId,
+  )?.dismissed;
 
   session.startOfWeek = createDateAtStartOfWeekEST(
     session.startDate,
@@ -33,7 +35,7 @@ export const formatSession = (session, applicationContext, get) => {
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
   if (
-    !hasNOTTBannerBeenDismissed &&
+    !!hasNOTTBannerBeenDismissed &&
     session.isCalendared &&
     session.formattedStartDate
   ) {
