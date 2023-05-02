@@ -9,8 +9,16 @@ import { state } from 'cerebral';
  */
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
+  get,
   store,
 }) => {
+  const isExternalConsolidatedCaseGroupFilingEnabled = get(
+    state.isExternalConsolidatedCaseGroupFilingEnabled,
+  );
+  if (isExternalConsolidatedCaseGroupFilingEnabled) {
+    store.set(state.form.fileAcrossConsolidatedGroup, true);
+  }
+
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);

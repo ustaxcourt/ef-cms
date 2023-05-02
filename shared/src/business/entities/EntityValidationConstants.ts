@@ -460,6 +460,25 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
 
+const DATE_RANGE_VALIDATION_RULE_KEYS = {
+  endDate: joi.alternatives().conditional('startDate', {
+    is: JoiValidationConstants.ISO_DATE.exist().not(null),
+    otherwise: JoiValidationConstants.ISO_DATE.required().description(
+      'The end date search filter must be of valid date format',
+    ),
+    then: JoiValidationConstants.ISO_DATE.required()
+      .min(joi.ref('startDate'))
+      .description(
+        'The end date search filter must be of valid date format and greater than or equal to the start date',
+      ),
+  }),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
+};
+
 // TODO: validate workItems in DocketEntry
 // DOCKET_ENTRY_VALIDATION_RULE_KEYS.workItem = joi
 //   .object()
@@ -467,6 +486,7 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
 //   .optional();
 
 module.exports = {
+  DATE_RANGE_VALIDATION_RULE_KEYS,
   DOCKET_ENTRY_VALIDATION_RULE_KEYS,
   DOCKET_ENTRY_VALIDATION_RULES: joi
     .object()
