@@ -61,6 +61,11 @@ legend {
   @media only screen and (max-width: $medium-screen) {
     line-height: 1.1em;
   }
+
+  &#redaction-acknowledgement-label {
+    max-width: 580px;
+    margin-top: 0;
+  }
 }
 
 input[type='email'],
@@ -562,6 +567,8 @@ label.ustc-upload {
 }
 
 .usa-date-picker {
+  min-width: 245px;
+
   * {
     animation: none;
   }

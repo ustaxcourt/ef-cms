@@ -1,18 +1,16 @@
-const jwt = require('jsonwebtoken');
-const {
+import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../shared/src/errors/errors';
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
+import {
   getAuthHeader,
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
   redirect,
-} = require('./apiGatewayHelper');
-const {
-  NotFoundError,
-  UnauthorizedError,
-} = require('../../../shared/src/errors/errors');
-const {
-  ROLES,
-} = require('../../../shared/src/business/entities/EntityConstants');
+} from './apiGatewayHelper';
+import jwt from 'jsonwebtoken';
 
 const EXPECTED_HEADERS = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',

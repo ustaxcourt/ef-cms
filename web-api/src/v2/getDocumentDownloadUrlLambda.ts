@@ -1,8 +1,6 @@
-const {
-  marshallDocumentDownloadUrl,
-} = require('./marshallers/marshallDocumentDownloadUrl');
-const { genericHandler } = require('../genericHandler');
-const { v2ApiWrapper } = require('./v2ApiWrapper');
+import { genericHandler } from '../genericHandler';
+import { marshallDocumentDownloadUrl } from './marshallers/marshallDocumentDownloadUrl';
+import { v2ApiWrapper } from './v2ApiWrapper';
 
 /**
  * used for getting the download policy which is needed for consumers to download files directly from S3
@@ -11,7 +9,7 @@ const { v2ApiWrapper } = require('./v2ApiWrapper');
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getDocumentDownloadUrlLambda = (event, options = {}) =>
+export const getDocumentDownloadUrlLambda = (event, options = {}) =>
   genericHandler(
     event,
     ({ applicationContext }) => {

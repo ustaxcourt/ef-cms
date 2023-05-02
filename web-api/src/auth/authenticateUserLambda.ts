@@ -1,5 +1,5 @@
-const { createCookieString } = require('../utilities/cookieFormatting');
-const { genericHandler } = require('../genericHandler');
+import { createCookieString } from '../utilities/cookieFormatting';
+import { genericHandler } from '../genericHandler';
 
 /**
  * Sets the authentication cookie based on the OAuth code
@@ -7,7 +7,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.authenticateUserLambda = event =>
+export const authenticateUserLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
