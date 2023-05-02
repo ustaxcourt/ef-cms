@@ -1,10 +1,10 @@
-const {
+import {
   getContactPrimary,
   getContactSecondary,
-} = require('../../../../shared/src/business/entities/cases/Case');
-const { marshallContact } = require('./marshallContact');
-const { marshallDocketEntry } = require('./marshallDocketEntry');
-const { marshallPractitioner } = require('./marshallPractitioner');
+} from '../../../../shared/src/business/entities/cases/Case';
+import { marshallContact } from './marshallContact';
+import { marshallDocketEntry } from './marshallDocketEntry';
+import { marshallPractitioner } from './marshallPractitioner';
 
 /**
  * The returned object is specified by the v1 API and any changes to these properties
@@ -13,7 +13,7 @@ const { marshallPractitioner } = require('./marshallPractitioner');
  * @param {object} caseObject the most up-to-date representation of a case
  * @returns {object} the v1 representation of a case
  */
-exports.marshallCase = caseObject => {
+export const marshallCase = caseObject => {
   const contactPrimary = getContactPrimary(caseObject) || undefined;
   const contactSecondary = getContactSecondary(caseObject) || undefined;
   return {

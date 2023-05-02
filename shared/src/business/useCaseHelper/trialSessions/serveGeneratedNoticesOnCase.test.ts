@@ -1,3 +1,5 @@
+import { getFakeFile, testPdfDoc } from '../../test/getFakeFile';
+
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -6,7 +8,6 @@ const {
 } = require('./serveGeneratedNoticesOnCase');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { getFakeFile, testPdfDoc } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('serveGeneratedNoticesOnCase', () => {

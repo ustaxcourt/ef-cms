@@ -1,8 +1,6 @@
-const createSilentApplicationContext = require('../../../shared/src/business/test/createSilentApplicationContext');
-const {
-  getDocumentDownloadUrlLambda,
-} = require('./getDocumentDownloadUrlLambda');
-const { MOCK_USERS } = require('../../../shared/src/test/mockUsers');
+import { MOCK_USERS } from '../../../shared/src/test/mockUsers';
+import { createSilentApplicationContext } from '../../../shared/src/business/test/createSilentApplicationContext';
+import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 
 const REQUEST_EVENT = {
   body: {},

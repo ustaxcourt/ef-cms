@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+import { genericHandler } from '../genericHandler';
 
 /**
  * deletes a statistic from the case
@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.deleteDeficiencyStatisticLambda = event =>
+export const deleteDeficiencyStatisticLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
