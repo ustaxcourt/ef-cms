@@ -6,12 +6,15 @@ import { runAction } from 'cerebral/test';
 describe('authenticateUserAction', () => {
   let mockYes;
   let mockNo;
+  let mockNewPasswordRequired;
 
   beforeAll(() => {
     mockYes = jest.fn();
     mockNo = jest.fn();
+    mockNewPasswordRequired = jest.fn();
 
     presenter.providers.path = {
+      newPasswordRequired: mockNewPasswordRequired,
       no: mockNo,
       yes: mockYes,
     };
@@ -71,5 +74,42 @@ describe('authenticateUserAction', () => {
     });
 
     expect(mockNo.mock.calls[0][0]).toMatchObject(mockAlertError);
+  });
+
+  describe('cognitoLocal', () => {
+    it('should prepare state for the change password form when authenticateUserInteractor returns NEW_PASSWORD_REQUIRED', async () => {
+      const code = 'abc@efg.com';
+      const cognitoLocal = 'Password!';
+      const sessionId = 'asd4wd2csdfsd';
+
+      const mockAlertError = {
+        alertError: 'NEW_PASSWORD_REQUIRED',
+        sessionId,
+      };
+
+      applicationContext
+        .getUseCases()
+        .authenticateUserInteractor.mockImplementationOnce(() => {
+          return mockAlertError;
+        });
+
+      const { state } = await runAction(authenticateUserAction, {
+        modules: {
+          presenter,
+        },
+        props: {
+          code,
+          cognitoLocal,
+        },
+        state: {},
+      });
+
+      expect(state.cognitoLocal.userEmail).toEqual(code);
+      expect(state.cognitoLocal.sessionId).toEqual(sessionId);
+
+      expect(mockNewPasswordRequired.mock.calls[0][0]).toMatchObject({
+        path: '/change-password-local',
+      });
+    });
   });
 });
