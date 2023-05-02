@@ -4,9 +4,9 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { formatSession } from './formattedTrialSessions';
-import { setNoticeOfTrialReminder } from './formattedTrialSessionDetails';
-jest.mock('./formattedTrialSessionDetails', () => {
-  return { setNoticeOfTrialReminder: jest.fn() };
+import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
+jest.mock('./utilities/set30DayNoticeOfTrialReminder', () => {
+  return { set30DayNoticeOfTrialReminder: jest.fn() };
 });
 
 describe('formattedTrialSessions formatSession', () => {
@@ -37,7 +37,7 @@ describe('formattedTrialSessions formatSession', () => {
   ];
 
   beforeEach(() =>
-    setNoticeOfTrialReminder.mockReturnValue({
+    set30DayNoticeOfTrialReminder.mockReturnValue({
       isCurrentDateWithinReminderRange: true,
       thirtyDaysBeforeTrialFormatted: '2020/10/10',
     }),
@@ -75,31 +75,6 @@ describe('formattedTrialSessions formatSession', () => {
   it('should NOT set an NOTT reminder flag when the session is NOT calendared', () => {
     formatSession(mockTrialSessions[1], applicationContext);
 
-    expect(setNoticeOfTrialReminder).not.toHaveBeenCalled();
+    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
   });
-
-  // it('should set showAlertForNOTTReminder for calendared sessions based on whether the current date falls within the range for an NOTT reminder or not', () => {
-  //   applicationContext
-  //     .getUtilities()
-  //     .isDateWithinDateRange.mockReturnValueOnce(false)
-  //     .mockReturnValue(true);
-
-  //   const result = runCompute(formattedTrialSessions, {
-  //     state: {
-  //       ...baseState,
-  //       trialSessions: TRIAL_SESSIONS_LIST,
-  //     },
-  //   });
-  //   expect(result.filteredTrialSessions['Open'][0].sessions).toMatchObject([
-  //     {
-  //       showAlertForNOTTReminder: true,
-  //     },
-  //     {
-  //       showAlertForNOTTReminder: false,
-  //     },
-  //     {
-  //       showAlertForNOTTReminder: true,
-  //     },
-  //   ]);
-  // });
 });
