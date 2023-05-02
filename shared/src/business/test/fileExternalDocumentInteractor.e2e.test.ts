@@ -74,6 +74,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
         filingType: 'Myself',
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: 1,
         petitioners: [
           {
             address1: '19 First Freeway',
@@ -91,6 +93,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
         ],
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 1,
       },
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
