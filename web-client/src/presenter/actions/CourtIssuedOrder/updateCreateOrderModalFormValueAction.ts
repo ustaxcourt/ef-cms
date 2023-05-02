@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * update modal values for create order modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the passed in props
@@ -12,7 +11,7 @@ export const updateCreateOrderModalFormValueAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { key, value } = props;
   if (key === 'eventCode') {
     if (value) {

@@ -1,7 +1,11 @@
+import { ClientApplicationContext } from '../applicationContext';
 import { baseState } from './state';
 
 export const presenter = {
-  providers: {},
+  providers: {
+    applicationContext: {} as ClientApplicationContext,
+    path: {},
+  },
   sequences: {},
   state: baseState,
 };

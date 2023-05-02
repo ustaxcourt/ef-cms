@@ -13,6 +13,6 @@ export const setFormPartyTrueAction =
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
    */
-  ({ store }) => {
+  ({ store }: ActionProps) => {
     store.set(state.form[party], true);
   };

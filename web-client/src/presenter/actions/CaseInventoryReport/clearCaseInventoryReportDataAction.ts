@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  */
-export const clearCaseInventoryReportDataAction = ({ store }) => {
+export const clearCaseInventoryReportDataAction = ({ store }: ActionProps) => {
   store.unset(state.caseInventoryReportData);
   store.set(state.screenMetadata.page, 1);
 };

@@ -1,6 +1,5 @@
 /**
  * get calendared cases for trial session
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -9,7 +8,7 @@
 export const getCalendaredCasesForTrialSessionAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { trialSessionId } = props;
 
   const calendaredCases = await applicationContext

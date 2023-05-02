@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Generates a printable receipt for document filing
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const generatePrintableFilingReceiptAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { documentsFiled } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
 

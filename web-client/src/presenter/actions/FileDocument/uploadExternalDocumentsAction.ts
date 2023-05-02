@@ -12,7 +12,6 @@ const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
 
 /**
  * upload document to s3.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -25,7 +24,7 @@ export const uploadExternalDocumentsAction = async ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 

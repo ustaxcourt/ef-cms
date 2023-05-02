@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * generate document titles for supporting documents when filing external document
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const generateTitleForSupportingDocumentsAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const documentMetadata = get(state.form);
   let documentTitle;
 
