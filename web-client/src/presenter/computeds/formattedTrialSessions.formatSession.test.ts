@@ -4,11 +4,16 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { formatSession } from './formattedTrialSessions';
+import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
+jest.mock('./utilities/set30DayNoticeOfTrialReminder', () => {
+  return { set30DayNoticeOfTrialReminder: jest.fn() };
+});
 
 describe('formattedTrialSessions formatSession', () => {
   const mockTrialSessions = [
     {
       caseOrder: [],
+      isCalendared: true,
       judge: { name: '3', userId: '3' },
       noticeIssuedDate: '2019-07-25T15:00:00.000Z',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -31,6 +36,13 @@ describe('formattedTrialSessions formatSession', () => {
     },
   ];
 
+  beforeEach(() =>
+    set30DayNoticeOfTrialReminder.mockReturnValue({
+      isCurrentDateWithinReminderRange: true,
+      thirtyDaysBeforeTrialFormatted: '2020/10/10',
+    }),
+  );
+
   it('formats trial sessions correctly selecting startOfWeek and formatting start date, startOfWeekSortable, and formattedNoticeIssued', () => {
     const result = formatSession(mockTrialSessions[0], applicationContext);
     expect(result).toMatchObject({
@@ -49,5 +61,20 @@ describe('formattedTrialSessions formatSession', () => {
       formattedEstimatedEndDate: '02/17/45',
       formattedStartDate: '02/17/44',
     });
+  });
+
+  it('should set an NOTT reminder flag and message when the session is calendared and has a startDate that is between 30 and 35 days calendar days of the current date', () => {
+    const result = formatSession(mockTrialSessions[0], applicationContext);
+
+    expect(result).toMatchObject({
+      alertMessageForNOTT: 'The 30-day notice is due before 2020/10/10',
+      showAlertForNOTTReminder: true,
+    });
+  });
+
+  it('should NOT set an NOTT reminder flag when the session is NOT calendared', () => {
+    formatSession(mockTrialSessions[1], applicationContext);
+
+    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
   });
 });
