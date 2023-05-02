@@ -99,6 +99,7 @@ import { disengageAppMaintenanceSequence } from './sequences/disengageAppMainten
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
@@ -616,6 +617,7 @@ const sequences = {
   dismissAlertSequence,
   dismissCreateMessageModalSequence,
   dismissModalSequence,
+  dismissThirtyDayTrialAlertSequence,
   editCorrespondenceDocumentSequence,
   editUploadCourtIssuedDocumentSequence,
   fetchUserNotificationsSequence,
