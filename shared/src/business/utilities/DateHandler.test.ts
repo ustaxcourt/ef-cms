@@ -264,7 +264,7 @@ describe('DateHandler', () => {
       it('gets an ISO Date String representing today at Midnight when given no arguments', () => {
         const sameDay = '2022-07-16';
         mockTimeFunc.setDateMockValue(`${sameDay}T18:54:00.000Z`);
-        const result = createISODateAtStartOfDayEST();
+        const result = createISODateAtStartOfDayEST(null);
         expect(result).toBe(`${sameDay}T04:00:00.000Z`);
       });
     });
@@ -275,7 +275,7 @@ describe('DateHandler', () => {
     });
 
     it('creates a timestamp at start of day EST when given no arguments', () => {
-      const myDate = createISODateAtStartOfDayEST();
+      const myDate = createISODateAtStartOfDayEST(null);
       expect(isStringISOFormatted(myDate)).toBeTruthy();
     });
 
@@ -493,6 +493,7 @@ describe('DateHandler', () => {
       const result = computeDate({
         day: '5',
         month: '11',
+        year: null,
       });
 
       expect(result).toBe(undefined);
@@ -500,9 +501,9 @@ describe('DateHandler', () => {
 
     it('should return null if not provided values for all of day, month, and year', () => {
       const result = computeDate({
-        daynotprovided: true,
-        not: 'date info',
-        some: 'other thing',
+        day: null,
+        month: null,
+        year: null,
       });
 
       expect(result).toBe(null);
