@@ -287,6 +287,21 @@ export const CustomCaseReport = connect(
             hasRunCustomCaseReport={hasRunCustomCaseReport}
             totalCases={totalCases}
           />
+          {customCaseInventoryReportHelper.pageCount > 1 && (
+            <Paginator
+              breakClassName="hide"
+              forcePage={activePage}
+              marginPagesDisplayed={0}
+              pageCount={customCaseInventoryReportHelper.pageCount}
+              pageRangeDisplayed={0}
+              onPageChange={pageChange => {
+                setActivePage(pageChange.selected);
+                getCustomCaseInventoryReportSequence({
+                  selectedPage: pageChange.selected,
+                });
+              }}
+            />
+          )}
         </section>
       </>
     );
