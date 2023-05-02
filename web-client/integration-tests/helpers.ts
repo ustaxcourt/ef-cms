@@ -750,8 +750,12 @@ export const uploadPetition = async (
     filingType: 'Myself',
     hasIrsNotice: false,
     partyType: overrides.partyType || PARTY_TYPES.petitioner,
+    petitionFile: fakeFile,
+    petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
     procedureType: overrides.procedureType || 'Regular',
+    stinFile: fakeFile1,
+    stinFileSize: 1,
   };
 
   const petitionFileId = '1f1aa3f7-e2e3-43e6-885d-4ce341588c76';

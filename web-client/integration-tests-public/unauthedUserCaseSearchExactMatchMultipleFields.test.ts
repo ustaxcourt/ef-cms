@@ -1,5 +1,7 @@
-import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  ADVANCED_SEARCH_TABS,
+  COUNTRY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -12,13 +14,12 @@ const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
-const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 const [firstName, lastName] = [faker.name.firstName(), faker.name.lastName()];
 
 const nameToSearchFor = `${firstName} ${lastName}`;
 
-const createdDocketNumbers = [];
+const createdDocketNumbers: string[] = [];
 
 let notFoundDocketNumberOnContactPrimarySecondaryName;
 
@@ -72,14 +73,18 @@ describe('Create and serve a case to test contactPrimary.name', () => {
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
-      const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary({ name: nameToSearchFor }),
+      const { docketNumber } = await uploadPetition(testClient, {
+        contactPrimary: getContactPrimary({
+          name: nameToSearchFor,
+          secondaryName: undefined,
+        }),
       });
 
-      expect(caseDetail.docketNumber).toBeDefined();
-      cerebralTest.docketNumber = caseDetail.docketNumber;
-      testClient.docketNumber = caseDetail.docketNumber;
-      createdDocketNumbers.push(caseDetail.docketNumber);
+      expect(docketNumber).toBeDefined();
+
+      cerebralTest.docketNumber = docketNumber;
+      testClient.docketNumber = docketNumber;
+      createdDocketNumbers.push(docketNumber);
     });
 
     updateCaseCaption(
