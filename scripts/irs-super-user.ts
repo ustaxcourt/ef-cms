@@ -79,7 +79,7 @@ export const registerUser = async (): Promise<void> => {
   }
 };
 
-export const login = async () => {
+export const login = async (): Promise<void> => {
   const authResponse = await cognito.send(initiateAuthCommand);
   console.log(authResponse);
 
