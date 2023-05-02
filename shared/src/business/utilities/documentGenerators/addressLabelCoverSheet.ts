@@ -1,4 +1,4 @@
-import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF';
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
 export const addressLabelCoverSheet = async ({ applicationContext, data }) => {

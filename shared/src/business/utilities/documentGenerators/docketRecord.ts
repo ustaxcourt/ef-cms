@@ -1,5 +1,5 @@
 import { COUNTRY_TYPES } from '../../entities/EntityConstants';
-import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF';
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
 export const docketRecord = async ({ applicationContext, data }) => {
