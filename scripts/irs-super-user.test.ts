@@ -1,3 +1,6 @@
+import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
+import { login, registerUser } from './irs-super-user';
+
 jest.mock('../shared/admin-tools/util', () => ({
   askQuestion: jest.fn(() => {
     return new Promise(resolve => {
@@ -6,10 +9,6 @@ jest.mock('../shared/admin-tools/util', () => ({
   }),
   requireEnvVars: jest.fn(),
 }));
-
-import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
-import { login, registerUser } from './irs-super-user';
-
 jest.mock('@aws-sdk/client-cognito-identity-provider', () => {
   return {
     AssociateSoftwareTokenCommand: class {},
