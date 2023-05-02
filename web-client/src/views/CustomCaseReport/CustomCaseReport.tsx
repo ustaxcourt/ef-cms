@@ -265,9 +265,11 @@ export const CustomCaseReport = connect(
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           {customCaseInventoryReportHelper.pageCount > 1 && (
             <Paginator
+              breakClassName="hide"
               forcePage={activePage}
+              marginPagesDisplayed={0}
               pageCount={customCaseInventoryReportHelper.pageCount}
-              pageRangeDisplayed={3}
+              pageRangeDisplayed={0}
               onPageChange={pageChange => {
                 setActivePage(pageChange.selected);
                 getCustomCaseInventoryReportSequence({
