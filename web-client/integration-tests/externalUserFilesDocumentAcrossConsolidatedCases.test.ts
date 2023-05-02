@@ -1,8 +1,8 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
-import { externalUserRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/externalUserRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
+import { practitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/practitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { runCompute } from 'cerebral/test';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
 import { seedDatabase, seedFullDataset } from './utils/database';
@@ -23,7 +23,7 @@ const verifyCorrectFileDocumentButton = (
     shouldShowRequestAccessToCaseButton = false,
   },
 ) => {
-  return it('file on a case where at least one irsPractitioner, but not themselves, is already associated (Request Access flow)', async () => {
+  return it('should verify the correct filing button is displayed', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber,
     });
@@ -63,9 +63,39 @@ const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   });
 };
 
+const verifyPractitionerAssociationAcrossConsolidatedCaseGroup = (
+  cerebralTest,
+  {
+    expectedAssociation,
+    practitionerRole,
+  }: { expectedAssociation: boolean; practitionerRole: string },
+) => {
+  return it(`should verify that ${practitionerRole} is ${
+    expectedAssociation ? '' : 'not'
+  } associated with all of the cases in the consolidated group`, () => {
+    const userId: string = cerebralTest.getState('user.userId');
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+
+    consolidatedCases.forEach(aCase => {
+      const practitioners =
+        practitionerRole === 'irsPractitioner'
+          ? aCase.irsPractitioners
+          : aCase.privatePractitioners;
+      const isAssociated = !!practitioners.find(
+        practitioner => practitioner.userId === userId,
+      );
+
+      expect(isAssociated).toBe(expectedAssociation);
+    });
+  });
+};
+
 describe('External User files a document across a consolidated case group', () => {
   const cerebralTest = setupTest();
 
+  const leadCaseDocketNumber = '102-23';
   const consolidatedCaseDocketNumber1 = '103-23';
   const consolidatedCaseDocketNumber2 = '104-23';
   const consolidatedCaseDocketNumber3 = '105-23';
@@ -100,15 +130,58 @@ describe('External User files a document across a consolidated case group', () =
 
     loginAs(cerebralTest, 'irspractitioner2@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
+
+    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+      expectedAssociation: false,
+      practitionerRole: 'irsPractitioner',
+    });
+
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
     });
-    externalUserRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
+    practitionerRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
       fakeFile,
     });
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+      expectedAssociation: true,
+      practitionerRole: 'irsPractitioner',
+    });
+  });
+
+  describe('privatePractitioner', () => {
+    loginAs(cerebralTest, 'privatepractitioner@example.com');
+    getConsolidatedCasesDetails(cerebralTest, leadCaseDocketNumber);
+    verifyCorrectFileDocumentButton(cerebralTest, {
+      docketNumber: leadCaseDocketNumber,
+      shouldShowFileDocumentButton: true,
+    });
+    externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
+    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+
+    loginAs(cerebralTest, 'privatepractitioner2@example.com');
+    getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
+
+    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+      expectedAssociation: false,
+      practitionerRole: 'privatePractitioner',
+    });
+
+    verifyCorrectFileDocumentButton(cerebralTest, {
+      docketNumber: consolidatedCaseDocketNumber3,
+      shouldShowRequestAccessToCaseButton: true,
+    });
+    practitionerRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
+      docketNumber: consolidatedCaseDocketNumber3,
+      fakeFile,
+    });
+    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+      expectedAssociation: true,
+      practitionerRole: 'privatePractitioner',
+    });
   });
 
   describe('petitioner', () => {
