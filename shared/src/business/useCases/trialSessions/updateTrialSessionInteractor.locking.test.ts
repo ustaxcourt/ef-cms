@@ -38,7 +38,17 @@ describe('determineEntitiesToLock', () => {
     });
   });
 
-  it('should return an object that includes all of the docketNumbers associated with the user', async () => {
+  it('should return an object that includes the specified trial session', async () => {
+    const { identifier } = await determineEntitiesToLock(
+      applicationContext,
+      mockParams,
+    );
+    expect(identifier).toContain(
+      `trial-session|${mockParams.trialSession.trialSessionId}`,
+    );
+  });
+
+  it('should return an object that includes all of the docketNumbers associated with the trial session', async () => {
     const { identifier } = await determineEntitiesToLock(
       applicationContext,
       mockParams,

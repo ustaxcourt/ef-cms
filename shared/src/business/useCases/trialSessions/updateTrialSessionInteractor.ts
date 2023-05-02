@@ -140,7 +140,7 @@ const createWorkingCopyForNewUserOnSession = async ({
  */
 export const updateTrialSession = async (
   applicationContext,
-  { trialSession },
+  { trialSession }: { trialSession: TrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -292,8 +292,8 @@ export const updateTrialSession = async (
 
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: object },
-) => {
+  { trialSession }: { trialSession: TrialSession },
+): Promise<{ identifier: string[]; ttl: number }> => {
   const { caseOrder } = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
@@ -301,8 +301,14 @@ export const determineEntitiesToLock = async (
       trialSessionId: trialSession.trialSessionId,
     });
 
+  const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
+
+  caseOrder?.forEach(({ docketNumber }) =>
+    entitiesToLock.push(`case|${docketNumber}`),
+  );
+
   return {
-    identifier: caseOrder?.map(({ docketNumber }) => `case|${docketNumber}`),
+    identifier: entitiesToLock,
     ttl: 900,
   };
 };
