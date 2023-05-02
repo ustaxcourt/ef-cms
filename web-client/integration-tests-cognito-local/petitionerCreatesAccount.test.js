@@ -43,8 +43,7 @@ describe('Petitioner creates new account', () => {
     expect(cerebralTest.getState('alertSuccess')).toEqual({
       linkText: 'Verify Email',
       linkUrl: expectedVerificationLink,
-      message: `New user account created successfully for ${userName}!
-      Please click the link below to verify your email address.`,
+      message: `New user account created successfully for ${userName}! Please click the link below to verify your email address.`,
       newTab: false,
     });
   });
