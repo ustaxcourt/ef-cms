@@ -1,13 +1,5 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
-
-import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
-import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
-import path from 'path';
-import sharedAppContext, { ERROR_MAP_429 } from '../../sharedAppContext';
-
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -24,7 +16,19 @@ import {
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-
+import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
+import {
+  DocketEntry,
+  getServedPartiesCode,
+  isServed,
+} from '../entities/DocketEntry';
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { abbreviateState } from '../utilities/abbreviateState';
+import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -36,12 +40,15 @@ import {
   compareStrings,
 } from '../utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
+import { createCase } from '../../persistence/dynamo/cases/createCase';
 import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createDocketNumber } from '../../persistence/dynamo/cases/docketNumberGenerator';
+import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '../../persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
 import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
 import {
   formatCase,
@@ -49,6 +56,7 @@ import {
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '../../../src/business/utilities/getFormattedCaseDetail';
+import { formatDollars } from '../utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -63,28 +71,12 @@ import {
 import { getAllWebSocketConnections } from '../../persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getFakeFile } from './getFakeFile';
-
 import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
 } from '../../persistence/dynamo/chambers/getJudgesChambers';
-
-import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
-import {
-  DocketEntry,
-  getServedPartiesCode,
-  isServed,
-} from '../entities/DocketEntry';
-import { ROLES } from '../entities/EntityConstants';
-import { User } from '../entities/User';
-import { abbreviateState } from '../utilities/abbreviateState';
-import { createCase } from '../../persistence/dynamo/cases/createCase';
-import { createMockDocumentClient } from './createMockDocumentClient';
-import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
-import { formatDollars } from '../utilities/formatDollars';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -94,6 +86,7 @@ import {
 } from '../utilities/getWorkQueueFilters';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
@@ -128,6 +121,8 @@ import { updateUserRecords } from '../../persistence/dynamo/users/updateUserReco
 import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
+import path from 'path';
+import sharedAppContext, { ERROR_MAP_429 } from '../../sharedAppContext';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -271,6 +266,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
