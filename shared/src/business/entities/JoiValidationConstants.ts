@@ -7,6 +7,7 @@ const {
   MAX_FILE_SIZE_BYTES,
 } = require('./EntityConstants');
 
+// These are specific to joi and cannot be shared with luxon
 const DATE_FORMATS = {
   ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
   YYYYMMDD: 'YYYY-MM-DD',

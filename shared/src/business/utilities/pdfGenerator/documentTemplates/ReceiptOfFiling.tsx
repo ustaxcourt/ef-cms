@@ -37,7 +37,9 @@ const DocumentRow = ({ document }) => {
 };
 
 export const ReceiptOfFiling = ({
+  consolidatedCasesDocketNumbers,
   document,
+  fileAcrossConsolidatedGroup,
   filedAt,
   filedBy,
   options,
@@ -57,8 +59,10 @@ export const ReceiptOfFiling = ({
       <CompressedDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
+        consolidatedCasesDocketNumbers={consolidatedCasesDocketNumbers}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
         documentTitle="Receipt of Filing"
+        fileAcrossConsolidatedGroup={fileAcrossConsolidatedGroup}
       />
       <div>
         <div className="float-left width-half" id="receipt-filed-by">
