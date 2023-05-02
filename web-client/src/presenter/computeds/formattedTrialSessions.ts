@@ -4,8 +4,11 @@ import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper
 import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { state } from 'cerebral';
 
-export const formatSession = (session, applicationContext) => {
+export const formatSession = (session, applicationContext, get) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
+  const listOfBanners = get(state.listOfBanners);
+  const hasNOTTBannerBeenDismissed =
+    listOfBanners[session.trialSessionId] === true;
 
   session.startOfWeek = createDateAtStartOfWeekEST(
     session.startDate,
@@ -29,7 +32,11 @@ export const formatSession = (session, applicationContext) => {
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
-  if (session.isCalendared && session.formattedStartDate) {
+  if (
+    !hasNOTTBannerBeenDismissed &&
+    session.isCalendared &&
+    session.formattedStartDate
+  ) {
     const { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted } =
       set30DayNoticeOfTrialReminder({
         applicationContext,
@@ -156,7 +163,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
     session.userIsAssignedToSession =
       isJudgeUserAssigned || isTrialClerkUserAssigned;
 
-    const formattedSession = formatSession(session, applicationContext);
+    const formattedSession = formatSession(session, applicationContext, get);
 
     let sessionWeek = find(formattedSessions, {
       startOfWeekSortable: formattedSession.startOfWeekSortable,

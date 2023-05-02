@@ -3,11 +3,15 @@ import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrial
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
+  const trialSession = get(state.trialSession);
+  const listOfBanners = get(state.listOfBanners);
+  const hasNOTTBannerBeenDismissed = listOfBanners[trialSession.trialSessionId];
+
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: get(state.trialSession),
+      trialSession,
     });
 
   if (formattedTrialSession) {
@@ -65,6 +69,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
 
       if (
+        !hasNOTTBannerBeenDismissed &&
         formattedTrialSession.isCalendared &&
         formattedTrialSession.formattedStartDate
       ) {
