@@ -23,7 +23,7 @@ jobs:
           path: branchToBeCompared
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18.15.0'
       - name: NPM Install in your branch
         working-directory: ./branchToBeCompared
         run: npm ci
