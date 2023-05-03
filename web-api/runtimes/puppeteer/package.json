@@ -12,6 +12,7 @@
   "dependencies": {
     "@sparticuz/chromium": "^112.0.2",
     "pug": "^3.0.2",
+    "aws-sdk": "^2.1360.0",
     "puppeteer-core": "19.8.5",
     "sass": "^1.49.7"
   },
