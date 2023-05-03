@@ -1,5 +1,8 @@
 import { CaseStatus, CaseType } from '../../entities/EntityConstants';
-import { CustomCaseFilingMethods } from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
+import {
+  CustomCaseFilingMethods,
+  CustomCaseInventorySearch,
+} from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -41,7 +44,6 @@ export type CaseInventory = Pick<
 
 /**
  * getCustomCaseInventoryReportInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.createEndDate the createEndDate filter
@@ -63,24 +65,7 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
 
-  const {
-    caseStatuses,
-    caseTypes,
-    createEndDate,
-    createStartDate,
-    filingMethod,
-  } = params;
-  if (
-    !createEndDate ||
-    !createStartDate ||
-    !filingMethod ||
-    !caseStatuses ||
-    !caseTypes
-  ) {
-    throw new Error(
-      'Missing required params to run a Custom Case Inventory Report',
-    );
-  }
+  new CustomCaseInventorySearch(params).validate();
 
   return await applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,
