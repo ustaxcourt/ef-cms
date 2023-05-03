@@ -19,7 +19,7 @@ describe('createNewAccountAction', () => {
 
     applicationContext
       .getUseCases()
-      .createUserInteractorLocal.mockReturnValue(true);
+      .createUserInteractorLocal.mockReturnValue({});
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -50,7 +50,7 @@ describe('createNewAccountAction', () => {
     });
   });
 
-  it('should return a correctly formatted alertSuccess with a correctly formatted linkUrl when createUserInteractorLocal returns true', async () => {
+  it('should return a correctly formatted alertSuccess with a correctly formatted linkUrl when createUserInteractorLocal returns successfully', async () => {
     const expectedAlertSuccess = {
       linkText: 'Verify Email',
       linkUrl:
@@ -78,10 +78,12 @@ describe('createNewAccountAction', () => {
     });
   });
 
-  it('should return a correctly formatted alertError when createUserInteractorLocal returns false', async () => {
+  it('should return a correctly formatted alertError when createUserInteractorLocal does not return successfully', async () => {
     applicationContext
       .getUseCases()
-      .createUserInteractorLocal.mockReturnValueOnce(false);
+      .createUserInteractorLocal.mockImplementationOnce(() => {
+        throw new Error();
+      });
 
     const expectedAlertError = {
       message:
