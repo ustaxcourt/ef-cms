@@ -680,7 +680,7 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('isTodayWithinGivenInterval)', () => {
+  describe('isTodayWithinGivenInterval', () => {
     it('should return false when the current date does not fall within the specified date time range', () => {
       const mockPastStartDate = prepareDateFromString(
         '10/10/2020',
@@ -699,15 +699,14 @@ describe('DateHandler', () => {
       expect(result).toBe(false);
     });
 
-    it('should return true when the current date does fall within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString(
-        Date.now(),
-        FORMATS.MMDDYY,
-      ).minus({ ['days']: 2 });
-      const mockPastEndDate = prepareDateFromString(
-        Date.now(),
-        FORMATS.MMDDYY,
-      ).plus({ ['days']: 2 });
+    it('should return true when the current date falls within the specified date time range', () => {
+      const mockPastStartDate = prepareDateFromString().minus({
+        ['days']: 2,
+      });
+
+      const mockPastEndDate = prepareDateFromString().plus({
+        ['days']: 2,
+      });
 
       const result = isTodayWithinGivenInterval({
         intervalEndDate: mockPastEndDate,

@@ -1,6 +1,6 @@
 # Note: this is debian 11 (bullseye)
 
-FROM cypress/browsers:node-16.18.1-chrome-110.0.5481.96-1-ff-109.0-edge-110.0.1587.41-1
+FROM cypress/browsers:node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1
 
 WORKDIR /home/app
 
@@ -40,7 +40,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.11.15.zip" -o "
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.4.5/terraform_1.4.5_linux_amd64.zip && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

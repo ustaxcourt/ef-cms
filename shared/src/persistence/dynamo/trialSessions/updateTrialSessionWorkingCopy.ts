@@ -13,7 +13,7 @@ export const updateTrialSessionWorkingCopy = ({
   trialSessionWorkingCopyToUpdate,
 }: {
   applicationContext: IApplicationContext;
-  trialSessionWorkingCopyToUpdate: TTrialSessionWorkingCopyData;
+  trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy;
 }): Promise<any> =>
   put({
     Item: {
