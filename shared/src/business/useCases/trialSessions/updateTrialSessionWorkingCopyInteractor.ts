@@ -17,7 +17,7 @@ export const updateTrialSessionWorkingCopyInteractor = async (
   applicationContext: IApplicationContext,
   {
     trialSessionWorkingCopyToUpdate,
-  }: { trialSessionWorkingCopyToUpdate: TTrialSessionWorkingCopyData },
+  }: { trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
