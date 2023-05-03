@@ -3,7 +3,11 @@ import { applicationContext } from '../../../business/test/createTestApplication
 import { createNewPetitionerUser } from './createNewPetitionerUser';
 
 describe('createNewPetitionerUser', () => {
-  beforeEach(() => {});
+  const oldEnv = process.env;
+
+  afterAll(() => {
+    process.env = oldEnv;
+  });
 
   it('should call adminCreateUser with the user email, name, and userId', async () => {
     const mockEmail = 'petitioner@example.com';
@@ -65,5 +69,32 @@ describe('createNewPetitionerUser', () => {
       sk: `user|${mockUserId}`,
       userId: mockUserId,
     });
+  });
+
+  it('should modify the params sent to cognito adminCreateUser when USE_COGNITO_LOCAL is true', async () => {
+    process.env.USE_COGNITO_LOCAL = true;
+
+    const mockUserId = 'e6df170d-bc7d-428b-b0f2-decb3f9b83a8';
+    const mockUser = {
+      name: 'Bob Ross',
+      pendingEmail: 'petitioner@example.com',
+      role: ROLES.petitioner,
+      section: 'petitioner',
+      userId: mockUserId,
+    };
+
+    await createNewPetitionerUser({
+      applicationContext,
+      user: mockUser as any,
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
+    ).toMatchObject(
+      expect.objectContaining({
+        DesiredDeliveryMediums: ['EMAIL'],
+        Username: mockUserId,
+      }),
+    );
   });
 });
