@@ -72,7 +72,7 @@ export const deleteCounselFromCase = async (
 };
 
 export const setupServiceIndicatorForUnrepresentedPetitioners = (
-  caseEntity: TCaseEntity,
+  caseEntity: Case,
 ) => {
   caseEntity.petitioners.forEach(petitioner => {
     if (
