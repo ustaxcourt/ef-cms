@@ -7,7 +7,6 @@ const config: Config = {
   moduleNameMapper: {
     '^uuid$': require.resolve('uuid'),
   },
-  testEnvironment: `${__dirname}/../../../../../web-client/JsdomWithTextEncoderEnvironment.js`,
   testMatch: [
     '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
   ],

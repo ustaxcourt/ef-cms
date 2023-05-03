@@ -3,7 +3,6 @@ import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 /**
  * aggregatePartiesForService
- *
  * @param {object} caseEntity the case entity with parties to be served
  * @returns {object} the aggregated contact information for all parties,
  * electronically-served parties, and paper-served parties
@@ -17,6 +16,7 @@ export const aggregatePartiesForService = caseEntity => {
   ];
 
   const aggregated = {
+    all: [],
     electronic: [],
     paper: [],
   };
