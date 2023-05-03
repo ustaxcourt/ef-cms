@@ -3,7 +3,6 @@ import { CaseQC } from '../entities/cases/CaseQC';
 
 /**
  * validateCaseDetailInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseDetail the case data to validate
@@ -16,7 +15,7 @@ export const validateCaseDetailInteractor = (
     caseDetail,
     useCaseEntity = false,
   }: { caseDetail: any; useCaseEntity?: boolean },
-): Promise<TCase> => {
+): Promise<Case> => {
   if (useCaseEntity) {
     return new Case(caseDetail, {
       applicationContext,
