@@ -14,6 +14,8 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       createEndDate: '2022-02-01T17:21:05.483Z',
       createStartDate: '2022-01-01T17:21:05.483Z',
       filingMethod: 'all',
+      pageNumber: 3,
+      pageSize: 100,
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,

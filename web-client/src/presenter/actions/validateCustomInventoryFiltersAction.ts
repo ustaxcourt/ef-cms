@@ -1,9 +1,9 @@
+import { CustomCaseInventorySearch } from '../../../../shared/src/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 /**
  * Validates the judge activity report search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -31,12 +31,10 @@ export const validateCustomInventoryFiltersAction = ({
         .createISODateString(createStartDate, FORMATS.MMDDYYYY)
     : undefined;
 
-  const errors = applicationContext
-    .getUseCases()
-    .validateCustomCaseInventorySearchFiltersInteractor(applicationContext, {
-      endDate: formattedEndDate,
-      startDate: formattedStartDate,
-    });
+  const errors = new CustomCaseInventorySearch({
+    endDate: formattedEndDate,
+    startDate: formattedStartDate,
+  }).getFormattedValidationErrors();
 
   if (errors) {
     return path.error({
