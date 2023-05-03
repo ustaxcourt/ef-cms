@@ -4,6 +4,18 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
 
+type TUserContact = {
+  address1: string;
+  address2: string;
+  address3: string;
+  city: string;
+  country: string;
+  countryType: string;
+  phone: string;
+  postalCode: string;
+  state: string;
+};
+
 /**
  * Update an address on a case. This performs a search to get all of the cases associated with the user,
  * and then one by one determines whether or not it needs to generate a docket entry. Only open cases and

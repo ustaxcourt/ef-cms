@@ -2,9 +2,9 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
+import { Case, isLeadCase } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
-import { isLeadCase } from '../entities/cases/Case';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -16,7 +16,6 @@ const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
- *
  * @param {object} options the providers object
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
@@ -33,7 +32,7 @@ export const generateCoverSheetData = async ({
   useInitialData = false,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCaseEntity;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;
   stampData?: any;
