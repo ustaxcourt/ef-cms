@@ -17,7 +17,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  caseToAdd: TCaseEntity;
+  caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
 }) => {
