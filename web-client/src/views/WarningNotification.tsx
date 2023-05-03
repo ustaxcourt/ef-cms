@@ -17,6 +17,8 @@ export const WarningNotificationComponent =
       linkUrl?: string;
       linkText?: string;
       message: string;
+      dismissText?: string;
+      dismissIcon?: string;
     };
     dismissable?: boolean;
     dismissAlertSequence?: Function;
@@ -81,11 +83,11 @@ export const WarningNotificationComponent =
                       <Button
                         link
                         className="no-underline padding-0"
-                        icon="times-circle"
+                        icon={alertWarning.dismissIcon || 'times-circle'}
                         iconRight={true}
                         onClick={() => dismissAlertSequence()}
                       >
-                        Clear
+                        {alertWarning.dismissText || 'Clear'}
                       </Button>
                     )}
                   </div>
