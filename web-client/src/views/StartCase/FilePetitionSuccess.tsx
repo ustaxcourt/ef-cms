@@ -35,13 +35,11 @@ export const FilePetitionSuccess = connect(
           </ul>
 
           <Button
-            secondary
             className="tablet-full-width"
             href="/"
-            icon="step-backward"
             id="button-back-to-dashboard"
           >
-            Back to Dashboard
+            View My Cases
           </Button>
         </section>
       </>
