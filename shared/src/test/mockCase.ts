@@ -7,9 +7,10 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
+import { Case } from '../business/entities/cases/Case';
 import { MOCK_DOCUMENTS } from './mockDocuments';
 
-export const MOCK_CASE: TCase = {
+export const MOCK_CASE: Case = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
