@@ -46,12 +46,12 @@ export const TrialSessionDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WarningNotification />
-          {formattedTrialSessionDetails.showAlertForNOTTReminder && (
+          {trialSessionDetailsHelper.showAlertForNOTTReminder && (
             <WarningNotificationComponent
               alertWarning={{
                 dismissIcon: 'paper-plane',
                 dismissText: 'Yes, served',
-                message: formattedTrialSessionDetails.alertMessageForNOTT,
+                message: trialSessionDetailsHelper.alertMessageForNOTT,
               }}
               dismissAlertSequence={showDismissThirtyDayAlertModalSequence}
               dismissable={trialSessionDetailsHelper.canDismissThirtyDayAlert}

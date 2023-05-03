@@ -90,8 +90,9 @@ export class TrialSession extends JoiValidationEntity {
   public sessionStatus: string;
   public proceedingType: string;
   public trialSessionId: string;
-  public judge: TJudge;
-  public trialClerk: TTrialClerk;
+  public judge?: TJudge;
+  public trialClerk?: TTrialClerk;
+  public dismissedAlertForNOTT?: boolean;
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -255,6 +256,7 @@ export class TrialSession extends JoiValidationEntity {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
+    this.dismissedAlertForNOTT = rawSession.dismissedAlertForNOTT || false;
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
