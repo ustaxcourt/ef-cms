@@ -4,7 +4,11 @@ import { chambersUser, judgeUser } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
 import { runCompute } from 'cerebral/test';
+import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { withAppContextDecorator } from '../../withAppContext';
+jest.mock('./utilities/set30DayNoticeOfTrialReminder', () => {
+  return { set30DayNoticeOfTrialReminder: jest.fn() };
+});
 
 describe('formattedTrialSessionDetails', () => {
   let mockTrialSession;
@@ -47,6 +51,11 @@ describe('formattedTrialSessionDetails', () => {
       .getFormattedTrialSessionDetails.mockImplementation(
         () => mockTrialSession,
       );
+
+    set30DayNoticeOfTrialReminder.mockReturnValue({
+      isCurrentDateWithinReminderRange: true,
+      thirtyDaysBeforeTrialFormatted: '2020/10/10',
+    });
   });
 
   it('returns undefined if state.trialSession is undefined', () => {
@@ -439,5 +448,45 @@ describe('formattedTrialSessionDetails', () => {
 
       expect(result.chambersPhoneNumber).toEqual('123-456-7890');
     });
+  });
+
+  it('should set an NOTT reminder flag and message when the session is calendared and has a startDate that is between 30 and 35 days calendar days of the current date', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      formattedStartDate: '2019-11-25T15:00:00.000Z',
+      isCalendared: true,
+    };
+
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...mockTrialSession,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      alertMessageForNOTT:
+        '30-day trial notices are due before 2020/10/10. Have notices been served?',
+      showAlertForNOTTReminder: true,
+    });
+  });
+
+  it('should NOT set an NOTT reminder flag when the session is NOT calendared', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      isCalendared: false,
+    };
+
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...mockTrialSession,
+        },
+      },
+    });
+
+    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
+    expect(result.showAlertForNOTTReminder).toBeUndefined();
   });
 });
