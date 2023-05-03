@@ -7,7 +7,6 @@ const config: Config = {
   moduleNameMapper: {
     '^uuid$': require.resolve('uuid'),
   },
-  testEnvironment: `${__dirname}/../../../../../web-client/JsdomWithTextEncoderEnvironment.js`,
   testMatch: [
     '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
   ],
@@ -18,6 +17,7 @@ const config: Config = {
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
+  workerIdleMemoryLimit: '25%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
 
 // eslint-disable-next-line import/no-default-export

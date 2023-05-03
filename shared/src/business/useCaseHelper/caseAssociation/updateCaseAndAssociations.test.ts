@@ -320,7 +320,7 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('work items', () => {
-    let updatedCase: TCase;
+    let updatedCase: Case;
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
