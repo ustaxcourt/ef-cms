@@ -7,7 +7,6 @@ import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * updateQcCompleteForTrialInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
@@ -27,7 +26,7 @@ export const updateQcCompleteForTrialInteractor = async (
     qcCompleteForTrial: boolean;
     trialSessionId: string;
   },
-): Promise<TCase> => {
+): Promise<Case> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)) {
