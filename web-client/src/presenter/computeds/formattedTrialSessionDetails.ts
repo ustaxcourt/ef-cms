@@ -1,19 +1,12 @@
 import { isEmpty, isEqual } from 'lodash';
-import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
-  const trialSession = get(state.trialSession);
-  const listOfBanners = get(state.listOfBanners);
-  const hasNOTTBannerBeenDismissed = listOfBanners.find(
-    session => session.trialSessionId === trialSession.trialSessionId,
-  )?.dismissed;
-
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession,
+      trialSession: get(state.trialSession),
     });
 
   if (formattedTrialSession) {
@@ -69,24 +62,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       );
       const hasNoActiveCases =
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
-
-      if (
-        !!hasNOTTBannerBeenDismissed &&
-        formattedTrialSession.isCalendared &&
-        formattedTrialSession.formattedStartDate
-      ) {
-        const {
-          isCurrentDateWithinReminderRange,
-          thirtyDaysBeforeTrialFormatted,
-        } = set30DayNoticeOfTrialReminder({
-          applicationContext,
-          trialStartDate: formattedTrialSession.formattedStartDate,
-        });
-
-        formattedTrialSession.showAlertForNOTTReminder =
-          isCurrentDateWithinReminderRange;
-        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
-      }
 
       if (
         hasNoActiveCases &&

@@ -169,6 +169,7 @@ export const updateTrialSessionInteractor = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
+    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     joinPhoneNumber: trialSession.joinPhoneNumber,
@@ -210,7 +211,7 @@ export const updateTrialSessionInteractor = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge.userId,
+      userId: updatedTrialSessionEntity.judge?.userId,
     });
   }
 
@@ -226,7 +227,7 @@ export const updateTrialSessionInteractor = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk.userId,
+      userId: updatedTrialSessionEntity.trialClerk?.userId,
     });
   }
 
