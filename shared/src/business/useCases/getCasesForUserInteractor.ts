@@ -10,8 +10,8 @@ import { uniqBy } from 'lodash';
 
 type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
-  consolidatedCases?: TCase[];
-} & TCase;
+  consolidatedCases?: Case[];
+} & Case;
 
 /**
  * This function will take in an array of cases, fetch all cases part of a consolidated group,
@@ -110,7 +110,6 @@ async function fetchConsolidatedGroupsAndNest({
 
 /**
  * getCasesForUserInteractor
- *
  * @param {object} applicationContext the application context
  * @returns {object} A list of the open cases and a list of the closed cases for the user
  */

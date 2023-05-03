@@ -1,5 +1,9 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
@@ -9,15 +13,20 @@ export const TrialSessionsTable = connect(
   {
     formattedTrialSessions:
       state.formattedTrialSessions.filteredTrialSessions[props.filter],
-    proceedingTypes: state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
-    trialSessionTypes: state.constants.SESSION_TYPES,
     trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessionsTable({
     formattedTrialSessions,
-    proceedingTypes,
     trialSessionsHelper,
-    trialSessionTypes,
+  }: {
+    formattedTrialSessions: any[];
+    trialSessionsHelper: {
+      additionalColumnsShown: number;
+      showNoticeIssued: boolean;
+      showSessionStatus: boolean;
+      showUnassignedJudgeFilter: boolean;
+      trialSessionJudges: any[];
+    };
   }) {
     return (
       <React.Fragment>
@@ -47,11 +56,13 @@ export const TrialSessionsTable = connect(
             name="proceedingType"
           >
             <option value="">-Proceeding Type-</option>
-            {Object.values(proceedingTypes).map(proceedingType => (
-              <option key={proceedingType} value={proceedingType}>
-                {proceedingType}
-              </option>
-            ))}
+            {Object.values(TRIAL_SESSION_PROCEEDING_TYPES).map(
+              proceedingType => (
+                <option key={proceedingType} value={proceedingType}>
+                  {proceedingType}
+                </option>
+              ),
+            )}
           </BindedSelect>
           <BindedSelect
             aria-label="session"
@@ -61,7 +72,7 @@ export const TrialSessionsTable = connect(
             name="sessionType"
           >
             <option value="">-Session Type-</option>
-            {Object.values(trialSessionTypes).map(sessionType => (
+            {Object.values(SESSION_TYPES).map(sessionType => (
               <option key={sessionType} value={sessionType}>
                 {sessionType}
               </option>
@@ -116,6 +127,7 @@ export const TrialSessionsTable = connect(
                 <tr className="trial-date">
                   <td colSpan={7 + trialSessionsHelper.additionalColumnsShown}>
                     <h4 className="margin-bottom-0">
+                      {'Week of '}
                       {trialDate.dateFormatted}
                     </h4>
                   </td>
