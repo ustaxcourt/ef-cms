@@ -89,7 +89,7 @@ const saveForLaterStrategy = async ({
 }: {
   applicationContext: IApplicationContext;
   request: IEditPaperFilingRequest;
-  caseEntity: TCaseEntity;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -141,7 +141,7 @@ const multiDocketServeStrategy = async ({
   request,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCaseEntity;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
 }) => {
@@ -190,7 +190,7 @@ const singleDocketServeStrategy = async ({
   request,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCaseEntity;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
 }) => {
@@ -226,12 +226,12 @@ const serveDocketEntry = async ({
   userId,
 }: {
   applicationContext: IApplicationContext;
-  caseEntitiesToFileOn: TCaseEntity[];
+  caseEntitiesToFileOn: Case[];
   clientConnectionId: string;
   docketEntryEntity: DocketEntry;
   documentMetadata: any;
   userId: string;
-  subjectCaseEntity: TCaseEntity;
+  subjectCaseEntity: Case;
   message: string;
 }) => {
   await applicationContext
@@ -378,7 +378,7 @@ const updateDocketEntry = async ({
   userId,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCaseEntity;
+  caseEntity: Case;
   docketEntry: DocketEntry;
   documentMetadata: any;
   userId: string;
@@ -474,7 +474,7 @@ const getDocketEntryToEdit = async ({
   docketNumber: string;
   docketEntryId: string;
 }): Promise<{
-  caseEntity: TCaseEntity;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
 }> => {
   const caseToUpdate = await applicationContext

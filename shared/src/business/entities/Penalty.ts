@@ -58,3 +58,7 @@ export class Penalty extends JoiValidationEntity {
     return Penalty.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+declare global {
+  type RawPenalty = ExcludeMethods<Penalty>;
+}

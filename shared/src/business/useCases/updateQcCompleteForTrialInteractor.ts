@@ -28,7 +28,7 @@ export const updateQcCompleteForTrial = async (
     qcCompleteForTrial: boolean;
     trialSessionId: string;
   },
-): Promise<TCase> => {
+): Promise<Case> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)) {
