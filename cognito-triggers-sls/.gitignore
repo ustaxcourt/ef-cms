@@ -14,12 +14,6 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
-# nyc test coverage
-.nyc_output
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
 # node-waf configuration
 .lock-wscript
 
@@ -30,16 +24,6 @@ build/Release
 node_modules
 jspm_packages
 
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# vim
-.*.sw*
-Session.vim
-
 # Serverless
 .webpack
 .serverless
@@ -47,6 +31,3 @@ Session.vim
 # env
 env.yml
 .env
-
-# Jetbrains IDEs
-.idea
