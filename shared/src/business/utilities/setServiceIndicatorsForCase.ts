@@ -1,15 +1,12 @@
-const {
-  isUserIdRepresentedByPrivatePractitioner,
-} = require('../entities/cases/Case');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
+import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import { isUserIdRepresentedByPrivatePractitioner } from '../entities/cases/Case';
 
 /**
  * sets the service indicators for parties on the given case
- *
  * @param {object} caseDetail case to set service indicators on
  * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
-const setServiceIndicatorsForCase = caseDetail => {
+export const setServiceIndicatorsForCase = caseDetail => {
   const { petitioners } = caseDetail;
 
   petitioners?.forEach(petitioner => {
@@ -31,8 +28,4 @@ const setServiceIndicatorsForCase = caseDetail => {
   });
 
   return caseDetail;
-};
-
-module.exports = {
-  setServiceIndicatorsForCase,
 };
