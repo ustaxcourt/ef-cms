@@ -1,6 +1,5 @@
 /**
  * confirmSignUpLocalInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} auth an object
  * @param {string} auth.confirmationCode the email confirmation code provided by cognito
@@ -20,10 +19,5 @@ export const confirmSignUpLocalInteractor = async (
     Username: userEmail,
   };
 
-  const result = await applicationContext
-    .getCognito()
-    .confirmSignUp(params)
-    .promise();
-
-  return result;
+  return await applicationContext.getCognito().confirmSignUp(params).promise();
 };

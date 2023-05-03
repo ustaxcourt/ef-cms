@@ -2,7 +2,6 @@ import { ROLES } from '../../entities/EntityConstants';
 
 /**
  * createUserInteractorLocal
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.user the user data
@@ -42,5 +41,5 @@ export const createUserInteractorLocal = async (
     Username: userId,
   };
 
-  await applicationContext.getCognito().signUp(params).promise();
+  return await applicationContext.getCognito().signUp(params).promise();
 };
