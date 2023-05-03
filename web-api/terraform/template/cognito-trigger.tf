@@ -29,7 +29,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   handler          = "cognito-triggers.handler"
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs18.x"
 
   lifecycle {
     ignore_changes = all
@@ -70,7 +70,7 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   handler          = "cognito-triggers.handler"
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs18.x"
 
   lifecycle {
     ignore_changes = all
