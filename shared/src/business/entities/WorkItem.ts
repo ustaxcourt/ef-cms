@@ -35,11 +35,7 @@ export class WorkItem extends JoiValidationEntity {
   public workItemId: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(
-    rawWorkItem,
-    { applicationContext },
-    caseEntity?: TCase | TCaseEntity,
-  ) {
+  constructor(rawWorkItem, { applicationContext }, caseEntity?: Case) {
     super('WorkItem');
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
@@ -107,7 +103,6 @@ export class WorkItem extends JoiValidationEntity {
 
   /**
    * Assign to a user
-   *
    * @param {object} props the props object
    * @param {string} props.assigneeId the user id of the user to assign the work item to
    * @param {string} props.assigneeName the name of the user to assign the work item to
@@ -162,7 +157,6 @@ export class WorkItem extends JoiValidationEntity {
 
   /**
    * marks the work item as read
-   *
    * @returns {WorkItem} the updated work item
    */
   markAsRead() {
