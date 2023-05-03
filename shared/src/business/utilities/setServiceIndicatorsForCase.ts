@@ -3,7 +3,6 @@ import { isUserIdRepresentedByPrivatePractitioner } from '../entities/cases/Case
 
 /**
  * sets the service indicators for parties on the given case
- *
  * @param {object} caseDetail case to set service indicators on
  * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
