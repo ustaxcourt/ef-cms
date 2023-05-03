@@ -2,7 +2,6 @@ const { post } = require('../requests');
 
 /**
  * confirmSignUpLocalInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} auth an object
  * @param {string} auth.confirmationCode the email confirmation code provided by cognito

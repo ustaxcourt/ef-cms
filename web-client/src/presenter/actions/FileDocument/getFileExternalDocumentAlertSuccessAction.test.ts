@@ -57,6 +57,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
         linkText: 'Print receipt.',
         linkUrl: 'http://example.com',
         message: 'Document filed and is accessible from the Docket Record.',
+        newTab: true,
       },
     });
   });
