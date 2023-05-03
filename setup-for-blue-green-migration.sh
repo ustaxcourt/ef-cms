@@ -91,7 +91,7 @@ if [[ "${EXISTS}" == "1" ]]; then
     echo "error: expected the ${NEXT_TABLE} table to have been deleted or empty from us-east-1 before running migration ${NUM_ITEMS}"
     exit 1
   fi
-  echo "warn: the table ${NEXT_TABLE} exists, but is empty"
+  echo "warn: the table ${NEXT_TABLE} (us-east-1) exists, but it is empty"
 fi
 
 EXISTS=$(check_dynamo_table_exists "${NEXT_TABLE}" us-west-1)
@@ -101,7 +101,7 @@ if [[ "${EXISTS}" == "1" ]]; then
     echo "error: expected the ${NEXT_TABLE} table to have been deleted or empty from us-west-1 before running migration ${NUM_ITEMS}"
     exit 1
   fi
-  echo "warn: the table ${NEXT_TABLE} exists, but is empty"
+  echo "warn: the table ${NEXT_TABLE} (us-west-1) exists, but it is empty"
 fi
 
 EXISTS=$(check_opensearch_domain_exists "${NEXT_OPENSEARCH_DOMAIN}")
@@ -112,4 +112,5 @@ if [[ "${EXISTS}" == "1" ]]; then
     echo "error: expected the ${NEXT_OPENSEARCH_DOMAIN} elasticsearch cluster to have been deleted from us-east-1 before running migration"
     exit 1
   fi
+  echo "warn: the table ${NEXT_OPENSEARCH_DOMAIN} exists, but it is empty"
 fi
