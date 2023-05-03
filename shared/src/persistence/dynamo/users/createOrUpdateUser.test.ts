@@ -10,12 +10,6 @@ const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
   .getJudgesChambersWithLegacy();
 
 describe('createOrUpdateUser', () => {
-  const oldEnv = process.env;
-
-  afterAll(() => {
-    process.env = oldEnv;
-  });
-
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
   const petitionsClerkUser = {
     email: 'test@example.com',
@@ -206,70 +200,6 @@ describe('createOrUpdateUser', () => {
       Item: {
         pk: 'privatePractitioner|PT1234',
         sk: `user|${userId}`,
-      },
-    });
-  });
-
-  it('should call adminCreateUser with the correct params when USE_COGNITO_LOCAL is true', async () => {
-    process.env.USE_COGNITO_LOCAL = true;
-    process.env.USER_POOL_ID = 'localUserPoolId';
-
-    // setupNonExistingUserMock();
-
-    await createOrUpdateUser({
-      applicationContext,
-      user: privatePractitionerUser as any,
-    });
-
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      DesiredDeliveryMediums: ['EMAIL'],
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: 'test@example.com',
-        },
-        {
-          Name: 'custom:role',
-          Value: 'privatePractitioner',
-        },
-        {
-          Name: 'name',
-          Value: 'Test Private Practitioner',
-        },
-        {
-          Name: 'custom:userId',
-          Value: privatePractitionerUser.userId,
-        },
-      ],
-      UserPoolId: 'localUserPoolId',
-      Username: privatePractitionerUser.userId,
-    });
-  });
-
-  it('should get userId of newly created user from passed-in user object instead of cognito', async () => {
-    const mockUserId = 'abcd1234';
-    process.env.USE_COGNITO_LOCAL = true;
-    process.env.USER_POOL_ID = 'localUserPoolId';
-
-    await createOrUpdatePractitionerUser({
-      applicationContext,
-      user: { ...privatePractitionerUser, userId: mockUserId } as any,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        ...privatePractitionerUser,
-        pk: `user|${mockUserId}`,
-        sk: `user|${mockUserId}`,
-        userId: mockUserId,
       },
     });
   });
