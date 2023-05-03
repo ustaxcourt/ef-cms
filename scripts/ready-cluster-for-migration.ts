@@ -6,6 +6,15 @@ if (!process.argv[2]) {
   throw new Error('Please provide an Opensearch Domain to check');
 }
 
+const deleteIfExists = async ({ client, index }) => {
+  const indexExists = await client.indices.exists({ body: {}, index });
+  if (indexExists.statusCode === 404) {
+    return;
+  }
+
+  await client.indices.delete({ body: {}, index });
+};
+
 (async () => {
   // check the domain
   const es: ES = new ES({ region: 'us-east-1' });
@@ -26,13 +35,23 @@ if (!process.argv[2]) {
     throw err;
   }
 
-  const client = await getClient({ environmentName: ENV, version: VERSION });
-  const res = await client.count({
-    body: {
-      query: {
-        match_all: {},
+  const body = {
+    query: {
+      bool: {
+        must_not: {
+          term: {
+            type: {
+              value: 'config',
+            },
+          },
+        },
       },
     },
+  };
+
+  const client = await getClient({ environmentName: ENV, version: VERSION });
+  const res = await client.count({
+    body,
   });
 
   // get the count for the domain
@@ -46,8 +65,6 @@ if (!process.argv[2]) {
   // if the cluster is empty, just delete the indices as they will be recreated soon
   // with latest and greatest mappings
   await Promise.all(
-    elasticsearchIndexes.map(index => {
-      client.indices.delete({ body: {}, index });
-    }),
+    elasticsearchIndexes.map(index => deleteIfExists({ client, index })),
   );
 })();
