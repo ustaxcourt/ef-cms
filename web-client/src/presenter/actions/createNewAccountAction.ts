@@ -14,23 +14,21 @@ export const createNewAccountAction = async ({
   path,
 }) => {
   const { email, name, password } = get(state.form);
-
   const user = { email, name, password };
-  const successfulResult = await applicationContext
-    .getUseCases()
-    .createUserInteractorLocal(applicationContext, {
-      user,
-    });
 
   // confirmation code is currently intentionally hard-coded in cognitoLocal
   const confirmationCode = '123456';
-
   const queryString = qs.stringify(
     { confirmationCode, email },
     { encode: false },
   );
 
-  if (successfulResult) {
+  try {
+    await applicationContext
+      .getUseCases()
+      .createUserInteractorLocal(applicationContext, {
+        user,
+      });
     return path.yes({
       alertSuccess: {
         linkText: 'Verify Email',
@@ -39,7 +37,7 @@ export const createNewAccountAction = async ({
         newTab: false,
       },
     });
-  } else {
+  } catch (e) {
     return path.no({
       alertError: {
         message: `New user account could not be created for ${email}`,

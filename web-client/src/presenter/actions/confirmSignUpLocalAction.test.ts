@@ -47,10 +47,12 @@ describe('confirmSignUpLocalAction', () => {
     });
   });
 
-  it('return an alertError when the confirmSignupLocalInteractor does not return a response', async () => {
+  it('return an alertError when the confirmSignupLocalInteractor does not return a successful response', async () => {
     applicationContext
       .getUseCases()
-      .confirmSignUpLocalInteractor.mockReturnValueOnce();
+      .confirmSignUpLocalInteractor.mockImplementationOnce(() => {
+        throw new Error();
+      });
 
     await runAction(confirmSignUpLocalAction, {
       modules: {

@@ -1,6 +1,5 @@
 /**
  * Confirms the user's account in cognito, locally
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.path the cerebral path function
@@ -14,20 +13,19 @@ export const confirmSignUpLocalAction = async ({
 }) => {
   const { confirmationCode, userEmail } = props;
 
-  const response = await applicationContext
-    .getUseCases()
-    .confirmSignUpLocalInteractor(applicationContext, {
-      confirmationCode,
-      userEmail,
-    });
-
-  if (response) {
+  try {
+    await applicationContext
+      .getUseCases()
+      .confirmSignUpLocalInteractor(applicationContext, {
+        confirmationCode,
+        userEmail,
+      });
     return path.yes({
       alertSuccess: {
         message: 'Your registration has been confirmed!',
       },
     });
-  } else {
+  } catch (e) {
     return path.no({
       alertError: {
         message: 'Error confirming account',
