@@ -43,7 +43,6 @@ export const isStringISOFormatted = dateString => {
 
 /**
  * convert a given date or time provided in Eastern Time to a GMT luxon object
- *
  * @param {string} dateString a string representing a date/time in EST
  * @param {string} inputFormat the format matching the incoming dateString
  * @returns {string} an ISO-8601 timestamp with GMT+0
@@ -60,7 +59,6 @@ export const prepareDateFromEST = (dateString, inputFormat) => {
 
 /**
  * combines a ISO-formatted date stamp in UTC with a HH:mm time string in EST
- *
  * @param {string} dateString ISO-formatted date stamp in UT
  * @param {string} timeString a HH:mm time string in EST
  * @returns {string} an ISO-8601 timestamp with GMT+0
@@ -120,7 +118,7 @@ export const prepareDateFromString = (
 };
 
 export const calculateISODate = ({
-  dateString,
+  dateString = undefined,
   howMuch = 0,
   units = 'days',
 }: {
@@ -154,7 +152,6 @@ export const createISODateString = (dateString?, inputFormat?) => {
 
 /**
  * createISODateAtStartOfDayEST
- *
  * @param {string} dateString a date string to be updated to ISO in USTC_TZ (ET)
  * @returns {string} the ISO formatted date set at midnight of today USTC_TZ (ET)
  */
@@ -170,7 +167,6 @@ export const createISODateAtStartOfDayEST = dateString => {
 
 /**
  * createDateAtStartOfWeekEST
- *
  * @param {string} dateString a date string to be updated to given format in USTC_TZ (ET)
  * @returns {string} the formatted date set at midnight of first Monday of
  *                   given week USTC_TZ (ET)
@@ -312,7 +308,6 @@ export const deconstructDate = dateString => {
 /**
  * Creates an object representing the current calendar day
  * according to USTC_TZ timezone
- *
  * @returns {object} with date, month, and year
  */
 export const getMonthDayYearInETObj = () => {
@@ -352,7 +347,6 @@ export const isValidDateString = (
  * When timeStamp1 is greater (more recent) than timeStamp2, the difference
  * will be positive. Time-stamps occurring on the same day will yield zero.
  * If timeStamp2 is greater than timeStamp1, the result will be negative.
- *
  * @param {string} timeStamp1 an ISO-8601 date string
  * @param {string} timeStamp2 an ISO-8601 date string
  * @returns {number} the difference between two days, rounded to the nearest integer
@@ -378,7 +372,6 @@ export const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
  * properly casts a variety of inputs to a UTC ISOString
  * directly using the luxon library to inspect the formatting of the input
  * before sending to application context functions to be transformed
- *
  * @param {object} applicationContext the application context
  * @param {string} dateString the date string to cast to an ISO string
  * @returns {string} the ISO string.
@@ -410,7 +403,6 @@ export const castToISO = dateString => {
 /**
  * checks if the new date contains all expected parts and returns date as an
  * ISO string; otherwise, it returns null
- *
  * @param {object} applicationContext the application context*
  * @param {string} updatedDateString the new date string to verify
  * @returns {string} the updatedDateString if everything is correct.
@@ -447,7 +439,6 @@ export const dateHasText = updatedDateString => {
  * Attempts to format separate date components provided into a string
  * like YYYY-MM-DD, e.g. 2021-01-20 if any of day, month, or year are defined
  * otherwise, will return null.
- *
  * @param {object} deconstructed date object
  * @param {string} deconstructed.day two-digit calendar day
  * @param {string} deconstructed.month two-digit calendar month
@@ -473,7 +464,6 @@ export const computeDate = ({ day, month, year }) => {
 
 /**
  * Formats date object into ISO string only if date is valid
- *
  * @param {object} date the date object containing year, month, day
  * @returns {string|void} a formatted ISO date string if date object is valid
  */
@@ -489,7 +479,6 @@ export const validateDateAndCreateISO = date => {
 
 /**
  * Subtracts a specified amount of time from passed in ISO date
- *
  * @param {string} date the ISO date
  * @param {object} dateConfig time
  * @returns {string} a formatted ISO date string if date object is valid
@@ -502,7 +491,6 @@ export const subtractISODates = (date, dateConfig) => {
  * Returns startDate plus n numberOfDays
  * but if the return date results on a Saturday, Sunday, or Federal holiday,
  * it will be moved forward to the next business day
- *
  * @param {string} startDate the date to add days to
  * @param {number} numberOfDays number of days to add to startDate
  * @returns {string} a formatted MONTH_DAY_YEAR string if date object is valid
