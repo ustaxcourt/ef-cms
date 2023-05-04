@@ -450,9 +450,10 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('should set an NOTT reminder flag and message when the session is calendared and has a startDate that is between 30 and 35 days calendar days of the current date', () => {
+  it('should set an NOTT reminder flag and message when the session is calendared and no previous notification has been dismissed', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
+      dismissedAlertForNOTT: false,
       formattedStartDate: '2019-11-25T15:00:00.000Z',
       isCalendared: true,
     };
@@ -472,9 +473,29 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
+  it('should NOT set an NOTT reminder flag when the alert has been previously dismissed', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      dismissedAlertForNOTT: true,
+      isCalendared: true,
+    };
+
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...mockTrialSession,
+        },
+      },
+    });
+
+    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
+    expect(result.showAlertForNOTTReminder).toBeUndefined();
+  });
+
   it('should NOT set an NOTT reminder flag when the session is NOT calendared', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
+      dismissedAlertForNOTT: false,
       isCalendared: false,
     };
 
