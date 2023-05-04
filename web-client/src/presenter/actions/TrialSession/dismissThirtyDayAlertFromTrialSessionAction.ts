@@ -27,7 +27,7 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
     return path.error({
       alertError: {
         message: 'Please try again.',
-        title: 'Trial session could not be edited.',
+        title: 'Alert could not be dismissed.',
       },
     });
   }
