@@ -26,7 +26,7 @@ export const LogIn = connect(
   }) {
     return (
       <section className="usa-section grid-container">
-        <h1 tabIndex="-1">Log in</h1>
+        <h1 tabIndex={-1}>Log in</h1>
         <SuccessNotification />
         <ErrorNotification />
         <form

@@ -21,7 +21,7 @@ export const ChangePasswordLocal = connect(
   }) {
     return (
       <section className="usa-section grid-container">
-        <h1 tabIndex="-1">New Password Required</h1>
+        <h1 tabIndex={-1}>New Password Required</h1>
         <ErrorNotification />
         <form
           noValidate

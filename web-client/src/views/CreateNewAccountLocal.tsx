@@ -19,7 +19,7 @@ export const CreateNewAccountLocal = connect(
   }) {
     return (
       <section className="usa-section grid-container">
-        <h1 tabIndex="-1">Create New Account</h1>
+        <h1 tabIndex={-1}>Create New Account</h1>
         <ErrorNotification />
         <form
           noValidate
