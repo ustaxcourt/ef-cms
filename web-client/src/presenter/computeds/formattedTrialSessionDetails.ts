@@ -1,4 +1,5 @@
 import { isEmpty, isEqual } from 'lodash';
+import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
@@ -8,6 +9,22 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       applicationContext,
       trialSession: get(state.trialSession),
     });
+
+  if (
+    !formattedTrialSession.dismissedAlertForNOTT &&
+    formattedTrialSession.isCalendared &&
+    formattedTrialSession.formattedStartDate
+  ) {
+    const { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted } =
+      set30DayNoticeOfTrialReminder({
+        applicationContext,
+        trialStartDate: formattedTrialSession.formattedStartDate,
+      });
+
+    formattedTrialSession.showAlertForNOTTReminder =
+      isCurrentDateWithinReminderRange;
+    formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+  }
 
   if (formattedTrialSession) {
     const {

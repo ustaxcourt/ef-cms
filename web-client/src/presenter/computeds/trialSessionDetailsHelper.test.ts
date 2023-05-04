@@ -181,4 +181,28 @@ describe('trialSessionDetailsHelper', () => {
     });
     expect(result.showSmallAndRegularQcComplete).toEqual(false);
   });
+
+  describe('canDismissThirtyDayAlert', () => {
+    it('should be true when the curent user has DISMISS_30_DAY_ALERT permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DISMISS_30_DAY_ALERT: true },
+          trialSession: TRIAL_SESSION,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toBe(true);
+    });
+
+    it('should be false when the curent user does NOT have DISMISS_30_DAY_ALERT permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DISMISS_30_DAY_ALERT: false },
+          trialSession: TRIAL_SESSION,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toBe(false);
+    });
+  });
 });

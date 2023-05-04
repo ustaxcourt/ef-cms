@@ -3,8 +3,7 @@ import React from 'react';
 
 /**
  * DismissThirtyDayNoticeAlertModal
- *
- * @returns {JSX.Element} Returns a modal dialog for unsealing a docket entry.
+ * @returns {JSX.Element} Returns a modal dialog for dismissing a 30 day NOTT alert
  */
 export function DismissThirtyDayNoticeAlertModal() {
   return (
