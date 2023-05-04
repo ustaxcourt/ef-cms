@@ -1,18 +1,18 @@
-const {
-  aggregateCommonQueryParams,
-} = require('../../business/utilities/aggregateCommonQueryParams');
-const {
-  MAX_SEARCH_CLIENT_RESULTS,
-} = require('../../business/entities/EntityConstants');
-const { isEmpty } = require('lodash');
-const { search } = require('./searchClient');
+import { MAX_SEARCH_CLIENT_RESULTS } from '../../business/entities/EntityConstants';
+import { aggregateCommonQueryParams } from '../../business/utilities/aggregateCommonQueryParams';
+import { isEmpty } from 'lodash';
+import { search } from './searchClient';
+
 /**
  * caseAdvancedSearchInteractor
  *
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
+export const caseAdvancedSearch = async ({
+  applicationContext,
+  searchTerms,
+}) => {
   const { commonQuery, exactMatchesQuery, nonExactMatchesQuery } =
     aggregateCommonQueryParams({ applicationContext, ...searchTerms });
 

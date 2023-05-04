@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getMaintenanceModeInteractor
@@ -7,7 +7,7 @@ const { get } = require('../requests');
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getMaintenanceModeInteractor = applicationContext => {
+export const getMaintenanceModeInteractor = applicationContext => {
   return get({
     applicationContext,
     endpoint: '/maintenance-mode',

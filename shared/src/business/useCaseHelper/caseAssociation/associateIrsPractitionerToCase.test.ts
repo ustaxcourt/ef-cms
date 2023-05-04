@@ -1,10 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  associateIrsPractitionerToCase,
-} = require('./associateIrsPractitionerToCase');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associateIrsPractitionerToCase } from './associateIrsPractitionerToCase';
+
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -12,9 +9,10 @@ const {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase.ts');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+} from '../../entities/EntityConstants';
+
+import { MOCK_CASE } from '../../../test/mockCase.ts';
+import { MOCK_USERS } from '../../../test/mockUsers';
 
 describe('associateIrsPractitionerToCase', () => {
   let caseRecord = {

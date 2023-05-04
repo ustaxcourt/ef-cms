@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * generateTrialSessionPaperServicePdfInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.trialNoticePdfsKeys the trial notice PDF keys of calendared cases associated with the trial session
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generateTrialSessionPaperServicePdfInteractor = (
+export const generateTrialSessionPaperServicePdfInteractor = (
   applicationContext,
   { trialNoticePdfsKeys },
 ) => {

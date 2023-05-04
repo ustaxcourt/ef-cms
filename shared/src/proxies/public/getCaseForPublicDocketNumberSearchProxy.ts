@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getCaseForPublicDocketSearchInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.docketNumber the docket number to search by
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCaseForPublicDocketSearchInteractor = ({
+export const getCaseForPublicDocketSearchInteractor = ({
   applicationContext,
   docketNumber,
 }) => {

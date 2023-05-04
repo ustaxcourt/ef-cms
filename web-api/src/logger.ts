@@ -1,8 +1,8 @@
 /* eslint-disable @miovision/disallow-date/no-new-date */
-const { createLogger } = require('./createLogger');
-const { get } = require('lodash');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
-const { transports } = require('winston');
+import { createLogger } from './createLogger';
+import { get } from 'lodash';
+import { getCurrentInvoke } from '@vendia/serverless-express';
+import { transports } from 'winston';
 
 let cache;
 const console = () =>
@@ -12,14 +12,14 @@ const console = () =>
     handleRejections: true,
   }));
 
-module.exports =
+export const logger =
   (transport = console()) =>
   (req, res, next) => {
-    const logger = createLogger({ transports: [transport] });
+    const createdLogger = createLogger({ transports: [transport] });
 
     if (process.env.NODE_ENV === 'production') {
       const currentInvoke = getCurrentInvoke();
-      logger.defaultMeta = {
+      createdLogger.defaultMeta = {
         environment: {
           color: process.env.CURRENT_COLOR || 'green',
           stage: process.env.STAGE || 'local',
@@ -38,10 +38,10 @@ module.exports =
       };
     }
 
-    logger.debug(`Request started: ${req.method} ${req.url}`);
+    createdLogger.debug(`Request started: ${req.method} ${req.url}`);
 
     req.locals = req.locals || {};
-    req.locals.logger = logger;
+    req.locals.logger = createdLogger;
     req.locals.startTime = new Date();
 
     const { end } = res;

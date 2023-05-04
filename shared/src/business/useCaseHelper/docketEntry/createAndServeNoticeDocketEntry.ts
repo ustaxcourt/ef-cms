@@ -1,14 +1,7 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  DocketEntry,
-  getServedPartiesCode,
-} = require('../../entities/DocketEntry');
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../../entities/EntityConstants');
-const { createISODateString } = require('../../utilities/DateHandler');
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
+import { DocketEntry, getServedPartiesCode } from '../../entities/DocketEntry';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { createISODateString } from '../../utilities/DateHandler';
 
 /**
  * createAndServeNoticeDocketEntry
@@ -21,7 +14,7 @@ const { createISODateString } = require('../../utilities/DateHandler');
  * @param {object} providers.noticePdf the notice pdf being served
  * @param {object} providers.userId the user ID
  */
-exports.createAndServeNoticeDocketEntry = async (
+export const createAndServeNoticeDocketEntry = async (
   applicationContext,
   {
     additionalDocketEntryInfo = {},

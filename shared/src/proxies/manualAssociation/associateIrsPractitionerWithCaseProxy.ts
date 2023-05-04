@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * associateIrsPractitionerWithCaseInteractorProxy
@@ -10,7 +10,7 @@ const { post } = require('../requests');
  * @param {string} params.userId the user id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.associateIrsPractitionerWithCaseInteractor = (
+export const associateIrsPractitionerWithCaseInteractor = (
   applicationContext,
   { docketNumber, serviceIndicator, userId },
 ) => {

@@ -1,4 +1,4 @@
-const { remove } = require('./requests');
+import { remove } from './requests';
 
 /**
  * removeCasePendingItemInteractor
@@ -9,7 +9,7 @@ const { remove } = require('./requests');
  * @param {string} providers.docketEntryId the id of docket entry no longer pending
  * @returns {Promise<object>} the updated case data
  */
-exports.removeCasePendingItemInteractor = (
+export const removeCasePendingItemInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
