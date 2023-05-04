@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 
 import { OrderDocketHeader } from '../components/OrderDocketHeader.tsx';
 import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader.tsx';

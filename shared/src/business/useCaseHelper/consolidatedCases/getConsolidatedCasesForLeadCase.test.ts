@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getConsolidatedCasesForLeadCase,
-} = require('./getConsolidatedCasesForLeadCase');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { UserCase } = require('../../entities/UserCase');
+import { MOCK_CASE } from '../../../test/mockCase';
+import { UserCase } from '../../entities/UserCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getConsolidatedCasesForLeadCase } from './getConsolidatedCasesForLeadCase';
 
 describe('getConsolidatedCasesForLeadCase', () => {
   it('should retrieve all cases associated with the leadDocketNumber', async () => {

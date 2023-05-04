@@ -1,9 +1,10 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const noticeOfTrialIssuedInPerson = async ({ applicationContext, data }) => {
+export const noticeOfTrialIssuedInPerson = async ({
+  applicationContext,
+  data,
+}) => {
   const { docketNumberWithSuffix } = data;
 
   const noticeOfTrialIssuedInPersonTemplate = reactTemplateGenerator({
@@ -33,8 +34,4 @@ const noticeOfTrialIssuedInPerson = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  noticeOfTrialIssuedInPerson,
 };

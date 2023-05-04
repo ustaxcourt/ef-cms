@@ -1,14 +1,15 @@
-exports.getChromiumBrowser = async () => {
-  const puppeteer = require('puppeteer');
+import chromium from '@sparticuz/chromium';
+import puppeteer from 'puppeteer';
+import puppeteerCore from 'puppeteer-core';
+
+export const getChromiumBrowser = async () => {
   return await puppeteer.launch({
     args: ['--no-sandbox'],
   });
 };
 
-exports.getChromiumBrowserAWS = async () => {
-  const chromium = require('@sparticuz/chromium');
-  const puppeteer = require('puppeteer-core');
-  return await puppeteer.launch({
+export const getChromiumBrowserAWS = async () => {
+  return await puppeteerCore.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath(),

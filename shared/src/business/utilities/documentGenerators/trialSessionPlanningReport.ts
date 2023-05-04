@@ -1,9 +1,10 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const trialSessionPlanningReport = async ({ applicationContext, data }) => {
+export const trialSessionPlanningReport = async ({
+  applicationContext,
+  data,
+}) => {
   const { locationData, previousTerms, term } = data;
 
   const trialSessionPlanningReportTemplate = reactTemplateGenerator({
@@ -44,8 +45,4 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  trialSessionPlanningReport,
 };

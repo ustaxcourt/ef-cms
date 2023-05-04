@@ -1,16 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../../web-client/src/applicationContext');
-const {
-  CASE_STATUS_TYPES,
-  PAYMENT_STATUS,
-} = require('../entities/EntityConstants');
-const {
-  formatCase,
-  getFormattedCaseDetail,
-} = require('./getFormattedCaseDetail');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_USERS } = require('../../test/mockUsers');
+import { CASE_STATUS_TYPES, PAYMENT_STATUS } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_USERS } from '../../test/mockUsers';
+import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { formatCase, getFormattedCaseDetail } from './getFormattedCaseDetail';
 
 describe('getFormattedCaseDetail', () => {
   applicationContext.getCurrentUser = () =>

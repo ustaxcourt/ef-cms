@@ -1,8 +1,7 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * getCasesClosedByJudgeInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.endDate the end date for the report query

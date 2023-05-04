@@ -1,14 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
-const { createUserForContact } = require('./createUserForContact');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { Case, getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createUserForContact } from './createUserForContact';
 
 describe('createUserForContact', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';

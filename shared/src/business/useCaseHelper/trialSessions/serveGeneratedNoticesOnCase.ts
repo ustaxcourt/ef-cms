@@ -9,7 +9,7 @@
  * @param {object} providers.noticeDocumentPdfData the notice document pdf data
  * @param {object} providers.servedParties the served parties
  */
-exports.serveGeneratedNoticesOnCase = async ({
+export const serveGeneratedNoticesOnCase = async ({
   applicationContext,
   caseEntity,
   newPdfDoc,
