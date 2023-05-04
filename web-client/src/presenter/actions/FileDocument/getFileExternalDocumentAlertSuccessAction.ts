@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * creates the success alert object
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object

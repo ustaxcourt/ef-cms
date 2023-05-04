@@ -154,7 +154,7 @@ export const createOrUpdateUser = async ({
   const userExists = await isUserAlreadyCreated({
     applicationContext,
     email: user.email,
-    userPoolId,
+    userPoolId: userPoolId as string,
   });
 
   if (!userExists) {

@@ -85,7 +85,7 @@ export const createOrUpdatePractitionerUser = async ({
   const userExists = await isUserAlreadyCreated({
     applicationContext,
     email: userEmail,
-    userPoolId: process.env.USER_POOL_ID,
+    userPoolId: process.env.USER_POOL_ID as string,
   });
 
   if (!userExists) {

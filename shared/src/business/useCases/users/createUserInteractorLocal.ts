@@ -8,8 +8,8 @@ import { ROLES } from '../../entities/EntityConstants';
  * @returns {Promise} the promise of the createUser call
  */
 export const createUserInteractorLocal = async (
-  applicationContext,
-  { user },
+  applicationContext: IApplicationContext,
+  { user }: { user: { password: string; name: string; email: string } },
 ) => {
   const userId = applicationContext.getUniqueId();
 
