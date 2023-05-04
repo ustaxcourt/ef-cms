@@ -122,11 +122,11 @@ fi
 #   // pass that to terraform (deploing_color <- deploying_node_version)
 
 if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-  GREEN_NODE_VERSION=$(../../../scripts/get-current-node-version.sh "${ENV}")
-  BLUE_NODE_VERSION=$(../../../scripts/get-deploying-node-version.sh "${ENV}")
+  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
 else
-  BLUE_NODE_VERSION=$(../../../scripts/get-current-node-version.sh "${ENV}")
-  GREEN_NODE_VERSION=$(../../../scripts/get-deploying-node-version.sh "${ENV}")
+  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
