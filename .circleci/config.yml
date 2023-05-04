@@ -1,17 +1,17 @@
 version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.5.0
-define: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.26.0
+define: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.2
 
 commands:
   npm-and-cypress-install:
     steps:
       - restore_cache:
           keys:
-            - v26-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v26-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -33,18 +33,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v26-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v26-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v26-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -57,7 +57,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v26-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
@@ -108,7 +108,7 @@ jobs:
           name: Admin User Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              node shared/admin-tools/user/setup-admin.js
+              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.js
             else
               echo "skipping…"
             fi
@@ -168,7 +168,7 @@ jobs:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              node shared/admin-tools/user/verify-ustc-admin-user-disabled.js
+              npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
             else
               echo "Skipping verify admin user disabled step on prod"
             fi
@@ -325,7 +325,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: Create and Enable Test User
-          command: node ./scripts/create-and-enable-smoketest-user.js
+          command: npx ts-node --transpile-only ./scripts/create-and-enable-smoketest-user.js
       - run:
           name: 'Cypress Readonly Smoke Tests'
           command: |
@@ -335,7 +335,7 @@ jobs:
             set -e
       - run:
           name: Disable Test User
-          command: node ./scripts/disable-smoketest-user.js
+          command: npx ts-node --transpile-only ./scripts/disable-smoketest-user.js
       - run:
           name: Kill Build if Smoketests Failed
           command: ./scripts/kill-circle-build.sh
