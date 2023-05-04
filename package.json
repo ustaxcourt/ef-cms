@@ -16,6 +16,7 @@
     "@aws-sdk/client-dynamodb": "^3.321.1",
     "@aws-sdk/client-sqs": "^3.321.1",
     "@aws-sdk/credential-provider-node": "^3.321.1",
+    "@aws-sdk/lib-dynamodb": "^3.326.0",
     "@aws-sdk/node-http-handler": "^3.321.1",
     "@aws-sdk/protocol-http": "^3.310.0",
     "@aws-sdk/signature-v4": "^3.310.0",
