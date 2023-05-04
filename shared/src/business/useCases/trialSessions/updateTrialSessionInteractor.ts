@@ -132,7 +132,6 @@ const createWorkingCopyForNewUserOnSession = async ({
 
 /**
  * updateTrialSessionInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
@@ -282,6 +281,7 @@ export const updateTrialSessionInteractor = async (
     applicationContext,
     message: {
       action: 'update_trial_session_complete',
+      dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
       hasPaper,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,

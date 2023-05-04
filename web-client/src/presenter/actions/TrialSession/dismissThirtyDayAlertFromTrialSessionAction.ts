@@ -1,10 +1,11 @@
 import { state } from 'cerebral';
 /**
  * sets the state.screenMetadata.showNewTab depending on the user role
- *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object containing the props.query
- * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.trialSessionFilters
+ * @param {object} providers.applicationContext the applicationContext object
+ * @param {object} providers.get the cerebral get method
+ * @param {object} providers.path provides execution path choices
+ * @returns {object} the path to call
  */
 export const dismissThirtyDayAlertFromTrialSessionAction = async ({
   applicationContext,
@@ -30,5 +31,6 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
       },
     });
   }
-  return path.success({ trialSessionId: trialSession.trialSessionId });
+
+  return path.success();
 };
