@@ -50,7 +50,10 @@ import { docketRecord } from '../../shared/src/business/utilities/documentGenera
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
 import { fallbackHandler } from './fallbackHandler';
-import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
+import {
+  getChromiumBrowser,
+  getChromiumBrowserAWS,
+} from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -230,7 +233,10 @@ export const createApplicationContext = (
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser,
+    getChromiumBrowser:
+      process.env.NODE_ENV === 'production'
+        ? getChromiumBrowserAWS
+        : getChromiumBrowser,
     getClerkOfCourtNameForSigning: () => {
       return clerkOfCourtNameForSigning;
     },

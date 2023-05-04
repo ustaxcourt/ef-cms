@@ -15,7 +15,7 @@ export const generateDraftDocument = async ({
   replacements,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCase;
+  caseEntity: Case;
   document: any;
   replacements: string[];
 }) => {
