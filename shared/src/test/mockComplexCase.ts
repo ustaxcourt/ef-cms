@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
-const { CONTACT_TYPES } = require('../business/entities/EntityConstants');
+import { CONTACT_TYPES } from '../business/entities/EntityConstants';
 
-exports.MOCK_COMPLEX_CASE = {
+export const MOCK_COMPLEX_CASE = {
   archivedCorrespondences: [],
   archivedDocketEntries: [],
   associatedJudge: 'Judge Thornton',

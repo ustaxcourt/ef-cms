@@ -4,7 +4,7 @@
  * @param {array} fields array of pdf form fields
  */
 
-exports.setPdfFormFields = fields => {
+export const setPdfFormFields = fields => {
   fields.forEach(field => {
     const fieldType = field.constructor.name;
     if (fieldType === 'PDFTextField') {

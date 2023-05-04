@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * updateOtherStatisticsInteractor
@@ -10,7 +10,7 @@ const { post } = require('../requests');
  * @param {number} providers.litigationCosts litigation costs statistic to add to the case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateOtherStatisticsInteractor = (
+export const updateOtherStatisticsInteractor = (
   applicationContext,
   { damages, docketNumber, litigationCosts },
 ) => {

@@ -6,7 +6,10 @@
  * @param {string} providers.docketEntryId the docket entry id
  * @returns {Promise<*>} updated docket entry entity
  */
-exports.removeCoversheet = async (applicationContext, { docketEntryId }) => {
+export const removeCoversheet = async (
+  applicationContext,
+  { docketEntryId },
+) => {
   let pdfData;
   try {
     ({ Body: pdfData } = await applicationContext

@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getJudgeInSectionHelper } = require('./getJudgeInSectionHelper');
-const { ROLES } = require('../entities/EntityConstants');
+import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getJudgeInSectionHelper } from './getJudgeInSectionHelper';
 
 let currentUser;
 

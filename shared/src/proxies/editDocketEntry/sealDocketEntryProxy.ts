@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * sealDocketEntryInteractor proxy
@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {object} providers.docketNumber the docket number for a case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.sealDocketEntryInteractor = (
+export const sealDocketEntryInteractor = (
   applicationContext,
   { docketEntryId, docketEntrySealedTo, docketNumber },
 ) => {

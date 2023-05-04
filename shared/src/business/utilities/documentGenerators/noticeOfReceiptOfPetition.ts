@@ -1,9 +1,10 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
+export const noticeOfReceiptOfPetition = async ({
+  applicationContext,
+  data,
+}) => {
   const reactNoticeReceiptPetitionTemplate = reactTemplateGenerator({
     componentName: 'NoticeOfReceiptOfPetition',
     data,
@@ -23,8 +24,4 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  noticeOfReceiptOfPetition,
 };

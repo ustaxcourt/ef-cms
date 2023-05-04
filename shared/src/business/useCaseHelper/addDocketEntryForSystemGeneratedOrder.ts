@@ -1,9 +1,10 @@
-const {
+import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../entities/EntityConstants');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
+} from '../entities/EntityConstants';
+import { DocketEntry } from '../entities/DocketEntry';
+import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+
 /**
  *
  * Add docket entry for system generated order
@@ -15,7 +16,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  * @param {Case} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
  */
-exports.addDocketEntryForSystemGeneratedOrder = async ({
+export const addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
   caseEntity,
   systemGeneratedDocument,

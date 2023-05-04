@@ -1,8 +1,8 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * Generate Notice of Docket Change PDF
@@ -12,7 +12,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketChangeInfo contains information about what has changed
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
-exports.generateNoticeOfDocketChangePdf = async ({
+export const generateNoticeOfDocketChangePdf = async ({
   applicationContext,
   docketChangeInfo,
 }) => {
