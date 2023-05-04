@@ -1,20 +1,32 @@
-const AWS = require('aws-sdk');
+const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
 
-const docClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
+const marshallOptions = {
+  convertClassInstanceToMap: false,
+  convertEmptyValues: false,
+  removeUndefinedValues: true,
+};
+
+const unmarshallOptions = {
+  wrapNumbers: false,
+};
+
+const docClient = DynamoDBDocumentClient.from(ddbClient, {
+  marshallOptions,
+  unmarshallOptions,
 });
 
 const getWhiteListIps = async () => {
-  const { Item: whiteListIps } = await docClient
-    .get({
+  const { Item: whiteListIps } = await docClient.send(
+    new GetItemCommand({
       Key: {
         pk: 'allowed-terminal-ips',
         sk: 'allowed-terminal-ips',
       },
       TableName: `efcms-deploy-${process.env.STAGE}`,
-    })
-    .promise();
+    }),
+  );
   return whiteListIps?.ips ?? [];
 };
 
