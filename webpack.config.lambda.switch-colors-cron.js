@@ -6,7 +6,7 @@ module.exports = {
     'switch-colors-status':
       './web-api/workflow-terraform/switch-colors-cron/main/lambdas/switch-colors.js',
   },
-  externals: ['aws-crt', 'aws-sdk'],
+  externals: ['aws-crt'],
   output: {
     clean: true,
     libraryTarget: 'umd',

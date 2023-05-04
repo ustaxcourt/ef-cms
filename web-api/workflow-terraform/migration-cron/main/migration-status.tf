@@ -12,7 +12,7 @@ resource "aws_lambda_function" "migration_status_lambda" {
   handler          = "migration-status.handler"
   source_code_hash = data.archive_file.migration_status_zip.output_base64sha256
 
-  runtime     = "nodejs16.x"
+  runtime     = "nodejs18.x"
   timeout     = "900"
   memory_size = "768"
 
