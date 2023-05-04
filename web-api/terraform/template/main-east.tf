@@ -554,6 +554,7 @@ module "api-east-green" {
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
+  node_version              = var.green_node_version
   create_maintenance_notify = 1
   source                    = "../api/"
   environment               = var.environment
@@ -620,6 +621,7 @@ module "api-east-blue" {
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
   pool_arn                  = aws_cognito_user_pool.pool.arn
+  node_version              = var.blue_node_version
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain

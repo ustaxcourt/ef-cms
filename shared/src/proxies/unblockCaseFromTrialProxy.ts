@@ -1,4 +1,4 @@
-const { remove } = require('./requests');
+import { remove } from './requests';
 
 /**
  * unblockCaseFromTrialInteractor
@@ -8,7 +8,7 @@ const { remove } = require('./requests');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.unblockCaseFromTrialInteractor = (
+export const unblockCaseFromTrialInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

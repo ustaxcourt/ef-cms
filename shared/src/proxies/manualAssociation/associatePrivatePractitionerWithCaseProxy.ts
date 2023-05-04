@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * associatePrivatePractitionerWithCaseInteractorProxy
@@ -11,7 +11,7 @@ const { post } = require('../requests');
  * @param {string} params.serviceIndicator the service indicator for the petitioner counsel (electronic, paper, none)
  * @returns {Promise<*>} the promise of the api call
  */
-exports.associatePrivatePractitionerWithCaseInteractor = (
+export const associatePrivatePractitionerWithCaseInteractor = (
   applicationContext,
   { docketNumber, representing, serviceIndicator, userId },
 ) => {

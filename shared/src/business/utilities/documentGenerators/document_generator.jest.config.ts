@@ -17,7 +17,7 @@ const config: Config = {
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
-  workerIdleMemoryLimit: '25%', // After a jest runner uses X% of total system memory, recreate the runner.
+  workerIdleMemoryLimit: '5%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
 
 // eslint-disable-next-line import/no-default-export

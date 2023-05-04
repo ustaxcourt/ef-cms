@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
+import * as pdfLib from 'pdf-lib';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -23,6 +24,12 @@ import {
   getServedPartiesCode,
   isServed,
 } from '../entities/DocketEntry';
+import {
+  ERROR_MAP_429,
+  getCognitoLoginUrl,
+  getPublicSiteUrl,
+  getUniqueId,
+} from '../../sharedAppContext';
 import { ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { abbreviateState } from '../utilities/abbreviateState';
@@ -123,7 +130,8 @@ import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentA
 import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
-import sharedAppContext, { ERROR_MAP_429 } from '../../sharedAppContext';
+import pug from 'pug';
+import sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -538,7 +546,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const applicationContext = {
-    ...sharedAppContext,
     barNumberGenerator: {
       createBarNumber: jest.fn().mockReturnValue('CS20001'),
     },
@@ -572,6 +579,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       }),
     }),
     getCognitoClientId: jest.fn(),
+    getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
@@ -622,16 +630,17 @@ export const createTestApplicationContext = ({ user } = {}) => {
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    getNodeSass: jest.fn().mockReturnValue(require('sass')),
+    getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfLib: jest.fn().mockResolvedValue(require('pdf-lib')),
+    getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn().mockReturnValue(require('pug')),
+    getPublicSiteUrl,
+    getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
@@ -640,7 +649,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
+    getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,

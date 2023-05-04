@@ -1,4 +1,4 @@
-const { remove } = require('./requests');
+import { remove } from './requests';
 
 /**
  * removeConsolidatedCasesInteractor
@@ -9,7 +9,7 @@ const { remove } = require('./requests');
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to be removed from consolidation
  * @returns {Promise<*>} the promise of the api call
  */
-exports.removeConsolidatedCasesInteractor = (
+export const removeConsolidatedCasesInteractor = (
   applicationContext,
   { docketNumber, docketNumbersToRemove },
 ) => {

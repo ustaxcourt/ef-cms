@@ -39,6 +39,8 @@ module "ef-cms_apis" {
   deploying_color            = var.deploying_color
   blue_table_name            = var.blue_table_name
   green_table_name           = var.green_table_name
+  blue_node_version          = var.blue_node_version
+  green_node_version         = var.green_node_version
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   green_elasticsearch_domain = var.green_elasticsearch_domain
   destination_table          = var.destination_table

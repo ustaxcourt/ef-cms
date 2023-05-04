@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  * @param {object} providers the providers object
@@ -7,7 +7,11 @@ const { get } = require('./requests');
  * @param {string} providers.key the key of the document to get
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getDownloadPolicyUrl = ({ applicationContext, docketNumber, key }) => {
+export const getDownloadPolicyUrl = ({
+  applicationContext,
+  docketNumber,
+  key,
+}) => {
   return get({
     applicationContext,
     endpoint: `/case-documents/${docketNumber}/${key}/download-policy-url`,
