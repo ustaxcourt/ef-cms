@@ -189,3 +189,7 @@ variable "bounce_handler_object" {
 variable "bounce_handler_object_hash" {
   type = string
 }
+
+variable "node_version" {
+  type = string
+}
