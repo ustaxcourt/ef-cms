@@ -1,6 +1,15 @@
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePdfFromHtmlInteractor } from './generatePdfFromHtmlInteractor';
 
+jest.mock(
+  '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
+  () => {
+    return {
+      reactTemplateGenerator: jest.fn().mockImplementation(() => '<div></div>'),
+    };
+  },
+);
+
 describe('generatePdfFromHtmlInteractor', () => {
   let pageContent = '';
   let closeMock;
@@ -22,6 +31,10 @@ describe('generatePdfFromHtmlInteractor', () => {
   beforeEach(() => {
     closeMock = jest.fn();
 
+    applicationContext
+      .getUtilities()
+      .combineTwoPdfs.mockImplementation(() => Buffer.from('hi'));
+
     applicationContext.getChromiumBrowser.mockImplementation(() => {
       launchMock();
       return {
@@ -31,6 +44,11 @@ describe('generatePdfFromHtmlInteractor', () => {
           return {
             pdf: pdfMock,
             setContent: setContentMock,
+          };
+        },
+        process() {
+          return {
+            pid: '123',
           };
         },
       };
@@ -72,7 +90,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     expect(closeMock).toHaveBeenCalled();
   });
 
-  it('should show header and footer by default', async () => {
+  it('should not show the header on 1 page documents', async () => {
     const args = {
       contentHtml:
         '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -84,10 +102,8 @@ describe('generatePdfFromHtmlInteractor', () => {
       args as any,
     );
 
-    expect(result.indexOf('<span class="pageNumber"></span>')).toBeGreaterThan(
-      -1,
-    );
-    expect(result.indexOf('Docket No.:')).toBeGreaterThan(-1);
+    expect(result.indexOf('<span class="pageNumber"></span>')).toEqual(-1);
+    expect(result.indexOf('Docket No.:')).toEqual(-1);
   });
 
   it('should display alternate header html when headerHtml is given', async () => {
@@ -99,13 +115,13 @@ describe('generatePdfFromHtmlInteractor', () => {
       headerHtml: customHeader,
     };
 
-    const result = await generatePdfFromHtmlInteractor(
-      applicationContext,
-      args as any,
-    );
+    await generatePdfFromHtmlInteractor(applicationContext, args as any);
 
-    expect(result.indexOf('Page <span class="pageNumber"></span>')).toEqual(-1); // This is in the header by default
-    expect(result.indexOf(customHeader)).toBeGreaterThan(-1);
+    const secondPageHeader = pdfMock.mock.calls[1][0].headerTemplate;
+    expect(
+      secondPageHeader.indexOf('Page <span class="pageNumber"></span>'),
+    ).toEqual(-1); // This is in the header by default
+    expect(secondPageHeader.indexOf(customHeader)).toBeGreaterThan(-1);
   });
 
   it('should display no header html when headerHtml is empty string', async () => {
@@ -132,12 +148,11 @@ describe('generatePdfFromHtmlInteractor', () => {
       footerHtml: 'Test Footer',
     };
 
-    const result = await generatePdfFromHtmlInteractor(
-      applicationContext,
-      args as any,
-    );
+    await generatePdfFromHtmlInteractor(applicationContext, args as any);
 
-    expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
+    const firstPageFooter = pdfMock.mock.calls[0][0].footerTemplate;
+
+    expect(firstPageFooter.indexOf('Test Footer')).toBeGreaterThan(-1);
   });
 
   it('should not show the default footer or additional footer content when overwriteFooter is set and footerHTML is not set', async () => {
@@ -167,12 +182,11 @@ describe('generatePdfFromHtmlInteractor', () => {
     };
     const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
 
-    const result = await generatePdfFromHtmlInteractor(
-      applicationContext,
-      args as any,
-    );
+    await generatePdfFromHtmlInteractor(applicationContext, args as any);
 
-    expect(result.indexOf(defaultFooterContent)).toEqual(-1);
-    expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
+    const firstPageFooter = pdfMock.mock.calls[0][0].footerTemplate;
+
+    expect(firstPageFooter.indexOf(defaultFooterContent)).toEqual(-1);
+    expect(firstPageFooter.indexOf('Test Footer')).toBeGreaterThan(-1);
   });
 });
