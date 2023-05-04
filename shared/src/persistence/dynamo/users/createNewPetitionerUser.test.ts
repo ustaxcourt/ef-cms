@@ -72,7 +72,7 @@ describe('createNewPetitionerUser', () => {
   });
 
   it('should modify the params sent to cognito adminCreateUser when USE_COGNITO_LOCAL is true', async () => {
-    process.env.USE_COGNITO_LOCAL = true;
+    process.env.USE_COGNITO_LOCAL = 'true';
 
     const mockUserId = 'e6df170d-bc7d-428b-b0f2-decb3f9b83a8';
     const mockUser = {

@@ -52,7 +52,7 @@ describe('createOrUpdatePractitionerUser', () => {
     barNumber: 'pt1234',
     email: 'test@example.com',
     name: 'Test Other',
-    role: ROLES.other,
+    role: ROLES.judge,
     section: 'other',
   };
 
@@ -319,7 +319,7 @@ describe('createOrUpdatePractitionerUser', () => {
   });
 
   it('should call adminCreateUser with the correct params when USE_COGNITO_LOCAL is true', async () => {
-    process.env.USE_COGNITO_LOCAL = true;
+    process.env.USE_COGNITO_LOCAL = 'true';
     process.env.USER_POOL_ID = 'localUserPoolId';
 
     // setupNonExistingUserMock();
@@ -362,7 +362,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
   it('should get userId of newly created user from passed-in user object instead of cognito', async () => {
     const mockUserId = 'abcd1234';
-    process.env.USE_COGNITO_LOCAL = true;
+    process.env.USE_COGNITO_LOCAL = 'true';
     process.env.USER_POOL_ID = 'localUserPoolId';
 
     await createOrUpdatePractitionerUser({
