@@ -1,25 +1,19 @@
-const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, GetCommand } = require('aws-sdk/lib-dynamodb');
 const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
 
-const marshallOptions = {
-  convertClassInstanceToMap: false,
-  convertEmptyValues: false,
-  removeUndefinedValues: true,
-};
-
-const unmarshallOptions = {
-  wrapNumbers: false,
-};
-
 const docClient = DynamoDBDocumentClient.from(ddbClient, {
-  marshallOptions,
-  unmarshallOptions,
+  marshallOptions: {
+    removeUndefinedValues: true,
+  },
+  unmarshallOptions: {
+    wrapNumbers: false,
+  },
 });
 
 const getWhiteListIps = async () => {
   const { Item: whiteListIps } = await docClient.send(
-    new GetItemCommand({
+    new GetCommand({
       Key: {
         pk: 'allowed-terminal-ips',
         sk: 'allowed-terminal-ips',
