@@ -13,7 +13,7 @@ resource "aws_lambda_function" "send_emails_lambda" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-  runtime = "nodejs18.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment

@@ -6,7 +6,7 @@ module.exports = {
     'migration-status':
       './web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.js',
   },
-  externals: ['aws-crt', 'aws-sdk'],
+  externals: ['aws-crt'],
   output: {
     clean: true,
     libraryTarget: 'umd',
