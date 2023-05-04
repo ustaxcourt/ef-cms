@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * removePdfFromDocketEntryInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketEntryId the id of the docket entry for the signed document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.removePdfFromDocketEntryInteractor = (
+export const removePdfFromDocketEntryInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

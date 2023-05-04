@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * removePetitionerAndUpdateCaptionInteractor
@@ -10,7 +10,7 @@ const { put } = require('./requests');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.removePetitionerAndUpdateCaptionInteractor = (
+export const removePetitionerAndUpdateCaptionInteractor = (
   applicationContext,
   { caseCaption, contactId, docketNumber },
 ) => {

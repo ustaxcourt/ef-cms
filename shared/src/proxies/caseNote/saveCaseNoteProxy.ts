@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * saveCaseNoteInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {string} providers.caseNote the notes to add
  * @returns {Promise<*>} the promise of the api call
  */
-exports.saveCaseNoteInteractor = (
+export const saveCaseNoteInteractor = (
   applicationContext,
   { caseNote, docketNumber },
 ) => {

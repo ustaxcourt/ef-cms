@@ -1,5 +1,5 @@
-const { getFilingsAndProceedings } = require('./getFormattedCaseDetail');
-const { OBJECTIONS_OPTIONS_MAP } = require('../entities/EntityConstants');
+import { OBJECTIONS_OPTIONS_MAP } from '../entities/EntityConstants';
+import { getFilingsAndProceedings } from './getFormattedCaseDetail';
 
 describe('getFilingsAndProceedings', () => {
   it('returns a value based on document properties (attachments, C/S,  objections, and lodged)', () => {

@@ -1,13 +1,14 @@
-const {
+import {
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   REVISED_TRANSCRIPT_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} = require('../entities/EntityConstants');
-const {
-  documentMeetsAgeRequirements,
+} from '../entities/EntityConstants';
+
+import {
   TRANSCRIPT_AGE_DAYS_MIN,
-} = require('./getFormattedCaseDetail');
-const { calculateISODate, createISODateString } = require('./DateHandler');
+  documentMeetsAgeRequirements,
+} from './getFormattedCaseDetail';
+import { calculateISODate, createISODateString } from './DateHandler';
 
 describe('documentMeetsAgeRequirements', () => {
   const oldTranscriptDate = '2010-01-01T01:02:03.007Z';

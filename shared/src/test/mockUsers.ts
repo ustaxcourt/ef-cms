@@ -1,4 +1,4 @@
-const {
+import {
   ADC_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
@@ -6,10 +6,8 @@ const {
   PETITIONS_SECTION,
   ROLES,
   TRIAL_CLERKS_SECTION,
-} = require('../business/entities/EntityConstants');
-const {
-  getJudgesChambers,
-} = require('../persistence/dynamo/chambers/getJudgesChambers');
+} from '../business/entities/EntityConstants';
+import { getJudgesChambers } from '../persistence/dynamo/chambers/getJudgesChambers';
 
 export const adcUser = {
   name: 'ADC',
