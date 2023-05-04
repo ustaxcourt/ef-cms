@@ -468,4 +468,23 @@ describe('updateTrialSessionInteractor', () => {
         .calls[0][1].swingSessionId,
     ).toEqual(mockSwingSessionId);
   });
+
+  it('should make a call to sendNotificationToUser when the trial session is successfully completed', async () => {
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        dismissedAlertForNOTT: true,
+      },
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    ).toMatchObject({
+      action: 'update_trial_session_complete',
+      dismissedAlertForNOTT: true,
+      hasPaper: false,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+  });
 });
