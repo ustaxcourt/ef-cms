@@ -10,7 +10,7 @@ resource "aws_lambda_function" "maintenance_notify_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
