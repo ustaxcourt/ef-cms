@@ -29,6 +29,51 @@ data "archive_file" "zip_api" {
   excludes = [
     "api-public.js",
     "websockets.js",
+    "trial-session.js",
+    "send-emails.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-triggers.js",
+    "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "seal-in-lower-environment.js",
+    "report.html"
+  ]
+}
+
+data "archive_file" "zip_send_emails" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api-public.js",
+    "api.js",
+    "trial-session.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-triggers.js",
+    "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "seal-in-lower-environment.js",
+    "report.html"
+  ]
+}
+
+data "archive_file" "zip_trial_session" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api-public.js",
+    "api.js",
+    "websockets.js",
+    "send-emails.js",
     "maintenance-notify.js",
     "cron.js",
     "streams.js",
@@ -83,6 +128,29 @@ resource "null_resource" "triggers_east_object" {
     always_run = timestamp()
   }
 }
+
+resource "null_resource" "send_emails_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_send_emails.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/send_emails_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
+resource "null_resource" "trial_session_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_trial_session.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/trial_session_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 
 data "archive_file" "zip_websockets" {
   type        = "zip"
@@ -355,6 +423,31 @@ data "aws_s3_bucket_object" "triggers_green_east_object" {
   key        = "triggers_green.js.zip"
 }
 
+data "aws_s3_bucket_object" "send_emails_green_east_object" {
+  depends_on = [null_resource.send_emails_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "send_emails_green.js.zip"
+}
+
+data "aws_s3_bucket_object" "send_emails_blue_east_object" {
+  depends_on = [null_resource.send_emails_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "send_emails_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "trial_session_blue_east_object" {
+  depends_on = [null_resource.trial_session_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "trial_session_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "trial_session_green_east_object" {
+  depends_on = [null_resource.trial_session_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "trial_session_green.js.zip"
+}
+
+
 data "aws_s3_bucket_object" "triggers_blue_east_object" {
   depends_on = [null_resource.triggers_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -455,10 +548,13 @@ module "api-east-green" {
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object
   websockets_object         = null_resource.websockets_east_object
+  send_emails_object        = null_resource.send_emails_east_object
+  trial_session_object      = null_resource.trial_session_east_object
   maintenance_notify_object = null_resource.maintenance_notify_east_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
+  node_version              = var.green_node_version
   create_maintenance_notify = 1
   source                    = "../api/"
   environment               = var.environment
@@ -486,6 +582,8 @@ module "api-east-green" {
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_green_east_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_green_east_object.etag
+  send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_green_east_object.etag
+  trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_green_east_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_east_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_east_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_east_object.etag
@@ -514,6 +612,8 @@ module "api-east-green" {
 module "api-east-blue" {
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object
+  send_emails_object        = null_resource.send_emails_east_object
+  trial_session_object      = null_resource.trial_session_east_object
   websockets_object         = null_resource.websockets_east_object
   maintenance_notify_object = null_resource.maintenance_notify_east_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
@@ -521,6 +621,7 @@ module "api-east-blue" {
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
   pool_arn                  = aws_cognito_user_pool.pool.arn
+  node_version              = var.blue_node_version
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
@@ -546,6 +647,8 @@ module "api-east-blue" {
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_east_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_blue_east_object.etag
+  send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_blue_east_object.etag
+  trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_blue_east_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_east_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_east_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_east_object.etag

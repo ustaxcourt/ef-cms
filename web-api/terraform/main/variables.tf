@@ -105,3 +105,11 @@ variable "should_es_alpha_exist" {
 variable "should_es_beta_exist" {
   type = bool
 }
+
+variable "blue_node_version" {
+  type = string
+}
+
+variable "green_node_version" {
+  type = string
+}
