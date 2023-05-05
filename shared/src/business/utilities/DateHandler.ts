@@ -216,7 +216,7 @@ export const formatDateString = (
   dateString,
   formatArg: TimeFormats = FORMATS.ISO,
 ): string => {
-  if (!dateString) return '';
+  if (!dateString) return undefined;
   let formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {

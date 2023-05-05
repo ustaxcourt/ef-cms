@@ -41,14 +41,14 @@ describe('determineEntitiesToLock', () => {
   });
 
   it('should return an object that includes all of the docketNumbers associated with the user', async () => {
-    const { identifier } = await determineEntitiesToLock(
+    const { identifiers } = await determineEntitiesToLock(
       applicationContext,
       mockParams,
     );
 
-    expect(identifier).toContain(`case|${mockCases[0].docketNumber}`);
-    expect(identifier).toContain(`case|${mockCases[1].docketNumber}`);
-    expect(identifier).toContain(`case|${mockCases[2].docketNumber}`);
+    expect(identifiers).toContain(`case|${mockCases[0].docketNumber}`);
+    expect(identifiers).toContain(`case|${mockCases[1].docketNumber}`);
+    expect(identifiers).toContain(`case|${mockCases[2].docketNumber}`);
   });
 });
 
@@ -186,11 +186,15 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         applicationContext,
         mockRequest,
       );
+
+      const expectedIdentifiers = mockCases.map(
+        aCase => `case|${aCase.docketNumber}`,
+      );
       expect(
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        identifiers: expectedIdentifiers,
       });
     });
   });
