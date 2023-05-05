@@ -1,22 +1,18 @@
-const joi = require('joi');
-const {
+import {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   OBJECTIONS_OPTIONS,
   SCENARIOS,
-} = require('./EntityConstants');
-const {
+} from './EntityConstants';
+import { JoiValidationConstants } from './JoiValidationConstants';
+import { SupportingDocumentInformationFactory } from './externalDocument/SupportingDocumentInformationFactory';
+import { VALIDATION_ERROR_MESSAGES } from './externalDocument/ExternalDocumentInformationFactory';
+import {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('./JoiValidationDecorator');
-const {
-  SupportingDocumentInformationFactory,
-} = require('./externalDocument/SupportingDocumentInformationFactory');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./externalDocument/ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
+} from './JoiValidationDecorator';
+import { replaceBracketed } from '../utilities/replaceBracketed';
+import joi from 'joi';
 
 /**
  * Case Association Request Factory entity
@@ -24,7 +20,7 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
  * @param {object} rawProps the raw case association request data
  * @constructor
  */
-function CaseAssociationRequestFactory(rawProps) {
+export function CaseAssociationRequestFactory(rawProps) {
   /**
    * bare constructor for entity factory
    */
@@ -177,5 +173,3 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
   filers: 'Select a party',
   scenario: 'Select a document',
 };
-
-module.exports = { CaseAssociationRequestFactory };

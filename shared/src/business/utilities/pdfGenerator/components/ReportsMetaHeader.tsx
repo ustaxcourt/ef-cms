@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 
 export const ReportsMetaHeader = ({ headerTitle }) => {
   return (

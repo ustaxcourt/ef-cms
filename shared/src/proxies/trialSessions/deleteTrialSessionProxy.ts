@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * deleteTrialSessionInteractor
@@ -8,7 +8,7 @@ const { remove } = require('../requests');
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteTrialSessionInteractor = (
+export const deleteTrialSessionInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {

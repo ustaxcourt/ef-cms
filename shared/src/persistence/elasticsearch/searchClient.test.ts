@@ -1,7 +1,6 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+
+import {
   emptyResults,
   mockDocketEntrySearchResult,
   mockMalformedQueryResult,
@@ -14,13 +13,12 @@ const {
   mockOpenCasesReceivedOnJulyFourthSearchResults,
   mockWorkItemSearchResult,
   openCasesReceivedOnJulyFourthSearchParameters,
-} = require('./searchClient.test.constants');
-const {
-  formatDocketEntryResult,
-} = require('./helpers/formatDocketEntryResult');
-const { formatMessageResult } = require('./helpers/formatMessageResult');
-const { formatWorkItemResult } = require('./helpers/formatWorkItemResult');
-const { search, searchAll } = require('./searchClient');
+} from './searchClient.test.constants';
+
+import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
+import { formatMessageResult } from './helpers/formatMessageResult';
+import { formatWorkItemResult } from './helpers/formatWorkItemResult';
+import { search, searchAll } from './searchClient';
 
 jest.mock('./helpers/formatMessageResult', () => ({
   formatMessageResult: jest.fn(),

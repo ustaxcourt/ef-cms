@@ -1,6 +1,6 @@
-const { getClinicLetterKey } = require('./getClinicLetterKey');
+import { getClinicLetterKey } from './getClinicLetterKey';
 
-const shouldAppendClinicLetter = async ({
+export const shouldAppendClinicLetter = async ({
   applicationContext,
   caseEntity,
   procedureType,
@@ -30,8 +30,4 @@ const shouldAppendClinicLetter = async ({
     }
   }
   return { appendClinicLetter, clinicLetterKey };
-};
-
-module.exports = {
-  shouldAppendClinicLetter,
 };

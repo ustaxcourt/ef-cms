@@ -1,6 +1,6 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
-exports.fetchPendingItems = async ({
+export const fetchPendingItems = async ({
   applicationContext,
   judge,
   page,

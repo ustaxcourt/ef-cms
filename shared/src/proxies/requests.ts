@@ -1,4 +1,4 @@
-const moize = require('moize').default;
+import moize from 'moize';
 
 /**
  *
@@ -28,7 +28,7 @@ export const head = async ({ applicationContext, endpoint, params }) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response body data
  */
-export const get = async ({ applicationContext, endpoint, params }) => {
+const internalGet = async ({ applicationContext, endpoint, params }) => {
   const response = await getResponse({
     applicationContext,
     endpoint,
@@ -55,14 +55,16 @@ export const getResponse = ({ applicationContext, endpoint, params }) => {
     });
 };
 
-export const getMemoized = moize({
+const getMemoized = moize({
   equals(cacheKeyArgument, keyArgument) {
     return cacheKeyArgument.endpoint === keyArgument.endpoint;
   },
   isPromise: true,
   maxAge: 5 * 1000, // five seconds
   updateExpire: true,
-})(get);
+})(internalGet);
+
+export const get = process.env.CI ? internalGet : getMemoized;
 
 /**
  *

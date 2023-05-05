@@ -1,4 +1,8 @@
-exports.deleteRecord = async ({ applicationContext, indexName, recordId }) => {
+export const deleteRecord = async ({
+  applicationContext,
+  indexName,
+  recordId,
+}) => {
   const client = applicationContext.getSearchClient();
 
   if (recordId && indexName) {

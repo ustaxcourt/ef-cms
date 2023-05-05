@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createCaseDeadlineInteractorProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createCaseDeadlineInteractor = (
+export const createCaseDeadlineInteractor = (
   applicationContext,
   { caseDeadline },
 ) => {

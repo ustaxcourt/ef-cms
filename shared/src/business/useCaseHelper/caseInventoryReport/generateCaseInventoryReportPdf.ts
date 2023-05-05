@@ -1,8 +1,8 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * Generate Case Inventory Report PDF
@@ -12,7 +12,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.caseEntity a case entity with its documents
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
-exports.generateCaseInventoryReportPdf = async ({
+export const generateCaseInventoryReportPdf = async ({
   applicationContext,
   cases,
   filters,
