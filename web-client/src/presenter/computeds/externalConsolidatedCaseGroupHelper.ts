@@ -19,12 +19,19 @@ export const externalConsolidatedCaseGroupHelper = (
 
     formattedCurrentCasePetitionerNames = `${caseDetail.docketNumber} ${currentCasePetitioners}`;
 
+    console.log('caseDetail.consolidatedCases', caseDetail.consolidatedCases);
     formattedConsolidatedCaseList = caseDetail.consolidatedCases.map(
       currentCase => {
-        const formattedPetitioners = currentCase.petitioners
-          .map(ptr => ptr.name)
-          .join(' & ');
-        return `${currentCase.docketNumber} ${formattedPetitioners}`;
+        console.log('currentCase', currentCase);
+        if (!currentCase.isSealed) {
+          const formattedPetitioners = currentCase.petitioners
+            .map(ptr => ptr.name)
+            .join(' & ');
+
+          return `${currentCase.docketNumber} ${formattedPetitioners}`;
+        }
+
+        return `${currentCase.docketNumber} Sealed Case`;
       },
     );
 
@@ -40,12 +47,12 @@ export const externalConsolidatedCaseGroupHelper = (
 
     caseDetail.consolidatedCases.forEach((memberCase, i) => {
       consolidatedGroupServiceParties[i] = {};
-      const combinedPartiesList = [
+      const combinedPartiesList = {
         ...memberCase.petitioners,
         ...memberCase.privatePractitioners,
         ...memberCase.irsPractitioners,
-      ];
-      combinedPartiesList.forEach((party, j) => {
+      };
+      Object.keys(combinedPartiesList).forEach((party, j) => {
         consolidatedGroupServiceParties[i][j] = `${party.name}, ${roleToDisplay(
           party,
         )}`;
