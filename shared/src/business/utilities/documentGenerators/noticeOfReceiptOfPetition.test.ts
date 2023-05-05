@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { noticeOfReceiptOfPetition } = require('./noticeOfReceiptOfPetition');
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfReceiptOfPetition } from './noticeOfReceiptOfPetition';
 
 describe('noticeOfReceiptOfPetition', () => {
   generateAndVerifyPdfDiff({

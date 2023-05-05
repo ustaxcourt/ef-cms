@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * checkEmailAvailabilityInteractor
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.email the email to check
  * @returns {Promise<*>} the promise of the api call
  */
-exports.checkEmailAvailabilityInteractor = (applicationContext, { email }) => {
+export const checkEmailAvailabilityInteractor = (
+  applicationContext,
+  { email },
+) => {
   return get({
     applicationContext,
     endpoint: '/users/email-availability',

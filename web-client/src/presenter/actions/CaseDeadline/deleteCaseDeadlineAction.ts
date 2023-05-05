@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 /**
  * resets the state.form which is used throughout the app for storing html form values
  * state.form is used throughout the app for storing html form values
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -15,7 +14,7 @@ export const deleteCaseDeadlineAction = async ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const caseDeadlineId = get(state.form.caseDeadlineId);
 

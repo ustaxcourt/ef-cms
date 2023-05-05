@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.form.startDate and state.form.endDate
  * @param {object} providers.props the cerebral props object used for passing the props.startDate and props.endDate
  */
-export const updateDateFromPickerFromFormAction = ({ props, store }) => {
+export const updateDateFromPickerFromFormAction = ({
+  props,
+  store,
+}: ActionProps) => {
   const filterStartDate = props.startDate;
   const filterEndDate = props.endDate;
 

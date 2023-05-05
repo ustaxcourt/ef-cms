@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const setPreviousDocumentDocketEntryAction = ({ get, store }) => {
+export const setPreviousDocumentDocketEntryAction = ({
+  get,
+  store,
+}: ActionProps) => {
   const form = get(state.form);
 
   const { docketEntries } = get(state.caseDetail);

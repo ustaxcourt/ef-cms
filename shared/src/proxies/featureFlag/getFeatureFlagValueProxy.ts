@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getFeatureFlagValueProxy
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.featureFlag the feature flag
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getFeatureFlagValueInteractor = (
+export const getFeatureFlagValueInteractor = (
   applicationContext,
   { featureFlag },
 ) => {

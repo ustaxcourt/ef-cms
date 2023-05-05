@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.form with an empty contact object
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
@@ -11,7 +10,7 @@ export const setDefaultAddPetitionerToCaseFormAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   store.set(state.form, { contact: {} });

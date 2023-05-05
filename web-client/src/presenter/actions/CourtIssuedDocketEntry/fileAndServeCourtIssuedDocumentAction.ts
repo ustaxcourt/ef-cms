@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * File and serve a court issued document
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const docketEntryId = get(state.docketEntryId);
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);

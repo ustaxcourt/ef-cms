@@ -1,4 +1,4 @@
-const { abbreviateState } = require('./abbreviateState');
+import { abbreviateState } from './abbreviateState';
 
 describe('abbreviateState', () => {
   it('should return a string with an abbreviated state when passed a comma separated city and unabbreviated state', () => {
