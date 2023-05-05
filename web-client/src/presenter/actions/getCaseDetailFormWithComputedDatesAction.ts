@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * combines the dates in the form with the caseDetails
- *
  * @param {object} providers the cerebral providers
  * @param {Function} providers.get the cerebral get function for getting the state.form
  * @returns {object} the formWithComputedDates
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getCaseDetailFormWithComputedDatesAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const {
     irsDay,
     irsMonth,

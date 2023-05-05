@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.privatePractitioners
  * @param {object} providers.store the cerebral store used for setting the state.modal.practitionerMatches
  */
-export const setPractitionersAction = ({ props, store }) => {
+export const setPractitionersAction = ({ props, store }: ActionProps) => {
   const practitionerMatches = props.privatePractitioners;
 
   store.set(state.modal.practitionerMatches, practitionerMatches);

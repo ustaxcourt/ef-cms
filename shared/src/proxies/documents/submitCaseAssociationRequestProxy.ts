@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {string} providers.filers the list of filers to associate with
  * @returns {Promise<*>} the promise of the api call
  */
-exports.submitCaseAssociationRequestInteractor = (
+export const submitCaseAssociationRequestInteractor = (
   applicationContext,
   { docketNumber, filers },
 ) => {

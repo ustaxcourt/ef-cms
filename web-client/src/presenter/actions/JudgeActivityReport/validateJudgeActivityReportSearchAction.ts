@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Validates the judge activity report search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const validateJudgeActivityReportSearchAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { endDate, judgeName, startDate } = get(state.form);
 
   const errors = applicationContext

@@ -1,4 +1,4 @@
-const { userIdLimiter } = require('./userIdLimiter');
+import { userIdLimiter } from './userIdLimiter';
 
 let mockPersistenceGateway = {};
 

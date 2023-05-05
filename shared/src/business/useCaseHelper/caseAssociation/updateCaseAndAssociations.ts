@@ -11,7 +11,6 @@ import diff from 'diff-arrays-of-objects';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -63,7 +62,6 @@ const updateCaseDocketEntries = ({
 
 /**
  * Identifies case messages which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -118,7 +116,6 @@ const updateCaseMessages = async ({
 
 /**
  * Identifies correspondences which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated correspondence data
@@ -172,7 +169,6 @@ const updateCorrespondence = ({
 /**
  * Identifies hearings to be removed, and issues persistence calls
  * where needed
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated hearings data
@@ -203,7 +199,6 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
 /**
  * Identifies IRS practitioners to be updated or removed, and issues persistence calls
  * where needed
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated IRS practitioner data
@@ -259,7 +254,6 @@ const updateIrsPractitioners = ({
 /**
  * Identifies private practitioners to be updated or removed, and issues persistence calls
  * where needed
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated private practitioner data
@@ -318,7 +312,6 @@ const updatePrivatePractitioners = ({
 
 /**
  * Identifies work item entries which have been updated and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -378,7 +371,6 @@ const updateCaseWorkItems = async ({
 
 /**
  * Identifies user case mappings which require updates and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -429,7 +421,6 @@ const updateUserCaseMappings = async ({
 
 /**
  * Identifies user case mappings which require updates and issues persistence calls
- *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
@@ -473,7 +464,6 @@ const updateCaseDeadlines = async ({
 
 /**
  * updateCaseAndAssociations
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseToUpdate the case object which was updated

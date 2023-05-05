@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateUserPendingEmailInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {string} providers.userId the userId to update the pendingEmail
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateUserPendingEmailInteractor = (
+export const updateUserPendingEmailInteractor = (
   applicationContext,
   { pendingEmail },
 ) => {

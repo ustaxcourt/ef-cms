@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * sealCaseContactAddressInteractor
@@ -9,7 +9,7 @@ const { put } = require('./requests');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.sealCaseContactAddressInteractor = (
+export const sealCaseContactAddressInteractor = (
   applicationContext,
   { contactId, docketNumber },
 ) => {

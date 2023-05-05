@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
-} = require('../../business/entities/EntityConstants');
-const { bulkDeleteRecords } = require('./bulkDeleteRecords');
+} from '../../business/entities/EntityConstants';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { bulkDeleteRecords } from './bulkDeleteRecords';
 
 describe('bulkDeleteRecords', () => {
   const oldImageRecord = {

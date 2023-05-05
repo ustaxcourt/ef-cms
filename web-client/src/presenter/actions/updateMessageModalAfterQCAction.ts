@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * updates the message form data's attachments field based on the document being QCd
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the get function to retrieve values from state
  * @param {object} providers.store the cerebral store object
@@ -11,7 +10,7 @@ export const updateMessageModalAfterQCAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   store.set(state.modal.validationErrors, {});
 
   const docketEntryId = get(state.docketEntryId);

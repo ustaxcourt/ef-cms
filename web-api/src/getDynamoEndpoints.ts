@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 const { DynamoDB } = AWS;
 
 /**
@@ -14,7 +14,7 @@ const { DynamoDB } = AWS;
  * @param {object} providers.useMasterRegion the flag indicating whether or not to use the master region
  * @returns {Object} the main region database and the fallback region database values
  */
-exports.getDynamoEndpoints = ({
+export const getDynamoEndpoints = ({
   fallbackRegion,
   fallbackRegionEndpoint,
   mainRegion,
